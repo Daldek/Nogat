@@ -1,0 +1,14 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+Nogat/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pliki edytorów i IDE
+.vscode/
+.idea/
