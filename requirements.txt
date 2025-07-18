@@ -1,0 +1,9 @@
+pandas>=1.4
+numpy>=1.22
+matplotlib>=3.5
+seaborn>=0.11
+xarray>=0.21
+netCDF4>=1.6
+requests>=2.27
+openpyxl>=3.0
+copernicusmarine>=2.2.1
