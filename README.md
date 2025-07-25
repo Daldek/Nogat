@@ -13,19 +13,19 @@ Celem repozytorium jest ułatwienie codziennej pracy z danymi środowiskowymi or
 
 ---
 ## Struktura katalogu głównego
-Nogat/
-├── meteorology/
-├── hydrology/
-├── oceanography/
-├── hydraulics/
-├── data/                 # Przykładowe dane lub linki do danych
-├── scripts/              # Uniwersalne skrypty narzędziowe (np. pobieranie danych, konwersje, wizualizacje)
-├── renv/                 # Katalog z bibliotekami R, tworzony przez `renv::init()`
-├── .Rprofile             # Plik konfiguracyjny dla sesji RStudio
-├── .Rproj.user/          # Dane sesji RStudio
-├── Nogat.Rproj           # Plik projektu RStudio
-├── renv.lock             # Lista pakietów R
-├── requirements.txt      # Lista pakietów Python
+Nogat/<br>
+├── meteorology/<br>
+├── hydrology/<br>
+├── oceanography/<br>
+├── hydraulics/<br>
+├── data/                 # Przykładowe dane lub linki do danych<br>
+├── scripts/              # Uniwersalne skrypty narzędziowe (np. pobieranie danych, konwersje, wizualizacje)<br>
+├── renv/                 # Katalog z bibliotekami R, tworzony przez `renv::init()`<br>
+├── .Rprofile             # Plik konfiguracyjny dla sesji RStudio<br>
+├── .Rproj.user/          # Dane sesji RStudio<br>
+├── Nogat.Rproj           # Plik projektu RStudio<br>
+├── renv.lock             # Lista pakietów R<br>
+├── requirements.txt      # Lista pakietów Python<br>
 ├── README.md
 
 ---
