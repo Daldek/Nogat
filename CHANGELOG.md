@@ -13,6 +13,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   from the lock (DEV-5.3, DEV-6.3).
 - Tests of `scripts/ecosystem.py` in `tests/`, run by the gate with an 80%
   coverage floor (DEV-7.5, DEV-7.6).
+- `.gitattributes`, `.editorconfig` and `.env.example`; `.gitignore` in
+  English and ignores `.env` (DEV-13.1, DEV-14.1).
+- `CLAUDE.md` with the hub's deviations, `docs/PROGRESS.md` and this
+  changelog (DOC-1.1, DEV-1.2).
 
 ### Changed
 

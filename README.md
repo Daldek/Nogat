@@ -35,9 +35,10 @@ uv run scripts/ecosystem.py drift            # compare consumers' pins with prod
 `nogat ecosystem deps` and `nogat ecosystem drift` (HUB-7.3). The registry
 holds structure only; versions and pins are read from the repositories.
 
-`scripts/gate.sh` checks the scripts (ruff, mypy), the registry and map, the
-CI templates (shellcheck, actionlint) and commit messages; CI runs it on every
-push and pull request.
+`scripts/gate.sh` sets up the environment from `uv.lock` and checks the
+scripts (ruff, mypy, pytest with coverage), the registry and map, the CI
+templates (shellcheck, actionlint) and commit messages; CI runs it on every
+push and pull request. Working on Nogat itself: [CLAUDE.md](CLAUDE.md).
 
 ## Issues
 
