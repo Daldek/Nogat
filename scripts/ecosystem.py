@@ -1,7 +1,3 @@
-# /// script
-# requires-python = ">=3.12"
-# dependencies = ["pyyaml>=6,<7", "jsonschema>=4.23,<5", "packaging>=24"]
-# ///
 """Validate ecosystem.yaml, generate docs/ECOSYSTEM_MAP.md, compare dependencies.
 
 Usage:
@@ -26,6 +22,7 @@ import sys
 import tomllib
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import jsonschema
 import yaml
@@ -44,13 +41,47 @@ COMMIT = re.compile(r"^[0-9a-f]{7,40}$")
 STANDARDS = ROOT / "standards"
 README_VERSION = re.compile(r"^Standard (\d+\.\d+)\b", re.MULTILINE)
 TOPIC_VERSION = re.compile(r"^Part of standard (\S+)", re.MULTILINE)
+VERSIONLESS = {"README.md", "DECISIONS.md"}
+INCLUDE = re.compile(r"^(-r|--requirement)(\s+|=)(?P<path>\S+)")
+OPTION = re.compile(r"\s+--?[A-Za-z]")
+
+
+class RegistryError(Exception):
+    """A file the tooling reads is missing or malformed; the message names it."""
+
+
+def _shown(path: Path) -> str:
+    """Path for messages, relative to Nogat (siblings appear as `../<Project>`)."""
+    return os.path.relpath(path, ROOT)
+
+
+def _read(path: Path) -> str:
+    """Text of a UTF-8 file; RegistryError names the file when it cannot be read."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as e:
+        raise RegistryError(f"{_shown(path)}: cannot read: {e}") from e
+
+
+def _read_json(path: Path) -> Any:
+    """Parse a JSON file; RegistryError names the file when it is not valid JSON."""
+    try:
+        return json.loads(_read(path))
+    except json.JSONDecodeError as e:
+        raise RegistryError(f"{_shown(path)}: not valid JSON: {e}") from e
 
 
 def load() -> dict[str, Any]:
-    with REGISTRY.open(encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+    """Read ecosystem.yaml; raise RegistryError when it cannot be read as a mapping."""
+    try:
+        with REGISTRY.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+    except OSError as e:
+        raise RegistryError(f"{REGISTRY.name}: cannot read: {e.strerror}") from e
+    except yaml.YAMLError as e:
+        raise RegistryError(f"{REGISTRY.name}: not valid YAML: {e}") from e
     if not isinstance(data, dict):
-        raise SystemExit(f"{REGISTRY.name}: top level must be a mapping")
+        raise RegistryError(f"{REGISTRY.name}: top level must be a mapping")
     return data
 
 
@@ -65,37 +96,46 @@ def _strings(value: Any) -> list[str]:
 
 
 def standard_version_problems(version: str) -> list[str]:
-    """Check that every statement of the standard version agrees (HUB-6.1)."""
+    """Check that every statement of the standard version agrees (HUB-6.1).
+
+    Every topic document in `standards/` carries a "Part of standard X.Y"
+    line near the top; README.md has the "Standard X.Y" line instead and
+    DECISIONS.md is a versionless log (2.x).
+    """
     problems: list[str] = []
-    readme = (STANDARDS / "README.md").read_text(encoding="utf-8")
+    readme = _read(STANDARDS / "README.md")
     found = README_VERSION.search(readme)
     if found is None:
         problems.append("standards/README.md: no 'Standard X.Y' version line")
     elif found.group(1) != version:
         problems.append(
-            f"standards/README.md: version {found.group(1)} != standard_version {version}"
+            f"standards/README.md: version {found.group(1)} "
+            f"!= standard_version {version}"
         )
-    registry = json.loads(
-        (STANDARDS / "error_registry.json").read_text(encoding="utf-8")
-    )
+    registry = _read_json(STANDARDS / "error_registry.json")
     if registry.get("standard_version") != version:
         problems.append(
             f"standards/error_registry.json: standard_version "
             f"{registry.get('standard_version')!r} != {version}"
         )
     for path in sorted(STANDARDS.glob("*.md")):
-        head = "\n".join(path.read_text(encoding="utf-8").splitlines()[:5])
+        if path.name in VERSIONLESS:
+            continue
+        head = "\n".join(_read(path).splitlines()[:5])
         header = TOPIC_VERSION.search(head)
-        if header is not None and header.group(1) != version:
+        if header is None:
+            problems.append(f"standards/{path.name}: no 'Part of standard X.Y' line")
+        elif header.group(1) != version:
             problems.append(
-                f"standards/{path.name}: 'Part of standard {header.group(1)}' != {version}"
+                f"standards/{path.name}: "
+                f"'Part of standard {header.group(1)}' != {version}"
             )
     return problems
 
 
 def validate(registry: dict[str, Any]) -> list[str]:
     """Return problems: schema violations first, then cross-reference errors."""
-    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    schema = _read_json(SCHEMA)
     validator = jsonschema.Draft202012Validator(schema)
     problems = [
         f"{'/'.join(map(str, e.absolute_path)) or '<root>'}: {e.message}"
@@ -118,7 +158,8 @@ def validate(registry: dict[str, Any]) -> list[str]:
             owner = provided.setdefault(item["id"], p["name"])
             if owner != p["name"]:
                 problems.append(
-                    f"{p['name']}: provides id {item['id']!r} already provided by {owner}"
+                    f"{p['name']}: provides id {item['id']!r} "
+                    f"already provided by {owner}"
                 )
 
     for p in registry["projects"]:
@@ -166,6 +207,7 @@ def _node(name: str) -> str:
 
 
 def render(registry: dict[str, Any]) -> str:
+    """Return docs/ECOSYSTEM_MAP.md generated from the registry (HUB-4.5)."""
     projects = registry["projects"]
     sources = {s["id"]: s for s in registry["data_sources"]}
     edges = [(p, d) for p in projects for d in p["depends_on"]]
@@ -173,11 +215,13 @@ def render(registry: dict[str, Any]) -> str:
     out: list[str] = [
         "# Ecosystem map",
         "",
-        "<!-- Generated by `uv run scripts/ecosystem.py map` from ecosystem.yaml. Do not edit. -->",
+        "<!-- Generated by `uv run scripts/ecosystem.py map` from ecosystem.yaml."
+        " Do not edit. -->",
         "",
         "Projects, dependencies and data exchanged between them. Source of truth:",
         "[`ecosystem.yaml`](../ecosystem.yaml) (standard",
-        f"{registry['standard_version']}, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).",
+        f"{registry['standard_version']}, "
+        "[ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).",
         "",
         "## Data flow",
         "",
@@ -217,8 +261,8 @@ def render(registry: dict[str, Any]) -> str:
     ]
     for p in projects:
         out.append(
-            f"| [{p['name']}]({p['repo']}) | {', '.join(p['profiles'])} | {p['status']} "
-            f"| {_cell(p['summary'])} |"
+            f"| [{p['name']}]({p['repo']}) | {', '.join(p['profiles'])} "
+            f"| {p['status']} | {_cell(p['summary'])} |"
         )
     out.append("")
 
@@ -230,8 +274,9 @@ def render(registry: dict[str, Any]) -> str:
     ]
     for consumer, dep in edges:
         out.append(
-            f"| {consumer['name']} | {dep['project']} | {dep['kind']} | {dep['status']} "
-            f"| {', '.join(dep['via'])} | {_code(dep['exchange'])} |"
+            f"| {consumer['name']} | {dep['project']} | {dep['kind']} "
+            f"| {dep['status']} | {', '.join(dep['via'])} "
+            f"| {_code(dep['exchange'])} |"
         )
     out.append("")
 
@@ -291,12 +336,25 @@ def render(registry: dict[str, Any]) -> str:
 
 
 def workspace() -> Path:
+    """Directory holding the project checkouts (HUB §3)."""
     return Path(os.environ.get("NOGAT_WORKSPACE") or ROOT.parent)
 
 
-def _requirement_lines(path: Path) -> list[str]:
+def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[str]:
+    r"""Return the requirement strings of a pyproject.toml or requirements file.
+
+    pyproject.toml contributes dependencies, extras and dependency groups. A
+    requirements file is read as pip reads it: `\` continues a line, options
+    after a requirement (`--hash=…`) and comments are dropped, `-r` includes
+    are followed and other option lines (`-e`, `-c`, `--index-url`) skipped.
+    Raises RegistryError when a file cannot be read or parsed.
+    """
+    text = _read(path)
     if path.suffix == ".toml":
-        data = tomllib.loads(path.read_text(encoding="utf-8"))
+        try:
+            data = tomllib.loads(text)
+        except tomllib.TOMLDecodeError as e:
+            raise RegistryError(f"{_shown(path)}: not valid TOML: {e}") from e
         project = data.get("project", {})
         lines = list(project.get("dependencies") or [])
         for extra in (project.get("optional-dependencies") or {}).values():
@@ -304,17 +362,28 @@ def _requirement_lines(path: Path) -> list[str]:
         for group in (data.get("dependency-groups") or {}).values():
             lines += [item for item in group if isinstance(item, str)]
         return lines
-    return [
-        line.split(" #")[0].strip()
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.lstrip().startswith(("#", "-"))
-    ]
+    lines = []
+    seen = seen | {path.resolve()}
+    for raw in text.replace("\\\n", " ").splitlines():
+        line = raw.split(" #")[0].strip()
+        if not line or line.startswith("#"):
+            continue
+        include = INCLUDE.match(line)
+        if include:
+            target = (path.parent / include["path"]).resolve()
+            if target not in seen:
+                lines += _requirement_lines(target, seen)
+            continue
+        if line.startswith("-"):
+            continue
+        lines.append(OPTION.split(line, maxsplit=1)[0].strip())
+    return lines
 
 
 def declared(
     registry: dict[str, Any],
 ) -> tuple[dict[str, dict[str, SpecifierSet]], list[str]]:
-    """Third-party requirements per package and project, plus notes on skipped checkouts."""
+    """Third-party requirements per package and project, plus notes on skips."""
     ecosystem = {canonicalize_name(p["name"]) for p in registry["projects"]}
     ecosystem |= {
         canonicalize_name(n)
@@ -335,7 +404,12 @@ def declared(
             if not path.is_file():
                 notes.append(f"{p['name']}: {manifest} missing")
                 continue
-            for line in _requirement_lines(path):
+            try:
+                lines = _requirement_lines(path)
+            except RegistryError as e:
+                notes.append(f"{p['name']}: {e}")
+                continue
+            for line in lines:
                 try:
                     req = Requirement(line)
                 except InvalidRequirement:
@@ -349,21 +423,27 @@ def declared(
     return result, notes
 
 
+def _just_above(version: Version) -> Version:
+    """Return a release above `version`, below every release sorting after it."""
+    release = (*version.release, *[0] * 8, 1)
+    return Version(".".join(map(str, release)))
+
+
 def range_conflicts(specs: dict[str, SpecifierSet]) -> str | None:
     """Describe why the declared ranges cannot share one version, or None.
 
-    Candidates are the versions named by the ranges themselves; ranges that
-    admit none of them in common are reported.
+    The versions that satisfy every range form intervals bounded by the
+    versions the ranges name. Each bound and the release just above it, plus
+    version 0, are tried; an empty intersection has no such candidate.
     """
-    candidates: set[Version] = set()
+    candidates: set[Version] = {Version("0")}
     for spec in specs.values():
         for s in spec:
             try:
-                candidates.add(Version(s.version.removesuffix(".*")))
+                bound = Version(s.version.removesuffix(".*"))
             except InvalidVersion:
                 continue
-    if not candidates:
-        return None
+            candidates |= {bound, _just_above(bound)}
     if any(
         all(spec.contains(v, prereleases=True) for spec in specs.values())
         for v in candidates
@@ -372,9 +452,15 @@ def range_conflicts(specs: dict[str, SpecifierSet]) -> str | None:
     return "no version satisfies " + "; ".join(f"{p} {s}" for p, s in specs.items())
 
 
-def installed(registry: dict[str, Any]) -> dict[str, tuple[str, dict[str, str]]]:
-    """Python version and package versions of each checkout's .venv next to its first manifest."""
+def installed(
+    registry: dict[str, Any],
+) -> tuple[dict[str, tuple[str, dict[str, str]]], list[str]]:
+    """Python and package versions of each checkout's .venv, plus notes on skips.
+
+    The environment is the .venv next to the project's first manifest.
+    """
     found: dict[str, tuple[str, dict[str, str]]] = {}
+    notes: list[str] = []
     for p in registry["projects"]:
         manifests = p.get("python_manifests") or []
         if not manifests:
@@ -393,31 +479,35 @@ def installed(registry: dict[str, Any]) -> dict[str, tuple[str, dict[str, str]]]
         )
         if python is None:
             continue
-        listed = subprocess.run(
-            ["uv", "pip", "list", "--format", "json", "--python", str(python)],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        version = subprocess.run(
-            [str(python), "-V"], capture_output=True, text=True, check=True
-        )
+        try:
+            listed = subprocess.run(
+                ["uv", "pip", "list", "--format", "json", "--python", str(python)],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            version = subprocess.run(
+                [str(python), "-V"], capture_output=True, text=True, check=True
+            )
+            packages = json.loads(listed.stdout)
+        except (OSError, subprocess.CalledProcessError, json.JSONDecodeError) as e:
+            notes.append(f"{p['name']}: cannot list {python}: {e}")
+            continue
         found[p["name"]] = (
             version.stdout.split()[-1],
-            {
-                canonicalize_name(x["name"]): x["version"]
-                for x in json.loads(listed.stdout)
-            },
+            {canonicalize_name(x["name"]): x["version"] for x in packages},
         )
-    return found
+    return found, notes
 
 
 def report_deps(registry: dict[str, Any], with_installed: bool) -> int:
+    """Print third-party ranges shared by projects; 1 when some cannot agree."""
     specs, notes = declared(registry)
     shared = {name: s for name, s in sorted(specs.items()) if len(s) > 1}
     conflicts = {name: why for name, s in shared.items() if (why := range_conflicts(s))}
     print(
-        f"Declared third-party ranges: {len(specs)} packages, {len(shared)} declared by two or more projects"
+        f"Declared third-party ranges: {len(specs)} packages, "
+        f"{len(shared)} declared by two or more projects"
     )
     print()
     for name, per_project in shared.items():
@@ -425,7 +515,8 @@ def report_deps(registry: dict[str, Any], with_installed: bool) -> int:
         ranges = "; ".join(f"{p} {s or '*'}" for p, s in per_project.items())
         print(f"  {name}: {ranges}{flag}")
     if with_installed:
-        envs = installed(registry)
+        envs, env_notes = installed(registry)
+        notes += env_notes
         print()
         print(
             "Installed environments: "
@@ -446,22 +537,36 @@ def report_deps(registry: dict[str, Any], with_installed: bool) -> int:
 
 
 def _latest_tag(checkout: Path) -> str | None:
-    """Newest `v*` tag of a checkout, or None without tags or git."""
+    """Newest `v*` release tag of a checkout, or None without tags or git.
+
+    Tags are ordered as versions; a pre-release tag is the latest only when
+    the checkout has no final release tag.
+    """
     try:
         done = subprocess.run(
-            ["git", "-C", str(checkout), "tag", "--list", "v*", "--sort=-v:refname"],
+            ["git", "-C", str(checkout), "tag", "--list", "v*"],
             capture_output=True,
             text=True,
             check=True,
         )
     except (OSError, subprocess.CalledProcessError):
         return None
-    tags = done.stdout.split()
-    return tags[0] if tags else None
+    versions: list[tuple[bool, Version, str]] = []
+    for tag in done.stdout.split():
+        try:
+            version = Version(tag.removeprefix("v"))
+        except InvalidVersion:
+            continue
+        versions.append((not version.is_prerelease, version, tag))
+    return max(versions)[2] if versions else None
 
 
 def _matches(req: Requirement, producer: dict[str, Any]) -> bool:
-    """Whether a requirement names the producer: import name, PyPI name, nogat-<project> or repo URL."""
+    """Whether a requirement names the producer.
+
+    A match is the import name, the PyPI name, `nogat-<project>` or the
+    producer's repository URL.
+    """
     names = {
         canonicalize_name(n)
         for n in (
@@ -477,12 +582,16 @@ def _matches(req: Requirement, producer: dict[str, Any]) -> bool:
 
 
 def _pin(req: Requirement) -> tuple[str, str]:
-    """Classify a requirement as (kind, value): tag, commit, branch, range, path or none."""
+    """Classify a requirement as (kind, value): tag, commit, branch, range, path, none.
+
+    For a VCS URL the ref is what follows the last `@` of the URL path, so
+    refs containing `/` (`release/0.8`) are kept whole.
+    """
     if req.url:
         if req.url.startswith("file:") or "://" not in req.url:
             return "path", req.url
-        last = req.url.split("#")[0].split("?")[0].rstrip("/").rpartition("/")[2]
-        ref = last.partition("@")[2]
+        path = urlsplit(req.url.removeprefix("git+")).path
+        ref = path.rpartition("@")[2] if "@" in path else ""
         if not ref:
             return "none", ""
         if COMMIT.match(ref):
@@ -496,6 +605,7 @@ def _pin(req: Requirement) -> tuple[str, str]:
 
 
 def _state(kind: str, value: str, latest: str | None) -> str:
+    """Compare a pin of `kind` and `value` with the producer's latest tag."""
     if kind == "commit":
         return "commit pin"
     if kind == "branch":
@@ -527,7 +637,7 @@ def _state(kind: str, value: str, latest: str | None) -> str:
 
 
 def report_drift(registry: dict[str, Any]) -> int:
-    """Print each active runtime or optional dependency: consumer pin against producer tag."""
+    """Print each active runtime or optional dependency: pin against latest tag."""
     by_name = {p["name"]: p for p in registry["projects"]}
     rows: list[tuple[str, str, str, str, str]] = []
     for consumer in registry["projects"]:
@@ -544,12 +654,22 @@ def report_drift(registry: dict[str, Any]) -> int:
             if not checkout.is_dir():
                 rows.append((*who, "—", latest or "—", "no checkout"))
                 continue
+            manifests = consumer.get("python_manifests") or []
+            if not manifests:
+                rows.append((*who, "—", latest or "—", "no manifest"))
+                continue
             found = False
-            for manifest in consumer.get("python_manifests") or []:
+            for manifest in manifests:
                 path = checkout / manifest
                 if not path.is_file():
                     continue
-                for line in _requirement_lines(path):
+                try:
+                    lines = _requirement_lines(path)
+                except RegistryError as e:
+                    rows.append((*who, "—", latest or "—", f"unreadable: {e}"))
+                    found = True
+                    continue
+                for line in lines:
                     try:
                         req = Requirement(line)
                     except InvalidRequirement:
@@ -579,6 +699,7 @@ def report_drift(registry: dict[str, Any]) -> int:
 
 
 def main() -> int:
+    """Run the command named on the command line; return the exit status."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("validate", help="validate ecosystem.yaml")
@@ -595,8 +716,12 @@ def main() -> int:
     sub.add_parser("drift", help="compare consumers' pins with producers' latest tags")
     args = parser.parse_args()
 
-    registry = load()
-    problems = validate(registry)
+    try:
+        registry = load()
+        problems = validate(registry)
+    except RegistryError as e:
+        print(f"ecosystem: {e}", file=sys.stderr)
+        return 1
     if problems:
         for problem in problems:
             print(f"ecosystem.yaml: {problem}", file=sys.stderr)
@@ -613,7 +738,8 @@ def main() -> int:
     if args.check:
         if not MAP.exists() or MAP.read_text(encoding="utf-8") != text:
             print(
-                f"{MAP.relative_to(ROOT)} is stale; run: uv run scripts/ecosystem.py map",
+                f"{MAP.relative_to(ROOT)} is stale; "
+                "run: uv run scripts/ecosystem.py map",
                 file=sys.stderr,
             )
             return 1

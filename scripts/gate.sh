@@ -1,40 +1,53 @@
 #!/usr/bin/env bash
-# Nogat quality gate (DEV-7.6, HUB-2.3). Nogat has no package yet, so it does
-# not use the project template; it checks the registry tooling, the registry
-# and generated map, the CI templates it ships, and commit messages.
+# Nogat quality gate (DEV-7.6, HUB-2.3). It follows standards/ci/gate.sh and
+# adds the hub's own steps: the registry and generated map, and shellcheck and
+# actionlint over the CI templates Nogat ships. Tool versions come from
+# uv.lock. Coverage measures scripts/ until the `nogat` package exists
+# (deviation DEV-5.1 in CLAUDE.md).
 #
-# Usage: scripts/gate.sh
+# Usage: scripts/gate.sh [extra pytest arguments]
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 step() { printf '\n== %s\n' "$1"; }
-command -v uv >/dev/null || { echo "gate: uv not found (DEV-6.2)" >&2; exit 1; }
+fail() { printf 'gate: %s\n' "$1" >&2; exit 1; }
+
+command -v uv >/dev/null || fail "uv not found (DEV-6.2): https://docs.astral.sh/uv/"
+
 started=$SECONDS
 
+step "uv sync --locked"
+uv sync --locked
+
+run() { uv run --no-sync "$@"; }
+
 step "ruff format --check"
-uvx ruff@0.15.0 format --check scripts
+run ruff format --check .
 
 step "ruff check"
-uvx ruff@0.15.0 check scripts
+run ruff check .
 
 step "mypy"
-uvx --with types-PyYAML --with types-jsonschema --with packaging \
-  mypy@1.19.1 --strict scripts/ecosystem.py
+run mypy
+
+step "pytest (tests/, coverage)"
+# ${@+"$@"} keeps an empty argument list safe under set -u on macOS bash 3.2.
+run pytest tests -m "not live" --cov --cov-report=term-missing:skip-covered \
+  -q ${@+"$@"}
 
 step "registry (HUB-2.3)"
-uv run scripts/ecosystem.py validate
+run python scripts/ecosystem.py validate
 
 step "ecosystem map (HUB-4.5)"
-uv run scripts/ecosystem.py map --check
+run python scripts/ecosystem.py map --check
 
 step "shellcheck"
-uvx --from shellcheck-py@0.11.0.1 shellcheck standards/ci/*.sh scripts/*.sh
+run shellcheck standards/ci/*.sh scripts/*.sh
 
 step "actionlint"
-uvx --from actionlint-py@1.7.12.25 actionlint .github/workflows/*.yml \
-  standards/ci/ci.yml standards/ci/live.yml
+run actionlint .github/workflows/*.yml standards/ci/ci.yml standards/ci/live.yml
 
 step "commit step"
 bash standards/ci/check-commits.sh

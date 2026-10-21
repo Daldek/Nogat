@@ -1,0 +1,66 @@
+[project]
+name = "nogat"
+version = "0.0.0"
+description = "Hub of the Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista ecosystem: shared standard, project registry and registry tooling."
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "jsonschema>=4.23",
+    "packaging>=24",
+    "pyyaml>=6",
+]
+
+[dependency-groups]
+dev = [
+    "actionlint-py>=1.7.12",
+    "mypy>=1.19",
+    "pytest>=8",
+    "pytest-cov>=6",
+    "ruff>=0.15",
+    "shellcheck-py>=0.11",
+    "types-jsonschema",
+    "types-pyyaml",
+]
+
+[tool.uv]
+# The `nogat` package does not exist yet (HUB §7); scripts/ runs in the
+# project environment. Deviation DEV-5.1 in CLAUDE.md.
+package = false
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+# v1 files, kept verbatim until replaced (DOC-11.1, ADOPTION_PLAN 0.1).
+extend-exclude = ["standards/legacy", "standards/templates", "standards/configs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.mypy]
+strict = true
+mypy_path = "scripts"
+files = ["scripts", "tests"]
+
+[tool.pytest.ini_options]
+addopts = ["--strict-markers"]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+markers = [
+    "live: needs real network services",
+    "db: needs a database",
+    "slow: takes more than about 10 s",
+]
+
+[tool.coverage.run]
+source = ["scripts"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_covered = true
