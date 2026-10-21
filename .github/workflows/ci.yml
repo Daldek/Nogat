@@ -1,0 +1,42 @@
+# Nogat CI (DEV-7.7): runs scripts/gate.sh. Linux only until Nogat ships the
+# `nogat` package; then it switches to standards/ci/ci.yml. Commit range and
+# author logic are those of the template (DEV-4.5).
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0   # the commit step needs history
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Gate
+        env:
+          GATE_COMMIT_RANGE: >-
+            ${{ (github.event_name == 'pull_request' && github.base_ref == 'develop')
+                && 'origin/develop..HEAD' || 'none' }}
+          GATE_CHECK_AUTHOR: >-
+            ${{ (github.event_name == 'pull_request'
+                 && github.base_ref == 'develop'
+                 && github.event.pull_request.head.repo.full_name == github.repository
+                 && github.event.pull_request.user.login != 'dependabot[bot]') && '1' || '0' }}
+        run: bash scripts/gate.sh
