@@ -1,0 +1,344 @@
+# Ecosystem registry (HUB §2, ECO-002): projects, dependencies and data exchanged
+# between them. Structure only; versions and pins are read from the repositories:
+# `uv run scripts/ecosystem.py drift`.
+# Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
+
+schema: nogat-ecosystem/1
+standard_version: "2.1"
+
+data_sources:
+  - id: gugik
+    name: GUGiK (Główny Urząd Geodezji i Kartografii)
+    country: PL
+    url: https://www.geoportal.gov.pl
+    licence: free reuse with attribution (Prawo geodezyjne i kartograficzne)
+  - id: cuzk
+    name: ČÚZK (Český úřad zeměměřický a katastrální)
+    country: CZ
+    url: https://geoportal.cuzk.cz
+    licence: CC BY 4.0
+  - id: clms
+    name: Copernicus Land Monitoring Service (CORINE Land Cover)
+    country: EU
+    url: https://land.copernicus.eu
+    licence: Copernicus data policy, attribution required
+  - id: soilgrids
+    name: ISRIC SoilGrids
+    country: global
+    url: https://soilgrids.org
+    licence: CC BY 4.0
+  - id: imgw-pib
+    name: IMGW-PIB (archives, live API, PMAXTP atlas)
+    country: PL
+    url: https://danepubliczne.imgw.pl
+    licence: IMGW-PIB terms of reuse, attribution required
+  - id: chmi
+    name: ČHMÚ open data
+    country: CZ
+    url: https://opendata.chmi.cz
+    licence: CC BY 4.0
+  - id: osm
+    name: OpenStreetMap
+    country: global
+    url: https://www.openstreetmap.org
+    licence: ODbL
+
+projects:
+  - name: Nogat
+    summary: Ecosystem hub with standards, registry and map; future user package installing all tools.
+    profiles: [hub]
+    status: active
+    repo: https://github.com/Daldek/Nogat
+    visibility: public
+    distribution: {pypi: null, import_name: null}
+    interfaces: {cli: null, mcp: null, rest: null, python: null}
+    data_sources: []
+    provides: []
+    depends_on: []
+
+  - name: Kartograf
+    summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) into a versioned store.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Kartograf
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: kartograf}
+    interfaces:
+      cli: kartograf
+      mcp: kartograf-mcp
+      rest: null
+      python: kartograf
+    data_sources: [gugik, cuzk, clms, soilgrids]
+    provides:
+      - id: kartograf-files
+        kind: dataset
+        summary: Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ).
+      - id: kartograf-meta/1
+        kind: sidecar
+        summary: "<file>.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256."
+      - id: kartograf-store
+        kind: store
+        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with read API list_segments, iter_store, read_sidecar, file_footprint.
+      - id: kartograf-project/1
+        kind: manifest
+        summary: kartograf-project.json pinning store versions by SHA-256.
+      - id: kartograf-download/1
+        kind: document
+        summary: Download report (files, failed, stale, notices); also for land cover, soil, HSG and collections.
+      - id: kartograf-plan/1
+        kind: document
+        summary: Update plan per file (current, newer, missing, unverifiable) without downloading.
+      - id: kartograf-availability/1
+        kind: document
+        summary: Years, systems, resolutions and completeness of DEM coverage for an area.
+      - id: kartograf-catalog/1
+        kind: catalog
+        summary: Command catalog behind CLI and MCP (get_catalog, validate_command, run_command, check_command, format_command).
+      - id: kartograf-error/1
+        kind: document
+        summary: Error document with code, hint and exit code.
+    depends_on: []
+
+  - name: IMGWTools
+    summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP and a versioned store with Parquet series.
+    profiles: [tool, app]
+    status: active
+    repo: https://github.com/Daldek/IMGWTools
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: imgwtools, import_name: imgwtools}
+    interfaces:
+      cli: imgw
+      mcp: imgw mcp
+      rest: imgw server (/api/v1)
+      python: imgwtools
+    data_sources: [imgw-pib, chmi]
+    provides:
+      - id: imgw-store/1
+        kind: store
+        summary: Versioned store (archives, stations, series) with read API store_info, iter_store, read_meta, read_series.
+      - id: imgw-meta/1
+        kind: sidecar
+        summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
+      - id: imgw-series/1
+        kind: dataset
+        summary: Parquet series per station with series.json index (periods, year type, units, coverage).
+      - id: imgw-project/1
+        kind: manifest
+        summary: imgw-project.json pinning store versions by SHA-256 or content hash.
+      - id: imgw-plan/1
+        kind: document
+        summary: Freshness plan for archives, series and catalog.
+      - id: imgw-observation/1
+        kind: document
+        summary: History of published HTTP signals per archive file.
+      - id: chmi-json/1
+        kind: document
+        summary: Canonical JSON form of ČHMÚ files used for content-based pins.
+      - id: imgw-result/1
+        kind: document
+        summary: Result envelope of every command (status, result, errors, notices, exit code).
+      - id: imgw-catalog
+        kind: catalog
+        summary: Command catalog command_schema with x-imgw metadata; validate_command, run_command, check_command, format_command.
+      - id: imgw-series-csv
+        kind: dataset
+        summary: CSV export of series with units and IMGW-PIB attribution (series export).
+      - id: imgw-pmaxtp
+        kind: document
+        summary: PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult).
+    depends_on:
+      - project: Kartograf
+        kind: data
+        status: active
+        via: [store]
+        exchange: [kartograf-meta/1, kartograf-project/1]
+        note: No import; detects Kartograf store markers to refuse nested stores. Hard-link publication model follows Kartograf ADR-036.
+
+  - name: Hydrolog
+    summary: Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Hydrolog
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: hydrolog}
+    interfaces:
+      cli: hydrolog
+      mcp: hydrolog mcp
+      rest: null
+      python: hydrolog
+    data_sources: []
+    provides:
+      - id: watershed-parameters
+        kind: document
+        summary: WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input.
+      - id: hydrolog-hsg
+        kind: dataset
+        summary: HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters.
+      - id: hydrolog-result/1
+        kind: document
+        summary: Result envelope (command, inputs, result, files with SHA-256, notices).
+      - id: hydrolog-error/1
+        kind: document
+        summary: Error envelope with registry code, details and hint.
+      - id: hydrolog-catalog
+        kind: catalog
+        summary: Catalog of commands behind CLI, MCP and hydrolog.operations (run_command).
+      - id: hydrolog-python-api
+        kind: library
+        summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, EulerIIHietogram).
+    depends_on:
+      - project: IMGWTools
+        kind: data
+        status: active
+        via: [file]
+        exchange: [imgw-series-csv]
+        note: No package dependency; stats commands read series CSV exported by `imgw series export`.
+      - project: Kartograf
+        kind: data
+        status: active
+        via: [file]
+        exchange: [kartograf-files]
+        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs. HSG rules ported from Kartograf (Hydrolog ADR-025).
+
+  - name: Hydrograf
+    summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
+    profiles: [app]
+    status: active
+    repo: https://github.com/Daldek/Hydrograf
+    python_manifests: [backend/pyproject.toml, backend/requirements.txt]
+    visibility: public
+    distribution: {pypi: null, import_name: null}
+    interfaces: {cli: null, mcp: null, rest: /api, python: null}
+    data_sources: [gugik, osm]
+    provides:
+      - id: hydrograf-rest
+        kind: service
+        summary: REST API with watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t) and CSV exports; MVT tiles.
+    depends_on:
+      - project: Kartograf
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [kartograf-files, kartograf-meta/1]
+        uses: [DownloadManager, GugikProvider, MetadataCache, LandCoverManager, Bdot10kProvider, HSGCalculator, SheetParser, find_sheets_for_bbox, find_sheets_for_geometry]
+      - project: Hydrolog
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [watershed-parameters, hydrolog-python-api]
+        uses: [WatershedParameters, ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, BlockHietogram, EulerIIHietogram]
+      - project: IMGWTools
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [imgw-pmaxtp]
+        uses: [fetch_pmaxtp]
+      - project: Hydraulik
+        kind: runtime
+        status: planned
+        via: [service]
+        exchange: [hydraulik-job]
+        note: Hydraulik as an external compute node fed with a catchment domain.
+
+  - name: Hydraulik
+    summary: 2D hydraulic flood screening with Deltares SFINCS; research stage.
+    profiles: [tool]
+    status: research
+    repo: https://github.com/Daldek/Hydraulik
+    visibility: public
+    distribution: {pypi: null, import_name: hydraulik}
+    interfaces: {cli: hydraulik, mcp: null, rest: null, python: hydraulik}
+    data_sources: [osm]
+    provides:
+      - id: hydraulik-job
+        kind: contract
+        summary: Planned hydraulik.spec contracts (JobSpec, InputBundle, RunStatus, ResultManifest) and web products.
+    depends_on:
+      - project: Kartograf
+        kind: runtime
+        status: active
+        via: [cli]
+        exchange: [kartograf-files]
+        note: Calls `kartograf download` as a subprocess for DEM and BDOT10k.
+      - project: IMGWTools
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [imgw-pmaxtp]
+        uses: [fetch_pmaxtp]
+      - project: Hydrolog
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [hydrolog-python-api]
+        uses: [BetaHietogram, EulerIIHietogram]
+
+  - name: Retman
+    summary: Polish natural-language command layer over the ecosystem tools.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Retman
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: retman}
+    interfaces: {cli: retman, mcp: null, rest: null, python: retman}
+    data_sources: []
+    provides: []
+    depends_on:
+      - project: Kartograf
+        kind: optional
+        status: active
+        via: [library]
+        exchange: [kartograf-catalog/1, kartograf-download/1, kartograf-error/1, kartograf-meta/1]
+      - project: IMGWTools
+        kind: optional
+        status: active
+        via: [library]
+        exchange: [imgw-catalog, imgw-result/1, imgw-plan/1, imgw-project/1, imgw-store/1]
+      - project: Hydrolog
+        kind: optional
+        status: planned
+        via: [library]
+        exchange: [hydrolog-catalog, hydrolog-result/1]
+        note: Retman PRD roadmap.
+      - project: Hydrograf
+        kind: optional
+        status: planned
+        via: [rest]
+        exchange: [hydrograf-rest]
+        note: Retman PRD roadmap.
+
+  - name: Archiwista
+    summary: Web browser and manager of Kartograf and IMGWTools stores.
+    profiles: [app]
+    status: active
+    repo: https://github.com/Daldek/Archiwista
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: archiwista}
+    interfaces: {cli: archiwista, mcp: null, rest: /api/v1, python: null}
+    data_sources: [gugik, osm]
+    provides:
+      - id: archiwista-rest
+        kind: service
+        summary: REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE).
+      - id: archiwista-sources
+        kind: contract
+        summary: Source adapter protocol registered through the archiwista.sources entry point.
+    depends_on:
+      - project: Kartograf
+        kind: runtime
+        status: active
+        via: [library, store]
+        exchange: [kartograf-store, kartograf-meta/1, kartograf-project/1, kartograf-plan/1]
+        uses: [list_segments, list_partitions, iter_store, read_sidecar, describe_segment, file_footprint, link_target, pinned_transform, open_project, get_project_status]
+        note: Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
+      - project: IMGWTools
+        kind: optional
+        status: planned
+        via: [library, store]
+        exchange: [imgw-store/1, imgw-meta/1, imgw-series/1, imgw-project/1, imgw-observation/1, chmi-json/1]
+        note: Extra archiwista[imgw] (IMGW-1..14); ČHMÚ (IMGW-15..19).
