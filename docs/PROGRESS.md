@@ -8,7 +8,7 @@
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json` |
 | `validate`, `map`, `deps`, `drift` | done | `scripts/ecosystem.py` |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` |
-| Standard checks (`standard-check`) | planned | IDs, links, budgets, error registry copy |
+| Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
 | Contradictions in standard 2.1 | planned | decisions as ECO entries, standard 2.2 |
 | Canonical agent-interface schemas | planned | envelope, error, catalog; conformance test |
 | `nogat` package (HUB §7) | planned | |
@@ -16,10 +16,9 @@
 
 ## Next
 
-1. `standard-check` in `scripts/ecosystem.py`, run by the gate.
-2. Settle the contradictions found in standard 2.1 (language of agent-facing
+1. Settle the contradictions found in standard 2.1 (language of agent-facing
    messages, DEV-17.5 scope, hub exit codes and ERR, rule precedence).
-3. Canonical schemas in `schemas/` for `<tool>-result/1`, `<tool>-error/1`
+2. Canonical schemas in `schemas/` for `<tool>-result/1`, `<tool>-error/1`
    and `<tool>-commands/1`, with a conformance test.
 
 ## Open questions

@@ -28,6 +28,7 @@ uv run scripts/ecosystem.py map              # regenerate docs/ECOSYSTEM_MAP.md
 uv run scripts/ecosystem.py map --check      # fail when the map is stale
 uv run scripts/ecosystem.py deps             # compare third-party dependencies across checkouts
 uv run scripts/ecosystem.py drift            # compare consumers' pins with producers' latest tags
+uv run scripts/ecosystem.py standard         # check the standard's IDs, links, budgets, generated tables
 ```
 
 `deps` and `drift` read the projects' checkouts next to Nogat, or under

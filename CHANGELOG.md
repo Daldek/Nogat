@@ -17,6 +17,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   English and ignores `.env` (DEV-13.1, DEV-14.1).
 - `CLAUDE.md` with the hub's deviations, `docs/PROGRESS.md` and this
   changelog (DOC-1.1, DEV-1.2).
+- `uv run scripts/ecosystem.py standard`, run by the gate: every cited
+  requirement ID, section and decision resolves; IDs are defined once and
+  in their document; relative links and anchors resolve; Nogat's files keep
+  the DOC-1.7 budgets; the project lists typed in prose match
+  `ecosystem.yaml`; the generated tables are fresh.
+- The tables of `standards/ERROR_REGISTRY.md` §1 and §2 are generated from
+  `error_registry.json` (`standard --write`); their wording is now the
+  registry's.
 
 ### Changed
 

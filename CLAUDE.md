@@ -12,8 +12,9 @@ project registry (`ecosystem.yaml`) and the tooling that reads it. Profile:
   force-pushes or history rewrites (DEV-3.3). `std-X.Y` tags included.
 - Change only this repository; a need in another project is an entry in
   `docs/requests/<Project>.md` (DEV-17.5).
-- Never edit generated files: `docs/ECOSYSTEM_MAP.md` comes from
-  `ecosystem.yaml` (`uv run scripts/ecosystem.py map`).
+- Never edit generated files or blocks: `docs/ECOSYSTEM_MAP.md` comes from
+  `ecosystem.yaml` (`uv run scripts/ecosystem.py map`), the tables in
+  `standards/ERROR_REGISTRY.md` from `error_registry.json` (`standard --write`).
 - `standards/legacy/`, `standards/templates/` and `standards/configs/` are v1
   files kept verbatim until replaced (DOC-11.1); do not edit or copy them.
 - A requirement ID is never renumbered or reused; a deleted ID is listed in
@@ -28,6 +29,7 @@ uv run pytest                            # tests only
 uv run scripts/ecosystem.py validate     # registry
 uv run scripts/ecosystem.py map          # regenerate docs/ECOSYSTEM_MAP.md
 uv run scripts/ecosystem.py deps|drift   # read sibling checkouts (HUB §3)
+uv run scripts/ecosystem.py standard     # IDs, links, budgets; --write regenerates
 ```
 
 Checkouts of the other projects are siblings of Nogat or under
@@ -36,7 +38,8 @@ Checkouts of the other projects are siblings of Nogat or under
 ## Code map
 
 ```
-scripts/ecosystem.py   registry: validate, map, deps, drift
+scripts/ecosystem.py   registry: validate, map, deps, drift, standard
+scripts/standard.py    checks of the standard: IDs, links, budgets, copies
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 standards/             the standard; ci/ holds the templates projects copy

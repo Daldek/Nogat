@@ -13,12 +13,14 @@ chain tools without per-tool tables.
 
 ## 1. Outcomes (not errors)
 
+<!-- generated: error-outcomes from error_registry.json by `uv run scripts/ecosystem.py standard --write`; do not edit -->
 | Status | Exit | Meaning |
 |---|---|---|
-| `ok` | 0 | completed for every unit |
-| `partial` | 10 | batch completed for some units; per-unit status in `items[]` |
-| `failed` | 11 | batch ran, no unit succeeded; per-unit codes in `items[]` |
-| `cancelled` | 130 | cancelled by the user (Ctrl+C, declined plan, MCP cancellation) |
+| `ok` | 0 | Operation completed for every unit. |
+| `partial` | 10 | Batch operation completed for some units; per-unit status in items[]. |
+| `failed` | 11 | Batch operation ran but no unit succeeded; per-unit codes in items[]. |
+| `cancelled` | 130 | Cancelled by the user (Ctrl+C, declined plan, MCP cancellation). |
+<!-- end generated -->
 
 *Why:* an agent retries units when the run finished with failed units and
 fixes the call when the run could not start. Exit codes 10 and 11 never mean
@@ -26,26 +28,28 @@ an error.
 
 ## 2. Errors
 
+<!-- generated: error-codes from error_registry.json by `uv run scripts/ecosystem.py standard --write`; do not edit -->
 | Code | Exit | HTTP | Meaning |
 |---|---|---|---|
-| `internal_error` | 1 | 500 | defect in the tool, unexpected exception |
-| `validation_error` | 2 | 400 | unknown command or option, wrong type, value not allowed, missing option |
-| `not_found` | 3 | 404 | referenced file, resource, station, identifier does not exist |
-| `conflict` | 4 | 409 | version collision, lock held, identifier taken |
-| `source_unavailable` | 5 | 502 | remote service failed: timeout, connection, HTTP error, download failure |
-| `missing_dependency` | 6 | 503 | extra or external program not installed |
-| `data_error` | 7 | 500 | data read by the tool is malformed (file, archive, sidecar, stored series) |
-| `store_unavailable` | 8 | 503 | store or cache unusable: no marker, locked, unreadable, share disconnected |
-| `io_error` | 9 | 500 | file system failure: permissions, space, missing path |
-| `forbidden` | 12 | 403 | path outside allowed roots, write in read-only mode, insufficient role |
-| `calculation_error` | 13 | 422 | valid input, no computable result (no convergence, short series, failed transformation) |
-| `no_data` | 14 | 404 | valid request, source has no data for the area, period or product |
-| `unsupported` | 15 | 422 | valid request, unsupported combination or outside the tool's scope |
-| `cancelled` | 130 | – | user or SIGINT |
-| `terminated` | 143 | – | SIGTERM |
-| `unauthorized` | – | 401 | REST only |
-| `method_not_allowed` | – | 405 | REST only |
-| `rate_limited` | – | 429 | REST only |
+| `internal_error` | 1 | 500 | Defect in the tool or an unexpected exception. |
+| `validation_error` | 2 | 400 | Unknown command or option, wrong type, value out of range or not allowed, missing required option, violated exclusion rule. |
+| `not_found` | 3 | 404 | Referenced file, resource, station, project or identifier does not exist. |
+| `conflict` | 4 | 409 | Operation conflicts with current state: version collision, lock held, identifier taken. |
+| `source_unavailable` | 5 | 502 | Remote service failed: timeout, connection error, HTTP error, download failure. |
+| `missing_dependency` | 6 | 503 | Feature needs an extra or an external program that is not installed; hint names the install command. |
+| `data_error` | 7 | 500 | Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format. |
+| `store_unavailable` | 8 | 503 | Data store or cache cannot be used: missing marker, locked, unreadable, network share disconnected. |
+| `io_error` | 9 | 500 | Reading or writing files failed: permissions, no space, path missing. |
+| `forbidden` | 12 | 403 | Path outside allowed directories, write attempted in read-only mode, insufficient role. |
+| `calculation_error` | 13 | 422 | Input is valid but no result can be computed: no convergence, series too short, numerical failure, transformation failed. |
+| `no_data` | 14 | 404 | Request is valid but the source has no data for the area, period or product requested. |
+| `unsupported` | 15 | 422 | Request is valid but this combination is not supported: no safe CRS transformation, product not offered for the country, operation outside the tool's scope. |
+| `cancelled` | 130 | – | Cancelled by the user or by SIGINT. |
+| `terminated` | 143 | – | Terminated by SIGTERM (container stop, timeout). |
+| `unauthorized` | – | 401 | REST only: missing or invalid credentials. |
+| `method_not_allowed` | – | 405 | REST only: HTTP method not supported by the route. |
+| `rate_limited` | – | 429 | REST only: client exceeded a rate limit; Retry-After is set. |
+<!-- end generated -->
 
 Titles in English and Polish are in the JSON file.
 

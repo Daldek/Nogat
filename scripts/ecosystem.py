@@ -7,6 +7,8 @@ Usage:
     uv run scripts/ecosystem.py deps           # third-party ranges across checkouts
     uv run scripts/ecosystem.py deps --installed   # also versions in each .venv
     uv run scripts/ecosystem.py drift          # consumers' pins against producers' tags
+    uv run scripts/ecosystem.py standard       # IDs, links, budgets, copies
+    uv run scripts/ecosystem.py standard --write   # regenerate blocks, then check
 
 Checkouts are resolved as siblings of Nogat or under NOGAT_WORKSPACE (HUB §3).
 """
@@ -25,6 +27,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 import jsonschema
+import standard
 import yaml
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import SpecifierSet
@@ -698,6 +701,31 @@ def report_drift(registry: dict[str, Any]) -> int:
     return 0
 
 
+def check_standard(registry: dict[str, Any], write: bool) -> int:
+    """Run the checks of scripts/standard.py; print problems, return 1 if any."""
+    path = STANDARDS / "ERROR_REGISTRY.md"
+    blocks = standard.error_tables(_read_json(STANDARDS / "error_registry.json"))
+    if write:
+        text = _read(path)
+        fresh = standard.regenerate(text, blocks)
+        if fresh != text:
+            path.write_text(fresh, encoding="utf-8")
+            print(f"wrote {_shown(path)}")
+    problems = [
+        *standard.id_problems(ROOT),
+        *standard.link_problems(ROOT),
+        *standard.budget_problems(ROOT),
+        *standard.generated_problems(path, blocks, _shown(path)),
+        *standard.project_list_problems(ROOT, registry),
+    ]
+    for problem in problems:
+        print(problem, file=sys.stderr)
+    if problems:
+        return 1
+    print("standard: IDs, links, budgets, generated blocks and project lists agree")
+    return 0
+
+
 def main() -> int:
     """Run the command named on the command line; return the exit status."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -714,6 +742,12 @@ def main() -> int:
         "--installed", action="store_true", help="also compare each checkout's .venv"
     )
     sub.add_parser("drift", help="compare consumers' pins with producers' latest tags")
+    standard_cmd = sub.add_parser(
+        "standard", help="check the standard's IDs, links, budgets and copies"
+    )
+    standard_cmd.add_argument(
+        "--write", action="store_true", help="regenerate generated blocks first"
+    )
     args = parser.parse_args()
 
     try:
@@ -733,6 +767,8 @@ def main() -> int:
         return report_deps(registry, args.installed)
     if args.command == "drift":
         return report_drift(registry)
+    if args.command == "standard":
+        return check_standard(registry, args.write)
 
     text = render(registry)
     if args.check:

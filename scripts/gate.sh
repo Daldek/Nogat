@@ -43,6 +43,9 @@ run python scripts/ecosystem.py validate
 step "ecosystem map (HUB-4.5)"
 run python scripts/ecosystem.py map --check
 
+step "standard (IDs, links, budgets, generated blocks)"
+run python scripts/ecosystem.py standard
+
 step "shellcheck"
 run shellcheck standards/ci/*.sh scripts/*.sh
 
