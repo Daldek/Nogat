@@ -33,3 +33,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   environment it cannot list.
 - `validate` reports a topic document of the standard without its
   "Part of standard X.Y" line.
+- `standards/ci/check-commits.sh` rejects AI co-author trailers by the
+  trailer name or the e-mail of the tool (Devin and GitHub bot addresses
+  included) and no longer rejects people or prose that only mention a tool;
+  only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
