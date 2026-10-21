@@ -29,3 +29,9 @@
   and `configs/` (root-owned files).
 - The plans in `docs/plans/` predate DEV-17.4's `Approved:` line: add it to
   the ones the author approved.
+- Contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`,
+  `CONTRIBUTORS.md`, DEV-13.7, DEV-16.2) are listed under Deviations in
+  `CLAUDE.md`, but they are a gap, not a deliberate deviation: move the entry
+  here (ADOPTION_PLAN 0.6), or adapt Archiwista's files and write
+  `SECURITY.md` (CLA text needs the author's approval; private vulnerability
+  reporting is a GitHub setting)?
