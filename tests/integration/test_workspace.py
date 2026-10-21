@@ -155,7 +155,7 @@ def test_main_bad_registry_error_document(
     document = _error(err)
     assert document["code"] == code
     assert document["exit_code"] == exit_code
-    assert document["command"] == "validate"
+    assert document["command"] == "ecosystem validate"
     assert message in document["message"]
 
 

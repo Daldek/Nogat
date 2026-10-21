@@ -44,9 +44,11 @@ scripts/ecosystem.py   registry: validate, map, deps, drift, standard
 scripts/standard.py    checks of the standard: IDs, links, budgets, copies
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
+schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 standards/             the standard; ci/ holds the templates projects copy
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
+tests/contract/        the agent schemas and Nogat's own error documents
 ```
 
 ## Documentation map

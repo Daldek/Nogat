@@ -10,15 +10,15 @@
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` |
 | Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
 | Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
-| Canonical agent-interface schemas | planned | envelope, error, catalog; conformance test |
+| Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Generated `AGENTS.md` (HUB-4.3) | planned | routing table with links |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | planned | ADOPTION_PLAN phases 1 to 6 |
 
 ## Next
 
-1. Canonical schemas in `schemas/` for `<tool>-result/1`, `<tool>-error/1`
-   and `<tool>-commands/1`, with a conformance test.
+1. Generated Nogat `AGENTS.md` (HUB-4.3): routing table with links.
+2. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
 
 ## Open questions
 

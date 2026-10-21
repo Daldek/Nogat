@@ -103,7 +103,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | Hydraulik | catalog, `--json` envelope, registry codes for the CLI; job and result JSON Schemas kept as domain documents (`hydraulik-<kind>/1`) |
 | Retman | registry codes for exits; consume tools through `list_commands`/`command_schema`/`run_command` (AGI-2.1) instead of per-tool handlers where possible |
 | Archiwista | problem+json with registry codes (AGI-6.3); OpenAPI ids (AGI-6.2) |
-| all tools | `pyproject` metadata for discovery: keywords, classifiers, project URLs (AGI-10.1) |
+| all tools | `pyproject` metadata for discovery: keywords, classifiers, project URLs (AGI-10.1); copy of `schemas/agent/` and contract tests that validate the envelope, error documents and catalog against it (AGI-4.1); catalog published as `<tool>-commands/1` (the registry's `*-catalog` ids follow, HUB-2.5) and MCP catalog tools `<tool>_commands_list`/`<tool>_commands_schema` (AGI-5.9) |
 
 ## Phase 5: releases as git tags
 

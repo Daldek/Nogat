@@ -68,8 +68,9 @@ fragmenting the registry.
 **ERR-2** The registry grows only through a new version of this standard; a
 project that needs a new code proposes it in Nogat.
 
-**ERR-3** Each project keeps a copy of `error_registry.json` taken from the
-standard tag `std-<standard_version>` and generates its error module from it
+**ERR-3** Each project keeps a copy of `error_registry.json` and of Nogat's
+`schemas/agent/` (AGI-4.1) taken from the standard tag
+`std-<standard_version>`, and generates its error module from the registry
 (for example `src/<package>/_errors.py`); a contract test compares the module
 with the copy.
 *Why:* ECO-015; the gate is offline, so it compares the generated module with

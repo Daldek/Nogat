@@ -9,7 +9,8 @@ Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 ## 1. Role
 
 **HUB-1.1** Nogat holds:
-1. this standard (`standards/`);
+1. this standard (`standards/`) and the schemas of the shared agent
+   documents (`schemas/agent/`, AGI-4.1);
 2. the project registry (`ecosystem.yaml`);
 3. tooling that reads the registry (drift report, workspace sync, MCP
    configuration, routing table for agents, checks of this standard);

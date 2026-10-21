@@ -59,6 +59,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-047](#eco-047-plan-approval-is-a-line-in-the-plan) | Plan approval is a line in the plan | accepted | 2026-10-21 |
 | [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
+| [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | accepted | 2026-10-21 |
 
 ---
 
@@ -724,7 +725,8 @@ Hydraulik does not distribute it.
 
 **Decision.** Machine output is English whatever the user's language:
 `--json` output, the error document on the last stderr line, MCP results and
-descriptions, REST responses. `lang` (default `pl`) selects the language of
+descriptions, REST responses unless the client sends `Accept-Language`
+(browsers of a web UI do). `lang` (default `pl`) selects the language of
 human-readable output only. `hint` is in the language of `message`.
 
 **Why.** With `lang = pl` as the default, the error document that agents
@@ -828,3 +830,26 @@ the repository's own branches, which DEV-4.5 and the CI template did not.
 
 **Rejected.** Checking every pull request into `main` (re-checks released
 history, the failure ECO-038 removed).
+
+## ECO-050 Agent documents have canonical schemas in Nogat
+
+**Decision.** The result envelope, the error document and the command
+catalog have JSON Schemas in Nogat `schemas/agent/` (`result-1`, `error-1`,
+`commands-1`); the error schema is generated from `error_registry.json`.
+Projects copy them with the registry (ERR-3) and validate their documents in
+contract tests. The contract they encode: an error prints nothing on stdout
+and the error document on stderr; `partial` and `failed` print the envelope
+and no error document; a failed unit carries a registry `code`;
+`validate_command` checks options without planning; the MCP catalog tools are
+`<tool>_commands_list` and `<tool>_commands_schema`; a catalog command lists
+its MCP `families`.
+
+**Why.** AGENT_INTERFACE.md defined the documents in prose only, without
+examples; seven projects could each claim AGI-1.2 and still emit different
+documents. The review also found the stream contract on errors, the meaning
+of `validate_command`, the `core` family field and the catalog tool name
+(which broke AGI-5.2's pattern) undefined.
+
+**Rejected.** Each project writing its own schemas (drift, Zen 2); a Python
+package of validators before the `nogat` package exists (one more
+distribution to release).

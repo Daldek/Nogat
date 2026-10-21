@@ -80,9 +80,9 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 ## Changelog
 
 - 2.1 (2026-10-21, not yet published):
-  - Agent-facing text by channel: `--json`, MCP and REST output is English,
-    human-readable output follows `lang` (AGI-9.2, DEV-2.2, ERR-6, Zen 9,
-    ECO-042).
+  - Agent-facing text by channel: `--json`, MCP and REST without
+    `Accept-Language` are English, human-readable output follows `lang`
+    (AGI-9.2, AGI-6.4, DEV-2.2, ERR-6, Zen 9, ECO-042).
   - Needs between projects are GitHub issues labelled `request` in the
     target repository; `docs/requests/` is gone (DEV-17.1, DEV-17.5,
     ECO-043).
@@ -94,6 +94,12 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - Nogat's AGENTS.md is a routing table with links (HUB-4.3, ECO-048).
   - Hotfix commits are checked on entry to `main`; messages are checked on
     every pull request into `develop` (DEV-4.5, ECO-049).
+  - Canonical schemas of the result envelope, error document and catalog in
+    Nogat `schemas/agent/`, copied by projects with the error registry; the
+    contract they encode: stdout on errors and outcomes, failed units with a
+    code, `validate_command`, MCP catalog tool names, MCP families
+    (AGI-2.1, AGI-2.2, AGI-3.2, AGI-3.3, AGI-4.1, AGI-4.2, AGI-5.9, ERR-3,
+    ECO-050).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

@@ -49,7 +49,8 @@ maintenance (ECO-005, ECO-023).
 
 **DEV-2.2** Human-readable output for end users (UI, CLI output without
 `--json`) is Polish by default and English on request; machine output
-(`--json`, MCP, REST) is English. AGI-9.2 defines the switch.
+(`--json`, MCP, REST without `Accept-Language`) is English. AGI-9.2 defines
+the switch.
 *Why:* target user groups are in Poland; agents read English (ECO-042).
 
 **DEV-2.3** User-facing text MUST live in translation resources (for example

@@ -25,6 +25,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 - The tables of `standards/ERROR_REGISTRY.md` §1 and §2 are generated from
   `error_registry.json` (`standard --write`); their wording is now the
   registry's.
+- `schemas/agent/`: canonical JSON Schemas of `<tool>-result/1`,
+  `<tool>-error/1` (generated from `error_registry.json` by
+  `standard --write`) and `<tool>-commands/1`, with contract tests of the
+  rules they enforce and of Nogat's own error documents (AGI-4.1, ECO-050).
 
 ### Changed
 

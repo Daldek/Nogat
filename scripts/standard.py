@@ -7,6 +7,7 @@ registry tables in standards/ERROR_REGISTRY.md).
 
 from __future__ import annotations
 
+import json
 import re
 import tomllib
 import unicodedata
@@ -258,6 +259,59 @@ def generated_problems(path: Path, blocks: dict[str, str], shown: str) -> list[s
             "run: uv run scripts/ecosystem.py standard --write"
         )
     return problems
+
+
+def error_schema(registry: dict[str, Any]) -> str:
+    """Return schemas/agent/error-1.schema.json, generated from error_registry.json.
+
+    The codes, and the exit code each one fixes, come from the registry; the
+    rest of the document is AGI-4.3.
+    """
+    codes = [e["code"] for e in registry["errors"]]
+    schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/Daldek/Nogat/schemas/agent/error-1.schema.json",
+        "title": "<tool>-error/1",
+        "description": (
+            "Error document (AGI-4.3, ERR-4). Generated from "
+            "standards/error_registry.json by `uv run scripts/ecosystem.py "
+            "standard --write`; do not edit. Unknown fields are allowed (AGI-4.1)."
+        ),
+        "type": "object",
+        "required": ["schema", "code", "title", "message", "details", "exit_code"],
+        "properties": {
+            "schema": {"type": "string", "pattern": "^[a-z][a-z0-9]*-error/1$"},
+            "code": {"$ref": "#/$defs/code"},
+            "title": {"type": "string", "minLength": 1},
+            "message": {"type": "string", "minLength": 1},
+            "hint": {"type": "string", "minLength": 1},
+            "details": {
+                "type": "object",
+                "properties": {"reason": {"$ref": "#/$defs/reason"}},
+            },
+            "exit_code": {"type": ["integer", "null"]},
+            "command": {"$ref": "commands-1.schema.json#/$defs/command_name"},
+        },
+        "allOf": [
+            {
+                "if": {"properties": {"code": {"const": e["code"]}}},
+                "then": {"properties": {"exit_code": {"const": e["exit_code"]}}},
+            }
+            for e in registry["errors"]
+        ],
+        "$defs": {
+            "code": {"enum": codes},
+            "reason": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        },
+    }
+    return json.dumps(schema, indent=2, ensure_ascii=False) + "\n"
+
+
+def file_problems(path: Path, expected: str, shown: str) -> list[str]:
+    """Check that a generated file exists and equals its generator's output."""
+    if not path.is_file() or path.read_text(encoding="utf-8") != expected:
+        return [f"{shown}: stale; run: uv run scripts/ecosystem.py standard --write"]
+    return []
 
 
 def _names(text: str) -> set[str]:

@@ -37,6 +37,7 @@ from packaging.version import InvalidVersion, Version
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = ROOT / "ecosystem.yaml"
 SCHEMA = ROOT / "schemas" / "ecosystem.schema.json"
+ERROR_SCHEMA = ROOT / "schemas" / "agent" / "error-1.schema.json"
 MAP = ROOT / "docs" / "ECOSYSTEM_MAP.md"
 
 LOCAL_PATH = re.compile(r"(^|\s)(/home/|/Users/|~/|[A-Za-z]:\\)")
@@ -738,16 +739,28 @@ def report_drift(registry: dict[str, Any]) -> int:
 
 
 def check_standard(registry: dict[str, Any], write: bool) -> int:
-    """Run the checks of scripts/standard.py; Failure when any finds a problem."""
+    """Run the checks of scripts/standard.py; Failure when any finds a problem.
+
+    Generated outputs: the error tables of ERROR_REGISTRY.md and
+    schemas/agent/error-1.schema.json, both from error_registry.json.
+    """
     path = STANDARDS / "ERROR_REGISTRY.md"
-    blocks = standard.error_tables(_read_json(STANDARDS / "error_registry.json"))
+    errors = _read_json(STANDARDS / "error_registry.json")
+    blocks = standard.error_tables(errors)
+    schema = standard.error_schema(errors)
     if write:
         text = _read(path)
         fresh = standard.regenerate(text, blocks)
         if fresh != text:
             path.write_text(fresh, encoding="utf-8")
             print(f"wrote {_shown(path)}")
-    stale = standard.generated_problems(path, blocks, _shown(path))
+        if not ERROR_SCHEMA.is_file() or _read(ERROR_SCHEMA) != schema:
+            ERROR_SCHEMA.write_text(schema, encoding="utf-8")
+            print(f"wrote {_shown(ERROR_SCHEMA)}")
+    stale = [
+        *standard.generated_problems(path, blocks, _shown(path)),
+        *standard.file_problems(ERROR_SCHEMA, schema, _shown(ERROR_SCHEMA)),
+    ]
     problems = [
         *standard.id_problems(ROOT),
         *standard.link_problems(ROOT),
@@ -766,11 +779,11 @@ def check_standard(registry: dict[str, Any], write: bool) -> int:
     if stale:
         raise Failure(
             "conflict",
-            f"{_shown(path)} has stale generated blocks",
+            "generated outputs of the standard are stale",
             hint="run: uv run scripts/ecosystem.py standard --write",
-            details={"reason": "stale_generated_file", "path": _shown(path)},
+            details={"reason": "stale_generated_file", "count": len(stale)},
         )
-    print("standard: IDs, links, budgets, generated blocks and project lists agree")
+    print("standard: IDs, links, budgets, generated outputs and project lists agree")
     return 0
 
 
@@ -886,7 +899,8 @@ def main(argv: list[str] | None = None) -> int:
     command = None
     try:
         args = _parser().parse_args(argv)
-        command = args.command
+        # `ecosystem <verb>`, the form of `nogat ecosystem <verb>` (HUB-7.3).
+        command = f"ecosystem {args.command}"
         return run(args)
     except Failure as failure:
         document = error_document(failure, command)
