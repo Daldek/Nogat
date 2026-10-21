@@ -1,7 +1,9 @@
 # Shared error registry
 
-Version 2.0 · 2026-10-19 · IDs `ERR-…` · source of truth:
-[error_registry.json](error_registry.json) (this page explains it).
+Part of standard 2.1 · IDs `ERR-…`
+
+[error_registry.json](error_registry.json) is the source of truth; this page
+explains it.
 
 One registry for every project (ECO-015). An exit code or HTTP status means the
 same thing whichever tool produced it, so agents, Retman and shell scripts can
@@ -18,9 +20,9 @@ chain tools without per-tool tables.
 | `failed` | 11 | batch ran, no unit succeeded; per-unit codes in `items[]` |
 | `cancelled` | 130 | cancelled by the user (Ctrl+C, declined plan, MCP cancellation) |
 
-*Why:* IMGWTools separates "the run finished with failed units" from "the run
-could not start". An agent retries units in the first case and fixes the call
-in the second. Exit codes 10 and 11 never mean an error.
+*Why:* an agent retries units when the run finished with failed units and
+fixes the call when the run could not start. Exit codes 10 and 11 never mean
+an error.
 
 ## 2. Errors
 
@@ -47,16 +49,9 @@ in the second. Exit codes 10 and 11 never mean an error.
 
 Titles in English and Polish are in the JSON file.
 
-*Why the numbers:* 1–9 keep IMGWTools' assignments, the most complete
-registry and already shared with Hydrolog for 2, 3, 6, 7 and 9. New codes
-take 12–15, so they cannot collide with the outcomes 10 and 11. This resolves
-the existing collisions:
-- 4 meant `conflict` in IMGWTools and `calculation_error` in Hydrolog.
-- 8 meant `store_unavailable` in IMGWTools and `forbidden` in Hydrolog.
-- In Kartograf, 1 mixed domain outcomes (`no_coverage`, `download_failed`)
-  with defects.
-
-130 and 143 follow the 128+signal convention.
+*Why the numbers:* new codes take 12–15, so they cannot collide with the
+outcomes 10 and 11; 130 and 143 follow the 128+signal convention; ECO-015
+records the collisions this resolves.
 
 ## 3. Rules
 
@@ -69,19 +64,22 @@ fragmenting the registry.
 **ERR-2** The registry grows only through a new version of this standard; a
 project that needs a new code proposes it in Nogat.
 
-**ERR-3** Each project vendors the registry as generated code (for example
-`src/<package>/_errors.py`) and a contract test compares it with
-`error_registry.json` of the pinned standard version.
+**ERR-3** Each project keeps a copy of `error_registry.json` taken from the
+standard tag `std-<standard_version>` and generates its error module from it
+(for example `src/<package>/_errors.py`); a contract test compares the module
+with the copy.
+*Why:* ECO-015; the gate is offline, so it compares the generated module with
+the vendored copy.
 
 **ERR-4** Interfaces report errors as follows:
 - Python: `<Project>Error` subclass with `code`, `message`, `hint`, `details`.
-- CLI: last line of stderr is `<prefix>-error/1`; exit code from the table.
+- CLI: last line of stderr is `<tool>-error/1`; exit code from the table.
 - MCP: `isError: true` with the error document.
 - REST: `application/problem+json` with `type` pointing to this page's anchor
   for the code, `status` from the table, plus `code`, `hint`, `details`.
 
 **ERR-5** Every error has a `hint` when a fix is known: the option to change,
-allowed values, the command to run (`uv add "kartograf[mcp]"`).
+allowed values, the command to run (`uv add "nogat-<project>[mcp]"`).
 *Why:* the hint lets an agent fix the call in one retry instead of a guess.
 
 **ERR-6** `message` and `title` follow the active language (AGI-9.2); `code`,

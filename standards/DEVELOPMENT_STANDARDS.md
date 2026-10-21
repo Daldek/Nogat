@@ -1,11 +1,6 @@
 # Development standards
 
-Version 2.0 · 2026-10-19 · applies to every project listed in `ecosystem.yaml`.
-
-Keywords MUST, MUST NOT, SHOULD, SHOULD NOT and MAY follow RFC 2119. Every
-requirement has an ID (`DEV-…`) so project documents, ADRs and adoption plans
-can reference it. Rationale follows each requirement; longer reasoning is in
-[DECISIONS.md](DECISIONS.md).
+Part of standard 2.1 · IDs `DEV-…`
 
 Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 [AGENT_INTERFACE.md](AGENT_INTERFACE.md), [ERROR_REGISTRY.md](ERROR_REGISTRY.md),
@@ -18,130 +13,132 @@ Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 
 Requirements apply to all projects unless marked with a profile.
 
-| Profile | Meaning | Projects (2026-10-19) |
+| Profile | Meaning | Projects |
 |---|---|---|
-| `library` | Python package consumed by other code | Hydrolog |
-| `tool` | Package with library + CLI + MCP (+ optional REST) | Kartograf, IMGWTools, Hydrolog (v1.0) |
-| `app` | Deployed application (web UI, server) | Hydrograf, Archiwista |
-| `pipeline` | Compute package driven by config files, research stage | Hydraulik |
-| `assistant` | Natural-language layer over other tools | Retman |
-| `hub` | Registry, standards, collected scripts | Nogat |
+| `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, IMGWTools, Hydrolog, Retman, Hydraulik |
+| `app` | Deployed service (web UI, server) | IMGWTools (web GUI), Hydrograf, Archiwista |
+| `hub` | Registry, standard and user package | Nogat |
 
-A project may have several profiles (IMGWTools: `tool` + `app` for its web GUI).
+A project may have several profiles; `ecosystem.yaml` is authoritative.
 
 **DEV-1.1** Each project MUST declare its profiles in `ecosystem.yaml` and in
 the first section of `CLAUDE.md`.
 *Why:* profiles decide which sections of this standard apply; agents need
 that without reading the whole standard.
 
-**DEV-1.2** Deviations from this standard MUST be recorded as an ADR in the
-project and listed in a "Deviations from the ecosystem standard" section of
-`CLAUDE.md` with the requirement ID.
-*Why:* undocumented deviations look like mistakes to the next agent, which
-then "fixes" them.
+**DEV-1.2** A deviation from this standard is recorded in one place: the
+"Deviations" section of the project's `CLAUDE.md`, as the requirement ID, one
+line and a link to the ADR if there is one.
+*Why:* an undocumented deviation looks like a mistake to the next agent,
+which then "fixes" it.
 
-**DEV-1.3** Project documents MUST reference this standard by version and
-URL, not by relative path, and MUST NOT copy its content. A project-level
-`docs/DEVELOPMENT_STANDARDS.md` MAY exist and then contains only additions
-and deviations.
-*Why:* v1.0 was copied into six projects and forked into six versions; the
-relative path `../../shared/standards/` never existed in the workspace.
+**DEV-1.3** Project documents cite requirements by ID and link to this
+standard by URL, never by relative path; they do not copy its content, and a
+project has no `docs/DEVELOPMENT_STANDARDS.md`.
+*Why:* a copy forks into a second version of the rule.
 
 ---
 
 ## 2. Language
 
 **DEV-2.1** Code, identifiers, docstrings, comments, log messages,
-documentation, commit messages, ADRs, specs, research notes, error codes,
-JSON field names and catalog/MCP descriptions MUST be in English.
+documentation, commit messages, ADRs, plans, error codes, JSON field names and
+catalog/MCP descriptions MUST be in English.
 *Why:* agents search and parse English; one language removes duplicate
 maintenance (ECO-005, ECO-023).
 
-**DEV-2.2** Text shown to end users of applications and human-readable CLI
-messages MUST be Polish by default and SHOULD be available in English
-through the language switch defined in AGENT_INTERFACE §9.
+**DEV-2.2** Text shown to end users (UI and CLI messages, error titles) is
+Polish by default and English on request; AGI-9.2 defines the switch.
 *Why:* target user groups are in Poland; English output helps agents and
 non-Polish collaborators.
 
 **DEV-2.3** User-facing text MUST live in translation resources (for example
-`locales/pl.toml`, `messages.py` dictionaries keyed by English IDs), not
+`locales/pl.toml`, or `messages.py` dictionaries keyed by English IDs), not
 inline in logic.
-*Why:* keeps code English and lets the language switch work everywhere
-(Retman `pl.toml` and Archiwista `messages.py` are the reference).
+*Why:* keeps code English and lets the language switch work everywhere.
 
 **DEV-2.4** Polish domain proper names (BDOT10k, PMAXTP, TERYT, NMT) MAY be
 used as identifiers when they are the official name of a dataset or system.
 Common words MUST be translated (`road_class`, not `klasa`).
-*Why:* official names are what users and agents search for; translating
-common words keeps the code readable for agents (Hydraulik `roads.py`
-currently uses `klasa`, `przejezdny`, `uwagi`).
+*Why:* official names are what users and agents search for.
 
 ---
 
 ## 3. Git
 
 **DEV-3.1** Branches: `main` (released state, default branch on GitHub),
-`develop` (integration), `feature/<topic>`, `fix/<topic>`, `docs/<topic>`
-from `develop`, `hotfix/<topic>` from `main`.
+`develop` (integration), topic branches `<type>/<topic>` from `develop`
+(`<type>` is a Conventional Commits type, DEV-4.1) and `hotfix/<topic>` from
+`main`.
 *Why:* one model for every repository (ECO-008).
 
-**DEV-3.2** Releases MUST be annotated tags `vX.Y.Z` on `main`. Working
-checkpoints are recorded in PROGRESS, not as tags.
-*Why:* consumers pin tags (ECO-016).
+**DEV-3.3** Without the author's approval in the current session an agent
+MUST NOT merge a pull request, create or move tags, publish a release,
+force-push a branch that is shared or merged, or rewrite the history of
+`main` or `develop`. Pushing its own topic branch and opening a pull request
+are allowed.
+*Why:* these operations are visible to consumers and hard to undo (ECO-030).
 
-**DEV-3.3** An agent MUST NOT merge into `main` or `develop`, push, create or
-move tags, force-push or rewrite history without explicit approval of the
-author in the current session.
-*Why:* these operations are visible to consumers and hard to undo; current
-practice in Kartograf and Archiwista.
+**DEV-3.4** A cross-project change planned in Nogat (DEV-17.5) is made on a
+dedicated branch of the target repository and follows the target's
+`CLAUDE.md`, including its CHANGELOG and PROGRESS rules.
+*Why:* the target repository stays the authority over its own rules.
 
-**DEV-3.4** An agent working from another repository (including Nogat) MUST
-work on a dedicated branch in the target repository, MUST follow the target's
-`CLAUDE.md`, and MUST record what it changed in the target's PROGRESS and
-CHANGELOG.
-*Why:* cross-repo work is the purpose of the hub; the target repository stays
-the authority over its own rules (Kartograf `CLAUDE.md` rule for agents from
-other repositories).
+**DEV-3.5** Work MUST be committed in the repository it belongs to.
+*Why:* uncommitted work is invisible to other agents and blocks history
+rewrites and branch renames.
 
-**DEV-3.5** Work MUST be committed in the repository it belongs to. Long-lived
-uncommitted work in worktrees SHOULD be avoided; an exception (such as the
-Hydraulik proof of concept) MUST be stated in `CLAUDE.md`.
-*Why:* uncommitted work blocks history rewrites, branch renames and other
-cross-repo operations and is invisible to other agents.
+**DEV-3.6** `main` and `develop` are protected on GitHub by a ruleset: pull
+request required, 0 approvals, required checks = the three non-experimental
+`gate` jobs (and `db` where the project has that job, DEV-7.7), force push and
+deletion blocked, no bypass actors. Every pull request (topic → `develop`,
+`develop` → `main`, hotfix → `main`) is merged with a merge commit, the only
+merge method the ruleset allows. A tag ruleset blocks update and deletion of
+`v*` tags. For a history rewrite the author disables the ruleset, rewrites,
+re-enables it and notes it in PROGRESS.
+*Why:* ECO-030, ECO-037; turns DEV-3.3 and the gate into a technical control
+instead of agent discipline.
 
 ---
 
 ## 4. Commits
 
-**DEV-4.1** Messages MUST follow Conventional Commits:
-`<type>(<scope>): <description>`, types `feat`, `fix`, `docs`, `test`,
-`refactor`, `perf`, `style`, `build`, `ci`, `chore`. Breaking changes MUST
-use `!` after the scope and a `BREAKING CHANGE:` footer.
-*Why:* already used everywhere; machine-readable history enables CHANGELOG
-checks.
+**DEV-4.1** Subjects MUST follow Conventional Commits:
+`<type>[(<scope>)][!]: <description>` with type `feat`, `fix`, `docs`, `test`,
+`refactor`, `perf`, `style`, `build`, `ci` or `chore`; `!` marks a breaking
+change. Merge commits and git's own `Revert "…"` subjects are exempt.
+*Why:* machine-readable history; the gate checks exactly this.
 
-**DEV-4.2** Author and committer MUST be `Daldek <git@debever.pl>`; each
-repository MUST set `user.name` and `user.email` locally.
-*Why:* ECO-006; repository-local configuration prevents agents committing
+**DEV-4.2** Commits made by the author and by agents have the author
+`Daldek <git@debever.pl>`; each repository MUST set `user.name` and
+`user.email` locally. The committer is not checked and merge commits created
+by GitHub are exempt. External contributors keep their identity (DEV-16.5).
+*Why:* ECO-006, ECO-038; a repository-local setting stops agents committing
 under their own identity.
 
 **DEV-4.3** Messages MUST NOT contain `Co-Authored-By` trailers naming AI
-tools, "Generated with ..." lines or other AI attribution. The gate (DEV-7.6)
-MUST reject such commits.
-*Why:* ECO-006; enforcement in the gate is the only reliable control because
-agent defaults add these lines.
+tools, `Claude-Session:` lines, "Generated with ..." lines or other AI
+attribution. The gate rejects such commits.
+*Why:* ECO-006; agent defaults add these lines, so a check is the only
+reliable control.
 
-**DEV-4.4** One logical change per commit; documentation that describes a
-change SHOULD be in the same commit as the change.
+**DEV-4.4** One logical change per commit, together with the documentation
+that describes it.
 *Why:* review and revert by agents operate on commits.
+
+**DEV-4.5** Commit messages and authors are checked once, when commits enter
+`develop`: locally by the gate (DEV-7.6) and in CI on pull requests into
+`develop`. The author check applies to pull requests from the repository's
+own branches, not to forks or Dependabot. Pull requests into `main` and
+pushes are not checked again.
+*Why:* ECO-038.
 
 ---
 
 ## 5. Repository layout
 
-**DEV-5.1** (`library`, `tool`, `assistant`, `pipeline`) Code MUST be in
-`src/<package>/`. (`app`) Deployed applications MAY use another layout
-documented in `CLAUDE.md`.
+**DEV-5.1** (`tool`, `hub`) Package code MUST be in `src/<package>/`. (`app`)
+Another layout MAY be used and is described in `CLAUDE.md`.
 *Why:* ECO-011.
 
 **DEV-5.2** Standard top level:
@@ -153,20 +150,17 @@ documented in `CLAUDE.md`.
 │   ├── unit/           # offline, fast
 │   ├── integration/    # offline, several modules or a database
 │   ├── contract/       # interface parity, generated-file drift, registry
-│   ├── live/           # real network services (marker `live`)
-│   ├── e2e/            # end-to-end UI or pipeline (optional)
-│   ├── perf/           # benchmarks (optional)
 │   └── fixtures/
-├── docs/               # see DOCUMENTATION_STANDARDS
-├── scripts/            # gate.sh and helpers
-├── README.md  CLAUDE.md  AGENTS.md  llms.txt  LICENSE
+├── docs/               # DOC §1
+├── scripts/            # gate.sh, check-commits.sh and helpers
+├── .github/            # workflows, dependabot.yml, PR template
+├── README.md  CLAUDE.md  LICENSE  …   # required files: DOC §1
 ├── pyproject.toml  uv.lock
-├── .editorconfig  .gitattributes  .gitignore  .env.example
+└── .editorconfig  .gitattributes  .gitignore  .env.example
 ```
 
-*Why:* agents locate tests, docs and gates without exploration; the `tests/`
-split mirrors markers used by the gate (IMGWTools and Archiwista already
-split this way).
+*Why:* agents locate tests, docs and gates without exploration. A test that
+needs a service or a database carries a marker (DEV-10.1), not a directory.
 
 **DEV-5.3** All tool configuration MUST be in `pyproject.toml`; no
 `setup.cfg`, `tox.ini`, `.flake8`, `pyrightconfig.json`.
@@ -182,36 +176,29 @@ installing from a wheel (ECO-011).
 
 ## 6. Python environment and dependencies
 
-**DEV-6.1** Python `>=3.12`. CI SHOULD also test the newest stable Python.
-*Why:* common baseline today (Retman ADR-002, Kartograf); newest version
-catches deprecations early.
+**DEV-6.1** `requires-python` is `>=3.12`.
 
 **DEV-6.2** uv MUST manage environments and dependencies; the environment is
-`.venv/` in the repository root; commands are run through `uv run` or
-`.venv/bin/…`.
+`.venv/` in the repository root; commands are run through `uv run`.
 *Why:* ECO-012; one invocation pattern for agents.
 
-**DEV-6.3** `uv.lock` MUST be committed. (`app`, `pipeline`) Deployment and
-container builds MUST install with `uv sync --frozen`.
-*Why:* reproducible environments; prevents the rebuild failures seen in
-Hydrograf.
+**DEV-6.3** `uv.lock` MUST be committed, and every install (development, CI,
+deployment, container build) MUST use `uv sync --locked`.
+*Why:* ECO-012; a stale lock fails the install instead of being ignored.
 
-**DEV-6.4** (`library`, `tool`) Runtime dependencies MUST be ranges with a
-lower bound; an upper bound only for a known incompatibility, with a comment
-naming the reason.
-*Why:* exact pins in a library make consumers unsolvable; reasons for caps
-(`affine<3`, `sqlalchemy<2.1`) are otherwise forgotten.
+**DEV-6.4** (`tool`) Runtime dependencies on third-party packages MUST be
+ranges with a lower bound; an upper bound only for a known incompatibility,
+with a comment naming the reason. Dependencies on ecosystem projects follow
+REL §5.
+*Why:* exact pins in a library make consumers unsolvable; reasons for caps are
+otherwise forgotten.
 
 **DEV-6.5** Optional features MUST be extras (`[mcp]`, `[api]`, `[raster]`,
-`[viz]`, `[all]`); development tools MUST be a `dev` dependency group.
-Missing extras MUST raise `missing_dependency` (ERROR_REGISTRY) naming the
+`[viz]`, `[all]`); development tools MUST be a `dev` dependency group. A
+missing extra raises `missing_dependency` (`error_registry.json`) naming the
 install command.
 *Why:* keeps base installs light for agents (MCP startup time) and makes the
 fix self-explaining.
-
-**DEV-6.6** Dependencies on other ecosystem projects MUST follow
-RELEASE_AND_DISTRIBUTION §5.
-*Why:* ECO-016.
 
 ---
 
@@ -223,38 +210,42 @@ RELEASE_AND_DISTRIBUTION §5.
 **DEV-7.2** Linting: `ruff check` with at least
 `select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "D"]` and
 `pydocstyle.convention = "numpy"`; tests MAY ignore `D`.
-*Why:* union of rules already used (IMGWTools, Archiwista); `D` enforces the
-docstrings agents rely on.
+*Why:* `D` enforces the docstrings agents rely on.
 
-**DEV-7.3** Type checking: mypy over `src/` and `tests/`. New projects
-`strict = true`. Existing projects MAY keep a committed baseline of known
-errors that MUST NOT grow, and SHOULD reach strict.
+**DEV-7.3** Type checking: mypy over `src/` and `tests/` with `strict = true`.
+A shortfall is a per-module override in `pyproject.toml`, listed as a
+deviation in `CLAUDE.md` (DEV-1.2).
 *Why:* ECO-010.
 
-**DEV-7.4** (`library`, `tool`) The package MUST ship `py.typed` and declare
+**DEV-7.4** (`tool`) The package MUST ship `py.typed` and declare
 `Typing :: Typed`.
-*Why:* typed public API is the most precise documentation an agent gets; an
-agent writing consumer code gets errors before running it.
+*Why:* a typed public API gives an agent writing consumer code errors before
+it runs the code.
 
-**DEV-7.5** Coverage MUST be at least 80% for the package; the threshold is
-set in `[tool.coverage.report] fail_under`. Projects below MAY set their
-current value and MUST NOT lower it.
-*Why:* 80% is practised in six projects; a ratchet lets Kartograf (60%)
-converge.
+**DEV-7.5** Package coverage MUST be at least 80%; `[tool.coverage.report]
+fail_under` is the floor. Setting it below 80 or lowering it is a deviation
+line in `CLAUDE.md` (DEV-1.2).
+*Why:* the gate enforces the floor; a deviation line keeps a lowered floor
+visible to the next agent.
 
-**DEV-7.6** Each repository MUST have `scripts/gate.sh` that runs, in order:
-`ruff format --check`, `ruff check`, mypy, offline tests, contract tests
-(generated files, error registry, interface parity) and commit-message checks
-(DEV-4.3). It MUST work from a git worktree. A commit MUST NOT be made when
-the gate fails.
-*Why:* one command for agents to verify work; Kartograf's worktree-aware
-`gate.sh` is the reference.
+**DEV-7.6** Each repository MUST have `scripts/gate.sh` (template
+`standards/ci/gate.sh` with `check-commits.sh`) that works from a git worktree
+and runs, in order: `ruff format --check`, `ruff check`, mypy, one pytest call
+over `tests/` with coverage (selection per DEV-10.1; contract tests are part of
+`tests/`), and the commit step: an identity preflight (git must commit as the
+author, DEV-4.2), then the checks of DEV-4.1 to DEV-4.3 on commits already
+made. Run the gate before every commit and do not commit while any other step
+fails; a failing message on an unpushed commit is repaired by amending it,
+which needs no approval.
+*Why:* one command for agents to verify work; the message of a commit cannot
+be checked before the commit exists.
 
 **DEV-7.7** CI (GitHub Actions) MUST run the gate on push and pull request to
-`main` and `develop`. (`library`, `tool`, `assistant`) CI SHOULD run on Linux,
-macOS and Windows.
-*Why:* only Hydrograf has CI today; Retman and IMGWTools target Windows and
-have had macOS/Windows-specific store bugs.
+`main` and `develop`: on Linux, macOS and Windows for `tool` projects; an
+`app` project MAY run the platform matrix without `db` tests plus a Linux `db`
+job. Templates: `standards/ci/ci.yml` (gate on the three systems) and
+`standards/ci/live.yml` (weekly `live` tests).
+*Why:* file-system and path bugs appear only on the platform that has them.
 
 ---
 
@@ -266,8 +257,7 @@ classes, `UPPER_SNAKE_CASE` constants, `_prefix` for internal names.
 **DEV-8.2** Physical quantities MUST carry the unit in the name: `area_km2`,
 `elevation_m`, `discharge_m3s`, `precipitation_mm`, `intensity_mm_h`,
 `duration_min`, `timeout_s`, `slope_percent`, `slope_m_per_m`, `size_bytes`.
-*Why:* removes unit ambiguity for people and agents; consistently practised
-in every project.
+*Why:* removes unit ambiguity for people and agents.
 
 **DEV-8.3** Function name prefixes carry meaning and MUST be used
 consistently across projects:
@@ -286,67 +276,66 @@ consistently across projects:
 | `calculate_` | pure computation |
 | `export_` | write a derived file for users |
 
-*Why:* union of prefixes from Kartograf, IMGWTools, Archiwista and Retman; an
-agent infers effects (network, writes) from the name.
-
-**DEV-8.4** Interface option names MUST follow the shared vocabulary in
-AGENT_INTERFACE §3.4.
-*Why:* an agent that learned one tool can drive the next without lookup.
+*Why:* an agent infers effects (network, writes) from the name.
 
 ---
 
 ## 9. Docstrings and comments
 
 **DEV-9.1** Every public module, class and function MUST have a NumPy-style
-docstring in English with `Parameters`, `Returns`, `Raises` and, for public
-API, an `Examples` section that runs as a doctest.
-*Why:* NumPy style is already used in every project; examples are what
-indexers (Context7) and agents extract.
+docstring in English with `Parameters`, `Returns` and `Raises`; public API
+adds an `Examples` section.
+*Why:* examples are what agents extract.
 
 **DEV-9.2** Units MUST be stated in docstrings in square brackets (`[km2]`).
 
-**DEV-9.3** Comments explain why, not what. `TODO`, `FIXME`, `NOTE` tags MAY be
-used; open questions belong in PROGRESS or an ADR, not in code.
+**DEV-9.3** Comments explain why, not what; open questions belong in PROGRESS
+or an ADR, not in code.
 
 ---
 
 ## 10. Testing
 
-**DEV-10.1** pytest with `--strict-markers`. Registered markers: `live`
-(real network), `slow` (more than ~10 s or Docker), `db` (database), `perf`,
-`e2e`. The default run and the gate MUST exclude `live`, `perf` and `e2e`.
-*Why:* deterministic offline runs for agents; union of markers in use.
+**DEV-10.1** pytest runs with `--strict-markers`. Registered markers: `live`
+(real network services), `db` (needs a database), `slow` (more than ~10 s or
+Docker). The default run and the gate MUST exclude `live`, and `db` where no
+database is available.
+*Why:* deterministic offline runs for agents; a marker says what a test needs.
 
 **DEV-10.2** Unit tests MUST NOT access the network; HTTP is mocked (for
 example `respx`) or replaced by recorded fixtures.
 
-**DEV-10.3** Live tests MUST be runnable on demand and SHOULD write a JSON
-report of results.
-*Why:* upstream services (IMGW, GUGiK, ČÚZK) change without notice; IMGWTools
-`IMGW_LIVE_REPORT` is the reference.
+**DEV-10.3** Live tests MUST be runnable on demand; CI runs them weekly
+(`standards/ci/live.yml`), never in the gate.
+*Why:* upstream services change without notice.
 
-**DEV-10.4** (`tool`) Contract tests MUST check: parity of option names across
-library, CLI, MCP and REST; generated files (`AGENTS.md`, `llms.txt`,
-`openapi.json`) equal generator output; error codes match
-`error_registry.json`.
-*Why:* AGENT_INTERFACE depends on these invariants; IMGWTools already has
-parity and drift tests.
+**DEV-10.4** (`tool`) Generated files (`AGENTS.md`, `llms.txt`,
+`openapi.json`) are never edited by hand. Contract tests in `tests/contract`
+check that each equals its generator's output, that option names have parity
+across library, CLI, MCP and REST, that error codes match
+`error_registry.json`, and the size budgets of generated files (DOC-1.7).
+*Why:* the agent interface depends on these invariants; a check proves
+generated files are fresh.
 
-**DEV-10.5** Test names: `test_<unit>_<scenario>[_<expected>]`; tests
-assert behaviour, not wording of messages.
+**DEV-10.5** Test names: `test_<unit>_<scenario>[_<expected>]`; tests assert
+behaviour, not the wording of messages.
+
+**DEV-10.6** (`tool`) A producer MUST ship a public `<package>.testing`
+module that builds small, valid instances, offline, of every format another
+project reads from its store or files (registry edges whose `via` includes
+`store` or `file`), and keep it in step with those formats. Consumers'
+contract tests use it, with the producer at the version they pin.
+*Why:* a format change then breaks the consumer's tests at the producer's
+release instead of at users.
 
 ---
 
 ## 11. Errors
 
-**DEV-11.1** Each project MUST define one base exception
-(`<Project>Error`) carrying `code` (from the shared registry), `message`,
-`details` (JSON-compatible) and optional `hint`; subclasses select a default
-code.
-*Why:* ECO-015; Hydrolog and IMGWTools exceptions are the reference.
-
-**DEV-11.2** Errors MUST be reported in every interface as defined in
-[ERROR_REGISTRY.md](ERROR_REGISTRY.md).
+**DEV-11.1** Each project MUST define one base exception (`<Project>Error`)
+carrying `code` (from the shared registry), `message`, `details`
+(JSON-compatible) and optional `hint`; subclasses select a default code.
+*Why:* ECO-015.
 
 **DEV-11.3** Validation MUST happen at system boundaries (CLI, MCP, REST,
 public functions) and MUST name the offending option and allowed values.
@@ -359,20 +348,20 @@ public functions) and MUST name the offending option and allowed values.
 **DEV-12.1** Modules use `logging.getLogger(__name__)`; libraries MUST NOT
 configure handlers or call `print`.
 
-**DEV-12.2** CLI logs and progress go to stderr; level controlled by
+**DEV-12.2** CLI logs and progress go to stderr; the level is set by
 `--verbose`/`--quiet` and `<TOOL>_LOG_LEVEL`.
-*Why:* stdout is reserved for results (AGENT_INTERFACE §3).
+*Why:* stdout is reserved for results (AGI §3).
 
 **DEV-12.3** Use `%`-style arguments in log calls; never log secrets, tokens
-or full credentials-bearing URLs.
+or credential-bearing URLs.
 
 ---
 
 ## 13. Security
 
-**DEV-13.1** Secrets only through environment variables or files outside the
-repository; `.env` is git-ignored; `.env.example` lists every variable
-without values.
+**DEV-13.1** Secrets MUST be read from environment variables only (user
+credentials: DEV-18.4); `.env` is git-ignored; `.env.example` lists every
+variable without values.
 
 **DEV-13.2** Every HTTP request MUST have a timeout; retries use bounded
 exponential backoff.
@@ -386,12 +375,24 @@ system to them.
 **DEV-13.4** SQL MUST use parameterised queries.
 
 **DEV-13.5** Licences of dependencies MUST be compatible with the project
-licence and the distribution channel; GPL dependencies MUST be documented in
-`CLAUDE.md` and README.
-*Why:* Hydraulik depends on GPL-3.0 `hydromt_sfincs`; whether that imposes
-obligations on an MIT repository is not yet established (its `CLAUDE.md`
-assumes it does and calls the repository private, while GitHub shows it
-public on 2026-10-19). To be investigated in a separate session.
+licence and the distribution channel; GPL dependencies MUST be named in
+`README.md` and `CLAUDE.md`.
+
+**DEV-13.6** Dependency updates and supply chain:
+- Dependabot (`.github/dependabot.yml`, template in `standards/ci/`) updates
+  GitHub Actions weekly in grouped pull requests;
+- GitHub Actions are pinned to a full commit SHA with the version in a
+  comment; Dependabot updates both;
+- GitHub "Dependabot security updates" are enabled in the repository settings
+  for Python vulnerabilities;
+- CI runs `pip-audit` weekly and on pull requests over PyPI packages only
+  (ecosystem packages are excluded); the job is not a required check, and an
+  accepted finding is ignored by ID with a comment;
+- third-party versions change with release sets (REL §6), not per project.
+*Why:* ECO-040.
+
+**DEV-13.7** Public repositories MUST have `SECURITY.md` and GitHub private
+vulnerability reporting enabled; reports are not filed as public issues.
 
 ---
 
@@ -400,8 +401,7 @@ public on 2026-10-19). To be investigated in a separate session.
 **DEV-14.1** UTF-8, LF line endings, final newline, no trailing whitespace,
 enforced by `.editorconfig` and `.gitattributes` (`* text=auto eol=lf`).
 Byte-exact fixtures (golden CSV) MUST be marked `-text` in `.gitattributes`.
-*Why:* Windows users and agents on different platforms; Kartograf
-`docs/DECISIONS.md` is CRLF today and becomes LF.
+*Why:* Windows users and agents on different platforms.
 
 **DEV-14.2** Indentation: 4 spaces for Python, 2 for JSON, YAML, TOML,
 Markdown, JavaScript, CSS.
@@ -413,8 +413,6 @@ Markdown, JavaScript, CSS.
 **DEV-15.1** JavaScript: ES modules, `camelCase`, `PascalCase` for classes and
 components, 2-space indent, 100-column lines, JSDoc for exported functions.
 No build step is required; vendored libraries keep their licence files.
-*Why:* Hydrograf (vanilla JS) and Archiwista (Preact + htm) already work this
-way.
 
 **DEV-15.2** UI text in Polish through translation resources (DEV-2.3);
 `data-*` attributes and CSS classes in English.
@@ -426,35 +424,86 @@ way.
 **DEV-16.1** Licence: MIT unless an ADR states otherwise.
 
 **DEV-16.2** Public repositories MUST have `CONTRIBUTING.md`, `docs/CLA.md`
-and `CONTRIBUTORS.md`, in the form used by IMGWTools, Hydraulik and
-Archiwista.
+and `CONTRIBUTORS.md`.
 
-**DEV-16.3** Publicly cited projects SHOULD include `CITATION.cff`.
-*Why:* hydrology users are often researchers; GitHub renders citation data
-and Zenodo uses it for DOIs.
+**DEV-16.4** `CONTRIBUTING.md` MUST describe the workflow: `uv sync --locked`,
+`GATE_CHECK_AUTHOR=0 scripts/gate.sh` before a pull request, Conventional
+Commits, the CLA and where to report security issues.
+`.github/PULL_REQUEST_TEMPLATE.md` MUST contain the CLA checkbox that
+`CONTRIBUTING.md` refers to.
+*Why:* contributors keep their own identity, which the author check of the
+gate would reject (DEV-16.5).
+
+**DEV-16.5** External contributions keep the contributor's identity (DEV-4.2);
+CI does not run the author check on their pull requests (DEV-4.5). The CLA is
+signed with the checkbox, and the contributor adds their line to
+`CONTRIBUTORS.md` in the same pull request (ECO-031).
 
 ---
 
 ## 17. Working with agents (developers)
 
-**DEV-17.1** Session start: read `CLAUDE.md`, `docs/PROGRESS.md`, run
-`git status` and `git log --oneline -10`, confirm the branch.
+**DEV-17.1** Session start: read `CLAUDE.md` and `docs/PROGRESS.md`, run
+`git status` and `git log --oneline -10`, confirm the branch and, when Nogat
+is checked out next to the project, read this project's entries in Nogat
+`docs/requests/<Project>.md` (DEV-17.5).
 
-**DEV-17.2** During a session: small commits after a passing gate; CHANGELOG
-updated with user-visible changes; decisions with alternatives recorded as
-ADRs.
+**DEV-17.2** Decisions with alternatives are recorded as ADRs (DOC §8).
 
-**DEV-17.3** Session end: `docs/PROGRESS.md` MUST be updated (DOCUMENTATION
-§6) before the last commit.
-*Why:* the next agent starts from PROGRESS; practised in every project.
+**DEV-17.3** Session end: `docs/PROGRESS.md` MUST be updated (DOC §6) before
+the last commit.
+*Why:* the next agent starts from PROGRESS.
 
-**DEV-17.4** Specs and plans for non-trivial changes MUST be written before
-code and reviewed by the author (`docs/specs/`, `docs/plans/`).
-*Why:* current practice in Kartograf, Retman, Archiwista and Hydraulik;
-prevents agents from building the wrong thing at scale.
+**DEV-17.4** A change to a public interface or across more than one module
+starts with a plan, `docs/plans/YYYY-MM-DD-slug.md` (goal, options, decision,
+steps, results), approved by the author before code. `docs/specs/` and
+`docs/research/` are not used for new work.
+*Why:* ECO-039; prevents agents building the wrong thing at scale.
 
-**DEV-17.5** An agent MUST NOT change another project to suit its own project.
-It records the need as a requirement for the other project in Nogat or in
-that project's backlog.
-*Why:* Retman's rule "tools know nothing about Retman" generalised; keeps
-each project's scope intact.
+**DEV-17.5** An agent MUST change only the repository of its session, except
+for a cross-project change planned in Nogat (DEV-3.4). A need in another
+project is one entry in Nogat `docs/requests/<Project>.md`, the single list;
+that project's session start reads it (DEV-17.1) and the session that resolves
+it deletes the entry.
+*Why:* keeps each project's scope intact (ECO-039).
+
+---
+
+## 18. User environment (profile `tool`)
+
+**DEV-18.1** Shared settings live in one TOML file, `nogat.toml`, in the user
+configuration directory (`platformdirs.user_config_path("nogat")`, or the path
+in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
+`cache_dir`, `lang`); section `[<tool>]` holds the tool's own keys. A value
+comes from the first of: command-line option, environment variable
+(`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
+`[nogat]`), built-in default. Every tool reads the file with `tomllib` and
+works without it and without the `nogat` package.
+*Why:* ECO-028.
+
+**DEV-18.2** Data stores live under `data_dir` (default
+`platformdirs.user_data_path("nogat")`), one directory per tool,
+`<data_dir>/<tool>`, unless the user sets a store root explicitly. Caches live
+in `<cache_dir>/<tool>` (`cache_dir` default
+`platformdirs.user_cache_path("nogat")`); tools do not write caches or state
+into the current working directory.
+
+**DEV-18.3** Tool-specific environment variables are named `<TOOL>_<KEY>`;
+every variable is listed in the tool's README and `.env.example`.
+
+**DEV-18.4** User credentials (CLMS account, store write tokens, API keys) are
+read from environment variables only, named in the tool's README and reported
+by `config show` (DEV-18.6); never in `nogat.toml`, never printed.
+
+**DEV-18.5** Tools with versioned stores document in README which data cannot
+be downloaded again (versions removed from the source) and how to back up a
+store: a copy that preserves hard links (`rsync -aH`; on Windows a tool that
+keeps hard links, not Explorer or `robocopy`), or the tool's own export.
+*Why:* sources remove old versions, and a copy without hard links multiplies
+the size of a store.
+
+**DEV-18.6** Every `tool` has `<tool> config show --json`: each key with its
+value and source, each credential name with present or missing, the store root
+and its size. `nogat doctor` uses only this command.
+*Why:* `nogat` learns a tool's settings from the tool, not from a copy of its
+rules.
