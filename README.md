@@ -1,41 +1,53 @@
 # Nogat
 
-To repozytorium powstało jako miejsce do gromadzenia i rozwijania skryptów oraz narzędzi wspierających pracę z danymi:
+Hub of an ecosystem of tools for hydrology, meteorology and geodata in
+Poland and Czechia: Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik,
+Retman and Archiwista.
 
-- **Meteorologicznymi**
-- **Hydrologicznymi**
-- **Oceanograficznymi**
-- **Hydraulicznymi**
+Nogat holds:
 
-Skrypty będą rozwijane głównie w języku Python, ale w razie potrzeby mogą pojawiać się także narzędzia w R.
+- the shared standard for all projects: [`standards/`](standards/README.md);
+- the project registry: [`ecosystem.yaml`](ecosystem.yaml), validated by
+  [`schemas/ecosystem.schema.json`](schemas/ecosystem.schema.json);
+- the map of dependencies and exchanged data, generated from the registry:
+  [`docs/ECOSYSTEM_MAP.md`](docs/ECOSYSTEM_MAP.md);
+- cross-project plans: [`docs/plans/`](docs/plans/).
 
-Celem repozytorium jest ułatwienie codziennej pracy z danymi środowiskowymi oraz wsparcie procesów analizy i modelowania.
+Nogat will also be the `nogat` package that installs every tool with one
+command (`uv tool install nogat`, [HUB §7](standards/ECOSYSTEM_HUB.md));
+it is not published yet.
 
----
-## Struktura katalogu głównego
-Nogat/<br>
-├── meteorology/<br>
-├── hydrology/<br>
-├── oceanography/<br>
-├── hydraulics/<br>
-├── data/                 # Przykładowe dane lub linki do danych<br>
-├── scripts/              # Uniwersalne skrypty narzędziowe (np. pobieranie danych, konwersje, wizualizacje)<br>
-├── renv/                 # Katalog z bibliotekami R, tworzony przez `renv::init()`<br>
-├── .Rprofile             # Plik konfiguracyjny dla sesji RStudio<br>
-├── .Rproj.user/          # Dane sesji RStudio<br>
-├── Nogat.Rproj           # Plik projektu RStudio<br>
-├── renv.lock             # Lista pakietów R<br>
-├── requirements.txt      # Lista pakietów Python<br>
-├── README.md
+Templates for every project's quality gate and CI are in
+[`standards/ci/`](standards/ci/README.md).
 
----
-## Problemy i wsparcie
-Jeśli napotkasz problemy, zgłoś je w sekcji [Issues](https://github.com/Daldek/Nogat/issues).
+## Registry tooling
 
----
-## Licencja
-Projekt jest udostępniony na liencji MIT. Szczegóły znajdziesz w pliku ``License``.
+```
+uv run scripts/ecosystem.py validate         # check ecosystem.yaml
+uv run scripts/ecosystem.py map              # regenerate docs/ECOSYSTEM_MAP.md
+uv run scripts/ecosystem.py map --check      # fail when the map is stale
+uv run scripts/ecosystem.py deps             # compare third-party dependencies across checkouts
+uv run scripts/ecosystem.py drift            # compare consumers' pins with producers' latest tags
+```
 
----
-## Autorzy
-- [Piotr de Bever](https://www.https://debever.pl/) [@LinkedIn](https://www.linkedin.com/in/piotr-de-bever/)
+`deps` and `drift` read the projects' checkouts next to Nogat, or under
+`NOGAT_WORKSPACE`. Once the `nogat` package exists they are
+`nogat ecosystem deps` and `nogat ecosystem drift` (HUB-7.3). The registry
+holds structure only; versions and pins are read from the repositories.
+
+`scripts/gate.sh` checks the scripts (ruff, mypy), the registry and map, the
+CI templates (shellcheck, actionlint) and commit messages; CI runs it on every
+push and pull request.
+
+## Issues
+
+Report problems in [Issues](https://github.com/Daldek/Nogat/issues).
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
+
+## Author
+
+[Piotr de Bever](https://debever.pl/) ·
+[LinkedIn](https://www.linkedin.com/in/piotr-de-bever/)
