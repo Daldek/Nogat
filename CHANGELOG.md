@@ -30,6 +30,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 - `scripts/gate.sh` follows `standards/ci/gate.sh`: `uv sync --locked`, the
   DEV-7.2 rule set, mypy over `scripts/` and `tests/`, pytest with coverage.
+- **Breaking:** `scripts/ecosystem.py` reports failures by the error
+  registry (HUB-4.8, ECO-044): exit 7 `data_error` for an invalid registry or
+  standard, 3 `not_found` for a missing file, 4 `conflict` for a stale map,
+  stale generated tables or incompatible ranges, 2 `validation_error` for a
+  wrong call, 1 only for a defect; the last stderr line is the
+  `nogat-error/1` document. Migration: scripts that tested for exit 1 test
+  for a non-zero exit or read the document.
+- Standard 2.1, not yet published, settles the contradictions found in its
+  review (ECO-042 to ECO-049 and consistency fixes; list in
+  `standards/README.md`). The CI template and Nogat's CI check commits of
+  `hotfix/*` pull requests into `main` (DEV-4.5).
 
 ### Fixed
 

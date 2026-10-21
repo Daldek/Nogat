@@ -31,24 +31,24 @@ an error.
 <!-- generated: error-codes from error_registry.json by `uv run scripts/ecosystem.py standard --write`; do not edit -->
 | Code | Exit | HTTP | Meaning |
 |---|---|---|---|
-| `internal_error` | 1 | 500 | Defect in the tool or an unexpected exception. |
-| `validation_error` | 2 | 400 | Unknown command or option, wrong type, value out of range or not allowed, missing required option, violated exclusion rule. |
-| `not_found` | 3 | 404 | Referenced file, resource, station, project or identifier does not exist. |
-| `conflict` | 4 | 409 | Operation conflicts with current state: version collision, lock held, identifier taken. |
-| `source_unavailable` | 5 | 502 | Remote service failed: timeout, connection error, HTTP error, download failure. |
-| `missing_dependency` | 6 | 503 | Feature needs an extra or an external program that is not installed; hint names the install command. |
-| `data_error` | 7 | 500 | Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format. |
-| `store_unavailable` | 8 | 503 | Data store or cache cannot be used: missing marker, locked, unreadable, network share disconnected. |
-| `io_error` | 9 | 500 | Reading or writing files failed: permissions, no space, path missing. |
-| `forbidden` | 12 | 403 | Path outside allowed directories, write attempted in read-only mode, insufficient role. |
-| `calculation_error` | 13 | 422 | Input is valid but no result can be computed: no convergence, series too short, numerical failure, transformation failed. |
-| `no_data` | 14 | 404 | Request is valid but the source has no data for the area, period or product requested. |
-| `unsupported` | 15 | 422 | Request is valid but this combination is not supported: no safe CRS transformation, product not offered for the country, operation outside the tool's scope. |
-| `cancelled` | 130 | – | Cancelled by the user or by SIGINT. |
-| `terminated` | 143 | – | Terminated by SIGTERM (container stop, timeout). |
-| `unauthorized` | – | 401 | REST only: missing or invalid credentials. |
-| `method_not_allowed` | – | 405 | REST only: HTTP method not supported by the route. |
-| `rate_limited` | – | 429 | REST only: client exceeded a rate limit; Retry-After is set. |
+| <a id="internal_error"></a>`internal_error` | 1 | 500 | Defect in the tool or an unexpected exception. |
+| <a id="validation_error"></a>`validation_error` | 2 | 400 | Unknown command or option, wrong type, value out of range or not allowed, missing required option, violated exclusion rule. |
+| <a id="not_found"></a>`not_found` | 3 | 404 | Referenced file, resource, station, project or identifier does not exist. |
+| <a id="conflict"></a>`conflict` | 4 | 409 | Operation conflicts with current state: version collision, lock held, identifier taken. |
+| <a id="source_unavailable"></a>`source_unavailable` | 5 | 502 | Remote service failed: timeout, connection error, HTTP error, download failure. |
+| <a id="missing_dependency"></a>`missing_dependency` | 6 | 503 | Feature needs an extra or an external program that is not installed; hint names the install command. |
+| <a id="data_error"></a>`data_error` | 7 | 500 | Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format. |
+| <a id="store_unavailable"></a>`store_unavailable` | 8 | 503 | Data store or cache cannot be used: missing marker, locked, unreadable, network share disconnected. |
+| <a id="io_error"></a>`io_error` | 9 | 500 | Reading or writing files failed: permissions, no space, path missing. |
+| <a id="forbidden"></a>`forbidden` | 12 | 403 | Path outside allowed directories, write attempted in read-only mode, insufficient role. |
+| <a id="calculation_error"></a>`calculation_error` | 13 | 422 | Input is valid but no result can be computed: no convergence, series too short, numerical failure, transformation failed. |
+| <a id="no_data"></a>`no_data` | 14 | 404 | Request is valid but the source has no data for the area, period or product requested. |
+| <a id="unsupported"></a>`unsupported` | 15 | 422 | Request is valid but this combination is not supported: no safe CRS transformation, product not offered for the country, operation outside the tool's scope. |
+| <a id="cancelled"></a>`cancelled` | 130 | – | Cancelled by the user or by SIGINT. |
+| <a id="terminated"></a>`terminated` | 143 | – | Terminated by SIGTERM (container stop, timeout). |
+| <a id="unauthorized"></a>`unauthorized` | – | 401 | REST only: missing or invalid credentials. |
+| <a id="method_not_allowed"></a>`method_not_allowed` | – | 405 | REST only: HTTP method not supported by the route. |
+| <a id="rate_limited"></a>`rate_limited` | – | 429 | REST only: client exceeded a rate limit; Retry-After is set. |
 <!-- end generated -->
 
 Titles in English and Polish are in the JSON file.
@@ -79,15 +79,17 @@ the vendored copy.
 - Python: `<Project>Error` subclass with `code`, `message`, `hint`, `details`.
 - CLI: last line of stderr is `<tool>-error/1`; exit code from the table.
 - MCP: `isError: true` with the error document.
-- REST: `application/problem+json` with `type` pointing to this page's anchor
-  for the code, `status` from the table, plus `code`, `hint`, `details`.
+- REST: `application/problem+json` with `type` pointing to the code's anchor
+  on this page (`ERROR_REGISTRY.md#<code>`), `status` from the table, plus
+  `code`, `hint`, `details`.
 
 **ERR-5** Every error has a `hint` when a fix is known: the option to change,
 allowed values, the command to run (`uv add "nogat-<project>[mcp]"`).
 *Why:* the hint lets an agent fix the call in one retry instead of a guess.
 
-**ERR-6** `message` and `title` follow the active language (AGI-9.2); `code`,
-`details` keys and `reason` never change with language.
+**ERR-6** `message`, `title` and `hint` are English in machine output and
+follow `lang` in human-readable output (AGI-9.2); `code`, `details` keys and
+`reason` never change with language.
 
 ## 4. Mapping of current project codes
 

@@ -27,6 +27,7 @@ LINK = re.compile(r"(?<!!)\[[^\]\n]*\]\((?P<target>[^)\s]+)\)")
 HEADING = re.compile(r"^#{1,6} (?P<text>.+?)\s*#*\s*$", re.MULTILINE)
 FENCE = re.compile(r"^```.*?^```", re.MULTILINE | re.DOTALL)
 INLINE_CODE = re.compile(r"`[^`\n]*`")
+HTML_ID = re.compile(r'<a id="([^"]+)"></a>')
 BUDGET_ROW = re.compile(
     r"^\| `(?P<path>[^`]+)` \| (?P<lines>[\d,]+) lines(?: and (?P<kib>\d+) KiB)? \|",
     re.MULTILINE,
@@ -136,9 +137,13 @@ def slug(heading: str) -> str:
 
 
 def anchors(text: str) -> set[str]:
-    """Return the anchors of every heading, numbered as GitHub numbers duplicates."""
+    """Return the anchors of a Markdown text.
+
+    Headings get GitHub's slugs, with duplicates numbered as GitHub numbers
+    them; `<a id="…">` elements add their ids.
+    """
     seen: Counter[str] = Counter()
-    found = set()
+    found = set(HTML_ID.findall(text))
     for m in HEADING.finditer(FENCE.sub("", text)):
         base = slug(m["text"])
         found.add(f"{base}-{seen[base]}" if seen[base] else base)
@@ -219,7 +224,8 @@ def error_tables(registry: dict[str, Any]) -> dict[str, str]:
     ]
     errors = ["| Code | Exit | HTTP | Meaning |", "|---|---|---|---|"]
     errors += [
-        f"| `{e['code']}` | {_dash(e['exit_code'])} | {_dash(e['http_status'])} "
+        f'| <a id="{e["code"]}"></a>`{e["code"]}` | {_dash(e["exit_code"])} '
+        f"| {_dash(e['http_status'])} "
         f"| {e['meaning']} |"
         for e in registry["errors"]
     ]

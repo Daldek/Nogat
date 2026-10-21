@@ -47,10 +47,10 @@ catalog/MCP descriptions MUST be in English.
 *Why:* agents search and parse English; one language removes duplicate
 maintenance (ECO-005, ECO-023).
 
-**DEV-2.2** Text shown to end users (UI and CLI messages, error titles) is
-Polish by default and English on request; AGI-9.2 defines the switch.
-*Why:* target user groups are in Poland; English output helps agents and
-non-Polish collaborators.
+**DEV-2.2** Human-readable output for end users (UI, CLI output without
+`--json`) is Polish by default and English on request; machine output
+(`--json`, MCP, REST) is English. AGI-9.2 defines the switch.
+*Why:* target user groups are in Poland; agents read English (ECO-042).
 
 **DEV-2.3** User-facing text MUST live in translation resources (for example
 `locales/pl.toml`, or `messages.py` dictionaries keyed by English IDs), not
@@ -92,12 +92,12 @@ rewrites and branch renames.
 request required, 0 approvals, required checks = the three non-experimental
 `gate` jobs (and `db` where the project has that job, DEV-7.7), force push and
 deletion blocked, no bypass actors. Every pull request (topic → `develop`,
-`develop` → `main`, hotfix → `main`) is merged with a merge commit, the only
-merge method the ruleset allows. A tag ruleset blocks update and deletion of
-`v*` tags. For a history rewrite the author disables the ruleset, rewrites,
-re-enables it and notes it in PROGRESS.
-*Why:* ECO-030, ECO-037; turns DEV-3.3 and the gate into a technical control
-instead of agent discipline.
+`develop` → `main`, hotfix → `main`, `main` → `develop`) is merged with a
+merge commit, the only merge method the ruleset allows. A tag ruleset blocks
+update and deletion of `v*` tags. For a history rewrite the author disables
+the ruleset, rewrites, re-enables it and notes it in PROGRESS.
+*Why:* ECO-030, ECO-037; nothing reaches `main` or `develop` without a pull
+request and a green gate. Merges and tags still rest on DEV-3.3.
 
 ---
 
@@ -127,11 +127,13 @@ that describes it.
 *Why:* review and revert by agents operate on commits.
 
 **DEV-4.5** Commit messages and authors are checked once, when commits enter
-`develop`: locally by the gate (DEV-7.6) and in CI on pull requests into
-`develop`. The author check applies to pull requests from the repository's
-own branches, not to forks or Dependabot. Pull requests into `main` and
-pushes are not checked again.
-*Why:* ECO-038.
+`develop` or, for a hotfix, `main`: locally by the gate (DEV-7.6) and in CI on
+pull requests into `develop` and on pull requests from `hotfix/*` into
+`main`. Messages are checked on every such pull request; the author check
+applies only to pull requests from the repository's own branches, not to
+forks or Dependabot. Other pull requests into `main` and pushes are not
+checked again.
+*Why:* ECO-038, ECO-049.
 
 ---
 
@@ -182,8 +184,10 @@ installing from a wheel (ECO-011).
 `.venv/` in the repository root; commands are run through `uv run`.
 *Why:* ECO-012; one invocation pattern for agents.
 
-**DEV-6.3** `uv.lock` MUST be committed, and every install (development, CI,
-deployment, container build) MUST use `uv sync --locked`.
+**DEV-6.3** `uv.lock` MUST be committed, and every environment of the
+repository (development, CI, deployment, container build) MUST be installed
+with `uv sync --locked`; the check of a built wheel (REL-2.3) installs the
+wheel.
 *Why:* ECO-012; a stale lock fails the install instead of being ignored.
 
 **DEV-6.4** (`tool`) Runtime dependencies on third-party packages MUST be
@@ -243,8 +247,9 @@ be checked before the commit exists.
 **DEV-7.7** CI (GitHub Actions) MUST run the gate on push and pull request to
 `main` and `develop`: on Linux, macOS and Windows for `tool` projects; an
 `app` project MAY run the platform matrix without `db` tests plus a Linux `db`
-job. Templates: `standards/ci/ci.yml` (gate on the three systems) and
-`standards/ci/live.yml` (weekly `live` tests).
+job; the `hub` runs on Linux until the `nogat` package exists. Templates:
+`standards/ci/ci.yml` (gate on the three systems) and `standards/ci/live.yml`
+(weekly `live` tests).
 *Why:* file-system and path bugs appear only on the platform that has them.
 
 ---
@@ -388,7 +393,8 @@ licence and the distribution channel; GPL dependencies MUST be named in
 - CI runs `pip-audit` weekly and on pull requests over PyPI packages only
   (ecosystem packages are excluded); the job is not a required check, and an
   accepted finding is ignored by ID with a comment;
-- third-party versions change with release sets (REL §6), not per project.
+- third-party versions change with release sets (REL §6), not per project;
+  a security fix is a patch release set (REL-6.6).
 *Why:* ECO-040.
 
 **DEV-13.7** Public repositories MUST have `SECURITY.md` and GitHub private
@@ -444,9 +450,8 @@ signed with the checkbox, and the contributor adds their line to
 ## 17. Working with agents (developers)
 
 **DEV-17.1** Session start: read `CLAUDE.md` and `docs/PROGRESS.md`, run
-`git status` and `git log --oneline -10`, confirm the branch and, when Nogat
-is checked out next to the project, read this project's entries in Nogat
-`docs/requests/<Project>.md` (DEV-17.5).
+`git status` and `git log --oneline -10`, confirm the branch and list the
+repository's open GitHub issues labelled `request` (DEV-17.5).
 
 **DEV-17.2** Decisions with alternatives are recorded as ADRs (DOC §8).
 
@@ -456,16 +461,18 @@ the last commit.
 
 **DEV-17.4** A change to a public interface or across more than one module
 starts with a plan, `docs/plans/YYYY-MM-DD-slug.md` (goal, options, decision,
-steps, results), approved by the author before code. `docs/specs/` and
-`docs/research/` are not used for new work.
-*Why:* ECO-039; prevents agents building the wrong thing at scale.
+steps, results). After the author approves it in a session, the plan gets
+the line `Approved: YYYY-MM-DD` under its title; code starts only after
+that line exists. `docs/specs/` and `docs/research/` are not used for new
+work.
+*Why:* ECO-039, ECO-047; prevents agents building the wrong thing at scale.
 
 **DEV-17.5** An agent MUST change only the repository of its session, except
 for a cross-project change planned in Nogat (DEV-3.4). A need in another
-project is one entry in Nogat `docs/requests/<Project>.md`, the single list;
-that project's session start reads it (DEV-17.1) and the session that resolves
-it deletes the entry.
-*Why:* keeps each project's scope intact (ECO-039).
+project is a GitHub issue in that project's repository labelled `request`;
+the session that resolves it closes the issue.
+*Why:* keeps each project's scope intact; the issue tracker is the list
+(ECO-043).
 
 ---
 

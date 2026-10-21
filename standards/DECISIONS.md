@@ -34,7 +34,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-022](#eco-022-common-distribution-name-pattern) | Common distribution name pattern | accepted: `nogat-` | 2026-10-20 |
 | [ECO-023](#eco-023-commit-messages-in-english) | Commit messages in English | accepted | 2026-10-19 |
 | [ECO-024](#eco-024-registry-records-exchanged-data) | Registry records exchanged data | amended by ECO-034 | 2026-10-20 |
-| [ECO-025](#eco-025-coordinated-releases-form-a-verified-release-set) | Coordinated releases form a verified release set | amended by ECO-037 | 2026-10-20 |
+| [ECO-025](#eco-025-coordinated-releases-form-a-verified-release-set) | Coordinated releases form a verified release set | amended by ECO-035, ECO-037 | 2026-10-20 |
 | [ECO-026](#eco-026-nogat-is-the-users-installable-environment) | Nogat is the users' installable environment | amended by ECO-037 | 2026-10-20 |
 | [ECO-027](#eco-027-nogat-drops-its-legacy-script-collection) | Nogat drops its legacy script collection | accepted | 2026-10-20 |
 | [ECO-028](#eco-028-one-user-environment-for-all-tools) | One user environment for all tools | amended by ECO-033 | 2026-10-20 |
@@ -42,21 +42,29 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-030](#eco-030-protected-branches-require-green-ci-only) | Protected branches require green CI only | amended by ECO-037 | 2026-10-20 |
 | [ECO-031](#eco-031-external-contributors-keep-their-identity) | External contributors keep their identity | amended by ECO-038 | 2026-10-20 |
 | [ECO-032](#eco-032-small-explicit-support-policy) | Small, explicit support policy | superseded by ECO-035 | 2026-10-20 |
-| [ECO-033](#eco-033-zen-of-nogat-and-one-way-to-write-a-rule) | Zen of Nogat and one way to write a rule | accepted | 2026-10-20 |
+| [ECO-033](#eco-033-zen-of-nogat-and-one-way-to-write-a-rule) | Zen of Nogat and one way to write a rule | amended by ECO-046 | 2026-10-20 |
 | [ECO-034](#eco-034-the-registry-holds-structure-only) | The registry holds structure only | accepted | 2026-10-20 |
 | [ECO-035](#eco-035-minimal-support-and-three-channels) | Minimal support and three channels | accepted | 2026-10-20 |
 | [ECO-036](#eco-036-three-profiles-tool-app-hub) | Three profiles: tool, app, hub | accepted | 2026-10-20 |
 | [ECO-037](#eco-037-one-release-path) | One release path | accepted | 2026-10-20 |
-| [ECO-038](#eco-038-commits-are-checked-once-on-entry-to-develop) | Commits are checked once, on entry to develop | accepted | 2026-10-20 |
-| [ECO-039](#eco-039-one-planning-document-one-request-list-short-progress) | One planning document, one request list, short PROGRESS | accepted | 2026-10-20 |
+| [ECO-038](#eco-038-commits-are-checked-once-on-entry-to-develop) | Commits are checked once, on entry to develop | amended by ECO-049 | 2026-10-20 |
+| [ECO-039](#eco-039-one-planning-document-one-request-list-short-progress) | One planning document, one request list, short PROGRESS | amended by ECO-043 | 2026-10-20 |
 | [ECO-040](#eco-040-dependabot-for-actions-audit-informs) | Dependabot for actions, audit informs | accepted | 2026-10-20 |
 | [ECO-041](#eco-041-hydraulik-stays-mit-sfincs-is-not-distributed) | Hydraulik stays MIT; SFINCS is not distributed | accepted | 2026-10-20 |
+| [ECO-042](#eco-042-agent-facing-text-follows-the-channel) | Agent-facing text follows the channel | accepted | 2026-10-21 |
+| [ECO-043](#eco-043-needs-between-projects-are-github-issues) | Needs between projects are GitHub issues | accepted | 2026-10-21 |
+| [ECO-044](#eco-044-nogats-tooling-reports-errors-by-the-registry) | Nogat's tooling reports errors by the registry | accepted | 2026-10-21 |
+| [ECO-045](#eco-045-precedence-of-conflicting-requirements) | Precedence of conflicting requirements | accepted | 2026-10-21 |
+| [ECO-046](#eco-046-the-standard-is-tagged-when-published) | The standard is tagged when published | accepted | 2026-10-21 |
+| [ECO-047](#eco-047-plan-approval-is-a-line-in-the-plan) | Plan approval is a line in the plan | accepted | 2026-10-21 |
+| [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
+| [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
 
 ---
 
 ## ECO-001 Nogat is the ecosystem hub
 
-**Amended by ECO-036:** third-party tool entries are removed from the registry.
+**Amended by ECO-036 (2026-10-20):** third-party tool entries are removed from the registry.
 
 **Decision.** Nogat describes every project of the ecosystem, their
 dependencies and shared rules, and is the place from which an agent
@@ -76,7 +84,7 @@ keeping the map in Hydrograf (biased to one consumer).
 
 ## ECO-002 Machine-readable registry `ecosystem.yaml`
 
-**Amended by ECO-034:** the registry records structure, not versions or pins.
+**Amended by ECO-034 (2026-10-20):** the registry records structure, not versions or pins.
 
 **Decision.** The registry of projects is a YAML file in Nogat. Human-readable
 overviews are generated from it.
@@ -139,7 +147,7 @@ languages to maintain, internal docs invisible to agents); bilingual README.
 
 ## ECO-006 Single author identity, no AI attribution
 
-**Amended by ECO-038:** the author identity is checked, not the committer;
+**Amended by ECO-038 (2026-10-20):** the author identity is checked, not the committer;
 merge commits created by GitHub are exempt.
 
 **Decision.** Every commit has author and committer `Daldek <git@debever.pl>`.
@@ -192,7 +200,7 @@ linter, isort and pydocstyle.
 
 ## ECO-010 mypy as the only type checker
 
-**Amended by ECO-033:** there is no shrinking baseline; mypy shortfalls use
+**Amended by ECO-033 (2026-10-20):** there is no shrinking baseline; mypy shortfalls use
 per-module overrides listed as deviations.
 
 **Decision.** mypy everywhere; IMGWTools moves from pyright; Hydraulik adds
@@ -206,7 +214,7 @@ today ranges from `strict = true` (Archiwista) to a baseline without strict
 
 ## ECO-011 `src` layout
 
-**Amended by ECO-036:** Nogat uses `src/nogat/` once it ships the `nogat`
+**Amended by ECO-036 (2026-10-20):** Nogat uses `src/nogat/` once it ships the `nogat`
 package; Hydrograf `backend/` stays exempt.
 
 **Decision.** Every distributable Python package uses `src/<package>/`.
@@ -231,7 +239,7 @@ documentation. Import paths do not change.
 
 ## ECO-012 uv and lock files
 
-**Amended by ECO-037:** installs use `uv sync --locked` everywhere.
+**Amended by ECO-037 (2026-10-20):** installs use `uv sync --locked` everywhere.
 
 **Decision.** uv is the package and environment manager. Libraries declare
 version ranges in `pyproject.toml` and commit `uv.lock` for reproducible
@@ -248,7 +256,7 @@ used by Retman. Archiwista's `requirements.lock` with hashes is replaced by
 
 ## ECO-013 PROGRESS holds current state, history is archived
 
-**Amended by ECO-039:** history is git log and CHANGELOG; there is no monthly
+**Amended by ECO-039 (2026-10-20):** history is git log and CHANGELOG; there is no monthly
 archive.
 
 **Decision.** `docs/PROGRESS.md` holds current status, the last session and
@@ -286,7 +294,7 @@ knowing which tool emitted it.
 
 ## ECO-016 Ecosystem dependencies pinned to released versions
 
-**Amended by ECO-034:** pins are read from the repositories, not recorded in
+**Amended by ECO-034 (2026-10-20):** pins are read from the repositories, not recorded in
 `ecosystem.yaml`.
 
 **Decision.** A project depends on another ecosystem project only through a
@@ -347,7 +355,7 @@ aliases.
 
 ## ECO-021 Publish to PyPI, then conda-forge
 
-**Amended by ECO-035:** conda-forge and other channels are deferred until a
+**Amended by ECO-035 (2026-10-20):** conda-forge and other channels are deferred until a
 user asks.
 
 **Decision.** Every distributable package is published to PyPI. conda-forge
@@ -415,7 +423,7 @@ rewrite (ECO-007) changes only identities and AI attribution.
 
 ## ECO-024 Registry records exchanged data
 
-**Amended by ECO-034:** structure only; no versions, pins or release sets.
+**Amended by ECO-034 (2026-10-20):** structure only; no versions, pins or release sets.
 
 **Decision.** `ecosystem.yaml` records, besides dependencies, what each
 project provides (`provides`), how a consumer reaches it (`via`) and which
@@ -435,7 +443,10 @@ a separate contracts file (two sources for one graph).
 
 ## ECO-025 Coordinated releases form a verified release set
 
-**Amended by ECO-037:** the published set is the `nogat` repository at its
+**Amended by ECO-035 (2026-10-20):** the set is verified on Python 3.12 and on the
+newest stable Python that CI runs (REL-7.1), not on one version.
+
+**Amended by ECO-037 (2026-10-20):** the published set is the `nogat` repository at its
 tag; candidates are verified by a Nogat CI workflow.
 
 **Decision.** The coordinated releases of the ecosystem tools are pinned in
@@ -459,7 +470,7 @@ released, verified configuration); harmonising lower bounds without a lock
 
 ## ECO-026 Nogat is the users' installable environment
 
-**Amended by ECO-037:** until every member is on PyPI, `nogat` is installed
+**Amended by ECO-037 (2026-10-20):** until every member is on PyPI, `nogat` is installed
 from its git tag; uv is the only documented installer.
 
 **Decision.** Besides maintaining the ecosystem (standards, registry, map of
@@ -500,7 +511,7 @@ keeping them as an unpackaged collection.
 
 ## ECO-028 One user environment for all tools
 
-**Amended by ECO-033:** credentials come from environment variables only; there
+**Amended by ECO-033 (2026-10-20):** credentials come from environment variables only; there
 is no keyring.
 
 **Decision.** All tools read shared settings from `nogat.toml` and `NOGAT_*`
@@ -523,7 +534,7 @@ lose it).
 
 ## ECO-029 Automated dependency updates and audit
 
-**Amended by ECO-040:** Dependabot covers GitHub Actions only; the audit is
+**Amended by ECO-040 (2026-10-20):** Dependabot covers GitHub Actions only; the audit is
 informative.
 
 **Decision.** Dependabot for GitHub Actions and `uv.lock`, actions pinned by
@@ -541,7 +552,7 @@ supports uv); updating third-party packages in each project independently
 
 ## ECO-030 Protected branches require green CI only
 
-**Amended by ECO-037:** merge commits only, no bypass actors, release tags
+**Amended by ECO-037 (2026-10-20):** merge commits only, no bypass actors, release tags
 protected.
 
 **Decision.** `main` and `develop` accept changes only through pull requests
@@ -557,7 +568,7 @@ branches even if they ignore DEV-3.3.
 
 ## ECO-031 External contributors keep their identity
 
-**Amended by ECO-038:** messages are checked when commits enter `develop`.
+**Amended by ECO-038 (2026-10-20):** messages are checked when commits enter `develop`.
 
 **Decision.** DEV-4.2 (single author identity) applies to the author's and
 agents' commits. Commits from external contributors keep their identity; the
@@ -585,6 +596,9 @@ support a narrow window.
 
 ## ECO-033 Zen of Nogat and one way to write a rule
 
+**Amended by ECO-046 (2026-10-21):** the version moves when the standard is
+published to `main`, not at every change.
+
 **Decision.** Standard 2.1 starts from twelve principles (standards/README.md,
 "Zen of Nogat"). Every requirement is mandatory; `MAY` marks an option; there
 is no SHOULD. A requirement is one or two sentences with an optional one-line
@@ -599,12 +613,17 @@ all stayed "2.0".
 **Rejected.** Keeping RFC 2119 with three strengths (agents cannot apply
 SHOULD without a criterion).
 
+**Consequence.** Rules that could not be checked were removed or reduced to
+what a check can enforce: the shrinking mypy baseline (ECO-010) and the
+keyring for credentials (ECO-028).
+
 ## ECO-034 The registry holds structure only
 
 **Decision.** `ecosystem.yaml` records what only Nogat knows: projects, their
 roles, what they provide, who depends on whom, through what and with which
 formats. Versions, pins and release tags are read from the repositories by
-`nogat ecosystem drift` (today `uv run scripts/ecosystem.py drift`).
+`nogat ecosystem drift` (`uv run scripts/ecosystem.py drift` until the
+package exists).
 
 **Why.** Copies of versions and pins had to be edited by hand at every
 release and pin change; the drift check compared one copy with another, not
@@ -654,6 +673,10 @@ manual verification on three machines.
 
 ## ECO-038 Commits are checked once, on entry to develop
 
+**Amended by ECO-049 (2026-10-21):** messages are checked on every pull
+request into `develop` (the author only on the repository's own branches),
+and hotfix commits on their pull request into `main`.
+
 **Decision.** The gate and CI check commit messages and the author when
 commits enter `develop` (locally and on pull requests into `develop` from the
 repository's own branches); pull requests into `main` and pushes are not
@@ -664,6 +687,9 @@ failed on any Dependabot, contributor or GitHub-made commit; GitHub sets
 itself as committer of merge commits.
 
 ## ECO-039 One planning document, one request list, short PROGRESS
+
+**Amended by ECO-043 (2026-10-21):** needs for another project are GitHub
+issues labelled `request` in that project's repository.
 
 **Decision.** Plans, specifications and research notes for new work are one
 kind, `docs/plans/YYYY-MM-DD-slug.md`. Needs for another project are entries
@@ -693,3 +719,112 @@ Hydraulik does not distribute it.
 
 **Consequence.** The `README.md` and `CLAUDE.md` of Hydraulik name
 `hydromt_sfincs` (GPL-3.0) and SFINCS as external, per DEV-13.5.
+
+## ECO-042 Agent-facing text follows the channel
+
+**Decision.** Machine output is English whatever the user's language:
+`--json` output, the error document on the last stderr line, MCP results and
+descriptions, REST responses. `lang` (default `pl`) selects the language of
+human-readable output only. `hint` is in the language of `message`.
+
+**Why.** With `lang = pl` as the default, the error document that agents
+parse carried Polish `title` and `message`, against Zen 9 and AGI-9.2's own
+reason ("agents work best in English"); an agent's result also depended on
+the user's setting.
+
+**Rejected.** English by default everywhere (end users would have to
+configure Polish); Polish by default in machine output (agents get Polish).
+
+## ECO-043 Needs between projects are GitHub issues
+
+**Decision.** A need in another project is a GitHub issue labelled `request`
+in that project's repository; the session that resolves it closes it.
+Nogat `docs/requests/` and the hub requirement that kept it are removed.
+
+**Why.** DEV-17.5 allowed an agent to change only its session's repository,
+yet asked it to write and delete entries in Nogat; every request cost a Nogat
+branch, gate and pull request. Issues need no commit and are read where the
+work happens.
+
+**Rejected.** An exception for Nogat request files (a pull request per
+request); needs in the requesting project's PROGRESS (scattered list).
+
+## ECO-044 Nogat's tooling reports errors by the registry
+
+**Decision.** Nogat's scripts report failures with registry codes and exit
+codes, and print the `nogat-error/1` document as the last stderr line: a
+malformed input is `data_error`, a missing one `not_found`, a stale
+generated file or incompatible ranges `conflict`, a wrong call
+`validation_error`, a defect `internal_error` (HUB-4.8). The rest of the
+command shape (`--json` envelopes) waits for the `nogat` package.
+
+**Why.** The scripts exited 1 for failed checks, which ERR §2 reserves for
+`internal_error`; agents could not tell a stale map from a crash.
+
+**Rejected.** Exempting the hub from ERR until the package exists (two
+meanings of exit 1 in one ecosystem).
+
+## ECO-045 Precedence of conflicting requirements
+
+**Decision.** When two requirements conflict, safety and the author's
+approvals (DEV-3.3, DEV §13) come first, then the requirement that names a
+profile or is narrower, then the general one. The agent follows the higher
+one and reports the conflict as an issue in Nogat labelled `standard`.
+
+**Why.** Every requirement is mandatory (ECO-033), so a conflict left an
+agent with no rule to follow; reporting it turns the conflict into a fix of
+the standard.
+
+**Rejected.** Stopping and asking the author at every conflict (blocks
+autonomous work on known conflicts).
+
+## ECO-046 The standard is tagged when published
+
+**Decision.** Changes of the standard accumulate on `develop` under the next
+version and its changelog; the merge into `main` is tagged `std-X.Y`, and
+the next change starts X.(Y+1).
+
+**Why.** ECO-033 bumped and tagged at every change. Version 2.1 changed many
+times before it reached `main`; a tag per change would have produced
+versions no project could use, and ERR-3 needs a tag only for what projects
+copy.
+
+**Rejected.** A minor version and tag per change (ECO-033).
+
+## ECO-047 Plan approval is a line in the plan
+
+**Decision.** After the author approves a plan in a session, the plan gets
+`Approved: YYYY-MM-DD` under its title; code starts only after that line
+exists (DEV-17.4).
+
+**Why.** DEV-17.4 required approval before code but left no record, so an
+agent in a later session could not tell an approved plan from a draft.
+
+**Rejected.** A merged pull request per plan (a review cycle before every
+interface change).
+
+## ECO-048 Nogat's AGENTS.md routes and links
+
+**Decision.** Nogat's AGENTS.md is generated from the registry: a routing
+table (task → tool → entry command) with links to each tool's AGENTS.md. The
+tools' blocks are not inlined; the AGENTS.md budget of DOC-1.7 applies.
+
+**Why.** Seven blocks of up to 60 lines and a routing table exceed the
+200-line budget, and clients truncate AGENTS.md (Codex reads 32 KiB).
+
+**Rejected.** A separate, larger budget for the hub (more context for every
+agent starting in Nogat).
+
+## ECO-049 Hotfix commits are checked on entry to main
+
+**Decision.** Commit messages are checked on every pull request into
+`develop`, the author only on pull requests from the repository's own
+branches (DEV-4.5). Pull requests from `hotfix/*` into `main` get the same
+checks, because their commits enter `main` before `develop`.
+
+**Why.** ECO-038 checked commits on entry to `develop`, which hotfix commits
+reach only after they are released; its text also limited message checks to
+the repository's own branches, which DEV-4.5 and the CI template did not.
+
+**Rejected.** Checking every pull request into `main` (re-checks released
+history, the failure ECO-038 removed).

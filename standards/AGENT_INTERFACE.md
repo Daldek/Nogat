@@ -5,8 +5,10 @@ Part of standard 2.1 · IDs `AGI-…`
 How a project exposes its functionality to programs and AI agents: Python
 library, CLI, MCP server, REST API, `llms.txt` and `AGENTS.md`. It applies to
 profile `tool` in full and to profile `app` for the documents (AGI §4), the
-REST API (AGI §6) and languages (AGI §9). The `hub` is exempt from the command
-shape (AGI §3) and takes part in AGI §8 through the aggregation of HUB-4.3.
+REST API (AGI §6) and languages (AGI §9). Until the `nogat` package exists,
+the `hub`'s scripts report errors as AGI-3.3 and ERR say and are exempt from
+the rest of AGI §3; the hub takes part in AGI §8 through the routing table of
+HUB-4.3 (ECO-044, ECO-048).
 
 The goal (ECO-017) is that an agent which needs Polish/Czech spatial data,
 hydrological computation, IMGW/ČHMÚ observations or flood modelling finds
@@ -188,9 +190,9 @@ units.
 |---|---|
 | `schema` | `<tool>-error/1` |
 | `code` | registry code (ERR §2) |
-| `title` | registry title in the active language |
-| `message` | what happened, in the active language |
-| `hint` | one line: how to fix, naming the option or command |
+| `title` | registry title in the language of the channel (AGI-9.2) |
+| `message` | what happened, in the language of the channel |
+| `hint` | one line: how to fix, naming the option or command; same language as `message` |
 | `details` | JSON object: `reason` (project-specific sub-code), `option`, `value`, `allowed`, `path`, ... |
 | `exit_code` | process exit code from the registry |
 | `command` | command name, if known |
@@ -351,8 +353,8 @@ the block in a consumer's AGENTS.md idempotently.
 AGENTS.md; injection is the delivery channel
 (https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals).
 
-**AGI-8.3** Nogat aggregates the blocks of all tools into its own AGENTS.md
-(HUB-4.3).
+**AGI-8.3** Nogat's AGENTS.md links each tool's AGENTS.md from its routing
+table (HUB-4.3); the blocks of AGI-8.2 are for consumer repositories.
 
 ---
 
@@ -361,12 +363,13 @@ AGENTS.md; injection is the delivery channel
 **AGI-9.1** Catalog texts are authored in English; Polish translations are
 stored next to them (`i18n.pl`) and used for human-readable output.
 
-**AGI-9.2** The language is the key `lang` of DEV-18.1 (default `pl`) plus the
-option `--lang`; it selects only human-readable output (CLI and UI messages,
-including the `title` and `message` of error documents), while MCP
-descriptions and instructions, AGENTS.md, llms.txt and OpenAPI are always
-English.
-*Why:* end users are Polish (ECO-005); agents work best in English.
+**AGI-9.2** Machine output is English: `--json` output, the error document
+on the last stderr line, MCP results, descriptions and instructions, REST
+responses, AGENTS.md, llms.txt and OpenAPI. Human-readable output (CLI
+without `--json`, UI) follows the key `lang` of DEV-18.1 (default `pl`) and
+the option `--lang`.
+*Why:* end users are Polish (ECO-005); agents read English and must get the
+same text whatever the user's setting (ECO-042).
 
 **AGI-9.3** Inputs with Polish names (stations, municipalities, rivers) are
 matched case- and diacritic-insensitively; on no match the error lists close

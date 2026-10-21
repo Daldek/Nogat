@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 2.1 · tag `std-2.1` once committed
+Standard 2.1 · not yet published; tagged `std-2.1` when it reaches `main` (HUB-6.1)
 
 Shared rules for Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -16,7 +16,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 6. Boring tools, default settings: uv, ruff, mypy, pytest, GitHub Actions.
 7. Context is the scarce resource: short files, details on demand, nothing the agent would do anyway.
 8. Safe by default: read before write, check before change; the author approves merges, tags and releases.
-9. Machines read English and stable codes; people read Polish.
+9. Agents, code and documents use English and stable codes; end users read Polish.
 10. Each project works alone; the hub adds, it never requires.
 11. Write the rule when the second project needs it, not before.
 12. Break freely before 1.0, but leave no shim behind.
@@ -26,6 +26,10 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 - Every requirement is mandatory. `MAY` marks an option; there is no SHOULD.
   Capitalised MUST and MUST NOT only stress: unmarked text in a requirement
   binds equally.
+- When two requirements conflict, safety and the author's approvals
+  (DEV-3.3, DEV §13) come first, then the requirement that names a profile
+  or is narrower, then the general one. The agent follows the higher one and
+  reports the conflict as an issue in Nogat labelled `standard` (ECO-045).
 - A requirement is one or two sentences, optionally followed by `*Why:*` and
   one line (a reason or an ECO reference). Dated facts and the state of named
   projects stay out of rules.
@@ -75,7 +79,30 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
-- 2.1 (2026-10-20):
+- 2.1 (2026-10-21, not yet published):
+  - Agent-facing text by channel: `--json`, MCP and REST output is English,
+    human-readable output follows `lang` (AGI-9.2, DEV-2.2, ERR-6, Zen 9,
+    ECO-042).
+  - Needs between projects are GitHub issues labelled `request` in the
+    target repository; `docs/requests/` is gone (DEV-17.1, DEV-17.5,
+    ECO-043).
+  - Nogat's tooling reports errors by the shared registry (HUB §4, ECO-044).
+  - Precedence of conflicting requirements (How to read the rules, ECO-045).
+  - The standard is tagged when published to `main`, not at every change
+    (HUB-6.1, ECO-046).
+  - An approved plan carries an `Approved:` line (DEV-17.4, ECO-047).
+  - Nogat's AGENTS.md is a routing table with links (HUB-4.3, ECO-048).
+  - Hotfix commits are checked on entry to `main`; messages are checked on
+    every pull request into `develop` (DEV-4.5, ECO-049).
+  - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
+    covers the `main` → `develop` pull request and claims only what the
+    ruleset enforces; DEV-6.3 covers environments, not wheel checks; a
+    security fix is a patch release set (HUB-7.4, DEV-13.6); AGENTS.md is
+    required for tools with a CLI (DOC-1.1); the hub's CI (DEV-7.7);
+    `nogat doctor` reads tool members (HUB-7.3); description limits only in
+    DOC-1.7; DOC §2 names `pyproject` as the master description; the error
+    tables are generated from `error_registry.json` with an anchor per code
+    (ERR-4); ADR statuses include `amended by …` with a date (DOC-8.1).
   - Zen of Nogat; every requirement mandatory, `MAY` for options, no SHOULD
     (ECO-033).
   - The registry holds structure only; the drift command reads versions and
@@ -111,7 +138,7 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     REL-6.2, REL-7.2 and REL-7.3 into REL-7.1.
   - Deleted IDs: DEV-3.2, DEV-8.4, DEV-11.2, DEV-16.3, DOC-1.3, DOC-5.5,
     DOC-6.2, DOC-9.2, AGI-10.2, AGI-10.3, AGI §11, REL-5.5, HUB-2.2, HUB-4.4,
-    HUB-5.1, HUB-6.2, and the third-party tools item of HUB-1.1.
+    HUB-5.1, HUB-5.3, HUB-6.2, and the third-party tools item of HUB-1.1.
 - 2.0 (2026-10-19): rewritten from project practice; English-only
   documentation; agent-first interface standard; shared error registry;
   `src` layout; uv; release and distribution channels; hub requirements.

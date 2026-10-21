@@ -10,8 +10,10 @@ project registry (`ecosystem.yaml`) and the tooling that reads it. Profile:
 
 - Without the author's approval in this session: no merges, tags, releases,
   force-pushes or history rewrites (DEV-3.3). `std-X.Y` tags included.
-- Change only this repository; a need in another project is an entry in
-  `docs/requests/<Project>.md` (DEV-17.5).
+- Change only this repository; a need in another project is a GitHub issue
+  labelled `request` in that project's repository (DEV-17.5).
+- Scripts report failures by the error registry: last stderr line is the
+  `nogat-error/1` document, exit code from `error_registry.json` (HUB-4.8).
 - Never edit generated files or blocks: `docs/ECOSYSTEM_MAP.md` comes from
   `ecosystem.yaml` (`uv run scripts/ecosystem.py map`), the tables in
   `standards/ERROR_REGISTRY.md` from `error_registry.json` (`standard --write`).
@@ -70,9 +72,8 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 
 - DEV-5.1: no `src/nogat/` until the `nogat` package exists (HUB §7); code
   lives in `scripts/`, coverage measures `scripts/`.
-- DEV-7.7: CI runs the gate on Linux only until the `nogat` package exists.
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
-- DOC-1.1: no aggregated `AGENTS.md` yet (HUB-4.3 not implemented).
+- DOC-1.1: no generated `AGENTS.md` yet (HUB-4.3 not implemented).
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).
 - DEV-13.7, DEV-16.2: `SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md` and

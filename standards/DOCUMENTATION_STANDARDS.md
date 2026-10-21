@@ -24,7 +24,7 @@ several profiles has the union:
 | `LICENSE` | ✓ | ✓ | ✓ |
 | `docs/PROGRESS.md` | ✓ | ✓ | ✓ |
 | `docs/CHANGELOG.md` (or `CHANGELOG.md`: the one place the project already uses) | ✓ | ✓ | ✓ |
-| `AGENTS.md`, generated | ✓ | – | ✓ (aggregated, HUB-4.3) |
+| `AGENTS.md`, generated | ✓ (with a CLI) | – | ✓ (routing table, HUB-4.3) |
 | `llms.txt`, generated | ✓ | – | – |
 
 Public repositories add the contribution files of DEV §16 and `SECURITY.md`
@@ -46,8 +46,8 @@ docs/
 └── plans/YYYY-MM-DD-slug.md goal, options, decision, steps, results (DEV-17.4)
 ```
 
-Nogat also has `docs/requests/` (DEV-17.5), `docs/user/` (DOC §12) and, in
-the repository root, `release-sets/` (REL §6).
+Nogat also has `docs/user/` (DOC §12) and, in the repository root,
+`release-sets/` (REL §6).
 *Why:* fixed names and dated filenames let an agent find a document and judge
 its age.
 
@@ -93,7 +93,8 @@ every limit has one home.
 ## 2. README.md
 
 README is the first document an agent or search pipeline reads about the
-project and the source of the descriptions used on PyPI and MCP registries.
+project; its summary paragraph is the longest form of the description that
+PyPI and MCP registries show (DOC-2.3).
 It is written for selection first ("is this the right tool?") and use second.
 
 **DOC-2.1** Sections, in this order. A section for an interface the project
@@ -253,8 +254,10 @@ change.
 ## 8. DECISIONS (ADR)
 
 **DOC-8.1** Each ADR has: ID, title, date, status (`proposed`, `accepted`,
-`superseded by …`), context, options considered, decision, consequences,
-errata (dated, appended, never rewriting the decision).
+`amended by …`, `superseded by …`), context, options considered, decision,
+consequences, errata (dated, appended, never rewriting the decision). An
+amendment is noted at the top of the amended ADR with its date and the
+amending ADR.
 
 **DOC-8.2** New ADRs are separate files `docs/decisions/NNNN-slug.md`;
 `docs/DECISIONS.md` is the index (ID, title, status, date, link). A

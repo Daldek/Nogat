@@ -4,8 +4,9 @@ Part of standard 2.1 · no requirement IDs
 
 Each item names the requirement it implements. Work happens in later
 sessions, one project per session, on a `docs/standard-2.1` or
-`chore/standard-2.1` branch, with the author's approval for merges, pushes,
-tags and history rewrites (DEV-3.3). The phases run in order: 0 Nogat, 1
+`chore/standard-2.1` branch, with the author's approval for merges, tags,
+force-pushes and history rewrites (DEV-3.3); pushing the topic branch needs
+none. The phases run in order: 0 Nogat, 1
 history rewrite, 2 tooling, 3 documentation, 4 agent interfaces, 5 releases
 as git tags, 6 PyPI.
 
@@ -19,7 +20,7 @@ as git tags, 6 PyPI.
 | 0.2 | Registry (`ecosystem.yaml`, schema, `scripts/ecosystem.py`, generated `docs/ECOSYSTEM_MAP.md`) and the hub README in English (done) | HUB §2, HUB §4, ECO-005 |
 | 0.3 | Pending Nogat work committed in small Conventional commits as Daldek on a topic branch and merged by pull request | DEV-4.1, DEV-4.2, DEV-3.3 |
 | 0.4 | Standard 2.1 merged to `main` and tagged `std-2.1` | HUB-6.1, ERR-3 |
-| 0.5 | Nogat `CLAUDE.md` and generated `AGENTS.md` (the routing table now; the tools' blocks join in phase 4) | DOC §3, DOC §4, HUB-4.3 |
+| 0.5 | Nogat `CLAUDE.md` (done) and generated `AGENTS.md`: the routing table with links to the tools' AGENTS.md | DOC §3, DOC §4, HUB-4.3 |
 | 0.6 | Ruleset for `main` and `develop`, tag ruleset for `v*`, private vulnerability reporting, contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`, `CONTRIBUTORS.md`, pull-request template with the CLA box) | DEV-3.6, DEV-13.7, DEV-16.2, DEV-16.4 |
 
 ## Phase 1: identity and history (one-off)
@@ -87,7 +88,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | Kartograf | remove the "no AGENTS.md" rule; generate AGENTS.md (ECO-014); `llms.txt` to link-list format with raw links (DOC §5) |
 | IMGWTools | `CLAUDE.md` (587 lines) and README (~830 lines) within budget |
 | Hydrolog | README (~810 lines) within budget |
-| Hydrograf | PROGRESS (145 KB) cut to its three sections; `notes/superpowers/*` into `docs/plans/`; `CROSS_PROJECT_ANALYSIS.md` migrated into the Nogat registry and `docs/requests/` |
+| Hydrograf | PROGRESS (145 KB) cut to its three sections; `notes/superpowers/*` into `docs/plans/`; `CROSS_PROJECT_ANALYSIS.md` migrated into the Nogat registry and `request` issues in the producers' repositories (DEV-17.5) |
 | Hydraulik | full documentation set; `CLAUDE.md` beyond 25 lines; CHANGELOG |
 | Retman | AGENTS.md, llms.txt |
 

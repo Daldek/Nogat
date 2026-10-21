@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import sys
+import json
 from pathlib import Path
 from typing import Any
 
@@ -101,7 +101,10 @@ def test_deps_flags_only_real_conflicts(
             _project("B", python_manifests=["requirements.txt"]),
         ]
     }
-    assert ecosystem.report_deps(registry, with_installed=False) == 1
+    with pytest.raises(ecosystem.Failure) as raised:
+        ecosystem.report_deps(registry, with_installed=False)
+    assert raised.value.code == "conflict"
+    assert raised.value.details["packages"] == ["shapely"]
     out = capsys.readouterr().out
     numpy = next(line for line in out.splitlines() if "numpy" in line)
     shapely = next(line for line in out.splitlines() if "shapely" in line)
@@ -118,30 +121,62 @@ def test_deps_notes_unreadable_manifest(
     assert "not valid TOML" in capsys.readouterr().err
 
 
+def _error(err: str) -> dict[str, Any]:
+    document: dict[str, Any] = json.loads(err.strip().splitlines()[-1])
+    assert document["schema"] == "nogat-error/1"
+    return document
+
+
 @pytest.mark.parametrize(
-    ("content", "message"),
+    ("content", "message", "code", "exit_code"),
     [
-        (None, "ecosystem.yaml: cannot read"),
-        ("projects: [\n", "ecosystem.yaml: not valid YAML"),
-        ("- a\n", "ecosystem.yaml: top level must be a mapping"),
+        (None, "ecosystem.yaml: cannot read", "not_found", 3),
+        ("projects: [\n", "ecosystem.yaml: not valid YAML", "data_error", 7),
+        ("- a\n", "ecosystem.yaml: top level must be a mapping", "data_error", 7),
+        ("schema: nogat-ecosystem/1\n", "ecosystem.yaml has", "data_error", 7),
     ],
 )
-def test_main_bad_registry_one_line_error(
+def test_main_bad_registry_error_document(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
     content: str | None,
     message: str,
+    code: str,
+    exit_code: int,
 ) -> None:
     registry = tmp_path / "ecosystem.yaml"
     if content is not None:
         registry.write_text(content, encoding="utf-8")
     monkeypatch.setattr(ecosystem, "REGISTRY", registry)
-    monkeypatch.setattr(sys, "argv", ["ecosystem.py", "validate"])
-    assert ecosystem.main() == 1
+    assert ecosystem.main(["validate"]) == exit_code
     err = capsys.readouterr().err
-    assert message in err
     assert "Traceback" not in err
+    document = _error(err)
+    assert document["code"] == code
+    assert document["exit_code"] == exit_code
+    assert document["command"] == "validate"
+    assert message in document["message"]
+
+
+def test_main_usage_error_is_validation_error(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert ecosystem.main(["map", "--chek"]) == 2
+    document = _error(capsys.readouterr().err)
+    assert document["code"] == "validation_error"
+    assert document["hint"] == "run: uv run scripts/ecosystem.py --help"
+
+
+def test_main_defect_is_internal_error(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    def broken(registry: dict[str, Any]) -> list[str]:
+        raise KeyError("projects")
+
+    monkeypatch.setattr(ecosystem, "validate", broken)
+    assert ecosystem.main(["validate"]) == 1
+    assert _error(capsys.readouterr().err)["code"] == "internal_error"
 
 
 def test_validate_missing_topic_header_reported(
@@ -171,10 +206,10 @@ def test_map_check_detects_stale_map(
     stale.write_text("# old\n", encoding="utf-8")
     monkeypatch.setattr(ecosystem, "MAP", stale)
     monkeypatch.setattr(ecosystem, "ROOT", tmp_path)
-    monkeypatch.setattr(sys, "argv", ["ecosystem.py", "map", "--check"])
-    assert ecosystem.main() == 1
-    monkeypatch.setattr(sys, "argv", ["ecosystem.py", "map"])
-    assert ecosystem.main() == 0
-    monkeypatch.setattr(sys, "argv", ["ecosystem.py", "map", "--check"])
-    assert ecosystem.main() == 0
+    assert ecosystem.main(["map", "--check"]) == 4
+    assert _error(capsys.readouterr().err)["details"]["reason"] == (
+        "stale_generated_file"
+    )
+    assert ecosystem.main(["map"]) == 0
+    assert ecosystem.main(["map", "--check"]) == 0
     assert "is up to date" in capsys.readouterr().out

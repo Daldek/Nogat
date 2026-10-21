@@ -66,7 +66,7 @@ package is `nogat` (HUB §7). A name is reserved by its first upload.
 
 **REL-4.1** Each MCP server has `server.json` in the repository root:
 - `name` `io.github.Daldek/<tool>`;
-- `title` and `description` of at most 100 characters (DOC-2.3);
+- `title` and `description` within the budget of DOC-1.7 (DOC-2.3);
 - `version` equal to the package version;
 - a `packages` entry with `registryType: "pypi"`, `identifier`
   `nogat-<project>`, `version`, `runtimeHint: "uvx"`,
@@ -96,8 +96,8 @@ CI. The consumer's release pull request replaces the commit with the tag
 (REL-2.1). Branch pins and editable installs are not committed.
 *Why:* ECO-016.
 
-**REL-5.4** The drift report (HUB-4.1; `nogat ecosystem drift`, today
-`uv run scripts/ecosystem.py drift`) reads the pins from the consumers'
+**REL-5.4** The drift report (HUB-4.1; `uv run scripts/ecosystem.py drift`,
+`nogat ecosystem drift` once the package exists) reads the pins from the consumers'
 manifests and the latest tags from the producers' checkouts and lists the
 pins that are behind. Each consumer upgrades in its own session.
 

@@ -156,7 +156,8 @@ def test_generated_blocks_regenerate_and_check(tmp_path: Path) -> None:
     path.write_text(standard.regenerate(path.read_text(), blocks), encoding="utf-8")
     text = path.read_text()
     assert "| `ok` | 0 | Done. |" in text
-    assert "| `rate_limited` | – | 429 | Slow down. |" in text
+    assert '| <a id="rate_limited"></a>`rate_limited` | – | 429 | Slow down. |' in text
+    assert "rate_limited" in standard.anchors(text)
     assert text.startswith("Intro\n") and text.endswith("Outro\n")
     assert standard.generated_problems(path, blocks, "ERR.md") == []
 

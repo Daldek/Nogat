@@ -23,7 +23,7 @@ import subprocess
 import sys
 import tomllib
 from pathlib import Path
-from typing import Any
+from typing import Any, NoReturn
 from urllib.parse import urlsplit
 
 import jsonschema
@@ -49,8 +49,33 @@ INCLUDE = re.compile(r"^(-r|--requirement)(\s+|=)(?P<path>\S+)")
 OPTION = re.compile(r"\s+--?[A-Za-z]")
 
 
-class RegistryError(Exception):
+class Failure(Exception):
+    """An outcome reported as a registry error (ERR §2, ECO-044)."""
+
+    def __init__(
+        self,
+        code: str,
+        message: str,
+        *,
+        hint: str | None = None,
+        details: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.code = code
+        self.message = message
+        self.hint = hint
+        self.details = details or {}
+
+
+class RegistryError(Failure):
     """A file the tooling reads is missing or malformed; the message names it."""
+
+    def __init__(self, message: str, code: str = "data_error") -> None:
+        super().__init__(code, message)
+
+
+def _os_code(error: OSError) -> str:
+    return "not_found" if isinstance(error, FileNotFoundError) else "io_error"
 
 
 def _shown(path: Path) -> str:
@@ -62,8 +87,10 @@ def _read(path: Path) -> str:
     """Text of a UTF-8 file; RegistryError names the file when it cannot be read."""
     try:
         return path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError) as e:
-        raise RegistryError(f"{_shown(path)}: cannot read: {e}") from e
+    except OSError as e:
+        raise RegistryError(f"{_shown(path)}: cannot read: {e}", _os_code(e)) from e
+    except UnicodeDecodeError as e:
+        raise RegistryError(f"{_shown(path)}: not UTF-8: {e}") from e
 
 
 def _read_json(path: Path) -> Any:
@@ -80,7 +107,9 @@ def load() -> dict[str, Any]:
         with REGISTRY.open(encoding="utf-8") as f:
             data = yaml.safe_load(f)
     except OSError as e:
-        raise RegistryError(f"{REGISTRY.name}: cannot read: {e.strerror}") from e
+        raise RegistryError(
+            f"{REGISTRY.name}: cannot read: {e.strerror}", _os_code(e)
+        ) from e
     except yaml.YAMLError as e:
         raise RegistryError(f"{REGISTRY.name}: not valid YAML: {e}") from e
     if not isinstance(data, dict):
@@ -504,7 +533,7 @@ def installed(
 
 
 def report_deps(registry: dict[str, Any], with_installed: bool) -> int:
-    """Print third-party ranges shared by projects; 1 when some cannot agree."""
+    """Print third-party ranges shared by projects; Failure when some cannot agree."""
     specs, notes = declared(registry)
     shared = {name: s for name, s in sorted(specs.items()) if len(s) > 1}
     conflicts = {name: why for name, s in shared.items() if (why := range_conflicts(s))}
@@ -536,7 +565,14 @@ def report_deps(registry: dict[str, Any], with_installed: bool) -> int:
             print(f"  {n}: " + "; ".join(f"{p} {v}" for p, v in versions.items()))
     for note in notes:
         print(f"note: {note}", file=sys.stderr)
-    return 1 if conflicts else 0
+    if conflicts:
+        raise Failure(
+            "conflict",
+            f"{len(conflicts)} package(s) have ranges no single version satisfies",
+            hint="align the ranges before preparing a release set (REL-6.4)",
+            details={"reason": "range_conflict", "packages": sorted(conflicts)},
+        )
+    return 0
 
 
 def _latest_tag(checkout: Path) -> str | None:
@@ -702,7 +738,7 @@ def report_drift(registry: dict[str, Any]) -> int:
 
 
 def check_standard(registry: dict[str, Any], write: bool) -> int:
-    """Run the checks of scripts/standard.py; print problems, return 1 if any."""
+    """Run the checks of scripts/standard.py; Failure when any finds a problem."""
     path = STANDARDS / "ERROR_REGISTRY.md"
     blocks = standard.error_tables(_read_json(STANDARDS / "error_registry.json"))
     if write:
@@ -711,24 +747,66 @@ def check_standard(registry: dict[str, Any], write: bool) -> int:
         if fresh != text:
             path.write_text(fresh, encoding="utf-8")
             print(f"wrote {_shown(path)}")
+    stale = standard.generated_problems(path, blocks, _shown(path))
     problems = [
         *standard.id_problems(ROOT),
         *standard.link_problems(ROOT),
         *standard.budget_problems(ROOT),
-        *standard.generated_problems(path, blocks, _shown(path)),
         *standard.project_list_problems(ROOT, registry),
     ]
-    for problem in problems:
+    for problem in [*problems, *stale]:
         print(problem, file=sys.stderr)
     if problems:
-        return 1
+        raise Failure(
+            "data_error",
+            f"the standard has {len(problems + stale)} problem(s)",
+            hint="fix the lines listed above",
+            details={"reason": "standard_inconsistent", "count": len(problems)},
+        )
+    if stale:
+        raise Failure(
+            "conflict",
+            f"{_shown(path)} has stale generated blocks",
+            hint="run: uv run scripts/ecosystem.py standard --write",
+            details={"reason": "stale_generated_file", "path": _shown(path)},
+        )
     print("standard: IDs, links, budgets, generated blocks and project lists agree")
     return 0
 
 
-def main() -> int:
-    """Run the command named on the command line; return the exit status."""
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+def check_map(registry: dict[str, Any], check: bool) -> int:
+    """Write docs/ECOSYSTEM_MAP.md, or with `check` fail when it is stale."""
+    text = render(registry)
+    shown = _shown(MAP)
+    if not check:
+        MAP.parent.mkdir(parents=True, exist_ok=True)
+        MAP.write_text(text, encoding="utf-8")
+        print(f"wrote {shown}")
+        return 0
+    if not MAP.exists() or MAP.read_text(encoding="utf-8") != text:
+        raise Failure(
+            "conflict",
+            f"{shown} is stale",
+            hint="run: uv run scripts/ecosystem.py map",
+            details={"reason": "stale_generated_file", "path": shown},
+        )
+    print(f"{shown} is up to date")
+    return 0
+
+
+class _Parser(argparse.ArgumentParser):
+    """Argument parser that reports usage errors as `validation_error`."""
+
+    def error(self, message: str) -> NoReturn:
+        raise Failure(
+            "validation_error",
+            message,
+            hint=f"run: uv run scripts/{self.prog} --help",
+        )
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = _Parser(prog="ecosystem.py", description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("validate", help="validate ecosystem.yaml")
     map_cmd = sub.add_parser("map", help="generate docs/ECOSYSTEM_MAP.md")
@@ -748,18 +826,22 @@ def main() -> int:
     standard_cmd.add_argument(
         "--write", action="store_true", help="regenerate generated blocks first"
     )
-    args = parser.parse_args()
+    return parser
 
-    try:
-        registry = load()
-        problems = validate(registry)
-    except RegistryError as e:
-        print(f"ecosystem: {e}", file=sys.stderr)
-        return 1
+
+def run(args: argparse.Namespace) -> int:
+    """Run the parsed command; Failure reports an outcome that is an error."""
+    registry = load()
+    problems = validate(registry)
     if problems:
         for problem in problems:
             print(f"ecosystem.yaml: {problem}", file=sys.stderr)
-        return 1
+        raise Failure(
+            "data_error",
+            f"ecosystem.yaml has {len(problems)} problem(s)",
+            hint="fix the lines listed above",
+            details={"reason": "invalid_registry", "count": len(problems)},
+        )
     if args.command == "validate":
         print(f"ecosystem.yaml: {len(registry['projects'])} projects, valid")
         return 0
@@ -769,22 +851,52 @@ def main() -> int:
         return report_drift(registry)
     if args.command == "standard":
         return check_standard(registry, args.write)
+    return check_map(registry, args.check)
 
-    text = render(registry)
-    if args.check:
-        if not MAP.exists() or MAP.read_text(encoding="utf-8") != text:
-            print(
-                f"{MAP.relative_to(ROOT)} is stale; "
-                "run: uv run scripts/ecosystem.py map",
-                file=sys.stderr,
-            )
-            return 1
-        print(f"{MAP.relative_to(ROOT)} is up to date")
-        return 0
-    MAP.parent.mkdir(parents=True, exist_ok=True)
-    MAP.write_text(text, encoding="utf-8")
-    print(f"wrote {MAP.relative_to(ROOT)}")
-    return 0
+
+def error_document(failure: Failure, command: str | None) -> dict[str, Any]:
+    """Return the `nogat-error/1` document of a failure (AGI-4.3, ERR-4).
+
+    Title and exit code come from standards/error_registry.json; when that
+    file cannot be read, the code stands in for the title and the exit code
+    is that of `internal_error`.
+    """
+    try:
+        entries = _read_json(STANDARDS / "error_registry.json")["errors"]
+        entry = next(e for e in entries if e["code"] == failure.code)
+    except (Failure, KeyError, StopIteration):
+        entry = {"title_en": failure.code, "exit_code": 1}
+    document: dict[str, Any] = {
+        "schema": "nogat-error/1",
+        "code": failure.code,
+        "title": entry["title_en"],
+        "message": failure.message,
+        "details": failure.details,
+        "exit_code": entry["exit_code"],
+    }
+    if failure.hint:
+        document["hint"] = failure.hint
+    if command:
+        document["command"] = command
+    return document
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the command line; on an error the last stderr line is its document."""
+    command = None
+    try:
+        args = _parser().parse_args(argv)
+        command = args.command
+        return run(args)
+    except Failure as failure:
+        document = error_document(failure, command)
+    except Exception as e:  # any defect becomes internal_error (ERR §2)
+        document = error_document(
+            Failure("internal_error", f"{type(e).__name__}: {e}"), command
+        )
+    print(f"ecosystem: {document['message']}", file=sys.stderr)
+    print(json.dumps(document, ensure_ascii=False), file=sys.stderr)
+    return int(document["exit_code"])
 
 
 if __name__ == "__main__":
