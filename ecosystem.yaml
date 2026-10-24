@@ -79,7 +79,7 @@ projects:
         summary: "<file>.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256."
       - id: kartograf-store
         kind: store
-        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with read API list_segments, iter_store, read_sidecar, file_footprint.
+        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12) and read API list_segments, iter_store, read_sidecar, file_footprint.
       - id: kartograf-project/1
         kind: manifest
         summary: kartograf-project.json pinning store versions by SHA-256.
@@ -117,7 +117,7 @@ projects:
     provides:
       - id: imgw-store/1
         kind: store
-        summary: Versioned store (archives, stations, series) with read API store_info, iter_store, read_meta, read_series.
+        summary: Versioned store (archives, stations, series) with root marker imgw-store.json (DEV-19.12) and read API store_info, iter_store, read_meta, read_series.
       - id: imgw-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
@@ -153,8 +153,8 @@ projects:
         kind: data
         status: active
         via: [store]
-        exchange: [kartograf-meta/1, kartograf-project/1]
-        note: No import; detects Kartograf store markers to refuse nested stores. Hard-link publication model follows Kartograf ADR-036.
+        exchange: [kartograf-store]
+        note: No import; refuses a store nested in another by marker file name (DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 
   - name: Hydrolog
     summary: Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP.

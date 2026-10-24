@@ -51,6 +51,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   review (ECO-042 to ECO-049 and consistency fixes; list in
   `standards/README.md`). The CI template and Nogat's CI check commits of
   `hotfix/*` pull requests into `main` (DEV-4.5).
+- `ecosystem.yaml` and the map: `kartograf-store` and `imgw-store/1` name their
+  root markers, and IMGWTools exchanges only `kartograf-store` with Kartograf
+  because nested stores are refused by marker file name (DEV-19.12,
+  DEV-19.14).
 
 ### Fixed
 

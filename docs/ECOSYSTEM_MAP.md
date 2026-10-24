@@ -77,7 +77,7 @@ flowchart LR
 
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
-| IMGWTools | Kartograf | data | active | store | `kartograf-meta/1`, `kartograf-project/1` |
+| IMGWTools | Kartograf | data | active | store | `kartograf-store` |
 | Hydrolog | IMGWTools | data | active | file | `imgw-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
@@ -96,7 +96,7 @@ flowchart LR
 
 ### Details
 
-- **IMGWTools → Kartograf**: No import; detects Kartograf store markers to refuse nested stores. Hard-link publication model follows Kartograf ADR-036.
+- **IMGWTools → Kartograf**: No import; refuses a store nested in another by marker file name (DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 - **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export`.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs. HSG rules ported from Kartograf (Hydrolog ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `LandCoverManager`, `Bdot10kProvider`, `HSGCalculator`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
@@ -118,9 +118,9 @@ flowchart LR
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
 | `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ). |
-| `kartograf-meta/1` | sidecar | IMGWTools, Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256. |
-| `kartograf-store` | store | Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with read API list_segments, iter_store, read_sidecar, file_footprint. |
-| `kartograf-project/1` | manifest | IMGWTools, Archiwista | kartograf-project.json pinning store versions by SHA-256. |
+| `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256. |
+| `kartograf-store` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12) and read API list_segments, iter_store, read_sidecar, file_footprint. |
+| `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256. |
 | `kartograf-download/1` | document | Retman | Download report (files, failed, stale, notices); also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Archiwista | Update plan per file (current, newer, missing, unverifiable) without downloading. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
@@ -131,7 +131,7 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with read API store_info, iter_store, read_meta, read_series. |
+| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (DEV-19.12) and read API store_info, iter_store, read_meta, read_series. |
 | `imgw-meta/1` | sidecar | Archiwista (planned) | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
 | `imgw-series/1` | dataset | Archiwista (planned) | Parquet series per station with series.json index (periods, year type, units, coverage). |
 | `imgw-project/1` | manifest | Retman, Archiwista (planned) | imgw-project.json pinning store versions by SHA-256 or content hash. |
