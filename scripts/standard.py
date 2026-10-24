@@ -43,6 +43,7 @@ GENERATED = re.compile(
     r"(?P<close><!-- end generated -->)",
     re.DOTALL,
 )
+MARKERS = re.compile(r"The markers are (?P<names>[^;]+);")
 
 # Directories with v1 files kept verbatim until replaced (DOC-11.1).
 V1 = ("standards/legacy/", "standards/templates/", "standards/configs/")
@@ -382,4 +383,37 @@ def project_list_problems(root: Path, registry: dict[str, Any]) -> list[str]:
                 f"standards/DEVELOPMENT_STANDARDS.md: DEV §1 `{profile}` lists "
                 f"{sorted(found)}, ecosystem.yaml has {sorted(expected)}"
             )
+    return problems
+
+
+def marker_problems(root: Path, registry: dict[str, Any]) -> list[str]:
+    """Check the store markers listed in DEV-19.12 against the registry.
+
+    Every project that provides a `store` has the marker `<tool>-store.json`,
+    `<tool>` being its CLI; the sentence "The markers are …;" must name exactly
+    those files.
+    """
+    problems: list[str] = []
+    expected: set[str] = set()
+    for project in registry["projects"]:
+        if not any(item["kind"] == "store" for item in project["provides"]):
+            continue
+        cli = project["interfaces"]["cli"]
+        if cli is None:
+            problems.append(
+                f"{project['name']}: provides a store but has no CLI, so no "
+                "marker name (DEV-19.12)"
+            )
+        else:
+            expected.add(f"{cli}-store.json")
+    rel = "standards/DEVELOPMENT_STANDARDS.md"
+    m = MARKERS.search((root / rel).read_text(encoding="utf-8"))
+    if m is None:
+        return [*problems, f"{rel}: marker list not found ({MARKERS.pattern})"]
+    found = _names(m["names"])
+    if found != expected:
+        problems.append(
+            f"{rel}: DEV-19.12 lists markers {sorted(found)}, the registry's "
+            f"stores have {sorted(expected)}"
+        )
     return problems

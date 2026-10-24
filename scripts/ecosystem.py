@@ -766,6 +766,7 @@ def check_standard(registry: dict[str, Any], write: bool) -> int:
         *standard.link_problems(ROOT),
         *standard.budget_problems(ROOT),
         *standard.project_list_problems(ROOT, registry),
+        *standard.marker_problems(ROOT, registry),
     ]
     for problem in [*problems, *stale]:
         print(problem, file=sys.stderr)

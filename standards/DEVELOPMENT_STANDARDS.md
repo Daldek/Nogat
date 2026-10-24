@@ -559,9 +559,10 @@ outside them is `forbidden` (AGI-5.8).
 **DEV-19.4** In plain mode a command selects the same data as in store mode,
 unless its catalog entry and documentation declare a selection rule that
 applies only to plain mode. A unit that such a rule leaves without data is
-skipped with a warning notice of code `skipped_incomplete` and an entry in
-`skipped[]` of the domain result; when every unit is skipped the command
-fails with `no_data`, reason `skipped_incomplete`.
+skipped, with a warning notice of code `skipped_incomplete` and an entry
+`{id, reason, message}` in `skipped[]` of the domain result (`id` as in
+`items[]`, `reason` `skipped_incomplete`); when every unit is skipped the
+command fails with `no_data`, reason `skipped_incomplete`.
 *Why:* a difference between the modes is declared and visible in the result.
 
 **DEV-19.5** In plain mode the file name is the name the file has in the
@@ -598,7 +599,8 @@ version or `unchanged`, and never overwrites.
 **DEV-19.10** `--check` is the only way to plan without effects, in both
 modes, and `check_command` returns the same plan (AGI-2.1). In plain mode the
 plan lists each target with its action: `write`, `replace` (only with
-`--force`) or `conflict`.
+`--force`) or `conflict`; a plan that lists `conflict` is a successful result
+(status `ok`, exit 0), and only the real run fails with `conflict`.
 
 **DEV-19.11** An `output_dir` that is, or lies inside, a store of any tool,
 or a directory the write would enter that contains a store marker, is a
@@ -635,11 +637,14 @@ meaning; a tool brings its sidecar in line by adding optional fields within
 | Field | Meaning |
 |---|---|
 | `schema` | `<tool>-meta/N` |
+| `producer` | name of the package that wrote the file (`distribution.import_name` in the registry) |
+| `producer_version` | version of that package |
 | `dataset` | dataset key `<scope>.<provider>.<name>` as written, never rewritten; scope is a country code, `eu` or `global` |
 | `dataset_key` | current key of `dataset` (a renamed key resolved), null when the tool does not know it; the read API returns it |
 | `country` | country of the data in capitals: ISO 3166-1 alpha-2 code, `EU` or `GLOBAL` |
 | `provider` | short name of the organisation that publishes the data |
 | `size_bytes` | size of the main file in bytes |
+| `sha256` | SHA-256 of the main file, 64 lower-case hexadecimal digits |
 | `downloaded_at` | UTC time the file was downloaded or built, ISO 8601 with offset |
 | `license` | object `{id, attribution, url}`: licence identifier, attribution text, link to the terms |
 | `request` | object: the request that produced the file, in the tool's own keys |
@@ -661,9 +666,9 @@ result.
 
 **DEV-19.19** The domain result of a writing command lists `files[]`:
 `{path, size_bytes, sha256, status}`, with `sha256` computed while the file is
-streamed. `status` is `written` or `replaced` in plain mode and the tool's
-version status (`new`, `unchanged`, `relabeled`, …) in store mode; per-unit
-outcomes stay in `items[]` (AGI-4.2), and skips are notices.
+streamed. `status` is `written` or `replaced` in plain mode and `new`,
+`unchanged` or `relabeled` in store mode; per-unit outcomes stay in `items[]`
+(AGI-4.2), and skips are notices.
 
 **DEV-19.20** The reasons of this section are `details.reason` values
 (AGI-4.3) under the codes given above: `duplicate_output_name`,

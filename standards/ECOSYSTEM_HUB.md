@@ -142,8 +142,9 @@ packages that differ. It prepares a candidate (REL-6.4).
 **HUB-4.7** `uv run scripts/ecosystem.py standard` checks the standard: every
 cited requirement ID, section and decision exists, IDs are defined once in
 their document, relative links resolve, Nogat's files keep the budgets of
-DOC-1.7, project lists in prose match the registry, and generated tables are
-fresh (`--write` regenerates them). The gate runs it.
+DOC-1.7, project lists in prose and the store markers of DEV-19.12 match the
+registry, and generated tables are fresh (`--write` regenerates them). The
+gate runs it.
 
 **HUB-4.8** Nogat's scripts report failures by the registry: a malformed
 input is `data_error`, a missing one `not_found`, a stale generated file or

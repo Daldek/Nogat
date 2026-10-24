@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 import standard
@@ -169,4 +170,57 @@ def test_generated_problems_missing_block(tmp_path: Path) -> None:
     assert problems == [
         "E: no generated block 'error-outcomes'",
         "E: no generated block 'error-codes'",
+    ]
+
+
+def _stores(*clis: str | None) -> dict[str, Any]:
+    """Registry with one project per CLI; each provides a store."""
+    return {
+        "projects": [
+            {
+                "name": f"P{n}",
+                "interfaces": {"cli": cli},
+                "provides": [{"id": f"p{n}-store", "kind": "store", "summary": "s"}],
+            }
+            for n, cli in enumerate(clis)
+        ]
+        + [
+            {
+                "name": "Other",
+                "interfaces": {"cli": "other"},
+                "provides": [{"id": "other-doc", "kind": "document", "summary": "s"}],
+            }
+        ]
+    }
+
+
+def _marker_tree(root: Path, sentence: str) -> Path:
+    text = f"# Dev\n\n**DEV-19.12** A root holds a marker. {sentence} Nothing else.\n"
+    return _tree(root, {"standards/DEVELOPMENT_STANDARDS.md": text})
+
+
+def test_marker_problems_match_the_stores_of_the_registry(tmp_path: Path) -> None:
+    root = _marker_tree(
+        tmp_path, "The markers are `a-store.json`\nand `b-store.json`; a tool looks."
+    )
+    assert standard.marker_problems(root, _stores("a", "b")) == []
+
+
+def test_marker_problems_report_a_store_without_its_marker(tmp_path: Path) -> None:
+    root = _marker_tree(tmp_path, "The markers are `a-store.json`; a tool looks.")
+    assert standard.marker_problems(root, _stores("a", "b")) == [
+        "standards/DEVELOPMENT_STANDARDS.md: DEV-19.12 lists markers "
+        "['a-store.json'], the registry's stores have "
+        "['a-store.json', 'b-store.json']"
+    ]
+
+
+def test_marker_problems_report_a_store_without_cli_and_a_missing_list(
+    tmp_path: Path,
+) -> None:
+    root = _marker_tree(tmp_path, "No list here.")
+    assert standard.marker_problems(root, _stores(None)) == [
+        "P0: provides a store but has no CLI, so no marker name (DEV-19.12)",
+        "standards/DEVELOPMENT_STANDARDS.md: marker list not found "
+        "(The markers are (?P<names>[^;]+);)",
     ]

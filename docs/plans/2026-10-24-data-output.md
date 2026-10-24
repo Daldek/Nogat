@@ -107,16 +107,22 @@ File and line references are those of 2026-10-24 and only locate the work.
      with its source. The default metadata cache moves from
      `<cwd>/.kartograf_cache.db` (`cache_info.py`, `cache/defaults.py`) to
      `<cache_dir>/kartograf`.
-   - **Plan and result** (DEV-19.10, DEV-19.19). `--check-updates` becomes
-     `--check`; `check_*` and `check_command` return the same plan, with the
-     plain actions `write`, `replace` and `conflict`. `kartograf-download/1`
-     lists `files[]` as `{path, size_bytes, sha256, status}` instead of
-     `files[].file.path`, and `skipped[]`; `sha256` is computed while the file
-     streams.
-   - **Sidecar and tests.** `kartograf-meta/1` already has the core of
-     DEV-19.16 (Results). The `kartograf.testing` module that DEV-10.6 asks
-     for in the standard adoption builds stores with the marker; contract
-     tests cover DEV-19.1, DEV-19.6, DEV-19.11, DEV-19.12 and DEV-19.19.
+   - **Plan and result** (DEV-19.10, DEV-19.4, DEV-19.19). `--check-updates`
+     becomes `--check`; `check_*` and `check_command` return the same plan,
+     with the plain actions `write`, `replace` and `conflict`; a plan that
+     lists conflicts is a successful result, and only the real run fails.
+     `kartograf-download/1` lists `files[]` as `{path, size_bytes, sha256,
+     status}` instead of `files[].file.path`, with the store statuses `new`,
+     `unchanged` and `relabeled` (the tool's own words today), and
+     `skipped[]` as `{id, reason, message}`; `sha256` is computed while the
+     file streams.
+   - **Sidecar and tests.** `kartograf-meta/1` gains `producer` (`kartograf`)
+     and `producer_version` beside `kartograf_version` (optional fields
+     within `/1`, `ResultMetadata` in `kartograf/sources/sidecar.py`); its
+     other fields have the meaning of DEV-19.16 (Results). The
+     `kartograf.testing` module that DEV-10.6 asks for in the standard
+     adoption builds stores with the marker; contract tests cover DEV-19.1,
+     DEV-19.6, DEV-19.10, DEV-19.11, DEV-19.12 and DEV-19.19.
    - **Documents.** USAGE (examples start with `-o`), ARCHITECTURE 1, 3.3 and
      4.x, README, `llms.txt`, the generated AGENTS.md, CHANGELOG `[0.8.0]`
      marked **Breaking** with migration notes, PROGRESS.
@@ -145,11 +151,17 @@ File and line references are those of 2026-10-24 and only locate the work.
      ARCHITECTURE; `config show --json` reports root and source. REST accepts
      no `root`, `output_dir` or `output` in a request, and MCP checks the
      default root against `--allow-dir`.
-   - **Plain mode** (DEV-19.4 to DEV-19.11). `_check_download`
+   - **Plan and result** (DEV-19.10, DEV-19.19). `_check_download`
      (`commands.py:2414`) and the download path get the preflight,
      `.imgw-incoming/<host>_<pid>_<token>/`, `--force` and the plan actions
-     `write`, `replace` and `conflict`; the sub-path is the server path;
-     `DownloadReport` becomes the `files[]` of DEV-19.19.
+     `write`, `replace` and `conflict`; a plan that lists conflicts is a
+     successful result, and only the real run fails. The sub-path is the
+     server path. `DownloadReport` becomes the `files[]` of DEV-19.19 with
+     the store statuses `new`, `unchanged` and `relabeled`: `created` becomes
+     `new` in `VersionResult`, `CatalogReport` and the PMAXTP and series
+     reports (`store/types.py`, `store/writer.py`, `store/catalog.py`,
+     `store/pmaxtp.py`, `store/series.py`), unreleased and so without
+     migration, and a reused version is listed as `unchanged`.
    - **Store** (DEV-19.12 to DEV-19.14). `imgw-store.json` gains `tool` and
      `producer_version` and always carries `created_at` (today `created_by`
      and an optional `created_at`). The first write into an empty or new root
@@ -221,32 +233,35 @@ File and line references are those of 2026-10-24 and only locate the work.
 
 ## Results
 
-Nogat, 2026-10-24: step 1 is done (list above).
+Nogat, 2026-10-24: step 1 is done (list above), with the check of
+`standard` that the markers of DEV-19.12 are those of the registry's stores
+(HUB-4.7).
 
 Sidecar core, compared in the code on 2026-10-24: Kartograf `Sidecar`
 (`kartograf/store.py`) and `ResultMetadata` (`kartograf/sources/sidecar.py`),
 IMGWTools `Meta` (`store/types.py`), writer (`store/writer.py`) and reader
-(`store/reader.py`). The ten fields of DEV-19.16 exist in both tools, in the
-document or in the read model, with the same meaning. What differs is the
-range of a value, and no field is renamed:
+(`store/reader.py`). The thirteen fields of DEV-19.16 exist in IMGWTools, in
+the document or in the read model, and in Kartograf except `producer` and
+`producer_version`; where both have a field, the meaning is the same. What
+differs is the range of a value, and no field is renamed:
 
 | Field | Difference | Who adapts |
 |---|---|---|
+| `producer`, `producer_version` | IMGWTools writes both; Kartograf has only `kartograf_version` | Kartograf adds both within `/1` and keeps `kartograf_version` |
 | `dataset_key` | derived from `dataset` on read in both, stored in neither | nobody; DEV-19.16 leaves the storage open |
 | `country`, `dataset` | Kartograf has `EU` and `GLOBAL` and keys `eu.…`, `global.…`; IMGWTools accepts two capital letters and a two-letter key scope only | IMGWTools widens both patterns when it stores data without one country; none does yet |
 | `downloaded_at` | Kartograf writes `+00:00` with microseconds, IMGWTools `Z` | nobody; both are ISO 8601 UTC with an offset |
 | `license` | IMGWTools adds the optional `terms_url` | nobody; an optional field within `/1` |
-| `schema`, `provider`, `size_bytes`, `request`, `extra` | none | – |
+| `schema`, `provider`, `size_bytes`, `sha256`, `request`, `extra` | none | – |
 
 Also found:
-- `sha256` has the same meaning in both sidecars but is not in the approved
-  core; the producer's version is `kartograf_version` in one and `producer`
-  with `producer_version` in the other.
-- Marker: IMGWTools `imgw-store.json` lacks `tool` and `producer_version`
-  (step 3 adds them within `/1`); Kartograf has no marker yet (step 2).
-- Store-mode `files[].status` has `new` in Kartograf and `created` in
-  IMGWTools for the same fact; DEV-19.19 leaves the words to the tool, and
-  PROGRESS asks the author whether to unify them.
+- Marker: IMGWTools `imgw-store.json` has `schema`, `created_by` and an
+  optional `created_at`, so step 3 adds `tool` and `producer_version` and
+  always writes `created_at` within `/1`; Kartograf has no marker yet
+  (step 2).
+- Store statuses of `files[]` are `new`, `unchanged` and `relabeled`
+  (DEV-19.19): IMGWTools says `created` for `new` (step 3), Kartograf already
+  says `new`.
 
 State of the projects on 2026-10-24, before the work:
 

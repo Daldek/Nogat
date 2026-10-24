@@ -20,8 +20,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 - `uv run scripts/ecosystem.py standard`, run by the gate: every cited
   requirement ID, section and decision resolves; IDs are defined once and
   in their document; relative links and anchors resolve; Nogat's files keep
-  the DOC-1.7 budgets; the project lists typed in prose match
-  `ecosystem.yaml`; the generated tables are fresh.
+  the DOC-1.7 budgets; the project lists typed in prose and the store markers
+  of DEV-19.12 match `ecosystem.yaml`; the generated tables are fresh.
 - The tables of `standards/ERROR_REGISTRY.md` §1 and §2 are generated from
   `error_registry.json` (`standard --write`); their wording is now the
   registry's.

@@ -101,8 +101,9 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     (AGI-2.1, AGI-2.2, AGI-3.2, AGI-3.3, AGI-4.1, AGI-4.2, AGI-5.9, ERR-3,
     ECO-050).
   - One data-output convention for tools with a versioned store: plain files
-    or the store, the same options, defaults, errors and result in every tool
-    (DEV §19, AGI-3.4, AGI-4.3, DEV-18.2, ERR-1, ECO-051).
+    or the store, the same options, defaults, errors and result in every tool;
+    `standard` checks the marker list against the registry (DEV §19, AGI-3.4,
+    AGI-4.3, DEV-18.2, ERR-1, HUB-4.7, ECO-051).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

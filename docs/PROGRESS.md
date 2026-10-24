@@ -40,14 +40,6 @@
   here (ADOPTION_PLAN 0.6), or adapt Archiwista's files and write
   `SECURITY.md` (CLA text needs the author's approval; private vulnerability
   reporting is a GitHub setting)?
-- `feature/data-output` branches from `fix/hub-gaps`, not from `develop`:
-  `develop` lacks `scripts/standard.py`, this file and the 2.1 fixes. Merge
-  `fix/hub-gaps` into `develop` first (the author's approval, DEV-3.3)?
-- DEV §19 leaves two things to the tools: the store-mode `files[].status`
-  words (`new` in Kartograf, `created` in IMGWTools) and `sha256`, which both
-  sidecars carry but DEV-19.16 does not list. Unify the words and add
-  `sha256` to the core, or leave both?
-- DEV §19 binds tools with a versioned store (Kartograf, IMGWTools) and
-  applies the plain-mode checks and `--force` to `--output` (one file) too,
-  which the convention does not say. Confirm both, or limit the checks to
-  `--output-dir` and extend the section to tools that only compute?
+- Merge order into `develop`: `fix/hub-gaps` first, then `feature/data-output`
+  (cut from `fix/hub-gaps`); `develop` lacks the 2.1 fixes, the standard
+  checks and this file. Both merges need the author's approval (DEV-3.3).
