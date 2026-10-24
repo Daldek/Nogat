@@ -35,6 +35,9 @@ the standard are listed in [standards/README.md](standards/README.md).
   `--force`, store markers, the sidecar core and `files[]`; AGI-1.3, AGI-2.3,
   AGI-3.4, AGI-4.3, AGI-5.8, ERR-1, DEV-18.2, DEV-18.5 and DEV-18.6 refer to
   it.
+- `docs/plans/2026-10-24-data-output.md`: the approved plan to adopt DEV §19
+  in the projects, producers first, then consumers, the integration check and
+  the first release set (HUB-5.2, DEV-17.4).
 
 ### Changed
 
