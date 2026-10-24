@@ -32,8 +32,9 @@ interface (AGI-3.4, AGI §4, ERR §2).
 library in generated code) without relearning.
 
 **AGI-1.3** Read-only operations are the default; writing operations offer a
-`check` mode (plan without effects); MCP servers start read-only; destructive
-operations need an explicit flag.
+`check` mode (plan without effects, DEV-19.10); MCP servers start read-only;
+destructive operations need an explicit flag (replacing files: `--force`,
+DEV-19.9).
 *Why:* agents execute autonomously; a plan without effects can be confirmed
 before anything is written.
 
@@ -90,7 +91,8 @@ https://arxiv.org/abs/2602.14878); `effects` feeds the MCP annotations
 **AGI-2.3** Each option declares: `name` (snake_case), `type`, `unit` (when
 physical), `required`, `default`, `enum` with a one-line meaning per value,
 `min`/`max`, `pattern`, `examples`, `description`, mutual exclusion groups
-(`one_of`), and whether it is a path (`path_role`: `input`, `output`, `root`).
+(`one_of`), and whether it is a path (`path_role`: `input`, `output`, `root`;
+the write targets of DEV-19.1 have `output` and `root`).
 *Why:* enums and bounds let agents fill parameters without reading prose;
 `path_role` drives the sandbox (AGI-5.8).
 
@@ -126,11 +128,11 @@ registry. Outcomes (ERR §1) print no error document.
 |---|---|
 | `--json` | machine output |
 | `--lang` | language of human-readable output, `pl` or `en` (AGI-9.2) |
-| `--check` | plan without effects |
+| `--check` | plan without effects; the only option for it (DEV-19.10) |
 | `--yes` | confirm without prompt |
-| `--output` | output file |
-| `--output-dir` | output directory |
-| `--root` | store root |
+| `--output` | the one output file of a command that writes exactly one file (DEV-19.1) |
+| `--output-dir`, `-o` | directory for plain output files, no metadata; `-o` is its short form and no other option's (DEV-19.1) |
+| `--root` | store root; default `<data_dir>/<tool>` (DEV-18.2, DEV-19.2) |
 | `--project` | project manifest path or name |
 | `--bbox` + `--crs` | bounding box `min_x,min_y,max_x,max_y` and its CRS |
 | `--geometry` + `--layer` | area from a vector file |
@@ -138,7 +140,7 @@ registry. Outcomes (ERR §1) print no error document.
 | `--station` / `--stations` | station identifier(s) |
 | `--start` / `--end` | ISO dates or datetimes |
 | `--years` | year range `YYYY-YYYY` or list |
-| `--force` | ignore caches and existing results |
+| `--force` | ignore caches and existing results: replace existing target files in plain mode, fetch again in store mode and never overwrite a version (DEV-19.9) |
 | `--workers` | parallelism |
 | `--limit` / `--cursor` | pagination |
 | `--allow-dir` | sandbox root (MCP) |
@@ -204,7 +206,7 @@ units.
 | `title` | registry title in the language of the channel (AGI-9.2) |
 | `message` | what happened, in the language of the channel |
 | `hint` | one line: how to fix, naming the option or command; same language as `message` |
-| `details` | JSON object: `reason` (project-specific sub-code), `option`, `value`, `allowed`, `path`, ... |
+| `details` | JSON object: `reason` (project-specific sub-code; the shared ones are in DEV §19), `option`, `value`, `allowed`, `path`, `paths`, ... |
 | `exit_code` | process exit code from the registry |
 | `command` | command name, if known |
 
@@ -265,9 +267,9 @@ malformed request) stay JSON-RPC errors.
 values make one retry sufficient.
 
 **AGI-5.8** `--allow-dir DIR` (repeatable) restricts every option with
-`path_role`; outside paths raise `forbidden`. `--allow-writes` enables
-writing tools; without it they run in `check` mode or are hidden.
-`--tools <families>` limits exposed tools.
+`path_role` and the default store root (DEV-19.3); outside paths raise
+`forbidden`. `--allow-writes` enables writing tools; without it they run in
+`check` mode or are hidden. `--tools <families>` limits exposed tools.
 
 **AGI-5.9** Each server exposes the catalog as the tools `<tool>_commands_list`
 (catalog summary) and `<tool>_commands_schema` (one command's schema), the

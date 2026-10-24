@@ -491,10 +491,10 @@ works without it and without the `nogat` package.
 
 **DEV-18.2** Data stores live under `data_dir` (default
 `platformdirs.user_data_path("nogat")`), one directory per tool,
-`<data_dir>/<tool>`, unless the user sets a store root explicitly. Caches live
-in `<cache_dir>/<tool>` (`cache_dir` default
-`platformdirs.user_cache_path("nogat")`); tools do not write caches or state
-into the current working directory.
+`<data_dir>/<tool>`, unless the user sets a store root (`--root`,
+`<TOOL>_ROOT`, `[<tool>] root`; DEV-19.2). Caches live in `<cache_dir>/<tool>`
+(`cache_dir` default `platformdirs.user_cache_path("nogat")`); tools do not
+write caches or state into the current working directory.
 
 **DEV-18.3** Tool-specific environment variables are named `<TOOL>_<KEY>`;
 every variable is listed in the tool's README and `.env.example`.
@@ -503,15 +503,169 @@ every variable is listed in the tool's README and `.env.example`.
 read from environment variables only, named in the tool's README and reported
 by `config show` (DEV-18.6); never in `nogat.toml`, never printed.
 
-**DEV-18.5** Tools with versioned stores document in README which data cannot
-be downloaded again (versions removed from the source) and how to back up a
-store: a copy that preserves hard links (`rsync -aH`; on Windows a tool that
-keeps hard links, not Explorer or `robocopy`), or the tool's own export.
+**DEV-18.5** Tools with versioned stores (DEV §19) document in README which
+data cannot be downloaded again (versions removed from the source) and how to
+back up a store: a copy that preserves hard links (`rsync -aH`; on Windows a
+tool that keeps hard links, not Explorer or `robocopy`), or the tool's own
+export.
 *Why:* sources remove old versions, and a copy without hard links multiplies
 the size of a store.
 
 **DEV-18.6** Every `tool` has `<tool> config show --json`: each key with its
 value and source, each credential name with present or missing, the store root
-and its size. `nogat doctor` uses only this command.
+with its source (DEV-19.2) and its size. `nogat doctor` uses only this command.
 *Why:* `nogat` learns a tool's settings from the tool, not from a copy of its
 rules.
+
+---
+
+## 19. Data output (profile `tool`)
+
+A tool that provides a versioned store (a `store` in the registry, HUB-2.5)
+writes data in one of two modes. *Plain mode* writes ordinary files without
+metadata, as a directory (`output_dir`) or as one file (`output`). *Store
+mode* writes the versioned store with sidecars (`root`). Names, defaults,
+errors and results are the same in every tool and interface (AGI-1.2,
+ECO-051); a tool without a store writes with `--output` and `--output-dir` as
+AGI-3.4 says.
+
+**DEV-19.1** The location of the data files a command writes comes from these
+options and from no other (not `--store`, not `--path`):
+
+| CLI | API (keyword-only) | `path_role` | Meaning |
+|---|---|---|---|
+| `-o`, `--output-dir` | `output_dir` | `output` | plain mode: files in a directory |
+| `--root` | `root` | `root` | store mode: root of the versioned store |
+| `--output` | `output` | `output` | plain mode: exactly one file (an export) |
+
+`output_dir` and `root` form one `one_of` group: giving both is
+`validation_error`.
+*Why:* one name per target in every tool and interface (AGI-1.2, AGI-3.4).
+
+**DEV-19.2** The store root is the first of `--root`, `<TOOL>_ROOT`,
+`[<tool>] root` in `nogat.toml` and `<data_dir>/<tool>` (DEV-18.1, DEV-18.2).
+A command with neither `output_dir` nor `output` uses the store at that root,
+so no option is required to write; `<tool> config show --json` reports the
+root and its source (DEV-18.6).
+*Why:* the common call needs no flag, and the store has one place (ECO-051).
+
+**DEV-19.3** A REST server writes only to the store root set in its server
+configuration and only with writes enabled, and it accepts no `root`,
+`output_dir` or `output` in a request. An MCP server writes only inside its
+`--allow-dir` directories and only with `--allow-writes`, so a default root
+outside them is `forbidden` (AGI-5.8).
+*Why:* a client must not choose where a server writes (DEV-13.3).
+
+**DEV-19.4** In plain mode a command selects the same data as in store mode,
+unless its catalog entry and documentation declare a selection rule that
+applies only to plain mode. A unit that such a rule leaves without data is
+skipped with a warning notice of code `skipped_incomplete` and an entry in
+`skipped[]` of the domain result; when every unit is skipped the command
+fails with `no_data`, reason `skipped_incomplete`.
+*Why:* a difference between the modes is declared and visible in the result.
+
+**DEV-19.5** In plain mode the file name is the name the file has in the
+store, a unit name that the tool declares and knows before the transfer; a
+file given by `output` has the name the caller gave it. The directory is flat
+unless names within one request can collide, and the tool then declares a
+relative sub-path.
+*Why:* the names are known before the first byte, so DEV-19.6 can check them.
+
+**DEV-19.6** Before the first byte is transferred a plain write builds the
+full list of targets and checks it, first for duplicate names (`conflict`,
+reason `duplicate_output_name`), then for existing targets without `--force`
+(`conflict`, reason `output_exists`). The error lists every offending path in
+`details.paths`, and nothing is written.
+*Why:* an agent repairs the whole call at once.
+
+**DEV-19.7** A plain write goes through a staging directory
+`<dir>/.<tool>-incoming/<host>_<pid>_<token>/` on the same file system, where
+`<dir>` is `output_dir` or the directory that holds `output`; each file is
+verified there and moved into place with `os.replace`. Staging is removed on
+success, on error, on SIGINT and on SIGTERM, and leftovers older than 24
+hours are removed on the next run.
+*Why:* an interrupted write leaves no partial target.
+
+**DEV-19.8** A plain write creates the output directory if it is missing and
+nothing but the data files: no sidecar, no hard link, no `versions/`
+directory, so it works on FAT, exFAT and SMB.
+
+**DEV-19.9** `--force` in plain mode replaces existing targets, each
+atomically with `os.replace`, and never deletes another file; without it
+nothing is overwritten. In store mode `--force` fetches again and gives a new
+version or `unchanged`, and never overwrites.
+
+**DEV-19.10** `--check` is the only way to plan without effects, in both
+modes, and `check_command` returns the same plan (AGI-2.1). In plain mode the
+plan lists each target with its action: `write`, `replace` (only with
+`--force`) or `conflict`.
+
+**DEV-19.11** An `output_dir` that is, or lies inside, a store of any tool,
+or a directory the write would enter that contains a store marker, is a
+`conflict` with reason `output_in_store`, and its hint names `--root`. A
+store is recognised by its marker file name alone (DEV-19.12).
+
+**DEV-19.12** A store root holds the marker `<tool>-store.json`, a JSON
+document of schema `<tool>-store/1` with at least the fields `schema`, `tool`,
+`created_at` and `producer_version`. The markers are `kartograf-store.json`
+and `imgw-store.json`; a tool looks for exactly these names and imports
+nothing from another tool.
+*Why:* each tool refuses another's store without depending on it (ECO-051).
+
+**DEV-19.13** A tool creates the marker on its first write into an empty or
+new root. A root that has the tool's layout but no marker is
+`store_unavailable` with the hint `<tool> store init --root <path>`, and
+`store init` verifies the layout and writes the marker.
+
+**DEV-19.14** A store never nests in another store of any tool: before it
+writes, a command looks for markers in the ancestors of the root and in its
+existing descendants, and a nested store is a `conflict`.
+
+**DEV-19.15** Store mode keeps the layout of the tool:
+`…/versions/…/<label>_<sha8>/<file>` with `<file>.meta.json` beside it,
+published by `os.link` from `.incoming/` with the sidecar linked last, so it
+needs hard links. The current version is the one the tool's read API returns;
+a link to it at a standard path is the tool's own addition, not part of this
+convention.
+
+**DEV-19.16** Every sidecar `<tool>-meta/N` has these fields with the same
+meaning; a tool brings its sidecar in line by adding optional fields within
+`/1`, never by renaming:
+
+| Field | Meaning |
+|---|---|
+| `schema` | `<tool>-meta/N` |
+| `dataset` | dataset key `<scope>.<provider>.<name>` as written, never rewritten; scope is a country code, `eu` or `global` |
+| `dataset_key` | current key of `dataset` (a renamed key resolved), null when the tool does not know it; the read API returns it |
+| `country` | country of the data in capitals: ISO 3166-1 alpha-2 code, `EU` or `GLOBAL` |
+| `provider` | short name of the organisation that publishes the data |
+| `size_bytes` | size of the main file in bytes |
+| `downloaded_at` | UTC time the file was downloaded or built, ISO 8601 with offset |
+| `license` | object `{id, attribution, url}`: licence identifier, attribution text, link to the terms |
+| `request` | object: the request that produced the file, in the tool's own keys |
+| `extra` | object: tool-specific details; a reader ignores keys it does not know |
+
+*Why:* a consumer reads the stores of every tool through the same fields
+(ECO-051).
+
+**DEV-19.17** Options that act on versions are valid only in store mode:
+`--upgrade`, `--plan` (saved update plans), the selection of several
+campaigns (`--all-campaigns`) and any update mode other than the default;
+with `output_dir` each is a `validation_error` that names `--root`.
+
+**DEV-19.18** A command whose input is the store (a `project` command, or a
+command that builds derived data from stored versions) is store-only and says
+so in its catalog entry. Every other writing command supports both modes; one
+that needs inputs fetches them to staging and in plain mode writes only its
+result.
+
+**DEV-19.19** The domain result of a writing command lists `files[]`:
+`{path, size_bytes, sha256, status}`, with `sha256` computed while the file is
+streamed. `status` is `written` or `replaced` in plain mode and the tool's
+version status (`new`, `unchanged`, `relabeled`, …) in store mode; per-unit
+outcomes stay in `items[]` (AGI-4.2), and skips are notices.
+
+**DEV-19.20** The reasons of this section are `details.reason` values
+(AGI-4.3) under the codes given above: `duplicate_output_name`,
+`output_exists`, `output_in_store` and `skipped_incomplete`. A tool adds no
+registry code for the convention (ERR-1).

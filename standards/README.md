@@ -58,7 +58,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | Document | Covers |
 |---|---|
 | [DECISIONS.md](DECISIONS.md) | Decisions behind the standard, with reasons and rejected options (ECO-…) |
-| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, tests, errors, logging, security, licence and contributions, agent workflow, user environment (DEV-…) |
+| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, tests, errors, logging, security, licence and contributions, agent workflow, user environment, data output (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
 | [ERROR_REGISTRY.md](ERROR_REGISTRY.md) + [error_registry.json](error_registry.json) | Shared error codes, exit codes, HTTP statuses (ERR-…) |
@@ -100,6 +100,9 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     code, `validate_command`, MCP catalog tool names, MCP families
     (AGI-2.1, AGI-2.2, AGI-3.2, AGI-3.3, AGI-4.1, AGI-4.2, AGI-5.9, ERR-3,
     ECO-050).
+  - One data-output convention for tools with a versioned store: plain files
+    or the store, the same options, defaults, errors and result in every tool
+    (DEV §19, AGI-3.4, AGI-4.3, DEV-18.2, ERR-1, ECO-051).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

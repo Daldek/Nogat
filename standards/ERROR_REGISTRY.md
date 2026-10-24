@@ -61,7 +61,8 @@ records the collisions this resolves.
 
 **ERR-1** Every raised error carries exactly one registry `code`. Projects MUST
 NOT invent codes. Finer distinctions go to `details.reason` as snake_case
-English (`no_coverage`, `invalid_sheet_code`, `year_out_of_range`).
+English (`no_coverage`, `invalid_sheet_code`, `year_out_of_range`); the
+reasons that every tool shares are defined with their rule (DEV §19).
 *Why:* consumers branch on `code`; `reason` keeps project precision without
 fragmenting the registry.
 

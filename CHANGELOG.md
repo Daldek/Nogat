@@ -29,6 +29,12 @@ the standard are listed in [standards/README.md](standards/README.md).
   `<tool>-error/1` (generated from `error_registry.json` by
   `standard --write`) and `<tool>-commands/1`, with contract tests of the
   rules they enforce and of Nogat's own error documents (AGI-4.1, ECO-050).
+- ECO-051 and DEV §19: one data-output convention for tools with a versioned
+  store. Plain files (`--output-dir`, `-o`, `--output`) or the store
+  (`--root`), the default store at `<data_dir>/<tool>`, preflight, staging and
+  `--force`, store markers, the sidecar core and `files[]`; AGI-1.3, AGI-2.3,
+  AGI-3.4, AGI-4.3, AGI-5.8, ERR-1, DEV-18.2, DEV-18.5 and DEV-18.6 refer to
+  it.
 
 ### Changed
 

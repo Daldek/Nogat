@@ -60,6 +60,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
 | [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | accepted | 2026-10-21 |
+| [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 
 ---
 
@@ -853,3 +854,39 @@ of `validate_command`, the `core` family field and the catalog tool name
 **Rejected.** Each project writing its own schemas (drift, Zen 2); a Python
 package of validators before the `nogat` package exists (one more
 distribution to release).
+
+## ECO-051 One data-output convention
+
+**Decision.** A tool with a versioned store writes data in the same two modes
+everywhere (DEV §19): plain files in a directory (`--output-dir`, `-o`) with
+no metadata, or the store (`--root`) with sidecars and a marker file; an
+export writes one file (`--output`). With neither option a command writes to
+the store at `<data_dir>/<tool>`. A plain write checks every target before
+the first byte, goes through a staging directory and replaces an existing
+file only with `--force`. A store is recognised by its marker file name, so
+no tool imports another to refuse a nested store. A writing command lists
+`files[]` with path, size, SHA-256 and status.
+
+**Why.** On 2026-10-24 the two store tools disagreed: Kartograf's `-o` was a
+store root and no command wrote a plain file; IMGWTools had `--root`, the
+variable `IMGW_STORE_ROOT`, `--path` for exports and a plain download into
+`data/downloaded` of the current directory. The same call meant different
+things in two tools (AGI-1.2, Zen 1), and a rule written for one tool would
+have been written again for the second (Zen 11). Both tools are untagged, so
+the change lands before their first release and needs no data migration
+(ECO-020).
+
+**Rejected.** The variant drafted on the Kartograf branch
+`claude/vigilant-faraday-finqvd` (its ADR-048): `--output` for the plain
+directory and `--store` for the store (AGI-3.4 gives `--output` to a file and
+`--root` to the store root); one of the two required, neither an error (the
+store already has a place, DEV-18.2); no flag to overwrite (a second download
+needs a manual delete, while AGI-3.4 already gives `--force` the meaning
+"ignore existing results"); Kartograf alone, with HSG outside plain mode
+(IMGWTools would keep its own names). A shared store library imported by all
+tools (a new dependency between all projects, against Zen 10; the layouts
+differ per tool, and a marker file name needs no import).
+
+**Consequence.** Kartograf and IMGWTools adopt DEV §19 before their first
+release; their consumers change the calls that gave a store as `output_dir`
+or `-o` (plan `docs/plans/2026-10-24-data-output.md`).
