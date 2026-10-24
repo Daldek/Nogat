@@ -37,7 +37,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   it.
 - `docs/plans/2026-10-24-data-output.md`: the approved plan to adopt DEV §19
   in the projects, producers first, then consumers, the integration check and
-  the first release set (HUB-5.2, DEV-17.4).
+  the first release set (HUB-5.2, DEV-17.4); ADOPTION_PLAN phase 4 lists the
+  items per project.
 
 ### Changed
 

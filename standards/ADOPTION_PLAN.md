@@ -105,6 +105,21 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | Archiwista | problem+json with registry codes (AGI-6.3); OpenAPI ids (AGI-6.2) |
 | all tools | `pyproject` metadata for discovery: keywords, classifiers, project URLs (AGI-10.1); copy of `schemas/agent/` and contract tests that validate the envelope, error documents and catalog against it (AGI-4.1); catalog published as `<tool>-commands/1` (the registry's `*-catalog` ids follow, HUB-2.5) and MCP catalog tools `<tool>_commands_list`/`<tool>_commands_schema` (AGI-5.9) |
 
+### Data output (DEV §19)
+
+Detail: [data output](../docs/plans/2026-10-24-data-output.md). A producer
+does this after its own standard 2.1 items; a consumer after the producers'
+development heads have it.
+
+| Project | Items |
+|---|---|
+| Kartograf | `--output-dir` (`-o`) for plain files and `--root` for the store instead of the store-only `-o`; `root` for every store-root parameter, `Project.output_dir` included; default root `<data_dir>/kartograf`, `KARTOGRAF_ROOT`, cache in `<cache_dir>/kartograf`; plain mode with preflight, `.kartograf-incoming/` and `--force`; newest full flight for PL sheets in plain mode; `--check` instead of `--check-updates`; marker `kartograf-store.json` and `store init`; nested-store check by marker names; `files[]` and `skipped[]`; a new ADR supersedes ADR-048 of the branch `claude/vigilant-faraday-finqvd` (DEV-19.1 to DEV-19.19, DEV-18.2) |
+| IMGWTools | `--output-dir` (`-o`) for the plain download, `--output` for exports instead of `--path`; plain mode with preflight, `.imgw-incoming/` and `--force`; default root `<data_dir>/imgw` and `IMGW_ROOT` instead of `IMGW_STORE_ROOT`; marker with `tool` and `producer_version`, created by the first write, `store init` verifying the layout; nested stores by marker name only; `files[]` (DEV-19.1 to DEV-19.19, DEV-18.2) |
+| Archiwista | `root` for Kartograf store roots in the adapter, the read-API contract test, the store fixture (with the marker) and SPEC §12 (DEV-19.1, DEV-19.12) |
+| Retman | `root=` in the Kartograf calls of the client and handlers (DEV-19.1) |
+| Hydrolog | documents only: the Kartograf examples in `docs/INTEGRATION.md` and the agent guide use `--output-dir` and `files[].path` (DEV-19.1, DEV-19.19) |
+| Hydrograf, Hydraulik | after the first release set: calls of `DownloadManager` and `kartograf download` follow the new names (DEV-19.1) |
+
 ## Phase 5: releases as git tags
 
 Detail: [first release set](../docs/plans/2026-10-20-first-release-set.md).
@@ -138,4 +153,7 @@ Until the rename of phase 6, a pin names each distribution as the tag's
   changes (ECO-020) instead of being replaced at once.
 - Producers before consumers in phases 4 to 6, in the dependency order of
   `ecosystem.yaml`.
+- DEV §19: Kartograf and IMGWTools in parallel, each after its own standard
+  2.1 items, then the consumers and the integration check; Hydrograf and
+  Hydraulik after the first release set.
 - Do not start a project while its own active work is uncommitted.
