@@ -575,11 +575,16 @@ unless names within one request can collide, and the tool then declares a
 relative sub-path.
 *Why:* the names are known before the first byte, so DEV-19.6 can check them.
 
-**DEV-19.6** Before the first byte is transferred a plain write builds the
-full list of targets and checks it, first for duplicate names (`conflict`,
-reason `duplicate_output_name`), then for existing targets without `--force`
-(`conflict`, reason `output_exists`). The error lists every offending path in
-`details.paths`, and nothing is written.
+**DEV-19.6** Before the first byte is transferred, and before any request, a
+plain write checks `output_dir` itself: one that is, or lies inside, a store
+is a `conflict` (reason `output_in_store`, DEV-19.11) with the directory as
+the only entry of `details.paths`. It then builds the full list of targets
+and checks it, first for duplicate names (`conflict`, reason
+`duplicate_output_name`), then for a target that would enter a directory with
+a store marker below `output_dir` (`output_in_store`, the target path), then
+for existing targets without `--force` (`conflict`, reason `output_exists`).
+The error lists every offending path in `details.paths`, and nothing is
+written.
 *Why:* an agent repairs the whole call at once.
 
 **DEV-19.7** A plain write goes through a staging directory
@@ -603,12 +608,20 @@ version or `unchanged`, and never overwrites.
 modes, and `check_command` returns the same plan (AGI-2.1). In plain mode the
 plan lists each target with its action: `write`, `replace` (only with
 `--force`) or `conflict`; a plan that lists `conflict` is a successful result
-(status `ok`, exit 0), and only the real run fails with `conflict`.
+(status `ok`, exit 0), and only the real run fails with `conflict`. In store
+mode a refusal of the root that is a `conflict` (`nested_store`,
+`not_empty`) is one `conflict` action for the root in the same successful
+plan, with no request; one that is not a `conflict` (`store_unavailable` for
+a root without marker, `data_error` for an unreadable marker) is raised by
+`--check` as that error.
 
-**DEV-19.11** An `output_dir` that is, or lies inside, a store of any tool,
-or a directory the write would enter that contains a store marker, is a
-`conflict` with reason `output_in_store`, and its hint names `--root`. A
-store is recognised by its marker file name alone (DEV-19.12).
+**DEV-19.11** An `output_dir` that is, or lies inside, a store of any tool is
+a `conflict` with reason `output_in_store`; the refusal comes before any
+request, applies to every target, and `details.paths` is the output
+directory. A store found only below `output_dir`, a directory the write for a
+particular target would enter that contains a store marker, is reported for
+that target's path. The hint names `--root`. A store is recognised by its
+marker file name alone (DEV-19.12).
 
 **DEV-19.12** A store root holds the marker `<tool>-store.json`, a JSON
 document of schema `<tool>-store/1` with at least the fields `schema`, `tool`,
@@ -675,5 +688,7 @@ streamed. `status` is `written` or `replaced` in plain mode and `new`,
 
 **DEV-19.20** The reasons of this section are `details.reason` values
 (AGI-4.3) under the codes given above: `duplicate_output_name`,
-`output_exists`, `output_in_store` and `skipped_incomplete`. A tool adds no
-registry code for the convention (ERR-1).
+`output_exists`, `output_in_store`, `skipped_incomplete`, `nested_store`
+(`conflict`, DEV-19.14) and `not_empty` (`conflict`: a root that holds other
+files and is no store). A tool adds no registry code for the convention
+(ERR-1).

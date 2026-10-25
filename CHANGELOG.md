@@ -119,6 +119,13 @@ the standard are listed in [standards/README.md](standards/README.md).
   a table at the end gives the progress of phases 2 to 4 per project on
   2026-10-25, from each project's PROGRESS and branch; the items that wait for
   the author are named as such.
+- DEV-19.6, DEV-19.10, DEV-19.11 and DEV-19.20: a plain `output_dir` that is,
+  or lies in, a store is refused before any request with `details.paths` the
+  output directory (a store only below it is reported for each target's
+  path); in store mode `--check` lists a root that is a `conflict`
+  (`nested_store`, `not_empty`) as one `conflict` action of a successful plan
+  and raises `store_unavailable` (`no_marker`) and an unreadable marker
+  (`data_error`); both producers do the same.
 
 ### Fixed
 
