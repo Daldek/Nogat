@@ -67,7 +67,7 @@ flowchart LR
 | [Nogat](https://github.com/Daldek/Nogat) | hub | active | Ecosystem hub with standards, registry and map; future user package installing all tools. |
 | [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
-| [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP. |
+| [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | 2D hydraulic flood screening with Deltares SFINCS; research stage. |
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over the ecosystem tools. |
@@ -89,7 +89,7 @@ flowchart LR
 | Hydraulik | Hydrolog | runtime | active | library | `hydrolog-python-api` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
 | Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
-| Retman | Hydrolog | optional | planned | library | `hydrolog-catalog`, `hydrolog-result/1` |
+| Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store`, `kartograf-meta/1`, `kartograf-project/1`, `kartograf-plan/1` |
 | Archiwista | IMGWTools | optional | planned | library, store | `imgw-store/1`, `imgw-meta/1`, `imgw-series/1`, `imgw-project/1`, `imgw-observation/1`, `chmi-json/1` |
@@ -97,8 +97,8 @@ flowchart LR
 ### Details
 
 - **IMGWTools → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
-- **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export`.
-- **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs. HSG rules ported from Kartograf (Hydrolog ADR-025).
+- **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export --output FILE`.
+- **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `LandCoverManager`, `Bdot10kProvider`, `HSGCalculator`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
 - **Hydrograf → IMGWTools**: uses `fetch_pmaxtp`
@@ -155,10 +155,13 @@ flowchart LR
 |---|---|---|---|
 | `watershed-parameters` | document | Hydrograf | WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input. |
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
+| `hydrolog-hydrograph-csv` | dataset | — | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
+| `hydrolog-network/1` | document | — | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
 | `hydrolog-result/1` | document | Retman (planned) | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
-| `hydrolog-catalog` | catalog | Retman (planned) | Catalog of commands behind CLI, MCP and hydrolog.operations (run_command). |
-| `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, EulerIIHietogram). |
+| `hydrolog-command-list/1` | catalog | Retman (planned) | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
+| `hydrolog-commands/1` | catalog | Retman (planned) | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
+| `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
 
 ### Hydrograf
 

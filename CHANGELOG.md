@@ -67,6 +67,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   `imgw-catalog`, in the HUB-2.1 example too; new ids: `kartograf-result/1`,
   `kartograf-testing`, `imgw-archives` and `imgw-testing` (DEV-10.6). Retman's
   exchanges with both tools follow.
+- `ecosystem.yaml` and the map follow Hydrolog's flood-routing branch
+  (`feature/routing-network`): the documents `hydrolog-network/1` (the river
+  network read by `route network`) and `hydrolog-hydrograph-csv` (the
+  hydrograph table of every `route` command and, one `<id>.csv` per node, of
+  `route network --output-dir`), the routing classes of `hydrolog-python-api`
+  and the catalog documents `hydrolog-command-list/1` and `hydrolog-commands/1`
+  instead of `hydrolog-catalog`; the notes on the IMGWTools and Kartograf files
+  name `--output FILE` and `--output-dir`. Retman's planned exchange follows.
 
 ### Fixed
 

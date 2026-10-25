@@ -175,7 +175,7 @@ projects:
         note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 
   - name: Hydrolog
-    summary: Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP.
+    summary: Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP.
     profiles: [tool]
     status: active
     repo: https://github.com/Daldek/Hydrolog
@@ -195,31 +195,40 @@ projects:
       - id: hydrolog-hsg
         kind: dataset
         summary: HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters.
+      - id: hydrolog-hydrograph-csv
+        kind: dataset
+        summary: Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one <id>.csv per node with --output-dir; the hand-off to hydraulic models.
+      - id: hydrolog-network/1
+        kind: document
+        summary: River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package.
       - id: hydrolog-result/1
         kind: document
         summary: Result envelope (command, inputs, result, files with SHA-256, notices).
       - id: hydrolog-error/1
         kind: document
         summary: Error envelope with registry code, details and hint.
-      - id: hydrolog-catalog
+      - id: hydrolog-command-list/1
         kind: catalog
-        summary: Catalog of commands behind CLI, MCP and hydrolog.operations (run_command).
+        summary: Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery.
+      - id: hydrolog-commands/1
+        kind: catalog
+        summary: One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command.
       - id: hydrolog-python-api
         kind: library
-        summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, EulerIIHietogram).
+        summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork).
     depends_on:
       - project: IMGWTools
         kind: data
         status: active
         via: [file]
         exchange: [imgw-series-csv]
-        note: No package dependency; stats commands read series CSV exported by `imgw series export`.
+        note: No package dependency; stats commands read series CSV exported by `imgw series export --output FILE`.
       - project: Kartograf
         kind: data
         status: active
         via: [file]
         exchange: [kartograf-files]
-        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs. HSG rules ported from Kartograf (Hydrolog ADR-025).
+        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
 
   - name: Hydrograf
     summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
@@ -320,7 +329,7 @@ projects:
         kind: optional
         status: planned
         via: [library]
-        exchange: [hydrolog-catalog, hydrolog-result/1]
+        exchange: [hydrolog-command-list/1, hydrolog-commands/1, hydrolog-result/1]
         note: Retman PRD roadmap.
       - project: Hydrograf
         kind: optional
