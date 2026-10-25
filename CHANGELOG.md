@@ -64,9 +64,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   `files[]` and the `--check` plan with its plain actions, the default roots and
   `store init`. The catalogs are the published `<tool>-command-list/1` and
   `<tool>-commands/1` (AGI-2.4, HUB-2.5) instead of `kartograf-catalog/1` and
-  `imgw-catalog`, in the HUB-2.1 example too; new ids: `kartograf-result/1`,
-  `kartograf-testing`, `imgw-archives` and `imgw-testing` (DEV-10.6). Retman's
-  exchanges with both tools follow.
+  `imgw-catalog`, in the HUB-2.1 example too; `kartograf-store` is
+  `kartograf-store/1`, the schema of its marker (DEV-19.12), as `imgw-store/1`
+  is; new ids: `kartograf-result/1`, `kartograf-testing`, `imgw-archives` and
+  `imgw-testing` (DEV-10.6). Retman's exchanges with both tools follow.
 - `ecosystem.yaml` and the map follow Hydrolog's flood-routing branch
   (`feature/routing-network`): the documents `hydrolog-network/1` (the river
   network read by `route network`) and `hydrolog-hydrograph-csv` (the

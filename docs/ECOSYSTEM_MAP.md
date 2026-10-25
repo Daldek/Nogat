@@ -76,7 +76,7 @@ flowchart LR
 
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
-| IMGWTools | Kartograf | data | active | store | `kartograf-store` |
+| IMGWTools | Kartograf | data | active | store | `kartograf-store/1` |
 | Hydrolog | IMGWTools | data | active | file | `imgw-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
@@ -90,7 +90,7 @@ flowchart LR
 | Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
 | Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
-| Archiwista | Kartograf | runtime | active | library, store | `kartograf-store`, `kartograf-meta/1`, `kartograf-project/1`, `kartograf-plan/1` |
+| Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-project/1`, `kartograf-plan/1` |
 | Archiwista | IMGWTools | optional | planned | library, store | `imgw-store/1`, `imgw-meta/1`, `imgw-series/1`, `imgw-project/1`, `imgw-observation/1`, `chmi-json/1` |
 
 ### Details
@@ -118,7 +118,7 @@ flowchart LR
 |---|---|---|---|
 | `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions. |
 | `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
-| `kartograf-store` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root). |
+| `kartograf-store/1` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root). |
 | `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256, with the store root. |
 | `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
