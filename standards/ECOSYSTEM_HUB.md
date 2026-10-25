@@ -56,7 +56,7 @@ projects:
         kind: optional        # runtime | optional | dev | data   (data = reads another project's files or store)
         status: active        # active | planned
         via: [library]        # library | cli | mcp | rest | service | store | file
-        exchange: [kartograf-catalog/1, kartograf-download/1]   # ids from Kartograf provides
+        exchange: [kartograf-commands/1, kartograf-download/1]   # ids from Kartograf provides
         uses: [symbol]        # optional: public symbols used
         note: free text       # optional
 ```

@@ -59,6 +59,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   root markers, and IMGWTools exchanges only `kartograf-store` with Kartograf
   because nested stores are refused by marker file name (DEV-19.12,
   DEV-19.14).
+- `ecosystem.yaml` and the map follow the Kartograf and IMGWTools branches of
+  the data-output work (ECO-051): plain files beside the store (`--output-dir`),
+  `files[]` and the `--check` plan with its plain actions, the default roots and
+  `store init`. The catalogs are the published `<tool>-command-list/1` and
+  `<tool>-commands/1` (AGI-2.4, HUB-2.5) instead of `kartograf-catalog/1` and
+  `imgw-catalog`, in the HUB-2.1 example too; new ids: `kartograf-result/1`,
+  `kartograf-testing`, `imgw-archives` and `imgw-testing` (DEV-10.6). Retman's
+  exchanges with both tools follow.
 
 ### Fixed
 

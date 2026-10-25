@@ -57,7 +57,7 @@ projects:
     depends_on: []
 
   - name: Kartograf
-    summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) into a versioned store.
+    summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store.
     profiles: [tool]
     status: active
     repo: https://github.com/Daldek/Kartograf
@@ -73,35 +73,44 @@ projects:
     provides:
       - id: kartograf-files
         kind: dataset
-        summary: Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ).
+        summary: Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions.
       - id: kartograf-meta/1
         kind: sidecar
-        summary: "<file>.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256."
+        summary: "<file>.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version."
       - id: kartograf-store
         kind: store
-        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12) and read API list_segments, iter_store, read_sidecar, file_footprint.
+        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root <data_dir>/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root).
       - id: kartograf-project/1
         kind: manifest
-        summary: kartograf-project.json pinning store versions by SHA-256.
+        summary: kartograf-project.json pinning store versions by SHA-256, with the store root.
       - id: kartograf-download/1
         kind: document
-        summary: Download report (files, failed, stale, notices); also for land cover, soil, HSG and collections.
+        summary: "Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections."
       - id: kartograf-plan/1
         kind: document
-        summary: Update plan per file (current, newer, missing, unverifiable) without downloading.
+        summary: Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode.
       - id: kartograf-availability/1
         kind: document
         summary: Years, systems, resolutions and completeness of DEM coverage for an area.
-      - id: kartograf-catalog/1
+      - id: kartograf-command-list/1
         kind: catalog
-        summary: Command catalog behind CLI and MCP (get_catalog, validate_command, run_command, check_command, format_command).
+        summary: Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery.
+      - id: kartograf-commands/1
+        kind: catalog
+        summary: One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command.
+      - id: kartograf-result/1
+        kind: document
+        summary: Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11.
       - id: kartograf-error/1
         kind: document
-        summary: Error document with code, hint and exit code.
+        summary: Error document with code, hint and exit code, the last line of stderr.
+      - id: kartograf-testing
+        kind: library
+        summary: kartograf.testing builds stores, projects and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
     depends_on: []
 
   - name: IMGWTools
-    summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP and a versioned store with Parquet series.
+    summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
     profiles: [tool, app]
     status: active
     repo: https://github.com/Daldek/IMGWTools
@@ -117,7 +126,7 @@ projects:
     provides:
       - id: imgw-store/1
         kind: store
-        summary: Versioned store (archives, stations, series) with root marker imgw-store.json (DEV-19.12) and read API store_info, iter_store, read_meta, read_series.
+        summary: Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series.
       - id: imgw-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
@@ -129,7 +138,7 @@ projects:
         summary: imgw-project.json pinning store versions by SHA-256 or content hash.
       - id: imgw-plan/1
         kind: document
-        summary: Freshness plan for archives, series and catalog.
+        summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
       - id: imgw-observation/1
         kind: document
         summary: History of published HTTP signals per archive file.
@@ -138,23 +147,32 @@ projects:
         summary: Canonical JSON form of ČHMÚ files used for content-based pins.
       - id: imgw-result/1
         kind: document
-        summary: Result envelope of every command (status, result, errors, notices, exit code).
-      - id: imgw-catalog
+        summary: "Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}."
+      - id: imgw-command-list/1
         kind: catalog
-        summary: Command catalog command_schema with x-imgw metadata; validate_command, run_command, check_command, format_command.
+        summary: Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and imgw commands list.
+      - id: imgw-commands/1
+        kind: catalog
+        summary: One command with options, x-imgw metadata and errors (command_schema, imgw commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command.
+      - id: imgw-archives
+        kind: dataset
+        summary: IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions.
       - id: imgw-series-csv
         kind: dataset
-        summary: CSV export of series with units and IMGW-PIB attribution (series export).
+        summary: CSV export of series with units and IMGW-PIB attribution (series export --output FILE).
       - id: imgw-pmaxtp
         kind: document
         summary: PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult).
+      - id: imgw-testing
+        kind: library
+        summary: imgwtools.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
     depends_on:
       - project: Kartograf
         kind: data
         status: active
         via: [store]
         exchange: [kartograf-store]
-        note: No import; refuses a store nested in another by marker file name (DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
+        note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 
   - name: Hydrolog
     summary: Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP.
@@ -292,12 +310,12 @@ projects:
         kind: optional
         status: active
         via: [library]
-        exchange: [kartograf-catalog/1, kartograf-download/1, kartograf-error/1, kartograf-meta/1]
+        exchange: [kartograf-command-list/1, kartograf-commands/1, kartograf-result/1, kartograf-download/1, kartograf-error/1, kartograf-meta/1]
       - project: IMGWTools
         kind: optional
         status: active
         via: [library]
-        exchange: [imgw-catalog, imgw-result/1, imgw-plan/1, imgw-project/1, imgw-store/1]
+        exchange: [imgw-command-list/1, imgw-commands/1, imgw-result/1, imgw-plan/1, imgw-project/1, imgw-store/1, imgw-archives, imgw-series-csv, imgw-testing]
       - project: Hydrolog
         kind: optional
         status: planned

@@ -65,8 +65,8 @@ flowchart LR
 | Project | Profiles | Status | Summary |
 |---|---|---|---|
 | [Nogat](https://github.com/Daldek/Nogat) | hub | active | Ecosystem hub with standards, registry and map; future user package installing all tools. |
-| [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) into a versioned store. |
-| [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP and a versioned store with Parquet series. |
+| [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
+| [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrological calculations (tc, SCS-CN, unit hydrographs, statistics, HSG) as library, CLI and MCP. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | 2D hydraulic flood screening with Deltares SFINCS; research stage. |
@@ -87,8 +87,8 @@ flowchart LR
 | Hydraulik | Kartograf | runtime | active | cli | `kartograf-files` |
 | Hydraulik | IMGWTools | runtime | active | library | `imgw-pmaxtp` |
 | Hydraulik | Hydrolog | runtime | active | library | `hydrolog-python-api` |
-| Retman | Kartograf | optional | active | library | `kartograf-catalog/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
-| Retman | IMGWTools | optional | active | library | `imgw-catalog`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1` |
+| Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
+| Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
 | Retman | Hydrolog | optional | planned | library | `hydrolog-catalog`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store`, `kartograf-meta/1`, `kartograf-project/1`, `kartograf-plan/1` |
@@ -96,7 +96,7 @@ flowchart LR
 
 ### Details
 
-- **IMGWTools → Kartograf**: No import; refuses a store nested in another by marker file name (DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
+- **IMGWTools → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 - **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export`.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs. HSG rules ported from Kartograf (Hydrolog ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `LandCoverManager`, `Bdot10kProvider`, `HSGCalculator`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
@@ -117,31 +117,37 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ). |
-| `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every file: CRS, nodata, source, licence, request, parent_request, SHA-256. |
-| `kartograf-store` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12) and read API list_segments, iter_store, read_sidecar, file_footprint. |
-| `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256. |
-| `kartograf-download/1` | document | Retman | Download report (files, failed, stale, notices); also for land cover, soil, HSG and collections. |
-| `kartograf-plan/1` | document | Archiwista | Update plan per file (current, newer, missing, unverifiable) without downloading. |
+| `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions. |
+| `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
+| `kartograf-store` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root). |
+| `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256, with the store root. |
+| `kartograf-download/1` | document | Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
+| `kartograf-plan/1` | document | Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
-| `kartograf-catalog/1` | catalog | Retman | Command catalog behind CLI and MCP (get_catalog, validate_command, run_command, check_command, format_command). |
-| `kartograf-error/1` | document | Retman | Error document with code, hint and exit code. |
+| `kartograf-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery. |
+| `kartograf-commands/1` | catalog | Retman | One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command. |
+| `kartograf-result/1` | document | Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
+| `kartograf-error/1` | document | Retman | Error document with code, hint and exit code, the last line of stderr. |
+| `kartograf-testing` | library | — | kartograf.testing builds stores, projects and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 
 ### IMGWTools
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (DEV-19.12) and read API store_info, iter_store, read_meta, read_series. |
+| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series. |
 | `imgw-meta/1` | sidecar | Archiwista (planned) | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
 | `imgw-series/1` | dataset | Archiwista (planned) | Parquet series per station with series.json index (periods, year type, units, coverage). |
 | `imgw-project/1` | manifest | Retman, Archiwista (planned) | imgw-project.json pinning store versions by SHA-256 or content hash. |
-| `imgw-plan/1` | document | Retman | Freshness plan for archives, series and catalog. |
+| `imgw-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `imgw-observation/1` | document | Archiwista (planned) | History of published HTTP signals per archive file. |
 | `chmi-json/1` | document | Archiwista (planned) | Canonical JSON form of ČHMÚ files used for content-based pins. |
-| `imgw-result/1` | document | Retman | Result envelope of every command (status, result, errors, notices, exit code). |
-| `imgw-catalog` | catalog | Retman | Command catalog command_schema with x-imgw metadata; validate_command, run_command, check_command, format_command. |
-| `imgw-series-csv` | dataset | Hydrolog | CSV export of series with units and IMGW-PIB attribution (series export). |
+| `imgw-result/1` | document | Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
+| `imgw-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and imgw commands list. |
+| `imgw-commands/1` | catalog | Retman | One command with options, x-imgw metadata and errors (command_schema, imgw commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
+| `imgw-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
+| `imgw-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
 | `imgw-pmaxtp` | document | Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
+| `imgw-testing` | library | Retman | imgwtools.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
 
 ### Hydrolog
 
