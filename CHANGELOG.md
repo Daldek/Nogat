@@ -90,6 +90,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   integration rule: until the author pushes, a pin names a local commit that
   only the uv git cache of one machine holds, so the producers (IMGWTools,
   Kartograf, Hydrolog) are pushed before the consumers.
+- `standards/ADOPTION_PLAN.md`: the data-output table has a state column, and
+  a table at the end gives the progress of phases 2 to 4 per project on
+  2026-10-25, from each project's PROGRESS and branch; the items that wait for
+  the author are named as such.
 
 ### Fixed
 

@@ -107,18 +107,18 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 
 ### Data output (DEV §19)
 
-Detail: [data output](../docs/plans/2026-10-24-data-output.md). A producer
-does this after its own standard 2.1 items; a consumer after the producers'
-development heads have it.
+Detail and state per project: [data output](../docs/plans/2026-10-24-data-output.md).
+A producer does this after its own standard 2.1 items; a consumer after the
+producers' development heads have it.
 
-| Project | Items |
-|---|---|
-| Kartograf | `--output-dir` (`-o`) for plain files and `--root` for the store instead of the store-only `-o`; `root` for every store-root parameter, `Project.output_dir` included; default root `<data_dir>/kartograf`, `KARTOGRAF_ROOT`, cache in `<cache_dir>/kartograf`; plain mode with preflight, `.kartograf-incoming/` and `--force`; newest full flight for PL sheets in plain mode; `--check` instead of `--check-updates`; marker `kartograf-store.json` and `store init`; nested-store check by marker names; `files[]` and `skipped[]`; `producer` and `producer_version` in `kartograf-meta/1`; a new ADR supersedes ADR-048 of the branch `claude/vigilant-faraday-finqvd` (DEV-19.1 to DEV-19.19, DEV-18.2) |
-| IMGWTools | `--output-dir` (`-o`) for the plain download, `--output` for exports instead of `--path`; plain mode with preflight, `.imgw-incoming/` and `--force`; default root `<data_dir>/imgw` and `IMGW_ROOT` instead of `IMGW_STORE_ROOT`; marker with `tool` and `producer_version`, created by the first write, `store init` verifying the layout; nested stores by marker name only; `files[]` with the status `new` instead of `created` (DEV-19.1 to DEV-19.19, DEV-18.2) |
-| Archiwista | `root` for Kartograf store roots in the adapter, the read-API contract test, the store fixture (with the marker) and SPEC §12 (DEV-19.1, DEV-19.12) |
-| Retman | `root=` in the Kartograf calls of the client and handlers (DEV-19.1) |
-| Hydrolog | documents only: the Kartograf examples in `docs/INTEGRATION.md` and the agent guide use `--output-dir` and `files[].path` (DEV-19.1, DEV-19.19) |
-| Hydrograf, Hydraulik | after the first release set: calls of `DownloadManager` and `kartograf download` follow the new names (DEV-19.1) |
+| Project | Items | State on 2026-10-25 |
+|---|---|---|
+| Kartograf | `--output-dir` (`-o`) for plain files and `--root` for the store instead of the store-only `-o`; `root` for every store-root parameter, `Project.output_dir` included; default root `<data_dir>/kartograf`, `KARTOGRAF_ROOT`, cache in `<cache_dir>/kartograf`; plain mode with preflight, `.kartograf-incoming/` and `--force`; newest full flight for PL sheets in plain mode; `--check` instead of `--check-updates`; marker `kartograf-store.json` and `store init`; nested-store check by marker names; `files[]` and `skipped[]`; `producer` and `producer_version` in `kartograf-meta/1`; a new ADR supersedes ADR-048 of the branch `claude/vigilant-faraday-finqvd` (DEV-19.1 to DEV-19.19, DEV-18.2) | in progress on `feature/data-output`: ADR-054, `root`, the default root, the marker and `store init`, `--check`, `producer`, `files[]` and `skipped[]` are committed; plain mode, the `output_dir`/`root` group and the documents are open |
+| IMGWTools | `--output-dir` (`-o`) for the plain download, `--output` for exports instead of `--path`; plain mode with preflight, `.imgw-incoming/` and `--force`; default root `<data_dir>/imgw` and `IMGW_ROOT` instead of `IMGW_STORE_ROOT`; marker with `tool` and `producer_version`, created by the first write, `store init` verifying the layout; nested stores by marker name only; `files[]` with the status `new` instead of `created` (DEV-19.1 to DEV-19.19, DEV-18.2) | done on `feature/data-output` (ADR-007, consumer migration guide in its CHANGELOG) |
+| Archiwista | `root` for Kartograf store roots in the adapter, the read-API contract test, the store fixture (with the marker) and SPEC §12 (DEV-19.1, DEV-19.12) | not started: waits for Kartograf's development head |
+| Retman | `root=` in the Kartograf calls of the client and handlers (DEV-19.1) | the IMGWTools calls are migrated on `feature/imgwtools-data-output` (ADR-024); the Kartograf calls wait for Kartograf |
+| Hydrolog | documents only: the Kartograf examples in `docs/INTEGRATION.md` and the agent guide use `--output-dir` and `files[].path` (DEV-19.1, DEV-19.19) | done on `chore/nogat-2.1`; the names are confirmed when the producers' releases land |
+| Hydrograf, Hydraulik | after the first release set: calls of `DownloadManager` and `kartograf download` follow the new names (DEV-19.1) | Hydraulik is done ahead of the set on `feature/sfincs-swmm` (`terrain download` runs `kartograf` with `--output-dir`; not yet run against the real Kartograf); Hydrograf follows the first release set |
 
 ## Phase 5: releases as git tags
 
@@ -157,3 +157,28 @@ Until the rename of phase 6, a pin names each distribution as the tag's
   2.1 items, then the consumers and the integration check; Hydrograf and
   Hydraulik after the first release set.
 - Do not start a project while its own active work is uncommitted.
+
+## Progress on 2026-10-25
+
+Phases 2 to 4 as each project's PROGRESS states them and its branch shows
+them; `done` means committed on the branch with its gate green, and the data
+output has its own table above. Nothing is pushed, tagged or merged. The
+author's items are left out of the cells: the history rewrite (phase 1),
+GitHub settings (rulesets, private vulnerability reporting, default
+branches), root-owned files, the licence and CLA text, tags, pushes and
+merges (DEV-3.3).
+
+| Project | Branch | Phase 2 | Phase 3 | Phase 4 |
+|---|---|---|---|---|
+| Kartograf | `chore/nogat-2.1` | done, except the contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `CONTRIBUTORS.md`, the pull request template), which its PROGRESS leaves to the author | in progress: only the frozen records of `docs/research` and `docs/superpowers` are still Polish | in progress: the envelope, the error mapping, the catalog, the MCP server and the generated guide are done; the message catalog (ADR-053, area by area), `kartograf mcp` (AGI-3.8) and the domain JSON Schemas (AGI-4.1) are open |
+| IMGWTools | `chore/nogat-2.1`, then `feature/data-output` | done, except `SECURITY.md` | in progress: README, USAGE and parts of CHANGELOG and DECISIONS are still Polish | in progress: the MCP prefix and annotations, `forbidden` 12, the English surfaces and the OpenAPI ids are done; the copy of `schemas/agent/` with its contract tests (AGI-4.1) is open |
+| Hydrolog | `chore/nogat-2.1` | done | in progress: the example notebooks are still Polish | done |
+| Retman | `chore/nogat-2.1` | done | in progress: `docs/research/` and `docs/specs/` are still Polish | done |
+| Archiwista | `chore/nogat-2.1` | done | in progress: README, ARCHITECTURE, DECISIONS, SPEC, the plans and the reports are still Polish | in progress: error texts by `Accept-Language` and the message catalog (parked on `wip/message-catalog`); the error registry and problem+json are done |
+| Hydrograf | `chore/nogat-2.1` | in progress: uv with its lock, formatting and the ruff rule set are done; mypy, the test tree, the gate, CI, Dependabot and the contribution files are planned | in progress: PROGRESS and BACKLOG are done | planned |
+| Hydraulik | `feature/sfincs-swmm` | done; committing the proof of concept stays the author's decision | done | done |
+
+Nogat (phase 0): 0.1 for the gate and CI templates, 0.2 and the `CLAUDE.md` of
+0.5 are done; 0.3 is on the topic branches `fix/hub-gaps` and
+`feature/data-output`, whose merge waits; 0.4, 0.6 and the generated
+`AGENTS.md` are open.
