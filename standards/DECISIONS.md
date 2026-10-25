@@ -62,6 +62,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | accepted | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
+| [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 
 ---
 
@@ -916,3 +917,43 @@ own guides list them, and the file would exceed its budget (ECO-048).
 **Consequence.** `validate` checks that a route starts with its project's CLI,
 not that the tool still has the command; when a tool renames or drops an entry
 command, its route changes in the registry in the same plan (HUB-5.2).
+
+## ECO-053 Development versions of a pinned producer, and tests in a wheel
+
+**Decision.** The integration dry run of 2026-10-25 (plan
+`docs/plans/2026-10-25-integration-dry-run.md`) ended in three decisions.
+(1) While a consumer pins a producer by commit (REL-5.3), the range of
+producer versions it declares as supported starts at the producer's
+development version of the pending release: `>=0.8.0.dev0,<0.9`; its release
+pull request narrows it to `>=0.8.0` with the tag. Runtime checks use the same
+range, with `prereleases=True` (REL-5.6). (2) A test finds repository files
+from its own location, never through the installed package; the members are
+installed as wheels (REL-2.5). (3) Consumers' contract tests use the
+producer's public `<package>.testing`, which the producer ships in its wheel
+(DEV-10.6, REL-6.5).
+
+**Why.** Develop carries `0.8.0.dev0` (REL-1.1), which PEP 440 puts below
+`0.8.0`; Retman and Archiwista accepted `>=0.8.0,<0.9` and refused Kartograf's
+head: nine Retman tests and 156 of Archiwista's failures came from that alone,
+while the commit they pinned still said `0.8.0` and hid it. Kartograf and
+Archiwista located their repository through `<package>.__file__`; that works
+in an editable install and fails in the wheel that REL-2.3 and REL-6.5 test.
+Only Retman's IMGWTools half built its stores with a producer's `testing`
+module, so a change of format would not break the other consumers' tests
+before users.
+
+**Rejected.** Dropping the lower bound, or accepting any `0.8` pre-release
+through a second check in each consumer (two ranges to keep equal; the
+declared one is the one `uv` resolves). Changing `develop` to carry `X.Y.0`
+between releases (REL-1.1 gives the unreleased version a spelling that cannot
+be mistaken for the release). Installing the member under test editable in
+`verify-candidate` (it tests another artefact than the wheel users get and
+hides missing package data, ECO-011). Keeping the tests that use the package
+path and skipping them in CI (they stay broken in the wheel check of REL-2.3).
+
+**Consequence.** Retman (`supported_versions` and the checks that read it) and
+Archiwista (its Kartograf range and doctor), and any consumer that pins a
+producer by commit, change their range before their next pin; Kartograf and
+Archiwista change the tests that find their repository through the package;
+Archiwista, Retman, Hydraulik and Hydrolog move to the producers' `testing`
+modules (the owners' follow-ups are listed in the dry-run plan).

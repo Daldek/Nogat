@@ -106,6 +106,12 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     or the store, the same options, defaults, errors and result in every tool;
     `standard` checks the marker list against the registry (DEV §19, AGI-3.4,
     AGI-4.3, DEV-18.2, ERR-1, HUB-4.7, ECO-051).
+  - A consumer that pins a producer by commit supports the producer's
+    development versions of the pending release (`>=0.8.0.dev0,<0.9`) and
+    checks versions with that range; tests find repository files from their
+    own location, not through the installed package, because members are
+    installed as wheels; producers ship `<package>.testing` in the wheel
+    (REL-5.6, REL-2.5, REL-6.5, DEV-10.6, ECO-053).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

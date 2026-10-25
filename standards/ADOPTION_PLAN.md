@@ -128,9 +128,9 @@ Until the rename of phase 6, a pin names each distribution as the tag's
 
 | # | Item | Requirement |
 |---|---|---|
-| 5.1 | Consumers that cannot run on a producer's development head migrate on a branch that pins the producer's commit | REL-5.3, DEV-3.4 |
+| 5.1 | Consumers that cannot run on a producer's development head migrate on a branch that pins the producer's commit, and declare the range from the producer's development version | REL-5.3, REL-5.6, DEV-3.4 |
 | 5.2 | `verify-candidate` workflow in Nogat, merged to `main`; candidates, fixed and repeated until the run is green | REL-6.4, REL-6.5 |
-| 5.3 | Member releases, producers first (release pull request, merge commit, annotated tag); commit pins replaced by tags | REL-2.1, REL-6.6 |
+| 5.3 | Member releases, producers first (release pull request, merge commit, annotated tag); commit pins replaced by tags and supported ranges narrowed to the release | REL-2.1, REL-5.6, REL-6.6 |
 | 5.4 | `nogat` package (`src/nogat/`, the commands of HUB-7.3, the members' commands in `[project.scripts]`, dependency list generated from the lock), released as a git tag | HUB §7, REL-6.6, ECO-026 |
 | 5.5 | Ecosystem user documentation `docs/user/` with executable recipes | DOC §12 |
 

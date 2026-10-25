@@ -48,6 +48,16 @@ request into `main` carries the fix, the version and the CHANGELOG entry; the
 author tags the merge commit; then a pull request `main` → `develop` brings
 the fix back (DEV-3.6).
 
+**REL-2.5** A test MUST NOT locate the repository through the path of the
+installed package (`Path(<package>.__file__).parents[…]`), and MUST NOT depend
+on the package being an editable install. A test that needs a repository file
+(`pyproject.toml`, `CHANGELOG.md`, `server.json`, documents) resolves it from
+the test file's location (`Path(__file__).resolve().parents[…]`). Members are
+installed as wheels by REL-2.3 and by `verify-candidate` (REL-6.5), and a
+wheel holds no repository.
+*Why:* ECO-053; on 2026-10-25 four tests of Kartograf and the collection of
+Archiwista's suite failed in a wheel and passed in an editable install.
+
 ## 3. Channels
 
 | Channel | For | Why |
@@ -101,6 +111,21 @@ CI. The consumer's release pull request replaces the commit with the tag
 manifests and the latest tags from the producers' checkouts and lists the
 pins that are behind. Each consumer upgrades in its own session.
 
+**REL-5.6** While a consumer pins a producer by commit (REL-5.3), the range of
+producer versions the consumer declares as supported admits the producer's
+development versions of the release that is pending: `>=X.Y.0.dev0,<X.(Y+1)`
+(`>=0.8.0.dev0,<0.9` for `0.8.0.dev0`; from `1.0` the upper bound is that of
+REL-5.2). The consumer's release pull request narrows it to `>=X.Y.0` with
+the upper bound of REL-5.2, in the same change that replaces the commit with
+the tag (REL-2.1). Every runtime check of the producer's version (a version
+gate, a doctor, a manifest, a table of capabilities) uses the declared range
+itself, tested with `packaging` `SpecifierSet(range).contains(version,
+prereleases=True)`, not a second copy and not a comparison with `X.Y.0`.
+*Why:* ECO-053; PEP 440 puts `0.8.0.dev0` below `0.8.0`, so a range that
+starts at `0.8.0` refuses the producer's `develop`, which carries the
+development version (REL-1.1), and the consumer cannot pass its own CI against
+the commit it pins.
+
 ## 6. Ecosystem release sets
 
 **REL-6.1** A release set is what one `nogat` release installs: every member
@@ -128,12 +153,14 @@ Members' development heads may be pinned by commit (REL-5.3).
 (`workflow_dispatch`, defined on `main`). On the CI runners and Python
 versions of REL-7.1 it installs the candidate's lock and runs, from each
 member checked out at its recorded commit, the offline test suite and the
-contract tests, which use the producers' `<package>.testing` modules
-(DEV-10.6). The run URL, recorded in the candidate's README, is the
-verification record. The author MAY also run on their own machines what CI
-cannot, such as network shares. A failure is fixed in the member and produces
-a new candidate.
-*Why:* ECO-037.
+contract tests, which use the producers' public `<package>.testing` modules
+(`kartograf.testing`, `imgwtools.testing`; the registry lists each in the
+producer's `exchange` as `<tool>-testing`; DEV-10.6). The members are
+installed as wheels (REL-2.5). The run URL, recorded in the candidate's
+README, is the verification record. The author MAY also run on their own
+machines what CI cannot, such as network shares. A failure is fixed in the
+member and produces a new candidate.
+*Why:* ECO-037, ECO-053.
 
 **REL-6.6** After verification each member is released by REL-2.1; its
 release pull request changes only what REL-2.1 lists, and any other change

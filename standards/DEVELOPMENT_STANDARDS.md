@@ -327,10 +327,13 @@ generated files are fresh.
 behaviour, not the wording of messages.
 
 **DEV-10.6** (`tool`) A producer MUST ship a public `<package>.testing`
-module that builds small, valid instances, offline, of every format another
-project reads from its store or files (registry edges whose `via` includes
-`store` or `file`), and keep it in step with those formats. Consumers'
-contract tests use it, with the producer at the version they pin.
+module (`kartograf.testing`, `imgwtools.testing`) in its installed wheel,
+not under `tests/`, that builds small, valid instances, offline, of every
+format another project reads from its store or files (registry edges whose
+`via` includes `store` or `file`), and keep it in step with those formats;
+the registry lists it in the producer's `exchange` as `<tool>-testing`.
+Consumers' contract tests use it, with the producer at the version they pin,
+not the producer's formats written by hand.
 *Why:* a format change then breaks the consumer's tests at the producer's
 release instead of at users.
 

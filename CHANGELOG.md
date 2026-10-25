@@ -57,6 +57,12 @@ the standard are listed in [standards/README.md](standards/README.md).
   step 7 of the data-output plan: the six heads in one environment, each
   member's offline suite, four cross-tool flows, and the failures across
   members with their causes and owners (REL-6.4, REL-6.5, DEV-10.6).
+- ECO-053: a consumer that pins a producer by commit declares a supported
+  range from the producer's development version (`>=0.8.0.dev0,<0.9`),
+  narrowed to the release with the tag, and checks versions with that range
+  and `prereleases=True` (REL-5.6); tests find repository files from the test
+  file, not through the installed package (REL-2.5); DEV-10.6 and REL-6.5
+  name `<package>.testing` as the producers' module in the wheel.
 
 ### Changed
 

@@ -3,9 +3,9 @@
 Status: done 2026-10-25. A dry run: no candidate exists, and nothing is pinned,
 tagged or pushed.
 
-Requirements: ECO-051, DEV-10.6, REL-5.3, REL-6.2, REL-6.4, REL-6.5. Step 7 of
-the [data-output plan](2026-10-24-data-output.md), run before its producers are
-complete, and a rehearsal of steps 3 and 4 of the
+Requirements: ECO-051, ECO-053, DEV-10.6, REL-2.5, REL-5.3, REL-5.6, REL-6.2,
+REL-6.4, REL-6.5. Step 7 of the [data-output plan](2026-10-24-data-output.md),
+run before its producers are complete, and a rehearsal of steps 3 and 4 of the
 [first release set](2026-10-20-first-release-set.md).
 
 ## Goal
@@ -150,6 +150,23 @@ What crosses a boundary and passes: IMGWTools with Retman's IMGWTools half
 Hydrolog and IMGWTools behind Hydraulik's `rainfall` extra (all its tests), and
 the markers and the nested-store refusals of both producers.
 
+### Decisions on the failures
+
+The coordinator settled the findings that needed a rule on 2026-10-25 (ECO-053).
+The others need no decision: their owner fixes them in its own session and
+branch (DEV-3.4).
+
+| # | Decision | Follow-up of the owners |
+|---|---|---|
+| F1 | None; not a defect of the head | Retman, step 5 of the plan: the Kartograf half moves to `root`/`output_dir`, `size_bytes`, `validation_error`, `no_data`, `source_unavailable` and the new catalog API |
+| F2 | REL-5.6: while a consumer pins a producer by commit (REL-5.3), its supported range admits the producer's development versions of the pending release, `>=X.Y.0.dev0,<X.(Y+1)`; the release pull request narrows it to `>=X.Y.0` with the tag. Runtime checks use the same range: `packaging` `SpecifierSet(range).contains(version, prereleases=True)` | Retman: `supported_versions` of the Kartograf half becomes `>=0.8.0.dev0,<0.9`, and the version gate, the table of capabilities, the doctor and the manifest loader read that range (REL-5.6), the six hidden Kartograf checks run again. Archiwista: `SUPPORTED_VERSIONS` of the Kartograf source and the doctor likewise. Both narrow to `>=0.8.0,<0.9` in the release pull request that puts the tag in place of the commit (REL-2.1). IMGWTools' head reports `3.0.0`, so Retman's `>=3.0.0,<4` admits it; it applies REL-5.6 as soon as IMGWTools' develop carries a `3.0.0.devN` |
+| F3 | None | Archiwista, step 4: `tests/fixtures/make_store.py` and the contract test move to `root`; with F8 the fixture builds the store with `kartograf.testing` |
+| F4 | REL-2.5: a test finds repository files from the test file's location, never through the installed package. `verify-candidate` keeps installing members as wheels (REL-2.3, REL-6.5); the editable install option is rejected | Kartograf: the four tests of `test_version.py`. Archiwista: `test_package_data.py`. Each member also looks for the same pattern (`<package>.__file__` used to reach the repository) in its other tests, and runs its suite once against the wheel it builds |
+| F5 | Closed by Kartograf's `252d632f` | Kartograf, step 2: the rest of its plain mode |
+| F6 | None | Archiwista: the IMGWTools source (`imgw` store entry, SPEC 5.5) on `feature/imgw-source` |
+| F7 | None | IMGWTools: `datasets download --root --check` refuses `nested_store` as the run does (minor) |
+| F8 | DEV-10.6 restated: a producer ships its public `<package>.testing` in the installed wheel, not under `tests/`, and lists it in its registry `exchange` as `<tool>-testing` (today `kartograf.testing`, `imgwtools.testing`); consumers' contract tests, and the contract tests of REL-6.5, build their stores and files with it | Archiwista: Kartograf stores of the fixtures and contract tests come from `kartograf.testing`, the IMGWTools source from `imgwtools.testing`. Retman: the Kartograf half uses `kartograf.testing` as the IMGWTools half uses `imgwtools.testing`. Hydraulik: contract tests of the Kartograf outputs it reads use `kartograf.testing`. Hydrolog: `hydrolog.testing` builds the six hydrograph tables Hydraulik reads, with the `hydrolog-testing` entry in the registry, and Hydraulik's contract test uses it. Kartograf and IMGWTools: builders for the files of the `file` edges (GeoTIFFs, the PMAXTP document) |
+
 ### What the run does not show
 
 - Kartograf's plain mode against the real servers beyond its plans: nothing was
@@ -163,10 +180,11 @@ the markers and the nested-store refusals of both producers.
 
 ## Next
 
-1. The failures fall into two groups, each for its own session: Retman step 5
-   and Archiwista step 4 (F1, F3), which the plan orders after Kartograf's
-   step 2, and whose size this run measured (29 tests in Retman, 288 in
-   Archiwista); a decision on consumer ranges and on how `verify-candidate`
-   installs a member (F2, F4). F5 is closed by Kartograf's `252d632f`.
+1. Each owner takes its follow-ups from Decisions on the failures, in its own
+   session: Retman step 5 and Archiwista step 4 (F1, F3, F8), which the plan
+   orders after Kartograf's step 2 and whose size this run measured (29 tests
+   in Retman, 288 in Archiwista); the ranges of F2 and the tests of F4 in
+   Retman, Archiwista and Kartograf; `hydrolog.testing` in Hydrolog. F5 is
+   closed by Kartograf's `252d632f`.
 2. Repeat the run when Kartograf's step 2 is complete and record it in the
    Results of the data-output plan: that is the integration check of step 7.
