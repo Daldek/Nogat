@@ -392,8 +392,11 @@ Pins of one project on another (`uv run scripts/ecosystem.py drift`, and the
 | Hydraulik | Hydrolog, IMGWTools | tags `v0.7.0`, `v2.1.1` (extra `rainfall`) | pushed; no Hydrolog tag has `route network` yet |
 | Hydrograf | Kartograf, Hydrolog, IMGWTools | tags `v0.7.0`, `v0.6.3`, `v2.1.0` | pushed, behind the latest tags; changes after the first release set |
 
-Integration check: not run. IMGWTools (`a304521`), Hydrolog (`6c9ba5a`) and
-Retman (`932d2cf`) are candidates; Kartograf is not until step 2 is complete,
-and Archiwista waits for it (step 4). Hydraulik and Hydrograf are not members
-of the check (step 8); Hydraulik's live `terrain download` needs Kartograf's
-plain mode.
+Integration check: not run. A dry run of 2026-10-25, with Hydraulik added and
+Kartograf's step 2 and Archiwista's step 4 still open, is recorded in the
+[integration dry run](2026-10-25-integration-dry-run.md): the failures across
+members, each with its cause and owner. IMGWTools (`a304521`), Hydrolog
+(`6c9ba5a`) and Retman (`932d2cf`) are candidates; Kartograf is not until step 2
+is complete, and Archiwista waits for it (step 4). Hydraulik and Hydrograf are
+not members of the check (step 8); Hydraulik's live `terrain download` needs
+Kartograf's plain mode.

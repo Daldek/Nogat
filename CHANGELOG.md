@@ -53,6 +53,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   a contract test compares the file with the generator and with the budget
   of DOC-1.7 (HUB-4.3, ECO-048, ECO-052). `nogat guide` and
   `nogat ecosystem agents` follow once the package exists (HUB-7.3).
+- `docs/plans/2026-10-25-integration-dry-run.md`: the record of a dry run of
+  step 7 of the data-output plan: the six heads in one environment, each
+  member's offline suite, four cross-tool flows, and the failures across
+  members with their causes and owners (REL-6.4, REL-6.5, DEV-10.6).
 
 ### Changed
 

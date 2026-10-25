@@ -12,6 +12,7 @@
 | Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
+| Integration dry run | done 2026-10-25 | the six heads in one environment: suites, four cross-tool flows, eight failures with their owners (`docs/plans/2026-10-25-integration-dry-run.md`); the check of plan step 7 repeats once Kartograf's step 2 is complete |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (IMGWTools after the rename of `master`) |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | phases 2 to 4 on the projects' branches, table at the end of ADOPTION_PLAN; data output: IMGWTools done, Kartograf in progress, Retman half done, Hydraulik done on its branch, Archiwista waits; nothing is pushed, so Retman's pin of IMGWTools is a local commit (plan step 7) |
@@ -21,7 +22,8 @@
 1. Data output in the projects, following `docs/plans/2026-10-24-data-output.md`
    (each project in its own session, DEV-3.4): Kartograf's plain mode and its
    documents, then Retman's Kartograf calls and Archiwista, then the
-   integration check (record it in the plan's Results) and the first release
+   integration check (record it in the plan's Results; the dry run of
+   2026-10-25 names what fails and who owns it) and the first release
    set. DEV-10.6 now falls due for Hydrolog (`hydrolog.testing`: Hydraulik
    reads its hydrograph tables), and for the files the new `file` edges read
    (the PMAXTP document of IMGWTools, the GeoTIFFs of Kartograf). When a tool
