@@ -32,9 +32,10 @@
    Hydrolog, then Retman, Archiwista, Hydraulik; plan step 7), so that Retman's
    pin `a304521` exists on GitHub; consumers re-pin after a producer's last
    rewrite.
-3. Hydrograf's registry entry waits for its `chore/nogat-2.1` (its PROGRESS):
-   `backend/requirements.txt` leaves `python_manifests` with the uv step, and
-   `uses` of Kartograf changes after its migration.
+3. Hydrograf's registry entry: `python_manifests` follows its uv step
+   (`backend/pyproject.toml` only, F7 of the final integration run); `uses` of
+   Kartograf still names the classes its migration removed (`LandCoverManager`,
+   `HSGCalculator`; Hydrograf's PROGRESS lists the new names).
 4. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
 
 ## Open questions

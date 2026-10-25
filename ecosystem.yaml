@@ -282,7 +282,7 @@ projects:
     profiles: [app]
     status: active
     repo: https://github.com/Daldek/Hydrograf
-    python_manifests: [backend/pyproject.toml, backend/requirements.txt]
+    python_manifests: [backend/pyproject.toml]
     visibility: public
     distribution: {pypi: null, import_name: null}
     interfaces: {cli: null, mcp: null, rest: /api, python: null}

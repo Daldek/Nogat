@@ -112,6 +112,9 @@ the standard are listed in [standards/README.md](standards/README.md).
   (`hydrolog-hydrograph-csv`). The entry lists its `pyproject.toml`, has no
   direct data source (the `osm` access of the proof of concept is gone) and keeps
   the status `research`.
+- `ecosystem.yaml`: Hydrograf's `python_manifests` is `backend/pyproject.toml` alone.
+  Hydrograf replaced `backend/requirements.txt` with uv and `backend/uv.lock`
+  (`3ca62f2`), and `deps` noted the missing file.
 - `docs/plans/2026-10-24-data-output.md`: the Results hold the state of every
   project's branch on 2026-10-25, the pins of one project on another and the
   integration rule: until the author pushes, a pin names a local commit that
