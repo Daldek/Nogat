@@ -59,6 +59,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   step 7 of the data-output plan: the six heads in one environment, each
   member's offline suite, four cross-tool flows, and the failures across
   members with their causes and owners (REL-6.4, REL-6.5, DEV-10.6).
+- `docs/plans/2026-10-25-final-integration.md`: the record of the final run at
+  the data-output heads (the eight heads in one environment, each member's own
+  gate, eight cross-tool flows), its failures F1 to F8 with causes and owners,
+  and the commits that fixed them; Hydrograf and Archiwista stay a known
+  incompatible pair (`affine`) until pyflwdir 0.5.13 (REL-6.5, DEV-10.1).
 - ECO-053: a consumer that pins a producer by commit declares a supported
   range from the producer's development version (`>=0.8.0.dev0,<0.9`),
   narrowed to the release with the tag, and checks versions with that range

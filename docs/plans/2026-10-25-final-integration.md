@@ -2,7 +2,8 @@
 
 Status: done 2026-10-25. A safeguard run: nothing is pinned, tagged or
 released, and the environments, the checkouts and the logs of the run were
-removed afterwards (REL-5.3).
+removed afterwards (REL-5.3). Its failures were fixed the same day, F6 (the
+author's) excepted ([Fixes](#fixes)).
 
 Requirements: ECO-051, ECO-053, DEV-10.1, DEV-10.6, DEV-19.10 to DEV-19.14,
 REL-2.5, REL-5.3, REL-5.6, REL-6.5. Step 7 of the [data-output
@@ -214,15 +215,52 @@ listed, every test passed in the union environment and on its member's own lock.
 - Retman with a real model, or with its default `basal` backend.
 - Timing: two or three runs shared four cores.
 
+## Fixes
+
+Every failure but F6 was fixed on 2026-10-25, each in its own project and on the
+branch of the table in step 1; F3 also left a known incompatible pair. Every
+commit below is pushed.
+
+| # | Fix | Commits |
+|---|---|---|
+| F1 | `_serve` hands the stray text of `sys.stdout` to standard error before the SDK restores descriptor 1, as Hydrolog does; IMGWTools does the same and has the test now (`tests/unit/test_mcp_stdio.py`) | Kartograf `ca7d538f23f385625fc10b186673a8a5705d2848`, IMGWTools `6bd35a49b329f99b591ffdee39367daec0e75af7` |
+| F2 | A position whose check failed stays `check_failed` in a plain plan, with its error and without action, path or reason, as in the store; the plan is `ok: false` (exit 11, or 10 when other positions are fine) | Kartograf `c31ca04c078ebbee36850d0aa4dcead59dd77a41` |
+| F3 | Archiwista declares `affine>=3,<4`; its lock keeps 3.0.1, and a resolver now refuses Archiwista beside `affine>=2.4,<3`. Hydrograf keeps its cap (its ADR-062): with pyflwdir 0.5.12, the latest release, and affine 3.0.1, 15 of its 1,302 offline tests fail (`FlwdirRaster.stream_distance` and `path`, which `scripts/process_dem.py` needs: numba cannot type `affine.Affine`, which `set_transform` makes of any transform). pyflwdir's own suite at `v0.5.12` passes only because its `conftest.py` disables the JIT; with the JIT on, 33 of its tests fail with affine 3.0.1 that pass with 2.4.0. The fix, pyflwdir #109 (issue #108), is merged for 0.5.13, which is not released | Archiwista `bc230d46bb49ba7f901d45ab5acb4d5fe07a5e33`, Hydrograf `b3545ca086701dd84a570d9d21d4bcdc1aadba01` |
+| F4 | The four tests expect the default root of IMGWTools beside Kartograf's; they pass with and without the extra `imgw` | Archiwista `19ff4d9cb3a8c3f0587c10253f0885f174584b40` |
+| F5 | The test asserts the English text, the default language | Archiwista `c168893a5a8e41933402c8884d47b901f284cf82` |
+| F6 | Not fixed: the rewrite of the old history is the author's. Hydrograf's branch is gated with `GATE_COMMIT_RANGE=develop..HEAD`, and IMGWTools' commit step still checks one commit | — |
+| F7 | Hydrograf's `python_manifests` is `backend/pyproject.toml` alone, and `deps` no longer notes the file; the map and `AGENTS.md` show no manifests and are unchanged | Nogat `d485bc2a3fdef319b265b1782f156a8b151227df` |
+| F8 | The cause was in the cache, not in the test. `PreviewCache` switches `cache.sqlite` to WAL when it opens; the switch reads the header and then writes it, and SQLite answers a process that read the header while another one writes it with `SQLITE_BUSY` at once, without the busy timeout (waiting could deadlock). The child died at its start with "database is locked", and the test's write of the start line raised `BrokenPipeError`. Not Python 3.12 alone: eight processes that open a new cache together failed in 7 of 10 rounds on 3.12 (SQLite 3.53.1) and in 5 of 10 on 3.13 (SQLite 3.46.1). The switch is now tried again until `BUSY_TIMEOUT_MS` (0 of 30 rounds fail on each). The new `test_cache_opened_by_processes_at_once` (eight processes, five new caches) failed in every run before the fix and passes 12 of 12 after on both versions, as `test_cache_safe_across_processes` does; the handshake of these tests reports a child that ended by its standard error, not by a broken pipe | Archiwista `6e5517e2bd83f19e2954027e1e8763ef0f4b4bd4` |
+
+The test that failed once under load (`test_year_buttons_select_layer_and_tiles`)
+is unchanged; it passed in Archiwista's gate below.
+
+**The known incompatible pair.** Hydrograf (`affine>=2.4,<3`) and Archiwista
+(`affine>=3,<4`) cannot share an environment until pyflwdir 0.5.13 lets
+Hydrograf lift its cap. Each is an application with its own lock, so only an
+environment of the whole ecosystem meets the conflict: `deps` now reports
+`affine` as a `range_conflict` (exit 4) and a resolver refuses the pair, where
+before it chose affine 2.4.0 for both; a repeat of this run installs the two
+apart.
+
+Full gates of the fixed heads, each on its own lock. Kartograf's and IMGWTools'
+ran in the session that fixed F1 and F2, with `PYTHONUNBUFFERED` unset as F1
+needs; the other three ran with it set (none of them has an MCP server).
+
+| Project | Head | Result |
+|---|---|---|
+| Kartograf | `c31ca04c` | GATE OK, 647 s: 8,973 passed, 18 not run, 95.23 %, 69 commits checked |
+| IMGWTools | `6bd35a4` | GATE OK, 209 s: 2,492 passed, 80 not run, 94.48 %; the commit step checked one commit (F6) |
+| Archiwista | `fc5e658` | GATE OK, 1,513 s: 1,447 passed, 47 not run, 92.28 %, 76 commits checked |
+| Hydrograf | `b3545ca` | GATE OK, 32 s, with `GATE_COMMIT_RANGE=develop..HEAD` (F6): 1,302 passed, 19 not run, 85.57 %, 50 commits checked |
+| Nogat | `d485bc2` | GATE OK, 8 s: 174 passed, 83.97 %, 35 commits checked |
+
 ## Next
 
-1. Kartograf: F1 (flush stdout before the SDK restores it, as Hydrolog does; add
-   the test to IMGWTools) and F2 (a failed index check stays a failure in a
-   plain plan).
-2. Archiwista: F4 and F5 (update the tests), F3 (declare `affine>=3`, which makes
-   the conflict with Hydrograf's cap a resolver error instead of a run-time one;
-   the two applications do not share an environment outside this run), and F8
-   (find the race of the cache test).
-3. The author: the history of Hydrograf's `develop` and of IMGWTools (F6).
-4. Repeat the run for the members that changed, and the two flows of F2, then
-   record it in the Results of the data-output plan.
+1. The author: the history of Hydrograf's `develop` and of IMGWTools (F6).
+2. Hydrograf lifts the affine cap with pyflwdir 0.5.13 (its ADR-062); until
+   then Hydrograf and Archiwista run in separate environments.
+3. The consumers re-pin the producers' new heads (Kartograf `c31ca04c`,
+   IMGWTools `6bd35a4`); then repeat the run for the members that changed,
+   with Hydrograf and Archiwista apart, and the two flows of F2, and record it
+   in the Results of the data-output plan.
