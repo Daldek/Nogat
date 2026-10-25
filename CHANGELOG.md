@@ -8,6 +8,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- DEV-19.2 names `store_root()` as the shared read-only accessor of the default store root in
+  the library of every producer (Kartograf and IMGWTools have it).
 - `pyproject.toml` and `uv.lock`: the registry tooling runs in the locked
   project environment; ruff, mypy, pytest, shellcheck and actionlint come
   from the lock (DEV-5.3, DEV-6.3).

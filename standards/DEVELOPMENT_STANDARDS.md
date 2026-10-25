@@ -549,7 +549,8 @@ options and from no other (not `--store`, not `--path`):
 `[<tool>] root` in `nogat.toml` and `<data_dir>/<tool>` (DEV-18.1, DEV-18.2).
 A command with neither `output_dir` nor `output` uses the store at that root,
 so no option is required to write; `<tool> config show --json` reports the
-root and its source (DEV-18.6).
+root and its source (DEV-18.6). A producer's library names the read-only accessor
+of that root `store_root()` (root, source, whether the marker exists; it reads no store).
 *Why:* the common call needs no flag, and the store has one place (ECO-051).
 
 **DEV-19.3** A REST server writes only to the store root set in its server
