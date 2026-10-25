@@ -85,6 +85,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   (`hydrolog-hydrograph-csv`). The entry lists its `pyproject.toml`, has no
   direct data source (the `osm` access of the proof of concept is gone) and keeps
   the status `research`.
+- `docs/plans/2026-10-24-data-output.md`: the Results hold the state of every
+  project's branch on 2026-10-25, the pins of one project on another and the
+  integration rule: until the author pushes, a pin names a local commit that
+  only the uv git cache of one machine holds, so the producers (IMGWTools,
+  Kartograf, Hydrolog) are pushed before the consumers.
 
 ### Fixed
 
