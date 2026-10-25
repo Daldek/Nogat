@@ -332,9 +332,10 @@ they move while the sessions run.
   ARCHITECTURE, README and the migration guide of the CHANGELOG, the smoke
   runs, and the status lines of the superseded ADR-048 on
   `claude/vigilant-faraday-finqvd` (ADR-054 names it by its branch, because
-  `develop` has another ADR-048). The branch is rebased onto `chore/nogat-2.1`
-  later: that branch holds the standard 2.1 adoption and moves the texts into
-  the message catalog (ADR-053) area by area.
+  `chore/nogat-2.1` has another ADR-048, the adoption of standard 2.1). The
+  branch is rebased onto `chore/nogat-2.1` later: that branch holds the
+  standard 2.1 adoption and moves the texts into the message catalog (ADR-053)
+  area by area.
 - **IMGWTools**, 21 commits on `chore/nogat-2.1` `b526f16`. Done: ADR-007;
   `--output-dir` (`-o`), `--root`, `--output` and `--force`; `IMGW_ROOT` and the
   default root `<data_dir>/imgw`; plain `datasets download`, `store sync` and
@@ -355,7 +356,7 @@ they move while the sessions run.
   `api_keys.json` state file), ADR-024 and the user documents. The Kartograf
   half (`root=`, the error codes) waits for Kartograf's branch.
 - **Hydrolog.** Step 6 is done on `chore/nogat-2.1` (16 commits on `develop`):
-  INTEGRATION, USAGE and the generated guide name `kartograf soil download
+  README, INTEGRATION and the generated guide name `kartograf soil download
   --output-dir`, `download_soil(output_dir=)`, `files[].path` and `imgw series
   export --output`, and Hydrolog checks the names when the producers' releases
   land (its Next 3). Beyond the plan, `feature/routing-network` (20 commits on
