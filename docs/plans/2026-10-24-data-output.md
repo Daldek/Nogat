@@ -306,13 +306,13 @@ they move while the sessions run.
 | Project | Step | Branch (worktree), head | State |
 |---|---|---|---|
 | Nogat | 1 | `feature/data-output` | done; the registry follows the branches below |
-| Kartograf | 2 | `feature/data-output` (`~/workspace/Kartograf-dataout`), `91c4510f` | in progress |
+| Kartograf | 2 | `feature/data-output` (worktree `Kartograf-dataout`), `91c4510f` | in progress |
 | IMGWTools | 3 | `feature/data-output`, `a304521` | done on the branch |
 | Archiwista | 4 | `chore/nogat-2.1`, `2b167c3` | not started |
 | Retman | 5 | `feature/imgwtools-data-output`, `932d2cf` | the IMGWTools half is done |
 | Hydrolog | 6 | `chore/nogat-2.1`, `d4f7282`; `feature/routing-network`, `6c9ba5a` | documents done; routing documents are new |
 | Hydrograf | 8 | `chore/nogat-2.1`, `39eb15e` | not part of this work |
-| Hydraulik | 8 | `feature/sfincs-swmm` (`~/workspace/Hydraulik-sfincs`), `793002a` | done on the branch, not merged |
+| Hydraulik | 8 | `feature/sfincs-swmm` (worktree `Hydraulik-sfincs`), `793002a` | done on the branch, not merged |
 
 - **Nogat.** The registry and the map follow the branches below (CHANGELOG):
   plain files and `files[]` beside the stores, the default roots, the published
@@ -379,7 +379,7 @@ they move while the sessions run.
   `081fda2`). The Kartograf calls run against a fake program: the live run
   waits for Kartograf's plain mode, and the field names of its plan and the ids
   of its items are what may differ. The proof of concept stays uncommitted in
-  `~/workspace/Hydraulik`; the merge plan is in its PROGRESS.
+  the `Hydraulik` checkout; the merge plan is in its PROGRESS.
 
 Pins of one project on another (`uv run scripts/ecosystem.py drift`, and the
 `pyproject.toml` of the Hydraulik branch):

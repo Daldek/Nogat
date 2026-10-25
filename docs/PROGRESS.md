@@ -38,8 +38,8 @@
 ## Open questions
 
 - Hydraulik's code is committed on `feature/sfincs-swmm` (worktree
-  `~/workspace/Hydraulik-sfincs`, not merged), and its registry entry lists
-  that branch's `pyproject.toml`, which `~/workspace/Hydraulik` lacks until the
+  `Hydraulik-sfincs`, not merged), and its registry entry lists that branch's
+  `pyproject.toml`, which the `Hydraulik` checkout on `develop` lacks until the
   merge (`deps` notes it). Keep `status: research` until the author merges the
   branch and settles the proof of concept, or mark it `active` now?
 - The Hydraulik entry has no data source, because the branch has no
