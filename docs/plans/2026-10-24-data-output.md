@@ -251,7 +251,7 @@ File and line references are those of 2026-10-24 and only locate the work.
    in `backend/scripts/download_dem.py` to `root=`; Hydraulik's proof of
    concept (`src/hydraulik/data.py` calls `kartograf download --output ...` and
    reads the store layout) uses `--output-dir` and the `files[].path` of the
-   result when it is committed.
+   result when it is committed (done on `feature/sfincs-swmm`, see Results).
 
 ## Results
 
