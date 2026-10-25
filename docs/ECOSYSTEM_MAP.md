@@ -39,7 +39,6 @@ flowchart LR
   src_chmi --> IMGWTools
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
-  src_osm --> Hydraulik
   src_gugik --> Archiwista
   src_osm --> Archiwista
   Kartograf -. store, no package .-> IMGWTools
@@ -50,8 +49,8 @@ flowchart LR
   IMGWTools -- library --> Hydrograf
   Hydraulik -. planned: service .-> Hydrograf
   Kartograf -- cli --> Hydraulik
-  IMGWTools -- library --> Hydraulik
-  Hydrolog -- library --> Hydraulik
+  IMGWTools -- library/file --> Hydraulik
+  Hydrolog -- library/file --> Hydraulik
   Kartograf -- library --> Retman
   IMGWTools -- library --> Retman
   Hydrolog -. planned: library .-> Retman
@@ -69,7 +68,7 @@ flowchart LR
 | [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
-| [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | 2D hydraulic flood screening with Deltares SFINCS; research stage. |
+| [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over the ecosystem tools. |
 | [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and IMGWTools stores. |
 
@@ -84,9 +83,9 @@ flowchart LR
 | Hydrograf | Hydrolog | runtime | active | library | `watershed-parameters`, `hydrolog-python-api` |
 | Hydrograf | IMGWTools | runtime | active | library | `imgw-pmaxtp` |
 | Hydrograf | Hydraulik | runtime | planned | service | `hydraulik-job` |
-| Hydraulik | Kartograf | runtime | active | cli | `kartograf-files` |
-| Hydraulik | IMGWTools | runtime | active | library | `imgw-pmaxtp` |
-| Hydraulik | Hydrolog | runtime | active | library | `hydrolog-python-api` |
+| Hydraulik | Kartograf | optional | active | cli | `kartograf-files`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-plan/1`, `kartograf-error/1` |
+| Hydraulik | IMGWTools | optional | active | library, file | `imgw-pmaxtp`, `imgw-result/1` |
+| Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
 | Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
 | Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
@@ -103,9 +102,9 @@ flowchart LR
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
 - **Hydrograf → IMGWTools**: uses `fetch_pmaxtp`
 - **Hydrograf → Hydraulik**: Hydraulik as an external compute node fed with a catchment domain.
-- **Hydraulik → Kartograf**: Calls `kartograf download` as a subprocess for DEM and BDOT10k.
-- **Hydraulik → IMGWTools**: uses `fetch_pmaxtp`
-- **Hydraulik → Hydrolog**: uses `BetaHietogram`, `EulerIIHietogram`
+- **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
+- **Hydraulik → IMGWTools**: uses `fetch_pmaxtp`; rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that imgw pmaxtp fetch --json prints.
+- **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
 - **Retman → Hydrolog**: Retman PRD roadmap.
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `open_project`, `get_project_status`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
@@ -121,13 +120,13 @@ flowchart LR
 | `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
 | `kartograf-store` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root). |
 | `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256, with the store root. |
-| `kartograf-download/1` | document | Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
-| `kartograf-plan/1` | document | Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
+| `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
+| `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
 | `kartograf-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery. |
-| `kartograf-commands/1` | catalog | Retman | One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command. |
-| `kartograf-result/1` | document | Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
-| `kartograf-error/1` | document | Retman | Error document with code, hint and exit code, the last line of stderr. |
+| `kartograf-commands/1` | catalog | Hydraulik, Retman | One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command. |
+| `kartograf-result/1` | document | Hydraulik, Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
+| `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores, projects and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 
 ### IMGWTools
@@ -141,7 +140,7 @@ flowchart LR
 | `imgw-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `imgw-observation/1` | document | Archiwista (planned) | History of published HTTP signals per archive file. |
 | `chmi-json/1` | document | Archiwista (planned) | Canonical JSON form of ČHMÚ files used for content-based pins. |
-| `imgw-result/1` | document | Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
+| `imgw-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
 | `imgw-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and imgw commands list. |
 | `imgw-commands/1` | catalog | Retman | One command with options, x-imgw metadata and errors (command_schema, imgw commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
 | `imgw-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
@@ -155,9 +154,9 @@ flowchart LR
 |---|---|---|---|
 | `watershed-parameters` | document | Hydrograf | WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input. |
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
-| `hydrolog-hydrograph-csv` | dataset | — | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
+| `hydrolog-hydrograph-csv` | dataset | Hydraulik | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
 | `hydrolog-network/1` | document | — | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
-| `hydrolog-result/1` | document | Retman (planned) | Result envelope (command, inputs, result, files with SHA-256, notices). |
+| `hydrolog-result/1` | document | Hydraulik, Retman (planned) | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
 | `hydrolog-command-list/1` | catalog | Retman (planned) | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
 | `hydrolog-commands/1` | catalog | Retman (planned) | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
@@ -195,4 +194,4 @@ data-flow diagram.
 | [ISRIC SoilGrids](https://soilgrids.org) | global | CC BY 4.0 | Kartograf |
 | [IMGW-PIB (archives, live API, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | IMGWTools |
 | [ČHMÚ open data](https://opendata.chmi.cz) | CZ | CC BY 4.0 | IMGWTools |
-| [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Hydraulik, Archiwista |
+| [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Archiwista |

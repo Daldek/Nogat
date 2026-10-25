@@ -75,6 +75,16 @@ the standard are listed in [standards/README.md](standards/README.md).
   and the catalog documents `hydrolog-command-list/1` and `hydrolog-commands/1`
   instead of `hydrolog-catalog`; the notes on the IMGWTools and Kartograf files
   name `--output FILE` and `--output-dir`. Retman's planned exchange follows.
+- `ecosystem.yaml` and the map follow Hydraulik's branch `feature/sfincs-swmm`:
+  the three edges are `optional` (the user's own rasters and rain need none of
+  them) with the facts of the code. Kartograf is a program that Hydraulik starts
+  with `--output-dir` and `--check`, reading its `commands schema`, envelope and
+  plan; IMGWTools and Hydrolog are the extra `rainfall` (`fetch_pmaxtp`, the four
+  hietogram classes) or the documents their CLIs print, and `swmm run` and
+  `model couple` read the hydrograph tables of `route network`
+  (`hydrolog-hydrograph-csv`). The entry lists its `pyproject.toml`, has no
+  direct data source (the `osm` access of the proof of concept is gone) and keeps
+  the status `research`.
 
 ### Fixed
 

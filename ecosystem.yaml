@@ -271,37 +271,41 @@ projects:
         note: Hydraulik as an external compute node fed with a catchment domain.
 
   - name: Hydraulik
-    summary: 2D hydraulic flood screening with Deltares SFINCS; research stage.
+    summary: Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling.
     profiles: [tool]
     status: research
     repo: https://github.com/Daldek/Hydraulik
+    python_manifests: [pyproject.toml]
     visibility: public
     distribution: {pypi: null, import_name: hydraulik}
     interfaces: {cli: hydraulik, mcp: null, rest: null, python: hydraulik}
-    data_sources: [osm]
+    data_sources: []
     provides:
       - id: hydraulik-job
         kind: contract
         summary: Planned hydraulik.spec contracts (JobSpec, InputBundle, RunStatus, ResultManifest) and web products.
     depends_on:
       - project: Kartograf
-        kind: runtime
+        kind: optional
         status: active
         via: [cli]
-        exchange: [kartograf-files]
-        note: Calls `kartograf download` as a subprocess for DEM and BDOT10k.
+        exchange: [kartograf-files, kartograf-commands/1, kartograf-result/1, kartograf-download/1, kartograf-plan/1, kartograf-error/1]
+        uses: [elevation download, landcover download, soil hsg, commands schema]
+        note: Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
       - project: IMGWTools
-        kind: runtime
+        kind: optional
         status: active
-        via: [library]
-        exchange: [imgw-pmaxtp]
+        via: [library, file]
+        exchange: [imgw-pmaxtp, imgw-result/1]
         uses: [fetch_pmaxtp]
+        note: rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that imgw pmaxtp fetch --json prints.
       - project: Hydrolog
-        kind: runtime
+        kind: optional
         status: active
-        via: [library]
-        exchange: [hydrolog-python-api]
-        uses: [BetaHietogram, EulerIIHietogram]
+        via: [library, file]
+        exchange: [hydrolog-python-api, hydrolog-result/1, hydrolog-hydrograph-csv]
+        uses: [BlockHietogram, TriangularHietogram, BetaHietogram, EulerIIHietogram]
+        note: rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
 
   - name: Retman
     summary: Polish natural-language command layer over the ecosystem tools.
