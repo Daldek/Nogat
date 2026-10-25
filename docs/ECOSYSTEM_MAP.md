@@ -98,7 +98,7 @@ flowchart LR
 - **IMGWTools → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 - **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export --output FILE`.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
-- **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `LandCoverManager`, `Bdot10kProvider`, `HSGCalculator`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
+- **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`, `list_segments`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
 - **Hydrograf → IMGWTools**: uses `fetch_pmaxtp`
 - **Hydrograf → Hydraulik**: Hydraulik as an external compute node fed with a catchment domain.

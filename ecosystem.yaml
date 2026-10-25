@@ -304,7 +304,7 @@ projects:
         status: active
         via: [library]
         exchange: [kartograf-files, kartograf-meta/1]
-        uses: [DownloadManager, GugikProvider, MetadataCache, LandCoverManager, Bdot10kProvider, HSGCalculator, SheetParser, find_sheets_for_bbox, find_sheets_for_geometry]
+        uses: [DownloadManager, GugikProvider, MetadataCache, download_landcover, calculate_hsg, hsg_statistics, iter_store, list_segments, SheetParser, find_sheets_for_bbox, find_sheets_for_geometry]
       - project: Hydrolog
         kind: runtime
         status: active

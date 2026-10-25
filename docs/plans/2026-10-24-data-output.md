@@ -382,15 +382,17 @@ they move while the sessions run.
   of its items are what may differ. The proof of concept stays uncommitted in
   the `Hydraulik` checkout; the merge plan is in its PROGRESS.
 
-Pins of one project on another (`uv run scripts/ecosystem.py drift`, and the
-`pyproject.toml` of the Hydraulik branch):
+Pins of one project on another, re-pinned on 2026-10-25 to the producer heads
+that fixed the failures of the
+[final integration run](2026-10-25-final-integration.md) (the `pyproject.toml`
+of each consumer branch; every commit is on GitHub):
 
-| Consumer | Producer | Pin | State |
+| Consumer (branch, head) | Producer | Pin | Gate at the head |
 |---|---|---|---|
-| Retman | IMGWTools | commit `a304521`, the head of `feature/data-output` | local only: not on GitHub, resolves where the uv git cache holds it |
-| Retman, Archiwista | Kartograf | commit `8e9bcbb` | on `origin/develop`; moves to the head of `feature/data-output` when step 2 is complete and pushed |
-| Hydraulik | Hydrolog, IMGWTools | tags `v0.7.0`, `v2.1.1` (extra `rainfall`) | pushed; no Hydrolog tag has `route network` yet |
-| Hydrograf | Kartograf, Hydrolog, IMGWTools | tags `v0.7.0`, `v0.6.3`, `v2.1.0` | pushed, behind the latest tags; changes after the first release set |
+| Retman (`feature/kartograf-data-output`, `cc6d1ee`) | Kartograf, IMGWTools (group `tools`) | commits `c31ca04c`, `6bd35a4`, the heads of `feature/data-output` | GATE OK, 104 s: 3,234 passed, 7 not run, 95.34 %, 45 commits checked |
+| Hydraulik (`feature/sfincs-swmm`, `91559e0`) | Hydrolog, IMGWTools (extra `rainfall`) | commits `5fa22b3` (`feature/routing-schematic`), `6bd35a4` | GATE OK, 49 s: 823 passed, 1 skipped, 17 not run, 95.64 %, 33 commits checked |
+| Hydrograf (`feature/producer-heads`, `9dfa3a8`) | Kartograf, Hydrolog, IMGWTools | commits `c31ca04c`, `5fa22b3`, `6bd35a4` | 1,302 passed, 19 not run, 85.57 %; the commit step passes with `GATE_COMMIT_RANGE=develop..HEAD` (51 commits) and fails on the old history of `develop` without it (F6) |
+| Archiwista (`feature/kartograf-data-output`, `e5b4c22`) | Kartograf, IMGWTools (extra `imgw`) | commits `c31ca04c`, `6bd35a4` | GATE OK, 1,987 s: 1,447 passed, 47 not run, 92.28 %, 77 commits checked |
 
 Integration check: not run. A dry run of 2026-10-25, with Hydraulik added and
 Kartograf's step 2 and Archiwista's step 4 still open, is recorded in the

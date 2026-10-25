@@ -260,7 +260,10 @@ needs; the other three ran with it set (none of them has an MCP server).
 1. The author: the history of Hydrograf's `develop` and of IMGWTools (F6).
 2. Hydrograf lifts the affine cap with pyflwdir 0.5.13 (its ADR-062); until
    then Hydrograf and Archiwista run in separate environments.
-3. The consumers re-pin the producers' new heads (Kartograf `c31ca04c`,
-   IMGWTools `6bd35a4`); then repeat the run for the members that changed,
-   with Hydrograf and Archiwista apart, and the two flows of F2, and record it
-   in the Results of the data-output plan.
+3. Done 2026-10-25: the consumers are re-pinned to the producers' new heads
+   (Kartograf `c31ca04c`, IMGWTools `6bd35a4`), each with its full gate and
+   pushed: Retman `cc6d1ee`, Hydraulik `91559e0`, Hydrograf `9dfa3a8`,
+   Archiwista `e5b4c22` (the pins table in the Results of the
+   data-output plan). Open: repeat the run for the members that changed, with
+   Hydrograf and Archiwista apart, and the two flows of F2, and record it in
+   the Results of the data-output plan.

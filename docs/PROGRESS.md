@@ -13,7 +13,7 @@
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | the six heads in one environment: suites, four cross-tool flows, eight failures with their owners and, since the coordinator's decisions (ECO-053: supported range of a pinned producer, tests found from the test file, `<package>.testing`), their follow-ups (`docs/plans/2026-10-25-integration-dry-run.md`); the check of plan step 7 repeats once Kartograf's step 2 is complete |
-| Final integration run | done 2026-10-25, fixed | the eight heads in one environment, each member's own gate and eight cross-tool flows; F1 to F8 with their owners and fixing commits, every one fixed but F6, the author's history rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) are a known incompatible pair, which `deps` reports as a `range_conflict`; a repeat runs them apart |
+| Final integration run | done 2026-10-25, fixed | the eight heads in one environment, each member's own gate and eight cross-tool flows; F1 to F8 with their owners and fixing commits, every one fixed but F6, the author's history rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the fixed producer heads (Kartograf `c31ca04c`, IMGWTools `6bd35a4`), each with its full gate (Next 3 of that plan). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) are a known incompatible pair, which `deps` reports as a `range_conflict`; a repeat runs them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (IMGWTools after the rename of `master`) |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | phases 2 to 4 on the projects' branches, table at the end of ADOPTION_PLAN; data output: IMGWTools done, Kartograf in progress, Retman half done, Hydraulik done on its branch, Archiwista waits; nothing is pushed, so Retman's pin of IMGWTools is a local commit (plan step 7) |
@@ -29,15 +29,11 @@
    reads its hydrograph tables), and for the files the new `file` edges read
    (the PMAXTP document of IMGWTools, the GeoTIFFs of Kartograf). When a tool
    renames a command, change its `routes` and run `agents` (CLAUDE.md).
-2. The author pushes producers before consumers (IMGWTools, Kartograf,
-   Hydrolog, then Retman, Archiwista, Hydraulik; plan step 7), so that Retman's
-   pin `a304521` exists on GitHub; consumers re-pin after a producer's last
-   rewrite.
-3. Hydrograf's registry entry: `python_manifests` follows its uv step
-   (`backend/pyproject.toml` only, F7 of the final integration run); `uses` of
-   Kartograf still names the classes its migration removed (`LandCoverManager`,
-   `HSGCalculator`; Hydrograf's PROGRESS lists the new names).
-4. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
+2. Repeat the final integration run for the members that changed since it
+   (Kartograf, IMGWTools and the four re-pinned consumers), with Hydrograf and
+   Archiwista apart and the two flows of F2, and record it in the Results of
+   the data-output plan (`docs/plans/2026-10-25-final-integration.md`, Next 3).
+3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
 
 ## Open questions
 

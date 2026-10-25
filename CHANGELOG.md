@@ -120,6 +120,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 - `ecosystem.yaml`: Hydrograf's `python_manifests` is `backend/pyproject.toml` alone.
   Hydrograf replaced `backend/requirements.txt` with uv and `backend/uv.lock`
   (`3ca62f2`), and `deps` noted the missing file.
+- `ecosystem.yaml`: `uses` of Hydrograf's edge to Kartograf names the calls of its
+  migration (`download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`,
+  `list_segments`) instead of the removed `LandCoverManager` and `HSGCalculator`,
+  and drops `Bdot10kProvider`, which only Hydrograf's tests patch.
 - `docs/plans/2026-10-24-data-output.md`: the Results hold the state of every
   project's branch on 2026-10-25, the pins of one project on another and the
   integration rule: until the author pushes, a pin names a local commit that
