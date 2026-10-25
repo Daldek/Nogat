@@ -5,31 +5,47 @@
 | Component | State | Note |
 |---|---|---|
 | Standard 2.1 | in progress | not yet published to `main`; tagged `std-2.1` when it is (HUB-6.1) |
-| Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json` |
+| Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; follows the branches of Kartograf, IMGWTools, Hydrolog and Hydraulik since 2026-10-25 (CHANGELOG) |
 | `validate`, `map`, `deps`, `drift` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` |
 | Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
 | Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
-| Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` |
+| Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Generated `AGENTS.md` (HUB-4.3) | planned | routing table with links |
 | `nogat` package (HUB §7) | planned | |
-| Adoption in the projects | planned | ADOPTION_PLAN phases 1 to 6; data output: steps 2 to 8 of its plan |
+| Adoption in the projects | in progress | phases 2 to 4 on the projects' branches, table at the end of ADOPTION_PLAN; data output: IMGWTools done, Kartograf in progress, Retman half done, Hydraulik done on its branch, Archiwista waits; nothing is pushed, so Retman's pin of IMGWTools is a local commit (plan step 7) |
 
 ## Next
 
 1. Generated Nogat `AGENTS.md` (HUB-4.3): routing table with links.
 2. Data output in the projects, following `docs/plans/2026-10-24-data-output.md`
-   (each project in its own session, DEV-3.4): Kartograf and IMGWTools, then
-   Archiwista, Retman and the Hydrolog documents, the integration check
-   (record it in the plan's Results) and the first release set.
-3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
+   (each project in its own session, DEV-3.4): Kartograf's plain mode and its
+   documents, then Retman's Kartograf calls and Archiwista, then the
+   integration check (record it in the plan's Results) and the first release
+   set. DEV-10.6 now falls due for Hydrolog (`hydrolog.testing`: Hydraulik
+   reads its hydrograph tables), and for the files the new `file` edges read
+   (the PMAXTP document of IMGWTools, the GeoTIFFs of Kartograf).
+3. The author pushes producers before consumers (IMGWTools, Kartograf,
+   Hydrolog, then Retman, Archiwista, Hydraulik; plan step 7), so that Retman's
+   pin `a304521` exists on GitHub; consumers re-pin after a producer's last
+   rewrite.
+4. Hydrograf's registry entry waits for its `chore/nogat-2.1` (its PROGRESS):
+   `backend/requirements.txt` leaves `python_manifests` with the uv step, and
+   `uses` of Kartograf changes after its migration.
+5. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
 
 ## Open questions
 
-- Hydraulik's registry entry declares a CLI and package that are not
-  committed (code in an uncommitted worktree): commit it, or mark the entry
-  `research` until then?
+- Hydraulik's code is committed on `feature/sfincs-swmm` (worktree
+  `~/workspace/Hydraulik-sfincs`, not merged), and its registry entry lists
+  that branch's `pyproject.toml`, which `~/workspace/Hydraulik` lacks until the
+  merge (`deps` notes it). Keep `status: research` until the author merges the
+  branch and settles the proof of concept, or mark it `active` now?
+- The Hydraulik entry has no data source, because the branch has no
+  OpenStreetMap access (its roads come from BDOT10k), but its README still
+  names OpenStreetMap and ODbL in the data and licensing paragraph: which is
+  right?
 - Publishing 2.1 to `main` (and its tag) and replacing the v1 `templates/`
   and `configs/` (root-owned files).
 - The plans in `docs/plans/` predate DEV-17.4's `Approved:` line: add it to
