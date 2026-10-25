@@ -14,9 +14,10 @@ project registry (`ecosystem.yaml`) and the tooling that reads it. Profile:
   labelled `request` in that project's repository (DEV-17.5).
 - Scripts report failures by the error registry: last stderr line is the
   `nogat-error/1` document, exit code from `error_registry.json` (HUB-4.8).
-- Never edit generated files or blocks: `docs/ECOSYSTEM_MAP.md` comes from
-  `ecosystem.yaml` (`uv run scripts/ecosystem.py map`), the tables in
-  `standards/ERROR_REGISTRY.md` from `error_registry.json` (`standard --write`).
+- Never edit generated files or blocks: `docs/ECOSYSTEM_MAP.md` and `AGENTS.md`
+  come from `ecosystem.yaml` (`uv run scripts/ecosystem.py map` and `agents`),
+  the tables in `standards/ERROR_REGISTRY.md` from `error_registry.json`
+  (`standard --write`).
 - `standards/legacy/`, `standards/templates/` and `standards/configs/` are v1
   files kept verbatim until replaced (DOC-11.1); do not edit or copy them.
 - A requirement ID is never renumbered or reused; a deleted ID is listed in
@@ -30,6 +31,7 @@ scripts/gate.sh                          # before every commit (DEV-7.6)
 uv run pytest                            # tests only
 uv run scripts/ecosystem.py validate     # registry
 uv run scripts/ecosystem.py map          # regenerate docs/ECOSYSTEM_MAP.md
+uv run scripts/ecosystem.py agents       # regenerate AGENTS.md, the routing table
 uv run scripts/ecosystem.py deps|drift   # read sibling checkouts (HUB §3)
 uv run scripts/ecosystem.py standard     # IDs, links, budgets; --write regenerates
 ```
@@ -40,7 +42,8 @@ Checkouts of the other projects are siblings of Nogat or under
 ## Code map
 
 ```
-scripts/ecosystem.py   registry: validate, map, deps, drift, standard
+scripts/ecosystem.py   registry: validate, map, agents, deps, drift, standard
+scripts/guide.py       AGENTS.md: the routing table, from the registry's routes
 scripts/standard.py    checks of the standard: IDs, links, budgets, copies
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
@@ -48,7 +51,7 @@ schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 standards/             the standard; ci/ holds the templates projects copy
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent schemas and Nogat's own error documents
+tests/contract/        the agent schemas, AGENTS.md and Nogat's own error documents
 ```
 
 ## Documentation map
@@ -57,6 +60,7 @@ tests/contract/        the agent schemas and Nogat's own error documents
 |---|---|
 | Change a rule | `standards/README.md` (how rules are written), the topic document, `standards/DECISIONS.md` for the reason |
 | Change the registry or its tooling | `standards/ECOSYSTEM_HUB.md` §2 and §4 |
+| Add or change a task of the routing table | `routes` of the project in `ecosystem.yaml` (HUB-2.9), then `uv run scripts/ecosystem.py agents`; the command must exist in the tool's `commands list` |
 | Change a CI template | `standards/ci/README.md` |
 | Plan cross-project work | `standards/ECOSYSTEM_HUB.md` §5, `docs/plans/` |
 
@@ -75,7 +79,6 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 - DEV-5.1: no `src/nogat/` until the `nogat` package exists (HUB §7); code
   lives in `scripts/`, coverage measures `scripts/`.
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
-- DOC-1.1: no generated `AGENTS.md` yet (HUB-4.3 not implemented).
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).
 - DEV-13.7, DEV-16.2: `SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md` and

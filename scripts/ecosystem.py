@@ -1,9 +1,11 @@
-"""Validate ecosystem.yaml, generate docs/ECOSYSTEM_MAP.md, compare dependencies.
+"""Validate ecosystem.yaml, generate the map and AGENTS.md, compare dependencies.
 
 Usage:
     uv run scripts/ecosystem.py validate
     uv run scripts/ecosystem.py map            # write docs/ECOSYSTEM_MAP.md
-    uv run scripts/ecosystem.py map --check    # exit 1 when the map is stale
+    uv run scripts/ecosystem.py map --check    # exit 4 when the map is stale
+    uv run scripts/ecosystem.py agents         # write AGENTS.md (HUB-4.3)
+    uv run scripts/ecosystem.py agents --check # exit 4 when AGENTS.md is stale
     uv run scripts/ecosystem.py deps           # third-party ranges across checkouts
     uv run scripts/ecosystem.py deps --installed   # also versions in each .venv
     uv run scripts/ecosystem.py drift          # consumers' pins against producers' tags
@@ -26,6 +28,7 @@ from pathlib import Path
 from typing import Any, NoReturn
 from urllib.parse import urlsplit
 
+import guide
 import jsonschema
 import standard
 import yaml
@@ -39,6 +42,7 @@ REGISTRY = ROOT / "ecosystem.yaml"
 SCHEMA = ROOT / "schemas" / "ecosystem.schema.json"
 ERROR_SCHEMA = ROOT / "schemas" / "agent" / "error-1.schema.json"
 MAP = ROOT / "docs" / "ECOSYSTEM_MAP.md"
+AGENTS = ROOT / "AGENTS.md"
 
 LOCAL_PATH = re.compile(r"(^|\s)(/home/|/Users/|~/|[A-Za-z]:\\)")
 COMMIT = re.compile(r"^[0-9a-f]{7,40}$")
@@ -214,6 +218,8 @@ def validate(registry: dict[str, Any]) -> list[str]:
                     problems.append(
                         f"{name} -> {producer}: {fmt!r} is not in {producer}.provides"
                     )
+
+    problems.extend(guide.route_problems(registry))
 
     for s in _strings(registry):
         if LOCAL_PATH.search(s):
@@ -788,24 +794,33 @@ def check_standard(registry: dict[str, Any], write: bool) -> int:
     return 0
 
 
-def check_map(registry: dict[str, Any], check: bool) -> int:
-    """Write docs/ECOSYSTEM_MAP.md, or with `check` fail when it is stale."""
-    text = render(registry)
-    shown = _shown(MAP)
+def _generated(path: Path, text: str, check: bool, command: str) -> int:
+    """Write a generated file, or with `check` fail when it is stale (HUB-4.5)."""
+    shown = _shown(path)
     if not check:
-        MAP.parent.mkdir(parents=True, exist_ok=True)
-        MAP.write_text(text, encoding="utf-8")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
         print(f"wrote {shown}")
         return 0
-    if not MAP.exists() or MAP.read_text(encoding="utf-8") != text:
+    if not path.exists() or path.read_text(encoding="utf-8") != text:
         raise Failure(
             "conflict",
             f"{shown} is stale",
-            hint="run: uv run scripts/ecosystem.py map",
+            hint=f"run: uv run scripts/ecosystem.py {command}",
             details={"reason": "stale_generated_file", "path": shown},
         )
     print(f"{shown} is up to date")
     return 0
+
+
+def check_map(registry: dict[str, Any], check: bool) -> int:
+    """Write docs/ECOSYSTEM_MAP.md, or with `check` fail when it is stale."""
+    return _generated(MAP, render(registry), check, "map")
+
+
+def check_agents(registry: dict[str, Any], check: bool) -> int:
+    """Write AGENTS.md (HUB-4.3), or with `check` fail when it is stale."""
+    return _generated(AGENTS, guide.render(registry), check, "agents")
 
 
 class _Parser(argparse.ArgumentParser):
@@ -826,6 +841,10 @@ def _parser() -> argparse.ArgumentParser:
     map_cmd = sub.add_parser("map", help="generate docs/ECOSYSTEM_MAP.md")
     map_cmd.add_argument(
         "--check", action="store_true", help="fail when the map is stale"
+    )
+    agents_cmd = sub.add_parser("agents", help="generate AGENTS.md, the routing table")
+    agents_cmd.add_argument(
+        "--check", action="store_true", help="fail when AGENTS.md is stale"
     )
     deps_cmd = sub.add_parser(
         "deps", help="compare third-party dependencies across checkouts"
@@ -865,6 +884,8 @@ def run(args: argparse.Namespace) -> int:
         return report_drift(registry)
     if args.command == "standard":
         return check_standard(registry, args.write)
+    if args.command == "agents":
+        return check_agents(registry, args.check)
     return check_map(registry, args.check)
 
 

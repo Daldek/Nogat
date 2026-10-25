@@ -69,6 +69,21 @@ projects:
       mcp: kartograf-mcp
       rest: null
       python: kartograf
+    routes:
+      - task: Download elevation models (NMT, NMPT), LAZ point clouds or contours of an area
+        command: kartograf elevation download
+      - task: Download orthophotos of an area
+        command: kartograf imagery download
+      - task: Download land cover of an area (BDOT10k, CORINE and others)
+        command: kartograf landcover download
+      - task: Download a SoilGrids soil layer of an area
+        command: kartograf soil download
+      - task: Classify hydrologic soil groups (HSG) of an area from SoilGrids texture it downloads itself
+        command: kartograf soil hsg
+      - task: Download boundaries, cadastre, 3D models, names, maps or geodetic data (find the group first)
+        command: kartograf commands list
+      - task: Read what a Kartograf store already holds
+        command: kartograf store overview
     data_sources: [gugik, cuzk, clms, soilgrids]
     provides:
       - id: kartograf-files
@@ -122,6 +137,21 @@ projects:
       mcp: imgw mcp
       rest: imgw server (/api/v1)
       python: imgwtools
+    routes:
+      - task: Find IMGW-PIB or ČHMÚ stations by name, river or code
+        command: imgw stations find
+      - task: Download archive data of stations into a versioned store
+        command: imgw store sync
+      - task: Download archive files as published, as plain files
+        command: imgw datasets download
+      - task: Read the series of a station from the store
+        command: imgw series read
+      - task: Export the series of a station as CSV with the provider's attribution
+        command: imgw series export
+      - task: Fetch current hydrological data of IMGW-PIB stations (live, not stored)
+        command: imgw current hydro
+      - task: Get PMAXTP design precipitation of a point in Poland
+        command: imgw pmaxtp fetch
     data_sources: [imgw-pib, chmi]
     provides:
       - id: imgw-store/1
@@ -187,6 +217,23 @@ projects:
       mcp: hydrolog mcp
       rest: null
       python: hydrolog
+    routes:
+      - task: Compute the time of concentration of a watershed
+        command: hydrolog tc watershed
+      - task: Compute effective precipitation of a rain by SCS-CN
+        command: hydrolog scs effective
+      - task: Build a design hyetograph (block, triangular, Beta, Euler II)
+        command: hydrolog precip hietogram
+      - task: Compute the design direct-runoff hydrograph of a watershed
+        command: hydrolog hydrograph generate
+      - task: Route a hydrograph through a reach, a reservoir or a river network
+        command: hydrolog route network
+      - task: Compute morphometry indicators of a watershed
+        command: hydrolog morphometry watershed
+      - task: Compute flood quantiles from annual maxima, for example of an IMGWTools export
+        command: hydrolog stats flood-frequency
+      - task: Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have
+        command: hydrolog soil hsg
     data_sources: []
     provides:
       - id: watershed-parameters
@@ -239,6 +286,13 @@ projects:
     visibility: public
     distribution: {pypi: null, import_name: null}
     interfaces: {cli: null, mcp: null, rest: /api, python: null}
+    routes:
+      - task: Delineate the watershed of a point in Poland and read its parameters
+        command: POST /api/delineate-watershed
+      - task: Generate a design hydrograph for a point in Poland from PMAXTP rainfall
+        command: POST /api/generate-hydrograph
+      - task: Cut a terrain profile along a line
+        command: POST /api/terrain-profile
     data_sources: [gugik, osm]
     provides:
       - id: hydrograf-rest
@@ -279,6 +333,21 @@ projects:
     visibility: public
     distribution: {pypi: null, import_name: hydraulik}
     interfaces: {cli: hydraulik, mcp: null, rest: null, python: hydraulik}
+    routes:
+      - task: Check which engines (SFINCS, SWMM) this machine can run
+        command: hydraulik engines check
+      - task: Fetch terrain, land cover and soil groups of a model area through Kartograf
+        command: hydraulik terrain download
+      - task: Write a design rain table from a Hydrolog shape and a PMAXTP depth
+        command: hydraulik rainfall build
+      - task: Build a SFINCS flood model directory from terrain and rain
+        command: hydraulik model build
+      - task: Run a SFINCS flood model and read its maxima and water balance
+        command: hydraulik model run
+      - task: Couple a SFINCS model with an EPA SWMM sewer network
+        command: hydraulik model couple
+      - task: Run a SWMM sewer network alone with an inflow hydrograph
+        command: hydraulik swmm run
     data_sources: []
     provides:
       - id: hydraulik-job
@@ -316,6 +385,9 @@ projects:
     visibility: public
     distribution: {pypi: null, import_name: retman}
     interfaces: {cli: retman, mcp: null, rest: null, python: retman}
+    routes:
+      - task: Plan a data download or export written in Polish, then run it once confirmed
+        command: retman plan run
     data_sources: []
     provides: []
     depends_on:
@@ -351,6 +423,11 @@ projects:
     visibility: public
     distribution: {pypi: null, import_name: archiwista}
     interfaces: {cli: archiwista, mcp: null, rest: /api/v1, python: null}
+    routes:
+      - task: Browse a Kartograf store on a map in the browser
+        command: archiwista serve
+      - task: Search the file catalog of a Kartograf store from a script
+        command: archiwista search
     data_sources: [gugik, osm]
     provides:
       - id: archiwista-rest

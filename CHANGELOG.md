@@ -39,6 +39,20 @@ the standard are listed in [standards/README.md](standards/README.md).
   in the projects, producers first, then consumers, the integration check and
   the first release set (HUB-5.2, DEV-17.4); ADOPTION_PLAN phase 4 lists the
   items per project.
+- `routes` in `ecosystem.yaml` and its schema: for each project the tasks that
+  tool covers and the command that starts each, in the names of the tool's
+  branch recorded in the registry (the CLI of the project, or an HTTP method
+  for Hydrograf's REST API). `validate` checks that a route starts with its
+  project's CLI, that a task is routed once and that every project but the hub
+  has a route (HUB-2.9, ECO-052).
+- `AGENTS.md`, generated from the registry by `uv run scripts/ecosystem.py
+  agents` (`scripts/guide.py`): a routing table of task, tool and entry
+  command, each row linking the tool's AGENTS.md as raw Markdown on `main`
+  (the README of an app), the tools' blocks not inlined. `agents --check`
+  fails with `conflict` when it is stale and is a step of `scripts/gate.sh`;
+  a contract test compares the file with the generator and with the budget
+  of DOC-1.7 (HUB-4.3, ECO-048, ECO-052). `nogat guide` and
+  `nogat ecosystem agents` follow once the package exists (HUB-7.3).
 
 ### Changed
 

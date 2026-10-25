@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Nogat quality gate (DEV-7.6, HUB-2.3). It follows standards/ci/gate.sh and
-# adds the hub's own steps: the registry and generated map, and shellcheck and
-# actionlint over the CI templates Nogat ships. Tool versions come from
-# uv.lock. Coverage measures scripts/ until the `nogat` package exists
-# (deviation DEV-5.1 in CLAUDE.md).
+# adds the hub's own steps: the registry and the generated map and AGENTS.md,
+# and shellcheck and actionlint over the CI templates Nogat ships. Tool
+# versions come from uv.lock. Coverage measures scripts/ until the `nogat`
+# package exists (deviation DEV-5.1 in CLAUDE.md).
 #
 # Usage: scripts/gate.sh [extra pytest arguments]
 set -euo pipefail
@@ -42,6 +42,9 @@ run python scripts/ecosystem.py validate
 
 step "ecosystem map (HUB-4.5)"
 run python scripts/ecosystem.py map --check
+
+step "AGENTS.md (HUB-4.3)"
+run python scripts/ecosystem.py agents --check
 
 step "standard (HUB-4.7: IDs, links, budgets, generated outputs)"
 run python scripts/ecosystem.py standard

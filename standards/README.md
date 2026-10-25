@@ -91,7 +91,9 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - The standard is tagged when published to `main`, not at every change
     (HUB-6.1, ECO-046).
   - An approved plan carries an `Approved:` line (DEV-17.4, ECO-047).
-  - Nogat's AGENTS.md is a routing table with links (HUB-4.3, ECO-048).
+  - Nogat's AGENTS.md is a routing table with links, generated from the
+    `routes` of the registry and checked by the gate (HUB-2.9, HUB-4.3,
+    ECO-048, ECO-052).
   - Hotfix commits are checked on entry to `main`; messages are checked on
     every pull request into `develop` (DEV-4.5, ECO-049).
   - Canonical schemas of the result envelope, error document and catalog in

@@ -61,6 +61,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
 | [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | accepted | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
+| [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 
 ---
 
@@ -890,3 +891,28 @@ differ per tool, and a marker file name needs no import).
 **Consequence.** Kartograf and IMGWTools adopt DEV §19 before their first
 release; their consumers change the calls that gave a store as `output_dir`
 or `-o` (plan `docs/plans/2026-10-24-data-output.md`).
+
+## ECO-052 The routing table is registry data
+
+**Decision.** The rows of Nogat's AGENTS.md routing table (ECO-048) are the
+`routes` of `ecosystem.yaml`: for each project a `task` and the `command` that
+starts it (HUB-2.9). `uv run scripts/ecosystem.py agents` writes the file,
+`agents --check` is a step of the gate, and a contract test compares the file
+with the generator (HUB-4.3, DEV-10.4). Each row links the tool's guide as raw
+Markdown on `main`; an `app`, which has no AGENTS.md, links its README.
+
+**Why.** Which tool covers a task is the one thing only Nogat knows, so it
+belongs in the registry (ECO-034). The tools' catalogs cannot supply it: Nogat
+imports no tool (HUB-1.2), the gate runs offline without the checkouts, and a
+catalog lists every command (Kartograf alone has more than forty), not the
+tasks a person states. Raw Markdown is what an agent fetches without HTML
+(DOC-5.2), and every repository releases from `main` (DEV-3.1).
+
+**Rejected.** Reading each tool's `commands list` when generating: it needs
+every tool installed, the file would change with each tool's release, and the
+gate could not run offline. A row for every command of every tool: the tools'
+own guides list them, and the file would exceed its budget (ECO-048).
+
+**Consequence.** `validate` checks that a route starts with its project's CLI,
+not that the tool still has the command; when a tool renames or drops an entry
+command, its route changes in the registry in the same plan (HUB-5.2).

@@ -26,7 +26,8 @@ history rewrites; the registry references repositories instead.
 
 **HUB-2.1** The registry records structure only: what only Nogat knows. Its
 fields are those of `schemas/ecosystem.schema.json`, shown below;
-`python_manifests` and, in a dependency, `uses` and `note` are optional.
+`python_manifests`, `routes` and, in a dependency, `uses` and `note` are
+optional.
 
 ```yaml
 schema: nogat-ecosystem/1
@@ -49,6 +50,9 @@ projects:
       mcp: null
       rest: null
       python: retman
+    routes:                   # HUB-2.9: a task and the command that starts it
+      - task: Plan a data task written in Polish, then run it once confirmed   # max 100 characters
+        command: retman plan run   # the CLI name first, or an HTTP method for a REST route
     data_sources: []          # ids from top-level data_sources accessed directly
     provides: []              # HUB-2.5: {id, kind, summary} offered to other projects
     depends_on:
@@ -91,6 +95,15 @@ in `python_manifests` (repository-relative, for example `pyproject.toml`,
 `backend/requirements.txt`); the drift and dependency reports read them
 (HUB-4.1, HUB-4.6).
 
+**HUB-2.9** Each project except the hub lists its `routes`, the rows of the
+routing table (HUB-4.3): a `task` of at most 100 characters and the `command`
+that starts it, beginning with the project's CLI or, for a REST interface,
+with an HTTP method. A task is routed once in the whole registry, and `repo`
+is a github.com URL, where the guides are linked. `validate` checks these
+rules.
+*Why:* an agent chooses a tool by task; a task that two tools claim sends it
+to the wrong one, and a command of another tool cannot start the task (ECO-052).
+
 ## 3. Local workspace
 
 **HUB-3.1** By default, repositories are resolved as siblings of Nogat, in a
@@ -116,13 +129,16 @@ latest tag.
 **HUB-4.2** `nogat mcp config --client claude|cursor|codex|vscode` prints a
 configuration with every ecosystem MCP server, from registry data.
 
-**HUB-4.3** Nogat `AGENTS.md` is generated from the registry: a routing
-table (task → tool → entry command) with a link to each tool's AGENTS.md;
-the tools' blocks (AGI-8.2) are not inlined, and the budget of DOC-1.7
-applies.
+**HUB-4.3** Nogat `AGENTS.md` is generated from the registry
+(`uv run scripts/ecosystem.py agents`): a routing table (task → tool → entry
+command) built from the `routes` of HUB-2.9, with a link to each tool's
+AGENTS.md, or to the README of an `app`, which has none (DOC-1.1), as raw
+Markdown on `main` (DOC-1.4, DOC-5.2). The tools' blocks (AGI-8.2) are not
+inlined, and the budget of DOC-1.7 applies. `agents --check` fails with
+`conflict` when the file is stale; the gate runs it.
 *Why:* an agent working from Nogat needs to know which tool covers a task
 without opening every repository; inlining every block would exceed the
-budget (ECO-048).
+budget (ECO-048, ECO-052).
 
 **HUB-4.5** `docs/ECOSYSTEM_MAP.md` is generated from the registry
 (`uv run scripts/ecosystem.py map`): data-flow diagram, project table,
@@ -216,7 +232,7 @@ HUB-4.8 says:
   the external prerequisites of HUB-7.1), `nogat mcp config` (HUB-4.2),
   `nogat guide` (routing table, HUB-4.3);
 - for maintenance, run in a Nogat checkout: `nogat ecosystem validate | map |
-  deps | drift | standard` (replacing `scripts/ecosystem.py`),
+  agents | deps | drift | standard` (replacing `scripts/ecosystem.py`),
   `nogat workspace sync` (HUB-3.3).
 
 The package includes `ecosystem.yaml` as package data, read by `nogat mcp

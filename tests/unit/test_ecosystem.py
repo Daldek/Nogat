@@ -1,9 +1,11 @@
-"""Unit tests of scripts/ecosystem.py: parsing, range checks, pins, tags."""
+"""Unit tests of scripts/ecosystem.py: parsing, range checks, pins, tags, routes."""
 
 from __future__ import annotations
 
+import copy
 import subprocess
 from pathlib import Path
+from typing import Any
 
 import ecosystem
 import pytest
@@ -191,3 +193,41 @@ def test_state_compares_pin_with_latest(
     kind: str, value: str, latest: str, state: str
 ) -> None:
     assert ecosystem._state(kind, value, latest) == state
+
+
+def _kartograf_with_route(route: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    """Return the registry with `route` added to Kartograf, and the route's path."""
+    registry = copy.deepcopy(ecosystem.load())
+    position = next(
+        i for i, p in enumerate(registry["projects"]) if p["name"] == "Kartograf"
+    )
+    routes = registry["projects"][position]["routes"]
+    routes.append(route)
+    return registry, f"projects/{position}/routes/{len(routes) - 1}"
+
+
+@pytest.mark.parametrize(
+    "route",
+    [
+        {"task": "Look up a sheet"},
+        {"command": "kartograf sheet find"},
+        {"task": "", "command": "kartograf sheet find"},
+        {"task": "t" * 101, "command": "kartograf sheet find"},
+        {"task": "Pipe in the command", "command": "kartograf sheet find | wc"},
+        {"task": "Backtick in the command", "command": "kartograf `sheet find`"},
+        {"task": "Unknown key", "command": "kartograf sheet find", "note": "no"},
+    ],
+)
+def test_validate_rejects_a_malformed_route(route: dict[str, Any]) -> None:
+    registry, path = _kartograf_with_route(route)
+    problems = ecosystem.validate(registry)
+    assert problems
+    assert all(problem.startswith(path) for problem in problems)
+
+
+def test_validate_reports_a_route_its_project_cannot_run() -> None:
+    registry, _ = _kartograf_with_route(
+        {"task": "Look up a sheet", "command": "imgw sheet find"}
+    )
+    problems = ecosystem.validate(registry)
+    assert any("Kartograf: route 'imgw sheet find'" in p for p in problems)

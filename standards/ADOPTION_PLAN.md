@@ -20,7 +20,7 @@ as git tags, 6 PyPI.
 | 0.2 | Registry (`ecosystem.yaml`, schema, `scripts/ecosystem.py`, generated `docs/ECOSYSTEM_MAP.md`) and the hub README in English (done) | HUB §2, HUB §4, ECO-005 |
 | 0.3 | Pending Nogat work committed in small Conventional commits as Daldek on a topic branch and merged by pull request | DEV-4.1, DEV-4.2, DEV-3.3 |
 | 0.4 | Standard 2.1 merged to `main` and tagged `std-2.1` | HUB-6.1, ERR-3 |
-| 0.5 | Nogat `CLAUDE.md` (done) and generated `AGENTS.md`: the routing table with links to the tools' AGENTS.md | DOC §3, DOC §4, HUB-4.3 |
+| 0.5 | Nogat `CLAUDE.md` and generated `AGENTS.md`, both done: the routing table with links to the tools' AGENTS.md | DOC §3, DOC §4, HUB-4.3 |
 | 0.6 | Ruleset for `main` and `develop`, tag ruleset for `v*`, private vulnerability reporting, contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`, `CONTRIBUTORS.md`, pull-request template with the CLA box) | DEV-3.6, DEV-13.7, DEV-16.2, DEV-16.4 |
 
 ## Phase 1: identity and history (one-off)
@@ -178,7 +178,7 @@ merges (DEV-3.3).
 | Hydrograf | `chore/nogat-2.1` | in progress: uv with its lock, formatting and the ruff rule set are done; mypy, the test tree, the gate, CI, Dependabot and the contribution files are planned | in progress: PROGRESS and BACKLOG are done | planned |
 | Hydraulik | `feature/sfincs-swmm` | done; committing the proof of concept stays the author's decision | done | done |
 
-Nogat (phase 0): 0.1 for the gate and CI templates, 0.2 and the `CLAUDE.md` of
-0.5 are done; 0.3 is on the topic branches `fix/hub-gaps` and
-`feature/data-output`, whose merge waits; 0.4, 0.6 and the generated
-`AGENTS.md` are open.
+Nogat (phase 0): 0.1 for the gate and CI templates, 0.2 and 0.5 (`CLAUDE.md`,
+and the generated `AGENTS.md`) are done; 0.3 is on the topic branches
+`fix/hub-gaps` and `feature/data-output`, whose merge waits; 0.4 and 0.6 are
+open.

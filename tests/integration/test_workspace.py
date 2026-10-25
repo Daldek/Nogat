@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import ecosystem
+import guide
 import pytest
 
 
@@ -213,3 +214,25 @@ def test_map_check_detects_stale_map(
     assert ecosystem.main(["map"]) == 0
     assert ecosystem.main(["map", "--check"]) == 0
     assert "is up to date" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("content", [None, "# old\n"])
+def test_agents_check_detects_a_missing_or_stale_file(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    content: str | None,
+) -> None:
+    target = tmp_path / "AGENTS.md"
+    if content is not None:
+        target.write_text(content, encoding="utf-8")
+    monkeypatch.setattr(ecosystem, "AGENTS", target)
+    monkeypatch.setattr(ecosystem, "ROOT", tmp_path)
+    assert ecosystem.main(["agents", "--check"]) == 4
+    document = _error(capsys.readouterr().err)
+    assert document["details"]["reason"] == "stale_generated_file"
+    assert document["hint"] == "run: uv run scripts/ecosystem.py agents"
+    assert ecosystem.main(["agents"]) == 0
+    assert ecosystem.main(["agents", "--check"]) == 0
+    assert "is up to date" in capsys.readouterr().out
+    assert target.read_text(encoding="utf-8") == guide.render(ecosystem.load())
