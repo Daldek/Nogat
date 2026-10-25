@@ -58,9 +58,15 @@ translated (AGI §9).
 `check_command(command, **options)` and `run_command(command, **options)` in
 its public API. `validate_command` checks the options against the command's
 schema and returns them with defaults filled, without planning or effects, or
-raises `validation_error`; `check_command` returns the plan of `--check`.
+raises `validation_error`; `check_command` returns the plan of `--check`. A
+project whose CLI lines other projects store or pass on also exposes
+`parse_command(line)`, which reads a line into the command, its options and
+its run flags, and `format_command(command, options=…, run=…)`, which writes
+them back as the canonical line, the form of every catalog example call; other
+projects MAY.
 *Why:* an orchestrating assistant can drive any tool generically through
-these five functions.
+these five functions; a consumer reads and writes a tool's CLI lines without a
+copy of its parser.
 
 **AGI-2.2** Each command declares:
 

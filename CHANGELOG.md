@@ -8,6 +8,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- AGI-2.1: a tool whose CLI lines other projects store or pass on exposes
+  `parse_command(line)` and `format_command(command, options=…, run=…)`, the
+  canonical line being the form of every catalog example call; other tools
+  MAY (Kartograf and IMGWTools have both).
 - DEV-19.2 names `store_root()` as the shared read-only accessor of the default store root in
   the library of every producer (Kartograf and IMGWTools have it).
 - `pyproject.toml` and `uv.lock`: the registry tooling runs in the locked

@@ -112,6 +112,9 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     own location, not through the installed package, because members are
     installed as wheels; producers ship `<package>.testing` in the wheel
     (REL-5.6, REL-2.5, REL-6.5, DEV-10.6, ECO-053).
+  - A tool whose CLI lines other projects store or pass on exposes
+    `parse_command` and `format_command`; catalog example calls are canonical
+    lines (AGI-2.1).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a
