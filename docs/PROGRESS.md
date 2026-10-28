@@ -34,6 +34,10 @@
    Archiwista apart and the two flows of F2, and record it in the Results of
    the data-output plan (`docs/plans/2026-10-25-final-integration.md`, Next 3).
 3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
+4. Prepare a coherent visual identity for Hydrograf, Archiwista and every
+   other ecosystem tool that has or will have a GUI (user request, 2026-10-28).
+   Define shared visual guidelines and reusable design assets, with room for
+   each tool's identity. Backlog only; design and implementation have not started.
 
 ## Open questions
 
