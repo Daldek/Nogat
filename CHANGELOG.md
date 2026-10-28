@@ -147,6 +147,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- Audit the 2026-10-28 project branch heads and manifests in
+  `docs/PROGRESS.md`; mark the early adoption and data-output snapshots as
+  historical, and record completed `hydrolog.testing`, consumer migrations,
+  remaining smoke/documentation work and the still-open integration repeat.
+- `docs/PROGRESS.md` reconciles adoption and integration status with the
+  recorded 2026-10-25 fixes and pushed consumer pins; removes the stale
+  “nothing is pushed” claim and makes the pending integration repeat, F6
+  history work and separate-environment requirement explicit.
 - `deps` no longer reports conflicts between overlapping ranges such as
   `<3` and `>2.5`.
 - `drift` keeps VCS refs containing `/` (`@release/0.8`), labels a project

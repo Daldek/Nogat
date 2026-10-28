@@ -297,11 +297,12 @@ State of the projects on 2026-10-24, before the work:
 | Hydrograf | `feature/kartograf-wykorzystanie`, one uncommitted file |
 | Hydraulik | `develop`; the proof of concept is uncommitted |
 
-### State on 2026-10-25
+### Early snapshot on 2026-10-25 (historical)
 
-Each project works on a local branch from its development branch; nothing is
-pushed, tagged or merged (DEV-3.3). The heads are those read on 2026-10-25;
-they move while the sessions run.
+The table and project notes below record the early local branches before
+the final integration run and subsequent pushes. They are not the current
+completion or publication status. The pins table below is a later update;
+the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md#project-evidence-on-2026-10-28).
 
 | Project | Step | Branch (worktree), head | State |
 |---|---|---|---|
@@ -394,11 +395,17 @@ of each consumer branch; every commit is on GitHub):
 | Hydrograf (`feature/producer-heads`, `9dfa3a8`) | Kartograf, Hydrolog, IMGWTools | commits `c31ca04c`, `5fa22b3`, `6bd35a4` | 1,302 passed, 19 not run, 85.57 %; the commit step passes with `GATE_COMMIT_RANGE=develop..HEAD` (51 commits) and fails on the old history of `develop` without it (F6) |
 | Archiwista (`feature/kartograf-data-output`, `e5b4c22`) | Kartograf, IMGWTools (extra `imgw`) | commits `c31ca04c`, `6bd35a4` | GATE OK, 1,987 s: 1,447 passed, 47 not run, 92.28 %, 77 commits checked |
 
-Integration check: not run. A dry run of 2026-10-25, with Hydraulik added and
-Kartograf's step 2 and Archiwista's step 4 still open, is recorded in the
-[integration dry run](2026-10-25-integration-dry-run.md): the failures across
-members, each with its cause and owner. IMGWTools (`a304521`), Hydrolog
-(`6c9ba5a`) and Retman (`932d2cf`) are candidates; Kartograf is not until step 2
-is complete, and Archiwista waits for it (step 4). Hydraulik and Hydrograf are
-not members of the check (step 8); Hydraulik's live `terrain download` needs
-Kartograf's plain mode.
+Integration check: the early dry run and the final run of 2026-10-25 are
+recorded in [the dry-run plan](2026-10-25-integration-dry-run.md) and
+[the final integration plan](2026-10-25-final-integration.md). The latter
+records fixes for F1–F5 and F7–F8, the open F6 history work and the
+Hydrograf/Archiwista environment conflict. The post-fix repeat remains open;
+the audit of 2026-10-28 ran no tests or gates.
+
+The current branch audit supersedes the waiting states above: Retman's
+two producer migrations and Archiwista's data-output migration are done
+on their branches, and `hydrolog.testing` exists at `0719c41` and in the
+pinned routing head `5fa22b3`. Kartograf still lists the CLI subprocess
+smoke and plain-mode prose as open; IMGWTools lists the live plain-mode
+smoke. Newer Kartograf, IMGWTools and Archiwista heads need to be named
+explicitly in the repeat, rather than treated as the 2026-10-25 pins.

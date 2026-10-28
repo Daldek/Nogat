@@ -158,15 +158,16 @@ Until the rename of phase 6, a pin names each distribution as the tag's
   Hydraulik after the first release set.
 - Do not start a project while its own active work is uncommitted.
 
-## Progress on 2026-10-25
+## Historical progress on 2026-10-25
 
-Phases 2 to 4 as each project's PROGRESS states them and its branch shows
-them; `done` means committed on the branch with its gate green, and the data
-output has its own table above. Nothing is pushed, tagged or merged. The
-author's items are left out of the cells: the history rewrite (phase 1),
-GitHub settings (rulesets, private vulnerability reporting, default
-branches), root-owned files, the licence and CLA text, tags, pushes and
-merges (DEV-3.3).
+This is the early adoption snapshot, before the final integration fixes and
+pushes, not the current completion or publication status. The branch audit
+of 2026-10-28 is in [PROGRESS](../docs/PROGRESS.md#project-evidence-on-2026-10-28):
+Hydrograf's quality tooling and producer migration, Archiwista's English
+documentation and message catalog, and Kartograf's message catalog have
+progressed beyond the cells below. `hydrolog.testing` is implemented on
+the routing branches. Publication does not close merges, releases, CLA,
+GitHub settings or the history rewrite.
 
 | Project | Branch | Phase 2 | Phase 3 | Phase 4 |
 |---|---|---|---|---|

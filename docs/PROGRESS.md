@@ -1,5 +1,10 @@
 # Progress
 
+Audited on 2026-10-28: local branches, worktrees, recent commits, manifests,
+project progress documents and `git ls-remote --heads --tags origin` (tags
+checked for Nogat). No tests or gates were run; earlier gate results below
+are historical evidence, not verification of the current heads.
+
 ## Status
 
 | Component | State | Note |
@@ -12,27 +17,49 @@
 | Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
-| Integration dry run | done 2026-10-25 | the six heads in one environment: suites, four cross-tool flows, eight failures with their owners and, since the coordinator's decisions (ECO-053: supported range of a pinned producer, tests found from the test file, `<package>.testing`), their follow-ups (`docs/plans/2026-10-25-integration-dry-run.md`); the check of plan step 7 repeats once Kartograf's step 2 is complete |
-| Final integration run | done 2026-10-25, fixed | the eight heads in one environment, each member's own gate and eight cross-tool flows; F1 to F8 with their owners and fixing commits, every one fixed but F6, the author's history rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the fixed producer heads (Kartograf `c31ca04c`, IMGWTools `6bd35a4`), each with its full gate (Next 3 of that plan). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) are a known incompatible pair, which `deps` reports as a `range_conflict`; a repeat runs them apart |
+| Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
+| Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits; all but F6 (the author's history rewrite) are fixed and pushed (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned and pushed, with their gates recorded (Next 3 of that plan). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (IMGWTools after the rename of `master`) |
 | `nogat` package (HUB §7) | planned | |
-| Adoption in the projects | in progress | phases 2 to 4 on the projects' branches, table at the end of ADOPTION_PLAN; data output: IMGWTools done, Kartograf in progress, Retman half done, Hydraulik done on its branch, Archiwista waits; nothing is pushed, so Retman's pin of IMGWTools is a local commit (plan step 7) |
+| Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
+
+### Project evidence on 2026-10-28
+
+Heads below were compared with `origin`; a topic branch being published does
+not mean it is merged or released. Sources are each branch's
+`docs/PROGRESS.md`, recent commits and dependency manifests.
+
+| Project | Audited branch and head | Progress and remaining work |
+|---|---|---|
+| Nogat | `feature/data-output`, `2ccea34` before this audit | Latest commit adds the GUI visual-identity backlog. Standard 2.1 remains off `main`; `origin` has no tags. Contribution files and v1 template replacement remain open |
+| Kartograf | `feature/data-output`, `745e8b18` | Plain mode is implemented at library and command-layer level; its own Next 4 still leaves a real-CLI subprocess smoke and plain-mode prose open. Later commits add `store_state`, shared task arguments for `project add`, project-lock reasons, report-cache reuse and PL-2000 sheet outlines. Message-catalog migration is closed; `kartograf mcp` and domain JSON Schemas remain open |
+| IMGWTools | `feature/data-output`, `e28fbcd` | Data-output migration, MCP stdout fix, `parse_command`/`format_command` and catalog examples are recorded as done. Live plain-mode smoke, English documentation and release work remain open |
+| Hydrolog | `feature/routing-schematic`, `5fa22b3` (routing worktree) | `hydrolog.testing` exists (introduced at `0719c41`); network objects, rainfall/runoff and SVG schematics are implemented on stacked routing branches. The main checkout remains at `chore/nogat-2.1`, `d4f7282`; inspecting that checkout alone misses this work. Merge, CLA, notebook translations and release remain open |
+| Retman | `feature/kartograf-data-output`, `cc6d1ee` | Both producer migrations are done on the branch. Manifest pins Kartograf `c31ca04c` and IMGWTools `6bd35a4`, not their latest heads. The Status table's older pins and “nothing is pushed” statement are stale; Next 2 has the matching pins. Documentation translations and the evaluation on the 630-command set remain open |
+| Archiwista | `feature/kartograf-data-output`, `b7775bb`; `feature/v0.4-team`, `815c8b2`; `feature/v0.4-review`, `8118c33` | Data output, English documentation and the message catalog are done on the branches. v0.3 actions and station comparison (I8, `b7775bb`) progressed beyond the integration baseline. The data-output manifest now pins Kartograf `745e8b18`, but IMGWTools stays at `6bd35a4`. v0.4 team/shared/review work is separate; D7 refusal/sign-in auditing is done at `815c8b2`, not the whole security checklist or T12 |
+| Hydrograf | `feature/producer-heads`, `9dfa3a8` | Producer migrations, quality tooling and contribution files are implemented; CLA, translation/REST gaps and history work remain open. Pins remain Kartograf `c31ca04c`, IMGWTools `6bd35a4`, Hydrolog `5fa22b3`; `affine<3` is retained. The checkout is on older `feature/kartograf-wykorzystanie`, `bc0b438`; the running Docker image is not evidence of the newer branch being deployed |
+| Hydraulik | `feature/sfincs-swmm`, `91559e0` | Extracted SFINCS/SWMM implementation and Hydrolog hand-off are committed; pins are Hydrolog `5fa22b3` and IMGWTools `6bd35a4`. Contract tests using `hydrolog.testing` are present, not run in this audit. The old claim that Kartograf has no plain mode is stale; the live terrain flow still needs verification. The older uncommitted PoC and documents stay local by the author's choice in this audit |
+
+DEV-10.6 follow-up: `hydrolog.testing` is no longer missing, but the Nogat
+registry still lacks `hydrolog-testing` and its file-exchange edges.
+`kartograf.testing` already builds a GeoTIFF as part of its fixture store;
+`imgwtools.testing` exports store fixtures, not a dedicated PMAXTP builder.
+Do not treat the remaining file-contract work as uniformly absent or done.
 
 ## Next
 
-1. Data output in the projects, following `docs/plans/2026-10-24-data-output.md`
-   (each project in its own session, DEV-3.4): Kartograf's plain mode and its
-   documents, then Retman's Kartograf calls and Archiwista, then the
-   integration check (record it in the plan's Results; the dry run of
-   2026-10-25 names what fails and who owns it) and the first release
-   set. DEV-10.6 now falls due for Hydrolog (`hydrolog.testing`: Hydraulik
-   reads its hydrograph tables), and for the files the new `file` edges read
-   (the PMAXTP document of IMGWTools, the GeoTIFFs of Kartograf). When a tool
-   renames a command, change its `routes` and run `agents` (CLAUDE.md).
-2. Repeat the final integration run for the members that changed since it
-   (Kartograf, IMGWTools and the four re-pinned consumers), with Hydrograf and
-   Archiwista apart and the two flows of F2, and record it in the Results of
-   the data-output plan (`docs/plans/2026-10-25-final-integration.md`, Next 3).
+1. Close the remaining data-output documentation and CLI smoke in Kartograf,
+   the live plain-mode smoke in IMGWTools, and the file-contract/registry
+   follow-ups above (each project in its own session, DEV-3.4).
+   Reconcile consumers' stale progress text with their manifests; newer
+   producer commits do not automatically replace reviewed pins. Prepare
+   the first release set only after the remaining integration work.
+   When a tool renames a command, change its `routes` and run `agents`
+   (CLAUDE.md).
+2. Repeat the final integration run at explicitly recorded heads, including
+   the changes after 2026-10-25 in Kartograf, IMGWTools and Archiwista,
+   with Hydrograf and Archiwista apart and the two flows of F2. Record the
+   outcome in the data-output plan; no repeat was performed in this audit.
 3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
 4. Prepare a coherent visual identity for Hydrograf, Archiwista and every
    other ecosystem tool that has or will have a GUI (user request, 2026-10-28).
@@ -41,6 +68,12 @@
 
 ## Open questions
 
+- F6 of the final integration run remains open: the author owns the history
+  rewrite of Hydrograf's `develop` and IMGWTools. The recorded Hydrograf gate
+  uses `GATE_COMMIT_RANGE=develop..HEAD`; IMGWTools' commit step checks only
+  one commit. Passing gates do not close this item.
+- Hydrograf must lift its `affine<3` cap when pyflwdir 0.5.13 permits it
+  (ADR-062); until then keep it and Archiwista in separate environments.
 - Hydraulik's code is committed on `feature/sfincs-swmm` (worktree
   `Hydraulik-sfincs`, not merged), and its registry entry lists that branch's
   `pyproject.toml`, which the `Hydraulik` checkout on `develop` lacks until the
