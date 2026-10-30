@@ -46,6 +46,23 @@ registry still lacks `hydrolog-testing` and its file-exchange edges.
 `imgwtools.testing` exports store fixtures, not a dedicated PMAXTP builder.
 Do not treat the remaining file-contract work as uniformly absent or done.
 
+### Changes on 2026-10-29 and 2026-10-30
+
+These rows supersede the Archiwista and Hydrograf rows above where they
+differ. Gate results named here were run in this session.
+
+| Project | Branch and head | Change |
+|---|---|---|
+| Archiwista | `feature/v0.4-team`, `df7e71e`, pushed | Plan v0.4 complete: T12 (three-person acceptance, every C9 route called by each role against the matrix, ASVS checklist, LAN runbook) and review defects D6 and D10. Full gate green on `54cded3` (2556 passed, coverage 93.53%) after four fixes it found (`c8d4b5e`, `bbe223d`, `96ddda8`, `54cded3`; the last a real Esc race in the web shell). Decided by the author's delegated approval: the five checklist deviations are accepted for LAN use; v0.3 and v0.4 are released separately, v0.3 first, after the first release set. Open: the author's three-computer run of the runbook. Git: `feature/v0.4-review` and `feature/v0.4-shared` deleted locally (both contained in `v0.4-team`, still on `origin`), their worktree removed, every branch tracks its own `origin` branch, `feat/mockup` pushed as a backup |
+| Hydrograf | `feature/logowanie-testow`, `072f9b1`, not pushed | Request logging and rotation, nginx bound to loopback, the tester guide; the test service runs this branch (Kartograf 0.7.0, IMGWTools 2.1.0, Hydrolog 0.6.3), not `feature/producer-heads`. Merging it into `producer-heads` conflicts in `README.md`, `backend/api/main.py`, `docs/CHANGELOG.md` and `docs/PROGRESS.md`. A Kaczawa bootstrap (183M cells) was OOM-killed twice; a smaller area (66M cells) succeeded and is served. Memory plan F1–F7 (~19 GB → ~9 GB, results identical) and clipping of shown data to the analysis boundary (high priority) are backlog items in its `docs/PROGRESS.md` and `docs/TECHNICAL_DEBT.md`. Two of its unpushed commits (`b195401`, `29e9f66`) hold infrastructure details and must be rewritten before a push |
+
+Git hygiene audit (2026-10-29, after `git fetch`): Hydraulik has uncommitted
+documents on `develop` and an unpushed PoC worktree branch; IMGWTools has two
+stashes (one is REST C5 work in progress) and `fix/archiwista-compat`, most
+likely superseded by `fix/archiwista-compat-2`; Hydrolog's
+`feature/v1-catalog-mcp-hsg` is merged and can be deleted; local
+`backup/*` branches in Hydrograf and IMGWTools have no `origin` copy.
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,
@@ -64,7 +81,12 @@ Do not treat the remaining file-contract work as uniformly absent or done.
 4. Prepare a coherent visual identity for Hydrograf, Archiwista and every
    other ecosystem tool that has or will have a GUI (user request, 2026-10-28).
    Define shared visual guidelines and reusable design assets, with room for
-   each tool's identity. Backlog only; design and implementation have not started.
+   each tool's identity. Backlog only: on 2026-10-29 no design work existed in
+   any repository or on this machine; start with a plan in `docs/plans/`
+   linked to `2026-10-20-unified-gui.md`.
+5. Release order for Archiwista (author's decision, 2026-10-29): v0.3, then
+   v0.4, as separate releases inside the first release set; after each, bump
+   its version here and refresh its row.
 
 ## Open questions
 
