@@ -85,6 +85,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   `imgw-project/1` from Kartograf, IMGWTools and the edges of Retman and
   Archiwista; `kartograf.testing` no longer builds projects; the store read
   APIs name `command_for_file` and `command_for_version`.
+- Archiwista's route `archiwista project-export`: the input data of a
+  project's set as flat category folders or a ZIP (ECO-054).
 
 ### Changed
 

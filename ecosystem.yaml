@@ -422,6 +422,8 @@ projects:
         command: archiwista serve
       - task: Search the file catalog of a Kartograf store from a script
         command: archiwista search
+      - task: Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP
+        command: archiwista project-export
     data_sources: [gugik, osm]
     provides:
       - id: archiwista-rest

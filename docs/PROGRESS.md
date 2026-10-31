@@ -90,8 +90,16 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    release set (D3, REL-5.4).
 6. Projects move to Archiwista (ECO-054): plan
    `docs/plans/2026-10-31-archiwista-projects.md`, approved 2026-10-31 with
-   D1 to D7 as recommended; its Results record the steps done in each
-   repository.
+   D1 to D7 as recommended; steps 1 to 5 are done and pushed on
+   `feature/archiwista-projects` in Kartograf, IMGWTools, Retman and
+   Archiwista (the plan's Results). Open: the release (step 6); the branches
+   are not merged. Follow-ups seen on the way: Kartograf's LAZ sidecars carry
+   no survey work, so Archiwista's "pobrane" badge never matches LAZ (a
+   `request` issue for Kartograf, not filed: no `gh` on this machine);
+   Archiwista's "U źródła" offers only nmt, nmpt and laz, so BDOT10k and
+   orthophoto are downloaded by pasting a Kartograf command; Archiwista's
+   `test_doctor_refused_store_shows_the_fix_the_producer_gave` fails while
+   port 8090 is taken (the test is not hermetic).
 
 ## Open questions
 

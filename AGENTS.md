@@ -51,6 +51,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Plan a data download or export written in Polish, then run it once confirmed | [Retman][retman] | `retman plan run` |
 | Browse a Kartograf store on a map in the browser | [Archiwista][archiwista] | `archiwista serve` |
 | Search the file catalog of a Kartograf store from a script | [Archiwista][archiwista] | `archiwista search` |
+| Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
 
 [kartograf]: https://raw.githubusercontent.com/Daldek/Kartograf/main/AGENTS.md
 [imgwtools]: https://raw.githubusercontent.com/Daldek/IMGWTools/main/AGENTS.md
