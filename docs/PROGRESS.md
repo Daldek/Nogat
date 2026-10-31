@@ -87,6 +87,12 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
 5. Release order for Archiwista (author's decision, 2026-10-29): v0.3, then
    v0.4, as separate releases inside the first release set; after each, bump
    its version here and refresh its row.
+6. Projects move to Archiwista (author's request, 2026-10-31): plan
+   `docs/plans/2026-10-31-archiwista-projects.md`, proposed, on
+   `plan/archiwista-projects`; it waits for the author's approval and
+   decisions D1 to D7. Until then nothing is removed from Kartograf or
+   IMGWTools, and their tags wait for the decision, since removing projects
+   after them would break released versions.
 
 ## Open questions
 
