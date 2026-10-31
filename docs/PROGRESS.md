@@ -84,15 +84,14 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    each tool's identity. Backlog only: on 2026-10-29 no design work existed in
    any repository or on this machine; start with a plan in `docs/plans/`
    linked to `2026-10-20-unified-gui.md`.
-5. Release order for Archiwista (author's decision, 2026-10-29): v0.3, then
-   v0.4, as separate releases inside the first release set; after each, bump
-   its version here and refresh its row.
-6. Projects move to Archiwista (author's request, 2026-10-31): plan
-   `docs/plans/2026-10-31-archiwista-projects.md`, proposed, on
-   `plan/archiwista-projects`; it waits for the author's approval and
-   decisions D1 to D7. Until then nothing is removed from Kartograf or
-   IMGWTools, and their tags wait for the decision, since removing projects
-   after them would break released versions.
+5. Archiwista's release (decision D2 of the projects plan, 2026-10-31,
+   replacing the separate v0.3 and v0.4 of 2026-10-29): one release holding
+   v0.3, v0.4 and the projects, after step 5 of that plan, outside the first
+   release set (D3, REL-5.4).
+6. Projects move to Archiwista (ECO-054): plan
+   `docs/plans/2026-10-31-archiwista-projects.md`, approved 2026-10-31 with
+   D1 to D7 as recommended; its Results record the steps done in each
+   repository.
 
 ## Open questions
 

@@ -115,6 +115,8 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - A tool whose CLI lines other projects store or pass on exposes
     `parse_command` and `format_command`; catalog example calls are canonical
     lines (AGI-2.1).
+  - Projects belong to Archiwista; a `project` command is no longer an
+    example of a store-only command (DEV-19.18, ECO-054).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

@@ -675,11 +675,10 @@ meaning; a tool brings its sidecar in line by adding optional fields within
 campaigns (`--all-campaigns`) and any update mode other than the default;
 with `output_dir` each is a `validation_error` that names `--root`.
 
-**DEV-19.18** A command whose input is the store (a `project` command, or a
-command that builds derived data from stored versions) is store-only and says
-so in its catalog entry. Every other writing command supports both modes; one
-that needs inputs fetches them to staging and in plain mode writes only its
-result.
+**DEV-19.18** A command whose input is the store (a command that builds
+derived data from stored versions) is store-only and says so in its catalog
+entry. Every other writing command supports both modes; one that needs inputs
+fetches them to staging and in plain mode writes only its result.
 
 **DEV-19.19** The domain result of a writing command lists `files[]`:
 `{path, size_bytes, sha256, status}`, with `sha256` computed while the file is

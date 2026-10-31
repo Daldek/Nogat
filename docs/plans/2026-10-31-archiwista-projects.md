@@ -1,7 +1,9 @@
 # Plan: projects belong to Archiwista
 
-Status: proposed. Requirements: HUB-5.2, DEV-17.4, DEV-19.18, REL-5.3,
-REL-5.4, ECO-020. Changes the members of the
+Approved: 2026-10-31
+
+Requirements: HUB-5.2, DEV-17.4, DEV-19.18, REL-5.3, REL-5.4, ECO-020,
+ECO-054. Changes the members of the
 [first release set](2026-10-20-first-release-set.md) before their tags.
 
 ## Goal
@@ -53,9 +55,8 @@ Hydrolog, Hydrograf and Hydraulik use neither (checked in their code).
 
 ## Decision
 
-Option B, on the author's request of 2026-10-31. When the plan is approved, a
-new ECO decision in `standards/DECISIONS.md` (the next free number) records it
-with this plan's reasons.
+Option B, on the author's request of 2026-10-31, recorded as ECO-054 in
+`standards/DECISIONS.md`.
 
 **What a producer keeps.** Download and check (`run_command`,
 `check_command`, the plan document), the store and its read API, the sidecar,
@@ -183,9 +184,12 @@ no aliases or deprecated paths (ECO-020). File references are those of
 6. **Release** (Nogat, by the first-release-set plan). A candidate with the
    new heads, the integration run repeated, then the tags, producers first.
 
-## Open decisions for the author
+## Decisions of the author
 
-| ID | Question | Options | Recommended |
+Settled on 2026-10-31: the author left them to the session, which took the
+recommended option of each.
+
+| ID | Question | Options | Chosen |
 |---|---|---|---|
 | D1 | Where the project lives | a) `archiwista-project.json` in the project directory, access in the state database; b) everything in the state database | a): it travels with the directory and the share, survives a lost state database, and other tools can read it |
 | D2 | Archiwista's releases | a) one release after step 5 holding v0.3, v0.4 and the projects; b) v0.3 and v0.4 separately as decided on 2026-10-29, the project work backported to v0.3 | a): v0.3's project actions (A7, A8, A13) are rewritten by step 5, and v0.4 is built on top of v0.3 |
@@ -207,4 +211,6 @@ no aliases or deprecated paths (ECO-020). File references are those of
 
 ## Results
 
-None yet.
+| Step | Repository and branch | Result |
+|---|---|---|
+| 1 | Nogat, `plan/archiwista-projects` | ECO-054; DEV-19.18 without the `project` example; registry: `archiwista-project/1` added, `kartograf-project/1` and `imgw-project/1` removed with their edges, `command_for_file` and `command_for_version` in the store read APIs; map and AGENTS.md regenerated; first-release set without Archiwista (D3) |

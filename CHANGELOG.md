@@ -74,12 +74,17 @@ the standard are listed in [standards/README.md](standards/README.md).
   and `prereleases=True` (REL-5.6); tests find repository files from the test
   file, not through the installed package (REL-2.5); DEV-10.6 and REL-6.5
   name `<package>.testing` as the producers' module in the wheel.
-- `docs/plans/2026-10-31-archiwista-projects.md` (proposed): projects leave
-  Kartograf and IMGWTools before their first tags and belong to Archiwista
-  alone (`archiwista-project/1`: area, pins of any producer, activity,
-  exports); each producer keeps download, check and the store and gains the
-  command of a stored version; steps producers first, open decisions D1 to D7
-  (HUB-5.2, DEV-17.4).
+- `docs/plans/2026-10-31-archiwista-projects.md` (approved 2026-10-31):
+  projects leave Kartograf and IMGWTools before their first tags and belong
+  to Archiwista alone (`archiwista-project/1`: area, pins of any producer,
+  activity, exports); each producer keeps download, check and the store and
+  gains the command of a stored version; steps producers first, decisions D1
+  to D7 settled as recommended (HUB-5.2, DEV-17.4).
+- ECO-054: projects belong to Archiwista. The registry lists
+  `archiwista-project/1` and drops `kartograf-project/1` and
+  `imgw-project/1` from Kartograf, IMGWTools and the edges of Retman and
+  Archiwista; `kartograf.testing` no longer builds projects; the store read
+  APIs name `command_for_file` and `command_for_version`.
 
 ### Changed
 

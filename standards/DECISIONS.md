@@ -63,6 +63,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
+| [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | accepted | 2026-10-31 |
 
 ---
 
@@ -957,3 +958,36 @@ producer by commit, change their range before their next pin; Kartograf and
 Archiwista change the tests that find their repository through the package;
 Archiwista, Retman, Hydraulik and Hydrolog move to the producers' `testing`
 modules (the owners' follow-ups are listed in the dry-run plan).
+
+## ECO-054 Projects belong to Archiwista
+
+**Decision.** A project, the record of the work on one task (its area, the
+store versions it pins, its activity and its exports), is kept only by
+Archiwista, in `archiwista-project.json` (`archiwista-project/1`) in the
+project's directory. Kartograf and IMGWTools download, check and keep the
+versioned store; they have no project manifest, command, MCP tool or library
+function, and each gives the command of a stored version from its metadata
+(Kartograf `command_for_file`, IMGWTools `command_for_version`), refusing
+with `unsupported` where the metadata does not rebuild the call. Plan:
+`docs/plans/2026-10-31-archiwista-projects.md` (option B).
+
+**Why.** The notion was split in three: `kartograf-project/1`,
+`imgw-project/1` and Archiwista's projects with access, own data and
+snapshots. In the producers' model a pin exists only inside a task and only
+after a full run of its command, so data already in the store could not be
+pinned without asking the source, and a project had no area, activity or
+export. Every new project feature crossed three repositories. Neither
+producer had released projects, so removing them breaks no user (ECO-020).
+
+**Rejected.** Keeping the producers' manifests under one Archiwista view (the
+split stays and a version is pinned only through a producer's task). A shared
+project library imported by every tool (a new dependency between all
+projects for a notion only Archiwista presents). Releasing the producers'
+projects now and moving them later (the release would publish an interface
+only to break it in the next one).
+
+**Consequence.** DEV-19.18 no longer names a `project` command. The registry
+drops `kartograf-project/1` and `imgw-project/1` and lists
+`archiwista-project/1`; Retman drops its IMGWTools project module; the first
+release set tags Kartograf, IMGWTools, Hydrolog and Retman without waiting
+for Archiwista, which follows in its own session (REL-5.4).

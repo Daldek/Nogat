@@ -94,10 +94,7 @@ projects:
         summary: "<file>.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version."
       - id: kartograf-store/1
         kind: store
-        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root <data_dir>/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root).
-      - id: kartograf-project/1
-        kind: manifest
-        summary: kartograf-project.json pinning store versions by SHA-256, with the store root.
+        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root <data_dir>/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root).
       - id: kartograf-download/1
         kind: document
         summary: "Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections."
@@ -121,7 +118,7 @@ projects:
         summary: Error document with code, hint and exit code, the last line of stderr.
       - id: kartograf-testing
         kind: library
-        summary: kartograf.testing builds stores, projects and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
+        summary: kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
     depends_on: []
 
   - name: IMGWTools
@@ -156,16 +153,13 @@ projects:
     provides:
       - id: imgw-store/1
         kind: store
-        summary: Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series.
+        summary: Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series, command_for_version.
       - id: imgw-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
       - id: imgw-series/1
         kind: dataset
         summary: Parquet series per station with series.json index (periods, year type, units, coverage).
-      - id: imgw-project/1
-        kind: manifest
-        summary: imgw-project.json pinning store versions by SHA-256 or content hash.
       - id: imgw-plan/1
         kind: document
         summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
@@ -400,7 +394,7 @@ projects:
         kind: optional
         status: active
         via: [library]
-        exchange: [imgw-command-list/1, imgw-commands/1, imgw-result/1, imgw-plan/1, imgw-project/1, imgw-store/1, imgw-archives, imgw-series-csv, imgw-testing]
+        exchange: [imgw-command-list/1, imgw-commands/1, imgw-result/1, imgw-plan/1, imgw-store/1, imgw-archives, imgw-series-csv, imgw-testing]
       - project: Hydrolog
         kind: optional
         status: planned
@@ -436,17 +430,20 @@ projects:
       - id: archiwista-sources
         kind: contract
         summary: Source adapter protocol registered through the archiwista.sources entry point.
+      - id: archiwista-project/1
+        kind: manifest
+        summary: archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054).
     depends_on:
       - project: Kartograf
         kind: runtime
         status: active
         via: [library, store]
-        exchange: [kartograf-store/1, kartograf-meta/1, kartograf-project/1, kartograf-plan/1]
-        uses: [list_segments, list_partitions, iter_store, read_sidecar, describe_segment, file_footprint, link_target, pinned_transform, open_project, get_project_status]
+        exchange: [kartograf-store/1, kartograf-meta/1, kartograf-plan/1]
+        uses: [list_segments, list_partitions, iter_store, read_sidecar, describe_segment, file_footprint, link_target, pinned_transform, command_for_file]
         note: Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
       - project: IMGWTools
         kind: optional
         status: planned
         via: [library, store]
-        exchange: [imgw-store/1, imgw-meta/1, imgw-series/1, imgw-project/1, imgw-observation/1, chmi-json/1]
+        exchange: [imgw-store/1, imgw-meta/1, imgw-series/1, imgw-observation/1, chmi-json/1]
         note: Extra archiwista[imgw] (IMGW-1..14); ČHMÚ (IMGW-15..19).

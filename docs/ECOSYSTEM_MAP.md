@@ -87,11 +87,11 @@ flowchart LR
 | Hydraulik | IMGWTools | optional | active | library, file | `imgw-pmaxtp`, `imgw-result/1` |
 | Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
-| Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-project/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
+| Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
 | Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
-| Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-project/1`, `kartograf-plan/1` |
-| Archiwista | IMGWTools | optional | planned | library, store | `imgw-store/1`, `imgw-meta/1`, `imgw-series/1`, `imgw-project/1`, `imgw-observation/1`, `chmi-json/1` |
+| Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
+| Archiwista | IMGWTools | optional | planned | library, store | `imgw-store/1`, `imgw-meta/1`, `imgw-series/1`, `imgw-observation/1`, `chmi-json/1` |
 
 ### Details
 
@@ -107,7 +107,7 @@ flowchart LR
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
 - **Retman → Hydrolog**: Retman PRD roadmap.
 - **Retman → Hydrograf**: Retman PRD roadmap.
-- **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `open_project`, `get_project_status`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
+- **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
 - **Archiwista → IMGWTools**: Extra archiwista[imgw] (IMGW-1..14); ČHMÚ (IMGW-15..19).
 
 ## What each project provides
@@ -118,8 +118,7 @@ flowchart LR
 |---|---|---|---|
 | `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions. |
 | `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
-| `kartograf-store/1` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint (keyword root). |
-| `kartograf-project/1` | manifest | Archiwista | kartograf-project.json pinning store versions by SHA-256, with the store root. |
+| `kartograf-store/1` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root). |
 | `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
@@ -127,16 +126,15 @@ flowchart LR
 | `kartograf-commands/1` | catalog | Hydraulik, Retman | One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command. |
 | `kartograf-result/1` | document | Hydraulik, Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
-| `kartograf-testing` | library | — | kartograf.testing builds stores, projects and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
+| `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 
 ### IMGWTools
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series. |
+| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series, command_for_version. |
 | `imgw-meta/1` | sidecar | Archiwista (planned) | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
 | `imgw-series/1` | dataset | Archiwista (planned) | Parquet series per station with series.json index (periods, year type, units, coverage). |
-| `imgw-project/1` | manifest | Retman, Archiwista (planned) | imgw-project.json pinning store versions by SHA-256 or content hash. |
 | `imgw-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `imgw-observation/1` | document | Archiwista (planned) | History of published HTTP signals per archive file. |
 | `chmi-json/1` | document | Archiwista (planned) | Canonical JSON form of ČHMÚ files used for content-based pins. |
@@ -180,6 +178,7 @@ flowchart LR
 |---|---|---|---|
 | `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
+| `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
 
 ## External data sources
 
