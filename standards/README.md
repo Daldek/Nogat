@@ -117,6 +117,8 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     lines (AGI-2.1).
   - Projects belong to Archiwista; a `project` command is no longer an
     example of a store-only command (DEV-19.18, ECO-054).
+  - Every GUI follows the visual identity in Nogat `design/`: tokens, both
+    themes, the project's mark, Archiwista's shell (DEV-15.3, ECO-055).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a

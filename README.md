@@ -13,7 +13,9 @@ Nogat holds:
   [`docs/ECOSYSTEM_MAP.md`](docs/ECOSYSTEM_MAP.md);
 - the routing table for agents, task to tool to entry command with a link to
   each tool's guide, generated from the registry: [`AGENTS.md`](AGENTS.md);
-- cross-project plans: [`docs/plans/`](docs/plans/).
+- cross-project plans: [`docs/plans/`](docs/plans/);
+- the visual identity of every GUI (tokens, marks, guidelines):
+  [`design/`](design/README.md).
 
 Nogat will also be the `nogat` package that installs every tool with one
 command (`uv tool install nogat`, [HUB §7](standards/ECOSYSTEM_HUB.md));

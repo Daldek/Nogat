@@ -427,6 +427,13 @@ No build step is required; vendored libraries keep their licence files.
 **DEV-15.2** UI text in Polish through translation resources (DEV-2.3);
 `data-*` attributes and CSS classes in English.
 
+**DEV-15.3** A GUI follows Nogat's visual identity in
+[design/](../design/README.md): a copy of `tokens.css` that names the Nogat
+commit it came from and no colour, font or size outside its tokens, the light
+and the dark theme, the project's mark as favicon and in the top bar, and the
+shell of the guidelines (top bar, navigation rail, resizable side panel).
+*Why:* the GUIs serve one user as one family of tools (ECO-055).
+
 ---
 
 ## 16. Licence and contributions

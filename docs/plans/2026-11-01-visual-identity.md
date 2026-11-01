@@ -1,6 +1,6 @@
 # Plan: one visual identity for the ecosystem's GUIs
 
-Approved: pending (the author's review of the identity in `design/`)
+Approved: 2026-11-01 (the author, after reviewing the specimen and the marks)
 
 Requirements: HUB-5.2, DEV-17.4. Item 4 of Next in
 [PROGRESS](../PROGRESS.md#next); the look of the
@@ -9,9 +9,10 @@ does not decide.
 
 ## Goal
 
-Every tool that has or will have a GUI (Archiwista and Hydrograf today)
-looks like one family: the same colours, type, spacing, controls and marks,
-in a light and a dark theme, with room for each tool's own accent and glyph.
+Every tool that has or will have a GUI (Archiwista, Hydrograf and the web GUI
+of IMGWTools today) looks like one family: the same colours, type, spacing,
+controls, marks and layout, in a light and a dark theme, with room for each
+tool's own accent and glyph.
 The brand comes from the author's site debever.pl; the working interface
 comes from Archiwista, the most complete GUI of the ecosystem.
 
@@ -51,24 +52,38 @@ Option 3, in Nogat's `design/`:
   every other tool has one family wave and its own glyph.
 - One accent pair per project (`--tool-<name>`), for the mark, the tool name
   and a header rule only; never for status.
+- The author chose the glyphs on 2026-11-01: Hydrolog the hydrograph,
+  Hydrograf a river network with cross sections (HEC-RAS's geometry editor),
+  IMGWTools a staff gauge.
+- Layout: Archiwista's shell (top bar, navigation rail, content with a
+  resizable side panel) for every GUI, Hydrograf's map included; floating
+  glass cards go.
+- The standard binds it: DEV-15.3 (profile `app`), ECO-055; the adoption rows
+  are in `standards/ADOPTION_PLAN.md`.
 - `design/README.md` holds the guidelines; `design/specimen.html` previews
   them; `tests/contract/test_design.py` checks WCAG 2.2 AA contrast of the
   promised pairs in both themes and one mark and accent per project of
-  `ecosystem.yaml`.
+  `ecosystem.yaml`; `design/mockups/` shows a GUI redrawn before its
+  project adopts it.
 
 ## Steps
 
 1. Nogat: tokens, marks, guidelines, specimen and contract tests
    (`feature/visual-identity`). Done 2026-11-01, see Results.
 2. The author reviews the identity (the specimen in both themes) and
-   approves this plan or asks for changes.
-3. Archiwista adopts it in its own session and plan: copy `tokens.css` with
+   approves this plan. Done 2026-11-01, with three marks redrawn.
+3. DEV-15.3 and ECO-055 in the standard; the adoption rows. Done 2026-11-01.
+4. A mockup of Hydrograf in the identity and Archiwista's shell
+   (`design/mockups/hydrograf/`), for the author's review before Hydrograf's
+   own plan.
+5. Archiwista adopts it in its own session and plan: copy `tokens.css` with
    the Nogat commit, map `--panel`, `--line`, `--text-*`, `--accent*` and
    `--local` to the tokens, add the dark theme, replace the favicon; its
    e2e tests cover the screens.
-4. Hydrograf adopts it the same way; the glass panels over the map stay a
-   Hydrograf component, drawn with the tokens.
-5. Any later GUI starts from the tokens; a new project in `ecosystem.yaml`
+6. Hydrograf adopts it from the approved mockup: the shell around the map,
+   the tokens instead of `glass.css`, the dark theme, its mark.
+7. IMGWTools moves its web GUI templates to the tokens and the shell.
+8. Any later GUI starts from the tokens; a new project in `ecosystem.yaml`
    needs its mark and accent pair (the contract test fails without them).
 
 ## Risks

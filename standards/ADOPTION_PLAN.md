@@ -120,6 +120,18 @@ producers' development heads have it.
 | Hydrolog | documents only: the Kartograf examples in `docs/INTEGRATION.md` and the agent guide use `--output-dir` and `files[].path` (DEV-19.1, DEV-19.19) | done on `chore/nogat-2.1`; the names are confirmed when the producers' releases land |
 | Hydrograf, Hydraulik | after the first release set: calls of `DownloadManager` and `kartograf download` follow the new names (DEV-19.1) | Hydraulik is done ahead of the set on `feature/sfincs-swmm` (`terrain download` runs `kartograf` with `--output-dir`; not yet run against the real Kartograf); Hydrograf follows the first release set |
 
+### Visual identity (DEV-15.3)
+
+Detail: [visual identity](../docs/plans/2026-11-01-visual-identity.md). Each
+GUI adopts it in its own session and plan, after the identity in Nogat
+`design/` is approved.
+
+| Project | Items |
+|---|---|
+| Archiwista | map `--panel`, `--line`, `--text-*`, `--accent*` and `--local` to the tokens; the dark theme; its mark as favicon and in the top bar; the shell is already the reference |
+| Hydrograf | the shell of Archiwista around the map (top bar, rail, resizable side panel) instead of floating glass cards; the tokens instead of `glass.css` colours; the dark theme; its mark; `admin.html` the same |
+| IMGWTools | the templates of the web GUI (`src/imgwtools/web/`) on the tokens and the shell; its mark |
+
 ## Phase 5: releases as git tags
 
 Detail: [first release set](../docs/plans/2026-10-20-first-release-set.md).

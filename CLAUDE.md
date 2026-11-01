@@ -49,9 +49,10 @@ scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 standards/             the standard; ci/ holds the templates projects copy
+design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent schemas, AGENTS.md and Nogat's own error documents
+tests/contract/        the agent schemas, AGENTS.md, Nogat's own error documents, design/
 ```
 
 ## Documentation map
@@ -63,6 +64,7 @@ tests/contract/        the agent schemas, AGENTS.md and Nogat's own error docume
 | Add or change a task of the routing table | `routes` of the project in `ecosystem.yaml` (HUB-2.9), then `uv run scripts/ecosystem.py agents`; the command must exist in the tool's `commands list` |
 | Change a CI template | `standards/ci/README.md` |
 | Plan cross-project work | `standards/ECOSYSTEM_HUB.md` §5, `docs/plans/` |
+| Change the visual identity or a GUI mockup | `design/README.md`, `docs/plans/2026-11-01-visual-identity.md`, ECO-055 |
 
 ## Session workflow
 

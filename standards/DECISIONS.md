@@ -64,6 +64,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | accepted | 2026-10-31 |
+| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
 
 ---
 
@@ -991,3 +992,25 @@ drops `kartograf-project/1` and `imgw-project/1` and lists
 `archiwista-project/1`; Retman drops its IMGWTools project module; the first
 release set tags Kartograf, IMGWTools, Hydrolog and Retman without waiting
 for Archiwista, which follows in its own session (REL-5.4).
+
+## ECO-055 One visual identity for every GUI
+
+**Decision.** Every GUI of the ecosystem (Archiwista, Hydrograf, the web GUI
+of IMGWTools and any later one) uses the identity in Nogat `design/`: shared
+tokens in one plain CSS file, light and dark, with the brand of debever.pl
+and the working interface of Archiwista; one mark and one accent pair per
+project; Archiwista's shell of top bar, navigation rail and resizable side
+panel (DEV-15.3). Plan: `docs/plans/2026-11-01-visual-identity.md`.
+
+**Why.** The same person moves between the GUIs; each looked unrelated
+(Archiwista indigo and dense, Hydrograf Apple-style glass, no shared mark),
+so every screen had to be learnt again.
+
+**Rejected.** Sharing only the marks (the screens stay unrelated). A shared
+CSS framework or component package (a build step in apps that are build-free
+under CSP `'self'`, and a dependency between apps).
+
+**Consequence.** Each GUI adopts the identity in its own session and plan;
+until then the gap is a deviation in its `CLAUDE.md` (DEV-1.2). A new project
+in `ecosystem.yaml` gets its mark and accent pair in `design/`; Nogat's
+contract test fails without them.
