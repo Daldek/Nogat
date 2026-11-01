@@ -168,10 +168,10 @@ App header: height `--header-height`, mark at 24 px plus the tool name in `--too
 - Nogat: the two waves of debever.pl's favicon.
 - Every other tool: one family wave at the bottom plus its glyph:
   - Archiwista: archive drawer
-  - Hydrograf: hydrograph
+  - Hydrograf: hydrographic network (river reaches joining, as in HEC-RAS's geometry editor)
   - Kartograf: folded map
-  - IMGWTools: cloud with rain
-  - Hydrolog: drop
+  - IMGWTools: staff gauge
+  - Hydrolog: hydrograph
   - Hydraulik: channel cross-section
   - Retman: boat with pennant
 - Use as favicon (`<link rel="icon" type="image/svg+xml" href="...">`) and in the header at 24 px.
