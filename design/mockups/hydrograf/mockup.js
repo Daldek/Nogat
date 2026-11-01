@@ -196,7 +196,6 @@
   };
   var modeButtons = { browse: $("#mode-browse"), watershed: $("#mode-watershed"), profile: $("#mode-profile") };
   var railMap = $("#rail-map");
-  var railProfile = $("#rail-profile");
   var mapWrap = $(".map-wrap");
 
   var ATTRIB = {
@@ -213,14 +212,6 @@
     });
   });
 
-  function setRail(item) {
-    [railMap, railProfile].forEach(function (a) {
-      var on = a === item;
-      a.classList.toggle("active", on);
-      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-    });
-  }
-
   function setMode(mode) {
     state.mode = mode;
     Object.keys(modeButtons).forEach(function (k) {
@@ -232,7 +223,6 @@
     $("#map-hint-text").textContent = HINTS[mode];
     mapWrap.dataset.mode = mode;
     $("#profile-drawer").hidden = mode !== "profile";
-    setRail(mode === "profile" ? railProfile : railMap);
 
     if (mode === "browse") closePanel("right");
     else if (mode === "watershed") openPanel("right");
@@ -243,7 +233,6 @@
     modeButtons[k].addEventListener("click", function () { setMode(k); });
   });
   railMap.addEventListener("click", function (e) { e.preventDefault(); setMode("watershed"); });
-  railProfile.addEventListener("click", function (e) { e.preventDefault(); setMode("profile"); });
   $("#profile-close").addEventListener("click", function () { setMode("watershed"); });
   $$('a[href="#"]').forEach(function (a) {
     a.addEventListener("click", function (e) { e.preventDefault(); });
