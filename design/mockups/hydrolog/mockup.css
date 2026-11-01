@@ -308,6 +308,7 @@ details.more .meta { margin-left: auto; color: var(--text-3); font-weight: var(-
   grid-row: 1;
   display: flex; flex-direction: column;
   min-width: 0; min-height: 0;
+  container-type: inline-size;
   background: var(--surface);
 }
 .view-panel.left { grid-column: 1; border-right: 1px solid var(--line); }
@@ -351,7 +352,7 @@ body.resizing { cursor: col-resize; user-select: none; }
 body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 
 /* ---------- Steps (collapsible sections, numbered as the chain of the calculation) ---------- */
-.steps { display: grid; gap: var(--space-2); }
+.steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
 .step { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
 .step > summary {
   display: flex; align-items: center; gap: 10px;
@@ -430,7 +431,7 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .view-bar .hint svg { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 .view-bar .end { margin-left: auto; display: flex; gap: var(--space-2); }
 .view-body { flex: 1; min-height: 0; overflow: auto; padding: var(--space-3); display: block; }
-.tab-pane { display: grid; gap: var(--space-3); }
+.tab-pane { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
 
 .card {
   min-width: 0;
@@ -543,10 +544,11 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
   margin: 0 0 var(--space-3);
   background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden;
 }
-.kpi { padding: var(--space-2) 10px; background: var(--surface); min-width: 0; }
+.kpi { padding: var(--space-2) 10px; background: var(--surface); min-width: 0; overflow: hidden; }
 .kpi .k { font-size: var(--text-xs); color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpi .v { font-size: var(--text-md); font-weight: var(--weight-bold); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kpi .u { font-size: var(--text-xs); color: var(--text-2); font-weight: var(--weight-regular); }
+@container (max-width: 380px) { .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .kpi.hi { background: var(--info-bg); }
 .kpi.hi .v { color: var(--info-ink); }
 
@@ -590,8 +592,11 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .b-f { fill: var(--loss-f); background: var(--loss-f); }
 .b-pe { fill: var(--rain-eff); background: var(--rain-eff); }
 
-.export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin: 0 0 var(--space-3); }
-.export-grid .btn { justify-content: flex-start; padding: 0 10px; font-size: var(--text-sm); }
+.export-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); margin: 0 0 var(--space-3); }
+.export-grid .btn {
+  justify-content: flex-start; height: auto; min-height: var(--control); padding: 4px 10px;
+  font-size: var(--text-sm); line-height: 1.2; text-align: left; white-space: normal;
+}
 .fmt {
   display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 18px; padding: 0 4px;
   border: 1px solid var(--line-2); border-radius: var(--radius-xs);
