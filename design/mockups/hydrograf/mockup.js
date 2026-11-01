@@ -199,6 +199,20 @@
   var railProfile = $("#rail-profile");
   var mapWrap = $(".map-wrap");
 
+  var ATTRIB = {
+    openfreemap: "OpenFreeMap © OpenMapTiles, dane © OpenStreetMap · NMT GUGiK",
+    "gugik-osm": "© OpenStreetMap, GUGiK · NMT GUGiK",
+    "esri-ortho": "Esri, Maxar, Earthstar Geographics · NMT GUGiK",
+    none: "NMT GUGiK"
+  };
+  document.querySelectorAll('input[name="basemap"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      if (!r.checked) return;
+      mapWrap.setAttribute("data-basemap", r.value);
+      $(".map-attrib").textContent = ATTRIB[r.value];
+    });
+  });
+
   function setRail(item) {
     [railMap, railProfile].forEach(function (a) {
       var on = a === item;

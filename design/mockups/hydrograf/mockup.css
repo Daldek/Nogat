@@ -262,6 +262,16 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .map-svg .t4 { fill: var(--nmt-4); }
 .map-svg .t5 { fill: var(--nmt-5); }
 .map-svg .nmt { opacity: 0.7; }
+.map-wrap[data-basemap="openfreemap"] .map-bg,
+.map-wrap[data-basemap="gugik-osm"] .map-bg { filter: grayscale(1); }
+.map-wrap[data-basemap="esri-ortho"] .map-bg { opacity: 0.9; }
+.map-wrap[data-basemap="esri-ortho"] .map-bg .t1 { fill: color-mix(in srgb, var(--accent-green) 55%, var(--text)); }
+.map-wrap[data-basemap="esri-ortho"] .map-bg .t2 { fill: color-mix(in srgb, var(--accent-green) 48%, var(--text)); }
+.map-wrap[data-basemap="esri-ortho"] .map-bg .t3 { fill: color-mix(in srgb, var(--accent-green) 40%, var(--text)); }
+.map-wrap[data-basemap="esri-ortho"] .map-bg .t4 { fill: color-mix(in srgb, var(--accent-green) 32%, var(--text)); }
+.map-wrap[data-basemap="esri-ortho"] .map-bg .t5 { fill: color-mix(in srgb, var(--accent-green) 25%, var(--text)); }
+.map-wrap[data-basemap="none"] { background: var(--surface-2); }
+.map-wrap[data-basemap="none"] .map-bg { visibility: hidden; }
 .map-svg .contour { fill: none; stroke: var(--text-3); stroke-width: 0.6; opacity: 0.35; }
 .map-svg .lake { fill: var(--water-fill); stroke: var(--water); stroke-width: 1; }
 .map-svg .river { fill: none; stroke: var(--water); stroke-linecap: round; stroke-linejoin: round; }
@@ -403,8 +413,10 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .chart .peak-dot { fill: var(--surface); stroke: var(--info); stroke-width: 2; }
 .chart .peak-label { fill: var(--text); font: var(--weight-bold) 11px var(--font-sans); font-variant-numeric: tabular-nums; }
 .chart .peak-box { fill: var(--surface); stroke: var(--line-2); }
-.chart .bar-total { fill: color-mix(in srgb, var(--info) 28%, var(--surface)); }
-.chart .bar-eff { fill: var(--info); }
+.chart .p-area { fill: color-mix(in srgb, var(--info) 14%, transparent); }
+.chart .p-line { fill: none; stroke: color-mix(in srgb, var(--info) 55%, var(--surface)); stroke-width: 2; stroke-linejoin: round; }
+.chart .pe-area { fill: color-mix(in srgb, var(--info) 30%, transparent); }
+.chart .pe-line { fill: none; stroke: var(--info); stroke-width: 2; stroke-linejoin: round; }
 .chart .hyp-area { fill: color-mix(in srgb, var(--accent-green) 22%, transparent); }
 .chart .hyp-line { fill: none; stroke: var(--accent-green); stroke-width: 2; }
 .chart .ref-line { stroke: var(--line-2); stroke-dasharray: 4 3; fill: none; }
@@ -415,8 +427,8 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 
 .chart-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin-top: 6px; font-size: var(--text-xs); color: var(--text-2); }
 .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.sw.total { background: color-mix(in srgb, var(--info) 28%, var(--surface)); }
-.sw.eff { background: var(--info); }
+.sw.p { height: 3px; background: color-mix(in srgb, var(--info) 55%, var(--surface)); }
+.sw.pe { height: 3px; background: var(--info); }
 .sw.q { height: 3px; background: var(--info); }
 
 .stack { display: block; width: 100%; height: 16px; border-radius: var(--radius-xs); overflow: hidden; margin: 0 0 var(--space-2); }

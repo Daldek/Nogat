@@ -179,12 +179,10 @@
           <section class="group">
             <h3 class="group-title">Podkłady kartograficzne</h3>
             <div class="radio-list" role="radiogroup" aria-label="Podkład kartograficzny">
-              <label><input type="radio" name="basemap" value="osm" checked> OpenStreetMap</label>
-              <label><input type="radio" name="basemap" value="esri"> ESRI</label>
-              <label><input type="radio" name="basemap" value="gugik-orto"> GUGiK ortofotomapa</label>
-              <label><input type="radio" name="basemap" value="gugik-topo"> GUGiK topograficzna</label>
-              <label><input type="radio" name="basemap" value="opentopomap"> OpenTopoMap</label>
-              <label><input type="radio" name="basemap" value="none"> Brak</label>
+              <label><input type="radio" name="basemap" value="openfreemap" checked> OpenFreeMap szary</label>
+              <label><input type="radio" name="basemap" value="gugik-osm"> OSM GUGiK szary (tylko Polska)</label>
+              <label><input type="radio" name="basemap" value="esri-ortho"> Ortofotomapa ESRI</label>
+              <label><input type="radio" name="basemap" value="none"> bez podkładu</label>
             </div>
           </section>
         </div>
@@ -212,10 +210,10 @@
           </div>
         </div>
 
-        <div class="map-wrap">
+        <div class="map-wrap" data-basemap="openfreemap">
           <svg class="map-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Mapa: zlewnia Kaczawy po przekrój Piątnica na tle NMT">
             <!-- Terrain (NMT) -->
-            <g class="nmt" data-layer="nmt">
+            <g class="nmt map-bg" data-layer="nmt">
               <rect class="t1" x="0" y="0" width="1000" height="1000"/>
               <path class="t2" d="M0,520 C150,470 250,560 400,515 S700,460 1000,535 V1000 H0 Z"/>
               <path class="t3" d="M0,700 C120,650 260,725 380,680 S650,630 760,695 S900,640 1000,685 V1000 H0 Z"/>
@@ -322,7 +320,7 @@
             </svg>
             <span>10 km</span>
           </div>
-          <span class="map-attrib">© OpenStreetMap · NMT GUGiK</span>
+          <span class="map-attrib">OpenFreeMap © OpenMapTiles, dane © OpenStreetMap · NMT GUGiK</span>
 
           <!-- Terrain profile drawer (profile mode) -->
           <section class="profile-drawer" id="profile-drawer" aria-labelledby="profile-title" hidden>
@@ -511,26 +509,33 @@
                 <div class="field-row" id="beta-params">
                   <div class="field">
                     <label for="alpha">α</label>
-                    <input type="number" id="alpha" value="2.0" step="0.1" min="0.1">
+                    <input type="number" id="alpha" value="2.6" step="0.1" min="0.1">
                   </div>
                   <div class="field">
                     <label for="beta">β</label>
-                    <input type="number" id="beta" value="2.0" step="0.1" min="0.1">
+                    <input type="number" id="beta" value="3.4" step="0.1" min="0.1">
                   </div>
                 </div>
                 <div class="chart">
                   <div class="chart-title">Opad <span>krok 30 min</span></div>
                   <svg viewBox="0 0 360 178" role="img" aria-label="Hietogram: opad całkowity i efektywny w krokach 30 min">
                   <g class="grid"><line x1="40" x2="350" y1="150" y2="150"/><line x1="40" x2="350" y1="122.4" y2="122.4"/><line x1="40" x2="350" y1="94.8" y2="94.8"/><line x1="40" x2="350" y1="67.2" y2="67.2"/><line x1="40" x2="350" y1="39.6" y2="39.6"/><line x1="40" x2="350" y1="12" y2="12"/></g>
-                  <rect class="bar-total" x="41.5" y="141.7" width="9.9" height="8.3"/><rect class="bar-total" x="54.4" y="136.2" width="9.9" height="13.8"/><rect class="bar-total" x="67.3" y="127.9" width="9.9" height="22.1"/><rect class="bar-total" x="80.2" y="118.3" width="9.9" height="31.7"/><rect class="bar-total" x="93.2" y="107.2" width="9.9" height="42.8"/><rect class="bar-total" x="106.1" y="94.8" width="9.9" height="55.2"/><rect class="bar-total" x="119" y="81" width="9.9" height="69"/><rect class="bar-total" x="131.9" y="67.2" width="9.9" height="82.8"/><rect class="bar-eff" x="131.9" y="144.5" width="9.9" height="5.5"/><rect class="bar-total" x="144.8" y="53.4" width="9.9" height="96.6"/><rect class="bar-eff" x="144.8" y="133.4" width="9.9" height="16.6"/><rect class="bar-total" x="157.8" y="43.7" width="9.9" height="106.3"/><rect class="bar-eff" x="157.8" y="123.8" width="9.9" height="26.2"/><rect class="bar-total" x="170.7" y="38.2" width="9.9" height="111.8"/><rect class="bar-eff" x="170.7" y="116.9" width="9.9" height="33.1"/><rect class="bar-total" x="183.6" y="36.8" width="9.9" height="113.2"/><rect class="bar-eff" x="183.6" y="111.4" width="9.9" height="38.6"/><rect class="bar-total" x="196.5" y="41" width="9.9" height="109"/><rect class="bar-eff" x="196.5" y="110" width="9.9" height="40"/><rect class="bar-total" x="209.4" y="50.6" width="9.9" height="99.4"/><rect class="bar-eff" x="209.4" y="111.4" width="9.9" height="38.6"/><rect class="bar-total" x="222.3" y="63.1" width="9.9" height="86.9"/><rect class="bar-eff" x="222.3" y="114.1" width="9.9" height="35.9"/><rect class="bar-total" x="235.2" y="76.9" width="9.9" height="73.1"/><rect class="bar-eff" x="235.2" y="118.3" width="9.9" height="31.7"/><rect class="bar-total" x="248.2" y="90.7" width="9.9" height="59.3"/><rect class="bar-eff" x="248.2" y="123.8" width="9.9" height="26.2"/><rect class="bar-total" x="261.1" y="103.1" width="9.9" height="46.9"/><rect class="bar-eff" x="261.1" y="127.9" width="9.9" height="22.1"/><rect class="bar-total" x="274" y="114.1" width="9.9" height="35.9"/><rect class="bar-eff" x="274" y="132.1" width="9.9" height="17.9"/><rect class="bar-total" x="286.9" y="123.8" width="9.9" height="26.2"/><rect class="bar-eff" x="286.9" y="136.2" width="9.9" height="13.8"/><rect class="bar-total" x="299.8" y="132.1" width="9.9" height="17.9"/><rect class="bar-eff" x="299.8" y="140.3" width="9.9" height="9.7"/><rect class="bar-total" x="312.8" y="137.6" width="9.9" height="12.4"/><rect class="bar-eff" x="312.8" y="143.1" width="9.9" height="6.9"/><rect class="bar-total" x="325.7" y="143.1" width="9.9" height="6.9"/><rect class="bar-eff" x="325.7" y="145.9" width="9.9" height="4.1"/><rect class="bar-total" x="338.6" y="145.9" width="9.9" height="4.1"/><rect class="bar-eff" x="338.6" y="147.2" width="9.9" height="2.8"/>
+                  <path class="p-area" d="M40,150 L46.5,147 L59.4,134.2 L72.3,117.8 L85.2,100.8 L98.1,84.8 L111,70.8 L124,59.5 L136.9,51.2 L149.8,46.1 L162.7,44.2 L175.6,45.4 L188.5,49.4 L201.5,55.9 L214.4,64.4 L227.3,74.6 L240.2,85.7 L253.1,97.4 L266,109 L279,120 L291.9,129.8 L304.8,138 L317.7,144.2 L330.6,148.2 L343.5,149.9 L350,150 Z"/>
+                  <path class="p-line" d="M40,150 L46.5,147 L59.4,134.2 L72.3,117.8 L85.2,100.8 L98.1,84.8 L111,70.8 L124,59.5 L136.9,51.2 L149.8,46.1 L162.7,44.2 L175.6,45.4 L188.5,49.4 L201.5,55.9 L214.4,64.4 L227.3,74.6 L240.2,85.7 L253.1,97.4 L266,109 L279,120 L291.9,129.8 L304.8,138 L317.7,144.2 L330.6,148.2 L343.5,149.9 L350,150"/>
+                  <path class="pe-area" d="M40,150 L124,150 L136.9,144.7 L149.8,133.8 L162.7,124.1 L175.6,116.5 L188.5,111.4 L201.5,108.9 L214.4,109 L227.3,111.3 L240.2,115.3 L253.1,120.5 L266,126.3 L279,132.3 L291.9,138 L304.8,142.8 L317.7,146.5 L330.6,148.9 L343.5,149.9 L350,150 Z"/>
+                  <path class="pe-line" d="M40,150 L124,150 L136.9,144.7 L149.8,133.8 L162.7,124.1 L175.6,116.5 L188.5,111.4 L201.5,108.9 L214.4,109 L227.3,111.3 L240.2,115.3 L253.1,120.5 L266,126.3 L279,132.3 L291.9,138 L304.8,142.8 L317.7,146.5 L330.6,148.9 L343.5,149.9 L350,150"/>
+                  <line class="peak-line" x1="162.7" x2="162.7" y1="44.2" y2="150"/>
+                  <circle class="peak-dot" cx="162.7" cy="44.2" r="4"/>
+                  <rect class="peak-box" x="172.7" y="16" width="134" height="20" rx="4"/>
+                  <text class="peak-label" x="179.7" y="30">Pmax 7,7 mm · 4,75 h</text>
                   <line class="axis" x1="40" x2="350" y1="150" y2="150"/>
                   <text class="tick" x="34" y="153" text-anchor="end">0</text><text class="tick" x="34" y="125.4" text-anchor="end">2</text><text class="tick" x="34" y="97.8" text-anchor="end">4</text><text class="tick" x="34" y="70.2" text-anchor="end">6</text><text class="tick" x="34" y="42.6" text-anchor="end">8</text><text class="tick" x="34" y="15" text-anchor="end">10</text><text class="tick" x="40" y="164" text-anchor="middle">0</text><text class="tick" x="91.7" y="164" text-anchor="middle">2</text><text class="tick" x="143.3" y="164" text-anchor="middle">4</text><text class="tick" x="195" y="164" text-anchor="middle">6</text><text class="tick" x="246.7" y="164" text-anchor="middle">8</text><text class="tick" x="298.3" y="164" text-anchor="middle">10</text><text class="tick" x="350" y="164" text-anchor="middle">12</text>
                   <text class="axis-label" x="350" y="177" text-anchor="end">czas [h]</text>
                   <text class="axis-label" x="4" y="6">P [mm / 30 min]</text>
                 </svg>
                   <div class="chart-legend">
-                    <span><i class="sw total"></i>Opad całkowity</span>
-                    <span><i class="sw eff"></i>Opad efektywny</span>
+                    <span><i class="sw p"></i>Opad całkowity</span>
+                    <span><i class="sw pe"></i>Opad efektywny</span>
                   </div>
                 </div>
                 <table class="params compact">
