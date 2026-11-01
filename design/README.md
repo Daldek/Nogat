@@ -12,6 +12,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [imgwtools](marks/imgwtools.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes (open the file in a browser) |
+| [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 
 ## Principles
 
@@ -55,6 +56,16 @@ Status: a dot or border uses the base colour; a badge uses `-bg` with `-ink` tex
 | --- | --- | --- | --- |
 | `--code-bg` | `#0d1117` | `#010409` | Code blocks, sidecars (dark in both themes) |
 | `--code-text` | `#e6edf3` | `#e6edf3` | Text on `--code-bg` |
+
+Navigation rail (dark in both themes):
+
+| Token | Light | Dark | Use |
+| --- | --- | --- | --- |
+| `--rail-bg` | `#0d1117` | `#010409` | Rail background |
+| `--rail-hover` | `#161b22` | `#161b22` | Hovered rail item |
+| `--rail-active` | `#284b63` | `#1f3a5c` | Active rail item |
+| `--rail-ink` | `#9da7b3` | `#9da7b3` | Rail icons and labels |
+| `--rail-ink-active` | `#ffffff` | `#ffffff` | Active item icon and label |
 
 Rules:
 
@@ -160,6 +171,36 @@ App header: height `--header-height`, mark at 24 px plus the tool name in `--too
 .app-header img { width: 24px; height: 24px; }
 .app-header .name { color: var(--tool-hydrograf); font-weight: var(--weight-bold); }
 ```
+
+## Layout
+
+The app shell comes from Archiwista; use it for every tool with a map or a workspace.
+
+- Shell: a grid of two columns (64 px rail, content) and two rows (`--header-height`, content).
+- Top bar spans both columns: `--surface`, bottom border `--line`. Left to right: mark at 24 px and the tool name in `--tool-<name>`, then the context (project, area, selection), then actions on the right.
+- Navigation rail: dark column of `.rail-item`s, 54 px wide, icon over a short label, `--radius-md`. Background `--rail-bg`, items `--rail-ink`, hover `--rail-hover`, active `--rail-active` with `--rail-ink-active`.
+- Content: `.view-layout` grid of left panel, centre, right panel. Left panel 260-560 px (default 300), right panel 340-720 px (default 400), centre at least 480 px.
+- Resizer: 10 px hit area on the panel edge with a 2 px line; on hover or drag a 36 px thumb in `--accent`. Focusable: arrow keys move 16 px, Shift+arrow 64 px, double-click resets the default width.
+- Centre: a 46 px `.map-bar` (segmented control for the view plus a short hint) over the map.
+- Map controls: legend bottom-left, zoom bottom-right. Secondary results (a terrain profile, a table) open as drawers at the bottom of the centre. No floating glass cards over the map.
+
+```css
+.shell { display: grid; grid-template-columns: 64px minmax(0, 1fr); grid-template-rows: var(--header-height) minmax(0, 1fr); height: 100vh; background: var(--bg); }
+.topbar { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-4); background: var(--surface); border-bottom: 1px solid var(--line); }
+.rail { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-2) 0; background: var(--rail-bg); }
+.rail-item { width: 54px; padding: var(--space-2) 0; border-radius: var(--radius-md); color: var(--rail-ink); font-size: var(--text-xs); text-align: center; }
+.rail-item:hover { background: var(--rail-hover); }
+.rail-item.active { background: var(--rail-active); color: var(--rail-ink-active); }
+.view-layout { --left-w: 300px; --right-w: 400px; display: grid; grid-template-columns: var(--left-w) minmax(480px, 1fr) var(--right-w); min-height: 0; }
+.resizer { width: 10px; cursor: col-resize; }
+```
+
+Phone (width <= 860 px):
+
+- Top bar 48 px.
+- The rail becomes a 58 px bottom bar: `--surface` background, `--line` top border, items in `--text-2`, active item in `--accent`.
+- Panels become bottom sheets: fixed above the bar (bottom 58 px), height `min(74vh, 640px)`, radius 16 px on the top corners, with a grip, a title and a close button. Resizers are hidden.
+- Form fields use 16 px text so iOS does not zoom.
 
 ## Marks
 

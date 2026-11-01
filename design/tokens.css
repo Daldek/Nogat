@@ -107,6 +107,13 @@
   --transition: 0.2s ease;
   --container-max: 1200px;
   --header-height: 52px;
+
+  /* Navigation rail */
+  --rail-bg: #0d1117;
+  --rail-hover: #161b22;
+  --rail-active: #284b63;
+  --rail-ink: #9da7b3;
+  --rail-ink-active: #ffffff;
 }
 
 /* Dark theme: follows the OS unless the app forces light */
@@ -163,6 +170,13 @@
     --tool-hydrolog: #7cc474;
     --tool-hydraulik: #b0a3f0;
     --tool-retman: #f0907a;
+
+    /* Navigation rail */
+    --rail-bg: #010409;
+    --rail-hover: #161b22;
+    --rail-active: #1f3a5c;
+    --rail-ink: #9da7b3;
+    --rail-ink-active: #ffffff;
   }
 }
 
@@ -219,4 +233,11 @@
   --tool-hydrolog: #7cc474;
   --tool-hydraulik: #b0a3f0;
   --tool-retman: #f0907a;
+
+  /* Navigation rail */
+  --rail-bg: #010409;
+  --rail-hover: #161b22;
+  --rail-active: #1f3a5c;
+  --rail-ink: #9da7b3;
+  --rail-ink-active: #ffffff;
 }

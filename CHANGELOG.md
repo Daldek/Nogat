@@ -13,7 +13,13 @@ the standard are listed in [standards/README.md](standards/README.md).
   per project in `marks/`, guidelines in `README.md` and `specimen.html`;
   `tests/contract/test_design.py` checks WCAG 2.2 AA contrast and a mark and
   accent for every project of `ecosystem.yaml`. Plan
-  `docs/plans/2026-11-01-visual-identity.md` awaits the author's approval.
+  `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01.
+- DEV-15.3 and ECO-055: every GUI follows the identity in `design/`, with
+  Archiwista's shell (top bar, navigation rail, resizable side panels); the
+  `--rail-*` tokens and the layout guidelines; adoption rows for Archiwista,
+  Hydrograf and IMGWTools in `standards/ADOPTION_PLAN.md`.
+- `design/mockups/hydrograf/`: a static, clickable mockup of Hydrograf in the
+  identity and Archiwista's shell (map and charts as inline SVG).
 - AGI-2.1: a tool whose CLI lines other projects store or pass on exposes
   `parse_command(line)` and `format_command(command, options=…, run=…)`, the
   canonical line being the form of every catalog example call; other tools

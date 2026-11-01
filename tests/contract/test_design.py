@@ -36,6 +36,8 @@ TEXT_PAIRS = [
     ("bad-ink", "bad-bg"),
     ("info-ink", "info-bg"),
     ("code-text", "code-bg"),
+    ("rail-ink", "rail-bg"),
+    ("rail-ink-active", "rail-active"),
 ]
 # Focus rings and status dots are non-text UI: 3:1 (WCAG 1.4.11).
 UI_PAIRS = [

@@ -99,3 +99,15 @@ Option 3, in Nogat's `design/`:
 
 Step 1 (2026-11-01): `design/tokens.css`, `design/marks/` (eight marks),
 `design/README.md`, `design/specimen.html`, `tests/contract/test_design.py`.
+
+Steps 2 and 3 (2026-11-01): the author approved the identity after
+redrawing the marks of Hydrolog, Hydrograf and IMGWTools; DEV-15.3, ECO-055,
+the adoption rows, the `--rail-*` tokens and the layout section of
+`design/README.md`.
+
+Step 4 (2026-11-01): `design/mockups/hydrograf/` (`index.html`,
+`mockup.css`, `mockup.js`, `theme-init.js`): Hydrograf's selected-watershed
+screen in Archiwista's shell, with the layers panel on the left, the map
+with modes, legend and the terrain-profile drawer in the centre, the
+watershed parameters, hietogram and hydrograph on the right, the feedback
+dialog, both themes and the phone layout. Static data; no remote resources.
