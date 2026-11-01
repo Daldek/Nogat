@@ -97,18 +97,17 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `feature/archiwista-projects` (the plan's Results). Pushed with green
    gates: Kartograf `26ee4592` (also ADR-058: `--geometry` by feature shape,
    GeoJSON), IMGWTools `4bf8bb0d`, Retman `5c3be44` (still pins Kartograf
-   `8ad55ab6`; re-pin before the release). Archiwista `dd4268c` runs on the
-   author's test server; its full gate and the push wait for the next session
-   (the author's decision of 2026-11-01; GitHub has `07f8c71`). Open: the
+   `8ad55ab6`; re-pin before the release). Archiwista `e9a18b9` is pushed
+   with a green full gate (2026-11-01: 2719 passed, coverage 93.63%; its only
+   change after `dd4268c`, which runs on the author's test server, makes the
+   doctor test independent of port 8090). Open: the
    release (step 6); no branch is merged. Gaps found in
    use: Kartograf KD-3/KD-4 (Archiwista's "U źródła" offers only nmt, nmpt
    and laz, so BDOT10k and orthophoto are downloaded by pasting a Kartograf
    command) and KH (plans show no size); Kartograf's LAZ sidecars carry no
    survey work, so Archiwista's "pobrane" badge never matches LAZ (a
-   `request` issue for Kartograf, not filed: no `gh` on this machine);
-   Archiwista's `test_doctor_refused_store_shows_the_fix_the_producer_gave`
-   fails while port 8090 is taken (the test is not hermetic). The final
-   integration repeat (item 2) must use these heads.
+   `request` issue for Kartograf, not filed: no `gh` on this machine). The
+   final integration repeat (item 2) must use these heads.
 
 ## Open questions
 
