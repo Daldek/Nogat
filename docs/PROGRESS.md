@@ -93,7 +93,13 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    mockup (`feature/hydrolog-gui-mockup`, not merged, not pushed) is revised
    after the author's review: no variants and no compute button in the
    hydrograph section, the network schematic vertical, node settings on
-   click; its open questions await the author. Next:
+   click; its open questions await the author. Its implementation is
+   planned in Hydrolog (`docs/plans/2026-11-02-hydrolog-gui.md` on
+   Hydrolog's `feature/gui`, from `feature/routing-schematic`; approval
+   pending), with this repository's pointer
+   `docs/plans/2026-11-02-hydrolog-gui.md` (branch `plan/hydrolog-gui`):
+   Nogat publishes the `handoff-1` schema (N1) before Hydrolog's hand-off
+   slice and adds Hydrolog's `gui` interface to the registry (N2). Next:
    Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
    B1–B6 recorded; 10 questions open) is deferred to a later session by the
