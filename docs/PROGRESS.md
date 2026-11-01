@@ -80,12 +80,13 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    with Hydrograf and Archiwista apart and the two flows of F2. Record the
    outcome in the data-output plan; no repeat was performed in this audit.
 3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
-4. Prepare a coherent visual identity for Hydrograf, Archiwista and every
-   other ecosystem tool that has or will have a GUI (user request, 2026-10-28).
-   Define shared visual guidelines and reusable design assets, with room for
-   each tool's identity. Backlog only: on 2026-10-29 no design work existed in
-   any repository or on this machine; start with a plan in `docs/plans/`
-   linked to `2026-10-20-unified-gui.md`.
+4. Visual identity (user request, 2026-10-28): step 1 of
+   `docs/plans/2026-11-01-visual-identity.md` is done on
+   `feature/visual-identity` (2026-11-01): `design/tokens.css`, eight marks,
+   guidelines and `design/specimen.html`, from debever.pl and Archiwista,
+   with contract tests. Next: the author reviews the specimen in both themes
+   and approves the plan; then Archiwista and Hydrograf adopt it, each in its
+   own session and plan (steps 3 and 4).
 5. Archiwista's release (decision D2 of the projects plan, 2026-10-31,
    replacing the separate v0.3 and v0.4 of 2026-10-29): one release holding
    v0.3, v0.4 and the projects, after step 5 of that plan, outside the first

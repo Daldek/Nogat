@@ -8,6 +8,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- `design/`: the shared visual identity of the ecosystem's GUIs, from
+  debever.pl and Archiwista: `tokens.css` (light and dark), one 32 px mark
+  per project in `marks/`, guidelines in `README.md` and `specimen.html`;
+  `tests/contract/test_design.py` checks WCAG 2.2 AA contrast and a mark and
+  accent for every project of `ecosystem.yaml`. Plan
+  `docs/plans/2026-11-01-visual-identity.md` awaits the author's approval.
 - AGI-2.1: a tool whose CLI lines other projects store or pass on exposes
   `parse_command(line)` and `format_command(command, options=…, run=…)`, the
   canonical line being the form of every catalog example call; other tools
