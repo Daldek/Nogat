@@ -111,3 +111,12 @@ screen in Archiwista's shell, with the layers panel on the left, the map
 with modes, legend and the terrain-profile drawer in the centre, the
 watershed parameters, hietogram and hydrograph on the right, the feedback
 dialog, both themes and the phone layout. Static data; no remote resources.
+
+Step 6 (2026-11-01, in review): Hydrograf `feature/visual-identity`
+(`0cad64c`, `5f86464`; its ADR-065) ports the approved mockup into the real
+frontend (Leaflet, Chart.js): the shell, layers with one zoom-to-extent
+button, Archiwista's basemaps plus the ESRI orthophoto (OpenFreeMap through
+MapLibre), charts and overlays on the tokens, admin and guide in the same
+shell. It runs as a parallel nginx container on port 8081 with production's
+API and database; production on port 8080 is unchanged until the author
+approves the deployment.
