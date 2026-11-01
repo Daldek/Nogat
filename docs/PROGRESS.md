@@ -96,10 +96,10 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `feature/archiwista-projects` (the plan's Results). Pushed with green
    gates: Kartograf `26ee4592` (also ADR-058: `--geometry` by feature shape,
    GeoJSON), IMGWTools `4bf8bb0d`, Retman `5c3be44` (still pins Kartograf
-   `8ad55ab6`; re-pin before the release). Archiwista `1f2ed39` runs on the
-   author's test server; its full gate ran at the end of the session of
-   2026-11-01 and the branch is pushed after it passes (GitHub had
-   `07f8c71`). Open: the release (step 6); no branch is merged. Gaps found in
+   `8ad55ab6`; re-pin before the release). Archiwista `dd4268c` runs on the
+   author's test server; its full gate and the push wait for the next session
+   (the author's decision of 2026-11-01; GitHub has `07f8c71`). Open: the
+   release (step 6); no branch is merged. Gaps found in
    use: Kartograf KD-3/KD-4 (Archiwista's "U źródła" offers only nmt, nmpt
    and laz, so BDOT10k and orthophoto are downloaded by pasting a Kartograf
    command) and KH (plans show no size); Kartograf's LAZ sidecars carry no
