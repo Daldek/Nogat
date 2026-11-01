@@ -80,6 +80,9 @@
         <div class="panel-head">
           <span class="grip" aria-hidden="true"></span>
           <h2 id="left-title">Warstwy</h2>
+          <button class="btn ghost sm icon" type="button" id="zoom-extent" title="Przybliż do zasięgu warstw" aria-label="Przybliż do zasięgu warstw">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/><rect x="7" y="7" width="6" height="6" rx="1"/></svg>
+          </button>
           <button class="btn ghost sm icon" type="button" id="left-close" aria-label="Zamknij panel warstw">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
           </button>
@@ -93,42 +96,36 @@
               <label class="name" for="ly-nmt">NMT</label>
               <input type="range" min="0" max="100" value="70" aria-label="Przezroczystość: NMT">
               <span class="val">70%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy NMT"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer">
               <input type="checkbox" id="ly-lakes" data-layer="lakes" checked>
               <label class="name" for="ly-lakes">Zbiorniki wodne</label>
               <input type="range" min="0" max="100" value="60" aria-label="Przezroczystość: Zbiorniki wodne">
               <span class="val">60%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Zbiorniki wodne"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer">
               <input type="checkbox" id="ly-streams" data-layer="streams" checked>
               <label class="name" for="ly-streams">Cieki BDOT10k</label>
               <input type="range" min="0" max="100" value="80" aria-label="Przezroczystość: Cieki BDOT10k">
               <span class="val">80%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Cieki BDOT10k"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer off">
               <input type="checkbox" id="ly-hsg">
               <label class="name" for="ly-hsg">Grupy glebowe</label>
               <input type="range" min="0" max="100" value="50" aria-label="Przezroczystość: Grupy glebowe">
               <span class="val">50%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Grupy glebowe"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer off">
               <input type="checkbox" id="ly-landcover">
               <label class="name" for="ly-landcover">Pokrycie terenu</label>
               <input type="range" min="0" max="100" value="30" aria-label="Przezroczystość: Pokrycie terenu">
               <span class="val">30%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Pokrycie terenu"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer off">
               <input type="checkbox" id="ly-sewer">
               <label class="name" for="ly-sewer">Kanalizacja deszczowa</label>
               <input type="range" min="0" max="100" value="50" aria-label="Przezroczystość: Kanalizacja deszczowa">
               <span class="val">50%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Kanalizacja deszczowa"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
           </section>
 
@@ -139,7 +136,6 @@
               <label class="name" for="ly-flow">Linie spływu</label>
               <input type="range" min="0" max="100" value="100" aria-label="Przezroczystość: Linie spływu">
               <span class="val">100%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Linie spływu"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer-extra">
               <div class="field">
@@ -156,7 +152,6 @@
               <label class="name" for="ly-depr">Zagłębienia</label>
               <input type="range" min="0" max="100" value="30" aria-label="Przezroczystość: Zagłębienia">
               <span class="val">30%</span>
-              <button class="btn ghost sm icon" type="button" aria-label="Przybliż do warstwy Zagłębienia"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.5"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"/></svg></button>
             </div>
             <div class="layer-extra">
               <div class="field">

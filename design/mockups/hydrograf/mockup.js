@@ -321,6 +321,7 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toast.hidden = true; }, 3000);
   }
+  $("#zoom-extent").addEventListener("click", function () { showToast("Mapa przybliżona do zasięgu włączonych warstw"); });
 
   $("#btn-feedback").addEventListener("click", openModal);
   $("#feedback-close").addEventListener("click", closeModal);
