@@ -20,6 +20,12 @@ the standard are listed in [standards/README.md](standards/README.md).
   Hydrograf and IMGWTools in `standards/ADOPTION_PLAN.md`.
 - `design/mockups/hydrograf/`: a static, clickable mockup of Hydrograf in the
   identity and Archiwista's shell (map and charts as inline SVG).
+- `design/mockups/hydrolog/`: a static, clickable mockup of Hydrolog's GUI
+  with numbers from the real CLI. The hydrograph section has no compute
+  button and no variants: its result follows every change of the data. The
+  network section draws the schematic vertically (sources at the top), opens
+  the settings of any node in `hydrolog-network/1` terms on click and keeps
+  an explicit compute.
 - AGI-2.1: a tool whose CLI lines other projects store or pass on exposes
   `parse_command(line)` and `format_command(command, options=…, run=…)`, the
   canonical line being the form of every catalog example call; other tools

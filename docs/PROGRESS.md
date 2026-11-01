@@ -89,8 +89,12 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    0.1, `GET /api/layers`, the delineation preview and verified (i) texts)
    runs in production on port 8080 since 2026-11-01; the review instance on
    8081 is removed. The specimen and mockup stay on the LAN through the
-   `nogat-specimen` container (192.168.88.9:8765, outside ufw). Next:
-   Archiwista and IMGWTools adopt it (steps 5 and 7). The platform draft
+   `nogat-specimen` container (192.168.88.9:8765, outside ufw). The Hydrolog
+   mockup (`feature/hydrolog-gui-mockup`, not merged, not pushed) is revised
+   after the author's review: no variants and no compute button in the
+   hydrograph section, the network schematic vertical, node settings on
+   click; its open questions await the author. Next:
+   Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
    B1–B6 recorded; 10 questions open) is deferred to a later session by the
    author; it may replace steps 5 to 7.

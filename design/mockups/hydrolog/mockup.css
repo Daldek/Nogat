@@ -318,6 +318,21 @@ details.more .meta { margin-left: auto; color: var(--text-3); font-weight: var(-
   flex: none; display: flex; align-items: center; gap: var(--space-3);
   padding: 10px 14px; border-top: 1px solid var(--line); background: var(--bg);
 }
+.panel-foot.auto { flex-wrap: wrap; row-gap: 4px; }
+.panel-foot .mock-note { flex-basis: 100%; margin: 0; }
+
+/* Hydrogram: results follow every change; a short "Liczenie…" state while they do */
+.calc-state { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--ok-ink); }
+.calc-state .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.calc-state.busy { color: var(--info-ink); }
+.calc-state.busy .dot { background: transparent; border: 2px solid var(--info); border-right-color: transparent; animation: hl-spin 0.7s linear infinite; }
+@keyframes hl-spin { to { transform: rotate(360deg); } }
+[data-hg-res] { transition: opacity 0.15s; }
+.computing [data-hg-res] { opacity: 0.45; }
+@media (prefers-reduced-motion: reduce) {
+  .calc-state.busy .dot { animation: none; }
+  [data-hg-res] { transition: none; }
+}
 
 .panel-head {
   display: flex; align-items: center; gap: var(--space-2);
@@ -383,21 +398,6 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
   font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--text-3);
   text-transform: uppercase; letter-spacing: 0.04em;
 }
-
-/* Variants */
-.variants { display: grid; gap: 2px; margin: 0 0 var(--space-3); padding: 0; list-style: none; }
-.var {
-  display: grid; grid-template-columns: 16px 22px minmax(0, 1fr) auto; align-items: center; gap: var(--space-2);
-  padding: 5px var(--space-2); border: 1px solid transparent; border-radius: var(--radius-md);
-}
-.var:hover { background: var(--surface-2); }
-.var.active { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); background: var(--accent-soft); }
-.var .vname { min-width: 0; font-size: var(--text-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.var .vmeta { display: block; font: var(--text-xs) var(--font-mono); color: var(--text-3); overflow: hidden; text-overflow: ellipsis; }
-.var .vq { font-weight: var(--weight-bold); font-variant-numeric: tabular-nums; }
-.var.off .vname, .var.off .vq { color: var(--text-3); }
-.var { cursor: pointer; }
-.var.focus { box-shadow: inset 3px 0 0 var(--accent); }
 
 /* Line swatches of the series */
 .sw-line { display: inline-block; width: 22px; height: 0; flex: none; border-top: 3px solid var(--series-1); vertical-align: middle; }
@@ -485,13 +485,8 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .chart .peak-tag { fill: var(--text); font: var(--weight-bold) var(--text-xs) var(--font-sans); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
 .chart .peak-box { fill: var(--surface); stroke: var(--line-2); }
 .chart .emp circle { fill: var(--surface); stroke: var(--text); stroke-width: 1.4; }
-.chart [data-v].dim { opacity: 0.15; }
-.chart [data-v].off, .chart .off { opacity: 0; }
 .chart-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin-top: var(--space-2); font-size: var(--text-xs); color: var(--text-2); align-items: center; }
-.chart-legend span, .chart-legend label { display: inline-flex; align-items: center; gap: 6px; }
-.chart-legend.toggles label { cursor: pointer; padding: 2px 6px 2px 4px; border-radius: var(--radius-sm); }
-.chart-legend.toggles label:hover { background: var(--surface-2); }
-.chart-legend.toggles label:has(input:not(:checked)) { color: var(--text-3); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
 
 /* tc bars */
 .chart .tc-bar { stroke-width: 0; }
@@ -503,9 +498,8 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .chart .bar-sub { fill: var(--text-3); font: 10px var(--font-mono); }
 .chart .bar-val { fill: var(--text); font: var(--weight-medium) var(--text-sm) var(--font-sans); font-variant-numeric: tabular-nums; }
 
-/* Network schematic: metro-map style, drawn from hydrolog-network-schematic/1 */
-.schem-v { display: none; }
-.schem-v svg { max-width: 420px; margin: 0 auto; }
+/* Network schematic: metro-map style, drawn vertically from hydrolog-network-schematic/1 (sources at the top) */
+.schem-v svg { display: block; width: 100%; max-width: 520px; max-height: max(560px, calc(100vh - 230px)); margin: 0 auto; }
 .schem .ln { stroke-linecap: round; }
 .schem .ln.main { stroke: var(--net-main); stroke-width: 7; }
 .schem .ln.trib { stroke: var(--net-trib); stroke-width: 6; }
@@ -515,12 +509,16 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .schem .t-reach .glyph { fill: var(--surface); stroke: var(--text); stroke-width: 2; }
 .schem .t-reservoir .glyph { fill: var(--surface); stroke: var(--text); stroke-width: 2.5; }
 .schem .glyph-in { fill: var(--text); }
+.schem .halo { fill: transparent; stroke: none; }
 .schem .node:hover .glyph, .schem .node:focus-visible .glyph { stroke: var(--accent); }
+.schem .node:focus-visible .halo { stroke: var(--focus); stroke-width: 2; stroke-dasharray: 4 3; }
+.schem .node.sel .halo { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
 .schem .node.sel .glyph { stroke: var(--accent); stroke-width: 3.5; }
+.schem .node.sel.t-subcatchment .glyph { stroke: var(--accent); stroke-width: 2.5; }
 .schem .lbl-id { fill: var(--text); font: var(--weight-bold) var(--text-sm) var(--font-sans); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .schem .lbl-m { fill: var(--text-2); font: var(--text-xs) var(--font-sans); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .schem .lbl-v { fill: var(--text); font: var(--weight-medium) var(--text-xs) var(--font-sans); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.schem .node.sel .lbl-id { fill: var(--accent); }
+.schem .node.sel .lbl-id, .schem .node.sel .lbl-v { fill: var(--accent); }
 .ng { display: inline-block; width: 12px; height: 12px; flex: none; border: 2px solid var(--text); background: var(--surface); }
 .ng.t-subcatchment { width: 10px; height: 10px; border: 0; background: var(--accent-green); transform: rotate(45deg); margin: 0 1px; }
 .ng.t-reach { width: 6px; height: 13px; border-width: 1.5px; border-radius: 2px; margin: 0 3px; }
@@ -529,14 +527,25 @@ body.resizing .view-center, body.resizing .view-panel { pointer-events: none; }
 .ng.t-outlet { border-radius: 50%; box-shadow: inset 0 0 0 2px var(--surface), inset 0 0 0 6px var(--text); }
 
 .node-list { display: grid; gap: 1px; margin: 0 0 var(--space-2); padding: 0; list-style: none; }
-.node-list li {
+.node-list button {
   display: grid; grid-template-columns: 18px 34px minmax(0, 1fr) auto; align-items: center; gap: 6px;
-  min-height: 28px; padding: 0 6px; border-radius: var(--radius-sm); cursor: pointer; font-size: var(--text-sm);
+  width: 100%; min-height: 28px; padding: 0 6px; border: 0; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text); font: var(--text-sm) var(--font-sans); text-align: left; cursor: pointer;
 }
-.node-list li > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); }
-.node-list li:hover { background: var(--surface-2); }
-.node-list li.sel { background: var(--accent-soft); box-shadow: inset 2px 0 0 var(--accent); }
+.node-list button > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); }
+.node-list button:hover { background: var(--surface-2); }
+.node-list button.sel { background: var(--accent-soft); box-shadow: inset 2px 0 0 var(--accent); }
 .node-list .nq { font-variant-numeric: tabular-nums; font-weight: var(--weight-bold); }
+
+/* Settings of the selected node (Sieć, Dane) */
+.node-head { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--text-2); }
+.node-head > code { font-weight: var(--weight-bold); color: var(--text); }
+.node-head .ng { margin-right: 2px; }
+.sub-title { margin: var(--space-3) 0 var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--line); font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--text-2); }
+.dtable.cells td { padding: 2px 4px; }
+.dtable.cells input { width: 100%; min-width: 64px; height: 26px; padding: 0 6px; border-color: transparent; font: var(--text-sm) var(--font-mono); text-align: right; background: transparent; }
+.dtable.cells input:hover { border-color: var(--line-2); }
+.node-res .chart { margin-bottom: var(--space-2); }
 
 /* ---------- Results panel ---------- */
 .summary {
@@ -633,14 +642,12 @@ pre.code .fold { color: color-mix(in srgb, var(--code-text) 55%, var(--code-bg))
 .dtable tbody tr:hover th, .dtable tbody tr:hover td { background: var(--surface-2); }
 .dtable tr.base th, .dtable tr.base td, .dtable tr.sel th, .dtable tr.sel td, .dtable tr.best th, .dtable tr.best td { background: var(--accent-soft); }
 .dtable tr.peak th, .dtable tr.peak td, .dtable tr.hl th, .dtable tr.hl td { background: var(--info-bg); color: var(--info-ink); font-weight: var(--weight-bold); }
-.dtable tr.off { opacity: 0.4; }
 .dtable tbody th .sw-line { margin-right: 6px; }
 .dtable .badge { height: 18px; }
 .dtable.edit td { font-family: var(--font-mono); }
 .dtable.edit thead th { white-space: normal; line-height: 1.2; }
 .ok-mark { color: var(--ok-ink); font-weight: var(--weight-bold); }
 .bad-mark { color: var(--bad-ink); font-weight: var(--weight-bold); }
-.series [data-v].off { color: var(--text-3); }
 
 /* ---------- Command lists (Kalkulatory, Wszystkie polecenia) ---------- */
 .cmd-tools { display: grid; gap: var(--space-2); margin: 0 0 var(--space-2); }
@@ -798,9 +805,7 @@ pre.code .fold { color: color-mix(in srgb, var(--code-text) 55%, var(--code-bg))
   .view-body { padding: var(--space-2); }
   .card { padding: var(--space-3); }
   .chart.wide svg { min-width: 560px; }
-  .schem-h { display: none; }
-  .schem-v { display: block; }
-  .lbl-long { display: none; }
+  .schem-v svg { max-height: none; }
   .view-bar > [data-open-panel="left"] { order: 0; }
   .view-bar .end { order: 1; }
   .view-bar .seg { order: 2; }

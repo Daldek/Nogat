@@ -13,7 +13,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [imgwtools](marks/imgwtools.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes (open the file in a browser) |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
-| [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections, the hydrograph workbench in full, alone and inside Nogat's shell (mockup) |
+| [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
 ## Principles
 
