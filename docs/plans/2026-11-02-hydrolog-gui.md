@@ -1,6 +1,7 @@
 # Plan: Hydrolog's GUI across the projects
 
-Approved: pending
+Approved: 2026-11-02 (the author, with Hydrolog's plan, the choices on the
+mockup's open questions and its deviations)
 
 Requirements: HUB-5.2, DEV-17.4, DEV-3.4, DEV-15.1, DEV-15.3, ECO-050,
 ECO-055. A pointer: the work and its decisions are Hydrolog's plan
@@ -59,13 +60,20 @@ Inputs to steps 1, 3 and 8 of the platform plan, not decided here:
 - The embedded mode: `?nogat=1` hides the chrome at first paint; the
   handshake waits for the kit's `embed.js`.
 
-## Open questions for the author
+## The author's answers of 2026-11-02
 
-1. N1 ahead of the rest of the platform plan: approved with this plan?
-   Hydrolog's S6 waits for it; everything else proceeds.
-2. Is the tunnel's public address behind Cloudflare Access? The GUI has no
-   sign-in of its own.
+1. N1 ahead of the rest of the platform plan: approved; recorded in the
+   [platform plan](2026-11-01-nogat-gui-platform.md).
+2. The tunnel's public address (to 127.0.0.1:8070) is behind Cloudflare
+   Access, set up by the author; the GUI has no sign-in of its own.
 
 ## Results
 
-None yet.
+- N1, 2026-11-02: `nogat-handoff/1` in
+  [`schemas/exchange/handoff-1.schema.json`](../../schemas/exchange/handoff-1.schema.json);
+  its example is the complete form of D15 in Hydrolog's plan (the
+  watershed of Hydrogram's defaults), whose payload validates against
+  `hydrolog-network/1` and through `hydrolog route network` gives the outlet
+  peak 60.2148 m³/s at 380 min and 1,046,213.2 m³, the values of its
+  `result`. Contract test `tests/contract/test_handoff_schema.py`; branch
+  `feature/handoff-1`, not merged, not pushed.

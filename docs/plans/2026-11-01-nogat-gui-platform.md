@@ -1,6 +1,8 @@
 # Plan: Nogat as the GUI platform of the ecosystem
 
-Approved: pending
+Approved: pending; item 6, the hand-off schema (step N1 of
+[Hydrolog's GUI](2026-11-02-hydrolog-gui.md)), approved by the author on
+2026-11-02 ahead of the rest
 
 Requirements: HUB-5.2, DEV-17.4, DEV-15.1, DEV-15.3, AGI-2.1, AGI-2.3,
 AGI-6.1, HUB-1.1, HUB-1.2, HUB §7, DEV §13, ECO-054, ECO-055. Continues the
@@ -324,6 +326,9 @@ research and waits for the author's approval.
    and an optional `result` for comparison. Embedded, `nogat:handoff` goes
    through the shell, which opens the target with it, the author's example in
    one click; alone, file and clipboard. Kept in `<data_dir>/nogat/handoffs/`.
+   The schema was approved on 2026-11-02 ahead of the rest of this plan, as
+   step N1 of [Hydrolog's GUI](2026-11-02-hydrolog-gui.md); the shell's part,
+   the kit's `handoff.js` and the store of hand-offs wait for this plan.
 7. **Hydrolog's GUI**, a hosted module called in process (no REST layer):
    first the hydrograph of one watershed with the inputs of Hydrograf's
    advanced mode, charts, balance, notices, CSV and hand-off; then the network
@@ -355,7 +360,7 @@ CHANGELOG and PROGRESS. Sizes are estimates in sessions.
 
 | # | Owner | Step | Size | Verified by |
 |---|---|---|---|---|
-| 1 | Nogat | The ECO decision; HUB-1.1, HUB-7.3, DEV-15.3 and the new rule of DEV §15; AGI-2.3 and the option fields of commands-1; schemas `handoff-1` and of the handshake messages; the identity headers and the role vocabulary; the registry's `gui` field; Nogat's profiles `[hub, app]` | 1.5 | gate: `validate`, `standard`, schema tests |
+| 1 | Nogat | The ECO decision; HUB-1.1, HUB-7.3, DEV-15.3 and the new rule of DEV §15; AGI-2.3 and the option fields of commands-1; schemas `handoff-1` (done ahead, N1 of Hydrolog's GUI) and of the handshake messages; the identity headers and the role vocabulary; the registry's `gui` field; Nogat's profiles `[hub, app]` | 1.5 | gate: `validate`, `standard`, schema tests |
 | 2 | Nogat | Kit 0.1, chrome: `tokens.css`, `base.css`, `shell.*` with the embedded switch, `theme.js`, `kit.json`; the specimen rebuilt on it; browser tests | 1.5 | specimen in both themes, alone and in a frame |
 | 3 | Nogat | Kit 0.1, parts: `info.js`, `form.js`, `chart-theme.js`, `embed.js`, `handoff.js`, `basemaps.json`; the copy check in `drift` | 2 | handshake tests across two origins; `drift` reports Hydrograf's copy |
 | 4 | Kartograf | Export option `i18n.pl`, its constraints, `section` and `format` in `kartograf-commands/1` | 1-2 | commands-1 contract test; Archiwista's adapter tests unchanged |
@@ -406,7 +411,9 @@ taking `route network` tables, Hydrograf on MapLibre to share a map shell.
 4. Archiwista's groups and sharing under Nogat: kept there (recommended), or sent?
 5. Topology 2: a proxied local mode in Archiwista, or local TLS in Nogat?
 6. Hand-off: an envelope around `hydrolog-network/1` (C2) or a flat document;
-   is Nogat its owner; do Archiwista projects keep hand-offs?
+   is Nogat its owner; do Archiwista projects keep hand-offs? The envelope
+   and Nogat as its owner were approved with N1 on 2026-11-02; the last part
+   is open.
 7. Editor: every option, grouped, or basic and advanced views; Kartograf first?
 8. Schematic: in Hydrograf (ADR-0013), in Hydrolog's module or both; and when
    does Hydrograf plan its control points?
@@ -415,4 +422,9 @@ taking `route network` tables, Hydrograf on MapLibre to share a map shell.
 
 ## Results
 
-None yet.
+- 2026-11-02, item 6 ahead of the rest (N1 of
+  [Hydrolog's GUI](2026-11-02-hydrolog-gui.md)): `nogat-handoff/1` in
+  [`schemas/exchange/handoff-1.schema.json`](../../schemas/exchange/handoff-1.schema.json)
+  with the complete example of Hydrolog's plan (D15), contract-tested in
+  `tests/contract/test_handoff_schema.py`; branch `feature/handoff-1`, not
+  merged, not pushed.

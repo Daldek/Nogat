@@ -48,11 +48,12 @@ scripts/standard.py    checks of the standard: IDs, links, budgets, copies
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
+schemas/exchange/      nogat-handoff/1, the envelope of data handed between GUIs
 standards/             the standard; ci/ holds the templates projects copy
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent schemas, AGENTS.md, Nogat's own error documents, design/
+tests/contract/        the agent and hand-off schemas, AGENTS.md, Nogat's own error documents, design/
 ```
 
 ## Documentation map

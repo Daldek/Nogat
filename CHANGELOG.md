@@ -8,6 +8,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- `schemas/exchange/handoff-1.schema.json`: `nogat-handoff/1`, the envelope
+  of data handed from one tool's GUI to another's (`created_at`, `producer`,
+  `subject`, `provenance`, a domain-document `payload` such as
+  `hydrolog-network/1`, an optional `result` for comparison), copied by
+  projects like `schemas/agent/`; its example is the complete hand-off of
+  Hydrolog's GUI plan (D15); `tests/contract/test_handoff_schema.py`. Item 6
+  of `docs/plans/2026-11-01-nogat-gui-platform.md`, approved by the author on
+  2026-11-02 ahead of the rest as N1 of `docs/plans/2026-11-02-hydrolog-gui.md`.
+
 - `design/`: the shared visual identity of the ecosystem's GUIs, from
   debever.pl and Archiwista: `tokens.css` (light and dark), one 32 px mark
   per project in `marks/`, guidelines in `README.md` and `specimen.html`;
