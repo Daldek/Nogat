@@ -84,7 +84,7 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01, steps 1
    to 4 done on `feature/visual-identity`: `design/` (tokens, eight marks,
    guidelines, specimen), DEV-15.3 and ECO-055, the Hydrograf mockup
-   (approved). Step 6: Hydrograf's `feature/visual-identity` (`5f86464`,
+   (approved). Step 6: Hydrograf's `feature/visual-identity` (`952d6f8`,
    worktree `Hydrograf-gui`, not pushed) runs as the parallel nginx
    `hydro_nginx_gui` on port 8081 with production's API and database;
    production (8080) unchanged until the author approves. Next: Archiwista
