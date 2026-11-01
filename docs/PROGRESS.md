@@ -84,14 +84,16 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01, steps 1
    to 4 done on `feature/visual-identity`: `design/` (tokens, eight marks,
    guidelines, specimen), DEV-15.3 and ECO-055, the Hydrograf mockup
-   (approved). Step 6: Hydrograf's `feature/visual-identity` (`cabcf7e`,
-   worktree `Hydrograf-gui`, not pushed; also AMC, an own rainfall series,
-   CN to 0.1 and `GET /api/layers` in its backend) runs on port 8081 as
-   `hydro_nginx_gui` and its own API `hydro_api_gui` on production's
-   database (no migrations on that branch); production (8080) unchanged
-   until the author approves. Next: the platform draft
-   `docs/plans/2026-11-01-nogat-gui-platform.md` (pending the author's
-   answers) may replace steps 5 to 7.
+   (approved). Step 6: Hydrograf's `feature/visual-identity` (`bf6f0f8`,
+   not merged, not pushed; it also adds AMC, an own rainfall series, CN to
+   0.1, `GET /api/layers`, the delineation preview and verified (i) texts)
+   runs in production on port 8080 since 2026-11-01; the review instance on
+   8081 is removed. The specimen and mockup stay on the LAN through the
+   `nogat-specimen` container (192.168.88.9:8765, outside ufw). Next:
+   Archiwista and IMGWTools adopt it (steps 5 and 7). The platform draft
+   `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
+   B1–B6 recorded; 10 questions open) is deferred to a later session by the
+   author; it may replace steps 5 to 7.
 5. Archiwista's release (decision D2 of the projects plan, 2026-10-31,
    replacing the separate v0.3 and v0.4 of 2026-10-29): one release holding
    v0.3, v0.4 and the projects, after step 5 of that plan, outside the first
