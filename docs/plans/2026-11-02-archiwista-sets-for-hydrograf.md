@@ -241,7 +241,7 @@ erratum 3). The calls, as `archiwista commands parse` reads them:
 |---|---|---|
 | 1 | `{"command": "elevation download", "options": {"product": "nmt", "country": "pl", "geometry": AREA, "resolution": "5m", "vertical_crs": "EVRF2007", "sheet_system": "1992", "year": 2020}}` (the author's year) | the 205 sheets of the area (local; D3) |
 | 2 | `{"command": "landcover download", "options": {"product": "bdot10k", "geometry": AREA}}` | ten counties |
-| 3 | `{"command": "soil hsg", "options": {"depth": "0-5cm", "bbox": [167000.0, 29000.0, 860000.0, 814000.0], "bbox_crs": "EPSG:2180"}}` (D4) | three SoilGrids inputs and the HSG raster |
+| 3 | `{"command": "soil hsg", "options": {"depth": "0-5cm", "bbox": [67000.0, -71000.0, 960000.0, 914000.0], "bbox_crs": "EPSG:2180"}}` (D4: Poland's box of step 5 plus 100 km) | three SoilGrids inputs and the HSG raster |
 
 No extra sheets (D3): `M-33-33-C-b-2-1` comes only from production's
 envelope rule, and `M-33-45-B-c-1-1` holds about 935 m² of the catchment at
@@ -659,8 +659,8 @@ the agent checks read-only.
      download.
   2. BDOT10k by the area: `landcover download --product bdot10k` with
      „Obszar polecenia” = Kaczawa (call 2). Expected: ten counties.
-  3. HSG for Poland's box: `soil hsg --depth 0-5cm --bbox 167000 29000 860000
-     814000 --bbox-crs EPSG:2180` (call 3, D4). Expected: three SoilGrids
+  3. HSG for Poland's box plus 100 km: `soil hsg --depth 0-5cm --bbox 67000 -71000 960000
+     914000 --bbox-crs EPSG:2180` (call 3, D4). Expected: three SoilGrids
      inputs and the HSG raster (no sizes: Kartograf's KH).
 - „Weryfikuj” the set, then „Zamknij zestaw”. A window that fails writes
   nothing into the set (`job_partial`): „Ponów” on its job card.
@@ -767,7 +767,7 @@ marks the coordinator's default, which the author may still override.
 |---|---|---|---|
 | D1 | The set's name and calls | a) a new set „Hydrograf 2020” built by the agent by one CLI job; b) another way | replaced: the author builds the set himself in the web interface as a draft set of three plan windows and closes it (A5); its name is his (proposed „Hydrograf 2020”) |
 | D3 | Sheets | a) 207, production's (two extra sheet calls); b) the 205 of the area | b): `M-33-33-C-b-2-1` comes only from production's envelope rule; `M-33-45-B-c-1-1` holds about 935 m² of the catchment at the divide, negligible (S5's tolerance) |
-| D4 | HSG extent | a) Poland's box, as step 5 today (32 MB, reusable); b) the area's envelope (1.6 km short of the mosaic's west edge, filled there by the nearest class) | a): the author's set takes `soil hsg` for Poland's box |
+| D4 | HSG extent | a) Poland's box, as step 5 today (32 MB, reusable); b) the area's envelope (1.6 km short of the mosaic's west edge, filled there by the nearest class) | decided by the author: a) widened by 100 km, EPSG:2180 `67000 -71000 960000 914000` (about 1.6 × the area of Poland's box); Hydrograf checks that the pinned HSG raster covers the NMT mosaic, not a fixed box |
 | D5 | Who runs the data operations | a) the agent builds the set by the CLI; b) the author does them in the web interface | changed to b): the author moves the project (A4) and builds and closes the set (A5); draft sets (A2) give one set of several plan windows |
 | D6 | The deploy on :8090 | a) a window the author names, with `TMPDIR` on `/` in the unit; b) without the `TMPDIR` line | open; recommended a): `/tmp` has 738 MB free, a county needs about twice its package. Nobody deploys before it |
 | D7 | The interface of A-ADR-049 erratum 5 (`POST /commands/area`, `archiwista commands area`, `AreaCommandAdapter`, „Obszar projektu”, „Obszar polecenia”), made without a plan | a) confirm it under this plan; b) change it first | a), confirmed |
