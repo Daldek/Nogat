@@ -775,7 +775,7 @@ marks the coordinator's default, which the author may still override.
 | D9 | The ADR | a) a new ADR-067, ADR-066 superseded in part; b) an amendment of ADR-066 | a), default |
 | D10 | Kartograf's mode fix | a) later, in Kartograf's own session (RCN and WFS cut-outs only); b) KF now | a), default |
 | D11 | UID 999 on the store | a) read only (`rX`), as Hydrograf no longer writes; b) keep `rwX` | a), default |
-| D12 | Producers of a draft set (new) | a) one producer per set: fixed by its first call or pin, a call or pin of another producer refused (`set_producer`); a local set of several producers' hand pins stays possible but takes no call; b) a producer per call: `producer` in each call, run pins of several producers in one plan set | open; recommended a): the Kaczawa set is Kartograf's alone, and IMGWTools has no commands until its v0.5; b) breaks the older reader within `/1` (it gives every call the group's `producer` and refuses a plan group's pin of another producer, `plan_producer`, `document.py:616-617`), so it needs `archiwista-project/2` or that loss; ask again with IMGWTools v0.5 |
+| D12 | Producers of a draft set (new) | a) one producer per set: fixed by its first call or pin, a call or pin of another producer refused (`set_producer`); a local set of several producers' hand pins stays possible but takes no call; b) a producer per call: `producer` in each call, run pins of several producers in one plan set | decided by the author: a). b) would break the older reader within `/1` (it gives every call the group's `producer` and refuses a plan group's pin of another producer, `plan_producer`, `document.py:616-617`), so it needs `archiwista-project/2`; ask again with IMGWTools v0.5 |
 
 The NMT year is no question: the author wrote `year: 2020` into the call,
 and the year of a call is part of the set's intent, never dropped or
@@ -804,4 +804,4 @@ changed by Archiwista (A2).
 
 | Step | Repository and branch | Result |
 |---|---|---|
-| N1 | Nogat, `plan/archiwista-sets-hydrograf` | this plan; the author's decisions of 2026-11-02 and draft sets (A2) recorded; D6 and D12 open |
+| N1 | Nogat, `plan/archiwista-sets-hydrograf` | this plan; the author's decisions of 2026-11-02 and draft sets (A2) recorded; D4, D6 and D12 decided by the author |
