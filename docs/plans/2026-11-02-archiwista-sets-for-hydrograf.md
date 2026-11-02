@@ -805,3 +805,4 @@ changed by Archiwista (A2).
 | Step | Repository and branch | Result |
 |---|---|---|
 | N1 | Nogat, `plan/archiwista-sets-hydrograf` | this plan; the author's decisions of 2026-11-02 and draft sets (A2) recorded; D4, D6 and D12 decided by the author |
+| A2 | Archiwista, `feature/archiwista-projects` | draft sets committed as `21eff04`..`6ece8ca` (PROGRESS `4027755`), A-ADR-049 erratum 6, index schema 17; full gate green on that tree (2026-11-02, 2749 passed); not pushed, not deployed (A3) |
