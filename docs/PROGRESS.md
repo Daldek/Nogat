@@ -3,9 +3,9 @@
 Audited on 2026-10-28: local branches, worktrees, recent commits, manifests,
 project progress documents and `git ls-remote --heads --tags origin` (tags
 checked for Nogat). No tests or gates were run; earlier gate results below
-are historical evidence, not verification of the current heads. Item 6 of
-Next is current as of 2026-11-01 and supersedes the project rows below where
-they differ.
+are historical evidence, not verification of the current heads. Items 4, 6
+and 7 of Next and the changes on 2026-11-01 and 2026-11-02 are current as of
+2026-11-02 and supersede the project rows below where they differ.
 
 ## Status
 
@@ -67,6 +67,25 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
 `feature/v1-catalog-mcp-hsg` is merged and can be deleted; local
 `backup/*` branches in Hydrograf and IMGWTools have no `origin` copy.
 
+### Changes on 2026-11-01 and 2026-11-02
+
+These rows supersede the rows above where they differ. Nothing here is
+merged or pushed.
+
+| Project | Branch and head | Change |
+|---|---|---|
+| Hydrograf | `feature/visual-identity`, `4098956`; production on 127.0.0.1:8080 | Backup of production in `/data/nmt/hydrograf-backup-2026-11-01/` (verified). The shown data are clipped to the Kaczawa catchment above 51.222825, 16.179380 (790.57 km², segments 159 of 870; a first clip to 813.17 km² took in part of the Czarna Woda), which closes the clipping item of 2026-10-29. New: the group „Wyniki analiz” (manifest `hydrograf-results/1`, `5c7c325`, `e2eafca`) with SFINCS run 2; the ISOK flood hazard map (MZP) from the Wody Polskie WMS (`ca0d920`, `1b8c199`); versioned asset URLs and no-cache HTML, because Cloudflare kept old JS (`eb5e28a`); the water surface of results on the terrain profile (`347a9d9`, `e625d92`, `4098956`); the profile finishes on phones (`4866617`); the guide's „Na start” and a welcome dialog (`cc5bc94`, `0377ec1`, `6a4e798`). The frontend test report (5 medium findings, no high) and the open choices go to its `docs/PROGRESS.md` |
+| Hydraulik | `feature/sfincs-swmm`, `91559e0` (code unchanged) | SFINCS on the Kamiennik catchment (37.22 km², segment 21911, the Świerzawa dam without an outlet, 5 m grid of 1,491,703 cells), run outside the repository. Run 1 (12 h, p = 1 %, 105 mm) is useless: with the default `huthresh` 0.05 water under 5 cm did not flow. Run 2 (`huthresh` 0.001) is published in Hydrograf. Run 3 (24 h, p = 1 %, 134.5 mm, seven cross sections) started 2026-11-02 01:03; its sections are then compared with Hydrolog's hydrology. Eight findings for `hydraulik` (among them `huthresh`, `dtout`/`dtmaxout` and cross sections missing from `model build`, a wrong summary when `dtmaxout` < `tstop`, no water level in `results export`) belong in Hydraulik's `docs/PROGRESS.md` |
+| Hydrolog | `feature/gui`, `cd6fa52` | The GUI of its plan `docs/plans/2026-11-02-hydrolog-gui.md` is implemented, waves A to C (its `docs/PROGRESS.md` and the plan's Results). `hydrolog gui serve` runs as the persistent service `hydrolog-gui` on 127.0.0.1:8070, where a Cloudflare tunnel points; the author sets up its Access |
+| Archiwista | `feature/archiwista-projects`, `e9a18b9`; paused by the author | The fix „obszar projektu nie daje się użyć do pobierania i sprawdzania danych” is ready and not committed: the index holds commit 1 (backend), the unstaged changes commit 2 (web). Its gate stopped on a hang of `tests/e2e/test_guide.py` in Firefox. The public instance on :8090 still runs `dd4268c`; the welcome dialog and the new guide wait. Leave its working tree and index as they are |
+| Nogat | see Next 7 | The Hydrolog mockup (`3d6608f`, `dc8cee4`, `ed3473c`), the pointer plan (`7719b1d`), N1 (`a01097c`) and N2 (`33920ec`) |
+
+Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog
+(`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
+`nogat-specimen` container keeps 8765. GPT-6-Sol wrote Hydrograf's guide and
+frontend test report, then reached its ChatGPT usage limit; delegations to it
+fail until the limit resets.
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,
@@ -86,9 +105,10 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01, steps 1
    to 4 done on `feature/visual-identity`: `design/` (tokens, eight marks,
    guidelines, specimen), DEV-15.3 and ECO-055, the Hydrograf mockup
-   (approved). Step 6: Hydrograf's `feature/visual-identity` (`bf6f0f8`,
-   not merged, not pushed; it also adds AMC, an own rainfall series, CN to
-   0.1, `GET /api/layers`, the delineation preview and verified (i) texts)
+   (approved). Step 6: Hydrograf's `feature/visual-identity` (`4098956` on
+   2026-11-02, not merged, not pushed; it also adds AMC, an own rainfall
+   series, CN to 0.1, `GET /api/layers`, the delineation preview and
+   verified (i) texts)
    runs in production on port 8080 since 2026-11-01; the review instance on
    8081 is removed. The specimen and mockup stay on the LAN through the
    `nogat-specimen` container (192.168.88.9:8765, outside ufw). The Hydrolog
@@ -103,7 +123,9 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    Nogat publishes the `handoff-1` schema (N1, done on `feature/handoff-1`)
    before Hydrolog's hand-off slice and adds Hydrolog's `gui` interface to
    the registry (N2, done on `feature/hydrolog-gui-registry` after
-   Hydrolog's wave A, `888d77d` on `feature/gui`). Next:
+   Hydrolog's wave A, `888d77d` on `feature/gui`). Hydrolog's waves A to C
+   are done (`cd6fa52`) and its GUI is served on 127.0.0.1:8070 behind a
+   Cloudflare tunnel (changes on 2026-11-01 and 2026-11-02). Next:
    Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
    B1–B6 recorded; 10 questions open) is deferred to a later session by the
@@ -128,7 +150,24 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    command) and KH (plans show no size); Kartograf's LAZ sidecars carry no
    survey work, so Archiwista's "pobrane" badge never matches LAZ (a
    `request` issue for Kartograf, not filed: no `gh` on this machine). The
-   final integration repeat (item 2) must use these heads.
+   final integration repeat (item 2) must use these heads. Paused by the
+   author on 2026-11-02: Archiwista's uncommitted fix of the project area
+   (changes on 2026-11-01 and 2026-11-02); finish its two commits and the
+   gate (the hang of `tests/e2e/test_guide.py` in Firefox) before deploying.
+7. Merges for the author's review (DEV-3.3; nothing is merged). Each list is
+   one linear stack, so every branch merges after the one before it without a
+   rebase if the review leaves them unchanged:
+   - Nogat into `develop`: `fix/hub-gaps`, `feature/data-output`,
+     `plan/archiwista-projects` (these three pushed), `feature/visual-identity`,
+     `feature/hydrolog-gui-mockup`, `plan/hydrolog-gui`, `feature/handoff-1`,
+     `feature/hydrolog-gui-registry` (local; it holds this record). `develop`
+     lacks the 2.1 fixes, the standard checks and this file until then.
+   - Hydrolog: `chore/nogat-2.1`, the routing stack from
+     `feature/routing-core` to `feature/routing-schematic`, then
+     `feature/gui` (its `docs/PROGRESS.md`, Next 1 and 8 to 11); N1 and N2
+     above are reviewed with `feature/gui`.
+   - Hydrograf: `feature/visual-identity` into `develop`; it contains
+     `feature/logowanie-testow` but not `feature/producer-heads`.
 
 ## Open questions
 
@@ -157,6 +196,3 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
   here (ADOPTION_PLAN 0.6), or adapt Archiwista's files and write
   `SECURITY.md` (CLA text needs the author's approval; private vulnerability
   reporting is a GitHub setting)?
-- Merge order into `develop`: `fix/hub-gaps` first, then `feature/data-output`
-  (cut from `fix/hub-gaps`); `develop` lacks the 2.1 fixes, the standard
-  checks and this file. Both merges need the author's approval (DEV-3.3).
