@@ -8,6 +8,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Registry: an optional `gui` interface, the command that serves a project's
+  browser GUI (HUB-2.1, `schemas/ecosystem.schema.json`), listed in the
+  interfaces of `AGENTS.md`. Hydrolog's is `hydrolog gui serve` (127.0.0.1:8070
+  by default, or the module `hydrolog.gui:gui_module` of the entry point group
+  `nogat.gui`), with the route „Open Hydrolog's GUI in the browser” and
+  `hydrolog-gui` in its `provides`. N2 of
+  `docs/plans/2026-11-02-hydrolog-gui.md`.
+
 - `schemas/exchange/handoff-1.schema.json`: `nogat-handoff/1`, the envelope
   of data handed from one tool's GUI to another's (`created_at`, `producer`,
   `subject`, `provenance`, a domain-document `payload` such as

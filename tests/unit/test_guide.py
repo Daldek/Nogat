@@ -138,6 +138,16 @@ def test_render_leaves_out_a_project_without_routes_and_the_hub() -> None:
     assert [row[0] for row in _table(text, "Tools")] == ["Alpha", "Beta"]
 
 
+def test_render_lists_the_optional_gui_interface_last_and_only_where_given() -> None:
+    registry = _registry()
+    registry["projects"][1]["interfaces"].update(python="alpha", gui="alpha gui serve")
+    rows = _table(guide.render(registry), "Tools")
+    assert [row[2] for row in rows] == [
+        "CLI `alpha`, Python `alpha`, GUI `alpha gui serve`",
+        "REST `/api`",
+    ]
+
+
 @pytest.mark.parametrize(
     ("provides", "named"),
     [

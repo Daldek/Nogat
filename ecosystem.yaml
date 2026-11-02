@@ -199,7 +199,7 @@ projects:
         note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
 
   - name: Hydrolog
-    summary: Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP.
+    summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
     profiles: [tool]
     status: active
     repo: https://github.com/Daldek/Hydrolog
@@ -211,6 +211,7 @@ projects:
       mcp: hydrolog mcp
       rest: null
       python: hydrolog
+      gui: hydrolog gui serve
     routes:
       - task: Compute the time of concentration of a watershed
         command: hydrolog tc watershed
@@ -228,6 +229,8 @@ projects:
         command: hydrolog stats flood-frequency
       - task: Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have
         command: hydrolog soil hsg
+      - task: Open Hydrolog's GUI in the browser
+        command: hydrolog gui serve
     data_sources: []
     provides:
       - id: watershed-parameters
@@ -257,6 +260,9 @@ projects:
       - id: hydrolog-python-api
         kind: library
         summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork).
+      - id: hydrolog-gui
+        kind: service
+        summary: Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host.
     depends_on:
       - project: IMGWTools
         kind: data

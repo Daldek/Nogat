@@ -231,3 +231,15 @@ def test_validate_reports_a_route_its_project_cannot_run() -> None:
     )
     problems = ecosystem.validate(registry)
     assert any("Kartograf: route 'imgw sheet find'" in p for p in problems)
+
+
+@pytest.mark.parametrize("gui", [None, "", 8070])
+def test_validate_rejects_a_gui_interface_that_names_no_command(gui: object) -> None:
+    registry = copy.deepcopy(ecosystem.load())
+    position = next(
+        i for i, p in enumerate(registry["projects"]) if p["name"] == "Kartograf"
+    )
+    registry["projects"][position]["interfaces"]["gui"] = gui
+    problems = ecosystem.validate(registry)
+    assert problems
+    assert all(p.startswith(f"projects/{position}/interfaces/gui") for p in problems)

@@ -71,7 +71,12 @@
             "cli": {"$ref": "#/$defs/nullable_string"},
             "mcp": {"$ref": "#/$defs/nullable_string"},
             "rest": {"$ref": "#/$defs/nullable_string"},
-            "python": {"$ref": "#/$defs/nullable_string"}
+            "python": {"$ref": "#/$defs/nullable_string"},
+            "gui": {
+              "description": "Optional: the command that serves the project's browser GUI on this computer.",
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "routes": {

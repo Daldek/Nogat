@@ -38,6 +38,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Compute morphometry indicators of a watershed | [Hydrolog][hydrolog] | `hydrolog morphometry watershed` |
 | Compute flood quantiles from annual maxima, for example of an IMGWTools export | [Hydrolog][hydrolog] | `hydrolog stats flood-frequency` |
 | Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have | [Hydrolog][hydrolog] | `hydrolog soil hsg` |
+| Open Hydrolog's GUI in the browser | [Hydrolog][hydrolog] | `hydrolog gui serve` |
 | Delineate the watershed of a point in Poland and read its parameters | [Hydrograf][hydrograf] | `POST /api/delineate-watershed` |
 | Generate a design hydrograph for a point in Poland from PMAXTP rainfall | [Hydrograf][hydrograf] | `POST /api/generate-hydrograph` |
 | Cut a terrain profile along a line | [Hydrograf][hydrograf] | `POST /api/terrain-profile` |
@@ -67,7 +68,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 |---|---|---|---|
 | Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | IMGWTools | active | CLI `imgw`, MCP `imgw mcp`, REST `imgw server (/api/v1)`, Python `imgwtools` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
-| Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog` | Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP. |
+| Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | Hydrograf | active | REST `/api` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over the ecosystem tools. |

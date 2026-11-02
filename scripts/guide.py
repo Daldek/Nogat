@@ -17,7 +17,13 @@ from urllib.parse import urlsplit
 RAW = "https://raw.githubusercontent.com"
 BRANCH = "main"
 HTTP_METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
-INTERFACES = (("cli", "CLI"), ("mcp", "MCP"), ("rest", "REST"), ("python", "Python"))
+INTERFACES = (
+    ("cli", "CLI"),
+    ("mcp", "MCP"),
+    ("rest", "REST"),
+    ("python", "Python"),
+    ("gui", "GUI"),
+)
 LAST_LINE = "Developing this repository? Read CLAUDE.md."  # DOC-4.2
 
 
@@ -104,10 +110,11 @@ def _and(names: list[str]) -> str:
 
 
 def _interfaces(project: dict[str, Any]) -> str:
+    # `gui` is optional in the registry (HUB-2.1); the others are null when absent.
     found = [
         f"{label} `{project['interfaces'][key]}`"
         for key, label in INTERFACES
-        if project["interfaces"][key]
+        if project["interfaces"].get(key)
     ]
     return ", ".join(found) or "none"
 

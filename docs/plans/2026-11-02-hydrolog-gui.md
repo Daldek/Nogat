@@ -77,3 +77,12 @@ Inputs to steps 1, 3 and 8 of the platform plan, not decided here:
   peak 60.2148 m³/s at 380 min and 1,046,213.2 m³, the values of its
   `result`. Contract test `tests/contract/test_handoff_schema.py`; branch
   `feature/handoff-1`, not merged, not pushed.
+- N2, 2026-11-02, after Hydrolog's wave A (S0, S1, S2, S2b; `888d77d` on
+  Hydrolog's `feature/gui`): the registry's interfaces gain an optional
+  `gui`, the command that serves a project's browser GUI (HUB-2.1, the
+  schema); Hydrolog's is `hydrolog gui serve`, with the route „Open
+  Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`
+  (alone on 127.0.0.1:8070 by default, or `hydrolog.gui:gui_module` of the
+  entry point group `nogat.gui`). `AGENTS.md` lists the interface and routes
+  the task; the map lists the service. Branch `feature/hydrolog-gui-registry`
+  from `feature/handoff-1`, not merged, not pushed.

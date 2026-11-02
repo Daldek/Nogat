@@ -26,8 +26,9 @@ history rewrites; the registry references repositories instead.
 
 **HUB-2.1** The registry records structure only: what only Nogat knows. Its
 fields are those of `schemas/ecosystem.schema.json`, shown below;
-`python_manifests`, `routes` and, in a dependency, `uses` and `note` are
-optional.
+`python_manifests`, `routes`, `interfaces.gui` (the command that serves the
+project's browser GUI on the user's computer, given only by a project that
+has one) and, in a dependency, `uses` and `note` are optional.
 
 ```yaml
 schema: nogat-ecosystem/1

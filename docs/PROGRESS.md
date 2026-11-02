@@ -19,6 +19,7 @@ they differ.
 | Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Hand-off schema `nogat-handoff/1` | done 2026-11-02, branch `feature/handoff-1` | `schemas/exchange/handoff-1.schema.json`, contract test; item 6 of the platform plan, approved ahead of the rest as N1 of Hydrolog's GUI |
+| Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
 | Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits; all but F6 (the author's history rewrite) are fixed and pushed (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned and pushed, with their gates recorded (Next 3 of that plan). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
@@ -101,7 +102,8 @@ likely superseded by `fix/archiwista-compat-2`; Hydrolog's
    `docs/plans/2026-11-02-hydrolog-gui.md` (branch `plan/hydrolog-gui`):
    Nogat publishes the `handoff-1` schema (N1, done on `feature/handoff-1`)
    before Hydrolog's hand-off slice and adds Hydrolog's `gui` interface to
-   the registry (N2). Next:
+   the registry (N2, done on `feature/hydrolog-gui-registry` after
+   Hydrolog's wave A, `888d77d` on `feature/gui`). Next:
    Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
    B1–B6 recorded; 10 questions open) is deferred to a later session by the

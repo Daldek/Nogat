@@ -66,7 +66,7 @@ flowchart LR
 | [Nogat](https://github.com/Daldek/Nogat) | hub | active | Ecosystem hub with standards, registry and map; future user package installing all tools. |
 | [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
-| [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrological calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP. |
+| [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over the ecosystem tools. |
@@ -159,6 +159,7 @@ flowchart LR
 | `hydrolog-command-list/1` | catalog | Retman (planned) | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
 | `hydrolog-commands/1` | catalog | Retman (planned) | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
 | `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
+| `hydrolog-gui` | service | — | Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host. |
 
 ### Hydrograf
 
