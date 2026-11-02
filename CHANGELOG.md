@@ -8,6 +8,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` (proposed):
+  Archiwista alone writes Kartograf data into the store it shares with
+  Hydrograf; Hydrograf's bootstrap reads a project's set strictly
+  (`--project`, `--set`, the SHA-256 of every pin, registry codes with hints
+  naming Archiwista's actions) and refuses `--bbox`, `--sheets` and
+  `--boundary-file` against the shared store. Steps Kartograf (optional),
+  Archiwista (the area fix, the deploy on :8090, Kaczawa's directory, the
+  set), Hydrograf (ADR-067, staging), S5 and the registry; the coverage of
+  the Kaczawa area, the modes Kartograf's writers leave and decisions D1 to
+  D11 for the author (HUB-5.2, DEV-17.4).
+
 - Registry: an optional `gui` interface, the command that serves a project's
   browser GUI (HUB-2.1, `schemas/ecosystem.schema.json`), listed in the
   interfaces of `AGENTS.md`. Hydrolog's is `hydrolog gui serve` (127.0.0.1:8070
