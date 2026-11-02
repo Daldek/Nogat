@@ -154,7 +154,7 @@ fail until the limit resets.
    author on 2026-11-02: Archiwista's uncommitted fix of the project area
    (changes on 2026-11-01 and 2026-11-02); finish its two commits and the
    gate (the hang of `tests/e2e/test_guide.py` in Firefox) before deploying
-   (steps A1 and A2 of item 8's plan).
+   (steps A1 and A3 of item 8's plan).
 7. Merges for the author's review (DEV-3.3; nothing is merged). Each list is
    one linear stack, so every branch merges after the one before it without a
    rebase if the review leaves them unchanged:
@@ -172,16 +172,22 @@ fail until the limit resets.
      `feature/logowanie-testow` but not `feature/producer-heads`.
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
-   `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`, proposed, on
-   `plan/archiwista-sets-hydrograf`; it waits for the author's approval and
-   decisions D1 to D11. Archiwista's area fix and deploy, Kaczawa in its own
-   directory and one set (NMT 5 m, BDOT10k, HSG) come before Hydrograf's
-   `--project`/`--set` and S5 of Hydrograf's store migration; nothing
-   outside Nogat is changed yet. Found on the way: BDOT10k, SoilGrids and HSG
-   leave files UID 999 reads (Hydrograf's ADR-066 fact 4 names the wrong
-   function; the mode defect is Kartograf's RCN and WFS cut-outs), and the
-   clip catchment leaves Kaczawa's area by 2.87 km², its outlet by 972 m, so
-   the set also pins production's two extra sheets.
+   `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on
+   `plan/archiwista-sets-hydrograf`, decided by the author on 2026-11-02
+   except D6 (the deploy window on :8090, nobody deploys before it) and the
+   new D12 (one producer per draft set, recommended). Order b: A1, the area
+   fix with its gate; A2, draft sets in Archiwista („zestaw w budowie”,
+   `state`, `closed_at`, `closed_by`, `pins_sha256`; a closed set frozen);
+   A3, the deploy; A4, the author moves Kaczawa to `projects/kaczawa`; A5,
+   the author builds the set (NMT 5 m 2020 by the area, 205 sheets; BDOT10k
+   by the area; HSG for Poland's box) in the web interface and closes it;
+   then H2 and S5. Hydrograf's H1 may proceed in parallel; consumers read
+   only closed sets (N2's rule for `archiwista-project/1`). Found on the
+   way: BDOT10k, SoilGrids and HSG leave files UID 999 reads (Hydrograf's
+   ADR-066 fact 4 names the wrong function; the mode defect is Kartograf's
+   RCN and WFS cut-outs), and the clip catchment leaves Kaczawa's area by
+   2.87 km², its outlet by 972 m; about 935 m² of it lie outside the 205
+   sheets, S5's tolerance.
 
 ## Open questions
 

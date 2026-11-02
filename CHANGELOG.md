@@ -8,16 +8,22 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
-- `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` (proposed):
-  Archiwista alone writes Kartograf data into the store it shares with
-  Hydrograf; Hydrograf's bootstrap reads a project's set strictly
-  (`--project`, `--set`, the SHA-256 of every pin, registry codes with hints
-  naming Archiwista's actions) and refuses `--bbox`, `--sheets` and
+- `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` (decided by the
+  author on 2026-11-02, D6 and D12 open): Archiwista alone writes Kartograf
+  data into the store it shares with Hydrograf; Hydrograf's bootstrap reads
+  one closed set of a project strictly (`--project`, `--set`, the SHA-256 of
+  every pin, the set's `pins_sha256`, registry codes with hints naming
+  Archiwista's actions) and refuses `--bbox`, `--sheets` and
   `--boundary-file` against the shared store. Steps Kartograf (optional),
-  Archiwista (the area fix, the deploy on :8090, Kaczawa's directory, the
-  set), Hydrograf (ADR-067, staging), S5 and the registry; the coverage of
-  the Kaczawa area, the modes Kartograf's writers leave and decisions D1 to
-  D11 for the author (HUB-5.2, DEV-17.4).
+  Archiwista (the area fix; draft sets, „zestaw w budowie”, with
+  `state`, `closed_at`, `closed_by` and `pins_sha256` in
+  `archiwista-project/1`, a closed set frozen; the deploy on :8090;
+  Kaczawa's directory; the set of NMT 5 m 2020, BDOT10k and HSG built and
+  closed by the author in the web interface), Hydrograf (ADR-067, staging),
+  S5 and the registry, whose `archiwista-project/1` gains the rule that
+  consumers read only closed sets; the coverage of the Kaczawa area, the
+  modes Kartograf's writers leave and the author's decisions D1 to D12
+  (HUB-5.2, DEV-17.4).
 
 - Registry: an optional `gui` interface, the command that serves a project's
   browser GUI (HUB-2.1, `schemas/ecosystem.schema.json`), listed in the
