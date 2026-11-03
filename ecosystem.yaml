@@ -329,6 +329,7 @@ projects:
     profiles: [tool]
     status: research
     repo: https://github.com/Daldek/Hydraulik
+    branch: feature/sfincs-swmm
     python_manifests: [pyproject.toml]
     visibility: public
     distribution: {pypi: null, import_name: hydraulik}

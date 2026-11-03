@@ -35,15 +35,20 @@ uv run scripts/ecosystem.py map          # regenerate docs/ECOSYSTEM_MAP.md
 uv run scripts/ecosystem.py agents       # regenerate AGENTS.md, the routing table
 uv run scripts/ecosystem.py deps|drift   # read sibling checkouts (HUB §3)
 uv run scripts/ecosystem.py standard     # IDs, links, budgets; --write regenerates
+uv run scripts/ecosystem.py set check    # consumers' pins against the release set
+uv run scripts/ecosystem.py set apply --project P [--path DIR]   # pin P to the set
+uv run scripts/ecosystem.py set bump P [--rev REF]   # move P, regenerate the README
+uv run scripts/ecosystem.py set readme [--check]     # release-sets/candidate-<N>/README.md
 ```
 
 Checkouts of the other projects are siblings of Nogat or under
-`NOGAT_WORKSPACE`; `deps` and `drift` only read them.
+`NOGAT_WORKSPACE`; `deps`, `drift` and `set check` only read them (`set check`
+and `set bump` fetch first); `set apply` writes one consumer's manifests.
 
 ## Code map
 
 ```
-scripts/ecosystem.py   registry: validate, map, agents, deps, drift, standard
+scripts/ecosystem.py   registry: validate, map, agents, deps, drift, standard, set
 scripts/guide.py       AGENTS.md: the routing table, from the registry's routes
 scripts/standard.py    checks of the standard: IDs, links, budgets, copies
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)

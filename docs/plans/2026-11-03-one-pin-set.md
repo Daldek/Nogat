@@ -32,7 +32,7 @@ commits" as one command per project.
 | # | Decision |
 |---|---|
 | D1 | `release-sets/candidate-1/members.toml` is the source of truth: `[<Project>] commit = "<40 hex>"` for every project that another one pins and every member of REL-6.1. Its `README.md` is generated from it (gate: `--check`). |
-| D2 | `ecosystem.py set check` reads each consumer's manifests at its integration ref (`origin/develop`, or the registry's new optional `branch` for a project whose code lives elsewhere, Hydraulik `feature/sfincs-swmm`) and reports every pin of a producer that differs from the set; exit 1 when one differs. It does not run in the gate (it needs the workspace and the network state); it runs before every merge that changes a pin. |
+| D2 | `ecosystem.py set check` reads each consumer's manifests at its integration ref (`origin/develop`, or the registry's new optional `branch` for a project whose code lives elsewhere, Hydraulik `feature/sfincs-swmm`) and reports every pin of a producer that differs from the set; it fails with `conflict` (exit 4, HUB-4.8) when one differs. It does not run in the gate (it needs the workspace and the network state); it runs before every merge that changes a pin. |
 | D3 | `ecosystem.py set apply --project P [--path DIR]` rewrites P's pins in place to the set's commits, both forms, full 40-hex SHAs, nothing else; then the consumer runs `uv lock` and its gate. |
 | D4 | `ecosystem.py set bump P [--rev REF]` sets P's commit to `REF` (default: `origin/develop` of P's checkout, after `git fetch`) as a full SHA and regenerates the README. A bump is committed to Nogat `develop` before consumers apply it. |
 | D5 | Hydrograf is included: the author's instruction covers every dependency; moving its pins (and the import rename `imgwtools` → `obserwator`) is admitted under its freeze as the API break of a producer. Production keeps the deployed image until the author redeploys. |
@@ -43,7 +43,13 @@ commits" as one command per project.
 | # | Change | Verified by |
 |---|---|---|
 | 1 | Nogat: D1–D4 in `scripts/ecosystem.py` with tests; HUB/REL text; candidate-1 at the heads of `origin/develop` (Kartograf, Obserwator, Hydrolog) | Nogat gate |
-| 2 | each consumer: `set apply`, `uv lock`, code follow-ups, its gate | `set check` exit 0 |
+| 2 | each consumer: `set apply`, `uv lock`, code follow-ups, its gate | `set check` exit 0 (`conflict`, exit 4, while a pin differs) |
 | 3 | Retman: knows every tool at the set's commits and runs their basic functions | Retman's tests and a live smoke |
 
 ## Results
+
+- Step 1 (2026-11-03, branch `feature/pin-set`, gate OK): HUB-4.9 and
+  REL-6.4; candidate-1 is Kartograf `9deaa31`, Obserwator `ea158dc`, Hydrolog
+  `38855a1`. `set check` then: Retman's Kartograf pin matches; Hydrograf (3),
+  Hydraulik (2), Retman (Obserwator) and Archiwista (2) differ; Hydraulik
+  does not declare Kartograf (it calls its CLI).

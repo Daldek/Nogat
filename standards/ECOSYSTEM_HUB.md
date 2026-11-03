@@ -26,9 +26,10 @@ history rewrites; the registry references repositories instead.
 
 **HUB-2.1** The registry records structure only: what only Nogat knows. Its
 fields are those of `schemas/ecosystem.schema.json`, shown below;
-`python_manifests`, `routes`, `interfaces.gui` (the command that serves the
-project's browser GUI on the user's computer, given only by a project that
-has one) and, in a dependency, `uses` and `note` are optional.
+`python_manifests`, `branch` (the branch holding a project's code when it is
+not `develop`, HUB-4.9), `routes`, `interfaces.gui` (the command that serves
+the project's browser GUI on the user's computer, given only by a project
+that has one) and, in a dependency, `uses` and `note` are optional.
 
 ```yaml
 schema: nogat-ecosystem/1
@@ -165,11 +166,24 @@ registry, and generated tables are fresh (`--write` regenerates them). The
 gate runs it.
 
 **HUB-4.8** Nogat's scripts report failures by the registry: a malformed
-input is `data_error`, a missing one `not_found`, a stale generated file or
-incompatible ranges `conflict`, a wrong call `validation_error`, a defect
-`internal_error`; the last stderr line is the `nogat-error/1` document
-(AGI-4.3).
+input is `data_error`, a missing one `not_found`, a stale generated file,
+incompatible ranges or a pin outside the release set `conflict`, a wrong
+call `validation_error`, a defect `internal_error`; the last stderr line is
+the `nogat-error/1` document (AGI-4.3).
 *Why:* agents handle the hub's tools like any other tool (ECO-044).
+
+**HUB-4.9** `uv run scripts/ecosystem.py set` keeps the pins of the current
+candidate (REL-6.4). `set check` fetches each consumer, reads its
+`python_manifests` at `origin/<branch>` (`develop` unless the registry gives
+`branch`) and lists every pin of a member or of an active dependency against
+the set's commit; it runs before every merge that changes a pin, not in the
+gate. `set apply --project <P> [--path <dir>]` rewrites P's pins, the `rev`
+of `[tool.uv.sources]` and the ref of a `git+` URL, to the full commits and
+changes nothing else. `set bump <P> [--rev <ref>]` records the commit `ref`
+resolves to in P's fetched checkout (default `origin/<branch>`) and
+regenerates the README, which `set readme --check` checks in the gate.
+*Why:* consumers that pin one producer at different commits cannot be
+installed together (REL-6.1).
 
 ## 5. Agents operating from Nogat
 

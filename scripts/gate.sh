@@ -46,6 +46,9 @@ run python scripts/ecosystem.py map --check
 step "AGENTS.md (HUB-4.3)"
 run python scripts/ecosystem.py agents --check
 
+step "release set README (HUB-4.9)"
+run python scripts/ecosystem.py set readme --check
+
 step "standard (HUB-4.7: IDs, links, budgets, generated outputs)"
 run python scripts/ecosystem.py standard
 

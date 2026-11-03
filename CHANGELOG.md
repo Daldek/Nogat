@@ -45,6 +45,18 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- One set of pins (plan `docs/plans/2026-11-03-one-pin-set.md`, step 1):
+  `release-sets/candidate-1/members.toml` holds Kartograf, Obserwator and
+  Hydrolog at the heads of `origin/develop`, and its `README.md` is generated
+  from it (gate: `set readme --check`). `scripts/ecosystem.py set check`
+  lists every consumer's pin, read at `origin/<branch>` after a fetch,
+  against the set and fails with `conflict` when one differs; `set apply
+  --project P [--path DIR]` rewrites P's `[tool.uv.sources]` `rev` and
+  `git+` URL refs to the full commits; `set bump P [--rev REF]` records a
+  member's commit. The registry's optional `branch` names where a project's
+  code lives (Hydraulik `feature/sfincs-swmm`); plan D2 says `conflict`
+  (exit 4, HUB-4.8) instead of exit 1 (REL-6.4, HUB-2.1, HUB-4.9).
+
 - `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` (decided by the
   author on 2026-11-02, D6 and D12 open): Archiwista alone writes Kartograf
   data into the store it shares with Hydrograf; Hydrograf's bootstrap reads

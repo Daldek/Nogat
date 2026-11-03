@@ -47,6 +47,11 @@
         },
         "status": {"enum": ["active", "research", "paused", "archived"]},
         "repo": {"type": "string", "pattern": "^https://"},
+        "branch": {
+          "description": "Branch holding the project's code when it is not develop; `set check` reads the manifests at origin/<branch> (REL-6.4).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$"
+        },
         "python_manifests": {
           "description": "Repository-relative files declaring Python dependencies (pyproject.toml, requirements*.txt).",
           "type": "array",
