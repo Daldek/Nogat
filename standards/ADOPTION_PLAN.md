@@ -24,6 +24,8 @@ author's approval for merges, tags, force-pushes and history rewrites
 
 ## Phase 1: identity and history (one-off)
 
+Done 2026-11-03 (record: `docs/PROGRESS.md`, Open questions).
+
 Preconditions, checked per repository before starting:
 - no uncommitted changes and no stash, which `git-filter-repo` does not
   rewrite. On 2026-10-19: Hydrolog 42 changed files, Hydrograf 1, Hydraulik 8

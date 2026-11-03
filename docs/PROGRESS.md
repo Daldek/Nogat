@@ -22,7 +22,7 @@ of 2026-11-03 and supersede the project rows below where they differ.
 | Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
-| Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits; all but F6 (the author's history rewrite) are fixed and pushed (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned and pushed, with their gates recorded (Next 3 of that plan). Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
+| Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (IMGWTools after the rename of `master`) |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
@@ -178,19 +178,22 @@ fail until the limit resets.
    serves the mockup on :8765. The GUI platform plan
    (`docs/plans/2026-11-01-nogat-gui-platform.md`) stays `Approved:
    pending`. The tools' branches await the author's review and release:
-   - Hydrograf: v0.5.0 frozen on `develop` (`d62646c`, pushed); next,
+   - Hydrograf: v0.5.0 frozen on `develop` (`f3404cd`, pushed; code of
+     `d62646c` with the producer pins and hashes of the rewrite); next,
      `develop` into `main` and the tag `v0.5.0`, both the author's.
    - Archiwista: `feature/archiwista-projects`.
    - Hydrolog: `fix/snyder-recession`, `feature/gui` (with `chore/nogat-2.1`
      and the routing stack beneath it; its `docs/PROGRESS.md`).
    - Hydraulik: `feature/sfincs-swmm`.
-   - Kartograf: v0.8.0 FROZEN on `develop` (`882a1c3e`, pushed, 2026-11-03):
+   - Kartograf: v0.8.0 FROZEN on `develop` (`1ed40b9a`, pushed, 2026-11-03;
+     code of `882a1c3e`, then only the hashes of the rewrite in its docs):
      only fixes of critical defects or API breaks until the tag; the
      Windows/macOS fixes are in, two Windows test expectations and the
      macOS run wait for 0.8.1 (its `docs/PROGRESS.md` Next 1); next,
      `verify-candidate`, the release commit, `develop` into `main` and
      `v0.8.0`, merged locally.
-   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`0045bac`).
+   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`0045bac`;
+     head `b9e74b3` after the rewrite).
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
    `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on
@@ -214,10 +217,23 @@ fail until the limit resets.
 
 ## Open questions
 
-- F6 of the final integration run remains open: the author owns the history
-  rewrite of Hydrograf's `develop` and IMGWTools. The recorded Hydrograf gate
-  uses `GATE_COMMIT_RANGE=develop..HEAD`; IMGWTools' commit step checks only
-  one commit. Passing gates do not close this item.
+- History rewrite (ADOPTION_PLAN phase 1, ECO-007): done 2026-11-03 for
+  Kartograf, IMGWTools, Hydrolog, Hydrograf and Hydraulik with
+  `git-filter-repo` a40bce548d2c on mirrors of the local repositories
+  (every local branch included, stashes kept locally): every commit is by
+  `Daldek <git@debever.pl>` (PL1B5J kept in IMGWTools), no AI trailer
+  remains, commit counts and the tree of every branch and tag are unchanged;
+  all branches and tags force-pushed with leases; local branches, worktrees
+  and detached worktree heads moved by the commit maps with their working
+  trees untouched. Bundles of the old histories:
+  `~/backups/history-rewrite-2026-11-03/`. Consumers re-pinned (Hydrograf,
+  Retman, Archiwista, Hydraulik `feature/sfincs-swmm`) and the hashes of
+  the current docs remapped on the development branches of the eight
+  repositories; other branches (for example Hydrolog `feature/gui`,
+  Kartograf `feature/pgw`) keep old hashes in their docs. Old commits stay
+  reachable on GitHub through IMGWTools pull request #1 until GitHub Support
+  removes them; Retman, Archiwista and Nogat needed no rewrite (Nogat's 8
+  noreply commits of 2025 are left as they are).
 - Hydrograf must lift its `affine<3` cap when pyflwdir 0.5.13 permits it
   (ADR-062); until then keep it and Archiwista in separate environments.
 - Hydraulik's code is committed on `feature/sfincs-swmm` (worktree
