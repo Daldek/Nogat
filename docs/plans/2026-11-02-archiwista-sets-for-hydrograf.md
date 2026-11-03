@@ -1,5 +1,8 @@
 # Plan: Archiwista's sets as Hydrograf's only Kartograf input
 
+Approved: 2026-11-02 (the author, variant B and decisions D1 to D12 in
+„Decisions of the author”)
+
 Requirements: HUB-5.2, DEV-17.4, DEV-3.4, DEV-17.5, AGI-3.3, ECO-054. Builds
 on the approved [projects plan](2026-10-31-archiwista-projects.md)
 (`archiwista-project/1`, Archiwista's A-ADR-049) and replaces step S5 of
