@@ -85,7 +85,7 @@ project's next merge into `main`.
 
 ## Results
 
-Step 1 (2026-11-03, branch `plan/numbering-from-main`, not merged): ECO-056,
+Step 1 (2026-11-03, merged into `develop` in `4bb6659`): ECO-056,
 amending ECO-004 and ECO-046; HUB-6.1 and AGI-4.1 carry the rule; the
 standard is 1.0 in `standards/`, `ecosystem.yaml`, `error_registry.json`,
 `CLAUDE.md`, `docs/PROGRESS.md` and the registry tests, with the 2.1
@@ -93,3 +93,9 @@ changelog as the 1.0 changelog; `standards/legacy/v1.0/` is
 `standards/legacy/shared-2026-01/`; `docs/ECOSYSTEM_MAP.md` regenerated
 (`AGENTS.md` and the error tables unchanged). Branch names such as
 `chore/nogat-2.1` stay: they name existing refs.
+
+Step 2 (2026-11-03): Kartograf `develop` `4e4445e5`, the commit that freezes
+it for 0.8.0, cites the standard as 1.0 (CLAUDE.md, ADR-048 to ADR-058,
+PROGRESS, CHANGELOG); its copy of `error_registry.json` comes from
+`4bb6659`, so `kartograf._errors.STANDARD_VERSION` is `"1.0"`; gate green
+(8,577 passed). Branch names `chore/nogat-2.1` stay.

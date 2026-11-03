@@ -184,7 +184,13 @@ fail until the limit resets.
    - Hydrolog: `fix/snyder-recession`, `feature/gui` (with `chore/nogat-2.1`
      and the routing stack beneath it; its `docs/PROGRESS.md`).
    - Hydraulik: `feature/sfincs-swmm`.
-   - Kartograf and IMGWTools: `feature/archiwista-projects`.
+   - Kartograf: v0.8.0 FROZEN on `develop` (`4e4445e5`, pushed, 2026-11-03):
+     only fixes of critical defects or API breaks until the tag; the
+     Windows/macOS fixes are in, two Windows test expectations and the
+     macOS run wait for 0.8.1 (its `docs/PROGRESS.md` Next 1); next,
+     `verify-candidate`, the release commit, `develop` into `main` and
+     `v0.8.0`, merged locally.
+   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`698907c`).
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
    `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on
