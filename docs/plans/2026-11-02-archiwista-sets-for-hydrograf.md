@@ -11,7 +11,7 @@ on Hydrograf's `feature/store-migration`, worktree `Hydrograf-store`).
 Decided: the author's answers of 2026-11-02 are in „Decisions of the
 author”; D6 was decided since (Archiwista deployed with `TMPDIR` on disk).
 Status on 2026-11-03: A1 to A3 and H1 done, A4 and A5 wait for the author,
-H2 and S5 postponed until after Hydrograf v0.8.0 (Results).
+H2 and S5 postponed until after Hydrograf v0.5.0 (Results).
 
 ## Goal
 
@@ -814,5 +814,5 @@ changed by Archiwista (A2).
 | A2 | Archiwista, `feature/archiwista-projects` | draft sets committed as `21eff04`..`6ece8ca` (PROGRESS `4027755`), A-ADR-049 erratum 6, index schema 17; full gate green on that tree (2026-11-02, 2749 passed) |
 | A3 | Archiwista, instance :8090 | `4027755` deployed 2026-11-03 ~00:00 with `TMPDIR` on disk; the index rebuild to schema 17 dropped sessions, job history and 18 drawn rectangles, kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`; `archiwista-state/2` back to `/1` deferred to the release preparation |
 | A4, A5 | Archiwista, data | wait for the author |
-| H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.8.0 candidate `7974ef0` (production since 2026-11-02 22:18) |
-| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.8.0 (its `develop` is frozen until the merge into `main` and the tag) |
+| H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `7974ef0` (production since 2026-11-02 22:18) |
+| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag) |

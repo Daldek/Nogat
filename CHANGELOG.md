@@ -15,7 +15,7 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 - `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`: status of
   2026-11-03 in Results: A1 to A3 and H1 done, A4 and A5 wait for the
-  author, H2 and S5 postponed until after Hydrograf v0.8.0.
+  author, H2 and S5 postponed until after Hydrograf v0.5.0.
 
 ### Added
 

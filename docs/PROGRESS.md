@@ -86,10 +86,10 @@ These rows supersede the rows above where they differ.
 
 | Project | Branch and head | Change |
 |---|---|---|
-| Hydrograf | `develop`, `7974ef0` (version `0.8.0.dev0`), pushed; production in place since 2026-11-02 22:18 | The v0.8.0 candidate. FROZEN until the author merges it into `main` and tags `v0.8.0`: only critical API-breaking fixes or glaring bugs. Pins Hydrolog `4f02ffd` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `26ee459`, IMGWTools `6bd35a4`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.8.0 |
+| Hydrograf | `develop`, `7974ef0` (version `0.5.0.dev0`), pushed; production in place since 2026-11-02 22:18 | The v0.5.0 candidate. FROZEN until the author merges it into `main` and tags `v0.5.0`: only critical API-breaking fixes or glaring bugs. Pins Hydrolog `4f02ffd` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `26ee459`, IMGWTools `6bd35a4`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.5.0 |
 | Archiwista | `feature/archiwista-projects`, `4027755`; on :8090 since 2026-11-03 ~00:00 | The project-area fix (A1) and draft sets, open or closed with `pins_sha256`, one producer per set (A2), deployed with `TMPDIR` on disk (A3). The rebuild of the index to schema 17 dropped the sessions, the job history and 18 drawn rectangles; they are kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`. Renaming `archiwista-state/2` to `/1` is deferred to the release preparation (the author's rule: identifiers `<name>/<N>` not yet released on `main` stay at `/1`) |
 | Hydrolog | `feature/gui`, `cd6fa52` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `4f02ffd`, pushed and pinned by Hydrograf |
-| Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.8.0 (item 7) |
+| Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
 
 Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
@@ -173,8 +173,8 @@ fail until the limit resets.
    serves the mockup on :8765. The GUI platform plan
    (`docs/plans/2026-11-01-nogat-gui-platform.md`) stays `Approved:
    pending`. The tools' branches await the author's review and release:
-   - Hydrograf: v0.8.0 frozen on `develop` (`7974ef0`, pushed); next,
-     `develop` into `main` and the tag `v0.8.0`, both the author's.
+   - Hydrograf: v0.5.0 frozen on `develop` (`7974ef0`, pushed); next,
+     `develop` into `main` and the tag `v0.5.0`, both the author's.
    - Archiwista: `feature/archiwista-projects`.
    - Hydrolog: `fix/snyder-recession`, `feature/gui` (with `chore/nogat-2.1`
      and the routing stack beneath it; its `docs/PROGRESS.md`).
@@ -199,7 +199,7 @@ fail until the limit resets.
    2.87 km², its outlet by 972 m; about 935 m² of it lie outside the 205
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
    :8090), H1 done (in Hydrograf's `develop`, `7974ef0`); A4 and A5 wait
-   for the author; H2 and S5 are postponed until after Hydrograf v0.8.0.
+   for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
 
 ## Open questions
 
