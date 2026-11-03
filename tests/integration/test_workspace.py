@@ -58,6 +58,13 @@ def test_drift_reports_each_consumer_state(
         "[project]\ndependencies = ["
         '"producer @ git+https://github.com/Daldek/Producer.git@release/0.8"]\n',
     )
+    _write(
+        workspace / "Web" / "backend" / "pyproject.toml",
+        '[project]\ndependencies = ["producer>=0.8.0.dev0,<0.9"]\n'
+        "[tool.uv.sources]\nproducer = { git = "
+        '"https://github.com/Daldek/Producer.git", '
+        'rev = "26ee45924b719b4f357ab02c88cda58aa806843f" }\n',
+    )
     _write(workspace / "Broken" / "pyproject.toml", "[project\n")
     (workspace / "Bare").mkdir()
     (workspace / "Producer").mkdir()
@@ -67,6 +74,11 @@ def test_drift_reports_each_consumer_state(
             _project(
                 "App",
                 python_manifests=["pyproject.toml"],
+                depends_on=[_dep("Producer")],
+            ),
+            _project(
+                "Web",
+                python_manifests=["backend/pyproject.toml"],
                 depends_on=[_dep("Producer")],
             ),
             _project(
@@ -82,6 +94,8 @@ def test_drift_reports_each_consumer_state(
     rows = {line.split()[0]: line for line in capsys.readouterr().out.splitlines()[1:]}
     assert "branch release/0.8" in rows["App"]
     assert "branch pin" in rows["App"]
+    assert "commit 26ee459 (backend/pyproject.toml, tool.uv.sources)" in rows["Web"]
+    assert rows["Web"].endswith("commit pin")
     assert "unreadable" in rows["Broken"]
     assert "not valid TOML" in rows["Broken"]
     assert rows["Bare"].endswith("no manifest")

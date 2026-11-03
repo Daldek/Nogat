@@ -79,6 +79,33 @@ def test_pin_classifies_requirement(line: str, expected: tuple[str, str]) -> Non
     assert ecosystem._pin(Requirement(line)) == expected
 
 
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        (
+            {"git": "https://github.com/Daldek/Kartograf.git", "rev": "26ee4592" * 5},
+            ("commit", "26ee459"),
+        ),
+        (
+            {"git": "https://github.com/Daldek/Kartograf.git", "tag": "v0.8.0"},
+            ("tag", "v0.8.0"),
+        ),
+        (
+            {"git": "https://github.com/Daldek/Kartograf.git", "branch": "develop"},
+            ("branch", "develop"),
+        ),
+        ({"git": "https://github.com/Daldek/Kartograf.git"}, ("none", "")),
+        ({"path": "../Kartograf", "editable": True}, ("path", "../Kartograf")),
+        ({"index": "pytorch"}, None),
+        ({"workspace": True}, None),
+    ],
+)
+def test_source_pin_classifies_uv_source(
+    source: dict[str, object], expected: tuple[str, str] | None
+) -> None:
+    assert ecosystem._source_pin(source) == expected
+
+
 def test_requirement_lines_reads_requirements_like_pip(tmp_path: Path) -> None:
     (tmp_path / "base.txt").write_text("numpy>=1.26  # arrays\n", encoding="utf-8")
     (tmp_path / "requirements.txt").write_text(

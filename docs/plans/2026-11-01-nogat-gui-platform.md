@@ -400,7 +400,7 @@ taking `route network` tables, Hydrograf on MapLibre to share a map shell.
 | Cookies reach every port of the host (verified) | an app receives Nogat's and the other apps' cookies | front ports strip them; `HttpOnly`; apps log no cookies; Nogat ignores app cookies |
 | Roles from Nogat in Archiwista (B3) | an Archiwista moved under Nogat loses its own role assignments | role assignment refused while `proxy_roles_header` is set; question 3 |
 | Everything on one machine (A2) | Hydrograf's API (8 GB) and PostGIS (2 GB) beside Archiwista's previews | `nogat up` starts only the configured apps; `nogat doctor` checks memory |
-| Hydrograf pins Hydrolog 0.6.3, the host the release set | the same inputs give different numbers | the hand-off carries the producer's version and result; the module shows the difference |
+| Hydrograf pins a Hydrolog commit (`4f02ffd` on 2026-11-03), the host the release set | the same inputs give different numbers | the hand-off carries the producer's version and result; the module shows the difference |
 | The work competes with the first release set and Archiwista's release | both slip | steps after those releases unless the author says otherwise (question 9) |
 
 ## Open questions for the author

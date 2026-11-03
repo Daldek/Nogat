@@ -379,6 +379,30 @@ def workspace() -> Path:
     return Path(os.environ.get("NOGAT_WORKSPACE") or ROOT.parent)
 
 
+def _toml(path: Path) -> dict[str, Any]:
+    """Parse a TOML file; RegistryError names the file when it is not valid TOML."""
+    try:
+        return tomllib.loads(_read(path))
+    except tomllib.TOMLDecodeError as e:
+        raise RegistryError(f"{_shown(path)}: not valid TOML: {e}") from e
+
+
+def _uv_sources(path: Path) -> dict[str, list[dict[str, Any]]]:
+    """`[tool.uv.sources]` of a pyproject.toml by package name; {} for other files.
+
+    uv installs a dependency named there from its source, whatever the
+    requirement says; a name may list several sources chosen by markers.
+    Raises RegistryError when the file cannot be read or parsed.
+    """
+    if path.suffix != ".toml":
+        return {}
+    sources = _toml(path).get("tool", {}).get("uv", {}).get("sources") or {}
+    return {
+        canonicalize_name(name): entry if isinstance(entry, list) else [entry]
+        for name, entry in sources.items()
+    }
+
+
 def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[str]:
     r"""Return the requirement strings of a pyproject.toml or requirements file.
 
@@ -388,12 +412,8 @@ def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[
     are followed and other option lines (`-e`, `-c`, `--index-url`) skipped.
     Raises RegistryError when a file cannot be read or parsed.
     """
-    text = _read(path)
     if path.suffix == ".toml":
-        try:
-            data = tomllib.loads(text)
-        except tomllib.TOMLDecodeError as e:
-            raise RegistryError(f"{_shown(path)}: not valid TOML: {e}") from e
+        data = _toml(path)
         project = data.get("project", {})
         lines = list(project.get("dependencies") or [])
         for extra in (project.get("optional-dependencies") or {}).values():
@@ -401,6 +421,7 @@ def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[
         for group in (data.get("dependency-groups") or {}).values():
             lines += [item for item in group if isinstance(item, str)]
         return lines
+    text = _read(path)
     lines = []
     seen = seen | {path.resolve()}
     for raw in text.replace("\\\n", " ").splitlines():
@@ -650,6 +671,27 @@ def _pin(req: Requirement) -> tuple[str, str]:
     return "none", ""
 
 
+def _source_pin(source: dict[str, Any]) -> tuple[str, str] | None:
+    """Classify a `[tool.uv.sources]` entry as `_pin` does a requirement.
+
+    None for a source that keeps the requirement's own pin (`index`,
+    `workspace`).
+    """
+    if "git" in source:
+        if "tag" in source:
+            return "tag", source["tag"]
+        if "branch" in source:
+            return "branch", source["branch"]
+        if "rev" not in source:
+            return "none", ""
+        return _pin(Requirement(f"source @ git+{source['git']}@{source['rev']}"))
+    if "path" in source:
+        return "path", source["path"]
+    if "url" in source:
+        return _pin(Requirement(f"source @ {source['url']}"))
+    return None
+
+
 def _state(kind: str, value: str, latest: str | None) -> str:
     """Compare a pin of `kind` and `value` with the producer's latest tag."""
     if kind == "commit":
@@ -711,6 +753,7 @@ def report_drift(registry: dict[str, Any]) -> int:
                     continue
                 try:
                     lines = _requirement_lines(path)
+                    sources = _uv_sources(path)
                 except RegistryError as e:
                     rows.append((*who, "—", latest or "—", f"unreadable: {e}"))
                     found = True
@@ -723,18 +766,21 @@ def report_drift(registry: dict[str, Any]) -> int:
                     if not _matches(req, producer):
                         continue
                     found = True
-                    kind, value = _pin(req)
-                    pin = (
-                        f"{kind} {value} ({manifest})"
-                        if value
-                        else f"{kind} ({manifest})"
-                    )
-                    state = (
-                        "no tags"
-                        if kind in ("tag", "range") and latest is None
-                        else _state(kind, value, latest)
-                    )
-                    rows.append((*who, pin, latest or "—", state))
+                    entries = sources.get(canonicalize_name(req.name), [])
+                    pins = [p for e in entries if (p := _source_pin(e)) is not None]
+                    where = f"{manifest}, tool.uv.sources" if pins else manifest
+                    for kind, value in pins or [_pin(req)]:
+                        pin = (
+                            f"{kind} {value} ({where})"
+                            if value
+                            else f"{kind} ({where})"
+                        )
+                        state = (
+                            "no tags"
+                            if kind in ("tag", "range") and latest is None
+                            else _state(kind, value, latest)
+                        )
+                        rows.append((*who, pin, latest or "—", state))
             if not found:
                 rows.append((*who, "—", latest or "—", "not declared"))
     header = ("consumer", "producer", "pin", "latest tag", "state")

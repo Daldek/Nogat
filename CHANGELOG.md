@@ -236,6 +236,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 - `drift` keeps VCS refs containing `/` (`@release/0.8`), labels a project
   without manifests "no manifest", and takes the newest final release tag as
   latest instead of a release candidate sorted after it.
+- `drift` reads `[tool.uv.sources]` of a `pyproject.toml`: a `git` source
+  with `rev`, `tag` or `branch`, a `path` or a `url` replaces the
+  requirement's own pin, as uv installs it, so Hydrograf's commit pins of
+  Kartograf, Hydrolog and IMGWTools are no longer shown as ranges that
+  exclude the latest tag.
+- `docs/PROGRESS.md`: Hydrograf's row of 2026-11-03 names `develop`
+  `7273410`, the `certifi` exception to its freeze, the rebuild and the
+  rollback image; Next 4 no longer says `feature/visual-identity` is
+  unmerged.
 - Requirements files are read as pip reads them: line continuations,
   `--hash` options and `-r` includes.
 - A missing or malformed `ecosystem.yaml`, JSON or manifest gives a one-line
