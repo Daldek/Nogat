@@ -11,6 +11,10 @@ Usage:
     uv run scripts/ecosystem.py drift          # consumers' pins against producers' tags
     uv run scripts/ecosystem.py standard       # IDs, links, budgets, copies
     uv run scripts/ecosystem.py standard --write   # regenerate blocks, then check
+    uv run scripts/ecosystem.py set check      # consumers' pins against the release set
+    uv run scripts/ecosystem.py set apply --project P [--path DIR]  # pin P to the set
+    uv run scripts/ecosystem.py set bump P [--rev REF]  # move P in the set
+    uv run scripts/ecosystem.py set readme [--check]    # the set's README.md
 
 Checkouts are resolved as siblings of Nogat or under NOGAT_WORKSPACE (HUB §3).
 """
@@ -24,6 +28,7 @@ import re
 import subprocess
 import sys
 import tomllib
+from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any, NoReturn
 from urllib.parse import urlsplit
@@ -43,6 +48,9 @@ SCHEMA = ROOT / "schemas" / "ecosystem.schema.json"
 ERROR_SCHEMA = ROOT / "schemas" / "agent" / "error-1.schema.json"
 MAP = ROOT / "docs" / "ECOSYSTEM_MAP.md"
 AGENTS = ROOT / "AGENTS.md"
+RELEASE_SETS = ROOT / "release-sets"
+CANDIDATE = re.compile(r"^candidate-(\d+)$")
+FULL_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 
 LOCAL_PATH = re.compile(r"(^|\s)(/home/|/Users/|~/|[A-Za-z]:\\)")
 COMMIT = re.compile(r"^[0-9a-f]{7,40}$")
@@ -396,15 +404,17 @@ def _names_repo(req: Requirement, sources: list[dict[str, Any]], repo: str) -> b
     return any(repo.lower() in url.lower() for url in urls)
 
 
-def _toml(path: Path) -> dict[str, Any]:
+def _toml(path: Path, read: Callable[[Path], str] = _read) -> dict[str, Any]:
     """Parse a TOML file; RegistryError names the file when it is not valid TOML."""
     try:
-        return tomllib.loads(_read(path))
+        return tomllib.loads(read(path))
     except tomllib.TOMLDecodeError as e:
         raise RegistryError(f"{_shown(path)}: not valid TOML: {e}") from e
 
 
-def _uv_sources(path: Path) -> dict[str, list[dict[str, Any]]]:
+def _uv_sources(
+    path: Path, read: Callable[[Path], str] = _read
+) -> dict[str, list[dict[str, Any]]]:
     """`[tool.uv.sources]` of a pyproject.toml by package name; {} for other files.
 
     uv installs a dependency named there from its source, whatever the
@@ -413,24 +423,29 @@ def _uv_sources(path: Path) -> dict[str, list[dict[str, Any]]]:
     """
     if path.suffix != ".toml":
         return {}
-    sources = _toml(path).get("tool", {}).get("uv", {}).get("sources") or {}
+    sources = _toml(path, read).get("tool", {}).get("uv", {}).get("sources") or {}
     return {
         canonicalize_name(name): entry if isinstance(entry, list) else [entry]
         for name, entry in sources.items()
     }
 
 
-def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[str]:
+def _requirement_lines(
+    path: Path,
+    seen: frozenset[Path] = frozenset(),
+    read: Callable[[Path], str] = _read,
+) -> list[str]:
     r"""Return the requirement strings of a pyproject.toml or requirements file.
 
     pyproject.toml contributes dependencies, extras and dependency groups. A
     requirements file is read as pip reads it: `\` continues a line, options
     after a requirement (`--hash=…`) and comments are dropped, `-r` includes
     are followed and other option lines (`-e`, `-c`, `--index-url`) skipped.
+    `read` returns a file's text (the disk by default, a git ref in `set check`).
     Raises RegistryError when a file cannot be read or parsed.
     """
     if path.suffix == ".toml":
-        data = _toml(path)
+        data = _toml(path, read)
         project = data.get("project", {})
         lines = list(project.get("dependencies") or [])
         for extra in (project.get("optional-dependencies") or {}).values():
@@ -438,18 +453,18 @@ def _requirement_lines(path: Path, seen: frozenset[Path] = frozenset()) -> list[
         for group in (data.get("dependency-groups") or {}).values():
             lines += [item for item in group if isinstance(item, str)]
         return lines
-    text = _read(path)
+    text = read(path)
     lines = []
-    seen = seen | {path.resolve()}
+    seen = seen | {Path(os.path.normpath(path))}
     for raw in text.replace("\\\n", " ").splitlines():
         line = raw.split(" #")[0].strip()
         if not line or line.startswith("#"):
             continue
         include = INCLUDE.match(line)
         if include:
-            target = (path.parent / include["path"]).resolve()
+            target = Path(os.path.normpath(path.parent / include["path"]))
             if target not in seen:
-                lines += _requirement_lines(target, seen)
+                lines += _requirement_lines(target, seen, read)
             continue
         if line.startswith("-"):
             continue
@@ -679,7 +694,8 @@ def _pin(req: Requirement) -> tuple[str, str]:
     """Classify a requirement as (kind, value): tag, commit, branch, range, path, none.
 
     For a VCS URL the ref is what follows the last `@` of the URL path, so
-    refs containing `/` (`release/0.8`) are kept whole.
+    refs containing `/` (`release/0.8`) are kept whole; a commit is kept as
+    written.
     """
     if req.url:
         if req.url.startswith("file:") or "://" not in req.url:
@@ -689,7 +705,7 @@ def _pin(req: Requirement) -> tuple[str, str]:
         if not ref:
             return "none", ""
         if COMMIT.match(ref):
-            return "commit", ref[:7]
+            return "commit", ref
         if re.match(r"^v?\d", ref):
             return "tag", ref
         return "branch", ref
@@ -751,6 +767,32 @@ def _state(kind: str, value: str, latest: str | None) -> str:
         return "not comparable"
 
 
+def _declared_pins(
+    lines: list[str], sources: dict[str, list[dict[str, Any]]], producer: dict[str, Any]
+) -> list[tuple[str, str, str]]:
+    """Pins of the producer among a manifest's requirements: (kind, value, form).
+
+    A requirement with `[tool.uv.sources]` entries is pinned by them (form
+    `tool.uv.sources`), otherwise by itself (form ""). [] when no requirement
+    names the producer.
+    """
+    pins: list[tuple[str, str, str]] = []
+    for line in lines:
+        try:
+            req = Requirement(line)
+        except InvalidRequirement:
+            continue
+        entries = sources.get(canonicalize_name(req.name), [])
+        if not _matches(req, entries, producer):
+            continue
+        own = [p for e in entries if (p := _source_pin(e)) is not None]
+        if own:
+            pins += [(kind, value, "tool.uv.sources") for kind, value in own]
+        else:
+            pins.append((*_pin(req), ""))
+    return pins
+
+
 def report_drift(registry: dict[str, Any]) -> int:
     """Print each active runtime or optional dependency: pin against latest tag."""
     by_name = {p["name"]: p for p in registry["projects"]}
@@ -785,36 +827,354 @@ def report_drift(registry: dict[str, Any]) -> int:
                     rows.append((*who, "—", latest or "—", f"unreadable: {e}"))
                     found = True
                     continue
-                for line in lines:
-                    try:
-                        req = Requirement(line)
-                    except InvalidRequirement:
-                        continue
-                    entries = sources.get(canonicalize_name(req.name), [])
-                    if not _matches(req, entries, producer):
-                        continue
-                    found = True
-                    pins = [p for e in entries if (p := _source_pin(e)) is not None]
-                    where = f"{manifest}, tool.uv.sources" if pins else manifest
-                    for kind, value in pins or [_pin(req)]:
-                        pin = (
-                            f"{kind} {value} ({where})"
-                            if value
-                            else f"{kind} ({where})"
-                        )
-                        state = (
-                            "no tags"
-                            if kind in ("tag", "range") and latest is None
-                            else _state(kind, value, latest)
-                        )
-                        rows.append((*who, pin, latest or "—", state))
+                pins = _declared_pins(lines, sources, producer)
+                found = found or bool(pins)
+                for kind, value, form in pins:
+                    where = f"{manifest}, {form}" if form else manifest
+                    shown = value[:7] if kind == "commit" else value
+                    pin = f"{kind} {shown} ({where})" if value else f"{kind} ({where})"
+                    state = (
+                        "no tags"
+                        if kind in ("tag", "range") and latest is None
+                        else _state(kind, value, latest)
+                    )
+                    rows.append((*who, pin, latest or "—", state))
             if not found:
                 rows.append((*who, "—", latest or "—", "not declared"))
-    header = ("consumer", "producer", "pin", "latest tag", "state")
-    widths = [max(len(r[i]) for r in [header, *rows]) for i in range(5)]
+    _table(("consumer", "producer", "pin", "latest tag", "state"), rows)
+    return 0
+
+
+def _table(header: tuple[str, ...], rows: Sequence[tuple[str, ...]]) -> None:
+    """Print rows as columns padded to their widest cell."""
+    widths = [max(len(r[i]) for r in [header, *rows]) for i in range(len(header))]
     for row in [header, *rows]:
         print("  ".join(c.ljust(w) for c, w in zip(row, widths, strict=True)).rstrip())
+
+
+def candidate() -> Path:
+    """Directory of the current candidate: `candidate-<N>` with the highest N."""
+    numbered = [
+        (int(m[1]), path)
+        for path in (RELEASE_SETS.iterdir() if RELEASE_SETS.is_dir() else [])
+        if path.is_dir() and (m := CANDIDATE.match(path.name))
+    ]
+    if not numbered:
+        raise Failure(
+            "not_found",
+            f"{_shown(RELEASE_SETS)}: no candidate-<N> directory (REL-6.4)",
+            hint="create release-sets/candidate-1/, then run: "
+            "uv run scripts/ecosystem.py set bump <Project>",
+            details={"reason": "no_candidate"},
+        )
+    return max(numbered)[1]
+
+
+def members(registry: dict[str, Any], directory: Path) -> dict[str, str]:
+    """Commit of each member in the candidate's members.toml, in registry order.
+
+    Raises RegistryError when the file is missing, names a project the
+    registry lacks or gives anything but `commit = "<40 hex>"`.
+    """
+    path = directory / "members.toml"
+    data = _toml(path)
+    order = [p["name"] for p in registry["projects"]]
+    problems = []
+    for name, table in data.items():
+        if name not in order:
+            problems.append(f"{name}: not a project of ecosystem.yaml")
+        elif (
+            not isinstance(table, dict)
+            or set(table) != {"commit"}
+            or not FULL_COMMIT.match(str(table["commit"]))
+        ):
+            problems.append(f'{name}: needs exactly commit = "<40 hex>"')
+    if problems:
+        raise RegistryError(f"{_shown(path)}: " + "; ".join(problems))
+    return {name: data[name]["commit"] for name in order if name in data}
+
+
+def render_members(directory: Path, commits: dict[str, str]) -> str:
+    """Text of a candidate's members.toml."""
+    out = [
+        f"# Release set {directory.name} (REL-6.4): the commit of each member.",
+        "# Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is",
+        "# generated from this file (`set readme`).",
+    ]
+    for name, commit in commits.items():
+        out += ["", f"[{name}]", f'commit = "{commit}"']
+    return "\n".join(out) + "\n"
+
+
+def render_set_readme(
+    registry: dict[str, Any], directory: Path, commits: dict[str, str]
+) -> str:
+    """Text of a candidate's README.md, generated from members.toml."""
+    repos = {p["name"]: p["repo"] for p in registry["projects"]}
+    out = [
+        f"# Release set {directory.name}",
+        "",
+        "<!-- Generated from members.toml by "
+        "`uv run scripts/ecosystem.py set readme`; do not edit. -->",
+        "",
+        "A candidate, not yet released (REL-6.4): every consumer pins each member",
+        "at the commit below. `uv run scripts/ecosystem.py set check` compares the",
+        "consumers' pins with it, `set apply --project <P>` writes them into a",
+        "consumer and `set bump <P>` moves a member.",
+        "",
+        "| Member | Commit |",
+        "|---|---|",
+    ]
+    for name, commit in commits.items():
+        out.append(f"| {name} | [`{commit}`]({repos[name]}/commit/{commit}) |")
+    return "\n".join(out) + "\n"
+
+
+def integration_ref(project: dict[str, Any]) -> str:
+    """Remote branch holding a project's code: registry `branch`, else develop."""
+    return f"origin/{project.get('branch') or 'develop'}"
+
+
+def _git(directory: Path, *args: str, code: str = "not_found") -> str:
+    """Stdout of `git -C directory args`; Failure `code` names a failing command."""
+    try:
+        done = subprocess.run(
+            ["git", "-C", str(directory), *args],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            check=False,
+        )
+    except OSError as e:
+        raise Failure("missing_dependency", f"git: {e.strerror}") from e
+    if done.returncode:
+        why = done.stderr.strip().splitlines()[-1:] or [f"exit {done.returncode}"]
+        raise Failure(
+            code,
+            f"{_shown(directory)}: git {' '.join(args)}: {why[0]}",
+            details={"reason": "git_failed"},
+        )
+    return done.stdout
+
+
+def _reader_at(directory: Path, ref: str) -> Callable[[Path], str]:
+    """Return a `read` for the manifest readers: files of `directory` at `ref`."""
+
+    def read(path: Path) -> str:
+        try:
+            relative = path.relative_to(directory).as_posix()
+        except ValueError as e:
+            raise RegistryError(f"{path}: outside {_shown(directory)}") from e
+        return _git(directory, "show", f"{ref}:{relative}")
+
+    return read
+
+
+def _set_state(kind: str, value: str, commit: str | None) -> str:
+    """Compare a consumer's pin with the set's commit of its producer."""
+    if commit is None:
+        return "not in set"
+    if kind != "commit":
+        return "not a commit pin"
+    return "ok" if commit.startswith(value.lower()) else "differs"
+
+
+def check_set(registry: dict[str, Any], directory: Path) -> int:
+    """Print every consumer's pin of a producer against the set (D2).
+
+    Manifests are read at each consumer's integration ref after `git fetch`.
+    A consumer is compared with every member and with the producers of its
+    active runtime and optional dependencies; such a dependency that the
+    manifests do not declare is listed as `not declared`. Failure `conflict`
+    when a pin differs from the set, is no commit or names a producer outside
+    it; `not_found` when a consumer cannot be read.
+    """
+    commits = members(registry, directory)
+    print(
+        f"{_shown(directory)}: "
+        + ", ".join(f"{name} {commit[:7]}" for name, commit in commits.items())
+    )
+    rows: list[tuple[str, str, str, str, str, str]] = []
+    for consumer in registry["projects"]:
+        manifests = consumer.get("python_manifests") or []
+        if not manifests:
+            continue
+        name = consumer["name"]
+        edges = {
+            dep["project"]
+            for dep in consumer["depends_on"]
+            if dep["status"] == "active" and dep["kind"] in ("runtime", "optional")
+        }
+        repo = checkout(consumer)
+        ref = integration_ref(consumer)
+        try:
+            if not repo.is_dir():
+                raise Failure("not_found", f"no checkout at {_shown(repo)}")
+            _git(repo, "fetch", "--quiet", "origin", code="source_unavailable")
+            read = _reader_at(repo, ref)
+            parsed = [
+                (
+                    m,
+                    _requirement_lines(repo / m, read=read),
+                    _uv_sources(repo / m, read),
+                )
+                for m in manifests
+            ]
+        except Failure as e:
+            rows.append((name, "—", ref, "—", "—", f"unreadable: {e.message}"))
+            continue
+        for producer in registry["projects"]:
+            if producer["name"] == name or not (
+                producer["name"] in edges or producer["name"] in commits
+            ):
+                continue
+            commit = commits.get(producer["name"])
+            who = (name, producer["name"])
+            found = False
+            for manifest, lines, sources in parsed:
+                for kind, value, form in _declared_pins(lines, sources, producer):
+                    found = True
+                    where = f"{ref}:{manifest}" + (f", {form}" if form else "")
+                    pinned = value[:7] if kind == "commit" else f"{kind} {value}"
+                    state = _set_state(kind, value, commit)
+                    rows.append((*who, where, (commit or "—")[:7], pinned, state))
+            if not found and producer["name"] in edges:
+                rows.append((*who, ref, (commit or "—")[:7], "—", "not declared"))
+    _table(("consumer", "producer", "manifest", "set", "pinned", "state"), rows)
+    unreadable = sorted({r[0] for r in rows if r[5].startswith("unreadable")})
+    wrong = sorted(
+        {r[0] for r in rows if r[5] not in ("ok", "not declared")} - set(unreadable)
+    )
+    if wrong:
+        raise Failure(
+            "conflict",
+            f"pins differ from {_shown(directory)} in {', '.join(wrong)}",
+            hint="run: uv run scripts/ecosystem.py set apply --project <Consumer>, "
+            "then uv lock and the consumer's gate",
+            details={"reason": "pin_mismatch", "consumers": wrong},
+        )
+    if unreadable:
+        raise Failure(
+            "not_found",
+            "cannot read the manifests of " + ", ".join(unreadable),
+            hint="clone the missing checkouts (HUB §3) or fetch their branches",
+            details={"reason": "unreadable_consumer", "consumers": unreadable},
+        )
     return 0
+
+
+def _with_ref(line: str, url: str, commit: str) -> str:
+    """Point the VCS URL of a requirement line at `commit`; change nothing else."""
+    base, mark, fragment = url.partition("#")
+    if "@" in urlsplit(base.removeprefix("git+")).path:
+        base = base[: base.rindex("@")]
+    return line.replace(url, f"{base}@{commit}{mark}{fragment}", 1)
+
+
+def _pinned_text(
+    path: Path, text: str, producers: list[dict[str, Any]], commits: dict[str, str]
+) -> str:
+    """Return a manifest's text with each pin of a set member at its commit (D3).
+
+    A `[tool.uv.sources]` entry has its `rev` replaced; a requirement without
+    one has the ref of its `git+` URL replaced or added. Tag and branch
+    sources, ranges and paths are left for the author.
+    """
+    sources = _uv_sources(path)
+    for line in _requirement_lines(path):
+        try:
+            req = Requirement(line)
+        except InvalidRequirement:
+            continue
+        entries = sources.get(canonicalize_name(req.name), [])
+        producer = next((p for p in producers if _matches(req, entries, p)), None)
+        if producer is None:
+            continue
+        commit = commits[producer["name"]]
+        if entries:
+            for entry in entries:
+                rev = entry.get("rev")
+                if "git" in entry and isinstance(rev, str):
+                    text = re.sub(
+                        rf"(\brev\s*=\s*)([\"']){re.escape(rev)}\2",
+                        rf"\g<1>\g<2>{commit}\g<2>",
+                        text,
+                    )
+        elif req.url and req.url.startswith("git+"):
+            text = text.replace(line, _with_ref(line, req.url, commit))
+    return text
+
+
+def apply_set(
+    registry: dict[str, Any], commits: dict[str, str], name: str, directory: Path
+) -> list[Path]:
+    """Rewrite a consumer's pins of the set's members in place; changed files."""
+    project = _project(registry, name)
+    manifests = project.get("python_manifests") or []
+    if not manifests:
+        raise Failure(
+            "not_found",
+            f"{name} has no python_manifests in ecosystem.yaml",
+            details={"reason": "no_manifest"},
+        )
+    producers = [
+        p for p in registry["projects"] if p["name"] in commits and p["name"] != name
+    ]
+    changed = []
+    for manifest in manifests:
+        path = directory / manifest
+        text = _read(path)
+        pinned = _pinned_text(path, text, producers, commits)
+        if pinned != text:
+            path.write_text(pinned, encoding="utf-8")
+            changed.append(path)
+    return changed
+
+
+def _project(registry: dict[str, Any], name: str) -> dict[str, Any]:
+    """Return the registry entry named `name`; `validation_error` when none is."""
+    for project in registry["projects"]:
+        if project["name"] == name:
+            found: dict[str, Any] = project
+            return found
+    raise Failure(
+        "validation_error",
+        f"unknown project {name!r}",
+        hint="use a project name from ecosystem.yaml",
+        details={"reason": "unknown_project"},
+    )
+
+
+def bump(registry: dict[str, Any], directory: Path, name: str, rev: str | None) -> int:
+    """Set a member's commit to `rev` resolved in its checkout, then the README (D4).
+
+    The checkout is fetched first; `rev` defaults to the project's
+    integration ref. members.toml is created when the candidate has none.
+    """
+    project = _project(registry, name)
+    repo = checkout(project)
+    if not repo.is_dir():
+        raise Failure(
+            "not_found",
+            f"{name}: no checkout at {_shown(repo)}",
+            details={"reason": "no_checkout"},
+        )
+    _git(repo, "fetch", "--quiet", "origin", code="source_unavailable")
+    ref = rev or integration_ref(project)
+    commit = _git(repo, "rev-parse", "--verify", f"{ref}^{{commit}}").strip()
+    path = directory / "members.toml"
+    commits = members(registry, directory) if path.exists() else {}
+    old = commits.get(name)
+    commits[name] = commit
+    commits = {
+        p["name"]: commits[p["name"]]
+        for p in registry["projects"]
+        if p["name"] in commits
+    }
+    path.write_text(render_members(directory, commits), encoding="utf-8")
+    print(f"{name}: {old[:7] if old else '—'} -> {commit} ({ref})")
+    readme = render_set_readme(registry, directory, commits)
+    return _generated(directory / "README.md", readme, False, "set readme")
 
 
 def check_standard(registry: dict[str, Any], write: bool) -> int:
@@ -932,7 +1292,49 @@ def _parser() -> argparse.ArgumentParser:
     standard_cmd.add_argument(
         "--write", action="store_true", help="regenerate generated blocks first"
     )
+    set_cmd = sub.add_parser(
+        "set", help="the release set candidate: pins of every consumer (REL-6.4)"
+    )
+    set_sub = set_cmd.add_subparsers(dest="set_command", required=True)
+    set_sub.add_parser(
+        "check", help="compare consumers' pins at their integration refs with the set"
+    )
+    apply_cmd = set_sub.add_parser(
+        "apply", help="rewrite a consumer's pins to the set's commits"
+    )
+    apply_cmd.add_argument("--project", required=True, help="consumer to rewrite")
+    apply_cmd.add_argument(
+        "--path", type=Path, help="its checkout (default: the workspace's)"
+    )
+    bump_cmd = set_sub.add_parser("bump", help="move a member to another commit")
+    bump_cmd.add_argument("project", help="member to move")
+    bump_cmd.add_argument(
+        "--rev", help="commit, tag or branch (default: its integration ref)"
+    )
+    readme_cmd = set_sub.add_parser(
+        "readme", help="generate the candidate's README.md from members.toml"
+    )
+    readme_cmd.add_argument(
+        "--check", action="store_true", help="fail when README.md is stale"
+    )
     return parser
+
+
+def run_set(registry: dict[str, Any], args: argparse.Namespace) -> int:
+    """Run a `set` subcommand on the current candidate."""
+    directory = candidate()
+    if args.set_command == "bump":
+        return bump(registry, directory, args.project, args.rev)
+    if args.set_command == "apply":
+        path = args.path or checkout(_project(registry, args.project))
+        commits = members(registry, directory)
+        for changed in apply_set(registry, commits, args.project, path):
+            print(changed)
+        return 0
+    if args.set_command == "check":
+        return check_set(registry, directory)
+    readme = render_set_readme(registry, directory, members(registry, directory))
+    return _generated(directory / "README.md", readme, args.check, "set readme")
 
 
 def run(args: argparse.Namespace) -> int:
@@ -955,6 +1357,8 @@ def run(args: argparse.Namespace) -> int:
         return report_deps(registry, args.installed)
     if args.command == "drift":
         return report_drift(registry)
+    if args.command == "set":
+        return run_set(registry, args)
     if args.command == "standard":
         return check_standard(registry, args.write)
     if args.command == "agents":
@@ -995,7 +1399,13 @@ def main(argv: list[str] | None = None) -> int:
     try:
         args = _parser().parse_args(argv)
         # `ecosystem <verb>`, the form of `nogat ecosystem <verb>` (HUB-7.3).
-        command = f"ecosystem {args.command}"
+        command = " ".join(
+            [
+                "ecosystem",
+                args.command,
+                *([args.set_command] if args.command == "set" else []),
+            ]
+        )
         return run(args)
     except Failure as failure:
         document = error_document(failure, command)

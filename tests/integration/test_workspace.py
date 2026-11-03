@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
 import json
+import os
+import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -292,3 +296,241 @@ def test_agents_check_detects_a_missing_or_stale_file(
     assert ecosystem.main(["agents", "--check"]) == 0
     assert "is up to date" in capsys.readouterr().out
     assert target.read_text(encoding="utf-8") == guide.render(ecosystem.load())
+
+
+SET = "26ee45924b719b4f357ab02c88cda58aa806843f"
+OLD = "8cd6844c493d27e6a8792c29dfc64528d68a2998"
+GIT_ENV = {
+    **os.environ,
+    "GIT_AUTHOR_NAME": "t",
+    "GIT_AUTHOR_EMAIL": "t@example.org",
+    "GIT_COMMITTER_NAME": "t",
+    "GIT_COMMITTER_EMAIL": "t@example.org",
+    "GIT_CONFIG_GLOBAL": os.devnull,
+    "GIT_CONFIG_NOSYSTEM": "1",
+}
+
+
+def _git(repo: Path, *args: str) -> str:
+    done = subprocess.run(
+        ["git", "-C", str(repo), *args],
+        check=True,
+        capture_output=True,
+        text=True,
+        env=GIT_ENV,
+    )
+    return done.stdout.strip()
+
+
+def _commit(seed: Path, files: dict[str, str], branch: str) -> str:
+    """Commit `files` in the seed repository and push them to its origin."""
+    for name, text in files.items():
+        _write(seed / name, text)
+    _git(seed, "add", "-A")
+    _git(seed, "commit", "-q", "--allow-empty", "-m", "x")
+    _git(seed, "push", "-q", "origin", f"HEAD:{branch}")
+    return _git(seed, "rev-parse", "HEAD")
+
+
+def _published(
+    workspace: Path, name: str, files: dict[str, str], branch: str = "develop"
+) -> Path:
+    """Return the seed of `name`: its files are on origin's `branch`, cloned."""
+    origin = workspace / "_origins" / f"{name}.git"
+    seed = workspace / "_seeds" / name
+    _git(workspace, "init", "-q", "--bare", str(origin))
+    _git(workspace, "init", "-q", "-b", branch, str(seed))
+    _git(seed, "remote", "add", "origin", str(origin))
+    _commit(seed, files, branch)
+    _git(workspace, "clone", "-q", "-b", branch, str(origin), name)
+    return seed
+
+
+def _set(tmp_path: Path, commits: dict[str, str]) -> Path:
+    directory = tmp_path / "release-sets" / "candidate-1"
+    _write(directory / "members.toml", ecosystem.render_members(directory, commits))
+    return directory
+
+
+def _pyproject(*requirements: str, sources: str = "") -> dict[str, str]:
+    listed = ", ".join(f'"{r}"' for r in requirements)
+    text = f'[project]\nname = "x"\ndependencies = [{listed}]\n'
+    if sources:
+        text += f"[tool.uv.sources]\n{sources}\n"
+    return {"pyproject.toml": text}
+
+
+def _rows(out: str) -> set[tuple[str, str, str]]:
+    """(consumer, producer, state) of each row `set check` printed."""
+    cells = [re.split(r"\s{2,}", line) for line in out.splitlines()[2:]]
+    return {(c[0], c[1], c[-1]) for c in cells}
+
+
+def test_set_check_compares_both_pin_forms_at_the_integration_ref(
+    workspace: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    url = "https://github.com/Daldek/Producer"
+    _published(workspace, "Pep", _pyproject(f"producer @ git+{url}@{SET[:7]}"))
+    _published(
+        workspace,
+        "Uv",
+        _pyproject(
+            "producer>=0.1",
+            sources=f'producer = {{ git = "{url}.git", rev = "{OLD}" }}',
+        ),
+        branch="feature/x",
+    )
+    # The working tree differs from what the integration ref holds.
+    _write(
+        workspace / "Uv" / "pyproject.toml",
+        _pyproject(f"producer @ git+{url}@{SET}")["pyproject.toml"],
+    )
+    _published(workspace, "Ranged", _pyproject("producer>=0.1"))
+    _published(workspace, "Silent", _pyproject("numpy>=1.26"))
+    _published(workspace, "Later", _pyproject(f"producer @ git+{url}@{OLD}"))
+    consumers: dict[str, dict[str, Any]] = {
+        "Pep": {},
+        "Uv": {"branch": "feature/x"},
+        "Ranged": {},
+        "Silent": {},
+        "Later": {},
+    }
+    registry = {
+        "projects": [
+            _project("Producer"),
+            *(
+                _project(
+                    name,
+                    python_manifests=["pyproject.toml"],
+                    depends_on=[] if name == "Later" else [_dep("Producer")],
+                    **fields,
+                )
+                for name, fields in consumers.items()
+            ),
+        ]
+    }
+    directory = _set(workspace, {"Producer": SET})
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.check_set(registry, directory)
+    assert caught.value.code == "conflict"
+    assert caught.value.details["consumers"] == ["Later", "Ranged", "Uv"]
+    assert _rows(capsys.readouterr().out) == {
+        ("Pep", "Producer", "ok"),
+        ("Uv", "Producer", "differs"),
+        ("Ranged", "Producer", "not a commit pin"),
+        ("Silent", "Producer", "not declared"),
+        ("Later", "Producer", "differs"),
+    }
+
+    registry["projects"] = [
+        p for p in registry["projects"] if p["name"] in ("Producer", "Pep", "Silent")
+    ]
+    assert ecosystem.check_set(registry, directory) == 0
+
+
+def test_set_check_reports_a_consumer_it_cannot_read(
+    workspace: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    _published(workspace, "Pep", _pyproject("numpy"), branch="main")
+    registry = {
+        "projects": [
+            _project("Producer"),
+            _project("Pep", python_manifests=["pyproject.toml"]),
+            _project("Gone", python_manifests=["pyproject.toml"]),
+        ]
+    }
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.check_set(registry, _set(workspace, {"Producer": SET}))
+    assert caught.value.code == "not_found"
+    assert caught.value.details["consumers"] == ["Gone", "Pep"]
+    assert "origin/develop" in capsys.readouterr().out
+
+
+def test_set_apply_rewrites_both_forms_and_nothing_else(tmp_path: Path) -> None:
+    pyproject = (
+        "[project]\n"
+        'name = "app"\n'
+        "dependencies = [\n"
+        '    "producer @ git+https://github.com/Daldek/Producer@v0.1.0",  # tag\n'
+        '    "stranger @ git+https://github.com/Daldek/Stranger@1234567",\n'
+        '    "numpy>=1.26",\n'
+        "]\n"
+        "[project.optional-dependencies]\n"
+        "store = [\"other[store]>=1 ; python_version >= '3.12'\"]\n"
+        "[tool.uv.sources]\n"
+        f"other = {{ git = \"https://github.com/Daldek/Other.git\", rev = '{OLD}' }}\n"
+    )
+    requirements = (
+        "producer @ git+https://github.com/Daldek/Producer.git#egg=producer\n"
+    )
+    _write(tmp_path / "pyproject.toml", pyproject)
+    _write(tmp_path / "requirements.txt", requirements)
+    other = "fedcba9876543210fedcba9876543210fedcba98"
+    registry = {
+        "projects": [
+            _project("Producer"),
+            _project("Other"),
+            _project("Stranger"),
+            _project("App", python_manifests=["pyproject.toml", "requirements.txt"]),
+        ]
+    }
+    commits = {"Producer": SET, "Other": other}
+
+    changed = ecosystem.apply_set(registry, commits, "App", tmp_path)
+
+    assert changed == [tmp_path / "pyproject.toml", tmp_path / "requirements.txt"]
+    assert (tmp_path / "pyproject.toml").read_text(encoding="utf-8") == (
+        pyproject.replace("Producer@v0.1.0", f"Producer@{SET}").replace(OLD, other)
+    )
+    assert (tmp_path / "requirements.txt").read_text(encoding="utf-8") == (
+        requirements.replace(".git#", f".git@{SET}#")
+    )
+    assert ecosystem.apply_set(registry, commits, "App", tmp_path) == []
+
+
+def test_set_bump_resolves_the_ref_and_regenerates_the_readme(
+    workspace: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seed = _published(workspace, "Producer", {"a.txt": "1\n"})
+    first = _git(seed, "rev-parse", "HEAD")
+    registry = {"projects": [_project("Consumer"), _project("Producer")]}
+    directory = workspace / "release-sets" / "candidate-2"
+    directory.mkdir(parents=True)
+    (workspace / "release-sets" / "candidate-1").mkdir()
+    monkeypatch.setattr(ecosystem, "RELEASE_SETS", workspace / "release-sets")
+    readme = argparse.Namespace(set_command="readme", check=True)
+
+    assert ecosystem.bump(registry, directory, "Producer", None) == 0
+    assert ecosystem.members(registry, directory) == {"Producer": first}
+    second = _commit(seed, {"a.txt": "2\n"}, "develop")
+    ecosystem.bump(registry, directory, "Producer", None)
+    assert ecosystem.members(registry, directory) == {"Producer": second}
+    assert ecosystem.run_set(registry, readme) == 0
+    ecosystem.bump(registry, directory, "Producer", first[:7])
+    assert ecosystem.members(registry, directory) == {"Producer": first}
+    assert first in (directory / "README.md").read_text(encoding="utf-8")
+
+    _write(
+        directory / "members.toml",
+        ecosystem.render_members(directory, {"Producer": second}),
+    )
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.run_set(registry, readme)
+    assert caught.value.code == "conflict"
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        f'[Unknown]\ncommit = "{SET}"\n',
+        f'[Producer]\ncommit = "{SET[:7]}"\n',
+        f'[Producer]\ncommit = "{SET}"\nbranch = "develop"\n',
+    ],
+)
+def test_members_rejects_anything_but_full_commits_of_projects(
+    tmp_path: Path, text: str
+) -> None:
+    _write(tmp_path / "members.toml", text)
+    with pytest.raises(ecosystem.RegistryError) as caught:
+        ecosystem.members({"projects": [_project("Producer")]}, tmp_path)
+    assert caught.value.code == "data_error"

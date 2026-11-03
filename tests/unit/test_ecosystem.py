@@ -64,7 +64,7 @@ def test_range_conflicts_disjoint_ranges_reported(ranges: tuple[str, str]) -> No
         (
             "kartograf @ git+https://github.com/Daldek/Kartograf.git"
             "@8e9bcbb0123456789abcdef0123456789abcdef0",
-            ("commit", "8e9bcbb"),
+            ("commit", "8e9bcbb0123456789abcdef0123456789abcdef0"),
         ),
         (
             "kartograf @ git+ssh://git@github.com/Daldek/Kartograf.git",
@@ -84,7 +84,7 @@ def test_pin_classifies_requirement(line: str, expected: tuple[str, str]) -> Non
     [
         (
             {"git": "https://github.com/Daldek/Kartograf.git", "rev": "26ee4592" * 5},
-            ("commit", "26ee459"),
+            ("commit", "26ee4592" * 5),
         ),
         (
             {"git": "https://github.com/Daldek/Kartograf.git", "tag": "v0.8.0"},
