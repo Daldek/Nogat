@@ -45,12 +45,12 @@ outside every repository and are removed afterwards; nothing is committed
 
    | Project | Branch | Head | Version |
    |---|---|---|---|
-   | IMGWTools | `feature/data-output` | `a304521` | 3.0.0 |
+   | IMGWTools | `feature/data-output` | `08f1a7b` | 3.0.0 |
    | Kartograf | `feature/data-output` | `40455e5e` (first pass `4c99f53a`) | 0.8.0.dev0 |
-   | Hydrolog | `feature/routing-network` | `6c9ba5a` | 1.0.0.dev0 |
+   | Hydrolog | `feature/routing-network` | `28be47d` | 1.0.0.dev0 |
    | Retman | `feature/imgwtools-data-output` | `932d2cf` | 0.1.0.dev0 |
    | Archiwista | `chore/nogat-2.1` | `093ea8c` (now `b2ae7ce`, PROGRESS only) | 0.3.0.dev0 |
-   | Hydraulik | `feature/sfincs-swmm` | `793002a` | 0.1.0.dev0 |
+   | Hydraulik | `feature/sfincs-swmm` | `f745439` | 0.1.0.dev0 |
 
    During the first pass Kartograf's working tree held uncommitted catalog and
    CLI changes; only committed heads were tested.
@@ -92,14 +92,14 @@ conflicting range.
 
 The pins between members do conflict, which is why they are overridden. The
 first one uv reports without the overrides is `kartograf`: the checkout against
-Archiwista's commit `8e9bcbb`. The IMGWTools pins (a commit in Retman, a tag in
+Archiwista's commit `b8971fd`. The IMGWTools pins (a commit in Retman, a tag in
 Hydraulik) and the Hydrolog pin (a tag in Hydraulik) are of the same kind.
 
 | Consumer | Producer | Pin overridden |
 |---|---|---|
-| Retman (`tools` group) | Kartograf | commit `8e9bcbb`, 46 commits behind the head tested, version `0.8.0` |
-| Retman (`tools` group) | IMGWTools | commit `a304521`, the head tested |
-| Archiwista | Kartograf | commit `8e9bcbb` |
+| Retman (`tools` group) | Kartograf | commit `b8971fd`, 46 commits behind the head tested, version `0.8.0` |
+| Retman (`tools` group) | IMGWTools | commit `08f1a7b`, the head tested |
+| Archiwista | Kartograf | commit `b8971fd` |
 | Hydraulik (`rainfall` extra) | Hydrolog, IMGWTools | tags `v0.7.0`, `v2.1.1` |
 
 A trap for step 3 of the release set: `override-dependencies` replaces every
@@ -137,7 +137,7 @@ the override and look for a package of each extra in the lock.
 | # | Where it shows | Cause | Owner |
 |---|---|---|---|
 | F1 | Retman: 29 failures at `40455e5e`, 82 at `4c99f53a`, all in the Kartograf half | The Kartograf half still calls the Kartograf of its pin. At `4c99f53a` its `output_dir=` (for `root=`) was refused in `validate_command`, `run_command`, `check_command` and the command line (56 tests). At `40455e5e` `output_dir` is Kartograf's option for plain files, so the same calls pass validation with another meaning; what they would write was not run. Still failing: `VersionedFile` built without the new `size_bytes` (9); eight tests that compare Kartograf's validation error with `invalid_input` and find `validation_error`; the codes `no_coverage` and `download_failed` for `no_data` and `source_unavailable` (3); and, hidden by F2, six conformance tests that read `kartograf.get_catalog`, removed for `list_commands()` and `command_schema()`. The other nine are F2. | Retman, step 5 of the plan, which waited for Kartograf's `root`; not a defect of the head |
-| F2 | Retman: nine tests fail (the version gate, the table of capabilities, three `eval` runs, four README examples), six Kartograf checks are skipped, and every start warns that no Kartograf operation is offered. Archiwista: `doctor` exits 10, and 156 of its 444 failures and errors name the incompatible source or need its pinned coordinate operations | Both consumers accept Kartograf `>=0.8.0,<0.9`. Develop carries `0.8.0.dev0` (REL-1.1), which PEP 440 puts below `0.8.0`, so both refuse the head. Commit `8e9bcbb` still said `0.8.0`, so it went unseen. The 24 Archiwista tests that do not name it pass once the head's version is reported as `0.8.0`, and so do the five Retman tests that failed for no other reason at `4c99f53a`. | Retman (`supported_versions`) and Archiwista (`SUPPORTED_VERSIONS`); the author decides how a consumer range treats an untagged producer (REL-5.3) |
+| F2 | Retman: nine tests fail (the version gate, the table of capabilities, three `eval` runs, four README examples), six Kartograf checks are skipped, and every start warns that no Kartograf operation is offered. Archiwista: `doctor` exits 10, and 156 of its 444 failures and errors name the incompatible source or need its pinned coordinate operations | Both consumers accept Kartograf `>=0.8.0,<0.9`. Develop carries `0.8.0.dev0` (REL-1.1), which PEP 440 puts below `0.8.0`, so both refuse the head. Commit `b8971fd` still said `0.8.0`, so it went unseen. The 24 Archiwista tests that do not name it pass once the head's version is reported as `0.8.0`, and so do the five Retman tests that failed for no other reason at `4c99f53a`. | Retman (`supported_versions`) and Archiwista (`SUPPORTED_VERSIONS`); the author decides how a consumer range treats an untagged producer (REL-5.3) |
 | F3 | Archiwista: 288 of the 444, almost all errors in fixtures | `tests/fixtures/make_store.py` calls Kartograf's `init_project(output_dir=...)` and the contract test pins the `output_dir` of `list_segments`, `list_partitions` and `iter_store`; all are `root` now | Archiwista, step 4, not started |
 | F4 | Kartograf: 4 tests of `test_version.py`, at both heads. Archiwista: `test_package_data.py` fails at collection and stops the whole run | Both find the repository through the path of the installed package. That works in an editable install and not in a wheel, which is how REL-2.3 and REL-6.5 install a member. The four Kartograf tests pass when it is imported from its checkout (17 of 17 in the file, checked at `4c99f53a`). | Kartograf, Archiwista; or the author decides that `verify-candidate` installs the member under test editable |
 | F5 | Hydraulik `terrain download`; no plain mode on Kartograf's CLI at `4c99f53a` | The catalog of that head had `--root` and no `--output-dir`; the option group was uncommitted in its working tree (step 2). Hydraulik refused correctly (its ADR-0006). `252d632f` fixed it: at `40455e5e` the catalog has `output_dir` (`path_role: output`) and `root` in one group, and the flow passes. | Kartograf, step 2 (done for the CLI) |

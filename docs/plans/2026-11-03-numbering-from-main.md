@@ -94,7 +94,7 @@ changelog as the 1.0 changelog; `standards/legacy/v1.0/` is
 (`AGENTS.md` and the error tables unchanged). Branch names such as
 `chore/nogat-2.1` stay: they name existing refs.
 
-Step 2 (2026-11-03): Kartograf `develop` `4e4445e5`, the commit that freezes
+Step 2 (2026-11-03): Kartograf `develop` `882a1c3e`, the commit that freezes
 it for 0.8.0, cites the standard as 1.0 (CLAUDE.md, ADR-048 to ADR-058,
 PROGRESS, CHANGELOG); its copy of `error_registry.json` comes from
 `4bb6659`, so `kartograf._errors.STANDARD_VERSION` is `"1.0"`; gate green

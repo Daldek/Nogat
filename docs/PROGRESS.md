@@ -36,13 +36,13 @@ not mean it is merged or released. Sources are each branch's
 | Project | Audited branch and head | Progress and remaining work |
 |---|---|---|
 | Nogat | `feature/data-output`, `2ccea34` before this audit | Latest commit adds the GUI visual-identity backlog. The standard remains off `main`; `origin` has no tags. Contribution files and legacy template replacement remain open |
-| Kartograf | `feature/data-output`, `745e8b18` | Plain mode is implemented at library and command-layer level; its own Next 4 still leaves a real-CLI subprocess smoke and plain-mode prose open. Later commits add `store_state`, shared task arguments for `project add`, project-lock reasons, report-cache reuse and PL-2000 sheet outlines. Message-catalog migration is closed; `kartograf mcp` and domain JSON Schemas remain open |
-| IMGWTools | `feature/data-output`, `e28fbcd` | Data-output migration, MCP stdout fix, `parse_command`/`format_command` and catalog examples are recorded as done. Live plain-mode smoke, English documentation and release work remain open |
-| Hydrolog | `feature/routing-schematic`, `5fa22b3` (routing worktree) | `hydrolog.testing` exists (introduced at `0719c41`); network objects, rainfall/runoff and SVG schematics are implemented on stacked routing branches. The main checkout remains at `chore/nogat-2.1`, `d4f7282`; inspecting that checkout alone misses this work. Merge, CLA, notebook translations and release remain open |
-| Retman | `feature/kartograf-data-output`, `cc6d1ee` | Both producer migrations are done on the branch. Manifest pins Kartograf `c31ca04c` and IMGWTools `6bd35a4`, not their latest heads. The Status table's older pins and “nothing is pushed” statement are stale; Next 2 has the matching pins. Documentation translations and the evaluation on the 630-command set remain open |
-| Archiwista | `feature/kartograf-data-output`, `b7775bb`; `feature/v0.4-team`, `815c8b2`; `feature/v0.4-review`, `8118c33` | Data output, English documentation and the message catalog are done on the branches. v0.3 actions and station comparison (I8, `b7775bb`) progressed beyond the integration baseline. The data-output manifest now pins Kartograf `745e8b18`, but IMGWTools stays at `6bd35a4`. v0.4 team/shared/review work is separate; D7 refusal/sign-in auditing is done at `815c8b2`, not the whole security checklist or T12 |
-| Hydrograf | `feature/producer-heads`, `9dfa3a8` | Producer migrations, quality tooling and contribution files are implemented; CLA, translation/REST gaps and history work remain open. Pins remain Kartograf `c31ca04c`, IMGWTools `6bd35a4`, Hydrolog `5fa22b3`; `affine<3` is retained. The checkout is on older `feature/kartograf-wykorzystanie`, `bc0b438`; the running Docker image is not evidence of the newer branch being deployed |
-| Hydraulik | `feature/sfincs-swmm`, `91559e0` | Extracted SFINCS/SWMM implementation and Hydrolog hand-off are committed; pins are Hydrolog `5fa22b3` and IMGWTools `6bd35a4`. Contract tests using `hydrolog.testing` are present, not run in this audit. The old claim that Kartograf has no plain mode is stale; the live terrain flow still needs verification. The older uncommitted PoC and documents stay local by the author's choice in this audit |
+| Kartograf | `feature/data-output`, `a4b92916` | Plain mode is implemented at library and command-layer level; its own Next 4 still leaves a real-CLI subprocess smoke and plain-mode prose open. Later commits add `store_state`, shared task arguments for `project add`, project-lock reasons, report-cache reuse and PL-2000 sheet outlines. Message-catalog migration is closed; `kartograf mcp` and domain JSON Schemas remain open |
+| IMGWTools | `feature/data-output`, `a28783d` | Data-output migration, MCP stdout fix, `parse_command`/`format_command` and catalog examples are recorded as done. Live plain-mode smoke, English documentation and release work remain open |
+| Hydrolog | `feature/routing-schematic`, `2a5ba1a` (routing worktree) | `hydrolog.testing` exists (introduced at `6bf2c5f`); network objects, rainfall/runoff and SVG schematics are implemented on stacked routing branches. The main checkout remains at `chore/nogat-2.1`, `8ae4a6d`; inspecting that checkout alone misses this work. Merge, CLA, notebook translations and release remain open |
+| Retman | `feature/kartograf-data-output`, `cc6d1ee` | Both producer migrations are done on the branch. Manifest pins Kartograf `d11f6219` and IMGWTools `71bae77`, not their latest heads. The Status table's older pins and “nothing is pushed” statement are stale; Next 2 has the matching pins. Documentation translations and the evaluation on the 630-command set remain open |
+| Archiwista | `feature/kartograf-data-output`, `b7775bb`; `feature/v0.4-team`, `815c8b2`; `feature/v0.4-review`, `8118c33` | Data output, English documentation and the message catalog are done on the branches. v0.3 actions and station comparison (I8, `b7775bb`) progressed beyond the integration baseline. The data-output manifest now pins Kartograf `a4b92916`, but IMGWTools stays at `71bae77`. v0.4 team/shared/review work is separate; D7 refusal/sign-in auditing is done at `815c8b2`, not the whole security checklist or T12 |
+| Hydrograf | `feature/producer-heads`, `f9d2118` | Producer migrations, quality tooling and contribution files are implemented; CLA, translation/REST gaps and history work remain open. Pins remain Kartograf `d11f6219`, IMGWTools `71bae77`, Hydrolog `2a5ba1a`; `affine<3` is retained. The checkout is on older `feature/kartograf-wykorzystanie`, `bc0b438`; the running Docker image is not evidence of the newer branch being deployed |
+| Hydraulik | `feature/sfincs-swmm`, `46f7fd2` | Extracted SFINCS/SWMM implementation and Hydrolog hand-off are committed; pins are Hydrolog `2a5ba1a` and IMGWTools `71bae77`. Contract tests using `hydrolog.testing` are present, not run in this audit. The old claim that Kartograf has no plain mode is stale; the live terrain flow still needs verification. The older uncommitted PoC and documents stay local by the author's choice in this audit |
 
 DEV-10.6 follow-up: `hydrolog.testing` is no longer missing, but the Nogat
 registry still lacks `hydrolog-testing` and its file-exchange edges.
@@ -58,7 +58,7 @@ differ. Gate results named here were run in this session.
 | Project | Branch and head | Change |
 |---|---|---|
 | Archiwista | `feature/v0.4-team`, `df7e71e`, pushed | Plan v0.4 complete: T12 (three-person acceptance, every C9 route called by each role against the matrix, ASVS checklist, LAN runbook) and review defects D6 and D10. Full gate green on `54cded3` (2556 passed, coverage 93.53%) after four fixes it found (`c8d4b5e`, `bbe223d`, `96ddda8`, `54cded3`; the last a real Esc race in the web shell). Decided by the author's delegated approval: the five checklist deviations are accepted for LAN use; v0.3 and v0.4 are released separately, v0.3 first, after the first release set. Open: the author's three-computer run of the runbook. Git: `feature/v0.4-review` and `feature/v0.4-shared` deleted locally (both contained in `v0.4-team`, still on `origin`), their worktree removed, every branch tracks its own `origin` branch, `feat/mockup` pushed as a backup |
-| Hydrograf | `feature/logowanie-testow`, `1d81694`, pushed | Request logging and rotation, nginx bound to loopback, the tester guide; the test service runs this branch (Kartograf 0.7.0, IMGWTools 2.1.0, Hydrolog 0.6.3), not `feature/producer-heads`. Merging it into `producer-heads` conflicts in `README.md`, `backend/api/main.py`, `docs/CHANGELOG.md` and `docs/PROGRESS.md`. A Kaczawa bootstrap (183M cells) was OOM-killed twice; a smaller area (66M cells) succeeded and is served. Memory plan F1–F7 (~19 GB → ~9 GB, results identical) and clipping of shown data to the analysis boundary (high priority) are backlog items in its `docs/PROGRESS.md` and `docs/TECHNICAL_DEBT.md`. Before its first push the branch history (`develop..`) was rewritten to replace a share path and a LAN address with placeholders |
+| Hydrograf | `feature/logowanie-testow`, `8d4d2f8`, pushed | Request logging and rotation, nginx bound to loopback, the tester guide; the test service runs this branch (Kartograf 0.7.0, IMGWTools 2.1.0, Hydrolog 0.6.3), not `feature/producer-heads`. Merging it into `producer-heads` conflicts in `README.md`, `backend/api/main.py`, `docs/CHANGELOG.md` and `docs/PROGRESS.md`. A Kaczawa bootstrap (183M cells) was OOM-killed twice; a smaller area (66M cells) succeeded and is served. Memory plan F1–F7 (~19 GB → ~9 GB, results identical) and clipping of shown data to the analysis boundary (high priority) are backlog items in its `docs/PROGRESS.md` and `docs/TECHNICAL_DEBT.md`. Before its first push the branch history (`develop..`) was rewritten to replace a share path and a LAN address with placeholders |
 
 Git hygiene audit (2026-10-29, after `git fetch`): Hydraulik has uncommitted
 documents on `develop` and an unpushed PoC worktree branch; IMGWTools has two
@@ -74,9 +74,9 @@ merged or pushed.
 
 | Project | Branch and head | Change |
 |---|---|---|
-| Hydrograf | `feature/visual-identity`, `4098956`; production on 127.0.0.1:8080 | Backup of production in `/data/nmt/hydrograf-backup-2026-11-01/` (verified). The shown data are clipped to the Kaczawa catchment above 51.222825, 16.179380 (790.57 km², segments 159 of 870; a first clip to 813.17 km² took in part of the Czarna Woda), which closes the clipping item of 2026-10-29. New: the group „Wyniki analiz” (manifest `hydrograf-results/1`, `5c7c325`, `e2eafca`) with SFINCS run 2; the ISOK flood hazard map (MZP) from the Wody Polskie WMS (`ca0d920`, `1b8c199`); versioned asset URLs and no-cache HTML, because Cloudflare kept old JS (`eb5e28a`); the water surface of results on the terrain profile (`347a9d9`, `e625d92`, `4098956`); the profile finishes on phones (`4866617`); the guide's „Na start” and a welcome dialog (`cc5bc94`, `0377ec1`, `6a4e798`). The frontend test report (5 medium findings, no high) and the open choices go to its `docs/PROGRESS.md` |
-| Hydraulik | `feature/sfincs-swmm`, `91559e0` (code unchanged) | SFINCS on the Kamiennik catchment (37.22 km², segment 21911, the Świerzawa dam without an outlet, 5 m grid of 1,491,703 cells), run outside the repository. Run 1 (12 h, p = 1 %, 105 mm) is useless: with the default `huthresh` 0.05 water under 5 cm did not flow. Run 2 (`huthresh` 0.001) is published in Hydrograf. Run 3 (24 h, p = 1 %, 134.5 mm, seven cross sections) started 2026-11-02 01:03; its sections are then compared with Hydrolog's hydrology. Eight findings for `hydraulik` (among them `huthresh`, `dtout`/`dtmaxout` and cross sections missing from `model build`, a wrong summary when `dtmaxout` < `tstop`, no water level in `results export`) belong in Hydraulik's `docs/PROGRESS.md` |
-| Hydrolog | `feature/gui`, `cd6fa52` | The GUI of its plan `docs/plans/2026-11-02-hydrolog-gui.md` is implemented, waves A to C (its `docs/PROGRESS.md` and the plan's Results). `hydrolog gui serve` runs as the persistent service `hydrolog-gui` on 127.0.0.1:8070, where a Cloudflare tunnel points; the author sets up its Access |
+| Hydrograf | `feature/visual-identity`, `4098956`; production on 127.0.0.1:8080 | Backup of production in `/data/nmt/hydrograf-backup-2026-11-01/` (verified). The shown data are clipped to the Kaczawa catchment above 51.222825, 16.179380 (790.57 km², segments 159 of 870; a first clip to 813.17 km² took in part of the Czarna Woda), which closes the clipping item of 2026-10-29. New: the group „Wyniki analiz” (manifest `hydrograf-results/1`, `8377c23`, `5449d70`) with SFINCS run 2; the ISOK flood hazard map (MZP) from the Wody Polskie WMS (`0e12eca`, `6aea0d4`); versioned asset URLs and no-cache HTML, because Cloudflare kept old JS (`357b997`); the water surface of results on the terrain profile (`9d281b8`, `2c4aff7`, `4098956`); the profile finishes on phones (`4866617`); the guide's „Na start” and a welcome dialog (`2ba7cc9`, `30a4164`, `8847fdf`). The frontend test report (5 medium findings, no high) and the open choices go to its `docs/PROGRESS.md` |
+| Hydraulik | `feature/sfincs-swmm`, `46f7fd2` (code unchanged) | SFINCS on the Kamiennik catchment (37.22 km², segment 21911, the Świerzawa dam without an outlet, 5 m grid of 1,491,703 cells), run outside the repository. Run 1 (12 h, p = 1 %, 105 mm) is useless: with the default `huthresh` 0.05 water under 5 cm did not flow. Run 2 (`huthresh` 0.001) is published in Hydrograf. Run 3 (24 h, p = 1 %, 134.5 mm, seven cross sections) started 2026-11-02 01:03; its sections are then compared with Hydrolog's hydrology. Eight findings for `hydraulik` (among them `huthresh`, `dtout`/`dtmaxout` and cross sections missing from `model build`, a wrong summary when `dtmaxout` < `tstop`, no water level in `results export`) belong in Hydraulik's `docs/PROGRESS.md` |
+| Hydrolog | `feature/gui`, `a328656` | The GUI of its plan `docs/plans/2026-11-02-hydrolog-gui.md` is implemented, waves A to C (its `docs/PROGRESS.md` and the plan's Results). `hydrolog gui serve` runs as the persistent service `hydrolog-gui` on 127.0.0.1:8070, where a Cloudflare tunnel points; the author sets up its Access |
 | Archiwista | `feature/archiwista-projects`, `e9a18b9`; paused by the author | The fix „obszar projektu nie daje się użyć do pobierania i sprawdzania danych” is ready and not committed: the index holds commit 1 (backend), the unstaged changes commit 2 (web). Its gate stopped on a hang of `tests/e2e/test_guide.py` in Firefox. The public instance on :8090 still runs `dd4268c`; the welcome dialog and the new guide wait. Leave its working tree and index as they are |
 | Nogat | see Next 7 | The Hydrolog mockup (`3d6608f`, `dc8cee4`, `ed3473c`), the pointer plan (`7719b1d`), N1 (`a01097c`) and N2 (`33920ec`) |
 
@@ -86,9 +86,9 @@ These rows supersede the rows above where they differ.
 
 | Project | Branch and head | Change |
 |---|---|---|
-| Hydrograf | `develop`, `7273410` (version `0.5.0.dev0`), pushed; production in place since 2026-11-02 22:18, rebuilt from `0c78b55` on 2026-11-03 | The v0.5.0 candidate. FROZEN until the author merges it into `main` and tags `v0.5.0`: only critical API-breaking fixes or glaring bugs; one exception so far, `certifi` 2026.10.23 for PYSEC-2026-4320 (`b42d038`, production rebuilt; Archiwista `34e83f4` the same). Pins Hydrolog `4f02ffd` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `26ee459`, IMGWTools `6bd35a4`, by commit in `[tool.uv.sources]`. Rollback image `hydrograf-api:pre-0.5.0`, backup `/data/nmt/hydrograf-backup-2026-11-02/`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.5.0 |
+| Hydrograf | `develop`, `7273410` (version `0.5.0.dev0`), pushed; production in place since 2026-11-02 22:18, rebuilt from `aafeb5a` on 2026-11-03 | The v0.5.0 candidate. FROZEN until the author merges it into `main` and tags `v0.5.0`: only critical API-breaking fixes or glaring bugs; one exception so far, `certifi` 2026.10.23 for PYSEC-2026-4320 (`a6fe779`, production rebuilt; Archiwista `34e83f4` the same). Pins Hydrolog `1708a09` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `eab8612`, IMGWTools `71bae77`, by commit in `[tool.uv.sources]`. Rollback image `hydrograf-api:pre-0.5.0`, backup `/data/nmt/hydrograf-backup-2026-11-02/`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.5.0 |
 | Archiwista | `feature/archiwista-projects`, `4027755`; on :8090 since 2026-11-03 ~00:00 | The project-area fix (A1) and draft sets, open or closed with `pins_sha256`, one producer per set (A2), deployed with `TMPDIR` on disk (A3). The rebuild of the index to schema 17 dropped the sessions, the job history and 18 drawn rectangles; they are kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`. Renaming `archiwista-state/2` to `/1` is deferred to the release preparation (the author's rule: identifiers `<name>/<N>` not yet released on `main` stay at `/1`) |
-| Hydrolog | `feature/gui`, `cd6fa52` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `4f02ffd`, pushed and pinned by Hydrograf |
+| Hydrolog | `feature/gui`, `a328656` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `1708a09`, pushed and pinned by Hydrograf |
 | Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
 
 Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog
@@ -139,8 +139,8 @@ fail until the limit resets.
    Nogat publishes the `handoff-1` schema (N1, done on `feature/handoff-1`)
    before Hydrolog's hand-off slice and adds Hydrolog's `gui` interface to
    the registry (N2, done on `feature/hydrolog-gui-registry` after
-   Hydrolog's wave A, `888d77d` on `feature/gui`). Hydrolog's waves A to C
-   are done (`cd6fa52`) and its GUI is served on 127.0.0.1:8070 behind a
+   Hydrolog's wave A, `e004a5d` on `feature/gui`). Hydrolog's waves A to C
+   are done (`a328656`) and its GUI is served on 127.0.0.1:8070 behind a
    Cloudflare tunnel (changes on 2026-11-01 and 2026-11-02). Next:
    Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
@@ -154,9 +154,9 @@ fail until the limit resets.
    `docs/plans/2026-10-31-archiwista-projects.md`, approved 2026-10-31 with
    D1 to D7 as recommended; steps 1 to 5 are done on
    `feature/archiwista-projects` (the plan's Results). Pushed with green
-   gates: Kartograf `26ee4592` (also ADR-058: `--geometry` by feature shape,
-   GeoJSON), IMGWTools `4bf8bb0d`, Retman `5c3be44` (still pins Kartograf
-   `8ad55ab6`; re-pin before the release). Archiwista `e9a18b9` is pushed
+   gates: Kartograf `eab8612d` (also ADR-058: `--geometry` by feature shape,
+   GeoJSON), IMGWTools `8cd6844c`, Retman `5c3be44` (still pins Kartograf
+   `dbcfe5bb`; re-pin before the release). Archiwista `e9a18b9` is pushed
    with a green full gate (2026-11-01: 2719 passed, coverage 93.63%; its only
    change after `dd4268c`, which runs on the author's test server, makes the
    doctor test independent of port 8090). Open: the
@@ -184,13 +184,13 @@ fail until the limit resets.
    - Hydrolog: `fix/snyder-recession`, `feature/gui` (with `chore/nogat-2.1`
      and the routing stack beneath it; its `docs/PROGRESS.md`).
    - Hydraulik: `feature/sfincs-swmm`.
-   - Kartograf: v0.8.0 FROZEN on `develop` (`4e4445e5`, pushed, 2026-11-03):
+   - Kartograf: v0.8.0 FROZEN on `develop` (`882a1c3e`, pushed, 2026-11-03):
      only fixes of critical defects or API breaks until the tag; the
      Windows/macOS fixes are in, two Windows test expectations and the
      macOS run wait for 0.8.1 (its `docs/PROGRESS.md` Next 1); next,
      `verify-candidate`, the release commit, `develop` into `main` and
      `v0.8.0`, merged locally.
-   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`698907c`).
+   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`0045bac`).
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
    `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on
@@ -209,7 +209,7 @@ fail until the limit resets.
    RCN and WFS cut-outs), and the clip catchment leaves Kaczawa's area by
    2.87 km², its outlet by 972 m; about 935 m² of it lie outside the 205
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
-   :8090), H1 done (in Hydrograf's `develop`, `7974ef0`); A4 and A5 wait
+   :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
 
 ## Open questions

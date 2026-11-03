@@ -43,12 +43,12 @@ no run touched a user directory.
    | Project | Branch | Head | Version |
    |---|---|---|---|
    | Nogat | `feature/data-output` | `e6d4ee1cdcc900bf5936be2ba21513288229dfe9` | no package |
-   | Kartograf | `feature/data-output` | `45dedf4a155e2d2f7302459a8c383876fed98e98` | 0.8.0.dev0 |
-   | IMGWTools | `feature/data-output` | `3f7de36f98f1ba40d72ab5556942567cfbc55b92` | 3.0.0 |
-   | Hydrolog | `feature/routing-schematic` | `5fa22b35e5e1ec9076c41d0be04d2a99458f5049` | 1.0.0.dev0 |
-   | Hydraulik | `feature/sfincs-swmm` | `e10c82cf1030850b866c9457feb7e1389be095f3` | 0.1.0.dev0 |
+   | Kartograf | `feature/data-output` | `c655639b6b80df81564c769d841c4f86bf811654` | 0.8.0.dev0 |
+   | IMGWTools | `feature/data-output` | `4faf884f1f695635e1589c9ebb3b6d4ad34073f1` | 3.0.0 |
+   | Hydrolog | `feature/routing-schematic` | `2a5ba1ac175cc710a8d6a23f477e09ca7257974a` | 1.0.0.dev0 |
+   | Hydraulik | `feature/sfincs-swmm` | `7a477806484c8c323401658c140a27564339620f` | 0.1.0.dev0 |
    | Retman | `feature/kartograf-data-output` | `cd1770c34f01fe7ffac6a6b1f53f2460a1b50e49` | 0.1.0.dev0 |
-   | Hydrograf | `feature/producer-heads` | `91015478dc6d4889c03d6f328e69ea5b3473c5cf` | 0.5.0.dev0 |
+   | Hydrograf | `feature/producer-heads` | `bde9bc2c7c2afc2ff7c6b2da802bc943804d05a2` | 0.5.0.dev0 |
    | Archiwista | `feature/kartograf-data-output` | `74c29cb45d4a3d48d3d987ea17c258c4cfefeabb` | 0.3.0.dev0 |
 
 2. **Environment.** A throwaway uv project on Python 3.12 with the eight
@@ -112,9 +112,9 @@ it resolves as it is.
 
 | Consumer | Pin that conflicts | Producer |
 |---|---|---|
-| Archiwista | `kartograf @ git+…@45dedf4a…` and, in the extra `imgw`, `imgwtools[store] @ git+…@3f7de36f…` | Kartograf, IMGWTools |
-| Hydraulik | `[tool.uv.sources]`: Hydrolog `5fa22b35…`, IMGWTools `3f7de36f…` | Hydrolog, IMGWTools |
-| Hydrograf | `[tool.uv.sources]`: Kartograf `45dedf4a…`, IMGWTools `3f7de36f…`, Hydrolog `5fa22b35…` | all three |
+| Archiwista | `kartograf @ git+…@c655639b…` and, in the extra `imgw`, `imgwtools[store] @ git+…@4faf884f…` | Kartograf, IMGWTools |
+| Hydraulik | `[tool.uv.sources]`: Hydrolog `2a5ba1ac…`, IMGWTools `4faf884f…` | Hydrolog, IMGWTools |
+| Hydrograf | `[tool.uv.sources]`: Kartograf `c655639b…`, IMGWTools `4faf884f…`, Hydrolog `2a5ba1ac…` | all three |
 
 Each of those commits is the head tested here, in the `pyproject.toml` and in
 the `uv.lock` of the consumer, so the override changes the form of the source
@@ -185,7 +185,7 @@ their `pyproject.toml` files.
 | F4 | Archiwista, own gate and union environment: `tests/contract/test_plugins.py::test_plugins_default_root_comes_from_the_source_that_has_one` (line 292), `tests/integration/test_default_root.py::test_default_root_health_leaves_it_out`, `::test_default_root_command_line_prints_what_the_route_answers`, `tests/integration/test_sources_imgw.py::test_sources_lists_imgw_with_its_versions_and_schemas` | The tests expect that only Kartograf reports a default root; the `imgw` source does too now (`src/archiwista/adapter/imgw/adapter.py:173-185`, `IMGW_ROOT`), as the doctor and `GET /sources` show | Real defect: stale tests, deterministic | Archiwista |
 | F5 | Archiwista, own gate and union environment: `tests/unit/test_config.py::test_config_store_needs_a_directory_and_detects_its_kind_from_any` (2 cases, line 448) | The test looks for the Polish "kartograf albo imgw" in `problem.message`, which is English (`DEFAULT_LANG = "en"`; the Polish text is `src/archiwista/messages/settings.py:60`). Not the locale: the same with `LANG=pl_PL.UTF-8` | Real defect: stale test, deterministic | Archiwista |
 | F6 | The commit step of the gates. Hydrograf: 19 commits of local `develop` that are not on `origin/develop` (author `agent@local`, AI trailers) fail; the 49 commits of the branch pass with `GATE_COMMIT_RANGE=develop..HEAD`. IMGWTools: the gate checks one commit; over the 138 commits since `master`, 48 old ones fail (author `agent@local`, 21 with AI trailers, one subject) | The rewrite of the old history is the author's (Hydrograf's PROGRESS names it) | Known, not a defect of the heads | The author |
-| F7 | `deps` notes "Hydrograf: backend/requirements.txt missing" | The registry still lists it in `python_manifests`; Hydrograf dropped the file in `3ca62f2` (uv step) | Known (PROGRESS, Next 3) | Nogat, with Hydrograf's entry |
+| F7 | `deps` notes "Hydrograf: backend/requirements.txt missing" | The registry still lists it in `python_manifests`; Hydrograf dropped the file in `a115135` (uv step) | Known (PROGRESS, Next 3) | Nogat, with Hydrograf's entry |
 | F8 | Archiwista: `tests/integration/test_preview_cache.py::test_cache_safe_across_processes` (`BrokenPipeError` at line 363), in the union environment and in the environment without Hydrograf; it passes in the own gate (Python 3.13.5). Alone in the Python 3.12 environment it fails 4 of 6 runs | A child process ends before the test has written to it; the cause was not isolated | Flaky (intermittent) | Archiwista |
 
 Every failure above is deterministic except F8. One more test failed once, in a
@@ -223,9 +223,9 @@ commit below is pushed.
 
 | # | Fix | Commits |
 |---|---|---|
-| F1 | `_serve` hands the stray text of `sys.stdout` to standard error before the SDK restores descriptor 1, as Hydrolog does; IMGWTools does the same and has the test now (`tests/unit/test_mcp_stdio.py`) | Kartograf `ca7d538f23f385625fc10b186673a8a5705d2848`, IMGWTools `6bd35a49b329f99b591ffdee39367daec0e75af7` |
-| F2 | A position whose check failed stays `check_failed` in a plain plan, with its error and without action, path or reason, as in the store; the plan is `ok: false` (exit 11, or 10 when other positions are fine) | Kartograf `c31ca04c078ebbee36850d0aa4dcead59dd77a41` |
-| F3 | Archiwista declares `affine>=3,<4`; its lock keeps 3.0.1, and a resolver now refuses Archiwista beside `affine>=2.4,<3`. Hydrograf keeps its cap (its ADR-062): with pyflwdir 0.5.12, the latest release, and affine 3.0.1, 15 of its 1,302 offline tests fail (`FlwdirRaster.stream_distance` and `path`, which `scripts/process_dem.py` needs: numba cannot type `affine.Affine`, which `set_transform` makes of any transform). pyflwdir's own suite at `v0.5.12` passes only because its `conftest.py` disables the JIT; with the JIT on, 33 of its tests fail with affine 3.0.1 that pass with 2.4.0. The fix, pyflwdir #109 (issue #108), is merged for 0.5.13, which is not released | Archiwista `bc230d46bb49ba7f901d45ab5acb4d5fe07a5e33`, Hydrograf `b3545ca086701dd84a570d9d21d4bcdc1aadba01` |
+| F1 | `_serve` hands the stray text of `sys.stdout` to standard error before the SDK restores descriptor 1, as Hydrolog does; IMGWTools does the same and has the test now (`tests/unit/test_mcp_stdio.py`) | Kartograf `813708ec432ce56b52fb9feadd3f9d201fb239f1`, IMGWTools `71bae778a6573019a0b8da6498b4429f0e03ddfb` |
+| F2 | A position whose check failed stays `check_failed` in a plain plan, with its error and without action, path or reason, as in the store; the plan is `ok: false` (exit 11, or 10 when other positions are fine) | Kartograf `d11f6219516098af3b92f49ff510ae02883cb055` |
+| F3 | Archiwista declares `affine>=3,<4`; its lock keeps 3.0.1, and a resolver now refuses Archiwista beside `affine>=2.4,<3`. Hydrograf keeps its cap (its ADR-062): with pyflwdir 0.5.12, the latest release, and affine 3.0.1, 15 of its 1,302 offline tests fail (`FlwdirRaster.stream_distance` and `path`, which `scripts/process_dem.py` needs: numba cannot type `affine.Affine`, which `set_transform` makes of any transform). pyflwdir's own suite at `v0.5.12` passes only because its `conftest.py` disables the JIT; with the JIT on, 33 of its tests fail with affine 3.0.1 that pass with 2.4.0. The fix, pyflwdir #109 (issue #108), is merged for 0.5.13, which is not released | Archiwista `bc230d46bb49ba7f901d45ab5acb4d5fe07a5e33`, Hydrograf `24771de3b366ddd6465252a3f5bae32a77fce3e9` |
 | F4 | The four tests expect the default root of IMGWTools beside Kartograf's; they pass with and without the extra `imgw` | Archiwista `19ff4d9cb3a8c3f0587c10253f0885f174584b40` |
 | F5 | The test asserts the English text, the default language | Archiwista `c168893a5a8e41933402c8884d47b901f284cf82` |
 | F6 | Not fixed: the rewrite of the old history is the author's. Hydrograf's branch is gated with `GATE_COMMIT_RANGE=develop..HEAD`, and IMGWTools' commit step still checks one commit | — |
@@ -249,10 +249,10 @@ needs; the other three ran with it set (none of them has an MCP server).
 
 | Project | Head | Result |
 |---|---|---|
-| Kartograf | `c31ca04c` | GATE OK, 647 s: 8,973 passed, 18 not run, 95.23 %, 69 commits checked |
-| IMGWTools | `6bd35a4` | GATE OK, 209 s: 2,492 passed, 80 not run, 94.48 %; the commit step checked one commit (F6) |
+| Kartograf | `d11f6219` | GATE OK, 647 s: 8,973 passed, 18 not run, 95.23 %, 69 commits checked |
+| IMGWTools | `71bae77` | GATE OK, 209 s: 2,492 passed, 80 not run, 94.48 %; the commit step checked one commit (F6) |
 | Archiwista | `fc5e658` | GATE OK, 1,513 s: 1,447 passed, 47 not run, 92.28 %, 76 commits checked |
-| Hydrograf | `b3545ca` | GATE OK, 32 s, with `GATE_COMMIT_RANGE=develop..HEAD` (F6): 1,302 passed, 19 not run, 85.57 %, 50 commits checked |
+| Hydrograf | `24771de` | GATE OK, 32 s, with `GATE_COMMIT_RANGE=develop..HEAD` (F6): 1,302 passed, 19 not run, 85.57 %, 50 commits checked |
 | Nogat | `d485bc2` | GATE OK, 8 s: 174 passed, 83.97 %, 35 commits checked |
 
 ## Next
@@ -261,8 +261,8 @@ needs; the other three ran with it set (none of them has an MCP server).
 2. Hydrograf lifts the affine cap with pyflwdir 0.5.13 (its ADR-062); until
    then Hydrograf and Archiwista run in separate environments.
 3. Done 2026-10-25: the consumers are re-pinned to the producers' new heads
-   (Kartograf `c31ca04c`, IMGWTools `6bd35a4`), each with its full gate and
-   pushed: Retman `cc6d1ee`, Hydraulik `91559e0`, Hydrograf `9dfa3a8`,
+   (Kartograf `d11f6219`, IMGWTools `71bae77`), each with its full gate and
+   pushed: Retman `cc6d1ee`, Hydraulik `46f7fd2`, Hydrograf `f9d2118`,
    Archiwista `e5b4c22` (the pins table in the Results of the
    data-output plan). Open: repeat the run for the members that changed, with
    Hydrograf and Archiwista apart, and the two flows of F2, and record it in

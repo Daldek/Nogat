@@ -113,7 +113,7 @@ watershed parameters, hietogram and hydrograph on the right, the feedback
 dialog, both themes and the phone layout. Static data; no remote resources.
 
 Step 6 (2026-11-01, in review): Hydrograf `feature/visual-identity`
-(`0cad64c` to `952d6f8`; its ADR-065) ports the approved mockup into the real
+(`3ea0bc6` to `0e5b8d1`; its ADR-065) ports the approved mockup into the real
 frontend (Leaflet, Chart.js): the shell (rail with Mapa and Administracja
 only), layers with one zoom-to-extent button, Archiwista's basemaps plus the
 ESRI orthophoto (OpenFreeMap through MapLibre), charts and overlays on the

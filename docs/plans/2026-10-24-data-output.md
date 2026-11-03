@@ -234,7 +234,7 @@ File and line references are those of 2026-10-24 and only locate the work.
    author pushes, such a pin names a local commit. `uv lock` and `uv sync`
    fetch the producer's GitHub URL, so the commit resolves only on a machine
    whose uv git cache was given it with a `git fetch` of the local clone
-   (Retman's pin of IMGWTools `a304521` is one). The author therefore pushes in
+   (Retman's pin of IMGWTools `08f1a7b` is one). The author therefore pushes in
    the order of the registry (HUB-5.2): the producers first, IMGWTools,
    Kartograf and Hydrolog, each with the branch that holds a pinned commit, and
    then the consumers, Retman, Archiwista and Hydraulik (Hydrograf after the
@@ -308,19 +308,19 @@ the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md#project-evidence-on-2026-10
 |---|---|---|---|
 | Nogat | 1 | `feature/data-output` | done; the registry follows the branches below |
 | Kartograf | 2 | `feature/data-output` (worktree `Kartograf-dataout`), `91c4510f` | in progress |
-| IMGWTools | 3 | `feature/data-output`, `a304521` | done on the branch |
+| IMGWTools | 3 | `feature/data-output`, `08f1a7b` | done on the branch |
 | Archiwista | 4 | `chore/nogat-2.1`, `2b167c3` | not started |
 | Retman | 5 | `feature/imgwtools-data-output`, `932d2cf` | the IMGWTools half is done |
-| Hydrolog | 6 | `chore/nogat-2.1`, `d4f7282`; `feature/routing-network`, `6c9ba5a` | documents done; routing documents are new |
-| Hydrograf | 8 | `chore/nogat-2.1`, `39eb15e` | not part of this work |
-| Hydraulik | 8 | `feature/sfincs-swmm` (worktree `Hydraulik-sfincs`), `793002a` | done on the branch, not merged |
+| Hydrolog | 6 | `chore/nogat-2.1`, `8ae4a6d`; `feature/routing-network`, `28be47d` | documents done; routing documents are new |
+| Hydrograf | 8 | `chore/nogat-2.1`, `f53eb87` | not part of this work |
+| Hydraulik | 8 | `feature/sfincs-swmm` (worktree `Hydraulik-sfincs`), `f745439` | done on the branch, not merged |
 
 - **Nogat.** The registry and the map follow the branches below (CHANGELOG):
   plain files and `files[]` beside the stores, the default roots, the published
   `<tool>-command-list/1` and `<tool>-commands/1`, `kartograf-result/1`, the
   `testing` modules, `hydrolog-network/1`, `hydrolog-hydrograph-csv` and the
   edges of Hydraulik.
-- **Kartograf**, nine commits on `chore/nogat-2.1` `18a33d01`. Landed, each
+- **Kartograf**, nine commits on `chore/nogat-2.1` `73864e6b`. Landed, each
   with its gate green: ADR-054, `root` and `--root` for every store root, the
   default root `<data_dir>/kartograf` and `KARTOGRAF_ROOT`, the marker
   `kartograf-store.json` with `kartograf store init`, `producer` and
@@ -337,7 +337,7 @@ the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md#project-evidence-on-2026-10
   branch is rebased onto `chore/nogat-2.1` later: that branch holds the
   standard 2.1 adoption and moves the texts into the message catalog (ADR-053)
   area by area.
-- **IMGWTools**, 21 commits on `chore/nogat-2.1` `b526f16`. Done: ADR-007;
+- **IMGWTools**, 21 commits on `chore/nogat-2.1` `b480b38`. Done: ADR-007;
   `--output-dir` (`-o`), `--root`, `--output` and `--force`; `IMGW_ROOT` and the
   default root `<data_dir>/imgw`; plain `datasets download`, `store sync` and
   `pmaxtp sync` with preflight, `.imgw-incoming/` and the `--check` plan; the
@@ -372,13 +372,13 @@ the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md#project-evidence-on-2026-10
   Its PROGRESS asks the registry for two changes, left until its branch is
   merged: drop `backend/requirements.txt` from `python_manifests` (the uv step
   deleted it) and revise `uses` of Kartograf after its migration.
-- **Hydraulik**, 29 commits on `develop` `de97009`. Done ahead of the release
+- **Hydraulik**, 29 commits on `develop` `3703913`. Done ahead of the release
   set, not merged: plain files only (ADR-0001); `terrain download` starts the
   `kartograf` program with `--check` and `--output-dir` and refuses a Kartograf
   whose `output_dir` is not `path_role: output` (ADR-0006); `rainfall build`
   from Hydrolog shapes and IMGWTools depths; `swmm run` and `model couple` read
   the tables of `hydrolog route network` (ADR-0009, checked on Hydrolog
-  `081fda2`). The Kartograf calls run against a fake program: the live run
+  `10f8c44`). The Kartograf calls run against a fake program: the live run
   waits for Kartograf's plain mode, and the field names of its plan and the ids
   of its items are what may differ. The proof of concept stays uncommitted in
   the `Hydraulik` checkout; the merge plan is in its PROGRESS.
@@ -390,10 +390,10 @@ of each consumer branch; every commit is on GitHub):
 
 | Consumer (branch, head) | Producer | Pin | Gate at the head |
 |---|---|---|---|
-| Retman (`feature/kartograf-data-output`, `cc6d1ee`) | Kartograf, IMGWTools (group `tools`) | commits `c31ca04c`, `6bd35a4`, the heads of `feature/data-output` | GATE OK, 104 s: 3,234 passed, 7 not run, 95.34 %, 45 commits checked |
-| Hydraulik (`feature/sfincs-swmm`, `91559e0`) | Hydrolog, IMGWTools (extra `rainfall`) | commits `5fa22b3` (`feature/routing-schematic`), `6bd35a4` | GATE OK, 49 s: 823 passed, 1 skipped, 17 not run, 95.64 %, 33 commits checked |
-| Hydrograf (`feature/producer-heads`, `9dfa3a8`) | Kartograf, Hydrolog, IMGWTools | commits `c31ca04c`, `5fa22b3`, `6bd35a4` | 1,302 passed, 19 not run, 85.57 %; the commit step passes with `GATE_COMMIT_RANGE=develop..HEAD` (51 commits) and fails on the old history of `develop` without it (F6) |
-| Archiwista (`feature/kartograf-data-output`, `e5b4c22`) | Kartograf, IMGWTools (extra `imgw`) | commits `c31ca04c`, `6bd35a4` | GATE OK, 1,987 s: 1,447 passed, 47 not run, 92.28 %, 77 commits checked |
+| Retman (`feature/kartograf-data-output`, `cc6d1ee`) | Kartograf, IMGWTools (group `tools`) | commits `d11f6219`, `71bae77`, the heads of `feature/data-output` | GATE OK, 104 s: 3,234 passed, 7 not run, 95.34 %, 45 commits checked |
+| Hydraulik (`feature/sfincs-swmm`, `46f7fd2`) | Hydrolog, IMGWTools (extra `rainfall`) | commits `2a5ba1a` (`feature/routing-schematic`), `71bae77` | GATE OK, 49 s: 823 passed, 1 skipped, 17 not run, 95.64 %, 33 commits checked |
+| Hydrograf (`feature/producer-heads`, `f9d2118`) | Kartograf, Hydrolog, IMGWTools | commits `d11f6219`, `2a5ba1a`, `71bae77` | 1,302 passed, 19 not run, 85.57 %; the commit step passes with `GATE_COMMIT_RANGE=develop..HEAD` (51 commits) and fails on the old history of `develop` without it (F6) |
+| Archiwista (`feature/kartograf-data-output`, `e5b4c22`) | Kartograf, IMGWTools (extra `imgw`) | commits `d11f6219`, `71bae77` | GATE OK, 1,987 s: 1,447 passed, 47 not run, 92.28 %, 77 commits checked |
 
 Integration check: the early dry run and the final run of 2026-10-25 are
 recorded in [the dry-run plan](2026-10-25-integration-dry-run.md) and
@@ -404,8 +404,8 @@ the audit of 2026-10-28 ran no tests or gates.
 
 The current branch audit supersedes the waiting states above: Retman's
 two producer migrations and Archiwista's data-output migration are done
-on their branches, and `hydrolog.testing` exists at `0719c41` and in the
-pinned routing head `5fa22b3`. Kartograf still lists the CLI subprocess
+on their branches, and `hydrolog.testing` exists at `6bf2c5f` and in the
+pinned routing head `2a5ba1a`. Kartograf still lists the CLI subprocess
 smoke and plain-mode prose as open; IMGWTools lists the live plain-mode
 smoke. Newer Kartograf, IMGWTools and Archiwista heads need to be named
 explicitly in the repeat, rather than treated as the 2026-10-25 pins.

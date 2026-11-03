@@ -208,7 +208,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   the status `research`.
 - `ecosystem.yaml`: Hydrograf's `python_manifests` is `backend/pyproject.toml` alone.
   Hydrograf replaced `backend/requirements.txt` with uv and `backend/uv.lock`
-  (`3ca62f2`), and `deps` noted the missing file.
+  (`a115135`), and `deps` noted the missing file.
 - `ecosystem.yaml`: `uses` of Hydrograf's edge to Kartograf names the calls of its
   migration (`download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`,
   `list_segments`) instead of the removed `LandCoverManager` and `HSGCalculator`,

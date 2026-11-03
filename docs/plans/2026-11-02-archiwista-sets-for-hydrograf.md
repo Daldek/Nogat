@@ -42,9 +42,9 @@ The author's variant B of 2026-11-02:
 
 ## Where it starts
 
-Checked on 2026-11-02 at Kartograf `26ee459` (the checkout `07cfed48` adds
+Checked on 2026-11-02 at Kartograf `eab8612` (the checkout `5979c987` adds
 one documentation commit), Archiwista `e9a18b9` with its uncommitted fix (the
-instance on :8090 runs `dd4268c`) and Hydrograf-store `a86204e`. Paths are
+instance on :8090 runs `dd4268c`) and Hydrograf-store `da70682`. Paths are
 relative to each repository unless absolute.
 
 ### The store and its writers
@@ -760,8 +760,8 @@ The S5 section of Hydrograf's migration plan is rewritten in H2's session
 
 | Consumer | Kartograf | Change |
 |---|---|---|
-| Archiwista | `26ee459` (`pyproject.toml`, `uv.lock`) | none: the set needs nothing newer; KF at its next re-pin |
-| Hydrograf | `26ee459` (`backend/pyproject.toml` `[tool.uv.sources]`, `backend/uv.lock`); Hydrolog `5fa22b3`, IMGWTools `6bd35a4` | none; a re-pin needs `uv lock` and a new image |
+| Archiwista | `eab8612` (`pyproject.toml`, `uv.lock`) | none: the set needs nothing newer; KF at its next re-pin |
+| Hydrograf | `eab8612` (`backend/pyproject.toml` `[tool.uv.sources]`, `backend/uv.lock`); Hydrolog `2a5ba1a`, IMGWTools `71bae77` | none; a re-pin needs `uv lock` and a new image |
 
 ## Decisions of the author
 
@@ -814,5 +814,5 @@ changed by Archiwista (A2).
 | A2 | Archiwista, `feature/archiwista-projects` | draft sets committed as `21eff04`..`6ece8ca` (PROGRESS `4027755`), A-ADR-049 erratum 6, index schema 17; full gate green on that tree (2026-11-02, 2749 passed) |
 | A3 | Archiwista, instance :8090 | `4027755` deployed 2026-11-03 ~00:00 with `TMPDIR` on disk; the index rebuild to schema 17 dropped sessions, job history and 18 drawn rectangles, kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`; `archiwista-state/2` back to `/1` deferred to the release preparation |
 | A4, A5 | Archiwista, data | wait for the author |
-| H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `7974ef0` (production since 2026-11-02 22:18) |
+| H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `1794f76` (production since 2026-11-02 22:18) |
 | H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag) |
