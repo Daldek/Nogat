@@ -8,6 +8,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
+  2026-11-03) and its topic branches deleted except
+  `feature/hydrolog-gui-mockup`; Next 7 lists the tools' branches awaiting
+  review and release.
+
 - `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`: status of
   2026-11-03 in Results: A1 to A3 and H1 done, A4 and A5 wait for the
   author, H2 and S5 postponed until after Hydrograf v0.8.0.
