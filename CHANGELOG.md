@@ -251,7 +251,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   Kartograf, Hydrolog and IMGWTools are no longer shown as ranges that
   exclude the latest tag.
 - `docs/PROGRESS.md`: Hydrograf's row of 2026-11-03 names `develop`
-  `7273410`, the `certifi` exception to its freeze, the rebuild and the
+  `d62646c`, the `certifi` exception to its freeze, the rebuild and the
   rollback image; Next 4 no longer says `feature/visual-identity` is
   unmerged.
 - Requirements files are read as pip reads them: line continuations,
