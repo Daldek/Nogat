@@ -1,6 +1,6 @@
 # Ecosystem hub (Nogat)
 
-Part of standard 2.1 · IDs `HUB-…`
+Part of standard 1.0 · IDs `HUB-…`
 
 Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 
@@ -32,7 +32,7 @@ has one) and, in a dependency, `uses` and `note` are optional.
 
 ```yaml
 schema: nogat-ecosystem/1
-standard_version: "2.1"       # HUB-6.1
+standard_version: "1.0"       # HUB-6.1
 data_sources:                 # HUB-2.7
   - {id: gugik, name: GUGiK, country: PL, url: https://www.geoportal.gov.pl, licence: "…"}
 projects:
@@ -179,16 +179,17 @@ that lists the affected projects and the order, producers first.
 
 **HUB-6.1** The version of the standard (MAJOR.MINOR) is in
 `standards/README.md`; `ecosystem.yaml` carries it as `standard_version`.
-Changes on `develop` accumulate under the next version, listed in the
-changelog of `standards/README.md`; when they reach `main`, the merge commit
-is tagged `std-X.Y`, and the next change starts version X.(Y+1). Projects
-cite requirement IDs, not versions, and record deviations as DEV-1.2 says.
+A version exists from its tag on `main`: when changes reach `main`, the
+merge commit is tagged `std-X.Y`. `develop` carries the next version, listed
+in the changelog of `standards/README.md`, and starts X.(Y+1) after the tag.
+Projects cite requirement IDs, not versions, and record deviations as
+DEV-1.2 says.
 `uv run scripts/ecosystem.py validate` (`nogat ecosystem validate` once the
 package exists) checks that `standard_version`, the version line of
 `standards/README.md`, `standard_version` in `error_registry.json` and the
 `Part of standard X.Y` header of every topic document agree.
 *Why:* a tag marks what projects can copy (ERR-3); unpublished drafts need
-none (ECO-046).
+none and bind no user (ECO-046, ECO-056).
 
 ## 7. The `nogat` package
 

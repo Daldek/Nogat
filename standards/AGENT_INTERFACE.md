@@ -1,6 +1,6 @@
 # Agent interface standard
 
-Part of standard 2.1 · IDs `AGI-…`
+Part of standard 1.0 · IDs `AGI-…`
 
 How a project exposes its functionality to programs and AI agents: Python
 library, CLI, MCP server, REST API, `llms.txt` and `AGENTS.md`. It applies to
@@ -176,14 +176,17 @@ starts the MCP server (AGI §5).
 
 **AGI-4.1** Every machine-readable document has a top-level `schema` field
 `<tool>-<kind>/<n>`. Adding optional fields keeps `<n>`, so consumers accept
-unknown fields; removing or changing meaning increments it. The schemas of
-the result envelope, the error document and the catalog are Nogat's
-`schemas/agent/` (`result-1`, `error-1`, `commands-1`); each project copies
-them with `error_registry.json` (ERR-3), and its contract tests validate its
-documents against them. Domain schemas are published in the package
+unknown fields; removing or changing meaning increments it, but only past a
+number released on the producer's `main`: a breaking change to an unreleased
+document keeps its number. The schemas of the result envelope, the error
+document and the catalog are Nogat's `schemas/agent/` (`result-1`,
+`error-1`, `commands-1`); each project copies them with
+`error_registry.json` (ERR-3), and its contract tests validate its documents
+against them. Domain schemas are published in the package
 (`src/<package>/schemas/`) and listed in the catalog.
 *Why:* one schema per shared document; prose alone let projects drift while
-each claimed AGI-1.2 (ECO-050).
+each claimed AGI-1.2 (ECO-050); a number no release carried binds no
+consumer (ECO-056).
 
 **AGI-4.2** The result envelope `<tool>-result/1`:
 

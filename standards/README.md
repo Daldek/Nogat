@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 2.1 · not yet published; tagged `std-2.1` when it reaches `main` (HUB-6.1)
+Standard 1.0 · not yet published; tagged `std-1.0` when it reaches `main` (HUB-6.1)
 
 Shared rules for Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -73,13 +73,21 @@ None.
 
 ## Legacy
 
-Standard v1.0 (2026-01-29) is archived in [legacy/v1.0/](legacy/v1.0/). The
-root-owned `templates/` and `configs/` directories are v1 files and not valid
-for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
+[legacy/shared-2026-01/](legacy/shared-2026-01/) holds the shared standards of
+2026-01-29 that preceded Nogat; they were never on Nogat's `main` (ECO-056).
+The root-owned `templates/` and `configs/` directories come from them and are
+not valid for this standard; the author replaces them (ADOPTION_PLAN 0.1,
+DOC-11.1).
 
 ## Changelog
 
-- 2.1 (2026-10-21, not yet published):
+- 1.0 (not yet published):
+  - Numbers count from `main`: a version of the standard exists from its tag
+    on `main`, and `develop` carries the next one; a document's `<n>`
+    increments only past a number released on the producer's `main`. The
+    drafts called 2.0 and 2.1 on `develop` are published as 1.0, and the
+    shared standards of 2026-01-29 are archived as `legacy/shared-2026-01/`
+    (HUB-6.1, AGI-4.1, ECO-056).
   - Agent-facing text by channel: `--json`, MCP and REST without
     `Accept-Language` are English, human-readable output follows `lang`
     (AGI-9.2, AGI-6.4, DEV-2.2, ERR-6, Zen 9, ECO-042).
@@ -151,7 +159,7 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - Open decisions settled: Hydraulik stays MIT (ECO-041), the `nogat`
     package ships the registry (HUB-7.3), the MCP start form is settled at the
     rename (ADOPTION_PLAN 6.1).
-  - Added to 2.0 earlier the same day and now part of 2.1: exchanged data in
+  - Added to the 2.0 draft earlier the same day: exchanged data in
     the registry (ECO-024, HUB-2.5 to HUB-2.7); release sets and the `deps`
     comparison (ECO-025, REL §6, HUB-4.6); the user package `nogat` and the
     `nogat-` prefix (ECO-026, ECO-022, HUB §7); removal of Nogat's legacy
@@ -166,7 +174,7 @@ for 2.1; the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - Deleted IDs: DEV-3.2, DEV-8.4, DEV-11.2, DEV-16.3, DOC-1.3, DOC-5.5,
     DOC-6.2, DOC-9.2, AGI-10.2, AGI-10.3, AGI §11, REL-5.5, HUB-2.2, HUB-4.4,
     HUB-5.1, HUB-5.3, HUB-6.2, and the third-party tools item of HUB-1.1.
-- 2.0 (2026-10-19): rewritten from project practice; English-only
-  documentation; agent-first interface standard; shared error registry;
-  `src` layout; uv; release and distribution channels; hub requirements.
-- 1.0 (2026-01-29): first shared standard.
+  - The draft called 2.0 (2026-10-19): rewritten from project practice;
+    English-only documentation; agent-first interface standard; shared error
+    registry; `src` layout; uv; release and distribution channels; hub
+    requirements (ECO-004).

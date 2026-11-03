@@ -4,7 +4,7 @@
 # Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
 
 schema: nogat-ecosystem/1
-standard_version: "2.1"
+standard_version: "1.0"
 
 data_sources:
   - id: gugik

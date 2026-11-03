@@ -137,7 +137,7 @@ def standard_version_problems(version: str) -> list[str]:
 
     Every topic document in `standards/` carries a "Part of standard X.Y"
     line near the top; README.md has the "Standard X.Y" line instead and
-    DECISIONS.md is a versionless log (2.x).
+    DECISIONS.md is a versionless log.
     """
     problems: list[str] = []
     readme = _read(STANDARDS / "README.md")
