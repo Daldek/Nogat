@@ -108,7 +108,8 @@ to the wrong one, and a command of another tool cannot start the task (ECO-052).
 ## 3. Local workspace
 
 **HUB-3.1** By default, repositories are resolved as siblings of Nogat, in a
-directory named like the project's registry `name`.
+directory named like the repository: the last path segment of the registry
+`repo`, which may differ from `name` until a repository is renamed (ECO-057).
 
 **HUB-3.2** A different layout is set with `NOGAT_WORKSPACE`, the directory
 that holds the checkouts.
