@@ -9,10 +9,11 @@ Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 ## 1. Role
 
 **HUB-1.1** Nogat holds:
-1. this standard (`standards/`);
+1. this standard (`standards/`) and the schemas of the shared agent
+   documents (`schemas/agent/`, AGI-4.1);
 2. the project registry (`ecosystem.yaml`);
 3. tooling that reads the registry (drift report, workspace sync, MCP
-   configuration, aggregated agent guide);
+   configuration, routing table for agents, checks of this standard);
 4. the user package `nogat`, which installs the whole ecosystem with one
    command (HUB §7, ECO-026).
 
@@ -25,7 +26,9 @@ history rewrites; the registry references repositories instead.
 
 **HUB-2.1** The registry records structure only: what only Nogat knows. Its
 fields are those of `schemas/ecosystem.schema.json`, shown below;
-`python_manifests` and, in a dependency, `uses` and `note` are optional.
+`python_manifests`, `routes`, `interfaces.gui` (the command that serves the
+project's browser GUI on the user's computer, given only by a project that
+has one) and, in a dependency, `uses` and `note` are optional.
 
 ```yaml
 schema: nogat-ecosystem/1
@@ -34,7 +37,7 @@ data_sources:                 # HUB-2.7
   - {id: gugik, name: GUGiK, country: PL, url: https://www.geoportal.gov.pl, licence: "…"}
 projects:
   - name: Retman
-    summary: Polish natural-language command layer over the ecosystem tools.   # ≤ 100 chars
+    summary: Polish natural-language command layer over the ecosystem tools.   # budget DOC-1.7
     profiles: [tool]          # tool | app | hub
     status: active            # active | research | paused | archived
     repo: https://github.com/Daldek/Retman
@@ -48,6 +51,9 @@ projects:
       mcp: null
       rest: null
       python: retman
+    routes:                   # HUB-2.9: a task and the command that starts it
+      - task: Plan a data task written in Polish, then run it once confirmed   # max 100 characters
+        command: retman plan run   # the CLI name first, or an HTTP method for a REST route
     data_sources: []          # ids from top-level data_sources accessed directly
     provides: []              # HUB-2.5: {id, kind, summary} offered to other projects
     depends_on:
@@ -55,7 +61,7 @@ projects:
         kind: optional        # runtime | optional | dev | data   (data = reads another project's files or store)
         status: active        # active | planned
         via: [library]        # library | cli | mcp | rest | service | store | file
-        exchange: [kartograf-catalog/1, kartograf-download/1]   # ids from Kartograf provides
+        exchange: [kartograf-commands/1, kartograf-download/1]   # ids from Kartograf provides
         uses: [symbol]        # optional: public symbols used
         note: free text       # optional
 ```
@@ -90,6 +96,15 @@ in `python_manifests` (repository-relative, for example `pyproject.toml`,
 `backend/requirements.txt`); the drift and dependency reports read them
 (HUB-4.1, HUB-4.6).
 
+**HUB-2.9** Each project except the hub lists its `routes`, the rows of the
+routing table (HUB-4.3): a `task` of at most 100 characters and the `command`
+that starts it, beginning with the project's CLI or, for a REST interface,
+with an HTTP method. A task is routed once in the whole registry, and `repo`
+is a github.com URL, where the guides are linked. `validate` checks these
+rules.
+*Why:* an agent chooses a tool by task; a task that two tools claim sends it
+to the wrong one, and a command of another tool cannot start the task (ECO-052).
+
 ## 3. Local workspace
 
 **HUB-3.1** By default, repositories are resolved as siblings of Nogat, in a
@@ -115,45 +130,65 @@ latest tag.
 **HUB-4.2** `nogat mcp config --client claude|cursor|codex|vscode` prints a
 configuration with every ecosystem MCP server, from registry data.
 
-**HUB-4.3** Nogat `AGENTS.md` aggregates the injected blocks of all tools
-(AGI-8.2) and a routing table: task → tool → entry command.
+**HUB-4.3** Nogat `AGENTS.md` is generated from the registry
+(`uv run scripts/ecosystem.py agents`): a routing table (task → tool → entry
+command) built from the `routes` of HUB-2.9, with a link to each tool's
+AGENTS.md, or to the README of an `app`, which has none (DOC-1.1), as raw
+Markdown on `main` (DOC-1.4, DOC-5.2). The tools' blocks (AGI-8.2) are not
+inlined, and the budget of DOC-1.7 applies. `agents --check` fails with
+`conflict` when the file is stale; the gate runs it.
 *Why:* an agent working from Nogat needs to know which tool covers a task
-without opening every repository.
+without opening every repository; inlining every block would exceed the
+budget (ECO-048, ECO-052).
 
 **HUB-4.5** `docs/ECOSYSTEM_MAP.md` is generated from the registry
 (`uv run scripts/ecosystem.py map`): data-flow diagram, project table,
 dependency table (kind, route, exchanged ids), what each project provides and
 who consumes it, external data sources. It shows structure only: no versions
-and no pins. `map --check` fails when the file is stale; the gate runs it.
+and no pins. `map --check` fails with `conflict` when the file is stale; the
+gate runs it.
 *Why:* people and agents need one view of which tool feeds which and what
 breaks when a format changes.
 
 **HUB-4.6** `uv run scripts/ecosystem.py deps` compares third-party
 requirements across the checkouts: ranges declared by two or more projects,
-and ranges no single version satisfies (exit 1). `--installed` adds the
+and ranges no single version satisfies (`conflict`). `--installed` adds the
 Python version and package versions of each checkout's `.venv` and lists
 packages that differ. It prepares a candidate (REL-6.4).
+
+**HUB-4.7** `uv run scripts/ecosystem.py standard` checks the standard: every
+cited requirement ID, section and decision exists, IDs are defined once in
+their document, relative links resolve, Nogat's files keep the budgets of
+DOC-1.7, project lists in prose and the store markers of DEV-19.12 match the
+registry, and generated tables are fresh (`--write` regenerates them). The
+gate runs it.
+
+**HUB-4.8** Nogat's scripts report failures by the registry: a malformed
+input is `data_error`, a missing one `not_found`, a stale generated file or
+incompatible ranges `conflict`, a wrong call `validation_error`, a defect
+`internal_error`; the last stderr line is the `nogat-error/1` document
+(AGI-4.3).
+*Why:* agents handle the hub's tools like any other tool (ECO-044).
 
 ## 5. Agents operating from Nogat
 
 **HUB-5.2** A cross-project change starts with a plan in Nogat (DEV-17.4)
 that lists the affected projects and the order, producers first.
 
-**HUB-5.3** Nogat keeps the single list of needs between projects:
-`docs/requests/<Project>.md`, one entry per need; agents write, read and
-delete entries as DEV-17.5 says.
-*Why:* ECO-039.
-
 ## 6. Standard versioning
 
 **HUB-6.1** The version of the standard (MAJOR.MINOR) is in
 `standards/README.md`; `ecosystem.yaml` carries it as `standard_version`.
-Every change of the standard bumps MINOR and is tagged `std-X.Y` in Nogat.
-Projects cite requirement IDs, not versions, and record deviations as DEV-1.2
-says. `nogat ecosystem validate` (today `uv run scripts/ecosystem.py validate`)
-checks that `standard_version`, the version line of
+Changes on `develop` accumulate under the next version, listed in the
+changelog of `standards/README.md`; when they reach `main`, the merge commit
+is tagged `std-X.Y`, and the next change starts version X.(Y+1). Projects
+cite requirement IDs, not versions, and record deviations as DEV-1.2 says.
+`uv run scripts/ecosystem.py validate` (`nogat ecosystem validate` once the
+package exists) checks that `standard_version`, the version line of
 `standards/README.md`, `standard_version` in `error_registry.json` and the
 `Part of standard X.Y` header of every topic document agree.
+*Why:* a tag marks what projects can copy (ERR-3); unpublished drafts need
+none (ECO-046).
 
 ## 7. The `nogat` package
 
@@ -188,17 +223,18 @@ one install command reproduces the verified set.
 **HUB-7.3** The package exposes each member's commands (`<tool>`,
 `<tool>-mcp`) through `[project.scripts]` entries pointing at the members'
 entry functions, so one install puts them on `PATH`. The `nogat` command has
-two groups and is exempt from the command shape of AGI §3:
+two groups, is exempt from the command shape of AGI §3 and reports errors as
+HUB-4.8 says:
 - for users: `nogat init` (writes `nogat.toml` and creates the data and cache
   directories, checking that hard links work; DEV-18.1, DEV-18.2),
   `nogat doctor` (installed versions against the set; settings and their
-  sources, credentials present or missing and store sizes, all from
-  `<tool> config show --json`, DEV-18.6; the external prerequisites of
-  HUB-7.1), `nogat mcp config` (HUB-4.2), `nogat guide` (routing table,
-  HUB-4.3);
+  sources, credentials present or missing and store sizes, from
+  `<tool> config show --json` of each member with profile `tool`, DEV-18.6;
+  the external prerequisites of HUB-7.1), `nogat mcp config` (HUB-4.2),
+  `nogat guide` (routing table, HUB-4.3);
 - for maintenance, run in a Nogat checkout: `nogat ecosystem validate | map |
-  deps | drift` (replacing `scripts/ecosystem.py`), `nogat workspace sync`
-  (HUB-3.3).
+  agents | deps | drift | standard` (replacing `scripts/ecosystem.py`),
+  `nogat workspace sync` (HUB-3.3).
 
 The package includes `ecosystem.yaml` as package data, read by `nogat mcp
 config`, `nogat guide` and the maintenance commands; DEV-5.4 applies (a test
@@ -208,6 +244,7 @@ proves the file is in the built wheel).
 previous `nogat` release, where a minor bump of a `0.y` member and a removed
 member count as major and an added member as minor; raising the minimum
 Python is major; third-party and development-tool updates alone are minor,
-because the set is tested.
+because the set is tested, except a security fix between sets, which is a
+patch (REL-6.6).
 *Why:* ECO-026; the number tells users whether an upgrade may break their
 scripts.

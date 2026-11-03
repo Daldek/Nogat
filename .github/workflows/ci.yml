@@ -32,11 +32,15 @@ jobs:
       - name: Gate
         env:
           GATE_COMMIT_RANGE: >-
-            ${{ (github.event_name == 'pull_request' && github.base_ref == 'develop')
-                && 'origin/develop..HEAD' || 'none' }}
+            ${{ github.event_name != 'pull_request' && 'none'
+                || github.base_ref == 'develop' && 'origin/develop..HEAD'
+                || (github.base_ref == 'main' && startsWith(github.head_ref, 'hotfix/'))
+                   && 'origin/main..HEAD'
+                || 'none' }}
           GATE_CHECK_AUTHOR: >-
             ${{ (github.event_name == 'pull_request'
-                 && github.base_ref == 'develop'
+                 && (github.base_ref == 'develop'
+                     || (github.base_ref == 'main' && startsWith(github.head_ref, 'hotfix/')))
                  && github.event.pull_request.head.repo.full_name == github.repository
                  && github.event.pull_request.user.login != 'dependabot[bot]') && '1' || '0' }}
         run: bash scripts/gate.sh

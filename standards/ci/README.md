@@ -28,9 +28,11 @@ Templates for the quality gate (DEV-7.6), CI (DEV-7.7) and dependency updates
      (`HEAD` alone when that is missing): Conventional Commits, no AI
      attribution (including `Claude-Session:` lines), author;
    - in CI, `GATE_COMMIT_RANGE` is `origin/develop..HEAD` on pull requests
-     into `develop` and `none` everywhere else, which skips the step;
-     `GATE_CHECK_AUTHOR=1` only for pull requests from the repository's own
-     branches, not from forks and not opened by Dependabot (DEV-16.5).
+     into `develop`, `origin/main..HEAD` on pull requests from `hotfix/*`
+     into `main`, and `none` everywhere else, which skips the step;
+     `GATE_CHECK_AUTHOR=1` only for those pull requests from the
+     repository's own branches, not from forks and not opened by Dependabot
+     (DEV-16.5).
 
 Contributors keep their own identity and run
 `GATE_CHECK_AUTHOR=0 scripts/gate.sh` (DEV-16.4).

@@ -71,8 +71,18 @@
             "cli": {"$ref": "#/$defs/nullable_string"},
             "mcp": {"$ref": "#/$defs/nullable_string"},
             "rest": {"$ref": "#/$defs/nullable_string"},
-            "python": {"$ref": "#/$defs/nullable_string"}
+            "python": {"$ref": "#/$defs/nullable_string"},
+            "gui": {
+              "description": "Optional: the command that serves the project's browser GUI on this computer.",
+              "type": "string",
+              "minLength": 1
+            }
           }
+        },
+        "routes": {
+          "description": "Rows of the routing table of AGENTS.md (HUB-4.3): a task and the command that starts it.",
+          "type": "array",
+          "items": {"$ref": "#/$defs/route"}
         },
         "data_sources": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
         "provides": {"type": "array", "items": {"$ref": "#/$defs/provided"}},
@@ -87,6 +97,15 @@
         "id": {"$ref": "#/$defs/id"},
         "kind": {"enum": ["dataset", "sidecar", "store", "manifest", "document", "catalog", "library", "service", "contract"]},
         "summary": {"type": "string"}
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "command"],
+      "properties": {
+        "task": {"type": "string", "minLength": 1, "maxLength": 100},
+        "command": {"type": "string", "pattern": "^[^`|\\n]+$"}
       }
     },
     "dependency": {

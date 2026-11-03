@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nogat visual identity</title>
+<link rel="icon" type="image/svg+xml" href="marks/nogat.svg">
+<script>
+  try {
+    var t = localStorage.getItem("nogat-theme");
+    if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--line-height);
+  }
+  .mono, code, kbd, pre { font-family: var(--font-mono); }
+
+  /* Header */
+  .top {
+    position: sticky; top: 0; z-index: 1;
+    height: var(--header-height);
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: 0 var(--space-4);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  .top h1 { margin: 0; font-size: var(--text-md); font-weight: var(--weight-bold); }
+  .top .switch { margin-left: auto; display: flex; gap: var(--space-1); }
+  .switch button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+
+  main { max-width: var(--container-max); margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-16); }
+  section { margin-bottom: var(--space-12); }
+  h2 { font-size: var(--text-lg); margin: 0 0 var(--space-4); }
+  h3 { font-size: var(--text-sm); color: var(--text-3); text-transform: uppercase; letter-spacing: .04em; margin: var(--space-4) 0 var(--space-2); }
+  .note { color: var(--text-3); font-size: var(--text-sm); }
+
+  /* Colour */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: var(--space-2); }
+  .swatch { display: flex; gap: var(--space-2); align-items: center; padding: var(--space-2); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
+  .chip { flex: none; width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--line-2); }
+  .swatch .mono { font-size: var(--text-xs); }
+  .swatch .val { color: var(--text-3); }
+
+  /* Type */
+  .type { width: 100%; border-collapse: collapse; }
+  .type td { padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+  .type .tok { color: var(--text-3); font-size: var(--text-xs); white-space: nowrap; }
+  .type .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+  /* Components */
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; margin-bottom: var(--space-3); }
+  button, .btn {
+    height: var(--control); padding: 0 var(--space-3);
+    font: inherit; font-weight: var(--weight-medium); color: var(--text);
+    background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius-sm);
+    cursor: pointer; transition: background var(--transition), border-color var(--transition);
+  }
+  button:hover { background: var(--surface-2); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  button.ghost { background: transparent; border-color: transparent; }
+  button.ghost:hover { background: var(--highlight); }
+  button.sm { height: var(--control-sm); padding: 0 var(--space-2); font-size: var(--text-sm); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  input, select {
+    height: var(--control); padding: 0 var(--space-2);
+    font: inherit; color: var(--text);
+    background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius-sm);
+  }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .panel { max-width: 420px; padding: var(--space-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .panel h4 { margin: 0 0 var(--space-1); font-size: var(--text-md); }
+  .panel p { margin: 0 0 var(--space-3); color: var(--text-2); }
+  .badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2); border-radius: var(--radius-pill); font-size: var(--text-xs); font-weight: var(--weight-bold); }
+  .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge.ok { background: var(--ok-bg); color: var(--ok-ink); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn-ink); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad-ink); }
+  .badge.info { background: var(--info-bg); color: var(--info-ink); }
+  .fmt { font-family: var(--font-mono); font-size: var(--text-xs); padding: 1px var(--space-1); border: 1px solid var(--line-2); border-radius: var(--radius-xs); color: var(--text-2); }
+  kbd { font-size: var(--text-xs); padding: 1px var(--space-1); background: var(--surface-2); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: var(--radius-xs); }
+  pre { margin: 0; padding: var(--space-3) var(--space-4); background: var(--code-bg); color: var(--code-text); border-radius: var(--radius-md); font-size: var(--text-sm); overflow-x: auto; }
+
+  /* App headers */
+  .apps { display: grid; gap: var(--space-2); }
+  .app {
+    height: var(--header-height);
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: 0 var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line); border-bottom: 3px solid var(--tool);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .app strong { color: var(--tool); font-size: var(--text-md); }
+  .app nav { margin-left: auto; display: flex; gap: var(--space-4); color: var(--text-2); font-size: var(--text-sm); }
+
+  /* Marks */
+  .marks { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+  .marks.on-bg { background: var(--bg); }
+  .marks.on-s2 { background: var(--surface-2); }
+  .mark { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
+  .mark .sizes { display: flex; gap: var(--space-3); align-items: flex-end; }
+  .mark span { font-size: var(--text-sm); color: var(--text-2); }
+
+  @media (max-width: 640px) {
+    input, select { font-size: 16px; }
+    .app nav { display: none; }
+    .type .mono-sample, .type .num { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="marks/nogat.svg" width="24" height="24" alt="">
+  <h1>Nogat visual identity</h1>
+  <div class="switch" role="group" aria-label="Theme">
+    <button class="sm" data-theme-choice="auto">Auto</button>
+    <button class="sm" data-theme-choice="light">Light</button>
+    <button class="sm" data-theme-choice="dark">Dark</button>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Colour</h2>
+    <div id="colours"></div>
+  </section>
+
+  <section>
+    <h2>Type</h2>
+    <table class="type" id="type"></table>
+  </section>
+
+  <section>
+    <h2>Components</h2>
+    <h3>Buttons</h3>
+    <div class="row">
+      <button>Default</button>
+      <button class="primary">Primary</button>
+      <button class="ghost">Ghost</button>
+      <button class="sm">Small</button>
+      <button disabled>Disabled</button>
+    </div>
+    <h3>Inputs</h3>
+    <div class="row">
+      <input type="text" placeholder="Catchment name" aria-label="Catchment name">
+      <select aria-label="Return period">
+        <option>Q 1%</option><option>Q 10%</option><option>Q 50%</option>
+      </select>
+    </div>
+    <h3>Panel</h3>
+    <div class="panel">
+      <h4>Zlewnia Kaczawy</h4>
+      <p>Area 2261.7 km², gauge Piątnica. Hydrograph ready for export.</p>
+      <div class="row">
+        <span class="badge ok">ok</span>
+        <span class="fmt">GPKG</span>
+        <button class="primary sm">Export</button>
+      </div>
+    </div>
+    <h3>Status badges</h3>
+    <div class="row">
+      <span class="badge ok">ok</span>
+      <span class="badge warn">warning</span>
+      <span class="badge bad">failed</span>
+      <span class="badge info">running</span>
+    </div>
+    <h3>Format chips and keys</h3>
+    <div class="row">
+      <span class="fmt">GeoTIFF</span><span class="fmt">LAZ</span><span class="fmt">GPKG</span>
+      <span class="note">Search with <kbd>Ctrl</kbd> + <kbd>K</kbd></span>
+    </div>
+    <h3>Code</h3>
+    <pre>$ kartograf elevation download --check
+tiles: 42  missing: 0  size: 1.8 GB</pre>
+  </section>
+
+  <section>
+    <h2>App headers</h2>
+    <div class="apps" id="apps"></div>
+    <p class="note">Tool accents identify the tool; tool accents never signal status.</p>
+  </section>
+
+  <section>
+    <h2>Marks</h2>
+    <h3>On --bg</h3>
+    <div class="marks on-bg" id="marks-bg"></div>
+    <h3>On --surface-2</h3>
+    <div class="marks on-s2" id="marks-s2"></div>
+  </section>
+</main>
+
+<script>
+  var TOOLS = ["nogat", "archiwista", "hydrograf", "kartograf", "imgwtools", "hydrolog", "hydraulik", "retman"];
+  var NAMES = { nogat: "Nogat", archiwista: "Archiwista", hydrograf: "Hydrograf", kartograf: "Kartograf",
+    imgwtools: "IMGWTools", hydrolog: "Hydrolog", hydraulik: "Hydraulik", retman: "Retman" };
+  var GROUPS = {
+    Surfaces: ["bg", "surface", "surface-2", "line", "line-2"],
+    Text: ["text", "text-2", "text-3"],
+    Accent: ["accent", "accent-hover", "accent-soft", "accent-ink", "accent-green", "focus", "highlight"],
+    Status: ["ok", "ok-bg", "ok-ink", "warn", "warn-bg", "warn-ink", "bad", "bad-bg", "bad-ink", "info", "info-bg", "info-ink"],
+    Code: ["code-bg", "code-text", "mark-frame"],
+    "Tool accents": TOOLS.map(function (t) { return "tool-" + t; })
+  };
+  var STEPS = ["xs", "sm", "base", "md", "lg", "xl", "2xl", "site"];
+  var root = document.documentElement;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderColours() {
+    var host = document.getElementById("colours");
+    var cs = getComputedStyle(root);
+    host.textContent = "";
+    Object.keys(GROUPS).forEach(function (group) {
+      host.appendChild(el("h3", null, group));
+      var grid = host.appendChild(el("div", "swatches"));
+      GROUPS[group].forEach(function (name) {
+        var s = grid.appendChild(el("div", "swatch"));
+        var chip = s.appendChild(el("div", "chip"));
+        chip.style.background = "var(--" + name + ")";
+        var label = s.appendChild(el("div"));
+        label.appendChild(el("div", "mono", "--" + name));
+        label.appendChild(el("div", "mono val", cs.getPropertyValue("--" + name).trim()));
+      });
+    });
+  }
+
+  function renderType() {
+    var table = document.getElementById("type");
+    STEPS.forEach(function (step, i) {
+      var tr = table.insertRow();
+      tr.style.fontSize = "var(--text-" + step + ")";
+      tr.insertCell().appendChild(el("span", "mono tok", "--text-" + step));
+      tr.insertCell().textContent = "Zlewnia Kaczawy — hydrogram odpływu 1%";
+      tr.insertCell().appendChild(el("span", "mono mono-sample", "kartograf elevation download --check"));
+      var num = tr.insertCell();
+      num.className = "num";
+      num.textContent = (1234.5 / (i + 1)).toFixed(2) + " m³/s";
+    });
+  }
+
+  function renderApps() {
+    var host = document.getElementById("apps");
+    TOOLS.forEach(function (t) {
+      var a = host.appendChild(el("div", "app"));
+      a.style.setProperty("--tool", "var(--tool-" + t + ")");
+      var img = a.appendChild(el("img"));
+      img.src = "marks/" + t + ".svg"; img.width = 24; img.height = 24; img.alt = "";
+      a.appendChild(el("strong", null, NAMES[t]));
+      var nav = a.appendChild(el("nav"));
+      ["Projects", "Data", "Settings"].forEach(function (x) { nav.appendChild(el("span", null, x)); });
+    });
+  }
+
+  function renderMarks(id) {
+    var host = document.getElementById(id);
+    TOOLS.forEach(function (t) {
+      var m = host.appendChild(el("div", "mark"));
+      var sizes = m.appendChild(el("div", "sizes"));
+      [64, 32, 16].forEach(function (px) {
+        var img = sizes.appendChild(el("img"));
+        img.src = "marks/" + t + ".svg"; img.width = px; img.height = px; img.alt = px === 64 ? NAMES[t] : "";
+      });
+      m.appendChild(el("span", null, NAMES[t]));
+    });
+  }
+
+  function setTheme(choice) {
+    if (choice === "light" || choice === "dark") root.dataset.theme = choice;
+    else { delete root.dataset.theme; choice = "auto"; }
+    try { localStorage.setItem("nogat-theme", choice); } catch (e) {}
+    document.querySelectorAll("[data-theme-choice]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.themeChoice === choice));
+    });
+    renderColours();
+  }
+
+  document.querySelectorAll("[data-theme-choice]").forEach(function (b) {
+    b.addEventListener("click", function () { setTheme(b.dataset.themeChoice); });
+  });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+    if (!root.dataset.theme) renderColours();
+  });
+
+  renderType();
+  renderApps();
+  renderMarks("marks-bg");
+  renderMarks("marks-s2");
+  setTheme(root.dataset.theme || "auto");
+</script>
+</body>
+</html>

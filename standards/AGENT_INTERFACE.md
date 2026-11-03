@@ -5,8 +5,10 @@ Part of standard 2.1 · IDs `AGI-…`
 How a project exposes its functionality to programs and AI agents: Python
 library, CLI, MCP server, REST API, `llms.txt` and `AGENTS.md`. It applies to
 profile `tool` in full and to profile `app` for the documents (AGI §4), the
-REST API (AGI §6) and languages (AGI §9). The `hub` is exempt from the command
-shape (AGI §3) and takes part in AGI §8 through the aggregation of HUB-4.3.
+REST API (AGI §6) and languages (AGI §9). Until the `nogat` package exists,
+the `hub`'s scripts report errors as AGI-3.3 and ERR say and are exempt from
+the rest of AGI §3; the hub takes part in AGI §8 through the routing table of
+HUB-4.3 (ECO-044, ECO-048).
 
 The goal (ECO-017) is that an agent which needs Polish/Czech spatial data,
 hydrological computation, IMGW/ČHMÚ observations or flood modelling finds
@@ -30,8 +32,9 @@ interface (AGI-3.4, AGI §4, ERR §2).
 library in generated code) without relearning.
 
 **AGI-1.3** Read-only operations are the default; writing operations offer a
-`check` mode (plan without effects); MCP servers start read-only; destructive
-operations need an explicit flag.
+`check` mode (plan without effects, DEV-19.10); MCP servers start read-only;
+destructive operations need an explicit flag (replacing files: `--force`,
+DEV-19.9).
 *Why:* agents execute autonomously; a plan without effects can be confirmed
 before anything is written.
 
@@ -51,11 +54,19 @@ translated (AGI §9).
 ## 2. Command catalog
 
 **AGI-2.1** Each project with profile `tool` exposes `list_commands()`,
-`command_schema(command)`, `check_command(command, **options)`,
-`run_command(command, **options)` and `validate_command(command, **options)`
-in its public API.
+`command_schema(command)`, `validate_command(command, **options)`,
+`check_command(command, **options)` and `run_command(command, **options)` in
+its public API. `validate_command` checks the options against the command's
+schema and returns them with defaults filled, without planning or effects, or
+raises `validation_error`; `check_command` returns the plan of `--check`. A
+project whose CLI lines other projects store or pass on also exposes
+`parse_command(line)`, which reads a line into the command, its options and
+its run flags, and `format_command(command, options=…, run=…)`, which writes
+them back as the canonical line, the form of every catalog example call; other
+projects MAY.
 *Why:* an orchestrating assistant can drive any tool generically through
-these five functions.
+these five functions; a consumer reads and writes a tool's CLI lines without a
+copy of its parser.
 
 **AGI-2.2** Each command declares:
 
@@ -69,9 +80,10 @@ these five functions.
 | `options` | list of options (AGI-2.3) |
 | `result` | result document schema id (`<tool>-<kind>/<n>`) and cardinality (`single`, `bounded`, `unbounded`) |
 | `effects` | `read_only` (bool), `writes` (`none`, `add`, `replace`, `delete`), `idempotent` (bool), `network` (bool), `destructive` (bool) |
-| `check` | name of the check operation or `null` |
+| `check` | catalog name of the command that plans this one without effects, or `null` |
+| `families` | MCP tool families for `--tools` (AGI-5.8); `core` marks the core family (AGI-5.12) |
 | `rules` | short imperative rules for agents |
-| `examples` | at least one complete call with expected result excerpt |
+| `examples` | at least one `{call, result}`: a complete CLI call and an excerpt of its result |
 | `errors` | registry codes the command can raise |
 | `i18n` | Polish texts for human-readable fields |
 
@@ -85,14 +97,15 @@ https://arxiv.org/abs/2602.14878); `effects` feeds the MCP annotations
 **AGI-2.3** Each option declares: `name` (snake_case), `type`, `unit` (when
 physical), `required`, `default`, `enum` with a one-line meaning per value,
 `min`/`max`, `pattern`, `examples`, `description`, mutual exclusion groups
-(`one_of`), and whether it is a path (`path_role`: `input`, `output`, `root`).
+(`one_of`), and whether it is a path (`path_role`: `input`, `output`, `root`;
+the write targets of DEV-19.1 have `output` and `root`).
 *Why:* enums and bounds let agents fill parameters without reading prose;
 `path_role` drives the sandbox (AGI-5.8).
 
-**AGI-2.4** The catalog is serialisable as `<tool>-commands/1` JSON and
-returned by `<tool> commands list --json`,
-`<tool> commands schema --command "<group> <verb>" --json` and the MCP catalog
-tool (AGI-5.9).
+**AGI-2.4** The catalog is serialisable as `<tool>-commands/1` JSON
+(schema in AGI-4.1) and returned by `<tool> commands list --json`,
+`<tool> commands schema --command "<group> <verb>" --json` and the MCP
+catalog tools (AGI-5.9).
 
 ---
 
@@ -104,13 +117,15 @@ executable per project; option flags are kebab-case forms of option names
 
 **AGI-3.2** `--json` prints exactly one JSON document (the result envelope,
 AGI-4.2) on stdout and nothing else. Without `--json`, a human-readable
-rendering. Logs, progress and warnings go to stderr.
+rendering. Logs, progress and warnings go to stderr. Outcomes `partial` and
+`failed` (exit 10 and 11) print the envelope; an error (ERR §2) prints
+nothing on stdout.
 *Why:* stdout then always parses as the declared result type
 (https://clispec.dev/).
 
-**AGI-3.3** On failure, the last line of stderr is the error document
+**AGI-3.3** On an error, the last line of stderr is the error document
 (AGI-4.3) as compact JSON, in both modes; the exit code comes from the
-registry.
+registry. Outcomes (ERR §1) print no error document.
 *Why:* ECO-019; agents read the last stderr line without parsing prose.
 
 **AGI-3.4** Where the concept applies, projects MUST use these option names:
@@ -119,11 +134,11 @@ registry.
 |---|---|
 | `--json` | machine output |
 | `--lang` | language of human-readable output, `pl` or `en` (AGI-9.2) |
-| `--check` | plan without effects |
+| `--check` | plan without effects; the only option for it (DEV-19.10) |
 | `--yes` | confirm without prompt |
-| `--output` | output file |
-| `--output-dir` | output directory |
-| `--root` | store root |
+| `--output` | the one output file of a command that writes exactly one file (DEV-19.1) |
+| `--output-dir`, `-o` | directory for plain output files, no metadata; `-o` is its short form and no other option's (DEV-19.1) |
+| `--root` | store root; default `<data_dir>/<tool>` (DEV-18.2, DEV-19.2) |
 | `--project` | project manifest path or name |
 | `--bbox` + `--crs` | bounding box `min_x,min_y,max_x,max_y` and its CRS |
 | `--geometry` + `--layer` | area from a vector file |
@@ -131,7 +146,7 @@ registry.
 | `--station` / `--stations` | station identifier(s) |
 | `--start` / `--end` | ISO dates or datetimes |
 | `--years` | year range `YYYY-YYYY` or list |
-| `--force` | ignore caches and existing results |
+| `--force` | ignore caches and existing results: replace existing target files in plain mode, fetch again in store mode and never overwrite a version (DEV-19.9) |
 | `--workers` | parallelism |
 | `--limit` / `--cursor` | pagination |
 | `--allow-dir` | sandbox root (MCP) |
@@ -160,9 +175,15 @@ starts the MCP server (AGI §5).
 ## 4. Documents: result, error, domain
 
 **AGI-4.1** Every machine-readable document has a top-level `schema` field
-`<tool>-<kind>/<n>`. Adding optional fields keeps `<n>`; removing or changing
-meaning increments it. JSON Schemas are published in the package
+`<tool>-<kind>/<n>`. Adding optional fields keeps `<n>`, so consumers accept
+unknown fields; removing or changing meaning increments it. The schemas of
+the result envelope, the error document and the catalog are Nogat's
+`schemas/agent/` (`result-1`, `error-1`, `commands-1`); each project copies
+them with `error_registry.json` (ERR-3), and its contract tests validate its
+documents against them. Domain schemas are published in the package
 (`src/<package>/schemas/`) and listed in the catalog.
+*Why:* one schema per shared document; prose alone let projects drift while
+each claimed AGI-1.2 (ECO-050).
 
 **AGI-4.2** The result envelope `<tool>-result/1`:
 
@@ -174,10 +195,10 @@ meaning increments it. JSON Schemas are published in the package
 | `command` | string | catalog command name |
 | `check` | bool | true if this was a plan |
 | `status` | `ok` \| `partial` \| `failed` \| `cancelled` | overall outcome |
-| `result` | object or list | domain document (`<tool>-<kind>/<n>`) |
-| `items` | list | per-unit outcome for batch operations: `{id, status, code?, message?}` |
+| `result` | object, list or null | domain document (`<tool>-<kind>/<n>`), a list of them, or null when nothing was produced |
+| `items` | list | per-unit outcome for batch operations: `{id, status, code?, reason?, message?}`; `status` is `ok` or `failed`, a failed unit has `code`; `partial` has both kinds, `failed` has no `ok` unit |
 | `notices` | list | `{level, code, message}`; `level` is `info` or `warning` |
-| `page` | object | `{total?, next_cursor?, truncated}` for collections |
+| `page` | object | `{total?, next_cursor?, truncated}` for collections; `truncated` is true when more results exist, and `next_cursor` then fetches them |
 
 *Why:* explicit `status` and per-item status let agents retry only the failed
 units.
@@ -188,10 +209,10 @@ units.
 |---|---|
 | `schema` | `<tool>-error/1` |
 | `code` | registry code (ERR §2) |
-| `title` | registry title in the active language |
-| `message` | what happened, in the active language |
-| `hint` | one line: how to fix, naming the option or command |
-| `details` | JSON object: `reason` (project-specific sub-code), `option`, `value`, `allowed`, `path`, ... |
+| `title` | registry title in the language of the channel (AGI-9.2) |
+| `message` | what happened, in the language of the channel |
+| `hint` | one line: how to fix, naming the option or command; same language as `message` |
+| `details` | JSON object: `reason` (project-specific sub-code; the shared ones are in DEV §19), `option`, `value`, `allowed`, `path`, `paths`, ... |
 | `exit_code` | process exit code from the registry |
 | `command` | command name, if known |
 
@@ -252,11 +273,13 @@ malformed request) stay JSON-RPC errors.
 values make one retry sufficient.
 
 **AGI-5.8** `--allow-dir DIR` (repeatable) restricts every option with
-`path_role`; outside paths raise `forbidden`. `--allow-writes` enables
-writing tools; without it they run in `check` mode or are hidden.
-`--tools <families>` limits exposed tools.
+`path_role` and the default store root (DEV-19.3); outside paths raise
+`forbidden`. `--allow-writes` enables writing tools; without it they run in
+`check` mode or are hidden. `--tools <families>` limits exposed tools.
 
-**AGI-5.9** Each server exposes `<tool>_catalog` (catalog summary and schemas)
+**AGI-5.9** Each server exposes the catalog as the tools `<tool>_commands_list`
+(catalog summary) and `<tool>_commands_schema` (one command's schema), the
+`operation_id`s of `<tool> commands list` and `<tool> commands schema` (AGI-5.2),
 and MAY expose AGENTS.md and the catalog as resources and typical flows as
 prompts. One or two entry tools MAY set
 `_meta["anthropic/alwaysLoad"] = true`.
@@ -308,8 +331,9 @@ agents and generators.
 `code`, `hint`, `details`, and `errors[]` with JSON Pointers for validation.
 HTTP status from the registry.
 
-**AGI-6.4** Language by `Accept-Language` (default `pl` for human text),
-`Content-Language` in responses; machine fields unaffected.
+**AGI-6.4** Human text in responses follows `Accept-Language` (English when
+the header is absent, AGI-9.2); `Content-Language` in responses; machine
+fields unaffected.
 
 **AGI-6.5** Pagination by opaque cursor; write endpoints require
 authentication; rate limits return `rate_limited` (429).
@@ -351,8 +375,8 @@ the block in a consumer's AGENTS.md idempotently.
 AGENTS.md; injection is the delivery channel
 (https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals).
 
-**AGI-8.3** Nogat aggregates the blocks of all tools into its own AGENTS.md
-(HUB-4.3).
+**AGI-8.3** Nogat's AGENTS.md links each tool's AGENTS.md from its routing
+table (HUB-4.3); the blocks of AGI-8.2 are for consumer repositories.
 
 ---
 
@@ -361,12 +385,13 @@ AGENTS.md; injection is the delivery channel
 **AGI-9.1** Catalog texts are authored in English; Polish translations are
 stored next to them (`i18n.pl`) and used for human-readable output.
 
-**AGI-9.2** The language is the key `lang` of DEV-18.1 (default `pl`) plus the
-option `--lang`; it selects only human-readable output (CLI and UI messages,
-including the `title` and `message` of error documents), while MCP
-descriptions and instructions, AGENTS.md, llms.txt and OpenAPI are always
-English.
-*Why:* end users are Polish (ECO-005); agents work best in English.
+**AGI-9.2** Machine output is English: `--json` output, the error document
+on the last stderr line, MCP results, descriptions and instructions, REST
+responses without `Accept-Language` (AGI-6.4), AGENTS.md, llms.txt and
+OpenAPI. Human-readable output (CLI without `--json`, UI) follows the key
+`lang` of DEV-18.1 (default `pl`) and the option `--lang`.
+*Why:* end users are Polish (ECO-005); agents read English and must get the
+same text whatever the user's setting (ECO-042).
 
 **AGI-9.3** Inputs with Polish names (stations, municipalities, rivers) are
 matched case- and diacritic-insensitively; on no match the error lists close

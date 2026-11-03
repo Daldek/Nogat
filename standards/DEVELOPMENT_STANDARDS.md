@@ -47,10 +47,11 @@ catalog/MCP descriptions MUST be in English.
 *Why:* agents search and parse English; one language removes duplicate
 maintenance (ECO-005, ECO-023).
 
-**DEV-2.2** Text shown to end users (UI and CLI messages, error titles) is
-Polish by default and English on request; AGI-9.2 defines the switch.
-*Why:* target user groups are in Poland; English output helps agents and
-non-Polish collaborators.
+**DEV-2.2** Human-readable output for end users (UI, CLI output without
+`--json`) is Polish by default and English on request; machine output
+(`--json`, MCP, REST without `Accept-Language`) is English. AGI-9.2 defines
+the switch.
+*Why:* target user groups are in Poland; agents read English (ECO-042).
 
 **DEV-2.3** User-facing text MUST live in translation resources (for example
 `locales/pl.toml`, or `messages.py` dictionaries keyed by English IDs), not
@@ -92,12 +93,12 @@ rewrites and branch renames.
 request required, 0 approvals, required checks = the three non-experimental
 `gate` jobs (and `db` where the project has that job, DEV-7.7), force push and
 deletion blocked, no bypass actors. Every pull request (topic → `develop`,
-`develop` → `main`, hotfix → `main`) is merged with a merge commit, the only
-merge method the ruleset allows. A tag ruleset blocks update and deletion of
-`v*` tags. For a history rewrite the author disables the ruleset, rewrites,
-re-enables it and notes it in PROGRESS.
-*Why:* ECO-030, ECO-037; turns DEV-3.3 and the gate into a technical control
-instead of agent discipline.
+`develop` → `main`, hotfix → `main`, `main` → `develop`) is merged with a
+merge commit, the only merge method the ruleset allows. A tag ruleset blocks
+update and deletion of `v*` tags. For a history rewrite the author disables
+the ruleset, rewrites, re-enables it and notes it in PROGRESS.
+*Why:* ECO-030, ECO-037; nothing reaches `main` or `develop` without a pull
+request and a green gate. Merges and tags still rest on DEV-3.3.
 
 ---
 
@@ -127,11 +128,13 @@ that describes it.
 *Why:* review and revert by agents operate on commits.
 
 **DEV-4.5** Commit messages and authors are checked once, when commits enter
-`develop`: locally by the gate (DEV-7.6) and in CI on pull requests into
-`develop`. The author check applies to pull requests from the repository's
-own branches, not to forks or Dependabot. Pull requests into `main` and
-pushes are not checked again.
-*Why:* ECO-038.
+`develop` or, for a hotfix, `main`: locally by the gate (DEV-7.6) and in CI on
+pull requests into `develop` and on pull requests from `hotfix/*` into
+`main`. Messages are checked on every such pull request; the author check
+applies only to pull requests from the repository's own branches, not to
+forks or Dependabot. Other pull requests into `main` and pushes are not
+checked again.
+*Why:* ECO-038, ECO-049.
 
 ---
 
@@ -182,8 +185,10 @@ installing from a wheel (ECO-011).
 `.venv/` in the repository root; commands are run through `uv run`.
 *Why:* ECO-012; one invocation pattern for agents.
 
-**DEV-6.3** `uv.lock` MUST be committed, and every install (development, CI,
-deployment, container build) MUST use `uv sync --locked`.
+**DEV-6.3** `uv.lock` MUST be committed, and every environment of the
+repository (development, CI, deployment, container build) MUST be installed
+with `uv sync --locked`; the check of a built wheel (REL-2.3) installs the
+wheel.
 *Why:* ECO-012; a stale lock fails the install instead of being ignored.
 
 **DEV-6.4** (`tool`) Runtime dependencies on third-party packages MUST be
@@ -243,8 +248,9 @@ be checked before the commit exists.
 **DEV-7.7** CI (GitHub Actions) MUST run the gate on push and pull request to
 `main` and `develop`: on Linux, macOS and Windows for `tool` projects; an
 `app` project MAY run the platform matrix without `db` tests plus a Linux `db`
-job. Templates: `standards/ci/ci.yml` (gate on the three systems) and
-`standards/ci/live.yml` (weekly `live` tests).
+job; the `hub` runs on Linux until the `nogat` package exists. Templates:
+`standards/ci/ci.yml` (gate on the three systems) and `standards/ci/live.yml`
+(weekly `live` tests).
 *Why:* file-system and path bugs appear only on the platform that has them.
 
 ---
@@ -321,10 +327,13 @@ generated files are fresh.
 behaviour, not the wording of messages.
 
 **DEV-10.6** (`tool`) A producer MUST ship a public `<package>.testing`
-module that builds small, valid instances, offline, of every format another
-project reads from its store or files (registry edges whose `via` includes
-`store` or `file`), and keep it in step with those formats. Consumers'
-contract tests use it, with the producer at the version they pin.
+module (`kartograf.testing`, `imgwtools.testing`) in its installed wheel,
+not under `tests/`, that builds small, valid instances, offline, of every
+format another project reads from its store or files (registry edges whose
+`via` includes `store` or `file`), and keep it in step with those formats;
+the registry lists it in the producer's `exchange` as `<tool>-testing`.
+Consumers' contract tests use it, with the producer at the version they pin,
+not the producer's formats written by hand.
 *Why:* a format change then breaks the consumer's tests at the producer's
 release instead of at users.
 
@@ -388,7 +397,8 @@ licence and the distribution channel; GPL dependencies MUST be named in
 - CI runs `pip-audit` weekly and on pull requests over PyPI packages only
   (ecosystem packages are excluded); the job is not a required check, and an
   accepted finding is ignored by ID with a comment;
-- third-party versions change with release sets (REL §6), not per project.
+- third-party versions change with release sets (REL §6), not per project;
+  a security fix is a patch release set (REL-6.6).
 *Why:* ECO-040.
 
 **DEV-13.7** Public repositories MUST have `SECURITY.md` and GitHub private
@@ -417,6 +427,13 @@ No build step is required; vendored libraries keep their licence files.
 **DEV-15.2** UI text in Polish through translation resources (DEV-2.3);
 `data-*` attributes and CSS classes in English.
 
+**DEV-15.3** A GUI follows Nogat's visual identity in
+[design/](../design/README.md): a copy of `tokens.css` that names the Nogat
+commit it came from and no colour, font or size outside its tokens, the light
+and the dark theme, the project's mark as favicon and in the top bar, and the
+shell of the guidelines (top bar, navigation rail, resizable side panel).
+*Why:* the GUIs serve one user as one family of tools (ECO-055).
+
 ---
 
 ## 16. Licence and contributions
@@ -444,9 +461,8 @@ signed with the checkbox, and the contributor adds their line to
 ## 17. Working with agents (developers)
 
 **DEV-17.1** Session start: read `CLAUDE.md` and `docs/PROGRESS.md`, run
-`git status` and `git log --oneline -10`, confirm the branch and, when Nogat
-is checked out next to the project, read this project's entries in Nogat
-`docs/requests/<Project>.md` (DEV-17.5).
+`git status` and `git log --oneline -10`, confirm the branch and list the
+repository's open GitHub issues labelled `request` (DEV-17.5).
 
 **DEV-17.2** Decisions with alternatives are recorded as ADRs (DOC §8).
 
@@ -456,16 +472,18 @@ the last commit.
 
 **DEV-17.4** A change to a public interface or across more than one module
 starts with a plan, `docs/plans/YYYY-MM-DD-slug.md` (goal, options, decision,
-steps, results), approved by the author before code. `docs/specs/` and
-`docs/research/` are not used for new work.
-*Why:* ECO-039; prevents agents building the wrong thing at scale.
+steps, results). After the author approves it in a session, the plan gets
+the line `Approved: YYYY-MM-DD` under its title; code starts only after
+that line exists. `docs/specs/` and `docs/research/` are not used for new
+work.
+*Why:* ECO-039, ECO-047; prevents agents building the wrong thing at scale.
 
 **DEV-17.5** An agent MUST change only the repository of its session, except
 for a cross-project change planned in Nogat (DEV-3.4). A need in another
-project is one entry in Nogat `docs/requests/<Project>.md`, the single list;
-that project's session start reads it (DEV-17.1) and the session that resolves
-it deletes the entry.
-*Why:* keeps each project's scope intact (ECO-039).
+project is a GitHub issue in that project's repository labelled `request`;
+the session that resolves it closes the issue.
+*Why:* keeps each project's scope intact; the issue tracker is the list
+(ECO-043).
 
 ---
 
@@ -483,10 +501,10 @@ works without it and without the `nogat` package.
 
 **DEV-18.2** Data stores live under `data_dir` (default
 `platformdirs.user_data_path("nogat")`), one directory per tool,
-`<data_dir>/<tool>`, unless the user sets a store root explicitly. Caches live
-in `<cache_dir>/<tool>` (`cache_dir` default
-`platformdirs.user_cache_path("nogat")`); tools do not write caches or state
-into the current working directory.
+`<data_dir>/<tool>`, unless the user sets a store root (`--root`,
+`<TOOL>_ROOT`, `[<tool>] root`; DEV-19.2). Caches live in `<cache_dir>/<tool>`
+(`cache_dir` default `platformdirs.user_cache_path("nogat")`); tools do not
+write caches or state into the current working directory.
 
 **DEV-18.3** Tool-specific environment variables are named `<TOOL>_<KEY>`;
 every variable is listed in the tool's README and `.env.example`.
@@ -495,15 +513,189 @@ every variable is listed in the tool's README and `.env.example`.
 read from environment variables only, named in the tool's README and reported
 by `config show` (DEV-18.6); never in `nogat.toml`, never printed.
 
-**DEV-18.5** Tools with versioned stores document in README which data cannot
-be downloaded again (versions removed from the source) and how to back up a
-store: a copy that preserves hard links (`rsync -aH`; on Windows a tool that
-keeps hard links, not Explorer or `robocopy`), or the tool's own export.
+**DEV-18.5** Tools with versioned stores (DEV §19) document in README which
+data cannot be downloaded again (versions removed from the source) and how to
+back up a store: a copy that preserves hard links (`rsync -aH`; on Windows a
+tool that keeps hard links, not Explorer or `robocopy`), or the tool's own
+export.
 *Why:* sources remove old versions, and a copy without hard links multiplies
 the size of a store.
 
 **DEV-18.6** Every `tool` has `<tool> config show --json`: each key with its
 value and source, each credential name with present or missing, the store root
-and its size. `nogat doctor` uses only this command.
+with its source (DEV-19.2) and its size. `nogat doctor` uses only this command.
 *Why:* `nogat` learns a tool's settings from the tool, not from a copy of its
 rules.
+
+---
+
+## 19. Data output (profile `tool`)
+
+A tool that provides a versioned store (a `store` in the registry, HUB-2.5)
+writes data in one of two modes. *Plain mode* writes ordinary files without
+metadata, as a directory (`output_dir`) or as one file (`output`). *Store
+mode* writes the versioned store with sidecars (`root`). Names, defaults,
+errors and results are the same in every tool and interface (AGI-1.2,
+ECO-051); a tool without a store writes with `--output` and `--output-dir` as
+AGI-3.4 says.
+
+**DEV-19.1** The location of the data files a command writes comes from these
+options and from no other (not `--store`, not `--path`):
+
+| CLI | API (keyword-only) | `path_role` | Meaning |
+|---|---|---|---|
+| `-o`, `--output-dir` | `output_dir` | `output` | plain mode: files in a directory |
+| `--root` | `root` | `root` | store mode: root of the versioned store |
+| `--output` | `output` | `output` | plain mode: exactly one file (an export) |
+
+`output_dir` and `root` form one `one_of` group: giving both is
+`validation_error`.
+*Why:* one name per target in every tool and interface (AGI-1.2, AGI-3.4).
+
+**DEV-19.2** The store root is the first of `--root`, `<TOOL>_ROOT`,
+`[<tool>] root` in `nogat.toml` and `<data_dir>/<tool>` (DEV-18.1, DEV-18.2).
+A command with neither `output_dir` nor `output` uses the store at that root,
+so no option is required to write; `<tool> config show --json` reports the
+root and its source (DEV-18.6). A producer's library names the read-only accessor
+of that root `store_root()` (root, source, whether the marker exists; it reads no store).
+*Why:* the common call needs no flag, and the store has one place (ECO-051).
+
+**DEV-19.3** A REST server writes only to the store root set in its server
+configuration and only with writes enabled, and it accepts no `root`,
+`output_dir` or `output` in a request. An MCP server writes only inside its
+`--allow-dir` directories and only with `--allow-writes`, so a default root
+outside them is `forbidden` (AGI-5.8).
+*Why:* a client must not choose where a server writes (DEV-13.3).
+
+**DEV-19.4** In plain mode a command selects the same data as in store mode,
+unless its catalog entry and documentation declare a selection rule that
+applies only to plain mode. A unit that such a rule leaves without data is
+skipped, with a warning notice of code `skipped_incomplete` and an entry
+`{id, reason, message}` in `skipped[]` of the domain result (`id` as in
+`items[]`, `reason` `skipped_incomplete`); when every unit is skipped the
+command fails with `no_data`, reason `skipped_incomplete`.
+*Why:* a difference between the modes is declared and visible in the result.
+
+**DEV-19.5** In plain mode the file name is the name the file has in the
+store, a unit name that the tool declares and knows before the transfer; a
+file given by `output` has the name the caller gave it. The directory is flat
+unless names within one request can collide, and the tool then declares a
+relative sub-path.
+*Why:* the names are known before the first byte, so DEV-19.6 can check them.
+
+**DEV-19.6** Before the first byte is transferred, and before any request, a
+plain write checks `output_dir` itself: one that is, or lies inside, a store
+is a `conflict` (reason `output_in_store`, DEV-19.11) with the directory as
+the only entry of `details.paths`. It then builds the full list of targets
+and checks it, first for duplicate names (`conflict`, reason
+`duplicate_output_name`), then for a target that would enter a directory with
+a store marker below `output_dir` (`output_in_store`, the target path), then
+for existing targets without `--force` (`conflict`, reason `output_exists`).
+The error lists every offending path in `details.paths`, and nothing is
+written.
+*Why:* an agent repairs the whole call at once.
+
+**DEV-19.7** A plain write goes through a staging directory
+`<dir>/.<tool>-incoming/<host>_<pid>_<token>/` on the same file system, where
+`<dir>` is `output_dir` or the directory that holds `output`; each file is
+verified there and moved into place with `os.replace`. Staging is removed on
+success, on error, on SIGINT and on SIGTERM, and leftovers older than 24
+hours are removed on the next run.
+*Why:* an interrupted write leaves no partial target.
+
+**DEV-19.8** A plain write creates the output directory if it is missing and
+nothing but the data files: no sidecar, no hard link, no `versions/`
+directory, so it works on FAT, exFAT and SMB.
+
+**DEV-19.9** `--force` in plain mode replaces existing targets, each
+atomically with `os.replace`, and never deletes another file; without it
+nothing is overwritten. In store mode `--force` fetches again and gives a new
+version or `unchanged`, and never overwrites.
+
+**DEV-19.10** `--check` is the only way to plan without effects, in both
+modes, and `check_command` returns the same plan (AGI-2.1). In plain mode the
+plan lists each target with its action: `write`, `replace` (only with
+`--force`) or `conflict`; a plan that lists `conflict` is a successful result
+(status `ok`, exit 0), and only the real run fails with `conflict`. In store
+mode a refusal of the root that is a `conflict` (`nested_store`,
+`not_empty`) is one `conflict` action for the root in the same successful
+plan, with no request; one that is not a `conflict` (`store_unavailable` for
+a root without marker, `data_error` for an unreadable marker) is raised by
+`--check` as that error.
+
+**DEV-19.11** An `output_dir` that is, or lies inside, a store of any tool is
+a `conflict` with reason `output_in_store`; the refusal comes before any
+request, applies to every target, and `details.paths` is the output
+directory. A store found only below `output_dir`, a directory the write for a
+particular target would enter that contains a store marker, is reported for
+that target's path. The hint names `--root`. A store is recognised by its
+marker file name alone (DEV-19.12).
+
+**DEV-19.12** A store root holds the marker `<tool>-store.json`, a JSON
+document of schema `<tool>-store/1` with at least the fields `schema`, `tool`,
+`created_at` and `producer_version`. The markers are `kartograf-store.json`
+and `imgw-store.json`; a tool looks for exactly these names and imports
+nothing from another tool.
+*Why:* each tool refuses another's store without depending on it (ECO-051).
+
+**DEV-19.13** A tool creates the marker on its first write into an empty or
+new root. A root that has the tool's layout but no marker is
+`store_unavailable` with the hint `<tool> store init --root <path>`, and
+`store init` verifies the layout and writes the marker.
+
+**DEV-19.14** A store never nests in another store of any tool: before it
+writes, a command looks for markers in the ancestors of the root and in its
+existing descendants, and a nested store is a `conflict`.
+
+**DEV-19.15** Store mode keeps the layout of the tool:
+`…/versions/…/<label>_<sha8>/<file>` with `<file>.meta.json` beside it,
+published by `os.link` from `.incoming/` with the sidecar linked last, so it
+needs hard links. The current version is the one the tool's read API returns;
+a link to it at a standard path is the tool's own addition, not part of this
+convention.
+
+**DEV-19.16** Every sidecar `<tool>-meta/N` has these fields with the same
+meaning; a tool brings its sidecar in line by adding optional fields within
+`/1`, never by renaming:
+
+| Field | Meaning |
+|---|---|
+| `schema` | `<tool>-meta/N` |
+| `producer` | name of the package that wrote the file (`distribution.import_name` in the registry) |
+| `producer_version` | version of that package |
+| `dataset` | dataset key `<scope>.<provider>.<name>` as written, never rewritten; scope is a country code, `eu` or `global` |
+| `dataset_key` | current key of `dataset` (a renamed key resolved), null when the tool does not know it; the read API returns it |
+| `country` | country of the data in capitals: ISO 3166-1 alpha-2 code, `EU` or `GLOBAL` |
+| `provider` | short name of the organisation that publishes the data |
+| `size_bytes` | size of the main file in bytes |
+| `sha256` | SHA-256 of the main file, 64 lower-case hexadecimal digits |
+| `downloaded_at` | UTC time the file was downloaded or built, ISO 8601 with offset |
+| `license` | object `{id, attribution, url}`: licence identifier, attribution text, link to the terms |
+| `request` | object: the request that produced the file, in the tool's own keys |
+| `extra` | object: tool-specific details; a reader ignores keys it does not know |
+
+*Why:* a consumer reads the stores of every tool through the same fields
+(ECO-051).
+
+**DEV-19.17** Options that act on versions are valid only in store mode:
+`--upgrade`, `--plan` (saved update plans), the selection of several
+campaigns (`--all-campaigns`) and any update mode other than the default;
+with `output_dir` each is a `validation_error` that names `--root`.
+
+**DEV-19.18** A command whose input is the store (a command that builds
+derived data from stored versions) is store-only and says so in its catalog
+entry. Every other writing command supports both modes; one that needs inputs
+fetches them to staging and in plain mode writes only its result.
+
+**DEV-19.19** The domain result of a writing command lists `files[]`:
+`{path, size_bytes, sha256, status}`, with `sha256` computed while the file is
+streamed. `status` is `written` or `replaced` in plain mode and `new`,
+`unchanged` or `relabeled` in store mode; per-unit outcomes stay in `items[]`
+(AGI-4.2), and skips are notices.
+
+**DEV-19.20** The reasons of this section are `details.reason` values
+(AGI-4.3) under the codes given above: `duplicate_output_name`,
+`output_exists`, `output_in_store`, `skipped_incomplete`, `nested_store`
+(`conflict`, DEV-19.14) and `not_empty` (`conflict`: a root that holds other
+files and is no store). A tool adds no registry code for the convention
+(ERR-1).

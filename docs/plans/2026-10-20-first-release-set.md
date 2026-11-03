@@ -21,11 +21,13 @@ the three CI runners.
 
 ## Decision
 
-Option B. The members (REL-6.1) are Kartograf, IMGWTools, Hydrolog, Retman and
-Archiwista. Hydrograf is an app without a package and Hydraulik is research;
-they follow in their own sessions (REL-5.4). Version numbers are written in
-the release pull requests (REL-2.1), after a candidate passed; this plan names
-none.
+Option B. The members (REL-6.1) are Kartograf, IMGWTools, Hydrolog and
+Retman. Archiwista left the set on 2026-10-31 (ECO-054, decision D3 of the
+[projects plan](2026-10-31-archiwista-projects.md)): the producers' tags do
+not wait for its project work, and it follows in its own session like
+Hydrograf, an app without a package, and Hydraulik, research (REL-5.4).
+Version numbers are written in the release pull requests (REL-2.1), after a
+candidate passed; this plan names none.
 
 ## Steps
 
@@ -35,8 +37,9 @@ none.
 2. **Migrate consumers against producer heads**, each in its own session and
    repository (DEV-3.4). A member that cannot run on a producer's development
    head migrates on a topic branch whose pull request pins the producer's
-   commit (REL-5.3) and passes the member's own CI. Retman and Archiwista need
-   no code change; the candidate overrides their pins.
+   commit (REL-5.3) and passes the member's own CI. Retman drops its
+   IMGWTools project module (projects plan, step 4); the candidate overrides
+   its pins.
 3. **Build the candidate** on a topic branch of Nogat:
    `release-sets/candidate-<N>/` with a `pyproject.toml` installing every
    member at its commit (pins between members overridden, test dependencies of

@@ -1,0 +1,7 @@
+* text=auto eol=lf
+
+# v1 files with CRLF, kept byte-for-byte until replaced (DOC-11.1,
+# ADOPTION_PLAN 0.1).
+standards/legacy/** -text
+standards/templates/** -text
+standards/configs/** -text

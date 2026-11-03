@@ -3,7 +3,8 @@
 # Windows, on Python 3.12 (required) and the newest stable Python (reported,
 # not blocking: wheels of geospatial dependencies often lag), and audits the
 # locked PyPI dependencies (DEV-13.6; informative, not a required check).
-# Commit messages are checked once, on pull requests into develop (DEV-4.5).
+# Commit messages are checked once, on pull requests into develop and from
+# hotfix/* into main (DEV-4.5).
 # Actions are pinned by commit SHA; Dependabot updates them
 # (.github/dependabot.yml).
 name: CI
@@ -52,17 +53,21 @@ jobs:
       - name: Gate
         shell: bash
         env:
-          # Commits are checked once, when they enter develop (DEV-4.5): only
-          # pull requests into develop; everything else skips the commit step.
+          # Commits are checked once, when they enter develop or, for a hotfix,
+          # main (DEV-4.5); everything else skips the commit step.
           GATE_COMMIT_RANGE: >-
-            ${{ (github.event_name == 'pull_request' && github.base_ref == 'develop')
-                && 'origin/develop..HEAD' || 'none' }}
-          # The author check applies to pull requests from this repository's own
-          # branches, not to forks or Dependabot, whose commits keep their
-          # identity (DEV-16.5).
+            ${{ github.event_name != 'pull_request' && 'none'
+                || github.base_ref == 'develop' && 'origin/develop..HEAD'
+                || (github.base_ref == 'main' && startsWith(github.head_ref, 'hotfix/'))
+                   && 'origin/main..HEAD'
+                || 'none' }}
+          # The author check applies to those pull requests from this
+          # repository's own branches, not to forks or Dependabot, whose
+          # commits keep their identity (DEV-16.5).
           GATE_CHECK_AUTHOR: >-
             ${{ (github.event_name == 'pull_request'
-                 && github.base_ref == 'develop'
+                 && (github.base_ref == 'develop'
+                     || (github.base_ref == 'main' && startsWith(github.head_ref, 'hotfix/')))
                  && github.event.pull_request.head.repo.full_name == github.repository
                  && github.event.pull_request.user.login != 'dependabot[bot]') && '1' || '0' }}
         run: bash scripts/gate.sh

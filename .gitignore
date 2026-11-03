@@ -1,14 +1,18 @@
-# Python virtual environment
-venv/
+# Python environments and caches
 .venv/
+venv/
 env/
 ENV/
-Nogat/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+.coverage
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
 
-# Pliki edytorów i IDE
+# Secrets (DEV-13.1)
+.env
+
+# Editors and IDEs
 .vscode/
 .idea/

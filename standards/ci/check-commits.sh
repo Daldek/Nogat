@@ -56,7 +56,19 @@ if ! commits="$(git rev-list "$range" 2>/dev/null)"; then
 fi
 
 subject_re='^(feat|fix|docs|test|refactor|perf|style|build|ci|chore)(\([^)]+\))?!?: .+'
-ai_re='^co-authored-by:.*(claude|anthropic|copilot|openai|chatgpt|gpt|gemini|cursor|codex|aider)|^claude-session:|generated (with|by) .*(claude|copilot|chatgpt|gpt|gemini|cursor|codex|aider)|🤖'
+# AI attribution (DEV-4.3): a co-author trailer whose name starts with an AI
+# tool or whose e-mail belongs to one, a session line, a "Generated with
+# <tool>" line, or the robot emoji. A person who merely shares a word with a
+# tool ("Jan Gemini <jan@gemini.pl>") and prose mentioning a tool pass.
+tools='(claude|anthropic|copilot|openai|chatgpt|gpt|gemini|cursor|codex|aider|devin)'
+domains='(anthropic\.com|openai\.com|cursor\.com|cursor\.sh|aider\.chat|cognition\.ai)'
+end='([^a-z0-9]|$)'
+ai_re="^co-authored-by:[[:space:]]*${tools}${end}"
+ai_re+="|^co-authored-by:.*<[^>]*@${domains}>"
+ai_re+="|^co-authored-by:.*<[^>]*${tools}[^>]*@users\.noreply\.github\.com>"
+ai_re+="|^claude-session:"
+ai_re+="|^[^a-z0-9]*generated (with|by) \[?${tools}${end}"
+ai_re+="|🤖"
 
 bad=0
 checked=0
@@ -71,7 +83,7 @@ for c in $commits; do
   if (( parents > 1 )); then
     continue   # merge commits: attribution only
   fi
-  if ! [[ "$subject" =~ $subject_re ]] && [[ "$subject" != Revert\ * ]]; then
+  if ! [[ "$subject" =~ $subject_re ]] && [[ "$subject" != Revert\ \"* ]]; then
     printf '  %s subject not Conventional Commits (DEV-4.1): %s\n' "$short" "$subject"; bad=1
   fi
   author="$(git log -1 --format=%ae "$c")"
