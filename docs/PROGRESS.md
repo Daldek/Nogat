@@ -192,8 +192,13 @@ fail until the limit resets.
      macOS run wait for 0.8.1 (its `docs/PROGRESS.md` Next 1); next,
      `verify-candidate`, the release commit, `develop` into `main` and
      `v0.8.0`, merged locally.
-   - IMGWTools: `feature/archiwista-projects` merged into `slave` (`0045bac`;
-     head `b9e74b3` after the rewrite).
+   - IMGWTools: branches renamed `main`/`develop` on 2026-11-03 (GitHub
+     rename API, `main` the default branch); `develop` has the English
+     documentation (one CHANGELOG `[Unreleased]` against v2.1.1) and a green
+     CI matrix (ubuntu, macOS, Windows; Windows fixes of the CLI output,
+     pipes and the agent guide). Remaining for v3.0.0: AGI-4.1/ERR-3
+     conformance (B6), `SECURITY.md` and the GitHub settings, `3.0.0.devN`,
+     the author's review; its `docs/PROGRESS.md`.
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
    `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on

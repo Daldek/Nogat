@@ -75,7 +75,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | producers of stores and files (Kartograf, IMGWTools) | public `<package>.testing` module; consumers' contract tests use it (DEV-10.6) |
 | Kartograf | `src/` layout (ECO-011); mypy per-module overrides listed in `CLAUDE.md` (DEV-7.3); `docs/DECISIONS.md` CRLF → LF (DEV-14.1) |
 | Hydrolog | Black and flake8 → ruff (ECO-009); `src/` layout; package data test for agent templates (DEV-5.4) |
-| IMGWTools | branches `master`/`slave` → `main`/`develop`, default branch on GitHub (ECO-008); pyright → mypy (ECO-010); links in `llms.txt` and docs from `master` to `main` |
+| IMGWTools | done 2026-11-03: branches `master`/`slave` → `main`/`develop` (GitHub rename API, `main` the default branch; ECO-008); pyright → mypy (ECO-010); links in `llms.txt` and docs point to `main` |
 | Hydrograf | uv and lock for `backend/` (replaces pinned `requirements.txt`, keeps documented caps); gate beyond ruff-only pre-commit; mypy in CI |
 | Hydraulik | commit the proof of concept from the worktree into `develop` (DEV-3.5, author's decision); `main` as default branch; mypy; English identifiers in `roads.py` (DEV-2.4); state in README/CLAUDE.md that SFINCS is external and not distributed (ECO-041) |
 | Retman | `src/` layout; logging (DEV §12) |
@@ -185,7 +185,7 @@ GitHub settings or the history rewrite.
 | Project | Branch | Phase 2 | Phase 3 | Phase 4 |
 |---|---|---|---|---|
 | Kartograf | `chore/nogat-2.1` | done, except the contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `CONTRIBUTORS.md`, the pull request template), which its PROGRESS leaves to the author | in progress: only the frozen records of `docs/research` and `docs/superpowers` are still Polish | in progress: the envelope, the error mapping, the catalog, the MCP server and the generated guide are done; the message catalog (ADR-053, area by area), `kartograf mcp` (AGI-3.8) and the domain JSON Schemas (AGI-4.1) are open |
-| IMGWTools | `chore/nogat-2.1`, then `feature/data-output` | done, except `SECURITY.md` | in progress: README, USAGE and parts of CHANGELOG and DECISIONS are still Polish | in progress: the MCP prefix and annotations, `forbidden` 12, the English surfaces and the OpenAPI ids are done; the copy of `schemas/agent/` with its contract tests (AGI-4.1) is open |
+| IMGWTools | `chore/nogat-2.1`, then `feature/data-output`; `develop` since 2026-11-03 | done, except `SECURITY.md`; CI green on ubuntu, macOS and Windows since 2026-11-03 | done 2026-11-03, except the frozen records of `docs/superpowers` | in progress: the MCP prefix and annotations, `forbidden` 12, the English surfaces and the OpenAPI ids are done; the copy of `schemas/agent/` with its contract tests (AGI-4.1) is open |
 | Hydrolog | `chore/nogat-2.1` | done | in progress: the example notebooks are still Polish | done |
 | Retman | `chore/nogat-2.1` | done | in progress: `docs/research/` and `docs/specs/` are still Polish | done |
 | Archiwista | `chore/nogat-2.1` | done | in progress: README, ARCHITECTURE, DECISIONS, SPEC, the plans and the reports are still Polish | in progress: error texts by `Accept-Language` and the message catalog (parked on `wip/message-catalog`); the error registry and problem+json are done |
