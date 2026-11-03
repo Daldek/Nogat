@@ -82,3 +82,14 @@ project's next merge into `main`.
    `origin` (its local `main` is the initial commit `5578983`); v0.3 and v0.4
    are names of development plans, folded into one release by D2 of the
    projects plan, so no state format has been released.
+
+## Results
+
+Step 1 (2026-11-03, branch `plan/numbering-from-main`, not merged): ECO-056,
+amending ECO-004 and ECO-046; HUB-6.1 and AGI-4.1 carry the rule; the
+standard is 1.0 in `standards/`, `ecosystem.yaml`, `error_registry.json`,
+`CLAUDE.md`, `docs/PROGRESS.md` and the registry tests, with the 2.1
+changelog as the 1.0 changelog; `standards/legacy/v1.0/` is
+`standards/legacy/shared-2026-01/`; `docs/ECOSYSTEM_MAP.md` regenerated
+(`AGENTS.md` and the error tables unchanged). Branch names such as
+`chore/nogat-2.1` stay: they name existing refs.
