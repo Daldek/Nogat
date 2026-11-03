@@ -154,7 +154,7 @@ Members' development heads may be pinned by commit (REL-5.3).
 versions of REL-7.1 it installs the candidate's lock and runs, from each
 member checked out at its recorded commit, the offline test suite and the
 contract tests, which use the producers' public `<package>.testing` modules
-(`kartograf.testing`, `imgwtools.testing`; the registry lists each in the
+(`kartograf.testing`, `obserwator.testing`; the registry lists each in the
 producer's `exchange` as `<tool>-testing`; DEV-10.6). The members are
 installed as wheels (REL-2.5). The run URL, recorded in the candidate's
 README, is the verification record. The author MAY also run on their own

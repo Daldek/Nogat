@@ -67,3 +67,14 @@ Obserwator)" on first mention at most.
 | 5 | the author | renames the GitHub repository; then the URLs in every repository follow | `drift` |
 
 ## Results
+
+Step 1 (Nogat), 2026-11-03, branch `feature/obserwator`: ECO-057; the
+registry entry Obserwator (distribution, interfaces, routes, `obserwator-*`
+ids and the consumers' edges); HUB-3.1 and `scripts/ecosystem.py` find a
+checkout by the last segment of `repo`, so `deps` and `drift` read
+`IMGWTools/` for Obserwator, and `drift` matches a requirement by its
+`[tool.uv.sources]` URL too (Hydrograf's `imgwtools` pinned in its sources
+is still found); standard texts, ADOPTION_PLAN 6.1, the error registry, the
+CI template's audit list, the mark `obserwator.svg`, the token
+`--tool-obserwator` and the Hydrolog mockup; `AGENTS.md` and
+`docs/ECOSYSTEM_MAP.md` regenerated.

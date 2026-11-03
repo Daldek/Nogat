@@ -10,7 +10,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | File | Content |
 | --- | --- |
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
-| [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [imgwtools](marks/imgwtools.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
+| [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes (open the file in a browser) |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
@@ -212,7 +212,7 @@ Phone (width <= 860 px):
   - Archiwista: archive drawer
   - Hydrograf: hydrographic network (reaches and cross sections, as in HEC-RAS's geometry editor)
   - Kartograf: folded map
-  - IMGWTools: staff gauge
+  - Obserwator: staff gauge
   - Hydrolog: hydrograph
   - Hydraulik: channel cross-section
   - Retman: boat with pennant
@@ -227,7 +227,7 @@ Phone (width <= 860 px):
 | Archiwista | `--tool-archiwista` | `#4a776c` | `#7fbfae` | [archiwista.svg](marks/archiwista.svg) |
 | Hydrograf | `--tool-hydrograf` | `#12708a` | `#4cc3e0` | [hydrograf.svg](marks/hydrograf.svg) |
 | Kartograf | `--tool-kartograf` | `#8a5a1c` | `#d9a35f` | [kartograf.svg](marks/kartograf.svg) |
-| IMGWTools | `--tool-imgwtools` | `#3b5bab` | `#8fa9f5` | [imgwtools.svg](marks/imgwtools.svg) |
+| Obserwator | `--tool-obserwator` | `#3b5bab` | `#8fa9f5` | [obserwator.svg](marks/obserwator.svg) |
 | Hydrolog | `--tool-hydrolog` | `#3f7a3a` | `#7cc474` | [hydrolog.svg](marks/hydrolog.svg) |
 | Hydraulik | `--tool-hydraulik` | `#5e4fa2` | `#b0a3f0` | [hydraulik.svg](marks/hydraulik.svg) |
 | Retman | `--tool-retman` | `#a4472f` | `#f0907a` | [retman.svg](marks/retman.svg) |

@@ -71,11 +71,11 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | Project | Items |
 |---|---|
 | all | `develop` carries `X.Y.Z.devN` of the next release and the CHANGELOG `[Unreleased]` section (REL-1.1); local git identity (DEV-4.2); `.editorconfig` and `.gitattributes` (DEV-14.1); `scripts/gate.sh` and `scripts/check-commits.sh` from `standards/ci/` (DEV-7.6, DEV-4.5); CI (DEV-7.7); Dependabot for Actions, Dependabot security updates and `pip-audit` (DEV-13.6); rulesets for `main`, `develop` and `v*` tags (DEV-3.6); `SECURITY.md` and private vulnerability reporting (DEV-13.7); contribution files (DEV-16.2, DEV-16.4); uv and `uv.lock` (DEV-6.2, DEV-6.3); markers `live`, `db`, `slow` and the `tests/` tree (DEV-10.1); coverage floor (DEV-7.5) |
-| tools (Kartograf, IMGWTools, Hydrolog, Retman, Hydraulik) | shared settings, data and cache directories, variable names, credentials from the environment, `<tool> config show --json` and backup notes for versioned stores (DEV §18) |
-| producers of stores and files (Kartograf, IMGWTools) | public `<package>.testing` module; consumers' contract tests use it (DEV-10.6) |
+| tools (Kartograf, Obserwator, Hydrolog, Retman, Hydraulik) | shared settings, data and cache directories, variable names, credentials from the environment, `<tool> config show --json` and backup notes for versioned stores (DEV §18) |
+| producers of stores and files (Kartograf, Obserwator) | public `<package>.testing` module; consumers' contract tests use it (DEV-10.6) |
 | Kartograf | `src/` layout (ECO-011); mypy per-module overrides listed in `CLAUDE.md` (DEV-7.3); `docs/DECISIONS.md` CRLF → LF (DEV-14.1) |
 | Hydrolog | Black and flake8 → ruff (ECO-009); `src/` layout; package data test for agent templates (DEV-5.4) |
-| IMGWTools | done 2026-11-03: branches `master`/`slave` → `main`/`develop` (GitHub rename API, `main` the default branch; ECO-008); pyright → mypy (ECO-010); links in `llms.txt` and docs point to `main` |
+| Obserwator | done 2026-11-03: branches `master`/`slave` → `main`/`develop` (GitHub rename API, `main` the default branch; ECO-008); pyright → mypy (ECO-010); links in `llms.txt` and docs point to `main` |
 | Hydrograf | uv and lock for `backend/` (replaces pinned `requirements.txt`, keeps documented caps); gate beyond ruff-only pre-commit; mypy in CI |
 | Hydraulik | commit the proof of concept from the worktree into `develop` (DEV-3.5, author's decision); `main` as default branch; mypy; English identifiers in `roads.py` (DEV-2.4); state in README/CLAUDE.md that SFINCS is external and not distributed (ECO-041) |
 | Retman | `src/` layout; logging (DEV §12) |
@@ -87,7 +87,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 |---|---|
 | all | translate documentation to English, project by project (ECO-005); required files (DOC-1.1); README (DOC §2) and `CLAUDE.md` (DOC §3) within their budgets (DOC-1.7), `CLAUDE.md` with a "Deviations" section (DEV-1.2); `docs/PROGRESS.md` as Status, Next and Open questions (DOC §6); ADR files (DOC §8); `docs/DEVELOPMENT_STANDARDS.md` deleted, its deviations moved to `CLAUDE.md` (DEV-1.3); new plans in `docs/plans/` (DEV-17.4) |
 | Kartograf | remove the "no AGENTS.md" rule; generate AGENTS.md (ECO-014); `llms.txt` to link-list format with raw links (DOC §5) |
-| IMGWTools | `CLAUDE.md` (587 lines) and README (~830 lines) within budget |
+| Obserwator | `CLAUDE.md` (587 lines) and README (~830 lines) within budget |
 | Hydrolog | README (~810 lines) within budget |
 | Hydrograf | PROGRESS (145 KB) cut to its three sections; `notes/superpowers/*` into `docs/plans/`; `CROSS_PROJECT_ANALYSIS.md` migrated into the Nogat registry and `request` issues in the producers' repositories (DEV-17.5) |
 | Hydraulik | full documentation set; `CLAUDE.md` beyond 25 lines; CHANGELOG |
@@ -98,7 +98,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 | Project | Items |
 |---|---|
 | Kartograf | envelope `kartograf-result/1` with `status` (AGI-4.2); errors on last stderr line (ECO-019); registry mapping (ERR §4); MCP tool prefix `kartograf_` (ECO-018), annotations, `outputSchema`, English descriptions with when/when-not (AGI §5); `commands guide` generator (AGI §8); shared option names (AGI-3.4) |
-| IMGWTools | MCP prefix `imgw_` and annotations; `forbidden` exit 12; agent surfaces always English (AGI-9.2); OpenAPI `operationId` = catalog ids (AGI-6.2) |
+| Obserwator | MCP prefix `obserwator_` and annotations; `forbidden` exit 12; agent surfaces always English (AGI-9.2); OpenAPI `operationId` = catalog ids (AGI-6.2) |
 | Hydrolog | registry numbers (13, 12); finish catalog fields (AGI-2.2); MCP per AGI §5 |
 | Hydrograf | REST problem+json with registry codes (AGI-6.3); OpenAPI ids (AGI-6.2) |
 | Hydraulik | catalog, `--json` envelope, registry codes for the CLI; job and result JSON Schemas kept as domain documents (`hydraulik-<kind>/1`) |
@@ -115,7 +115,7 @@ producers' development heads have it.
 | Project | Items | State on 2026-10-25 |
 |---|---|---|
 | Kartograf | `--output-dir` (`-o`) for plain files and `--root` for the store instead of the store-only `-o`; `root` for every store-root parameter, `Project.output_dir` included; default root `<data_dir>/kartograf`, `KARTOGRAF_ROOT`, cache in `<cache_dir>/kartograf`; plain mode with preflight, `.kartograf-incoming/` and `--force`; newest full flight for PL sheets in plain mode; `--check` instead of `--check-updates`; marker `kartograf-store.json` and `store init`; nested-store check by marker names; `files[]` and `skipped[]`; `producer` and `producer_version` in `kartograf-meta/1`; a new ADR supersedes ADR-048 of the branch `claude/vigilant-faraday-finqvd` (DEV-19.1 to DEV-19.19, DEV-18.2) | in progress on `feature/data-output`: ADR-054, `root`, the default root, the marker and `store init`, `--check`, `producer`, `files[]` and `skipped[]` are committed; plain mode, the `output_dir`/`root` group and the documents are open |
-| IMGWTools | `--output-dir` (`-o`) for the plain download, `--output` for exports instead of `--path`; plain mode with preflight, `.imgw-incoming/` and `--force`; default root `<data_dir>/imgw` and `IMGW_ROOT` instead of `IMGW_STORE_ROOT`; marker with `tool` and `producer_version`, created by the first write, `store init` verifying the layout; nested stores by marker name only; `files[]` with the status `new` instead of `created` (DEV-19.1 to DEV-19.19, DEV-18.2) | done on `feature/data-output` (ADR-007, consumer migration guide in its CHANGELOG) |
+| IMGWTools (now Obserwator) | `--output-dir` (`-o`) for the plain download, `--output` for exports instead of `--path`; plain mode with preflight, `.imgw-incoming/` and `--force`; default root `<data_dir>/imgw` and `IMGW_ROOT` instead of `IMGW_STORE_ROOT`; marker with `tool` and `producer_version`, created by the first write, `store init` verifying the layout; nested stores by marker name only; `files[]` with the status `new` instead of `created` (DEV-19.1 to DEV-19.19, DEV-18.2) | done on `feature/data-output` (ADR-007, consumer migration guide in its CHANGELOG) |
 | Archiwista | `root` for Kartograf store roots in the adapter, the read-API contract test, the store fixture (with the marker) and SPEC §12 (DEV-19.1, DEV-19.12) | not started: waits for Kartograf's development head |
 | Retman | `root=` in the Kartograf calls of the client and handlers (DEV-19.1) | the IMGWTools calls are migrated on `feature/imgwtools-data-output` (ADR-024); the Kartograf calls wait for Kartograf |
 | Hydrolog | documents only: the Kartograf examples in `docs/INTEGRATION.md` and the agent guide use `--output-dir` and `files[].path` (DEV-19.1, DEV-19.19) | done on `chore/nogat-2.1`; the names are confirmed when the producers' releases land |
@@ -131,7 +131,7 @@ GUI adopts it in its own session and plan, after the identity in Nogat
 |---|---|
 | Archiwista | map `--panel`, `--line`, `--text-*`, `--accent*` and `--local` to the tokens; the dark theme; its mark as favicon and in the top bar; the shell is already the reference |
 | Hydrograf | the shell of Archiwista around the map (top bar, rail, resizable side panel) instead of floating glass cards; the tokens instead of `glass.css` colours; the dark theme; its mark; `admin.html` the same |
-| IMGWTools | the templates of the web GUI (`src/imgwtools/web/`) on the tokens and the shell; its mark |
+| Obserwator | the templates of the web GUI (`src/obserwator/web/`) on the tokens and the shell; its mark |
 
 ## Phase 5: releases as git tags
 
@@ -151,9 +151,9 @@ Until the rename of phase 6, a pin names each distribution as the tag's
 
 | # | Item | Requirement |
 |---|---|---|
-| 6.1 | Trusted Publishing workflows; each distribution renamed to `nogat-<project>`, with consumers changing name and pin together; IMGWTools publishes a final `imgwtools` release that points to `nogat-imgwtools`, with no code shim; the MCP start form `uvx --from "nogat-<project>[mcp]" <tool>-mcp` and the `packages` entry of `server.json` are settled in the same step | REL-2.2, REL-3.1, ECO-022, ECO-020, AGI-5.1, REL-4.1 |
+| 6.1 | Trusted Publishing workflows; each distribution renamed to `nogat-<project>`, with consumers changing name and pin together; Obserwator publishes a final `imgwtools` release that points to `nogat-obserwator`, with no code shim (ECO-057); the MCP start form `uvx --from "nogat-<project>[mcp]" <tool>-mcp` and the `packages` entry of `server.json` are settled in the same step | REL-2.2, REL-3.1, ECO-022, ECO-020, AGI-5.1, REL-4.1 |
 | 6.2 | First PyPI releases of the members; the first upload reserves each name | REL-3.1, REL-2.1 |
-| 6.3 | `server.json` and MCP Registry entries for the MCP servers (Kartograf, IMGWTools, Hydrolog) | REL §4 |
+| 6.3 | `server.json` and MCP Registry entries for the MCP servers (Kartograf, Obserwator, Hydrolog) | REL §4 |
 | 6.4 | Consumers switch from git tags to PyPI ranges | REL-5.2 |
 | 6.5 | `nogat` on PyPI once every member is there: a new candidate verifies the renamed releases, and the release depends on exact PyPI versions | REL §6, HUB-7.1, HUB-7.2 |
 
@@ -166,7 +166,7 @@ Until the rename of phase 6, a pin names each distribution as the tag's
   changes (ECO-020) instead of being replaced at once.
 - Producers before consumers in phases 4 to 6, in the dependency order of
   `ecosystem.yaml`.
-- DEV §19: Kartograf and IMGWTools in parallel, each after its own standard
+- DEV §19: Kartograf and Obserwator in parallel, each after its own standard
   1.0 items, then the consumers and the integration check; Hydrograf and
   Hydraulik after the first release set.
 - Do not start a project while its own active work is uncommitted.
@@ -185,7 +185,7 @@ GitHub settings or the history rewrite.
 | Project | Branch | Phase 2 | Phase 3 | Phase 4 |
 |---|---|---|---|---|
 | Kartograf | `chore/nogat-2.1` | done, except the contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `CONTRIBUTORS.md`, the pull request template), which its PROGRESS leaves to the author | in progress: only the frozen records of `docs/research` and `docs/superpowers` are still Polish | in progress: the envelope, the error mapping, the catalog, the MCP server and the generated guide are done; the message catalog (ADR-053, area by area), `kartograf mcp` (AGI-3.8) and the domain JSON Schemas (AGI-4.1) are open |
-| IMGWTools | `chore/nogat-2.1`, then `feature/data-output`; `develop` since 2026-11-03 | done, except `SECURITY.md`; CI green on ubuntu, macOS and Windows since 2026-11-03 | done 2026-11-03, except the frozen records of `docs/superpowers` | in progress: the MCP prefix and annotations, `forbidden` 12, the English surfaces and the OpenAPI ids are done; the copy of `schemas/agent/` with its contract tests (AGI-4.1) is open |
+| IMGWTools (now Obserwator) | `chore/nogat-2.1`, then `feature/data-output`; `develop` since 2026-11-03 | done, except `SECURITY.md`; CI green on ubuntu, macOS and Windows since 2026-11-03 | done 2026-11-03, except the frozen records of `docs/superpowers` | in progress: the MCP prefix and annotations, `forbidden` 12, the English surfaces and the OpenAPI ids are done; the copy of `schemas/agent/` with its contract tests (AGI-4.1) is open |
 | Hydrolog | `chore/nogat-2.1` | done | in progress: the example notebooks are still Polish | done |
 | Retman | `chore/nogat-2.1` | done | in progress: `docs/research/` and `docs/specs/` are still Polish | done |
 | Archiwista | `chore/nogat-2.1` | done | in progress: README, ARCHITECTURE, DECISIONS, SPEC, the plans and the reports are still Polish | in progress: error texts by `Accept-Language` and the message catalog (parked on `wip/message-catalog`); the error registry and problem+json are done |

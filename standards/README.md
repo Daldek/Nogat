@@ -2,7 +2,7 @@
 
 Standard 1.0 · not yet published; tagged `std-1.0` when it reaches `main` (HUB-6.1)
 
-Shared rules for Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik,
+Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
 tools must be easy to discover, judge and call correctly, and safe to develop.
 
@@ -46,10 +46,10 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
   have it.
 - Placeholders, defined here once:
   - `<project>`: the project name in lower case as in `nogat-<project>`:
-    kartograf, imgwtools, hydrolog, hydrograf, hydraulik, retman, archiwista;
-  - `<Project>`: the project name as in the registry (Kartograf, IMGWTools, …);
+    kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista;
+  - `<Project>`: the project name as in the registry (Kartograf, Obserwator, …);
   - `<tool>`: the CLI name, `interfaces.cli` in `ecosystem.yaml`: kartograf,
-    imgw, hydrolog, retman, archiwista, hydraulik; `<TOOL>` is its upper
+    obserwator, hydrolog, retman, archiwista, hydraulik; `<TOOL>` is its upper
     case;
   - `<package>`: the Python import name (`distribution.import_name`).
 

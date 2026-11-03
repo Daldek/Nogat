@@ -111,8 +111,8 @@ Applied during adoption; breaking changes are accepted (ECO-020).
 | Kartograf | `transform_unavailable` | `unsupported` (`transform_unavailable`) | 1 → 15 |
 | Kartograf | `interrupted` | `cancelled` | 130 |
 | Kartograf | result `ok: false` | envelope `status: partial` or `failed` | 1 → 10 / 11 |
-| IMGWTools | `forbidden` (REST only) | `forbidden` | none → 12 |
-| IMGWTools | others | unchanged | – |
+| Obserwator | `forbidden` (REST only) | `forbidden` | none → 12 |
+| Obserwator | others | unchanged | – |
 | Hydrolog | `calculation_error` | `calculation_error` | 4 → 13 |
 | Hydrolog | `forbidden` | `forbidden` | 8 → 12 |
 | Hydrolog | output not writable | `io_error` (`output_unwritable`) | 9 |
