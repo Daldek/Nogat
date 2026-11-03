@@ -15,8 +15,8 @@ Requirements apply to all projects unless marked with a profile.
 
 | Profile | Meaning | Projects |
 |---|---|---|
-| `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, IMGWTools, Hydrolog, Retman, Hydraulik |
-| `app` | Deployed service (web UI, server) | IMGWTools (web GUI), Hydrograf, Archiwista |
+| `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, Obserwator, Hydrolog, Retman, Hydraulik |
+| `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista |
 | `hub` | Registry, standard and user package | Nogat |
 
 A project may have several profiles; `ecosystem.yaml` is authoritative.
@@ -327,7 +327,7 @@ generated files are fresh.
 behaviour, not the wording of messages.
 
 **DEV-10.6** (`tool`) A producer MUST ship a public `<package>.testing`
-module (`kartograf.testing`, `imgwtools.testing`) in its installed wheel,
+module (`kartograf.testing`, `obserwator.testing`) in its installed wheel,
 not under `tests/`, that builds small, valid instances, offline, of every
 format another project reads from its store or files (registry edges whose
 `via` includes `store` or `file`), and keep it in step with those formats;
@@ -634,7 +634,7 @@ marker file name alone (DEV-19.12).
 **DEV-19.12** A store root holds the marker `<tool>-store.json`, a JSON
 document of schema `<tool>-store/1` with at least the fields `schema`, `tool`,
 `created_at` and `producer_version`. The markers are `kartograf-store.json`
-and `imgw-store.json`; a tool looks for exactly these names and imports
+and `obserwator-store.json`; a tool looks for exactly these names and imports
 nothing from another tool.
 *Why:* each tool refuses another's store without depending on it (ECO-051).
 

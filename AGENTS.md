@@ -4,7 +4,7 @@
 
 ## Purpose and scope
 
-Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
+Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
 
 Use it to find the tool for a task and the command to start with, then read that tool's guide, linked in the table; and to plan a change that spans projects: a plan in `docs/plans/` comes first, producers before consumers.
 
@@ -23,20 +23,20 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Classify hydrologic soil groups (HSG) of an area from SoilGrids texture it downloads itself | [Kartograf][kartograf] | `kartograf soil hsg` |
 | Download boundaries, cadastre, 3D models, names, maps or geodetic data (find the group first) | [Kartograf][kartograf] | `kartograf commands list` |
 | Read what a Kartograf store already holds | [Kartograf][kartograf] | `kartograf store overview` |
-| Find IMGW-PIB or ČHMÚ stations by name, river or code | [IMGWTools][imgwtools] | `imgw stations find` |
-| Download archive data of stations into a versioned store | [IMGWTools][imgwtools] | `imgw store sync` |
-| Download archive files as published, as plain files | [IMGWTools][imgwtools] | `imgw datasets download` |
-| Read the series of a station from the store | [IMGWTools][imgwtools] | `imgw series read` |
-| Export the series of a station as CSV with the provider's attribution | [IMGWTools][imgwtools] | `imgw series export` |
-| Fetch current hydrological data of IMGW-PIB stations (live, not stored) | [IMGWTools][imgwtools] | `imgw current hydro` |
-| Get PMAXTP design precipitation of a point in Poland | [IMGWTools][imgwtools] | `imgw pmaxtp fetch` |
+| Find IMGW-PIB or ČHMÚ stations by name, river or code | [Obserwator][obserwator] | `obserwator stations find` |
+| Download archive data of stations into a versioned store | [Obserwator][obserwator] | `obserwator store sync` |
+| Download archive files as published, as plain files | [Obserwator][obserwator] | `obserwator datasets download` |
+| Read the series of a station from the store | [Obserwator][obserwator] | `obserwator series read` |
+| Export the series of a station as CSV with the provider's attribution | [Obserwator][obserwator] | `obserwator series export` |
+| Fetch current hydrological data of IMGW-PIB stations (live, not stored) | [Obserwator][obserwator] | `obserwator current hydro` |
+| Get PMAXTP design precipitation of a point in Poland | [Obserwator][obserwator] | `obserwator pmaxtp fetch` |
 | Compute the time of concentration of a watershed | [Hydrolog][hydrolog] | `hydrolog tc watershed` |
 | Compute effective precipitation of a rain by SCS-CN | [Hydrolog][hydrolog] | `hydrolog scs effective` |
 | Build a design hyetograph (block, triangular, Beta, Euler II) | [Hydrolog][hydrolog] | `hydrolog precip hietogram` |
 | Compute the design direct-runoff hydrograph of a watershed | [Hydrolog][hydrolog] | `hydrolog hydrograph generate` |
 | Route a hydrograph through a reach, a reservoir or a river network | [Hydrolog][hydrolog] | `hydrolog route network` |
 | Compute morphometry indicators of a watershed | [Hydrolog][hydrolog] | `hydrolog morphometry watershed` |
-| Compute flood quantiles from annual maxima, for example of an IMGWTools export | [Hydrolog][hydrolog] | `hydrolog stats flood-frequency` |
+| Compute flood quantiles from annual maxima, for example of an Obserwator export | [Hydrolog][hydrolog] | `hydrolog stats flood-frequency` |
 | Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have | [Hydrolog][hydrolog] | `hydrolog soil hsg` |
 | Open Hydrolog's GUI in the browser | [Hydrolog][hydrolog] | `hydrolog gui serve` |
 | Delineate the watershed of a point in Poland and read its parameters | [Hydrograf][hydrograf] | `POST /api/delineate-watershed` |
@@ -55,7 +55,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
 
 [kartograf]: https://raw.githubusercontent.com/Daldek/Kartograf/main/AGENTS.md
-[imgwtools]: https://raw.githubusercontent.com/Daldek/IMGWTools/main/AGENTS.md
+[obserwator]: https://raw.githubusercontent.com/Daldek/IMGWTools/main/AGENTS.md
 [hydrolog]: https://raw.githubusercontent.com/Daldek/Hydrolog/main/AGENTS.md
 [hydrograf]: https://raw.githubusercontent.com/Daldek/Hydrograf/main/README.md
 [hydraulik]: https://raw.githubusercontent.com/Daldek/Hydraulik/main/AGENTS.md
@@ -67,12 +67,12 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Tool | Status | Interfaces | What it is |
 |---|---|---|---|
 | Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
-| IMGWTools | active | CLI `imgw`, MCP `imgw mcp`, REST `imgw server (/api/v1)`, Python `imgwtools` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
+| Obserwator | active | CLI `obserwator`, MCP `obserwator mcp`, REST `obserwator server (/api/v1)`, Python `obserwator` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | Hydrograf | active | REST `/api` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over the ecosystem tools. |
-| Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and IMGWTools stores. |
+| Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
 
 ## Calling a tool
 
@@ -82,7 +82,7 @@ Every tool (profile `tool`) is called the same way:
 2. **Check, then run:** a command that writes has `--check`, which plans without effects; run the plan first.
 3. **Read the result:** `status` of the envelope is `ok`, `partial` or `failed` (exit 0, 10, 11); `partial` and `failed` are results, not errors: read `items` and retry only the failed units.
 4. **Decide by code:** an error is a document on the last line of stderr; its `code` and exit code come from the shared error registry (below).
-5. **Know where data goes:** `--output-dir` (`-o`) writes plain files and `--output` one file; `--root` writes the versioned store of Kartograf and IMGWTools (default `<data_dir>/<tool>`); `--force` replaces existing files and nothing else is overwritten; an `--output-dir` inside a store is refused with `conflict`.
+5. **Know where data goes:** `--output-dir` (`-o`) writes plain files and `--output` one file; `--root` writes the versioned store of Kartograf and Obserwator (default `<data_dir>/<tool>`); `--force` replaces existing files and nothing else is overwritten; an `--output-dir` inside a store is refused with `conflict`.
 
 ## More
 

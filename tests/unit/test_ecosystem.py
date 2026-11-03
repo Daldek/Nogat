@@ -254,10 +254,10 @@ def test_validate_rejects_a_malformed_route(route: dict[str, Any]) -> None:
 
 def test_validate_reports_a_route_its_project_cannot_run() -> None:
     registry, _ = _kartograf_with_route(
-        {"task": "Look up a sheet", "command": "imgw sheet find"}
+        {"task": "Look up a sheet", "command": "obserwator sheet find"}
     )
     problems = ecosystem.validate(registry)
-    assert any("Kartograf: route 'imgw sheet find'" in p for p in problems)
+    assert any("Kartograf: route 'obserwator sheet find'" in p for p in problems)
 
 
 @pytest.mark.parametrize("gui", [None, "", 8070])

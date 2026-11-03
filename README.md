@@ -1,7 +1,7 @@
 # Nogat
 
 Hub of an ecosystem of tools for hydrology, meteorology and geodata in
-Poland and Czechia: Kartograf, IMGWTools, Hydrolog, Hydrograf, Hydraulik,
+Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman and Archiwista.
 
 Nogat holds:

@@ -16,7 +16,7 @@ package dependency (labelled).
 flowchart LR
   Nogat["Nogat<br/>active"]
   Kartograf["Kartograf<br/>active"]
-  IMGWTools["IMGWTools<br/>active"]
+  Obserwator["Obserwator<br/>active"]
   Hydrolog["Hydrolog<br/>active"]
   Hydrograf["Hydrograf<br/>active"]
   Hydraulik["Hydraulik<br/>research"]
@@ -35,28 +35,28 @@ flowchart LR
   src_cuzk --> Kartograf
   src_clms --> Kartograf
   src_soilgrids --> Kartograf
-  src_imgw_pib --> IMGWTools
-  src_chmi --> IMGWTools
+  src_imgw_pib --> Obserwator
+  src_chmi --> Obserwator
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
   src_gugik --> Archiwista
   src_osm --> Archiwista
-  Kartograf -. store, no package .-> IMGWTools
-  IMGWTools -. file, no package .-> Hydrolog
+  Kartograf -. store, no package .-> Obserwator
+  Obserwator -. file, no package .-> Hydrolog
   Kartograf -. file, no package .-> Hydrolog
   Kartograf -- library --> Hydrograf
   Hydrolog -- library --> Hydrograf
-  IMGWTools -- library --> Hydrograf
+  Obserwator -- library --> Hydrograf
   Hydraulik -. planned: service .-> Hydrograf
   Kartograf -- cli --> Hydraulik
-  IMGWTools -- library/file --> Hydraulik
+  Obserwator -- library/file --> Hydraulik
   Hydrolog -- library/file --> Hydraulik
   Kartograf -- library --> Retman
-  IMGWTools -- library --> Retman
+  Obserwator -- library --> Retman
   Hydrolog -. planned: library .-> Retman
   Hydrograf -. planned: rest .-> Retman
   Kartograf -- library/store --> Archiwista
-  IMGWTools -. planned: library/store .-> Archiwista
+  Obserwator -. planned: library/store .-> Archiwista
 ```
 
 ## Projects
@@ -65,50 +65,50 @@ flowchart LR
 |---|---|---|---|
 | [Nogat](https://github.com/Daldek/Nogat) | hub | active | Ecosystem hub with standards, registry and map; future user package installing all tools. |
 | [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
-| [IMGWTools](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
+| [Obserwator](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over the ecosystem tools. |
-| [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and IMGWTools stores. |
+| [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and Obserwator stores. |
 
 ## Dependencies and exchanged data
 
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
-| IMGWTools | Kartograf | data | active | store | `kartograf-store/1` |
-| Hydrolog | IMGWTools | data | active | file | `imgw-series-csv` |
+| Obserwator | Kartograf | data | active | store | `kartograf-store/1` |
+| Hydrolog | Obserwator | data | active | file | `obserwator-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
 | Hydrograf | Hydrolog | runtime | active | library | `watershed-parameters`, `hydrolog-python-api` |
-| Hydrograf | IMGWTools | runtime | active | library | `imgw-pmaxtp` |
+| Hydrograf | Obserwator | runtime | active | library | `obserwator-pmaxtp` |
 | Hydrograf | Hydraulik | runtime | planned | service | `hydraulik-job` |
 | Hydraulik | Kartograf | optional | active | cli | `kartograf-files`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-plan/1`, `kartograf-error/1` |
-| Hydraulik | IMGWTools | optional | active | library, file | `imgw-pmaxtp`, `imgw-result/1` |
+| Hydraulik | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-result/1` |
 | Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
-| Retman | IMGWTools | optional | active | library | `imgw-command-list/1`, `imgw-commands/1`, `imgw-result/1`, `imgw-plan/1`, `imgw-store/1`, `imgw-archives`, `imgw-series-csv`, `imgw-testing` |
+| Retman | Obserwator | optional | active | library | `obserwator-command-list/1`, `obserwator-commands/1`, `obserwator-result/1`, `obserwator-plan/1`, `obserwator-store/1`, `obserwator-archives`, `obserwator-series-csv`, `obserwator-testing` |
 | Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
-| Archiwista | IMGWTools | optional | planned | library, store | `imgw-store/1`, `imgw-meta/1`, `imgw-series/1`, `imgw-observation/1`, `chmi-json/1` |
+| Archiwista | Obserwator | optional | planned | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1` |
 
 ### Details
 
-- **IMGWTools → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with imgw-store.json. Hard-link publication model follows Kartograf ADR-036.
-- **Hydrolog → IMGWTools**: No package dependency; stats commands read series CSV exported by `imgw series export --output FILE`.
+- **Obserwator → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+- **Hydrolog → Obserwator**: No package dependency; stats commands read series CSV exported by `obserwator series export --output FILE`.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`, `list_segments`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
-- **Hydrograf → IMGWTools**: uses `fetch_pmaxtp`
+- **Hydrograf → Obserwator**: uses `fetch_pmaxtp`
 - **Hydrograf → Hydraulik**: Hydraulik as an external compute node fed with a catchment domain.
 - **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
-- **Hydraulik → IMGWTools**: uses `fetch_pmaxtp`; rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that imgw pmaxtp fetch --json prints.
+- **Hydraulik → Obserwator**: uses `fetch_pmaxtp`; rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that obserwator pmaxtp fetch --json prints.
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
 - **Retman → Hydrolog**: Retman PRD roadmap.
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
-- **Archiwista → IMGWTools**: Extra archiwista[imgw] (IMGW-1..14); ČHMÚ (IMGW-15..19).
+- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
 
 ## What each project provides
 
@@ -118,7 +118,7 @@ flowchart LR
 |---|---|---|---|
 | `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions. |
 | `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
-| `kartograf-store/1` | store | IMGWTools, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root). |
+| `kartograf-store/1` | store | Obserwator, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root). |
 | `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
@@ -128,23 +128,23 @@ flowchart LR
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 
-### IMGWTools
+### Obserwator
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `imgw-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker imgw-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/imgw (IMGW_ROOT), imgw store init, and read API store_info, iter_store, read_meta, read_series, command_for_version. |
-| `imgw-meta/1` | sidecar | Archiwista (planned) | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
-| `imgw-series/1` | dataset | Archiwista (planned) | Parquet series per station with series.json index (periods, year type, units, coverage). |
-| `imgw-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
-| `imgw-observation/1` | document | Archiwista (planned) | History of published HTTP signals per archive file. |
+| `obserwator-store/1` | store | Retman, Archiwista (planned) | Versioned store (archives, stations, series) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), obserwator store init, and read API store_info, iter_store, read_meta, read_series, command_for_version. |
+| `obserwator-meta/1` | sidecar | Archiwista (planned) | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
+| `obserwator-series/1` | dataset | Archiwista (planned) | Parquet series per station with series.json index (periods, year type, units, coverage). |
+| `obserwator-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
+| `obserwator-observation/1` | document | Archiwista (planned) | History of published HTTP signals per archive file. |
 | `chmi-json/1` | document | Archiwista (planned) | Canonical JSON form of ČHMÚ files used for content-based pins. |
-| `imgw-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
-| `imgw-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and imgw commands list. |
-| `imgw-commands/1` | catalog | Retman | One command with options, x-imgw metadata and errors (command_schema, imgw commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
-| `imgw-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
-| `imgw-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
-| `imgw-pmaxtp` | document | Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
-| `imgw-testing` | library | Retman | imgwtools.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
+| `obserwator-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
+| `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
+| `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
+| `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
+| `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
+| `obserwator-pmaxtp` | document | Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
+| `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
 
 ### Hydrolog
 
@@ -192,6 +192,6 @@ data-flow diagram.
 | [ČÚZK (Český úřad zeměměřický a katastrální)](https://geoportal.cuzk.cz) | CZ | CC BY 4.0 | Kartograf |
 | [Copernicus Land Monitoring Service (CORINE Land Cover)](https://land.copernicus.eu) | EU | Copernicus data policy, attribution required | Kartograf |
 | [ISRIC SoilGrids](https://soilgrids.org) | global | CC BY 4.0 | Kartograf |
-| [IMGW-PIB (archives, live API, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | IMGWTools |
-| [ČHMÚ open data](https://opendata.chmi.cz) | CZ | CC BY 4.0 | IMGWTools |
+| [IMGW-PIB (archives, live API, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
+| [ČHMÚ open data](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
 | [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Archiwista |

@@ -53,7 +53,7 @@ def test_examples_validate(index: int) -> None:
         _with(producer={"tool": "hydrograf", "version": "0.9.0"}),
         _with(provenance={}),
         _with(created_at="2026-11-02T11:15:00.123+01:00"),
-        _with(payload={"schema": "imgw-pmaxtp/1", "depth_mm": 105.0}),
+        _with(payload={"schema": "obserwator-pmaxtp/1", "depth_mm": 105.0}),
         _with(
             result={
                 "command": "POST /api/generate-hydrograph",

@@ -4,15 +4,17 @@ Audited on 2026-10-28: local branches, worktrees, recent commits, manifests,
 project progress documents and `git ls-remote --heads --tags origin` (tags
 checked for Nogat). No tests or gates were run; earlier gate results below
 are historical evidence, not verification of the current heads. Items 4, 6,
-7 and 8 of Next and the changes from 2026-11-01 to 2026-11-03 are current as
-of 2026-11-03 and supersede the project rows below where they differ.
+7, 8 and 9 of Next and the changes from 2026-11-01 to 2026-11-03 are current
+as of 2026-11-03 and supersede the project rows below where they differ.
+IMGWTools is called Obserwator from v3.0.0 (ECO-057); dated sections keep
+the old name.
 
 ## Status
 
 | Component | State | Note |
 |---|---|---|
 | Standard 1.0 | in progress | not yet published to `main`; tagged `std-1.0` when it is (HUB-6.1); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056) |
-| Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; follows the branches of Kartograf, IMGWTools, Hydrolog and Hydraulik since 2026-10-25 (CHANGELOG); `routes` name the commands of those branches, of Retman and of Archiwista |
+| Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; follows the branches of Kartograf, Obserwator, Hydrolog and Hydraulik since 2026-10-25 (CHANGELOG); `routes` name the commands of those branches, of Retman and of Archiwista; Obserwator's checkout is the directory `IMGWTools`, its repository's name (HUB-3.1) |
 | `validate`, `map`, `agents`, `deps`, `drift` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` |
 | Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
@@ -23,7 +25,7 @@ of 2026-11-03 and supersede the project rows below where they differ.
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
 | Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
-| Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (IMGWTools after the rename of `master`) |
+| Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (Obserwator after the rename of `master`) |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
 
@@ -100,7 +102,7 @@ fail until the limit resets.
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,
-   the live plain-mode smoke in IMGWTools, and the file-contract/registry
+   the live plain-mode smoke in Obserwator, and the file-contract/registry
    follow-ups above (each project in its own session, DEV-3.4).
    Reconcile consumers' stale progress text with their manifests; newer
    producer commits do not automatically replace reviewed pins. Prepare
@@ -108,7 +110,7 @@ fail until the limit resets.
    When a tool renames a command, change its `routes` and run `agents`
    (CLAUDE.md).
 2. Repeat the final integration run at explicitly recorded heads, including
-   the changes after 2026-10-25 in Kartograf, IMGWTools and Archiwista,
+   the changes after 2026-10-25 in Kartograf, Obserwator and Archiwista,
    with Hydrograf and Archiwista apart and the two flows of F2. Record the
    outcome in the data-output plan; no repeat was performed in this audit.
 3. Publish 1.0 to `main` with the author (ADOPTION_PLAN 0.3, 0.4). Numbers
@@ -142,7 +144,7 @@ fail until the limit resets.
    Hydrolog's wave A, `e004a5d` on `feature/gui`). Hydrolog's waves A to C
    are done (`a328656`) and its GUI is served on 127.0.0.1:8070 behind a
    Cloudflare tunnel (changes on 2026-11-01 and 2026-11-02). Next:
-   Archiwista and IMGWTools adopt the identity (steps 5 and 7). The platform draft
+   Archiwista and Obserwator adopt the identity (steps 5 and 7). The platform draft
    `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
    B1–B6 recorded; 10 questions open) is deferred to a later session by the
    author; it may replace steps 5 to 7.
@@ -155,7 +157,7 @@ fail until the limit resets.
    D1 to D7 as recommended; steps 1 to 5 are done on
    `feature/archiwista-projects` (the plan's Results). Pushed with green
    gates: Kartograf `eab8612d` (also ADR-058: `--geometry` by feature shape,
-   GeoJSON), IMGWTools `8cd6844c`, Retman `5c3be44` (still pins Kartograf
+   GeoJSON), Obserwator `8cd6844c`, Retman `5c3be44` (still pins Kartograf
    `dbcfe5bb`; re-pin before the release). Archiwista `e9a18b9` is pushed
    with a green full gate (2026-11-01: 2719 passed, coverage 93.63%; its only
    change after `dd4268c`, which runs on the author's test server, makes the
@@ -192,13 +194,14 @@ fail until the limit resets.
      macOS run wait for 0.8.1 (its `docs/PROGRESS.md` Next 1); next,
      `verify-candidate`, the release commit, `develop` into `main` and
      `v0.8.0`, merged locally.
-   - IMGWTools: branches renamed `main`/`develop` on 2026-11-03 (GitHub
-     rename API, `main` the default branch); `develop` has the English
-     documentation (one CHANGELOG `[Unreleased]` against v2.1.1) and a green
-     CI matrix (ubuntu, macOS, Windows; Windows fixes of the CLI output,
-     pipes and the agent guide). Remaining for v3.0.0: AGI-4.1/ERR-3
-     conformance (B6), `SECURITY.md` and the GitHub settings, `3.0.0.devN`,
-     the author's review; its `docs/PROGRESS.md`.
+   - Obserwator (repository `IMGWTools`): branches renamed `main`/`develop`
+     on 2026-11-03 (GitHub rename API, `main` the default branch); `develop`
+     has the English documentation (one CHANGELOG `[Unreleased]` against
+     v2.1.1) and a green CI matrix (ubuntu, macOS, Windows; Windows fixes of
+     the CLI output, pipes and the agent guide). Remaining for v3.0.0: the
+     rename to Obserwator (item 9), AGI-4.1/ERR-3 conformance (B6),
+     `SECURITY.md` and the GitHub settings, `3.0.0.devN`, the author's
+     review; its `docs/PROGRESS.md`.
 8. Archiwista's sets as Hydrograf's only Kartograf input (the author's
    variant B, 2026-11-02): plan
    `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md` on
@@ -219,6 +222,14 @@ fail until the limit resets.
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
+9. IMGWTools becomes Obserwator with v3.0.0 (ECO-057): plan
+   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, approved 2026-11-03.
+   Step 1 (Nogat: the registry entry, standard texts, ADOPTION_PLAN 6.1,
+   error registry, design marks and mockups, `AGENTS.md` and the map) is
+   done on `feature/obserwator`, not merged. Next: step 2 in the `IMGWTools`
+   repository, then the consumers (step 3), Kartograf's marker and
+   Hydrograf's docs (step 4); the repository rename and its URLs are the
+   author's (step 5).
 
 ## Open questions
 

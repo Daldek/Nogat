@@ -379,6 +379,23 @@ def workspace() -> Path:
     return Path(os.environ.get("NOGAT_WORKSPACE") or ROOT.parent)
 
 
+def checkout(project: dict[str, Any]) -> Path:
+    """Return a project's checkout: the workspace directory named like its repository.
+
+    The directory is the last segment of `repo` (HUB-3.1), which may differ
+    from the registry `name` while the repository keeps an older name.
+    """
+    repo: str = project["repo"]
+    path = urlsplit(repo).path.strip("/").removesuffix(".git")
+    return workspace() / (path.rpartition("/")[2] or project["name"])
+
+
+def _names_repo(req: Requirement, sources: list[dict[str, Any]], repo: str) -> bool:
+    """Whether the requirement's URL or one of its uv sources is the repository."""
+    urls = [req.url or "", *(str(s.get("git") or s.get("url") or "") for s in sources)]
+    return any(repo.lower() in url.lower() for url in urls)
+
+
 def _toml(path: Path) -> dict[str, Any]:
     """Parse a TOML file; RegistryError names the file when it is not valid TOML."""
     try:
@@ -455,17 +472,18 @@ def declared(
     notes: list[str] = []
     for p in registry["projects"]:
         manifests = p.get("python_manifests") or []
-        checkout = workspace() / p["name"]
-        if manifests and not checkout.is_dir():
-            notes.append(f"{p['name']}: no checkout at {checkout}")
+        checkout_dir = checkout(p)
+        if manifests and not checkout_dir.is_dir():
+            notes.append(f"{p['name']}: no checkout at {checkout_dir}")
             continue
         for manifest in manifests:
-            path = checkout / manifest
+            path = checkout_dir / manifest
             if not path.is_file():
                 notes.append(f"{p['name']}: {manifest} missing")
                 continue
             try:
                 lines = _requirement_lines(path)
+                sources = _uv_sources(path)
             except RegistryError as e:
                 notes.append(f"{p['name']}: {e}")
                 continue
@@ -476,7 +494,14 @@ def declared(
                     notes.append(f"{p['name']}: cannot parse {line!r} in {manifest}")
                     continue
                 name = canonicalize_name(req.name)
-                if name in ecosystem or req.url:
+                if (
+                    name in ecosystem
+                    or req.url
+                    or any(
+                        _names_repo(req, sources.get(name, []), q["repo"])
+                        for q in registry["projects"]
+                    )
+                ):
                     continue
                 specs = result.setdefault(name, {})
                 specs[p["name"]] = specs.get(p["name"], SpecifierSet()) & req.specifier
@@ -525,7 +550,7 @@ def installed(
         manifests = p.get("python_manifests") or []
         if not manifests:
             continue
-        base = (workspace() / p["name"] / manifests[0]).parent
+        base = (checkout(p) / manifests[0]).parent
         python = next(
             (
                 c
@@ -628,11 +653,13 @@ def _latest_tag(checkout: Path) -> str | None:
     return max(versions)[2] if versions else None
 
 
-def _matches(req: Requirement, producer: dict[str, Any]) -> bool:
+def _matches(
+    req: Requirement, sources: list[dict[str, Any]], producer: dict[str, Any]
+) -> bool:
     """Whether a requirement names the producer.
 
     A match is the import name, the PyPI name, `nogat-<project>` or the
-    producer's repository URL.
+    producer's repository URL in the requirement or in its uv `sources`.
     """
     names = {
         canonicalize_name(n)
@@ -645,7 +672,7 @@ def _matches(req: Requirement, producer: dict[str, Any]) -> bool:
     }
     if canonicalize_name(req.name) in names:
         return True
-    return bool(req.url) and producer["repo"].lower() in (req.url or "").lower()
+    return _names_repo(req, sources, producer["repo"])
 
 
 def _pin(req: Requirement) -> tuple[str, str]:
@@ -729,17 +756,17 @@ def report_drift(registry: dict[str, Any]) -> int:
     by_name = {p["name"]: p for p in registry["projects"]}
     rows: list[tuple[str, str, str, str, str]] = []
     for consumer in registry["projects"]:
-        checkout = workspace() / consumer["name"]
+        consumer_dir = checkout(consumer)
         for dep in consumer["depends_on"]:
             if dep["status"] != "active" or dep["kind"] not in ("runtime", "optional"):
                 continue
             producer = by_name[dep["project"]]
             who = (consumer["name"], producer["name"])
-            producer_checkout = workspace() / producer["name"]
+            producer_checkout = checkout(producer)
             latest = (
                 _latest_tag(producer_checkout) if producer_checkout.is_dir() else None
             )
-            if not checkout.is_dir():
+            if not consumer_dir.is_dir():
                 rows.append((*who, "—", latest or "—", "no checkout"))
                 continue
             manifests = consumer.get("python_manifests") or []
@@ -748,7 +775,7 @@ def report_drift(registry: dict[str, Any]) -> int:
                 continue
             found = False
             for manifest in manifests:
-                path = checkout / manifest
+                path = consumer_dir / manifest
                 if not path.is_file():
                     continue
                 try:
@@ -763,10 +790,10 @@ def report_drift(registry: dict[str, Any]) -> int:
                         req = Requirement(line)
                     except InvalidRequirement:
                         continue
-                    if not _matches(req, producer):
+                    entries = sources.get(canonicalize_name(req.name), [])
+                    if not _matches(req, entries, producer):
                         continue
                     found = True
-                    entries = sources.get(canonicalize_name(req.name), [])
                     pins = [p for e in entries if (p := _source_pin(e)) is not None]
                     where = f"{manifest}, tool.uv.sources" if pins else manifest
                     for kind, value in pins or [_pin(req)]:

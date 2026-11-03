@@ -108,11 +108,11 @@ def test_result_invalid(document: dict[str, Any]) -> None:
 
 
 ERROR: dict[str, Any] = {
-    "schema": "imgw-error/1",
+    "schema": "obserwator-error/1",
     "code": "validation_error",
     "title": "Invalid input",
     "message": "unknown station",
-    "hint": "run: imgw stations list",
+    "hint": "run: obserwator stations list",
     "details": {"reason": "unknown_station", "option": "station"},
     "exit_code": 2,
     "command": "series fetch",

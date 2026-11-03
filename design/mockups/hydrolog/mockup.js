@@ -729,8 +729,8 @@
   $$('[data-action="pmaxtp"]').forEach(function (b) {
     b.addEventListener("click", function () {
       showToast(root.dataset.host === "nogat"
-        ? "Moduł IMGWTools: PMAXTP p 1%, 12 h = 105,0 mm"
-        : "Samodzielnie: wklej wynik imgw pmaxtp fetch albo wpisz wysokość ręcznie");
+        ? "Moduł Obserwatora: PMAXTP p 1%, 12 h = 105,0 mm"
+        : "Samodzielnie: wklej wynik obserwator pmaxtp fetch albo wpisz wysokość ręcznie");
     });
   });
 

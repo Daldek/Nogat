@@ -102,6 +102,48 @@ def test_drift_reports_each_consumer_state(
     assert rows["Absent"].endswith("no checkout")
 
 
+def test_renamed_project_is_read_from_its_repository_directory(
+    workspace: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # The registry name changed, the repository and its checkout did not
+    # (ECO-057); the consumer still requires the old distribution name.
+    _write(
+        workspace / "OldTools" / "pyproject.toml",
+        '[project]\ndependencies = ["pandas>=2"]\n',
+    )
+    _write(
+        workspace / "App" / "pyproject.toml",
+        '[project]\ndependencies = ["oldtools>=3.0.0.dev0,<4", "pandas>=2.1"]\n'
+        "[tool.uv.sources]\noldtools = { git = "
+        '"https://github.com/Daldek/OldTools.git", '
+        'rev = "71bae778a6573019a0b8da6498b4429f0e03ddfb" }\n',
+    )
+    registry = {
+        "projects": [
+            _project(
+                "Renamed",
+                repo="https://github.com/Daldek/OldTools",
+                distribution={"pypi": "renamed", "import_name": "renamed"},
+                python_manifests=["pyproject.toml"],
+            ),
+            _project(
+                "App",
+                python_manifests=["pyproject.toml"],
+                depends_on=[_dep("Renamed")],
+            ),
+        ]
+    }
+    assert ecosystem.report_drift(registry) == 0
+    rows = {line.split()[0]: line for line in capsys.readouterr().out.splitlines()[1:]}
+    assert rows["App"].split()[1] == "Renamed"
+    assert "commit 71bae77 (pyproject.toml, tool.uv.sources)" in rows["App"]
+
+    specs, notes = ecosystem.declared(registry)
+    assert notes == []
+    assert set(specs) == {"pandas"}
+    assert set(specs["pandas"]) == {"Renamed", "App"}
+
+
 def test_deps_flags_only_real_conflicts(
     workspace: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

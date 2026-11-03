@@ -72,7 +72,7 @@ because wheels of geospatial dependencies often arrive later). Raise the
 newest version when a new Python is released.
 
 The `audit` job exports the locked dependencies with hashes, leaves out the
-ecosystem's own distributions (`kartograf`, `imgwtools`, `hydrolog`, `retman`,
+ecosystem's own distributions (`kartograf`, `obserwator`, `hydrolog`, `retman`,
 `archiwista`, `hydraulik`, `hydrograf` and their `nogat-<project>` names: they
 come from git tags until they are on PyPI and carry no hashes) and runs
 `pip-audit` on push, on pull requests and weekly. It informs and is not a

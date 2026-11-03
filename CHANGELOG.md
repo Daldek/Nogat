@@ -8,6 +8,23 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- IMGWTools becomes Obserwator with v3.0.0 (ECO-057, plan
+  `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, step 1). Registry: the
+  project `Obserwator`, distribution and import name `obserwator`, the
+  interfaces `obserwator`, `obserwator mcp` and `obserwator server`, its
+  routes, the ids `obserwator-*` provided and consumed (`imgw-store/1` is
+  `obserwator-store/1`, and likewise the others); the repository URL stays.
+  HUB-3.1: a checkout is the directory named like the repository (the last
+  segment of `repo`), so `deps` and `drift` read Obserwator from
+  `IMGWTools/`; `drift` also matches a requirement by its
+  `[tool.uv.sources]` URL, which finds Hydrograf's `imgwtools` pin. The
+  standard texts (DEV-10.6, DEV-19.12 `obserwator-store.json`, the
+  placeholders), ADOPTION_PLAN (6.1: the final `imgwtools` release points to
+  `nogat-obserwator`), the error registry, the CI template's audit list, the
+  design mark `obserwator.svg`, the token `--tool-obserwator` and the
+  Hydrolog mockup follow; `AGENTS.md` and `docs/ECOSYSTEM_MAP.md` are
+  regenerated. The provider IMGW-PIB and dated records keep their names.
+
 - The standard is 1.0: numbers count from `main` (ECO-056). A version of the
   standard exists from its tag on `main` and `develop` carries the next one
   (HUB-6.1); a document's `<n>` increments only past a number released on

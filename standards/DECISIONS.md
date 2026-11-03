@@ -66,6 +66,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | accepted | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
+| [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 
 ---
 
@@ -1046,3 +1047,38 @@ document behind it.
 a version that was never published). Calling the legacy shared standards 1.0
 (two things named 1.0). Incrementing `<n>` at every breaking change on any
 branch (numbers no consumer ever read).
+
+## ECO-057 IMGWTools becomes Obserwator
+
+**Decision.** From v3.0.0 the tool released as IMGWTools 2.1.1 is called
+Obserwator: the product, the distribution and import package `obserwator`
+(`nogat-obserwator` at ADOPTION_PLAN 6.1, where a final `imgwtools` release
+points to it), the command `obserwator`, and every name derived from the
+tool: `OBSERWATOR_<KEY>` (`OBSERWATOR_IMGW_API_URL` for a provider
+endpoint), `[obserwator]` in `nogat.toml`, `<data_dir>/obserwator`, document
+ids `obserwator-<kind>/1`, the marker `obserwator-store.json`, MCP tools
+`obserwator_*`, `x-obserwator*`, `ObserwatorError` and its subclasses. The
+institute keeps its name: IMGW-PIB, the dataset ids `pl.imgw.*` and
+identifiers naming the provider stay. The repository URL and the workspace
+directory `IMGWTools` stay until the author renames the repository, so a
+checkout is found by the repository's name, not the registry `name`
+(HUB-3.1). Dated records keep the old name. Plan:
+`docs/plans/2026-11-03-imgwtools-to-obserwator.md`.
+
+**Why.** The author's decision of 2026-11-03: IMGW-PIB is an institute, not
+the tool, which reads ČHMÚ as well. Before the first release from `develop`
+is the cheapest time: the only release, 2.1.1 on `main`, has no store and
+none of the document ids, which exist only on `develop`, so they are renamed
+without an alias or a migration (ECO-056).
+
+**Rejected.** Renaming only the product and keeping `imgw` for the command,
+the package and the ids (two names for one tool, and the institute's name
+on every identifier). Aliases for the old ids, variables and marker (a
+compatibility layer for formats no user has, ECO-056). Renaming the
+repository in the same step (every URL in every repository changes at once;
+the author does it later).
+
+**Consequence.** Producers first (HUB-5.2): Nogat, then Obserwator, then
+Archiwista, Retman, Hydraulik and Hydrolog, then the frozen Kartograf
+(`STORE_MARKERS`) and Hydrograf (documents only; its pin and imports of
+`imgwtools` stay until after its v0.5.0).
