@@ -144,9 +144,12 @@ set's `uv.lock` and limited to the packages in the member's own lock. Declared
 ranges stay ranges (REL-5.2) and contain the set's version.
 
 **REL-6.4** A candidate is a set that is not yet released:
-`release-sets/candidate-<N>/` in Nogat holds its `pyproject.toml` and
-`uv.lock` (as in REL-6.1) and a README with the commit of each member.
-Members' development heads may be pinned by commit (REL-5.3).
+`release-sets/candidate-<N>/` in Nogat holds `members.toml`, the commit of
+each member and of every project another one pins, the `README.md` generated
+from it, and its `pyproject.toml` and `uv.lock` (as in REL-6.1). Members'
+development heads may be pinned by commit (REL-5.3); every consumer pins
+each of them at the commit of the current candidate, the highest `<N>`, kept
+by `uv run scripts/ecosystem.py set check|apply|bump` (HUB-4.9).
 *Why:* nothing is released without a green run (ECO-025).
 
 **REL-6.5** A candidate is verified by the Nogat workflow `verify-candidate`

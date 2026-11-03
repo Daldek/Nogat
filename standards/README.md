@@ -129,6 +129,10 @@ DOC-11.1).
     themes, the project's mark, Archiwista's shell (DEV-15.3, ECO-055).
   - The registry's optional `gui` interface: the command that serves a
     project's browser GUI (HUB-2.1).
+  - A candidate's `members.toml` holds the commit every consumer pins; the
+    `set` commands check, write and move the pins, and the registry's
+    optional `branch` names where a project's code lives (REL-6.4, HUB-2.1,
+    HUB-4.8, HUB-4.9).
   - Consistency fixes: approvals in ADOPTION_PLAN follow DEV-3.3; DEV-3.6
     covers the `main` → `develop` pull request and claims only what the
     ruleset enforces; DEV-6.3 covers environments, not wheel checks; a
