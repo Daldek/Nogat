@@ -11,12 +11,12 @@ of 2026-11-03 and supersede the project rows below where they differ.
 
 | Component | State | Note |
 |---|---|---|
-| Standard 2.1 | in progress | not yet published to `main`; tagged `std-2.1` when it is (HUB-6.1) |
+| Standard 1.0 | in progress | not yet published to `main`; tagged `std-1.0` when it is (HUB-6.1); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056) |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; follows the branches of Kartograf, IMGWTools, Hydrolog and Hydraulik since 2026-10-25 (CHANGELOG); `routes` name the commands of those branches, of Retman and of Archiwista |
 | `validate`, `map`, `agents`, `deps`, `drift` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` |
 | Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
-| Contradictions in standard 2.1 | done | ECO-042 to ECO-049 and consistency fixes |
+| Contradictions in standard 1.0 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Hand-off schema `nogat-handoff/1` | done 2026-11-02, branch `feature/handoff-1` | `schemas/exchange/handoff-1.schema.json`, contract test; item 6 of the platform plan, approved ahead of the rest as N1 of Hydrolog's GUI |
 | Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
@@ -35,7 +35,7 @@ not mean it is merged or released. Sources are each branch's
 
 | Project | Audited branch and head | Progress and remaining work |
 |---|---|---|
-| Nogat | `feature/data-output`, `2ccea34` before this audit | Latest commit adds the GUI visual-identity backlog. Standard 2.1 remains off `main`; `origin` has no tags. Contribution files and v1 template replacement remain open |
+| Nogat | `feature/data-output`, `2ccea34` before this audit | Latest commit adds the GUI visual-identity backlog. The standard remains off `main`; `origin` has no tags. Contribution files and legacy template replacement remain open |
 | Kartograf | `feature/data-output`, `745e8b18` | Plain mode is implemented at library and command-layer level; its own Next 4 still leaves a real-CLI subprocess smoke and plain-mode prose open. Later commits add `store_state`, shared task arguments for `project add`, project-lock reasons, report-cache reuse and PL-2000 sheet outlines. Message-catalog migration is closed; `kartograf mcp` and domain JSON Schemas remain open |
 | IMGWTools | `feature/data-output`, `e28fbcd` | Data-output migration, MCP stdout fix, `parse_command`/`format_command` and catalog examples are recorded as done. Live plain-mode smoke, English documentation and release work remain open |
 | Hydrolog | `feature/routing-schematic`, `5fa22b3` (routing worktree) | `hydrolog.testing` exists (introduced at `0719c41`); network objects, rainfall/runoff and SVG schematics are implemented on stacked routing branches. The main checkout remains at `chore/nogat-2.1`, `d4f7282`; inspecting that checkout alone misses this work. Merge, CLA, notebook translations and release remain open |
@@ -111,7 +111,13 @@ fail until the limit resets.
    the changes after 2026-10-25 in Kartograf, IMGWTools and Archiwista,
    with Hydrograf and Archiwista apart and the two flows of F2. Record the
    outcome in the data-output plan; no repeat was performed in this audit.
-3. Publish 2.1 to `main` with the author (ADOPTION_PLAN 0.3, 0.4).
+3. Publish 1.0 to `main` with the author (ADOPTION_PLAN 0.3, 0.4). Numbers
+   count from `main` (ECO-056): plan
+   `docs/plans/2026-11-03-numbering-from-main.md`, approved 2026-11-03; step
+   1 (Nogat) done on `plan/numbering-from-main`, not merged; steps 2 to 5
+   change the projects' references before their next merge into `main`
+   (Archiwista's `archiwista-state/2` back to `/1`); step 6 is this
+   publication.
 4. Visual identity (user request, 2026-10-28): plan
    `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01, steps 1
    to 4 done on `feature/visual-identity`: `design/` (tokens, eight marks,
@@ -217,8 +223,8 @@ fail until the limit resets.
   OpenStreetMap access (its roads come from BDOT10k), but its README still
   names OpenStreetMap and ODbL in the data and licensing paragraph: which is
   right?
-- Publishing 2.1 to `main` (and its tag) and replacing the v1 `templates/`
-  and `configs/` (root-owned files).
+- Publishing 1.0 to `main` (and its tag) and replacing the legacy
+  `templates/` and `configs/` (root-owned files).
 - The plans in `docs/plans/` predate DEV-17.4's `Approved:` line: add it to
   the ones the author approved.
 - Contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`,

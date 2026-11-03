@@ -45,15 +45,15 @@ GENERATED = re.compile(
 )
 MARKERS = re.compile(r"The markers are (?P<names>[^;]+);")
 
-# Directories with v1 files kept verbatim until replaced (DOC-11.1).
-V1 = ("standards/legacy/", "standards/templates/", "standards/configs/")
+# Directories with legacy files kept verbatim until replaced (DOC-11.1).
+LEGACY = ("standards/legacy/", "standards/templates/", "standards/configs/")
 CITING_SUFFIXES = {".md", ".py", ".sh", ".yml", ".yaml", ".json", ".toml"}
 
 
 def _files(root: Path, suffixes: set[str]) -> list[Path]:
     """Return Nogat's own files with the given suffixes.
 
-    Skipped: the v1 directories, hidden directories other than `.github`,
+    Skipped: the legacy directories, hidden directories other than `.github`,
     and uv.lock.
     """
     found = []
@@ -63,7 +63,7 @@ def _files(root: Path, suffixes: set[str]) -> list[Path]:
         if (
             not path.is_file()
             or path.suffix not in suffixes
-            or rel.startswith(V1)
+            or rel.startswith(LEGACY)
             or any(p.startswith(".") and p != ".github" for p in parts)
             or rel == "uv.lock"
         ):

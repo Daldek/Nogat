@@ -8,6 +8,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- The standard is 1.0: numbers count from `main` (ECO-056). A version of the
+  standard exists from its tag on `main` and `develop` carries the next one
+  (HUB-6.1); a document's `<n>` increments only past a number released on
+  the producer's `main` (AGI-4.1). The drafts called 2.0 and 2.1 are 1.0 in
+  `standards/`, `ecosystem.yaml` and `error_registry.json`, to be tagged
+  `std-1.0`; `standards/legacy/v1.0/` is now `standards/legacy/shared-2026-01/`,
+  the shared standards of 2026-01-29 that preceded Nogat. Plan:
+  `docs/plans/2026-11-03-numbering-from-main.md`, step 1.
+
 - `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
   2026-11-03) and its topic branches deleted except
   `feature/hydrolog-gui-mockup`; Next 7 lists the tools' branches awaiting

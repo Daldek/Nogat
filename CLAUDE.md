@@ -18,8 +18,9 @@ project registry (`ecosystem.yaml`) and the tooling that reads it. Profile:
   come from `ecosystem.yaml` (`uv run scripts/ecosystem.py map` and `agents`),
   the tables in `standards/ERROR_REGISTRY.md` from `error_registry.json`
   (`standard --write`).
-- `standards/legacy/`, `standards/templates/` and `standards/configs/` are v1
-  files kept verbatim until replaced (DOC-11.1); do not edit or copy them.
+- `standards/legacy/`, `standards/templates/` and `standards/configs/` hold
+  files of the shared standards of 2026-01-29 that preceded Nogat, kept
+  verbatim until replaced (DOC-11.1); do not edit or copy them.
 - A requirement ID is never renumbered or reused; a deleted ID is listed in
   the changelog of `standards/README.md`.
 

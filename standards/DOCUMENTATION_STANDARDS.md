@@ -1,6 +1,6 @@
 # Documentation standards
 
-Part of standard 2.1 · IDs `DOC-…`
+Part of standard 1.0 · IDs `DOC-…`
 
 Documentation has three audiences, and each file serves one of them:
 
@@ -295,10 +295,10 @@ per agent vendor (`.github/copilot-instructions.md`, `.cursor/rules/*`,
 ## 11. Templates
 
 **DOC-11.1** The templates of this standard are the files in
-[`ci/`](ci/README.md): quality gate, CI and Dependabot. The v1 files in
-`templates/` and `configs/` are not valid for this standard and are not
-copied until they are replaced.
-*Why:* the v1 files contradict rules of this standard.
+[`ci/`](ci/README.md): quality gate, CI and Dependabot. The legacy files in
+`templates/` and `configs/`, from the shared standards of 2026-01-29, are not
+valid for this standard and are not copied until they are replaced.
+*Why:* the legacy files contradict rules of this standard.
 
 ---
 

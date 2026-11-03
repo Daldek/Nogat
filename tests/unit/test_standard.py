@@ -20,11 +20,11 @@ def _tree(root: Path, files: dict[str, str]) -> Path:
 BASE = {
     "standards/README.md": "# Standard\n\n## Changelog\n\n- Deleted IDs: DEV-9.9.\n",
     "standards/DEVELOPMENT_STANDARDS.md": (
-        "# Dev\n\nPart of standard 2.1 · IDs `DEV-…`\n\n## 1. Profiles\n\n"
+        "# Dev\n\nPart of standard 1.0 · IDs `DEV-…`\n\n## 1. Profiles\n\n"
         "**DEV-1.1** Rule.\n\n**DEV-1.2** See DEV-1.1 and DOC §2.\n"
     ),
     "standards/DOCUMENTATION_STANDARDS.md": (
-        "# Doc\n\nPart of standard 2.1 · IDs `DOC-…`\n\n## 2. README\n\n"
+        "# Doc\n\nPart of standard 1.0 · IDs `DOC-…`\n\n## 2. README\n\n"
         "**DOC-2.1** Rule, ECO-001.\n\n"
         "| Text | Budget | Enforced by |\n|---|---|---|\n"
         "| `CLAUDE.md` | 3 lines | review |\n"
@@ -65,8 +65,8 @@ def test_id_problems_reports(
     assert problem in standard.id_problems(_tree(tmp_path, {**BASE, **extra}))
 
 
-def test_id_problems_ignores_changelog_and_v1(tmp_path: Path) -> None:
-    extra = {"standards/legacy/v1.0/OLD.md": "DEV-42.1\n"}
+def test_id_problems_ignores_changelog_and_legacy(tmp_path: Path) -> None:
+    extra = {"standards/legacy/shared-2026-01/OLD.md": "DEV-42.1\n"}
     assert standard.id_problems(_tree(tmp_path, {**BASE, **extra})) == []
 
 

@@ -1,6 +1,6 @@
 # Ecosystem standard decisions
 
-Decision log for the shared standard (2.x). Each entry records what was
+Decision log for the shared standard (1.x). Each entry records what was
 decided, why, and which alternatives were rejected. Requirements that follow
 from a decision live in the topic documents; this file explains the reasons.
 Entries changed by a later decision carry an "Amended by" line.
@@ -13,7 +13,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-001](#eco-001-nogat-is-the-ecosystem-hub) | Nogat is the ecosystem hub | amended by ECO-036 | 2026-10-19 |
 | [ECO-002](#eco-002-machine-readable-registry-ecosystemyaml) | Machine-readable registry `ecosystem.yaml` | amended by ECO-034 | 2026-10-19 |
 | [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | accepted | 2026-10-19 |
-| [ECO-004](#eco-004-standard-v20-is-rewritten-from-practice) | Standard v2.0 is rewritten from practice | accepted | 2026-10-19 |
+| [ECO-004](#eco-004-standard-v20-is-rewritten-from-practice) | Standard v2.0 is rewritten from practice | amended by ECO-056 | 2026-10-19 |
 | [ECO-005](#eco-005-english-everywhere-polish-only-in-the-end-user-interface) | English everywhere, Polish only in the end-user interface | accepted | 2026-10-19 |
 | [ECO-006](#eco-006-single-author-identity-no-ai-attribution) | Single author identity, no AI attribution | amended by ECO-038 | 2026-10-19 |
 | [ECO-007](#eco-007-one-off-history-rewrite) | One-off history rewrite | accepted | 2026-10-19 |
@@ -55,7 +55,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-043](#eco-043-needs-between-projects-are-github-issues) | Needs between projects are GitHub issues | accepted | 2026-10-21 |
 | [ECO-044](#eco-044-nogats-tooling-reports-errors-by-the-registry) | Nogat's tooling reports errors by the registry | accepted | 2026-10-21 |
 | [ECO-045](#eco-045-precedence-of-conflicting-requirements) | Precedence of conflicting requirements | accepted | 2026-10-21 |
-| [ECO-046](#eco-046-the-standard-is-tagged-when-published) | The standard is tagged when published | accepted | 2026-10-21 |
+| [ECO-046](#eco-046-the-standard-is-tagged-when-published) | The standard is tagged when published | amended by ECO-056 | 2026-10-21 |
 | [ECO-047](#eco-047-plan-approval-is-a-line-in-the-plan) | Plan approval is a line in the plan | accepted | 2026-10-21 |
 | [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
@@ -65,6 +65,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | accepted | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
+| [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 
 ---
 
@@ -111,6 +112,10 @@ this stage.
 BasicHydraulic has no active development.
 
 ## ECO-004 Standard v2.0 is rewritten from practice
+
+**Amended by ECO-056 (2026-11-03):** v1.0 is the shared standards of
+2026-01-29 that preceded Nogat, archived in `legacy/shared-2026-01/`; v2.0
+is a draft of standard 1.0.
 
 **Decision.** v1.0 (2026-01-29) is archived in `legacy/v1.0/`. v2.0 is
 written from what the projects actually do, plus the agent-first
@@ -503,7 +508,7 @@ own environment.
 **Decision.** The R plotting script and its renv environment, the RStudio
 project, the Copernicus Marine download scripts, the sample NetCDF and CSV
 files and the old `requirements.txt` are removed from Nogat. Third-party
-tools stayed as registry entries until 2.1 removed them (ECO-036).
+tools stayed as registry entries until ECO-036 removed them.
 
 **Why.** The author decided to drop R, data files and other legacy content.
 None of it met the tool standard (R cannot ship in the Python package, the
@@ -605,7 +610,7 @@ support a narrow window.
 **Amended by ECO-046 (2026-10-21):** the version moves when the standard is
 published to `main`, not at every change.
 
-**Decision.** Standard 2.1 starts from twelve principles (standards/README.md,
+**Decision.** The standard starts from twelve principles (standards/README.md,
 "Zen of Nogat"). Every requirement is mandatory; `MAY` marks an option; there
 is no SHOULD. A requirement is one or two sentences with an optional one-line
 *Why*; dated facts and the state of named projects stay out of rules. Every
@@ -787,11 +792,14 @@ autonomous work on known conflicts).
 
 ## ECO-046 The standard is tagged when published
 
+**Amended by ECO-056 (2026-11-03):** a version exists from its tag on
+`main`; the version `develop` carries may be renumbered until then.
+
 **Decision.** Changes of the standard accumulate on `develop` under the next
 version and its changelog; the merge into `main` is tagged `std-X.Y`, and
 the next change starts X.(Y+1).
 
-**Why.** ECO-033 bumped and tagged at every change. Version 2.1 changed many
+**Why.** ECO-033 bumped and tagged at every change. The standard changed many
 times before it reached `main`; a tag per change would have produced
 versions no project could use, and ERR-3 needs a tag only for what projects
 copy.
@@ -1014,3 +1022,27 @@ under CSP `'self'`, and a dependency between apps).
 until then the gap is a deviation in its `CLAUDE.md` (DEV-1.2). A new project
 in `ecosystem.yaml` gets its mark and accent pair in `design/`; Nogat's
 contract test fails without them.
+
+## ECO-056 Numbers count from main
+
+**Decision.** Only a repository's `main` fixes a number; what `develop` and
+topic branches carry binds no user. A version of the standard exists from
+its tag `std-X.Y` on Nogat's `main`, and `develop` carries the next one
+(HUB-6.1). A document's `<n>` in `<tool>-<kind>/<n>` increments only past a
+number released on the producer's `main`; a breaking change to an unreleased
+document keeps its number (AGI-4.1). The first standard published to `main`
+is 1.0, tagged `std-1.0`: the drafts called 2.0 and 2.1 on `develop` are
+1.0, and earlier entries keep those draft names. The shared standards of
+2026-01-29, which preceded Nogat and were never on its `main`, are archived
+as `legacy/shared-2026-01/`, so 1.0 names one thing. Plan:
+`docs/plans/2026-11-03-numbering-from-main.md`.
+
+**Why.** Nogat's `main` holds no standard and `origin` has no tags; read
+from `main`, 2.1 would follow no 1.0 or 2.0. Bumping a document number for a
+format never released (`archiwista-state/2`) leaves consumers a gap with no
+document behind it.
+
+**Rejected.** Keeping 2.1 and explaining the gap (every project would cite
+a version that was never published). Calling the legacy shared standards 1.0
+(two things named 1.0). Incrementing `<n>` at every breaking change on any
+branch (numbers no consumer ever read).

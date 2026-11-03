@@ -1,14 +1,13 @@
-# Adoption plan for standard 2.1
+# Adoption plan for standard 1.0
 
-Part of standard 2.1 · no requirement IDs
+Part of standard 1.0 · no requirement IDs
 
 Each item names the requirement it implements. Work happens in later
-sessions, one project per session, on a `docs/standard-2.1` or
-`chore/standard-2.1` branch, with the author's approval for merges, tags,
-force-pushes and history rewrites (DEV-3.3); pushing the topic branch needs
-none. The phases run in order: 0 Nogat, 1
-history rewrite, 2 tooling, 3 documentation, 4 agent interfaces, 5 releases
-as git tags, 6 PyPI.
+sessions, one project per session, on a topic branch (DEV-3.1), with the
+author's approval for merges, tags, force-pushes and history rewrites
+(DEV-3.3); pushing the topic branch needs none. The phases run in order:
+0 Nogat, 1 history rewrite, 2 tooling, 3 documentation, 4 agent interfaces,
+5 releases as git tags, 6 PyPI.
 
 ---
 
@@ -16,10 +15,10 @@ as git tags, 6 PyPI.
 
 | # | Item | Requirement |
 |---|---|---|
-| 0.1 | Templates: the gate and CI templates are in `standards/ci/` (done); document templates and configs replace the v1 `standards/templates/` and `standards/configs/`, which are owned by root, so the author replaces them; until then the v1 files are not valid | DOC-11.1, DEV-7.6, DEV-7.7 |
+| 0.1 | Templates: the gate and CI templates are in `standards/ci/` (done); document templates and configs replace the legacy `standards/templates/` and `standards/configs/`, which are owned by root, so the author replaces them; until then the legacy files are not valid | DOC-11.1, DEV-7.6, DEV-7.7 |
 | 0.2 | Registry (`ecosystem.yaml`, schema, `scripts/ecosystem.py`, generated `docs/ECOSYSTEM_MAP.md`) and the hub README in English (done) | HUB §2, HUB §4, ECO-005 |
 | 0.3 | Pending Nogat work committed in small Conventional commits as Daldek on a topic branch and merged by pull request | DEV-4.1, DEV-4.2, DEV-3.3 |
-| 0.4 | Standard 2.1 merged to `main` and tagged `std-2.1` | HUB-6.1, ERR-3 |
+| 0.4 | Standard 1.0 merged to `main` and tagged `std-1.0` | HUB-6.1, ERR-3 |
 | 0.5 | Nogat `CLAUDE.md` and generated `AGENTS.md`, both done: the routing table with links to the tools' AGENTS.md | DOC §3, DOC §4, HUB-4.3 |
 | 0.6 | Ruleset for `main` and `develop`, tag ruleset for `v*`, private vulnerability reporting, contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`, `CONTRIBUTORS.md`, pull-request template with the CLA box) | DEV-3.6, DEV-13.7, DEV-16.2, DEV-16.4 |
 
@@ -108,7 +107,7 @@ re-enabled afterwards, and the author notes it in PROGRESS (DEV-3.6).
 ### Data output (DEV §19)
 
 Detail and state per project: [data output](../docs/plans/2026-10-24-data-output.md).
-A producer does this after its own standard 2.1 items; a consumer after the
+A producer does this after its own standard 1.0 items; a consumer after the
 producers' development heads have it.
 
 | Project | Items | State on 2026-10-25 |
@@ -166,7 +165,7 @@ Until the rename of phase 6, a pin names each distribution as the tag's
 - Producers before consumers in phases 4 to 6, in the dependency order of
   `ecosystem.yaml`.
 - DEV §19: Kartograf and IMGWTools in parallel, each after its own standard
-  2.1 items, then the consumers and the integration check; Hydrograf and
+  1.0 items, then the consumers and the integration check; Hydrograf and
   Hydraulik after the first release set.
 - Do not start a project while its own active work is uncommitted.
 

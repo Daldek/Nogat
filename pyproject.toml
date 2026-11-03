@@ -30,7 +30,7 @@ package = false
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-# v1 files, kept verbatim until replaced (DOC-11.1, ADOPTION_PLAN 0.1).
+# Legacy files, kept verbatim until replaced (DOC-11.1, ADOPTION_PLAN 0.1).
 extend-exclude = ["standards/legacy", "standards/templates", "standards/configs"]
 
 [tool.ruff.lint]

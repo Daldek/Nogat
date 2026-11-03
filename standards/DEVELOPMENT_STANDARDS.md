@@ -1,6 +1,6 @@
 # Development standards
 
-Part of standard 2.1 · IDs `DEV-…`
+Part of standard 1.0 · IDs `DEV-…`
 
 Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 [AGENT_INTERFACE.md](AGENT_INTERFACE.md), [ERROR_REGISTRY.md](ERROR_REGISTRY.md),
