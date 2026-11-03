@@ -86,7 +86,7 @@ These rows supersede the rows above where they differ.
 
 | Project | Branch and head | Change |
 |---|---|---|
-| Hydrograf | `develop`, `7974ef0` (version `0.5.0.dev0`), pushed; production in place since 2026-11-02 22:18 | The v0.5.0 candidate. FROZEN until the author merges it into `main` and tags `v0.5.0`: only critical API-breaking fixes or glaring bugs. Pins Hydrolog `4f02ffd` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `26ee459`, IMGWTools `6bd35a4`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.5.0 |
+| Hydrograf | `develop`, `7273410` (version `0.5.0.dev0`), pushed; production in place since 2026-11-02 22:18, rebuilt from `0c78b55` on 2026-11-03 | The v0.5.0 candidate. FROZEN until the author merges it into `main` and tags `v0.5.0`: only critical API-breaking fixes or glaring bugs; one exception so far, `certifi` 2026.10.23 for PYSEC-2026-4320 (`b42d038`, production rebuilt; Archiwista `34e83f4` the same). Pins Hydrolog `4f02ffd` (`fix/snyder-recession`, pushed: Snyder's unit hydrograph runs to the end of its recession, peak = qpR), Kartograf `26ee459`, IMGWTools `6bd35a4`, by commit in `[tool.uv.sources]`. Rollback image `hydrograf-api:pre-0.5.0`, backup `/data/nmt/hydrograf-backup-2026-11-02/`. Production shows the SFINCS result `sfincs-kamiennik-24h-p1` (24 h, p = 1 %, Kamiennik; reservoir maximum 281.43 m). Reads Archiwista's project sets (`--project`/`--set`, closed sets only, ADR-067: H1 of item 8); the bootstrap of the full area from a set (H2, S5) is postponed until after v0.5.0 |
 | Archiwista | `feature/archiwista-projects`, `4027755`; on :8090 since 2026-11-03 ~00:00 | The project-area fix (A1) and draft sets, open or closed with `pins_sha256`, one producer per set (A2), deployed with `TMPDIR` on disk (A3). The rebuild of the index to schema 17 dropped the sessions, the job history and 18 drawn rectangles; they are kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`. Renaming `archiwista-state/2` to `/1` is deferred to the release preparation (the author's rule: identifiers `<name>/<N>` not yet released on `main` stay at `/1`) |
 | Hydrolog | `feature/gui`, `cd6fa52` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `4f02ffd`, pushed and pinned by Hydrograf |
 | Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
@@ -116,12 +116,11 @@ fail until the limit resets.
    `docs/plans/2026-11-01-visual-identity.md`, approved 2026-11-01, steps 1
    to 4 done on `feature/visual-identity`: `design/` (tokens, eight marks,
    guidelines, specimen), DEV-15.3 and ECO-055, the Hydrograf mockup
-   (approved). Step 6: Hydrograf's `feature/visual-identity` (`4098956` on
-   2026-11-02, not merged, not pushed; it also adds AMC, an own rainfall
-   series, CN to 0.1, `GET /api/layers`, the delineation preview and
-   verified (i) texts)
-   runs in production on port 8080 since 2026-11-01; the review instance on
-   8081 is removed. The specimen and mockup stay on the LAN through the
+   (approved). Step 6: Hydrograf's `feature/visual-identity` (AMC, an own
+   rainfall series, CN to 0.1, `GET /api/layers`, the delineation preview and
+   verified (i) texts) is merged into its `develop`, which runs in
+   production on port 8080 (changes on 2026-11-02 and 2026-11-03); the
+   review instance on 8081 is removed. The specimen and mockup stay on the LAN through the
    `nogat-specimen` container (192.168.88.9:8765, outside ufw). The Hydrolog
    mockup (`feature/hydrolog-gui-mockup`, not merged, not pushed) is revised
    after the author's review: no variants and no compute button in the
@@ -173,7 +172,7 @@ fail until the limit resets.
    serves the mockup on :8765. The GUI platform plan
    (`docs/plans/2026-11-01-nogat-gui-platform.md`) stays `Approved:
    pending`. The tools' branches await the author's review and release:
-   - Hydrograf: v0.5.0 frozen on `develop` (`7974ef0`, pushed); next,
+   - Hydrograf: v0.5.0 frozen on `develop` (`7273410`, pushed); next,
      `develop` into `main` and the tag `v0.5.0`, both the author's.
    - Archiwista: `feature/archiwista-projects`.
    - Hydrolog: `fix/snyder-recession`, `feature/gui` (with `chore/nogat-2.1`
