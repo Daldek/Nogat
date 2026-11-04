@@ -55,7 +55,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
 
 [kartograf]: https://raw.githubusercontent.com/Daldek/Kartograf/main/AGENTS.md
-[obserwator]: https://raw.githubusercontent.com/Daldek/IMGWTools/main/AGENTS.md
+[obserwator]: https://raw.githubusercontent.com/Daldek/Obserwator/main/AGENTS.md
 [hydrolog]: https://raw.githubusercontent.com/Daldek/Hydrolog/main/AGENTS.md
 [hydrograf]: https://raw.githubusercontent.com/Daldek/Hydrograf/main/README.md
 [hydraulik]: https://raw.githubusercontent.com/Daldek/Hydraulik/main/AGENTS.md

@@ -125,7 +125,7 @@ projects:
     summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
     profiles: [tool, app]
     status: active
-    repo: https://github.com/Daldek/IMGWTools
+    repo: https://github.com/Daldek/Obserwator
     python_manifests: [pyproject.toml]
     visibility: public
     distribution: {pypi: obserwator, import_name: obserwator}

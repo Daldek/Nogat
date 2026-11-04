@@ -65,7 +65,7 @@ flowchart LR
 |---|---|---|---|
 | [Nogat](https://github.com/Daldek/Nogat) | hub | active | Ecosystem hub with standards, registry and map; future user package installing all tools. |
 | [Kartograf](https://github.com/Daldek/Kartograf) | tool | active | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
-| [Obserwator](https://github.com/Daldek/IMGWTools) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
+| [Obserwator](https://github.com/Daldek/Obserwator) | tool, app | active | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
