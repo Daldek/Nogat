@@ -110,7 +110,7 @@ These rows supersede the rows above where they differ.
 | Nogat | `develop` `d672083` | `candidate-1`: Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `2eb8bd0`; `set check` ok for Retman, Archiwista, Hydraulik and Hydrograf |
 | Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
 | Hydrograf | `develop` `812a432`, production rebuilt ~11:55 | Obserwator `1ee5457` in the image; rollback `/data/nmt/hydrograf-backup-2026-11-04-std10/`, image `hydrograf-api:pre-std10-2026-11-04` |
-| Hydrolog | in progress | Three-step hydrograph wizard in the GUI. The author decided: only `area_km2` is required in a watershed, no model is preselected, Hydrolog's defaults appear as placeholders, the Kamiennik example moves from the form to the user guide, and Hydrolog owns the typical ranges (`OutsideTypicalRange` with `details.field`) |
+| Hydrolog | `develop` `56eff0b`; served on :8070 from that commit since ~15:00 | Three-step „Hydrogram zlewni” in the GUI. Following the author's decisions, a watershed requires only `area_km2`, no model is preselected, Hydrolog's defaults appear as placeholders and the Kamiennik example sits in the user guide, not in the form. Hydrolog owns the typical ranges (`OutsideTypicalRange` with `details.field`). Gate: 6750 passed; 2 e2e tests failed in a run that overlapped other edits and passed on their own (11 passed). Not in `candidate-1` yet (the set keeps `2eb8bd0`). The guide screenshots need retaking by hand |
 
 ## Next
 
