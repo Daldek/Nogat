@@ -55,3 +55,24 @@ Every change is breaking for an unreleased document, so the ids stay `/1`
 | 3 | Retman, Archiwista, Hydraulik, Hydrolog | `set apply`; follow `page`/`cursor`, `message`, `--json` where they use them; Archiwista's range `>=3.0.0.dev0,<4` | each gate |
 
 ## Results
+
+2026-11-04, all three steps done.
+
+| # | Project | Commit (merge into its integration branch) | Verified by |
+|---|---|---|---|
+| 1 | Obserwator | `develop` `1ee5457` (D1–D7, ADR-010); follow-ups `cfde74d` (CHANGELOG entries in the final shapes, `StoreInfo.schema` → `store_schema`) and `84e43a1` (the guide names the `commands-1` fields; the MCP instructions stay below 2 KiB with macOS temp paths) | gate 2634 passed; CI on ubuntu, macOS and Windows green on `84e43a1` (`1ee5457` failed only the 2 KiB test on macOS) |
+| 2 | Nogat | `candidate-1`: Obserwator `ea158dc` → `1ee5457` (`d672083`) | `set check` ok for every consumer |
+| 3 | Retman | `develop` `bc272e2`: list `result` with `page`, notice and error `message`, `hint`, the audit line with `--json`, a catalog reader of `commands-1` | gate 3361 passed; smoke of the 21 Obserwator operations: everything except the large daily sync (time box) and the export that depends on it |
+| 3 | Archiwista | `develop` `4ac2933`: range `>=3.0.0.dev0,<4`, `StoreInfo.store_schema`, Obserwator's `hint` passed on | gate 2783 passed (61 min); e2e of the adapter 82 passed |
+| 3 | Hydraulik | `feature/sfincs-swmm` `9fc9572`: the texts name `obserwator pmaxtp fetch --json` | gate (823 passed); a live document of the new CLI read by `read_pmaxtp_document` equals `fetch_pmaxtp` |
+| 3 | Hydrograf | `develop` `9e50785` (pin only; it calls `fetch_pmaxtp`), production rebuilt (`812a432` records it) | gate 1430 passed; in the image obserwator 3.0.0.dev0; `/health`, a design hydrograph, `fetch_pmaxtp` in the container, 404 problem+json, admin 401 |
+
+Deviations: `commands list` stays the summary `obserwator-command-list/1`. The full catalog in
+`commands-1` is 87 kB, over the 50 kB document limit (DOC-1.7), the same as in Kartograf and
+Hydrolog; AGI-2.4's wording needs a decision in the standard. The `--json` and `--lang` flags are
+run flags of `parse_command`/`format_command`, not options of `commands-1`, as in Kartograf.
+Hydrolog had no Obserwator call to migrate. The set keeps `1ee5457`: `84e43a1` changes only
+guide texts and a test, so it waits for the next bump.
+
+Not caused by this plan: Retman's CI fails on macOS (a store under `/var`, a symlink) and on
+Windows (paths, encoding) since before `01a4efd`; ubuntu is green.

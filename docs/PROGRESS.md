@@ -100,6 +100,18 @@ Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog
 frontend test report, then reached its ChatGPT usage limit; delegations to it
 fail until the limit resets.
 
+### Changes on 2026-11-04
+
+These rows supersede the rows above where they differ.
+
+| Project | Branch and head | Change |
+|---|---|---|
+| Obserwator | `develop` `84e43a1` (3.0.0.dev0) | v3.0.0 blocker B6 done: the result, error and catalog documents of standard 1.0, `--json`, paging by cursor (ADR-010; plan `2026-11-04-obserwator-agent-contracts.md`, Results). CI green on the three systems |
+| Nogat | `develop` `d672083` | `candidate-1`: Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `2eb8bd0`; `set check` ok for Retman, Archiwista, Hydraulik and Hydrograf |
+| Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
+| Hydrograf | `develop` `812a432`, production rebuilt ~11:55 | Obserwator `1ee5457` in the image; rollback `/data/nmt/hydrograf-backup-2026-11-04-std10/`, image `hydrograf-api:pre-std10-2026-11-04` |
+| Hydrolog | in progress | Three-step hydrograph wizard in the GUI. The author decided: only `area_km2` is required in a watershed, no model is preselected, Hydrolog's defaults appear as placeholders, the Kamiennik example moves from the form to the user guide, and Hydrolog owns the typical ranges (`OutsideTypicalRange` with `details.field`) |
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,
