@@ -56,3 +56,13 @@ administrator reads, marks and deletes reports in the app.
 | 2 | Hydrolog | D3–D6, after its Obserwator rename is merged | its gate, a browser smoke |
 
 ## Results
+
+Step 2, Hydrolog (2026-11-03, `2eb8bd0`): `<data_dir>/hydrolog/feedback.sqlite3`,
+`POST /api/feedback`, `/api/admin/feedback[/{id}]` with `X-Admin-Key`
+(`HYDROLOG_ADMIN_API_KEY[_FILE]`, 401 when unset), the admin page `/admin/`;
+gate green (one known flaky e2e test, passing on rerun). Step 1, Archiwista
+(2026-11-04, `e479219`): state schema 5 with `feedback`, `POST
+/api/v1/feedback`, `/api/v1/admin/feedback[/{id}]` for the role `admin`,
+the admin view „Zgłoszenia”; no request id exists, so its diagnostics keep
+the problem code and reason instead; gate green (2,782 passed). Neither is
+deployed.

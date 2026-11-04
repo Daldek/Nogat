@@ -224,13 +224,32 @@ fail until the limit resets.
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
 9. IMGWTools becomes Obserwator with v3.0.0 (ECO-057): plan
-   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, approved 2026-11-03.
-   Step 1 (Nogat: the registry entry, standard texts, ADOPTION_PLAN 6.1,
-   error registry, design marks and mockups, `AGENTS.md` and the map) is
-   done on `feature/obserwator`, not merged. Next: step 2 in the `IMGWTools`
-   repository, then the consumers (step 3), Kartograf's marker and
-   Hydrograf's docs (step 4); the repository rename and its URLs are the
-   author's (step 5).
+   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`. Steps 1–4 are done
+   and pushed (2026-11-03/04): Nogat, the producer (`IMGWTools` `develop`
+   `ea158dc`, ADR-009, CI green on Linux, macOS and Windows), Archiwista,
+   Retman, Hydraulik, Hydrolog, Kartograf's marker and Hydrograf (docs, its
+   pins and imports, admitted under its freeze). Left: step 5, the author's
+   rename of the GitHub repository, then the URLs in every repository.
+   Archiwista's production (`:8090`) still runs the old code: its next deploy
+   rebuilds the index (schema 18) and needs `imgw` renamed to `obserwator`
+   in `[[stores]]` of its `config.toml`; Hydrograf's production needs an
+   image rebuild by the author to use the new pins.
+10. One set of pins (plan `docs/plans/2026-11-03-one-pin-set.md`):
+   `release-sets/candidate-1` holds Kartograf `9deaa314`, Obserwator
+   `ea158dc6`, Hydrolog `2eb8bd0c`; every consumer pins them (`set check`
+   exit 0 on 2026-11-04). To move a producer: `set bump <Project>`, commit,
+   then per consumer `set apply --project <Consumer> --path <worktree>`,
+   `uv lock`, its gate, merge, and `set check`.
+11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog (plan
+   `docs/plans/2026-11-03-feedback-in-archiwista-and-hydrolog.md`): both
+   merged into `develop` (Hydrolog `2eb8bd0`, Archiwista `e479219`); not
+   deployed. Hydrograf's 26 reports are backed up in
+   `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
+12. Retman covers every basic route of the registry for Kartograf (10
+   operations), Obserwator (19) and Hydrolog (9); a smoke of all 38 with the
+   real tools at the set's commits: 43 cases planned, 41 run, 2 skipped as
+   large downloads, none failed (its `docs/PROGRESS.md`). Eval rows of the
+   new operations are unmeasured: no model server on this machine.
 
 ## Open questions
 

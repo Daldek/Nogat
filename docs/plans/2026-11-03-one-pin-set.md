@@ -53,3 +53,11 @@ commits" as one command per project.
   `38855a1`. `set check` then: Retman's Kartograf pin matches; Hydrograf (3),
   Hydraulik (2), Retman (Obserwator) and Archiwista (2) differ; Hydraulik
   does not declare Kartograf (it calls its CLI).
+- Step 2 (2026-11-03/04): every consumer applies candidate-1 (Hydrograf
+  `e1b06dd`, Hydraulik `51204b8`, Retman `30691e6`, Archiwista `e479219`);
+  Hydrolog moved to `2eb8bd0` by `set bump`; `set check` exit 0, with
+  Hydraulik's Kartograf "not declared" (it calls the CLI).
+- Step 3 (2026-11-04): Retman offers every basic route of Kartograf,
+  Obserwator and Hydrolog (38 operations, Hydrolog edge active in the
+  registry); a smoke of all of them with the real tools at the set's commits
+  planned 43 cases, ran 41, skipped 2 large downloads, none failed.

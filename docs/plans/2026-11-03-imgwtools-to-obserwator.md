@@ -78,3 +78,11 @@ is still found); standard texts, ADOPTION_PLAN 6.1, the error registry, the
 CI template's audit list, the mark `obserwator.svg`, the token
 `--tool-obserwator` and the Hydrolog mockup; `AGENTS.md` and
 `docs/ECOSYSTEM_MAP.md` regenerated.
+
+Steps 2–4 (2026-11-03/04, all merged and pushed): the producer `IMGWTools`
+`develop` `ea158dc` (package, command, variables, ids, marker, MCP names,
+exceptions; ADR-009; gate and the CI matrix green); Retman `bad0ac1`,
+Archiwista `e479219` (with its feedback), Hydraulik `feature/sfincs-swmm`
+`6a74b5a`, Hydrolog `38855a1`, Kartograf `9deaa314` (the marker, admitted
+under its freeze), Hydrograf `63bd2c6` (docs) and `f4dca77` (pins and
+imports, plan `2026-11-03-one-pin-set.md` D5). Step 5 is the author's.
