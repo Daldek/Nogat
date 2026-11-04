@@ -10,5 +10,5 @@ consumer and `set bump <P>` moves a member.
 | Member | Commit |
 |---|---|
 | Kartograf | [`9deaa314c88f89ea2d9308481e0c0b04751fc792`](https://github.com/Daldek/Kartograf/commit/9deaa314c88f89ea2d9308481e0c0b04751fc792) |
-| Obserwator | [`ea158dc6f703a5ababd91ff54e7ddec35b4f389b`](https://github.com/Daldek/IMGWTools/commit/ea158dc6f703a5ababd91ff54e7ddec35b4f389b) |
+| Obserwator | [`ea158dc6f703a5ababd91ff54e7ddec35b4f389b`](https://github.com/Daldek/Obserwator/commit/ea158dc6f703a5ababd91ff54e7ddec35b4f389b) |
 | Hydrolog | [`2eb8bd0c0af7a4219bfe9a0f756c1fa27cc15c52`](https://github.com/Daldek/Hydrolog/commit/2eb8bd0c0af7a4219bfe9a0f756c1fa27cc15c52) |

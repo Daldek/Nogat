@@ -8,6 +8,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Obserwator's registry `repo` is `https://github.com/Daldek/Obserwator` after the repository rename (plan step 5); HUB-3.1 and the ECO-057 note follow.
+
 - IMGWTools becomes Obserwator with v3.0.0 (ECO-057, plan
   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, step 1). Registry: the
   project `Obserwator`, distribution and import name `obserwator`, the
@@ -190,6 +192,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   project's set as flat category folders or a ZIP (ECO-054).
 
 ### Changed
+
+- Obserwator's registry `repo` is `https://github.com/Daldek/Obserwator` after the repository rename (plan step 5); HUB-3.1 and the ECO-057 note follow.
 
 - `scripts/gate.sh` follows `standards/ci/gate.sh`: `uv sync --locked`, the
   DEV-7.2 rule set, mypy over `scripts/` and `tests/`, pytest with coverage.

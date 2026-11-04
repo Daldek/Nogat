@@ -1062,7 +1062,9 @@ institute keeps its name: IMGW-PIB, the dataset ids `pl.imgw.*` and
 identifiers naming the provider stay. The repository URL and the workspace
 directory `IMGWTools` stay until the author renames the repository, so a
 checkout is found by the repository's name, not the registry `name`
-(HUB-3.1). Dated records keep the old name. Plan:
+(HUB-3.1). Dated records keep the old name. On 2026-11-04 the author
+renamed the repository to `Daldek/Obserwator`; the registry `repo` and the
+checkout directory `Obserwator` follow (plan step 5). Plan:
 `docs/plans/2026-11-03-imgwtools-to-obserwator.md`.
 
 **Why.** The author's decision of 2026-11-03: IMGW-PIB is an institute, not
