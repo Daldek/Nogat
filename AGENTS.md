@@ -49,7 +49,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Run a SFINCS flood model and read its maxima and water balance | [Hydraulik][hydraulik] (research) | `hydraulik model run` |
 | Couple a SFINCS model with an EPA SWMM sewer network | [Hydraulik][hydraulik] (research) | `hydraulik model couple` |
 | Run a SWMM sewer network alone with an inflow hydrograph | [Hydraulik][hydraulik] (research) | `hydraulik swmm run` |
-| Plan a data download or export written in Polish, then run it once confirmed | [Retman][retman] | `retman plan run` |
+| Plan a download, export or calculation written in Polish, then run it once confirmed | [Retman][retman] | `retman plan run` |
 | Browse a Kartograf store on a map in the browser | [Archiwista][archiwista] | `archiwista serve` |
 | Search the file catalog of a Kartograf store from a script | [Archiwista][archiwista] | `archiwista search` |
 | Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
@@ -71,7 +71,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | Hydrograf | active | REST `/api` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
-| Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over the ecosystem tools. |
+| Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
 
 ## Calling a tool

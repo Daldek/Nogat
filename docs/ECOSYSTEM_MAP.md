@@ -53,7 +53,7 @@ flowchart LR
   Hydrolog -- library/file --> Hydraulik
   Kartograf -- library --> Retman
   Obserwator -- library --> Retman
-  Hydrolog -. planned: library .-> Retman
+  Hydrolog -- library --> Retman
   Hydrograf -. planned: rest .-> Retman
   Kartograf -- library/store --> Archiwista
   Obserwator -. planned: library/store .-> Archiwista
@@ -69,7 +69,7 @@ flowchart LR
 | [Hydrolog](https://github.com/Daldek/Hydrolog) | tool | active | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | [Hydrograf](https://github.com/Daldek/Hydrograf) | app | active | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
-| [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over the ecosystem tools. |
+| [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and Obserwator stores. |
 
 ## Dependencies and exchanged data
@@ -88,7 +88,7 @@ flowchart LR
 | Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
 | Retman | Obserwator | optional | active | library | `obserwator-command-list/1`, `obserwator-commands/1`, `obserwator-result/1`, `obserwator-plan/1`, `obserwator-store/1`, `obserwator-archives`, `obserwator-series-csv`, `obserwator-testing` |
-| Retman | Hydrolog | optional | planned | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
+| Retman | Hydrolog | optional | active | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
 | Archiwista | Obserwator | optional | planned | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1` |
@@ -105,7 +105,6 @@ flowchart LR
 - **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
 - **Hydraulik → Obserwator**: uses `fetch_pmaxtp`; rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that obserwator pmaxtp fetch --json prints.
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
-- **Retman → Hydrolog**: Retman PRD roadmap.
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
 - **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
@@ -154,10 +153,10 @@ flowchart LR
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
 | `hydrolog-hydrograph-csv` | dataset | Hydraulik | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
 | `hydrolog-network/1` | document | — | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
-| `hydrolog-result/1` | document | Hydraulik, Retman (planned) | Result envelope (command, inputs, result, files with SHA-256, notices). |
+| `hydrolog-result/1` | document | Hydraulik, Retman | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
-| `hydrolog-command-list/1` | catalog | Retman (planned) | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
-| `hydrolog-commands/1` | catalog | Retman (planned) | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
+| `hydrolog-command-list/1` | catalog | Retman | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
+| `hydrolog-commands/1` | catalog | Retman | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
 | `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
 | `hydrolog-gui` | service | — | Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host. |
 
