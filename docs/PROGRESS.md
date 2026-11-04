@@ -110,7 +110,7 @@ These rows supersede the rows above where they differ.
 | Nogat | `develop` `d672083` | `candidate-1`: Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `2eb8bd0`; `set check` ok for Retman, Archiwista, Hydraulik and Hydrograf |
 | Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
 | Hydrograf | `develop` `812a432`, production rebuilt ~11:55 | Obserwator `1ee5457` in the image; rollback `/data/nmt/hydrograf-backup-2026-11-04-std10/`, image `hydrograf-api:pre-std10-2026-11-04` |
-| Hydrolog | `develop` `a651e09`; served on :8070 from that commit | „Hydrogram zlewni” has three steps. Following the author's decisions, a watershed requires only `area_km2`, no model is preselected and Hydrolog's defaults appear as placeholders. Every GUI section starts empty, and the worked examples are in the user guide. Hydrolog's single table of typical ranges, each with its source (ADR-0017), is the only source of ranges: the catalog serves `typical_ranges` in single-command documents, and the GUI keeps no numbers. Nash n and K have no published source, are kept and marked to be verified (`outside_unverified_range`). Gate: 6827 passed. Not in `candidate-1` (the set keeps `2eb8bd0`; the author has changes before the bump). The guide screenshots of Sieć, Statystyka, Polecenia and Kalkulatory need retaking by hand |
+| Hydrolog | `develop` `e7b97ee`; served on :8070 from that commit | „Hydrogram zlewni” has three steps driven by the chosen model; every GUI section starts empty, with worked examples in the guide; typical ranges come only from Hydrolog's table with sources (ADR-0017), Nash n and K marked to be verified. The PMAXTP depth is fetched for a point through Obserwator (`precip pmaxtp`, extra `pmaxtp` pinned to `candidate-1`, ADR-0018), read-only in the GUI. The defects of GPT's browser test (a long Nash series, two „Wyczyść” cases) are fixed. Gate: 6882 passed. Not in `candidate-1` (the set keeps `2eb8bd0`) until the author's further changes |
 
 ## Next
 
@@ -235,27 +235,18 @@ These rows supersede the rows above where they differ.
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
-9. IMGWTools becomes Obserwator with v3.0.0 (ECO-057): plan
-   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`. Steps 1–4 are done
-   and pushed (2026-11-03/04): Nogat, the producer (`IMGWTools` `develop`
-   `ea158dc`, ADR-009, CI green on Linux, macOS and Windows), Archiwista,
-   Retman, Hydraulik, Hydrolog, Kartograf's marker and Hydrograf (docs, its
-   pins and imports, admitted under its freeze). Left: step 5, the author's
-   rename of the GitHub repository, then the URLs in every repository.
-   Archiwista's production (`:8090`) still runs the old code: its next deploy
-   rebuilds the index (schema 18) and needs `imgw` renamed to `obserwator`
-   in `[[stores]]` of its `config.toml`; Hydrograf's production needs an
-   image rebuild by the author to use the new pins.
+9. IMGWTools is Obserwator (ECO-057, plan
+   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done in every
+   repository, the GitHub repository renamed and the URLs updated; productions
+   follow (changes on 2026-11-04).
 10. One set of pins (plan `docs/plans/2026-11-03-one-pin-set.md`):
    `release-sets/candidate-1` holds Kartograf `9deaa314`, Obserwator
-   `ea158dc6`, Hydrolog `2eb8bd0c`; every consumer pins them (`set check`
-   exit 0 on 2026-11-04). To move a producer: `set bump <Project>`, commit,
-   then per consumer `set apply --project <Consumer> --path <worktree>`,
-   `uv lock`, its gate, merge, and `set check`.
-11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog (plan
-   `docs/plans/2026-11-03-feedback-in-archiwista-and-hydrolog.md`): both
-   merged into `develop` (Hydrolog `2eb8bd0`, Archiwista `e479219`); not
-   deployed. Hydrograf's 26 reports are backed up in
+   `1ee54573`, Hydrolog `2eb8bd0c`; every consumer pins them, Hydrolog itself
+   pins Obserwator (extra `pmaxtp`). To move a producer: `set bump`, then per
+   consumer `set apply`, `uv lock`, its gate, merge, `set check`. Hydrolog is
+   not bumped until the author's further changes.
+11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
+   with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
 12. Retman covers every basic route of the registry for Kartograf (10
    operations), Obserwator (19) and Hydrolog (9); a smoke of all 38 with the

@@ -42,7 +42,7 @@ flowchart LR
   src_gugik --> Archiwista
   src_osm --> Archiwista
   Kartograf -. store, no package .-> Obserwator
-  Obserwator -. file, no package .-> Hydrolog
+  Obserwator -- library/file --> Hydrolog
   Kartograf -. file, no package .-> Hydrolog
   Kartograf -- library --> Hydrograf
   Hydrolog -- library --> Hydrograf
@@ -77,7 +77,7 @@ flowchart LR
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
 | Obserwator | Kartograf | data | active | store | `kartograf-store/1` |
-| Hydrolog | Obserwator | data | active | file | `obserwator-series-csv` |
+| Hydrolog | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
 | Hydrograf | Hydrolog | runtime | active | library | `watershed-parameters`, `hydrolog-python-api` |
@@ -96,7 +96,7 @@ flowchart LR
 ### Details
 
 - **Obserwator → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
-- **Hydrolog → Obserwator**: No package dependency; stats commands read series CSV exported by `obserwator series export --output FILE`.
+- **Hydrolog → Obserwator**: uses `fetch_pmaxtp`; precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`, `list_segments`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
@@ -142,7 +142,7 @@ flowchart LR
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
 | `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
 | `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
-| `obserwator-pmaxtp` | document | Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
+| `obserwator-pmaxtp` | document | Hydrolog, Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
 
 ### Hydrolog

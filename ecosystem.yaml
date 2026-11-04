@@ -265,11 +265,12 @@ projects:
         summary: Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host.
     depends_on:
       - project: Obserwator
-        kind: data
+        kind: optional
         status: active
-        via: [file]
-        exchange: [obserwator-series-csv]
-        note: No package dependency; stats commands read series CSV exported by `obserwator series export --output FILE`.
+        via: [library, file]
+        exchange: [obserwator-pmaxtp, obserwator-series-csv]
+        uses: [fetch_pmaxtp]
+        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`.
       - project: Kartograf
         kind: data
         status: active
