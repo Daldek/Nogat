@@ -94,11 +94,7 @@ These rows supersede the rows above where they differ.
 | Hydrolog | `feature/gui`, `a328656` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `1708a09`, pushed and pinned by Hydrograf |
 | Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
 
-Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog
-(`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
-`nogat-specimen` container keeps 8765. GPT-6-Sol wrote Hydrograf's guide and
-frontend test report, then reached its ChatGPT usage limit; delegations to it
-fail until the limit resets.
+Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the `nogat-specimen` container keeps 8765.
 
 ### Changes on 2026-11-04
 
@@ -107,10 +103,7 @@ These rows supersede the rows above where they differ.
 | Project | Branch and head | Change |
 |---|---|---|
 | Obserwator | `develop` `84e43a1` (3.0.0.dev0) | v3.0.0 blocker B6 done: the result, error and catalog documents of standard 1.0, `--json`, paging by cursor (ADR-010; plan `2026-11-04-obserwator-agent-contracts.md`, Results). CI green on the three systems |
-| Nogat | `develop` `d672083` | `candidate-1`: Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `2eb8bd0`; `set check` ok for Retman, Archiwista, Hydraulik and Hydrograf |
 | Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
-| Hydrograf | `develop` `aecd2c0`, production since 2026-11-05 ~10:30 | The v0.5.0 candidate now holds, by the author's decision, the Lutz fix (Nash by Lutz uses the land cover's forest and urban shares; Nash–Lutz results change) and the hand-off to Hydrolog („Kopiuj do Hydrologa”, „Plik przekazania”, ADR-068, carrying Lutz's inputs and the area actually used). Hydrolog reproduces n, K and the result exactly: its comparison says „zgodny”. Rollback `/data/nmt/hydrograf-backup-2026-11-05-lutz/` (image `hydrograf-api:pre-lutz-2026-11-05`). Waits for the author's confirmation, then v0.5.0 |
-| Hydrolog | `develop` `02eb42c`; served on :8070 | „Hydrogram zlewni” has three steps driven by the chosen model; every GUI section starts empty, with worked examples in the guide; typical ranges come only from Hydrolog's table with sources (ADR-0017), Nash n and K marked to be verified. The PMAXTP depth is fetched for a point through Obserwator (`precip pmaxtp`, ADR-0018). Hydrograf's hand-off, the watershed alone included, is pasted from the clipboard. Not in `candidate-1` (the set keeps `2eb8bd0`) until the author's further changes |
 
 ### Changes on 2026-11-05
 
