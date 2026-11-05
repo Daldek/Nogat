@@ -112,6 +112,17 @@ These rows supersede the rows above where they differ.
 | Hydrograf | `develop` `aecd2c0`, production since 2026-11-05 ~10:30 | The v0.5.0 candidate now holds, by the author's decision, the Lutz fix (Nash by Lutz uses the land cover's forest and urban shares; Nash–Lutz results change) and the hand-off to Hydrolog („Kopiuj do Hydrologa”, „Plik przekazania”, ADR-068, carrying Lutz's inputs and the area actually used). Hydrolog reproduces n, K and the result exactly: its comparison says „zgodny”. Rollback `/data/nmt/hydrograf-backup-2026-11-05-lutz/` (image `hydrograf-api:pre-lutz-2026-11-05`). Waits for the author's confirmation, then v0.5.0 |
 | Hydrolog | `develop` `02eb42c`; served on :8070 | „Hydrogram zlewni” has three steps driven by the chosen model; every GUI section starts empty, with worked examples in the guide; typical ranges come only from Hydrolog's table with sources (ADR-0017), Nash n and K marked to be verified. The PMAXTP depth is fetched for a point through Obserwator (`precip pmaxtp`, ADR-0018). Hydrograf's hand-off, the watershed alone included, is pasted from the clipboard. Not in `candidate-1` (the set keeps `2eb8bd0`) until the author's further changes |
 
+### Changes on 2026-11-05
+
+These rows supersede the rows above where they differ. Details: Results of `plans/2026-11-05-official-tc-inputs.md`.
+
+| Project | Branch and head | Change |
+|---|---|---|
+| Nogat | `develop` `0a2b054` | `candidate-1`: Hydrolog `1ffcd6b` (Kartograf `9deaa31`, Obserwator `1ee5457` unchanged); `set check` ok. The example of `nogat-handoff/1` carries the longest flow path (`8727f6e`) |
+| Hydrolog | `develop` `1ffcd6b`; served on :8070 | Time of concentration from the inputs its source defines (ADR-0019): `flow_path_length_km`, `flow_path_slope_m_per_m`, no substitutes; `NashIUH.from_tc` removed |
+| Hydrograf | `develop` `a8a89e9`, production since 2026-11-05 12:53 UTC | tc only through Hydrolog; flow path heads, overland segments and channel sources measured (ADR-070, migration 004, backfilled); thresholds 1 and 10 km²; PMAXTP depth as the watershed mean by Thiessen polygons (ADR-069) with an optional areal reduction factor; tester reports #13, #14, #16, #20, #23–#27, #35, #37, #39, #40. Hydrolog's comparison of the hand-off reads „zgodny” for every tc method. Rollback `/data/nmt/hydrograf-backup-2026-11-05-v050/` (image `hydrograf-api:pre-v050`, runbook §9). Waits for the author's confirmation, then v0.5.0 |
+| Retman, Hydraulik | `develop` `d03cf24`, `feature/sfincs-swmm` `1225172` | pinned to Hydrolog `1ffcd6b`, gates green |
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,
