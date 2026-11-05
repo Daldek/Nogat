@@ -27,7 +27,7 @@ Today Hydrolog takes Kirpich's and NRCS's length from the main channel with subs
 
 | # | Decision |
 |---|---|
-| D1 | Hydrolog's `WatershedParameters` gains optional `flow_path_length_km` (longest flow path, divide to outlet) and `flow_path_slope_m_per_m` ((elevation of its head on the divide − outlet) / its length); the network schema follows. |
+| D1 | Hydrolog's `WatershedParameters` gains optional `flow_path_length_km` (longest flow path, from the hydraulically most distant point of the watershed to the outlet) and `flow_path_slope_m_per_m` ((elevation of that point − outlet) / its length); the network schema follows. That point lies on a ridge, usually the divide, but it can be a ridge inside the watershed: NEH 630 ch. 15 p. 15-5 takes the longest flow path "to represent the hydraulically most distant point in the watershed", and Fang et al. 2005 eq. 3.14 measures from "the most remote point in the watershed" (erratum 2026-11-05; the computation was already so). |
 | D2 | `TC_INPUTS` without substitutes: Kirpich = flow path length and slope; NRCS = flow path length, mean slope, CN; Giandotti = channel length, area, mean and min elevation; FAA and Kerby = overland length and slope plus C / N; Kerby–Kirpich = overland fields plus the flow path (channel = flow path − overland). A missing input is `validation_error` `missing_field` naming it. |
 | D3 | `tc kerby-kirpich` changes to the flow-path fields (clean cut-over); its channel ranges are renamed to the flow-path fields. |
 | D4 | FAA C and Kerby N are inputs; nothing derives them (no sourced class table). |
