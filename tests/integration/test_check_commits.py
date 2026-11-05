@@ -34,10 +34,16 @@ def _check(
     repo: Path, message: str, email: str = AUTHOR
 ) -> subprocess.CompletedProcess[str]:
     _git(repo, "commit", "-q", "--allow-empty", "-m", message, email=email)
+    # The check's own settings are pinned: CI runs the suite with GATE_CHECK_AUTHOR=0.
     return subprocess.run(
         ["bash", str(SCRIPT)],
         cwd=repo,
-        env={**os.environ, "GATE_COMMIT_RANGE": "HEAD^!"},
+        env={
+            **os.environ,
+            "GATE_COMMIT_RANGE": "HEAD^!",
+            "GATE_CHECK_AUTHOR": "1",
+            "GATE_AUTHOR_EMAIL": AUTHOR,
+        },
         capture_output=True,
         text=True,
     )
