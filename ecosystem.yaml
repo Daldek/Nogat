@@ -263,6 +263,9 @@ projects:
       - id: hydrolog-gui
         kind: service
         summary: Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host.
+      - id: hydrolog-series/1
+        kind: document
+        summary: A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020).
     depends_on:
       - project: Obserwator
         kind: optional
@@ -456,3 +459,9 @@ projects:
         via: [library, store]
         exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1]
         note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
+      - project: Hydrolog
+        kind: data
+        status: active
+        via: [file]
+        exchange: [hydrolog-series/1]
+        note: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
