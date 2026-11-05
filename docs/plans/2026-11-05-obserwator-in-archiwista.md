@@ -1,6 +1,6 @@
 # Plan: Obserwator's data in Archiwista, read and fetched, on the test server
 
-Approved: 2026-11-05, the author („Obserwator - od razu przejdź do pisania planu i wdrożenia”); the decisions below by delegated authority.
+Not approved for implementation. Written on 2026-11-05 at the author's request („przygotuj nową gałąź dla tej współpracy i napisz plan, ale nie wdrażaj go”), on branch `plan/obserwator-in-archiwista`; work starts after the author approves it. Archiwista's own plan of steps 1 and 2: `docs/plans/2026-11-05-obserwator-actions.md` on its branch `feature/obserwator-actions`.
 
 Requirements: HUB-5.2 (producers before consumers), ECO-054, ECO-057, Archiwista SPEC 12.2 (KB-1..KB-5 as the model) and 12.7 (IMGW-1..IMGW-13, IMGW-21), release v0.5 „IMGW stations” of the SPEC (section 14).
 
