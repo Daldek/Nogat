@@ -100,6 +100,18 @@ the precomputed watershed of the point.
   set, so the instance downloads nothing itself.
 - PMAXTP grid at 2 km (about 1,400 points, one Obserwator request each).
 
+### D7. Only the main watercourses of BDOT10k are burned into the DEM (the author, 2026-11-06)
+
+- Ditch networks (`OT_SWRM_L`) form loops that falsify the flow directions when burned. For this
+  instance the burning takes `OT_SWRS_L` with `PRZEBIEG = 'ciek główny'` (no side arms) that is a
+  river (`RODZAJ = 'rzeka'`) or carries an MPHP identifier (`IDENTYFIKATORMPHP`), and `OT_SWKN_L`
+  only with an MPHP identifier; no `OT_SWRM_L`. Water polygons (`OT_PTWP_A`) stay as today.
+  Measured in county 3001: ditches 1,643 km, all SWRS 554 km, of which rivers 41 km and MPHP
+  streams 188 features.
+- A Hydrograf setting (`stream_burning` in `config.yaml`, default: today's three layers, so
+  production's results do not change); the stream table `bdot_streams` (names at a point) and the
+  lake-outflow classification keep every layer.
+
 ## Steps
 
 | # | Project | Branch | Step | Depends on |
@@ -109,6 +121,7 @@ the precomputed watershed of the point.
 | 3 | Hydrograf | `feature/pgw-units` | D3 (reads the GeoPackage of step 1; fixtures from `kartograf.testing`) | 1, 2 |
 | 4 | Hydrograf | `feature/windowed-reads` | D4 | 2 |
 | 5 | Hydrograf | `feature/compose-instances` | D5, the compose names | – |
+| 5a | Hydrograf | `feature/burn-main-streams` | D7, the `stream_burning` setting | – |
 | 6 | host | – | D6 inputs: store init, downloads, Archiwista project and set | 1 |
 | 7 | host | – | the instance: worktree, `.env`, secrets, `docker compose -p hydroni up`, bootstrap by units, verification | 3, 4, 5, 6 |
 
