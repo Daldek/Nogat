@@ -1,13 +1,11 @@
 # Progress
 
-Audited on 2026-10-28: local branches, worktrees, recent commits, manifests,
-project progress documents and `git ls-remote --heads --tags origin` (tags
-checked for Nogat). No tests or gates were run; earlier gate results below
-are historical evidence, not verification of the current heads. Items 4, 6,
-7, 8 and 9 of Next and the changes from 2026-11-01 to 2026-11-03 are current
-as of 2026-11-03 and supersede the project rows below where they differ.
-IMGWTools is called Obserwator from v3.0.0 (ECO-057); dated sections keep
-the old name.
+Audited on 2026-10-28: local branches, worktrees, recent commits, manifests, project progress
+documents and `git ls-remote --heads --tags origin` (tags checked for Nogat). No tests or gates
+were run; earlier gate results below are historical evidence, not verification of the current
+heads. Items 4, 6, 7, 8 and 9 of Next and the changes from 2026-11-01 to 2026-11-03 are current
+as of 2026-11-03 and supersede the project rows below where they differ. IMGWTools is called
+Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 
 ## Status
 
@@ -105,26 +103,17 @@ These rows supersede the rows above where they differ.
 | Obserwator | `develop` `84e43a1` (3.0.0.dev0) | v3.0.0 blocker B6 done: the result, error and catalog documents of standard 1.0, `--json`, paging by cursor (ADR-010; plan `2026-11-04-obserwator-agent-contracts.md`, Results). CI green on the three systems |
 | Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
 
-### Changes on 2026-11-05
+### Changes on 2026-11-05 and 2026-11-06
 
-These rows supersede the rows above where they differ. Details: Results of `plans/2026-11-05-official-tc-inputs.md`.
+These rows supersede the rows above where they differ. Details: Results of `plans/2026-11-05-official-tc-inputs.md` and `plans/2026-11-05-archiwista-series-to-hydrolog.md`, and each project's `docs/PROGRESS.md`.
 
 | Project | Branch and head | Change |
 |---|---|---|
-| Nogat | `develop` `0a2b054` | `candidate-1`: Hydrolog `1ffcd6b` (Kartograf `9deaa31`, Obserwator `1ee5457` unchanged); `set check` ok. The example of `nogat-handoff/1` carries the longest flow path (`8727f6e`) |
-| Hydrolog | `develop` `88ac424`; :8070 serves `c16976e` | Time of concentration from the inputs its source defines (ADR-0019): `flow_path_length_km`, `flow_path_slope_m_per_m`, no substitutes; `NashIUH.from_tc` removed; the longest flow path is described from the hydraulically most distant point |
+| Nogat | `develop` `9aa55c9` | `candidate-1`: Hydrolog `1ffcd6b` (Kartograf `9deaa31`, Obserwator `1ee5457` unchanged); `set check` ok. The example of `nogat-handoff/1` carries the longest flow path (`8727f6e`). The series plan merged (`269c388`), its Results filled. CI was red on every push since 2026-11-04: `tests/integration/test_check_commits.py` inherited CI's `GATE_CHECK_AUTHOR=0`; the test now pins the check's settings; CI green |
+| Hydrolog | `develop` `88dbe71`; :8070 serves `33b5568` (a systemd user unit) | Time of concentration from the inputs its source defines (ADR-0019): `flow_path_length_km`, `flow_path_slope_m_per_m`, no substitutes; `NashIUH.from_tc` removed. „Wczytaj z Archiwisty” (ADR-0020); fixes for macOS and Windows (MIME types of the GUI's scripts, LF reports, the guide on a phone, two racy browser tests). CI green on Linux and macOS; Windows reports without blocking until its port (the author's decision of 2026-11-06, deviation DEV-7.7 in Hydrolog's CLAUDE.md) |
 | Hydrograf | `develop` `520f886`, production (since 2026-11-05 12:53 UTC, updated in place the same day) | tc only through Hydrolog; flow path heads, overland segments and channel sources measured (ADR-070, migration 004, backfilled); thresholds 1 and 10 km²; PMAXTP depth as the watershed mean by Thiessen polygons (ADR-069) with an optional areal reduction factor; tester reports #13, #14, #16, #20, #23–#27, #35, #37, #39, #40; the author's review: boundary flow path from the watershed's boundary cells, full unsimplified lines, legend „Zlewnia” (plan Results 5). Hydrolog's comparison of the hand-off reads „zgodny” for every tc method. Rollback `/data/nmt/hydrograf-backup-2026-11-05-v050/` (image `hydrograf-api:pre-v050`, runbook §9). No `v0.5.0` tag yet: the author continues the review |
 | Retman, Hydraulik | `develop` `d03cf24`, `feature/sfincs-swmm` `1225172` | pinned to Hydrolog `1ffcd6b`, gates green |
-
-### Changes on 2026-11-05 (evening) and 2026-11-06
-
-These rows supersede the rows above where they differ. Details: Results of `plans/2026-11-05-archiwista-series-to-hydrolog.md` and each project's `docs/PROGRESS.md`.
-
-| Project | Branch and head | Change |
-|---|---|---|
-| Nogat | `develop` `9aa55c9` | The series plan merged (`269c388`) and its Results filled. CI was red on every push since 2026-11-04: `tests/integration/test_check_commits.py` inherited CI's `GATE_CHECK_AUTHOR=0`; the test now pins the check's settings (`fix/check-commits-test-env`); CI green |
 | Archiwista | `develop` `cd29b6f`; :8090 runs it since 2026-11-06 | Merged and deployed: Obserwator's commands, monthly and annual charts (A-ADR-051), the map's station products, the series hand-off to Hydrolog (A-ADR-052) with a choice of data and variable; the map draws a station catalog without series (ČHMÚ's `store catalogs`). The store `zespol` lives on the SMB share `/mnt/magazyn/agent-tmp/archiwista-zespol/`. CI green for the first time (`8f34a4c`): the gate's limit 30 → 90 min, the run without the extra `obserwator` fixed |
-| Hydrolog | `develop` `88dbe71`; :8070 serves `33b5568` (a systemd user unit) | „Wczytaj z Archiwisty” (ADR-0020); fixes for macOS and Windows (MIME types of the GUI's scripts, LF reports, the guide on a phone, two racy browser tests). CI green on Linux and macOS; Windows reports without blocking until its port (the author's decision of 2026-11-06, deviation DEV-7.7 in Hydrolog's CLAUDE.md) |
 
 ## Next
 
