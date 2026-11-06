@@ -116,6 +116,16 @@ These rows supersede the rows above where they differ. Details: Results of `plan
 | Hydrograf | `develop` `520f886`, production (since 2026-11-05 12:53 UTC, updated in place the same day) | tc only through Hydrolog; flow path heads, overland segments and channel sources measured (ADR-070, migration 004, backfilled); thresholds 1 and 10 km²; PMAXTP depth as the watershed mean by Thiessen polygons (ADR-069) with an optional areal reduction factor; tester reports #13, #14, #16, #20, #23–#27, #35, #37, #39, #40; the author's review: boundary flow path from the watershed's boundary cells, full unsimplified lines, legend „Zlewnia” (plan Results 5). Hydrolog's comparison of the hand-off reads „zgodny” for every tc method. Rollback `/data/nmt/hydrograf-backup-2026-11-05-v050/` (image `hydrograf-api:pre-v050`, runbook §9). No `v0.5.0` tag yet: the author continues the review |
 | Retman, Hydraulik | `develop` `d03cf24`, `feature/sfincs-swmm` `1225172` | pinned to Hydrolog `1ffcd6b`, gates green |
 
+### Changes on 2026-11-05 (evening) and 2026-11-06
+
+These rows supersede the rows above where they differ. Details: Results of `plans/2026-11-05-archiwista-series-to-hydrolog.md` and each project's `docs/PROGRESS.md`.
+
+| Project | Branch and head | Change |
+|---|---|---|
+| Nogat | `develop` `9aa55c9` | The series plan merged (`269c388`) and its Results filled. CI was red on every push since 2026-11-04: `tests/integration/test_check_commits.py` inherited CI's `GATE_CHECK_AUTHOR=0`; the test now pins the check's settings (`fix/check-commits-test-env`); CI green |
+| Archiwista | `develop` `cd29b6f`; :8090 runs it since 2026-11-06 | Merged and deployed: Obserwator's commands, monthly and annual charts (A-ADR-051), the map's station products, the series hand-off to Hydrolog (A-ADR-052) with a choice of data and variable; the map draws a station catalog without series (ČHMÚ's `store catalogs`). The store `zespol` lives on the SMB share `/mnt/magazyn/agent-tmp/archiwista-zespol/`. CI green for the first time (`8f34a4c`): the gate's limit 30 → 90 min, the run without the extra `obserwator` fixed |
+| Hydrolog | `develop` `88dbe71`; :8070 serves `33b5568` (a systemd user unit) | „Wczytaj z Archiwisty” (ADR-0020); fixes for macOS and Windows (MIME types of the GUI's scripts, LF reports, the guide on a phone, two racy browser tests). CI green on Linux and macOS; Windows reports without blocking until its port (the author's decision of 2026-11-06, deviation DEV-7.7 in Hydrolog's CLAUDE.md) |
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,

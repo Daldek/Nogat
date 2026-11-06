@@ -49,6 +49,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- A station's series from Archiwista to Hydrolog (plan
+  `docs/plans/2026-11-05-archiwista-series-to-hydrolog.md`, D5): Hydrolog
+  provides `hydrolog-series/1`, carried inside `nogat-handoff/1` (unchanged);
+  Archiwista depends on Hydrolog (`kind: data`, `via: [file]`, `exchange:
+  [hydrolog-series/1]`); `docs/ECOSYSTEM_MAP.md` regenerated.
+
 - One set of pins (plan `docs/plans/2026-11-03-one-pin-set.md`, step 1):
   `release-sets/candidate-1/members.toml` holds Kartograf, Obserwator and
   Hydrolog at the heads of `origin/develop`, and its `README.md` is generated
@@ -267,6 +273,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- `tests/integration/test_check_commits.py` pins the commit check's settings
+  (`GATE_CHECK_AUTHOR=1`, `GATE_AUTHOR_EMAIL`): it inherited CI's
+  `GATE_CHECK_AUTHOR=0`, so the author test failed in every CI run since
+  2026-11-04.
 - Audit the 2026-10-28 project branch heads and manifests in
   `docs/PROGRESS.md`; mark the early adoption and data-output snapshots as
   historical, and record completed `hydrolog.testing`, consumer migrations,
