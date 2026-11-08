@@ -139,4 +139,46 @@ author's approval (DEV-3.3).
 
 ## Results
 
-(filled in per step)
+Recorded 2026-11-08. Every merge below had the author's approval in the session.
+
+- **Step 1, Kartograf (D1):** `feature/pgw` merged into `develop` (`2470acf9`, rebased onto the
+  rewritten history; gate 8,641 tests, 95.3 %): ADR-059, the whole-country archive, the area
+  GeoPackage, the `kartograf.testing` fixture, the size probes asking for identity encoding (the
+  PGW server gzips its answers). Live run into the store `hydroni`: archive 142,048,450 B, area
+  GeoPackage 25 layers, 363 features; 26 river catchments plus `LW10235` cover the area exactly.
+- **Step 2, memory plan (D2):** F1–F7 and tiled GeoTIFFs merged, bit-identical on six synthetic
+  cases. The memory work exposed a sink-fix bug: pits next to nodata were "fixed" towards a
+  neighbour draining back, 2,335 two-cell cycles on the production raster, outlet accumulation
+  understated by about 1,047 km² (fix `3b968d0`). Production still runs the old code; its
+  reprocessing is postponed by the author.
+- **Step 3, units (D3):** ADR-071. Units are groups of the 223 h07 catchments by the JCWP they
+  lie in (27 units, 13.9–291.4 km²; every catchment lies 100 % in one JCWP). A fill per unit
+  window never agreed on the seams at 5 m (closed basins, flats), so the depressions of the whole
+  grid are filled once (161–172 s, 4.1–4.3 GB) and the units share it; accumulation, streams and
+  sub-catchments run per unit with a cell-level hand-off. Full area: 233.2 M cells, 138.5 M with
+  data, step 3 in 48 min, peak about 7.9 GB.
+- **Step 4, windows (D4):** precise delineation reads windows (`MAX_WINDOW_CELLS` 40 M); the
+  profile stays on point sampling.
+- **Step 5, instance (D5):** `hydroni` on 127.0.0.1:8081, public at
+  `https://hydrograf-hydroni.debever.pl`; DB volume on local disk, rasters on the NAS, `data/hydro`,
+  cache and MVT tiles on local disk (SQLite cannot write on the share; 2.8 M tiles took 17.6 h on
+  it and 34 min locally).
+- **Step 5a, burning (D7):** `dem.stream_burning: main`. A user report (the Noteć flowing upstream)
+  led to ADR-072: the smoothing of burned lines follows the digitized direction of BDOT10k
+  (reversed only where the DEM rises > 2 m over ≥ 200 m), strictly descending, gaps ≤ 50 m
+  bridged; no inflow from outside the area (the author). Noteć after the run: 581 of 583 D8
+  samples downstream (was 7 of 569).
+- **Step 6, inputs (D6):** Archiwista project `h07`; set `2026` lacked the sheet
+  N-33-120-D-a-3-3 inside the area (an enclosed nodata hole draining 40 km²), so set `2026-2`
+  (727 pins) adds it; the union of the sheets now covers the area completely. Water bodies are
+  never endorheic (`--waterbody-mode none`, the author): the `auto` classification marked 81 % of
+  the lakes endorheic.
+- **Step 7, verification:** delineation, land cover, HSG, PMAXTP hydrographs, depressions,
+  overlays and tiles answer through the public host. The deliverable for the author is
+  `/mnt/magazyn/agent-tmp/Hydroni/h07_parametry_zlewni.gpkg`: the 223 catchments with the panel's
+  basic parameters (without catchment length and width), Gravelius and Miller indices, land cover
+  per class and control columns (`scripts/export_catchment_parameters.py`).
+- **Open:** the project's area sheet list missed the sheet (708 of 709); HSG gives 430 of 479
+  polygons in group A; no catchment has industrial land cover; the welcome text names the
+  Kaczawa; `docker-compose.prod.yml` sets the DB password twice; the variant that interpolates
+  enclosed nodata (`feat/fill-everything`, ADR-073) waits for the author.
