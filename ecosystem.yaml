@@ -266,6 +266,9 @@ projects:
       - id: hydrolog-series/1
         kind: document
         summary: A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020).
+      - id: hydrolog-testing
+        kind: library
+        summary: hydrolog.testing builds network documents, the tables route network writes and the precip hietogram envelope with the real code, offline, for the contract tests of consumers (DEV-10.6, Hydrolog ADR-0011).
     depends_on:
       - project: Obserwator
         kind: optional
@@ -365,7 +368,7 @@ projects:
         via: [cli]
         exchange: [kartograf-files, kartograf-commands/1, kartograf-result/1, kartograf-download/1, kartograf-plan/1, kartograf-error/1]
         uses: [elevation download, landcover download, soil hsg, commands schema]
-        note: Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
+        note: Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6), namely the elevation, the BDOT10k GeoPackage of the area's counties (landcover download --product bdot10k; land cover and roads, which model build paints into the grid) and the soil groups; the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
       - project: Obserwator
         kind: optional
         status: active
@@ -377,9 +380,9 @@ projects:
         kind: optional
         status: active
         via: [library, file]
-        exchange: [hydrolog-python-api, hydrolog-result/1, hydrolog-hydrograph-csv]
+        exchange: [hydrolog-python-api, hydrolog-result/1, hydrolog-hydrograph-csv, hydrolog-testing]
         uses: [BlockHietogram, TriangularHietogram, BetaHietogram, EulerIIHietogram]
-        note: rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
+        note: rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
 
   - name: Retman
     summary: Polish natural-language command layer over Kartograf, Obserwator and Hydrolog.

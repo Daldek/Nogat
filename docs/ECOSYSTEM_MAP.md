@@ -86,7 +86,7 @@ flowchart LR
 | Hydrograf | Hydraulik | runtime | planned | service | `hydraulik-job` |
 | Hydraulik | Kartograf | optional | active | cli | `kartograf-files`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-plan/1`, `kartograf-error/1` |
 | Hydraulik | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-result/1` |
-| Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv` |
+| Hydraulik | Hydrolog | optional | active | library, file | `hydrolog-python-api`, `hydrolog-result/1`, `hydrolog-hydrograph-csv`, `hydrolog-testing` |
 | Retman | Kartograf | optional | active | library | `kartograf-command-list/1`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-error/1`, `kartograf-meta/1` |
 | Retman | Obserwator | optional | active | library | `obserwator-command-list/1`, `obserwator-commands/1`, `obserwator-result/1`, `obserwator-plan/1`, `obserwator-store/1`, `obserwator-archives`, `obserwator-series-csv`, `obserwator-testing` |
 | Retman | Hydrolog | optional | active | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
@@ -104,9 +104,9 @@ flowchart LR
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
 - **Hydrograf → Obserwator**: uses `fetch_pmaxtp`
 - **Hydrograf → Hydraulik**: Hydraulik as an external compute node fed with a catchment domain.
-- **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6); the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
+- **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6), namely the elevation, the BDOT10k GeoPackage of the area's counties (landcover download --product bdot10k; land cover and roads, which model build paints into the grid) and the soil groups; the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
 - **Hydraulik → Obserwator**: uses `fetch_pmaxtp`; rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that obserwator pmaxtp fetch --json prints.
-- **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009).
+- **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
 - **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
@@ -163,6 +163,7 @@ flowchart LR
 | `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
 | `hydrolog-gui` | service | — | Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host. |
 | `hydrolog-series/1` | document | Archiwista | A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020). |
+| `hydrolog-testing` | library | Hydraulik | hydrolog.testing builds network documents, the tables route network writes and the precip hietogram envelope with the real code, offline, for the contract tests of consumers (DEV-10.6, Hydrolog ADR-0011). |
 
 ### Hydrograf
 

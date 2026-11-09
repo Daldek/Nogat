@@ -90,5 +90,3 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).
-- DEV-13.7, DEV-16.2: `SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md` and
-  `CONTRIBUTORS.md` await the author.

@@ -22,7 +22,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
-| Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
+| Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) and closed 2026-11-09 without a further rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (Obserwator after the rename of `master`) |
 | One set of pins (HUB-4.9, REL-6.4) | step 1 done 2026-11-03, branch `feature/pin-set` | `release-sets/candidate-1/` (Kartograf, Obserwator, Hydrolog at `origin/develop`); `set check`, `apply`, `bump`, `readme`; next the consumers apply it (plan `docs/plans/2026-11-03-one-pin-set.md`, step 2) |
 | `nogat` package (HUB §7) | planned | |
@@ -45,8 +45,8 @@ not mean it is merged or released. Sources are each branch's
 | Hydrograf | `feature/producer-heads`, `f9d2118` | Producer migrations, quality tooling and contribution files are implemented; CLA, translation/REST gaps and history work remain open. Pins remain Kartograf `d11f6219`, IMGWTools `71bae77`, Hydrolog `2a5ba1a`; `affine<3` is retained. The checkout is on older `feature/kartograf-wykorzystanie`, `bc0b438`; the running Docker image is not evidence of the newer branch being deployed |
 | Hydraulik | `feature/sfincs-swmm`, `46f7fd2` | Extracted SFINCS/SWMM implementation and Hydrolog hand-off are committed; pins are Hydrolog `2a5ba1a` and IMGWTools `71bae77`. Contract tests using `hydrolog.testing` are present, not run in this audit. The old claim that Kartograf has no plain mode is stale; the live terrain flow still needs verification. The older uncommitted PoC and documents stay local by the author's choice in this audit |
 
-DEV-10.6 follow-up: `hydrolog.testing` is no longer missing, but the Nogat
-registry still lacks `hydrolog-testing` and its file-exchange edges.
+DEV-10.6 follow-up: `hydrolog.testing` is no longer missing, and since
+2026-11-09 the registry lists `hydrolog-testing` on Hydraulik's Hydrolog edge.
 `kartograf.testing` already builds a GeoTIFF as part of its fixture store;
 `imgwtools.testing` exports store fixtures, not a dedicated PMAXTP builder.
 Do not treat the remaining file-contract work as uniformly absent or done.
@@ -259,41 +259,34 @@ These rows supersede the rows above where they differ. Details: Results of `plan
 
 ## Open questions
 
-- History rewrite (ADOPTION_PLAN phase 1, ECO-007): done 2026-11-03 for
-  Kartograf, IMGWTools, Hydrolog, Hydrograf and Hydraulik with
-  `git-filter-repo` a40bce548d2c on mirrors of the local repositories
-  (every local branch included, stashes kept locally): every commit is by
-  `Daldek <git@debever.pl>` (PL1B5J kept in IMGWTools), no AI trailer
-  remains, commit counts and the tree of every branch and tag are unchanged;
-  all branches and tags force-pushed with leases; local branches, worktrees
-  and detached worktree heads moved by the commit maps with their working
-  trees untouched. Bundles of the old histories:
-  `~/backups/history-rewrite-2026-11-03/`. Consumers re-pinned (Hydrograf,
-  Retman, Archiwista, Hydraulik `feature/sfincs-swmm`) and the hashes of
-  the current docs remapped on the development branches of the eight
-  repositories; other branches (for example Hydrolog `feature/gui`,
-  Kartograf `feature/pgw`) keep old hashes in their docs. Old commits stay
-  reachable on GitHub through IMGWTools pull request #1 until GitHub Support
-  removes them; Retman, Archiwista and Nogat needed no rewrite (Nogat's 8
-  noreply commits of 2025 are left as they are).
-- Hydrograf must lift its `affine<3` cap when pyflwdir 0.5.13 permits it
-  (ADR-062); until then keep it and Archiwista in separate environments.
-- Hydraulik's code is committed on `feature/sfincs-swmm` (worktree
-  `Hydraulik-sfincs`, not merged), and its registry entry lists that branch's
-  `pyproject.toml`, which the `Hydraulik` checkout on `develop` lacks until the
-  merge (`deps` notes it). Keep `status: research` until the author merges the
-  branch and settles the proof of concept, or mark it `active` now?
-- The Hydraulik entry has no data source, because the branch has no
-  OpenStreetMap access (its roads come from BDOT10k), but its README still
-  names OpenStreetMap and ODbL in the data and licensing paragraph: which is
-  right?
-- Publishing 1.0 to `main` (and its tag) and replacing the legacy
-  `templates/` and `configs/` (root-owned files).
-- The plans in `docs/plans/` predate DEV-17.4's `Approved:` line: add it to
-  the ones the author approved.
-- Contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`,
-  `CONTRIBUTORS.md`, DEV-13.7, DEV-16.2) are listed under Deviations in
-  `CLAUDE.md`, but they are a gap, not a deliberate deviation: move the entry
-  here (ADOPTION_PLAN 0.6), or adapt Archiwista's files and write
-  `SECURITY.md` (CLA text needs the author's approval; private vulnerability
-  reporting is a GitHub setting)?
+- Publishing 1.0 to `main` (tag `std-1.0`, Next 3) and replacing the legacy
+  `standards/templates/` and `standards/configs/` (ADOPTION_PLAN 0.1, 0.4):
+  the author's step, because those files are owned by root and the agents
+  here have no root.
+- `docs/CLA.md` (DEV-16.2): its text needs the author's approval, then the
+  pull-request template's CLA box (DEV-16.4); until then no external pull
+  request is merged. Private vulnerability reporting (DEV-13.7) is the
+  author's GitHub setting; GitHub's API reported it off on 2026-11-09.
+- No record of approval, so no `Approved:` line (DEV-17.4):
+  `2026-10-20-first-release-set.md` (proposed) and `2026-10-20-unified-gui.md`
+  (an idea).
+- Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
+  then Hydrograf and Archiwista run in separate environments.
+
+Decided by the author on 2026-11-09 (CHANGELOG): F6 is closed; the rewrite of
+2026-11-03 (`git-filter-repo` a40bce548d2c, bundles in
+`~/backups/history-rewrite-2026-11-03/`; every commit by `Daldek
+<git@debever.pl>`, PL1B5J kept in IMGWTools, no AI trailer) stands and
+Hydrograf's `develop` and IMGWTools are not rewritten again, because
+Hydrograf's rollback procedures name their hashes (`f772f4e`, `08d8190`) and
+`candidate-1` names Hydrolog's; other branches (Hydrolog `feature/gui`,
+Kartograf `feature/pgw`) keep old hashes in their docs, and IMGWTools pull
+request #1 keeps old commits reachable until GitHub Support removes them.
+Hydraulik stays `research` until `feature/sfincs-swmm` is merged; its roads
+come from BDOT10k through Kartograf (README `d9d8536`), so its entry keeps
+no direct data source (HUB-2.7) and its Kartograf edge names the BDOT10k
+GeoPackage. The merge order of `fix/hub-gaps` and `feature/data-output` is
+stale (both in `ed3b8a0`). The dry run and the final integration plan carry
+the data-output plan's approval (2026-10-24). `SECURITY.md`,
+`CONTRIBUTING.md` and `CONTRIBUTORS.md` are adapted from Archiwista's, and
+the entry left `CLAUDE.md`'s Deviations.

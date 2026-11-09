@@ -1,9 +1,13 @@
 # Plan: final integration run at the data-output heads
 
+Approved: 2026-10-24 (the author, with the data-output plan, whose step 7
+this run is; the per-commit checks before it by the author's decision of
+2026-10-25)
+
 Status: done 2026-10-25. A safeguard run: nothing is pinned, tagged or
 released, and the environments, the checkouts and the logs of the run were
 removed afterwards (REL-5.3). Its failures were fixed the same day, F6 (the
-author's) excepted ([Fixes](#fixes)).
+author's, closed 2026-11-09 without a further rewrite) excepted ([Fixes](#fixes)).
 
 Requirements: ECO-051, ECO-053, DEV-10.1, DEV-10.6, DEV-19.10 to DEV-19.14,
 REL-2.5, REL-5.3, REL-5.6, REL-6.5. Step 7 of the [data-output
@@ -228,7 +232,7 @@ commit below is pushed.
 | F3 | Archiwista declares `affine>=3,<4`; its lock keeps 3.0.1, and a resolver now refuses Archiwista beside `affine>=2.4,<3`. Hydrograf keeps its cap (its ADR-062): with pyflwdir 0.5.12, the latest release, and affine 3.0.1, 15 of its 1,302 offline tests fail (`FlwdirRaster.stream_distance` and `path`, which `scripts/process_dem.py` needs: numba cannot type `affine.Affine`, which `set_transform` makes of any transform). pyflwdir's own suite at `v0.5.12` passes only because its `conftest.py` disables the JIT; with the JIT on, 33 of its tests fail with affine 3.0.1 that pass with 2.4.0. The fix, pyflwdir #109 (issue #108), is merged for 0.5.13, which is not released | Archiwista `bc230d46bb49ba7f901d45ab5acb4d5fe07a5e33`, Hydrograf `24771de3b366ddd6465252a3f5bae32a77fce3e9` |
 | F4 | The four tests expect the default root of IMGWTools beside Kartograf's; they pass with and without the extra `imgw` | Archiwista `19ff4d9cb3a8c3f0587c10253f0885f174584b40` |
 | F5 | The test asserts the English text, the default language | Archiwista `c168893a5a8e41933402c8884d47b901f284cf82` |
-| F6 | Not fixed: the rewrite of the old history is the author's. Hydrograf's branch is gated with `GATE_COMMIT_RANGE=develop..HEAD`, and IMGWTools' commit step still checks one commit | — |
+| F6 | Not fixed on 2026-10-25: the rewrite of the old history is the author's. Hydrograf's branch is gated with `GATE_COMMIT_RANGE=develop..HEAD`, and IMGWTools' commit step still checks one commit. The rewrite of 2026-11-03 (ADOPTION_PLAN phase 1) left every commit of both by the author without an AI trailer; closed 2026-11-09 by the author: no further rewrite, because Hydrograf's rollback procedures and the pins of `candidate-1` name the current hashes | — |
 | F7 | Hydrograf's `python_manifests` is `backend/pyproject.toml` alone, and `deps` no longer notes the file; the map and `AGENTS.md` show no manifests and are unchanged | Nogat `d485bc2a3fdef319b265b1782f156a8b151227df` |
 | F8 | The cause was in the cache, not in the test. `PreviewCache` switches `cache.sqlite` to WAL when it opens; the switch reads the header and then writes it, and SQLite answers a process that read the header while another one writes it with `SQLITE_BUSY` at once, without the busy timeout (waiting could deadlock). The child died at its start with "database is locked", and the test's write of the start line raised `BrokenPipeError`. Not Python 3.12 alone: eight processes that open a new cache together failed in 7 of 10 rounds on 3.12 (SQLite 3.53.1) and in 5 of 10 on 3.13 (SQLite 3.46.1). The switch is now tried again until `BUSY_TIMEOUT_MS` (0 of 30 rounds fail on each). The new `test_cache_opened_by_processes_at_once` (eight processes, five new caches) failed in every run before the fix and passes 12 of 12 after on both versions, as `test_cache_safe_across_processes` does; the handshake of these tests reports a child that ended by its standard error, not by a broken pipe | Archiwista `6e5517e2bd83f19e2954027e1e8763ef0f4b4bd4` |
 
@@ -257,7 +261,8 @@ needs; the other three ran with it set (none of them has an MCP server).
 
 ## Next
 
-1. The author: the history of Hydrograf's `develop` and of IMGWTools (F6).
+1. Closed 2026-11-09: the history of Hydrograf's `develop` and of IMGWTools
+   is not rewritten again (F6).
 2. Hydrograf lifts the affine cap with pyflwdir 0.5.13 (its ADR-062); until
    then Hydrograf and Archiwista run in separate environments.
 3. Done 2026-10-25: the consumers are re-pinned to the producers' new heads
