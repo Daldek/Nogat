@@ -8,6 +8,24 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- The author's decisions of 2026-11-09 on the open questions of
+  `docs/PROGRESS.md`: F6 is closed without a further rewrite of Hydrograf's
+  `develop` or IMGWTools (rollback procedures and `candidate-1` name the
+  current hashes); `affine<3` is a watch item until pyflwdir 0.5.13;
+  Hydraulik stays `research` until `feature/sfincs-swmm` is merged; the
+  merge order of `fix/hub-gaps` and `feature/data-output` is stale. Open:
+  the publication of 1.0 and the root-owned legacy templates (the author's),
+  `docs/CLA.md`, and the two plans below without a record of approval.
+- `ecosystem.yaml`: Hydraulik's Kartograf edge names the BDOT10k GeoPackage
+  (land cover and roads) that `terrain download` fetches; roads come from
+  BDOT10k through Kartograf, not OpenStreetMap, and the entry keeps no direct
+  data source. `docs/ECOSYSTEM_MAP.md` regenerated.
+- `docs/plans/2026-10-25-integration-dry-run.md` and
+  `docs/plans/2026-10-25-final-integration.md` carry `Approved: 2026-10-24`,
+  the approval of the data-output plan whose step 7 they are (DEV-17.4);
+  `2026-10-20-first-release-set.md` and `2026-10-20-unified-gui.md` have no
+  record and keep none.
+
 - The example of `nogat-handoff/1` carries Kamiennik's longest flow path (`flow_path_length_km` 15.88, `flow_path_slope_m_per_m` 0.0114), which Kirpich needs since Hydrolog `29138cc` (plan `docs/plans/2026-11-05-official-tc-inputs.md`); its `result` is Hydrolog's for it: 57.8786 m³/s at 400 min, 1,046,712.9 m³.
 
 - Obserwator's registry `repo` is `https://github.com/Daldek/Obserwator` after the repository rename (plan step 5); HUB-3.1 and the ECO-057 note follow.
@@ -48,6 +66,16 @@ the standard are listed in [standards/README.md](standards/README.md).
   author, H2 and S5 postponed until after Hydrograf v0.5.0.
 
 ### Added
+
+- `SECURITY.md`, `CONTRIBUTING.md` and `CONTRIBUTORS.md`, adapted from
+  Archiwista's to the hub (DEV-13.7, DEV-16.2, DEV-16.4); `docs/CLA.md` and
+  the pull-request template's CLA box wait for the author's approval of the
+  text, and the entry left the Deviations of `CLAUDE.md`.
+- `hydrolog-testing` in the registry: Hydrolog provides it, and Hydraulik's
+  edge to Hydrolog exchanges it, because Hydraulik's contract tests read the
+  `route network` tables and the `precip hietogram` envelope as
+  `hydrolog.testing` builds them (DEV-10.6, Hydrolog ADR-0011, Hydraulik
+  ADR-0010); `docs/ECOSYSTEM_MAP.md` regenerated.
 
 - A station's series from Archiwista to Hydrolog (plan
   `docs/plans/2026-11-05-archiwista-series-to-hydrolog.md`, D5): Hydrolog
