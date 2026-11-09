@@ -178,7 +178,17 @@ Recorded 2026-11-08. Every merge below had the author's approval in the session.
   `/mnt/magazyn/agent-tmp/Hydroni/h07_parametry_zlewni.gpkg`: the 223 catchments with the panel's
   basic parameters (without catchment length and width), Gravelius and Miller indices, land cover
   per class and control columns (`scripts/export_catchment_parameters.py`).
-- **Open:** the project's area sheet list missed the sheet (708 of 709); HSG gives 430 of 479
-  polygons in group A; no catchment has industrial land cover; the welcome text names the
-  Kaczawa; `docker-compose.prod.yml` sets the DB password twice; the variant that interpolates
-  enclosed nodata (`feat/fill-everything`, ADR-073) waits for the author.
+- **After the plan (2026-11-08, the author's requests):** land cover from the attributes of
+  BDOT10k with industrial land (Hydrograf ADR-074: PTZB kinds, grassland split from arable land,
+  KUPG plants cut out of the PT partition) and CN from the land cover × hydrologic soil group
+  complexes of the TR-55 table in Hydrolog (ADR-075); a lake with any outflowing watercourse is
+  exorheic. Hydroni runs `develop` `8156dee`; the land cover was imported again (which also
+  removed duplicated rows). The GeoPackage (v3) carries CN for AMC I, II and III (mean 50.2,
+  69.5, 84.1) and the HSG shares (A 5.3 %, B 94.7 %); v1 and v2 are kept with date suffixes.
+  The area sheet list missed a sheet because of the complex geometry of the area (the author);
+  the HSG is usable (groups by area, not polygon count).
+- **Open:** reprocess production Hydrograf with these changes (next session); other BDOT10k
+  layers in the land cover (KU complexes, OIMK wetlands); a per-instance area text instead of
+  the Kaczawa; the runoff-weighted CN to check later; Kartograf (cell-size validation, HSG from
+  0–100 cm) and Hydrolog (TR-55 rows, CN of water) requests recorded in their PROGRESS; the
+  variant that interpolates enclosed nodata (`feat/fill-everything`, ADR-073) waits for the author.
