@@ -1,5 +1,8 @@
 # Plan: integration dry run at the data-output heads
 
+Approved: 2026-10-24 (the author, with the data-output plan, whose step 7
+this dry run rehearses)
+
 Status: done 2026-10-25. A dry run: no candidate exists, and nothing is pinned,
 tagged or pushed.
 
