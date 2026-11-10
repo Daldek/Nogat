@@ -146,4 +146,5 @@ The registry lines of step 4, in Hydrograf's `depends_on` (the `uses` list stays
 
 ## Results
 
-None yet: the schema change is step 1, a separate step.
+- 2026-11-10, step 1: Nogat `8848c26` on `develop`. `node_provenance` and `$defs/node_inputs` in `schemas/exchange/handoff-1.schema.json` as D1 gives them, the description of `provenance`, the second example as above; the first example unchanged. SHA-256 of the schema `84c6856d1148acdc08bf79600c8cdab03674e81fe1f30eb7abeb66629b5742ed`, the hash Hydrograf and Hydrolog record when they copy it (steps 2 and 3). `tests/contract/test_handoff_schema.py`: 45 passed (the cases above).
+- Steps 2 to 4 wait: Hydrograf's `delineate-network`, Hydrolog's A6, then the registry edge.

@@ -18,7 +18,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Standard checks | done | `uv run scripts/ecosystem.py standard`, in the gate |
 | Contradictions in standard 1.0 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
-| Hand-off schema `nogat-handoff/1` | done 2026-11-02, branch `feature/handoff-1` | `schemas/exchange/handoff-1.schema.json`, contract test; item 6 of the platform plan, approved ahead of the rest as N1 of Hydrolog's GUI |
+| Hand-off schema `nogat-handoff/1` | done 2026-11-02; `node_provenance` 2026-11-10 | `schemas/exchange/handoff-1.schema.json`, contract test; item 6 of the platform plan, approved ahead of the rest as N1 of Hydrolog's GUI; the origin of each node of a network added as step 1 of `plans/2026-11-10-node-provenance-in-handoff.md` (Next 13) |
 | Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
@@ -249,10 +249,7 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
-9. IMGWTools is Obserwator (ECO-057, plan
-   `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done in every
-   repository, the GitHub repository renamed and the URLs updated; productions
-   follow (changes on 2026-11-04).
+9. IMGWTools is Obserwator (ECO-057, plan `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done everywhere (changes on 2026-11-04).
 10. `candidate-2` is applied by every consumer (2026-11-10, heads and pins above; Retman's
    member bumped to `320a7d6`). Left: production Hydrograf's rebuild on `develop`; Hydrolog
    v1.0.0 waits for Obserwator 3.0.0's tag (producers first, HUB-5.2) and `verify-candidate`.
@@ -264,6 +261,9 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
    real tools at the set's commits: 43 cases planned, 41 run, 2 skipped as
    large downloads, none failed (its `docs/PROGRESS.md`). Eval rows of the
    new operations are unmeasured: no model server on this machine.
+13. The origin of each node in the hand-off (B7 of Hydrograf's network delineation): plan `docs/plans/2026-11-10-node-provenance-in-handoff.md`,
+   approved 2026-11-10; step 1 done (`node_provenance`, still `/1`). Next: Hydrograf's `delineate-network` (step 2) and Hydrolog's Sieć
+   (A6, step 3) copy the schema; step 4, the registry edge, once step 2 is merged.
 
 ## Open questions
 
