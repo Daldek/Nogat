@@ -17,6 +17,13 @@ the standard are listed in [standards/README.md](standards/README.md).
   `docs/plans/2026-11-10-node-provenance-in-handoff.md` (step 1; B7 of
   Hydrograf's network delineation): Hydrograf's `delineate-network` writes
   it, Hydrolog's Sieć shows it and writes it back.
+- Release set `candidate-3`, now the current one (REL-6.4): candidate-2's
+  members with Hydrolog `759d7ef` -> `930915d`, its `origin/develop` with
+  `nash_estimation` (W1) and structure-only networks (W2); Kartograf
+  `d0990c8`, Obserwator `f9f4ee7` and Retman `320a7d6` unchanged. A
+  candidate, not a release: no tags. `set check` reports `conflict` (exit 4)
+  in Hydrograf, Hydraulik and Retman, which pin Hydrolog `759d7ef`, until
+  each applies the set; candidate-2 is unchanged.
 - Release set `candidate-2`, now the current one (REL-6.4, HUB-4.9):
   Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `3b84db6` and Retman
   `a9c04ad`, the heads of their `origin/develop` on 2026-11-10, recorded by
