@@ -120,7 +120,7 @@ After `git fetch`; pins at each consumer's integration branch, with the first-pa
 | Project | Head | Pins (commits behind) |
 |---|---|---|
 | Kartograf, Obserwator | `develop` `d0990c8`, `f9f4ee7` | members of `candidate-2`; pin no project |
-| Hydrolog | `develop` `3b84db6` | member; Obserwator `1ee5457` (2026-11-04), 4 |
+| Hydrolog | `develop` `759d7ef` | member, `set bump` from `3b84db6`; Obserwator `f9f4ee7`, the set's |
 | Retman | `develop` `a9c04ad` | member; Kartograf `9deaa31` (2026-11-03), 9; Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b` (2026-11-05), 24 |
 | Hydrograf | `develop` `894810c` | Kartograf `9deaa31`, 9; Obserwator `1ee5457`, 4; Hydrolog `4fad769` (2026-11-09), 3 |
 | Hydraulik | `feature/sfincs-swmm` `d467f76` | Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b`, 24; Kartograf through its CLI, not pinned |
@@ -254,8 +254,8 @@ After `git fetch`; pins at each consumer's integration branch, with the first-pa
    repository, the GitHub repository renamed and the URLs updated; productions
    follow (changes on 2026-11-04).
 10. Move the consumers to `candidate-2` (pins on 2026-11-10 above): Hydrolog
-   first and `set bump Hydrolog`, then the others, `set bump Retman`, and
-   `set check` (Results of `docs/plans/2026-11-03-one-pin-set.md`).
+   done (`set bump Hydrolog` to `759d7ef`); then the others, `set bump
+   Retman`, and `set check` (Results of `docs/plans/2026-11-03-one-pin-set.md`).
 11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
    with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.

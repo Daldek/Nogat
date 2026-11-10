@@ -136,3 +136,9 @@ What the gates meet in the lag, by the producers' CHANGELOGs:
   `residential_low` and `residential_medium` only.
 - Comments that name candidate-1 (Hydrolog's and Retman's `pyproject.toml`)
   and the consumers' integration documents follow in the same sessions.
+
+Step 1 done the same day: Hydrolog applied the set (its `develop` `759d7ef`,
+the merge of `chore/pins-candidate-2`, pins Obserwator `f9f4ee7`, gate
+green), and `set bump Hydrolog` moved the member from `3b84db6` to
+`759d7ef0e99b654c4aff172d69439a6d8df42db2` (2 commits, the pin change and its
+merge).
