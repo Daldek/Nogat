@@ -73,7 +73,10 @@ def test_example_node_provenance_names_nodes(index: int) -> None:
         _with(node_provenance={"OUT": {"node": {"source": "hydrograf"}}}),
         _with(
             node_provenance={
-                "Z1": {"rainfall": {"source": "user"}, "watershed": {"source": "hydrograf"}}
+                "Z1": {
+                    "rainfall": {"source": "user"},
+                    "watershed": {"source": "hydrograf"},
+                }
             }
         ),
         _with(node_provenance={"Dopływ_1.a-2": {"watershed": {"source": "user"}}}),
