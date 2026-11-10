@@ -67,6 +67,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Release set `candidate-2`, now the current one (REL-6.4, HUB-4.9):
+  Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `3b84db6` and Retman
+  `a9c04ad`, the heads of their `origin/develop` on 2026-11-10, recorded by
+  `set bump`. Retman is recorded as a member of the first release set (D3 of
+  `docs/plans/2026-10-31-archiwista-projects.md`); Archiwista stays outside
+  it. `set check` reports `conflict` until the consumers apply it: all of
+  them pin candidate-1's commits, Hydrograf Hydrolog `4fad769`. Hydrolog
+  applies first, because uv carries its Obserwator pin into consumers that
+  install its `pmaxtp`, `gui` or `all` extra. Heads, pins and their lag:
+  `docs/PROGRESS.md`; the order of the moves and what each meets: Results of
+  `docs/plans/2026-11-03-one-pin-set.md`.
 - `SECURITY.md`, `CONTRIBUTING.md` and `CONTRIBUTORS.md`, adapted from
   Archiwista's to the hub (DEV-13.7, DEV-16.2, DEV-16.4); `docs/CLA.md` and
   the pull-request template's CLA box wait for the author's approval of the
