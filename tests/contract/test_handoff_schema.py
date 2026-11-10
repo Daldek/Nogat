@@ -2,8 +2,9 @@
 
 Projects copy the schema like schemas/agent/ (ECO-050); these tests pin what
 the envelope requires and what it leaves to the payload's owner, and that
-the schema's own example, the complete form of Hydrolog's GUI plan (D15),
-validates.
+the schema's own examples validate: the complete form of Hydrolog's GUI plan
+(D15) and a network with the origin of each node
+(docs/plans/2026-11-10-node-provenance-in-handoff.md).
 """
 
 from __future__ import annotations
@@ -46,6 +47,13 @@ def test_examples_validate(index: int) -> None:
     assert _errors(SCHEMA["examples"][index]) == []
 
 
+@pytest.mark.parametrize("index", range(len(SCHEMA["examples"])))
+def test_example_node_provenance_names_nodes(index: int) -> None:
+    example = SCHEMA["examples"][index]
+    ids = {node["id"] for node in example["payload"].get("nodes", [])}
+    assert set(example.get("node_provenance", {})) <= ids
+
+
 @pytest.mark.parametrize(
     "document",
     [
@@ -62,6 +70,13 @@ def test_examples_validate(index: int) -> None:
             }
         ),
         _with(origin_page_title="unknown fields are allowed (AGI-4.1)"),
+        _with(node_provenance={"OUT": {"node": {"source": "hydrograf"}}}),
+        _with(
+            node_provenance={
+                "Z1": {"rainfall": {"source": "user"}, "watershed": {"source": "hydrograf"}}
+            }
+        ),
+        _with(node_provenance={"Dopływ_1.a-2": {"watershed": {"source": "user"}}}),
     ],
     ids=[
         "no-result",
@@ -71,6 +86,9 @@ def test_examples_validate(index: int) -> None:
         "other-payload-kind",
         "result-by-another-engine",
         "unknown-field",
+        "node-origin-only",
+        "node-inputs-beside-provenance",
+        "node-id-of-the-payload-owner",
     ],
 )
 def test_handoff_valid(document: dict[str, Any]) -> None:
@@ -104,6 +122,13 @@ def test_required_field(required: str) -> None:
         _with(result={"peak_discharge_m3s": -1.0}),
         _with(result={"peak_discharge_m3s": "60,2"}),
         _with(result={"computed_with": {"tool": "hydrolog"}}),
+        _with(node_provenance={}),
+        _with(node_provenance={"Z1": {}}),
+        _with(node_provenance={"Z1": {"Watershed": {"source": "hydrograf"}}}),
+        _with(node_provenance={"Z1": {"watershed": {"element": "headwater"}}}),
+        _with(node_provenance={"Z1": {"watershed": "hydrograf"}}),
+        _with(node_provenance={"": {"node": {"source": "user"}}}),
+        _with(node_provenance=[{"Z1": {"watershed": {"source": "user"}}}]),
     ],
     ids=[
         "schema-version",
@@ -123,6 +148,13 @@ def test_required_field(required: str) -> None:
         "negative-peak",
         "peak-as-text",
         "engine-without-version",
+        "empty-node-provenance",
+        "empty-node-entry",
+        "node-input-not-lowercase",
+        "node-origin-without-source",
+        "node-origin-not-object",
+        "empty-node-id",
+        "node-provenance-not-object",
     ],
 )
 def test_handoff_invalid(document: dict[str, Any]) -> None:
