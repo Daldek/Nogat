@@ -8,6 +8,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Release set `candidate-2`: Hydrolog `3b84db6` -> `759d7ef`, its
+  `origin/develop` after it applied the set (Obserwator `f9f4ee7`, gate
+  green), recorded by `set bump` after a fetch; README regenerated. Kartograf,
+  Obserwator and Retman unchanged.
 - The author's decisions of 2026-11-09 on the open questions of
   `docs/PROGRESS.md`: F6 is closed without a further rewrite of Hydrograf's
   `develop` or IMGWTools (rollback procedures and `candidate-1` name the
