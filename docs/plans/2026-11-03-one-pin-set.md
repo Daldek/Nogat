@@ -142,3 +142,19 @@ the merge of `chore/pins-candidate-2`, pins Obserwator `f9f4ee7`, gate
 green), and `set bump Hydrolog` moved the member from `3b84db6` to
 `759d7ef0e99b654c4aff172d69439a6d8df42db2` (2 commits, the pin change and its
 merge).
+
+Steps 2 and 3 done the same day, each merged into the consumer's
+integration branch with its gate OK: Hydrograf `develop` `01ab00a` (head
+`fd0b533` after its docs), Retman `develop` `320a7d6`, Hydraulik
+`feature/sfincs-swmm` `d0f3938` (its CN of water follows Hydrolog's 98) and
+Archiwista `develop` `a656ee1`. `set bump Retman` moved the member from
+`a9c04ad` to `320a7d69b382f274f0b1a14ee5a7d3872457ae12` (the pin change and
+its merge). `set check` after a fetch: every pin `ok`, exit 0, with
+Hydraulik's Kartograf "not declared" (it calls the CLI), as for candidate-1.
+
+Deployed: Hydroni runs Hydrograf `fd0b533` with the set's pins. Production
+Hydrograf runs `894810c` with candidate-1-era pins (Kartograf `9deaa31`,
+Obserwator `1ee5457`, Hydrolog `4fad769`) until its next rebuild, which
+needs new images only. Still open: Hydrolog v1.0.0 waits for its producers
+(HUB-5.2; Obserwator 3.0.0 is not tagged) and for `verify-candidate`
+(REL-6.5), which does not exist yet.

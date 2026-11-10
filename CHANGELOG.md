@@ -6,69 +6,6 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
-### Changed
-
-- Release set `candidate-2`: Hydrolog `3b84db6` -> `759d7ef`, its
-  `origin/develop` after it applied the set (Obserwator `f9f4ee7`, gate
-  green), recorded by `set bump` after a fetch; README regenerated. Kartograf,
-  Obserwator and Retman unchanged.
-- The author's decisions of 2026-11-09 on the open questions of
-  `docs/PROGRESS.md`: F6 is closed without a further rewrite of Hydrograf's
-  `develop` or IMGWTools (rollback procedures and `candidate-1` name the
-  current hashes); `affine<3` is a watch item until pyflwdir 0.5.13;
-  Hydraulik stays `research` until `feature/sfincs-swmm` is merged; the
-  merge order of `fix/hub-gaps` and `feature/data-output` is stale. Open:
-  the publication of 1.0 and the root-owned legacy templates (the author's),
-  `docs/CLA.md`, and the two plans below without a record of approval.
-- `ecosystem.yaml`: Hydraulik's Kartograf edge names the BDOT10k GeoPackage
-  (land cover and roads) that `terrain download` fetches; roads come from
-  BDOT10k through Kartograf, not OpenStreetMap, and the entry keeps no direct
-  data source. `docs/ECOSYSTEM_MAP.md` regenerated.
-- `docs/plans/2026-10-25-integration-dry-run.md` and
-  `docs/plans/2026-10-25-final-integration.md` carry `Approved: 2026-10-24`,
-  the approval of the data-output plan whose step 7 they are (DEV-17.4);
-  `2026-10-20-first-release-set.md` and `2026-10-20-unified-gui.md` have no
-  record and keep none.
-
-- The example of `nogat-handoff/1` carries Kamiennik's longest flow path (`flow_path_length_km` 15.88, `flow_path_slope_m_per_m` 0.0114), which Kirpich needs since Hydrolog `29138cc` (plan `docs/plans/2026-11-05-official-tc-inputs.md`); its `result` is Hydrolog's for it: 57.8786 m³/s at 400 min, 1,046,712.9 m³.
-
-- Obserwator's registry `repo` is `https://github.com/Daldek/Obserwator` after the repository rename (plan step 5); HUB-3.1 and the ECO-057 note follow.
-
-- IMGWTools becomes Obserwator with v3.0.0 (ECO-057, plan
-  `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, step 1). Registry: the
-  project `Obserwator`, distribution and import name `obserwator`, the
-  interfaces `obserwator`, `obserwator mcp` and `obserwator server`, its
-  routes, the ids `obserwator-*` provided and consumed (`imgw-store/1` is
-  `obserwator-store/1`, and likewise the others); the repository URL stays.
-  HUB-3.1: a checkout is the directory named like the repository (the last
-  segment of `repo`), so `deps` and `drift` read Obserwator from
-  `IMGWTools/`; `drift` also matches a requirement by its
-  `[tool.uv.sources]` URL, which finds Hydrograf's `imgwtools` pin. The
-  standard texts (DEV-10.6, DEV-19.12 `obserwator-store.json`, the
-  placeholders), ADOPTION_PLAN (6.1: the final `imgwtools` release points to
-  `nogat-obserwator`), the error registry, the CI template's audit list, the
-  design mark `obserwator.svg`, the token `--tool-obserwator` and the
-  Hydrolog mockup follow; `AGENTS.md` and `docs/ECOSYSTEM_MAP.md` are
-  regenerated. The provider IMGW-PIB and dated records keep their names.
-
-- The standard is 1.0: numbers count from `main` (ECO-056). A version of the
-  standard exists from its tag on `main` and `develop` carries the next one
-  (HUB-6.1); a document's `<n>` increments only past a number released on
-  the producer's `main` (AGI-4.1). The drafts called 2.0 and 2.1 are 1.0 in
-  `standards/`, `ecosystem.yaml` and `error_registry.json`, to be tagged
-  `std-1.0`; `standards/legacy/v1.0/` is now `standards/legacy/shared-2026-01/`,
-  the shared standards of 2026-01-29 that preceded Nogat. Plan:
-  `docs/plans/2026-11-03-numbering-from-main.md`, step 1.
-
-- `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
-  2026-11-03) and its topic branches deleted except
-  `feature/hydrolog-gui-mockup`; Next 7 lists the tools' branches awaiting
-  review and release.
-
-- `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`: status of
-  2026-11-03 in Results: A1 to A3 and H1 done, A4 and A5 wait for the
-  author, H2 and S5 postponed until after Hydrograf v0.5.0.
-
 ### Added
 
 - Release set `candidate-2`, now the current one (REL-6.4, HUB-4.9):
@@ -244,7 +181,80 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Release set `candidate-2`: Retman `a9c04ad` -> `320a7d6` by `set bump`
+  after a fetch, its `develop` once it applied the set (plan
+  `docs/plans/2026-11-03-one-pin-set.md`, step 3); README regenerated.
+- Every consumer applied release set `candidate-2` on 2026-11-10: Hydrograf
+  `develop` `01ab00a` (head `fd0b533` after its docs), Retman `develop`
+  `320a7d6`, Hydraulik `feature/sfincs-swmm` `d0f3938` (CN of water follows
+  Hydrolog, 98), Archiwista `develop` `a656ee1`. `set check` after a fetch:
+  every pin `ok`, exit 0; Hydraulik's Kartograf stays "not declared" (it
+  calls the CLI). `docs/PROGRESS.md` (heads and pins, Next 10), the Results
+  of `docs/plans/2026-11-03-one-pin-set.md` and of
+  `docs/plans/2026-11-06-hydroni-instance.md` (Hydroni on set `2026-3` and
+  `fd0b533`, production on `894810c`, the open items of 2026-11-08) follow.
+- `CHANGELOG.md`: one `### Changed` in `[Unreleased]` (the entries of the
+  second are merged into it) and the Obserwator `repo` entry once.
+- Release set `candidate-2`: Hydrolog `3b84db6` -> `759d7ef`, its
+  `origin/develop` after it applied the set (Obserwator `f9f4ee7`, gate
+  green), recorded by `set bump` after a fetch; README regenerated. Kartograf,
+  Obserwator and Retman unchanged.
+- The author's decisions of 2026-11-09 on the open questions of
+  `docs/PROGRESS.md`: F6 is closed without a further rewrite of Hydrograf's
+  `develop` or IMGWTools (rollback procedures and `candidate-1` name the
+  current hashes); `affine<3` is a watch item until pyflwdir 0.5.13;
+  Hydraulik stays `research` until `feature/sfincs-swmm` is merged; the
+  merge order of `fix/hub-gaps` and `feature/data-output` is stale. Open:
+  the publication of 1.0 and the root-owned legacy templates (the author's),
+  `docs/CLA.md`, and the two plans below without a record of approval.
+- `ecosystem.yaml`: Hydraulik's Kartograf edge names the BDOT10k GeoPackage
+  (land cover and roads) that `terrain download` fetches; roads come from
+  BDOT10k through Kartograf, not OpenStreetMap, and the entry keeps no direct
+  data source. `docs/ECOSYSTEM_MAP.md` regenerated.
+- `docs/plans/2026-10-25-integration-dry-run.md` and
+  `docs/plans/2026-10-25-final-integration.md` carry `Approved: 2026-10-24`,
+  the approval of the data-output plan whose step 7 they are (DEV-17.4);
+  `2026-10-20-first-release-set.md` and `2026-10-20-unified-gui.md` have no
+  record and keep none.
+
+- The example of `nogat-handoff/1` carries Kamiennik's longest flow path (`flow_path_length_km` 15.88, `flow_path_slope_m_per_m` 0.0114), which Kirpich needs since Hydrolog `29138cc` (plan `docs/plans/2026-11-05-official-tc-inputs.md`); its `result` is Hydrolog's for it: 57.8786 m³/s at 400 min, 1,046,712.9 m³.
+
 - Obserwator's registry `repo` is `https://github.com/Daldek/Obserwator` after the repository rename (plan step 5); HUB-3.1 and the ECO-057 note follow.
+
+- IMGWTools becomes Obserwator with v3.0.0 (ECO-057, plan
+  `docs/plans/2026-11-03-imgwtools-to-obserwator.md`, step 1). Registry: the
+  project `Obserwator`, distribution and import name `obserwator`, the
+  interfaces `obserwator`, `obserwator mcp` and `obserwator server`, its
+  routes, the ids `obserwator-*` provided and consumed (`imgw-store/1` is
+  `obserwator-store/1`, and likewise the others); the repository URL stays.
+  HUB-3.1: a checkout is the directory named like the repository (the last
+  segment of `repo`), so `deps` and `drift` read Obserwator from
+  `IMGWTools/`; `drift` also matches a requirement by its
+  `[tool.uv.sources]` URL, which finds Hydrograf's `imgwtools` pin. The
+  standard texts (DEV-10.6, DEV-19.12 `obserwator-store.json`, the
+  placeholders), ADOPTION_PLAN (6.1: the final `imgwtools` release points to
+  `nogat-obserwator`), the error registry, the CI template's audit list, the
+  design mark `obserwator.svg`, the token `--tool-obserwator` and the
+  Hydrolog mockup follow; `AGENTS.md` and `docs/ECOSYSTEM_MAP.md` are
+  regenerated. The provider IMGW-PIB and dated records keep their names.
+
+- The standard is 1.0: numbers count from `main` (ECO-056). A version of the
+  standard exists from its tag on `main` and `develop` carries the next one
+  (HUB-6.1); a document's `<n>` increments only past a number released on
+  the producer's `main` (AGI-4.1). The drafts called 2.0 and 2.1 are 1.0 in
+  `standards/`, `ecosystem.yaml` and `error_registry.json`, to be tagged
+  `std-1.0`; `standards/legacy/v1.0/` is now `standards/legacy/shared-2026-01/`,
+  the shared standards of 2026-01-29 that preceded Nogat. Plan:
+  `docs/plans/2026-11-03-numbering-from-main.md`, step 1.
+
+- `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
+  2026-11-03) and its topic branches deleted except
+  `feature/hydrolog-gui-mockup`; Next 7 lists the tools' branches awaiting
+  review and release.
+
+- `docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`: status of
+  2026-11-03 in Results: A1 to A3 and H1 done, A4 and A5 wait for the
+  author, H2 and S5 postponed until after Hydrograf v0.5.0.
 
 - `scripts/gate.sh` follows `standards/ci/gate.sh`: `uv sync --locked`, the
   DEV-7.2 rule set, mypy over `scripts/` and `tests/`, pytest with coverage.

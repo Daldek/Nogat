@@ -24,7 +24,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
 | Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) and closed 2026-11-09 without a further rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (Obserwator after the rename of `master`) |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-2/` since 2026-11-10 (Kartograf, Obserwator, Hydrolog and Retman at `origin/develop`); `set check` reports `conflict` until every consumer applies it (Next 10). Tooling: `set check`, `apply`, `bump`, `readme` (plan `docs/plans/2026-11-03-one-pin-set.md`) |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-2/` since 2026-11-10 (Kartograf, Obserwator, Hydrolog and Retman); every consumer applied it the same day and `set check` exits 0 (Next 10). Tooling: `set check`, `apply`, `bump`, `readme` (plan `docs/plans/2026-11-03-one-pin-set.md`); `verify-candidate` (REL-6.5) does not exist yet |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
 
@@ -115,16 +115,16 @@ These rows supersede the rows above where they differ. Details: Results of `plan
 
 ### Heads and pins on 2026-11-10
 
-After `git fetch`; pins at each consumer's integration branch, with the first-parent commits of the producer's `develop` between the pin and `candidate-2`. These rows supersede the rows above where they differ.
+After `git fetch`; pins at each consumer's integration branch. These rows supersede the rows above where they differ. `set check` against `candidate-2`: every pin `ok`, exit 0.
 
-| Project | Head | Pins (commits behind) |
+| Project | Head | Pins and deployment |
 |---|---|---|
 | Kartograf, Obserwator | `develop` `d0990c8`, `f9f4ee7` | members of `candidate-2`; pin no project |
-| Hydrolog | `develop` `759d7ef` | member, `set bump` from `3b84db6`; Obserwator `f9f4ee7`, the set's |
-| Retman | `develop` `a9c04ad` | member; Kartograf `9deaa31` (2026-11-03), 9; Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b` (2026-11-05), 24 |
-| Hydrograf | `develop` `894810c` | Kartograf `9deaa31`, 9; Obserwator `1ee5457`, 4; Hydrolog `4fad769` (2026-11-09), 3 |
-| Hydraulik | `feature/sfincs-swmm` `d467f76` | Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b`, 24; Kartograf through its CLI, not pinned |
-| Archiwista | `develop` `0d1907f` | Kartograf `9deaa31`, 9; Obserwator `1ee5457`, 4 |
+| Hydrolog | `develop` `759d7ef` | member; Obserwator `f9f4ee7` |
+| Retman | `develop` `320a7d6` | member (`set bump` from `a9c04ad`); Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `759d7ef` |
+| Hydrograf | `develop` `fd0b533` (the set applied in `01ab00a`) | the set's Kartograf, Obserwator and Hydrolog. Hydroni runs `fd0b533`; production runs `894810c` (since 2026-11-10) with Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `4fad769` until its next rebuild (images only) |
+| Hydraulik | `feature/sfincs-swmm` `d0f3938` | Obserwator `f9f4ee7`, Hydrolog `759d7ef` (its CN of water follows Hydrolog, 98); Kartograf through its CLI, not pinned |
+| Archiwista | `develop` `a656ee1` | Kartograf `d0990c8`, Obserwator `f9f4ee7` |
 
 ## Next
 
@@ -253,9 +253,9 @@ After `git fetch`; pins at each consumer's integration branch, with the first-pa
    `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done in every
    repository, the GitHub repository renamed and the URLs updated; productions
    follow (changes on 2026-11-04).
-10. Move the consumers to `candidate-2` (pins on 2026-11-10 above): Hydrolog
-   done (`set bump Hydrolog` to `759d7ef`); then the others, `set bump
-   Retman`, and `set check` (Results of `docs/plans/2026-11-03-one-pin-set.md`).
+10. `candidate-2` is applied by every consumer (2026-11-10, heads and pins above; Retman's
+   member bumped to `320a7d6`). Left: production Hydrograf's rebuild on `develop`; Hydrolog
+   v1.0.0 waits for Obserwator 3.0.0's tag (producers first, HUB-5.2) and `verify-candidate`.
 11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
    with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
