@@ -187,8 +187,22 @@ Recorded 2026-11-08. Every merge below had the author's approval in the session.
   69.5, 84.1) and the HSG shares (A 5.3 %, B 94.7 %); v1 and v2 are kept with date suffixes.
   The area sheet list missed a sheet because of the complex geometry of the area (the author);
   the HSG is usable (groups by area, not polygon count).
-- **Open:** reprocess production Hydrograf with these changes (next session); other BDOT10k
-  layers in the land cover (KU complexes, OIMK wetlands); a per-instance area text instead of
-  the Kaczawa; the runoff-weighted CN to check later; Kartograf (cell-size validation, HSG from
-  0–100 cm) and Hydrolog (TR-55 rows, CN of water) requests recorded in their PROGRESS; the
-  variant that interpolates enclosed nodata (`feat/fill-everything`, ADR-073) waits for the author.
+- **2026-11-10:** Hydroni bootstrapped again from the closed set `2026-3` (728 pins: `2026-2`
+  plus the sheet N-33-118-B-a-4-2 that Hydrograf's ADR-076 coverage check asked for), run 3 on
+  `545f109`, 00:54–03:15 CET: 710 sheets, 201,195 segments at 0.01 / 0.1 / 1 / 10 km², 92.01 km²
+  of wetlands as group D, 73 burned lines reversed by ADR-077; export v4 of the 223 catchments
+  with the runoff control columns. Hydroni then ran `894810c` and now runs `fd0b533`, Hydrograf's
+  `develop` with release set candidate-2. Production switched to `894810c` at 05:00 CET,
+  reprocessed by Hydrograf's runbook `docs/runbooks/2026-11-10-reprocessing.md` (backup
+  `/data/nmt/hydrograf-backup-2026-11-10/`, image `hydrograf-api:pre-2026-11-10`); it keeps the
+  candidate-1-era producer pins until its next rebuild.
+- **Closed of the 2026-11-08 Open list:** production reprocessed (above); wetlands and the KU
+  lawns in the land cover (Hydrograf ADR-078: soil under wetlands is group D, KUSK/KUKO lawns
+  open space); the area text per instance (`frontend/data/instance.json`); the runoff-weighted
+  check (control columns of the export, ADR-075 amendment); Kartograf's cell-size refusal
+  (ADR-060) and HSG of the least permeable layer of 0–100 cm (ADR-061); Hydrolog's TR-55 rows
+  and CN 98 for water (in candidate-2); enclosed nodata filled on request
+  (`dem.fill_enclosed_nodata`, default `false`, ADR-073), not needed on Hydroni since `2026-3`.
+- **Open:** using the 0–100 cm HSG in Hydrograf's bootstrap (the author's call, step 5 again on
+  each instance); catchment 1883617 and the 11 catchments with a polygon/NMT area ratio above
+  1.2 for the author's review; the report to GUGiK on the 1 m sheets (the author's step).
