@@ -24,7 +24,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
 | Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) and closed 2026-11-09 without a further rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (Obserwator after the rename of `master`) |
-| One set of pins (HUB-4.9, REL-6.4) | step 1 done 2026-11-03, branch `feature/pin-set` | `release-sets/candidate-1/` (Kartograf, Obserwator, Hydrolog at `origin/develop`); `set check`, `apply`, `bump`, `readme`; next the consumers apply it (plan `docs/plans/2026-11-03-one-pin-set.md`, step 2) |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-2/` since 2026-11-10 (Kartograf, Obserwator, Hydrolog and Retman at `origin/develop`); `set check` reports `conflict` until every consumer applies it (Next 10). Tooling: `set check`, `apply`, `bump`, `readme` (plan `docs/plans/2026-11-03-one-pin-set.md`) |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
 
@@ -101,7 +101,6 @@ These rows supersede the rows above where they differ.
 | Project | Branch and head | Change |
 |---|---|---|
 | Obserwator | `develop` `84e43a1` (3.0.0.dev0) | v3.0.0 blocker B6 done: the result, error and catalog documents of standard 1.0, `--json`, paging by cursor (ADR-010; plan `2026-11-04-obserwator-agent-contracts.md`, Results). CI green on the three systems |
-| Retman, Archiwista, Hydraulik | `bc272e2`, `4ac2933`, `feature/sfincs-swmm` `9fc9572` | pinned to the set and migrated to Obserwator's new documents, each gate green |
 
 ### Changes on 2026-11-05 and 2026-11-06
 
@@ -112,8 +111,20 @@ These rows supersede the rows above where they differ. Details: Results of `plan
 | Nogat | `develop` `9aa55c9` | `candidate-1`: Hydrolog `1ffcd6b` (Kartograf `9deaa31`, Obserwator `1ee5457` unchanged); `set check` ok. The example of `nogat-handoff/1` carries the longest flow path (`8727f6e`). The series plan merged (`269c388`), its Results filled. CI was red on every push since 2026-11-04: `tests/integration/test_check_commits.py` inherited CI's `GATE_CHECK_AUTHOR=0`; the test now pins the check's settings; CI green |
 | Hydrolog | `develop` `88dbe71`; :8070 serves `33b5568` (a systemd user unit) | Time of concentration from the inputs its source defines (ADR-0019): `flow_path_length_km`, `flow_path_slope_m_per_m`, no substitutes; `NashIUH.from_tc` removed. „Wczytaj z Archiwisty” (ADR-0020); fixes for macOS and Windows (MIME types of the GUI's scripts, LF reports, the guide on a phone, two racy browser tests). CI green on Linux and macOS; Windows reports without blocking until its port (the author's decision of 2026-11-06, deviation DEV-7.7 in Hydrolog's CLAUDE.md) |
 | Hydrograf | `develop` `520f886`, production (since 2026-11-05 12:53 UTC, updated in place the same day) | tc only through Hydrolog; flow path heads, overland segments and channel sources measured (ADR-070, migration 004, backfilled); thresholds 1 and 10 km²; PMAXTP depth as the watershed mean by Thiessen polygons (ADR-069) with an optional areal reduction factor; tester reports #13, #14, #16, #20, #23–#27, #35, #37, #39, #40; the author's review: boundary flow path from the watershed's boundary cells, full unsimplified lines, legend „Zlewnia” (plan Results 5). Hydrolog's comparison of the hand-off reads „zgodny” for every tc method. Rollback `/data/nmt/hydrograf-backup-2026-11-05-v050/` (image `hydrograf-api:pre-v050`, runbook §9). No `v0.5.0` tag yet: the author continues the review |
-| Retman, Hydraulik | `develop` `d03cf24`, `feature/sfincs-swmm` `1225172` | pinned to Hydrolog `1ffcd6b`, gates green |
 | Archiwista | `develop` `cd29b6f`; :8090 runs it since 2026-11-06 | Merged and deployed: Obserwator's commands, monthly and annual charts (A-ADR-051), the map's station products, the series hand-off to Hydrolog (A-ADR-052) with a choice of data and variable; the map draws a station catalog without series (ČHMÚ's `store catalogs`). The store `zespol` lives on the SMB share `/mnt/magazyn/agent-tmp/archiwista-zespol/`. CI green for the first time (`8f34a4c`): the gate's limit 30 → 90 min, the run without the extra `obserwator` fixed |
+
+### Heads and pins on 2026-11-10
+
+After `git fetch`; pins at each consumer's integration branch, with the first-parent commits of the producer's `develop` between the pin and `candidate-2`. These rows supersede the rows above where they differ.
+
+| Project | Head | Pins (commits behind) |
+|---|---|---|
+| Kartograf, Obserwator | `develop` `d0990c8`, `f9f4ee7` | members of `candidate-2`; pin no project |
+| Hydrolog | `develop` `3b84db6` | member; Obserwator `1ee5457` (2026-11-04), 4 |
+| Retman | `develop` `a9c04ad` | member; Kartograf `9deaa31` (2026-11-03), 9; Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b` (2026-11-05), 24 |
+| Hydrograf | `develop` `894810c` | Kartograf `9deaa31`, 9; Obserwator `1ee5457`, 4; Hydrolog `4fad769` (2026-11-09), 3 |
+| Hydraulik | `feature/sfincs-swmm` `d467f76` | Obserwator `1ee5457`, 4; Hydrolog `1ffcd6b`, 24; Kartograf through its CLI, not pinned |
+| Archiwista | `develop` `0d1907f` | Kartograf `9deaa31`, 9; Obserwator `1ee5457`, 4 |
 
 ## Next
 
@@ -242,12 +253,9 @@ These rows supersede the rows above where they differ. Details: Results of `plan
    `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done in every
    repository, the GitHub repository renamed and the URLs updated; productions
    follow (changes on 2026-11-04).
-10. One set of pins (plan `docs/plans/2026-11-03-one-pin-set.md`):
-   `release-sets/candidate-1` holds Kartograf `9deaa314`, Obserwator
-   `1ee54573`, Hydrolog `2eb8bd0c`; every consumer pins them, Hydrolog itself
-   pins Obserwator (extra `pmaxtp`). To move a producer: `set bump`, then per
-   consumer `set apply`, `uv lock`, its gate, merge, `set check`. Hydrolog is
-   not bumped until the author's further changes.
+10. Move the consumers to `candidate-2` (pins on 2026-11-10 above): Hydrolog
+   first and `set bump Hydrolog`, then the others, `set bump Retman`, and
+   `set check` (Results of `docs/plans/2026-11-03-one-pin-set.md`).
 11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
    with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
