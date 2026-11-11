@@ -2,6 +2,8 @@
 
 Approved: 2026-11-10, the author (B7 of Hydrograf's network delineation at control points: the origin of each node in the hand-off, an additive change of Nogat first, producers before consumers); the decisions below by delegated authority.
 
+Status: done 2026-11-11. Steps 1 to 4 merged into the `develop` of Nogat, Hydrograf and Hydrolog ([Results](#results)); no tags, no release.
+
 Requirements: HUB-5.2 (producers before consumers), DEV-17.4, AGI-4.1, ECO-050; `schemas/exchange/handoff-1.schema.json` (`nogat-handoff/1`, item 6 of [the GUI platform](2026-11-01-nogat-gui-platform.md)).
 
 ## Goal
@@ -147,4 +149,6 @@ The registry lines of step 4, in Hydrograf's `depends_on` (the `uses` list stays
 ## Results
 
 - 2026-11-10, step 1: Nogat `8848c26` on `develop`. `node_provenance` and `$defs/node_inputs` in `schemas/exchange/handoff-1.schema.json` as D1 gives them, the description of `provenance`, the second example as above; the first example unchanged. SHA-256 of the schema `84c6856d1148acdc08bf79600c8cdab03674e81fe1f30eb7abeb66629b5742ed`, the hash Hydrograf and Hydrolog record when they copy it (steps 2 and 3). `tests/contract/test_handoff_schema.py`: 45 passed (the cases above).
-- Steps 2 to 4 wait: Hydrograf's `delineate-network`, Hydrolog's A6, then the registry edge.
+- 2026-11-10/11, step 2: Hydrograf, inside its plan `docs/plans/2026-11-10-network-delineation.md` (ADR-080): the copy of the schema `5ed0aea` (`schemas/nogat/handoff-1.schema.json`, SHA-256 as above), `POST /api/delineate-network` and `build_network_handoff` in `27432f7` and `d6ece5d`, writing `node_provenance` for every subcatchment, reach and junction (D7; `OUT` takes `provenance`); merged into `develop` at `824bebd` after its gate (2088 passed); `tests/unit/test_network_endpoint.py` and `tests/integration/test_network_delineation_db.py` check the keys against the payload's nodes. Deployed on the Hydroni instance (127.0.0.1:8081) on 2026-11-11 and smoke-tested there (a network of 250.39 km², 4 subcatchments, 2 reaches, 2 junctions); Hydrograf's production (8080) is not redeployed, pending the author's decision.
+- 2026-11-10/11, step 3: Hydrolog, W5 of its plan `docs/plans/2026-11-10-network-wizard.md` (A6): the copy of the schema (same SHA-256), the node panel's origin with the precedence of D4 and the notice of D6, Sieć's hand-off writing `node_provenance` (D8), in `cead00a`, `3de9e20`, `c2bf2e7`, `4c3c3e8`; W6 opened Hydrograf's own network hand-off as a fixture. Merged into `develop` at `3b28b15` after its gate (7659 passed); the plan closed at `d86b3a9`.
+- 2026-11-11, step 4: D10 in `ecosystem.yaml`, Hydrograf's edge to Hydrolog as above, its note naming ADR-080 for the network; and the route „Delineate a network of subcatchments at control points (closing section, tributaries, gauges)” → `POST /api/delineate-network` among Hydrograf's routes (HUB-2.9). Hydrolog's network wizard gets no route: the routing table names its GUI only by `hydrolog gui serve`. `docs/ECOSYSTEM_MAP.md` and `AGENTS.md` regenerated; `uv run scripts/ecosystem.py validate` and `scripts/gate.sh` pass.

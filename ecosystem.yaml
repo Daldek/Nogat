@@ -282,7 +282,7 @@ projects:
         status: active
         via: [file]
         exchange: [kartograf-files]
-        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
+        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Kartograf ADR-025).
 
   - name: Hydrograf
     summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
@@ -298,6 +298,8 @@ projects:
         command: POST /api/delineate-watershed
       - task: Generate a design hydrograph for a point in Poland from PMAXTP rainfall
         command: POST /api/generate-hydrograph
+      - task: Delineate a network of subcatchments at control points (closing section, tributaries, gauges)
+        command: POST /api/delineate-network
       - task: Cut a terrain profile along a line
         command: POST /api/terrain-profile
     data_sources: [gugik, osm]
@@ -315,9 +317,10 @@ projects:
       - project: Hydrolog
         kind: runtime
         status: active
-        via: [library]
-        exchange: [watershed-parameters, hydrolog-python-api]
+        via: [library, file]
+        exchange: [watershed-parameters, hydrolog-python-api, hydrolog-network/1]
         uses: [WatershedParameters, ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, BlockHietogram, EulerIIHietogram]
+        note: POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
       - project: Obserwator
         kind: runtime
         status: active

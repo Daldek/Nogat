@@ -45,7 +45,7 @@ flowchart LR
   Obserwator -- library/file --> Hydrolog
   Kartograf -. file, no package .-> Hydrolog
   Kartograf -- library --> Hydrograf
-  Hydrolog -- library --> Hydrograf
+  Hydrolog -- library/file --> Hydrograf
   Obserwator -- library --> Hydrograf
   Hydraulik -. planned: service .-> Hydrograf
   Kartograf -- cli --> Hydraulik
@@ -81,7 +81,7 @@ flowchart LR
 | Hydrolog | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
-| Hydrograf | Hydrolog | runtime | active | library | `watershed-parameters`, `hydrolog-python-api` |
+| Hydrograf | Hydrolog | runtime | active | library, file | `watershed-parameters`, `hydrolog-python-api`, `hydrolog-network/1` |
 | Hydrograf | Obserwator | runtime | active | library | `obserwator-pmaxtp` |
 | Hydrograf | Hydraulik | runtime | planned | service | `hydraulik-job` |
 | Hydraulik | Kartograf | optional | active | cli | `kartograf-files`, `kartograf-commands/1`, `kartograf-result/1`, `kartograf-download/1`, `kartograf-plan/1`, `kartograf-error/1` |
@@ -99,9 +99,9 @@ flowchart LR
 
 - **Obserwator → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
 - **Hydrolog → Obserwator**: uses `fetch_pmaxtp`; precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`.
-- **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Hydrolog ADR-025).
+- **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Kartograf ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`, `list_segments`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
-- **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`
+- **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`; POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
 - **Hydrograf → Obserwator**: uses `fetch_pmaxtp`
 - **Hydrograf → Hydraulik**: Hydraulik as an external compute node fed with a catchment domain.
 - **Hydraulik → Kartograf**: uses `elevation download`, `landcover download`, `soil hsg`, `commands schema`; Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6), namely the elevation, the BDOT10k GeoPackage of the area's counties (landcover download --product bdot10k; land cover and roads, which model build paints into the grid) and the soil groups; the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
@@ -155,7 +155,7 @@ flowchart LR
 | `watershed-parameters` | document | Hydrograf | WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input. |
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
 | `hydrolog-hydrograph-csv` | dataset | Hydraulik | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
-| `hydrolog-network/1` | document | — | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
+| `hydrolog-network/1` | document | Hydrograf | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
 | `hydrolog-result/1` | document | Hydraulik, Retman | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
 | `hydrolog-command-list/1` | catalog | Retman | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |

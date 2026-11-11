@@ -24,7 +24,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
 | Final integration run | initial run done 2026-10-25; repeat pending | F1 to F8 have owners and fixing commits and are fixed and pushed; F6, the history rewrite, is done (2026-11-03, ADOPTION_PLAN phase 1) and closed 2026-11-09 without a further rewrite (`docs/plans/2026-10-25-final-integration.md`, Fixes). Retman, Hydraulik, Hydrograf and Archiwista are re-pinned to the rewritten commits and pushed. Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) remain incompatible in one environment; the repeat must run them apart |
 | Generated `AGENTS.md` (HUB-4.3) | done | `uv run scripts/ecosystem.py agents` from the `routes` of the registry (HUB-2.9, ECO-052), `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there (Obserwator after the rename of `master`) |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-2/` since 2026-11-10 (Kartograf, Obserwator, Hydrolog and Retman); every consumer applied it the same day and `set check` exits 0 (Next 10). Tooling: `set check`, `apply`, `bump`, `readme` (plan `docs/plans/2026-11-03-one-pin-set.md`); `verify-candidate` (REL-6.5) does not exist yet |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-3/` since 2026-11-10: candidate-2's members with Hydrolog `930915d` (W1 and W2 of its network wizard, which Hydrograf's network delineation needs). Hydrograf applied it (`develop` `824bebd`); Retman and Hydraulik still pin Hydrolog `759d7ef` (candidate-2), so `set check` reports `conflict` for them until they apply it. candidate-2 (2026-11-10) was applied by every consumer the same day (Next 10). Tooling: `set check`, `apply`, `bump`, `readme` (plan `docs/plans/2026-11-03-one-pin-set.md`); `verify-candidate` (REL-6.5) does not exist yet |
 | `nogat` package (HUB §7) | planned | |
 | Adoption in the projects | in progress | current branch evidence is listed below; the 2026-10-25 adoption and data-output snapshots are historical, not current waiting lists. The post-fix integration repeat and first release set remain open |
 
@@ -250,9 +250,9 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
 9. IMGWTools is Obserwator (ECO-057, plan `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done everywhere (changes on 2026-11-04).
-10. `candidate-2` is applied by every consumer (2026-11-10, heads and pins above; Retman's
-   member bumped to `320a7d6`). Left: production Hydrograf's rebuild on `develop`; Hydrolog
-   v1.0.0 waits for Obserwator 3.0.0's tag (producers first, HUB-5.2) and `verify-candidate`.
+10. `candidate-2` is applied by every consumer (2026-11-10, heads and pins above; Retman's member bumped to `320a7d6`). `candidate-3`
+   (Hydrolog `930915d`) followed the same day; Hydrograf applied it, Retman and Hydraulik have not yet (Status). Left: production
+   Hydrograf's rebuild on `develop`; Hydrolog v1.0.0 waits for Obserwator 3.0.0's tag (producers first, HUB-5.2) and `verify-candidate`.
 11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
    with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
@@ -261,9 +261,9 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
    real tools at the set's commits: 43 cases planned, 41 run, 2 skipped as
    large downloads, none failed (its `docs/PROGRESS.md`). Eval rows of the
    new operations are unmeasured: no model server on this machine.
-13. The origin of each node in the hand-off (B7 of Hydrograf's network delineation): plan `docs/plans/2026-11-10-node-provenance-in-handoff.md`,
-   approved 2026-11-10; step 1 done (`node_provenance`, still `/1`). Next: Hydrograf's `delineate-network` (step 2) and Hydrolog's Sieć
-   (A6, step 3) copy the schema; step 4, the registry edge, once step 2 is merged.
+13. The origin of each node in the hand-off: plan `docs/plans/2026-11-10-node-provenance-in-handoff.md`, done 2026-11-11. `node_provenance` in `nogat-handoff/1`
+   (step 1); Hydrograf's `POST /api/delineate-network` writes it (step 2, `develop` `824bebd`, on Hydroni since 2026-11-11, production pending the author);
+   Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
 
 ## Open questions
 

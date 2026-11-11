@@ -41,6 +41,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Open Hydrolog's GUI in the browser | [Hydrolog][hydrolog] | `hydrolog gui serve` |
 | Delineate the watershed of a point in Poland and read its parameters | [Hydrograf][hydrograf] | `POST /api/delineate-watershed` |
 | Generate a design hydrograph for a point in Poland from PMAXTP rainfall | [Hydrograf][hydrograf] | `POST /api/generate-hydrograph` |
+| Delineate a network of subcatchments at control points (closing section, tributaries, gauges) | [Hydrograf][hydrograf] | `POST /api/delineate-network` |
 | Cut a terrain profile along a line | [Hydrograf][hydrograf] | `POST /api/terrain-profile` |
 | Check which engines (SFINCS, SWMM) this machine can run | [Hydraulik][hydraulik] (research) | `hydraulik engines check` |
 | Fetch terrain, land cover and soil groups of a model area through Kartograf | [Hydraulik][hydraulik] (research) | `hydraulik terrain download` |

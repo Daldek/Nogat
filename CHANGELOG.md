@@ -197,6 +197,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Registry: Hydrograf's edge to Hydrolog gains `via: file` and the exchange
+  `hydrolog-network/1`, with a note on the hand-offs (a watershed, ADR-068;
+  a network, ADR-080, whose hand-off carries `node_provenance`), and
+  Hydrograf's routes gain „Delineate a network of subcatchments at control
+  points (closing section, tributaries, gauges)” -> `POST
+  /api/delineate-network`; `AGENTS.md` and `docs/ECOSYSTEM_MAP.md`
+  regenerated. Step 4 closes `docs/plans/2026-11-10-node-provenance-in-handoff.md`
+  (Status done 2026-11-11, Results of steps 2 to 4: Hydrograf `824bebd`,
+  Hydrolog `3b28b15`). `docs/PROGRESS.md`: Next 13 done; the release-set row
+  and Next 10 name `candidate-3`, applied by Hydrograf, not yet by Retman and
+  Hydraulik.
 - Release set `candidate-2`: Retman `a9c04ad` -> `320a7d6` by `set bump`
   after a fetch, its `develop` once it applied the set (plan
   `docs/plans/2026-11-03-one-pin-set.md`, step 3); README regenerated.
@@ -342,6 +353,9 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- Registry: Hydrolog's edge to Kartograf named the HSG rules „Hydrolog
+  ADR-025”; they are Kartograf's ADR-025 (Hydrolog's ADR-0025 is the
+  structure alone in the schematic). Map regenerated.
 - `tests/integration/test_check_commits.py` pins the commit check's settings
   (`GATE_CHECK_AUTHOR=1`, `GATE_AUTHOR_EMAIL`): it inherited CI's
   `GATE_CHECK_AUTHOR=0`, so the author test failed in every CI run since
