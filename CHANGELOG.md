@@ -197,6 +197,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Registry: Hydrograf's routes gain „Preview a network of subcatchments while
+  placing control points (areas, reach lengths, outlines)” -> `POST
+  /api/delineate-network/preview` (its ADR-081, `develop` `97498bb`);
+  `AGENTS.md` regenerated. `docs/PROGRESS.md`: the state of 2026-11-11
+  (heads, pins, the instances, the author's open decisions) replaces the
+  heads of 2026-11-10; the superseded rows of 2026-11-04 are dropped.
 - Registry: Hydrograf's edge to Hydrolog gains `via: file` and the exchange
   `hydrolog-network/1`, with a note on the hand-offs (a watershed, ADR-068;
   a network, ADR-080, whose hand-off carries `node_provenance`), and

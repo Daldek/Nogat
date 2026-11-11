@@ -92,15 +92,7 @@ These rows supersede the rows above where they differ.
 | Hydrolog | `feature/gui`, `a328656` | Served as the omp service on 127.0.0.1:8070 behind a Cloudflare tunnel; `fix/snyder-recession`, `1708a09`, pushed and pinned by Hydrograf |
 | Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
 
-Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the `nogat-specimen` container keeps 8765.
-
-### Changes on 2026-11-04
-
-These rows supersede the rows above where they differ.
-
-| Project | Branch and head | Change |
-|---|---|---|
-| Obserwator | `develop` `84e43a1` (3.0.0.dev0) | v3.0.0 blocker B6 done: the result, error and catalog documents of standard 1.0, `--json`, paging by cursor (ADR-010; plan `2026-11-04-obserwator-agent-contracts.md`, Results). CI green on the three systems |
+Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the `nogat-specimen` container keeps 8765. Hydrograf's other instances: Hydroni 8081, kaczawa2 8082 (since 2026-11-11).
 
 ### Changes on 2026-11-05 and 2026-11-06
 
@@ -113,18 +105,15 @@ These rows supersede the rows above where they differ. Details: Results of `plan
 | Hydrograf | `develop` `520f886`, production (since 2026-11-05 12:53 UTC, updated in place the same day) | tc only through Hydrolog; flow path heads, overland segments and channel sources measured (ADR-070, migration 004, backfilled); thresholds 1 and 10 km²; PMAXTP depth as the watershed mean by Thiessen polygons (ADR-069) with an optional areal reduction factor; tester reports #13, #14, #16, #20, #23–#27, #35, #37, #39, #40; the author's review: boundary flow path from the watershed's boundary cells, full unsimplified lines, legend „Zlewnia” (plan Results 5). Hydrolog's comparison of the hand-off reads „zgodny” for every tc method. Rollback `/data/nmt/hydrograf-backup-2026-11-05-v050/` (image `hydrograf-api:pre-v050`, runbook §9). No `v0.5.0` tag yet: the author continues the review |
 | Archiwista | `develop` `cd29b6f`; :8090 runs it since 2026-11-06 | Merged and deployed: Obserwator's commands, monthly and annual charts (A-ADR-051), the map's station products, the series hand-off to Hydrolog (A-ADR-052) with a choice of data and variable; the map draws a station catalog without series (ČHMÚ's `store catalogs`). The store `zespol` lives on the SMB share `/mnt/magazyn/agent-tmp/archiwista-zespol/`. CI green for the first time (`8f34a4c`): the gate's limit 30 → 90 min, the run without the extra `obserwator` fixed |
 
-### Heads and pins on 2026-11-10
+### State on 2026-11-11
 
-After `git fetch`; pins at each consumer's integration branch. These rows supersede the rows above where they differ. `set check` against `candidate-2`: every pin `ok`, exit 0.
+After `git ls-remote`; these rows supersede the rows above where they differ. Unchanged since 2026-11-10: Kartograf `d0990c8`, Obserwator `f9f4ee7`, Retman `320a7d6`, Archiwista `a656ee1` (`develop`) and Hydraulik `d0f3938` (`feature/sfincs-swmm`) with their pins; Retman and Hydraulik still pin Hydrolog `759d7ef` (candidate-2).
 
-| Project | Head | Pins and deployment |
+| Project | Head | Change, pins and deployment |
 |---|---|---|
-| Kartograf, Obserwator | `develop` `d0990c8`, `f9f4ee7` | members of `candidate-2`; pin no project |
-| Hydrolog | `develop` `759d7ef` | member; Obserwator `f9f4ee7` |
-| Retman | `develop` `320a7d6` | member (`set bump` from `a9c04ad`); Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `759d7ef` |
-| Hydrograf | `develop` `fd0b533` (the set applied in `01ab00a`) | the set's Kartograf, Obserwator and Hydrolog. Hydroni runs `fd0b533`; production runs `894810c` (since 2026-11-10) with Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `4fad769` until its next rebuild (images only) |
-| Hydraulik | `feature/sfincs-swmm` `d0f3938` | Obserwator `f9f4ee7`, Hydrolog `759d7ef` (its CN of water follows Hydrolog, 98); Kartograf through its CLI, not pinned |
-| Archiwista | `develop` `a656ee1` | Kartograf `d0990c8`, Obserwator `f9f4ee7` |
+| Hydrograf | `develop` `a46adb4` | Network delineation at control points, its ADR-080 amended six times on 2026-11-11: the mouth rule at every junction; a branch without a point at its mouth runs down its main river (`15e72e8`); a point at a confluence enters it at its mouth, a river without a point at a node is a dopływ of its own (`a46adb4`); two kinds of subcatchment for the person, dopływ and przyrzecze, A outlined as „Zlewnia A (całość)” (`a2e5d88`, `eb3b7d4`); notices of short and flat reaches with „Przesuń do zbiegu”, a flat reach handed off as a lag (`add1a9f`). The network preview, ADR-081 (`97498bb`). Pins candidate-3 (Hydrolog `930915d`). Hydroni (127.0.0.1:8081, public) and kaczawa2 (127.0.0.1:8082, a review copy of the Kaczawa instance, no public host, README `~/data/hydrograf-kaczawa2/README`) run `a46adb4`. Production (127.0.0.1:8080, public) still runs `894810c` with Kartograf `9deaa31`, Obserwator `1ee5457`, Hydrolog `4fad769` and the rasters re-cut on 2026-11-10 23:53 CET (rollback `data/nmt.pre-recut`); not redeployed until the author has reviewed kaczawa2 |
+| Hydrolog | `develop` `3aab136` | The network wizard (its plan closed); Sieć says why it refuses a reach and offers a lag or level pool (`caf617c`); Hydrograf's headwater is a „dopływ” in a node's origin (`be189b0`); a Muskingum-Cunge reach without a grid of non-negative weights is routed as a cascade of linear reservoirs with the warning `diffusion_dominated` instead of `unstable_timestep` (ADR-0026, `3aab136`). Past candidate-3's `930915d`. The GUI on 127.0.0.1:8070 runs `3aab136` |
+| Nogat | `develop` | candidate-3 (Hydrolog `930915d`); `node_provenance` done (Next 13); the registry edge Hydrograf → Hydrolog and the routes of `delineate-network` and its preview |
 
 ## Next
 
@@ -249,10 +238,11 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
    sheets, S5's tolerance. State on 2026-11-03: A1 to A3 done (`4027755` on
    :8090), H1 done (in Hydrograf's `develop`, `1794f76`); A4 and A5 wait
    for the author; H2 and S5 are postponed until after Hydrograf v0.5.0.
-9. IMGWTools is Obserwator (ECO-057, plan `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done everywhere (changes on 2026-11-04).
-10. `candidate-2` is applied by every consumer (2026-11-10, heads and pins above; Retman's member bumped to `320a7d6`). `candidate-3`
-   (Hydrolog `930915d`) followed the same day; Hydrograf applied it, Retman and Hydraulik have not yet (Status). Left: production
-   Hydrograf's rebuild on `develop`; Hydrolog v1.0.0 waits for Obserwator 3.0.0's tag (producers first, HUB-5.2) and `verify-candidate`.
+9. IMGWTools is Obserwator (ECO-057, plan `docs/plans/2026-11-03-imgwtools-to-obserwator.md`): done everywhere (2026-11-04).
+10. `candidate-2` is applied by every consumer (2026-11-10; Retman's member bumped to `320a7d6`). `candidate-3`
+   (Hydrolog `930915d`) followed the same day; Hydrograf applied it, Retman and Hydraulik have not (Open questions). Left: production
+   Hydrograf's rebuild on `develop` after the author's review of kaczawa2 (state on 2026-11-11); Hydrolog v1.0.0 waits for Obserwator
+   3.0.0's tag (producers first, HUB-5.2), `verify-candidate` and the author's versions.
 11. Feedback „Zgłoś uwagę” in Archiwista and Hydrolog: merged and deployed
    with their productions; Hydrograf's 26 reports are backed up in
    `/data/nmt/hydrograf-feedback-backup-2026-11-03T2319/`.
@@ -280,6 +270,15 @@ After `git fetch`; pins at each consumer's integration branch. These rows supers
   (an idea).
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
+- The author's decisions (state on 2026-11-11): production Hydrograf rebuilt on `develop` (`a46adb4` or later) only
+  after the author's review of kaczawa2 (8082); public access to kaczawa2 (a Cloudflare host or an SSH tunnel); the
+  final versions, with no tags in any project until they are decided (Hydrolog v1.0.0 included); candidate-3 by Retman
+  and Hydraulik (both pin Hydrolog `759d7ef`), and whether a next candidate takes Hydrolog `3aab136`. Production runs old pins.
+- Hydrograf's network method (ADR-080), recorded with proposals in its `docs/PROGRESS.md`, no work until the author asks
+  („na razie nic nie rób”): a large unpointed tributary entering mid-reach stays in the przyrzecze, routed nowhere;
+  reach lengths by D8 4–7 % longer than BDOT10k; reach slopes from end-point elevations noisy on short or flat reaches;
+  the 50 m mouth tolerance is arbitrary (reaches of 50–200 m get a notice and a button only); elements over 250 km²
+  lie beyond SCS-CN's validity (a notice only).
 
 Decided by the author on 2026-11-09 (CHANGELOG): F6 is closed; the rewrite of
 2026-11-03 (`git-filter-repo` a40bce548d2c, bundles in

@@ -300,6 +300,8 @@ projects:
         command: POST /api/generate-hydrograph
       - task: Delineate a network of subcatchments at control points (closing section, tributaries, gauges)
         command: POST /api/delineate-network
+      - task: Preview a network of subcatchments while placing control points (areas, reach lengths, outlines)
+        command: POST /api/delineate-network/preview
       - task: Cut a terrain profile along a line
         command: POST /api/terrain-profile
     data_sources: [gugik, osm]
