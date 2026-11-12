@@ -12,6 +12,8 @@
   } catch (e) {}
 </script>
 <link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="kit/nogat-app-menu.css">
+<script type="module" src="kit/nogat-app-menu.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -178,6 +180,11 @@
     <div class="row">
       <span class="fmt">GeoTIFF</span><span class="fmt">LAZ</span><span class="fmt">GPKG</span>
       <span class="note">Search with <kbd>Ctrl</kbd> + <kbd>K</kbd></span>
+    </div>
+    <h3>App menu</h3>
+    <div class="row">
+      <nogat-app-menu current="hydrograf" marks="marks/" apps='{"hydrograf": "mockups/hydrograf/", "hydrolog": "mockups/hydrolog/"}'></nogat-app-menu>
+      <span class="note">kit/nogat-app-menu.js: the GUIs of the deployment's <code>[nogat.gui]</code> (DEV-15.4)</span>
     </div>
     <h3>Code</h3>
     <pre>$ kartograf elevation download --check

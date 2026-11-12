@@ -434,6 +434,32 @@ and the dark theme, the project's mark as favicon and in the top bar, and the
 shell of the guidelines (top bar, navigation rail, resizable side panel).
 *Why:* the GUIs serve one user as one family of tools (ECO-055).
 
+**DEV-15.4** A GUI shows the kit's app menu, `<nogat-app-menu>` from Nogat
+`design/kit/`, in its top bar left of the theme switch. It lists the GUIs
+whose address the deployment sets in `[nogat.gui]` of `nogat.toml`
+(DEV-18.1), one key per registry name in lower case; the app passes that
+table to its page, and with no other GUI set the menu is not drawn. An entry
+opens its GUI in the tab named `nogat-<name>`.
+*Why:* one person moves between the GUIs (ECO-058).
+
+**DEV-15.5** A GUI hands data to another as `nogat-handoff/1` (Nogat
+`schemas/exchange/handoff-1.schema.json`) through the kit's `nogat-handoff.js`.
+The producer offers „Kopiuj do <GUI in genitive>” and „Plik przekazania”; the
+file is `<subject>.handoff.json` in 2-space JSON with a final newline. The
+consumer offers „Wczytaj z <GUI in genitive>” with „Plik przekazania…” and
+„Wklej ze schowka”, checks the envelope against its copy of the schema and
+the payload against its owner's schema, and names each problem in Polish.
+Copying falls back to a selected text field where the Clipboard API is
+missing or refused.
+*Why:* three implementations differed in file name, text and clipboard
+(ECO-058).
+
+**DEV-15.6** Files of Nogat's kit, tokens, marks and schemas are copied byte
+for byte and never edited in the project (a token copy keeps only the
+leading comment of DEV-15.3); a change is made in Nogat and copied again.
+`drift` reports each copy as current, behind or modified (HUB-4.1).
+*Why:* copies that drift unseen split the shared look and contracts again.
+
 ---
 
 ## 16. Licence and contributions
@@ -492,7 +518,8 @@ the session that resolves it closes the issue.
 **DEV-18.1** Shared settings live in one TOML file, `nogat.toml`, in the user
 configuration directory (`platformdirs.user_config_path("nogat")`, or the path
 in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
-`cache_dir`, `lang`); section `[<tool>]` holds the tool's own keys. A value
+`cache_dir`, `lang`, and the table `gui` of GUI addresses, DEV-15.4); section
+`[<tool>]` holds the tool's own keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
 `[nogat]`), built-in default. Every tool reads the file with `tomllib` and

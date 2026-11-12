@@ -8,7 +8,7 @@ Usage:
     uv run scripts/ecosystem.py agents --check # exit 4 when AGENTS.md is stale
     uv run scripts/ecosystem.py deps           # third-party ranges across checkouts
     uv run scripts/ecosystem.py deps --installed   # also versions in each .venv
-    uv run scripts/ecosystem.py drift          # consumers' pins against producers' tags
+    uv run scripts/ecosystem.py drift          # pins against tags; copies of Nogat
     uv run scripts/ecosystem.py standard       # IDs, links, budgets, copies
     uv run scripts/ecosystem.py standard --write   # regenerate blocks, then check
     uv run scripts/ecosystem.py set check      # consumers' pins against the release set
@@ -22,6 +22,7 @@ Checkouts are resolved as siblings of Nogat or under NOGAT_WORKSPACE (HUB §3).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -29,7 +30,7 @@ import subprocess
 import sys
 import tomllib
 from collections.abc import Callable, Sequence
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, NoReturn
 from urllib.parse import urlsplit
 
@@ -60,6 +61,17 @@ TOPIC_VERSION = re.compile(r"^Part of standard (\S+)", re.MULTILINE)
 VERSIONLESS = {"README.md", "DECISIONS.md"}
 INCLUDE = re.compile(r"^(-r|--requirement)(\s+|=)(?P<path>\S+)")
 OPTION = re.compile(r"\s+--?[A-Za-z]")
+# What projects copy of Nogat (DEV-15.6): files, and directories filtered by
+# `nogat_sources`.
+COPIED_PATHS = (
+    "schemas/agent",
+    "schemas/exchange",
+    "standards/error_registry.json",
+    "design/tokens.css",
+    "design/marks",
+    "design/kit",
+)
+COPY_HEADER = re.compile(rb"\A/\*.*?\*/(\r?\n)?", re.DOTALL)
 
 
 class Failure(Exception):
@@ -793,8 +805,135 @@ def _declared_pins(
     return pins
 
 
+def nogat_sources(root: Path) -> list[str]:
+    """Nogat's files that projects copy, tracked at HEAD of `root` (DEV-15.6).
+
+    Agent and exchange schemas, the error registry, the tokens, the marks
+    and every file of the kit; paths relative to `root`, sorted.
+    """
+    listed = _git(
+        root, "ls-tree", "-r", "-z", "--name-only", "HEAD", "--", *COPIED_PATHS
+    )
+    sources = []
+    for path in listed.split("\0"):
+        parent, suffix = (
+            PurePosixPath(path).parent.as_posix(),
+            PurePosixPath(path).suffix,
+        )
+        if (
+            path in COPIED_PATHS
+            or path.startswith("design/kit/")
+            or (parent in ("schemas/agent", "schemas/exchange") and suffix == ".json")
+            or (parent == "design/marks" and suffix == ".svg")
+        ):
+            sources.append(path)
+    return sorted(sources)
+
+
+def _blob_hashes(root: Path, names: list[str]) -> dict[str, str]:
+    """SHA-256 of each `commit:path` blob of `root`; names git lacks are left out.
+
+    One `git cat-file --batch` reads every blob; a blob met again under
+    another name is not hashed twice.
+    """
+    out = _git_bytes(
+        root, "cat-file", "--batch", stdin="".join(f"{n}\n" for n in names).encode()
+    )
+    by_blob: dict[str, str] = {}
+    hashes: dict[str, str] = {}
+    at = 0
+    for name in names:
+        end = out.index(b"\n", at)
+        header = out[at:end].decode("utf-8").split()
+        at = end + 1
+        if len(header) != 3:  # `<name> missing`: the path is absent at that commit
+            continue
+        blob, kind, size = header[0], header[1], int(header[2])
+        if kind == "blob":
+            if blob not in by_blob:
+                by_blob[blob] = hashlib.sha256(out[at : at + size]).hexdigest()
+            hashes[name] = by_blob[blob]
+        at += size + 1
+    return hashes
+
+
+def source_versions(root: Path, sources: list[str]) -> dict[str, dict[str, str]]:
+    """Per source, the newest commit on HEAD's history holding each SHA-256."""
+    history = {
+        s: _git(root, "log", "--format=%H", "HEAD", "--", s).split() for s in sources
+    }
+    names = [f"{c}:{s}" for s in sources for c in history[s]]
+    hashes = _blob_hashes(root, names)
+    versions: dict[str, dict[str, str]] = {}
+    for source in sources:
+        found = versions.setdefault(source, {})
+        for commit in history[source]:  # newest first: the first commit wins
+            digest = hashes.get(f"{commit}:{source}")
+            if digest is not None:
+                found.setdefault(digest, commit)
+    return versions
+
+
+def without_copy_header(data: bytes) -> bytes:
+    """Drop a leading `/* ... */` that names Nogat as the origin (DEV-15.3)."""
+    match = COPY_HEADER.match(data)
+    if match and b"Copied from Nogat" in match[0]:
+        return data[match.end() :]
+    return data
+
+
+def _sha256(path: Path) -> str | None:
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        return None
+
+
+def copy_rows(registry: dict[str, Any], root: Path) -> list[tuple[str, ...]]:
+    """(project, copy, source, state) of each project's copy of a Nogat file (D9).
+
+    A copy is a file tracked in the project's checkout named like a source;
+    its working-tree bytes, without a leading `Copied from Nogat` comment,
+    are `current` when they equal Nogat's working tree, `behind <commit>`
+    when they equal an older version on Nogat's HEAD, else `modified`.
+    """
+    sources = nogat_sources(root)
+    versions = source_versions(root, sources)
+    current = {s: _sha256(root / s) for s in sources}
+    by_name: dict[str, list[str]] = {}
+    for source in sources:
+        by_name.setdefault(PurePosixPath(source).name, []).append(source)
+    rows: list[tuple[str, ...]] = []
+    for project in registry["projects"]:
+        if "hub" in project["profiles"]:
+            continue
+        directory = checkout(project)
+        if not (directory / ".git").exists():
+            rows.append((project["name"], "—", "—", "no checkout"))
+            continue
+        tracked = _git(directory, "ls-files", "-z").split("\0")
+        for path in sorted(p for p in tracked if PurePosixPath(p).name in by_name):
+            try:
+                data = without_copy_header((directory / path).read_bytes())
+            except OSError:
+                continue  # tracked but deleted or unreadable in the working tree
+            digest = hashlib.sha256(data).hexdigest()
+            for source in by_name[PurePosixPath(path).name]:
+                if digest == current[source]:
+                    state = "current"
+                elif digest in versions[source]:
+                    state = f"behind {versions[source][digest][:7]}"
+                else:
+                    state = "modified"
+                rows.append((project["name"], path, source, state))
+    return rows
+
+
 def report_drift(registry: dict[str, Any]) -> int:
-    """Print each active runtime or optional dependency: pin against latest tag."""
+    """Print each active runtime or optional dependency's pin against latest tag.
+
+    A second table states each project's copies of Nogat's files (D9).
+    """
     by_name = {p["name"]: p for p in registry["projects"]}
     rows: list[tuple[str, str, str, str, str]] = []
     for consumer in registry["projects"]:
@@ -842,6 +981,8 @@ def report_drift(registry: dict[str, Any]) -> int:
             if not found:
                 rows.append((*who, "—", latest or "—", "not declared"))
     _table(("consumer", "producer", "pin", "latest tag", "state"), rows)
+    print()
+    _table(("project", "copy", "source", "state"), copy_rows(registry, ROOT))
     return 0
 
 
@@ -935,26 +1076,33 @@ def integration_ref(project: dict[str, Any]) -> str:
     return f"origin/{project.get('branch') or 'develop'}"
 
 
-def _git(directory: Path, *args: str, code: str = "not_found") -> str:
-    """Stdout of `git -C directory args`; Failure `code` names a failing command."""
+def _git_bytes(
+    directory: Path, *args: str, code: str = "not_found", stdin: bytes | None = None
+) -> bytes:
+    """Stdout of `git -C directory args` fed `stdin`; Failure `code` names a failure."""
     try:
         done = subprocess.run(
             ["git", "-C", str(directory), *args],
+            input=stdin,
             capture_output=True,
-            text=True,
-            encoding="utf-8",
             check=False,
         )
     except OSError as e:
         raise Failure("missing_dependency", f"git: {e.strerror}") from e
     if done.returncode:
-        why = done.stderr.strip().splitlines()[-1:] or [f"exit {done.returncode}"]
+        stderr = done.stderr.decode("utf-8", "replace")
+        why = stderr.strip().splitlines()[-1:] or [f"exit {done.returncode}"]
         raise Failure(
             code,
             f"{_shown(directory)}: git {' '.join(args)}: {why[0]}",
             details={"reason": "git_failed"},
         )
     return done.stdout
+
+
+def _git(directory: Path, *args: str, code: str = "not_found") -> str:
+    """Stdout of `git -C directory args` as text; Failure `code` names a failure."""
+    return _git_bytes(directory, *args, code=code).decode("utf-8")
 
 
 def _reader_at(directory: Path, ref: str) -> Callable[[Path], str]:
@@ -1285,7 +1433,11 @@ def _parser() -> argparse.ArgumentParser:
     deps_cmd.add_argument(
         "--installed", action="store_true", help="also compare each checkout's .venv"
     )
-    sub.add_parser("drift", help="compare consumers' pins with producers' latest tags")
+    sub.add_parser(
+        "drift",
+        help="compare consumers' pins with producers' latest tags, and copies of "
+        "Nogat's files with Nogat",
+    )
     standard_cmd = sub.add_parser(
         "standard", help="check the standard's IDs, links, budgets and copies"
     )

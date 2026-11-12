@@ -11,7 +11,8 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | --- | --- |
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
-| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes (open the file in a browser) |
+| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu, since modules do not load from `file://` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.6): the app menu `nogat-app-menu.js` and `.css`, the hand-off `nogat-handoff.js`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -235,6 +236,32 @@ Phone (width <= 860 px):
 The tool accent appears only in the mark, the tool name and an optional 2-3 px header rule.
 The shared `--accent` stays the interactive colour everywhere.
 A new project gets a mark and a `--tool-<name>` pair in both themes; the contract test requires one per project in `ecosystem.yaml`.
+
+## Kit
+
+Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
+`nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit.py` fails when they disagree.
+
+App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
+
+```html
+<nogat-app-menu current="hydrolog" marks="nogat/marks/"></nogat-app-menu>
+```
+
+The app sets `element.apps` (or the `apps` attribute, as JSON) to the deployment's `[nogat.gui]` table of `nogat.toml`, e.g. `{"hydrograf": "https://hydrograf.example/", "archiwista": "/archiwista/"}`.
+Addresses resolve against the page; only http and https stay. With no GUI but the current one the element is not drawn. An entry opens its GUI in the tab `nogat-<name>`: Chromium reuses that tab unless one of the two pages sends `Cross-Origin-Opener-Policy`, which costs one more tab.
+The menu styles itself with the tokens and falls back to light values, so a GUI without `tokens.css` shows it too.
+
+Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
+
+| Export | Use |
+| --- | --- |
+| `TEXTS.copyTo(name)`, `TEXTS.file`, `TEXTS.loadFrom(name)`, `TEXTS.openFile`, `TEXTS.paste`, `TEXTS.open(name)` | The labels: „Kopiuj do Hydrologa”, „Plik przekazania”, „Wczytaj z Hydrografa”, „Plik przekazania…”, „Wklej ze schowka”, „Otwórz Archiwistę” |
+| `copyHandoff(doc, field)` | Clipboard in a secure context; otherwise the text goes selected into `field` and the result is `"field"` (show `TEXTS.copyByHand`) |
+| `downloadHandoff(doc)` | Saves `<subject>.handoff.json`, 2-space JSON with a final newline; returns the name |
+| `readFile(file)`, `readClipboard()` | The text of a picked file; the clipboard's, or `null` when refused (offer a field, `TEXTS.pasteByHand`) |
+| `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
+| `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
 ## Adopting
 

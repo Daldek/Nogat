@@ -59,7 +59,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-047](#eco-047-plan-approval-is-a-line-in-the-plan) | Plan approval is a line in the plan | accepted | 2026-10-21 |
 | [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
-| [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | accepted | 2026-10-21 |
+| [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | amended by ECO-058 | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
@@ -67,6 +67,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
+| [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 
 ---
 
@@ -858,6 +859,10 @@ and no error document; a failed unit carries a registry `code`;
 `<tool>_commands_list` and `<tool>_commands_schema`; a catalog command lists
 its MCP `families`.
 
+**Amended by ECO-058 (2026-11-12):** the envelope `nogat-handoff/1` that
+GUIs exchange is a canonical schema too, in `schemas/exchange/`, copied and
+checked the same way; `drift` reports every copy (DEV-15.6).
+
 **Why.** AGENT_INTERFACE.md defined the documents in prose only, without
 examples; seven projects could each claim AGI-1.2 and still emit different
 documents. The review also found the stream contract on errors, the meaning
@@ -1084,3 +1089,31 @@ the author does it later).
 Archiwista, Retman, Hydraulik and Hydrolog, then the frozen Kartograf
 (`STORE_MARKERS`) and Hydrograf (documents only; its pin and imports of
 `imgwtools` stay until after its v0.5.0).
+
+## ECO-058 GUIs link to each other and hand off one way
+
+**Decision.** The GUI platform comes in two stages. Stage 1: every GUI of the
+ecosystem shows the kit's app menu, which leads to the other GUIs the
+deployment configures in `[nogat.gui]` of `nogat.toml`, and hands data off by
+file and clipboard through the kit's `nogat-handoff.js` (DEV-15.4, DEV-15.5).
+The kit lives in Nogat `design/kit/` beside the tokens: plain files copied
+byte for byte, which `drift` checks by hash (DEV-15.6). Nogat runs no GUI;
+one window with one sign-in is stage 2, a new project with its own
+repository that copies the kit like every other GUI. Plans:
+`docs/plans/2026-11-12-gui-links-and-handoff.md` (stage 1) and
+`docs/plans/2026-11-01-nogat-gui-platform.md` (stage 2).
+
+**Why.** The author's decision of 2026-11-12. No GUI linked to another, and
+the hand-off ran through three implementations that differed in file name,
+text and clipboard behaviour, while Archiwista's copy of `handoff-1` fell
+behind unseen. Links and one hand-off take about ten sessions and stay useful
+under a hub; the hub with frames, a proxy and one sign-in takes over thirty.
+
+**Rejected.** Nogat hosting the GUIs (the standard's repository would carry a
+web server and a sign-in). Each GUI writing its own menu (a fourth copy of
+the same code). Addresses in the registry (they differ per deployment,
+HUB-2.4). The kit in the hub's repository (every GUI would depend on an app).
+
+**Consequence.** Each GUI adopts the kit in its own session (steps 4 to 7 of
+the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
+(DEV-1.2).

@@ -270,3 +270,25 @@ def test_validate_rejects_a_gui_interface_that_names_no_command(gui: object) -> 
     problems = ecosystem.validate(registry)
     assert problems
     assert all(p.startswith(f"projects/{position}/interfaces/gui") for p in problems)
+
+
+@pytest.mark.parametrize(
+    ("data", "kept"),
+    [
+        (b"/* Copied from Nogat x.\n   y. */\n:root {}\n", b":root {}\n"),
+        (b"/* Copied from Nogat x. */\r\n:root {}\r\n", b":root {}\r\n"),
+        (b"/* Copied from Nogat x. */:root {}", b":root {}"),
+        # Only a leading comment naming Nogat is the copy's header.
+        (b"/* Our tokens. */\n:root {}\n", b"/* Our tokens. */\n:root {}\n"),
+        (b"\n/* Copied from Nogat x. */\n", b"\n/* Copied from Nogat x. */\n"),
+        (b"/* a */ /* Copied from Nogat */\n", b"/* a */ /* Copied from Nogat */\n"),
+        (
+            b"/* Copied from Nogat, never closed\n",
+            b"/* Copied from Nogat, never closed\n",
+        ),
+    ],
+)
+def test_without_copy_header_drops_only_the_leading_nogat_comment(
+    data: bytes, kept: bytes
+) -> None:
+    assert ecosystem.without_copy_header(data) == kept

@@ -127,6 +127,11 @@ DOC-11.1).
     example of a store-only command (DEV-19.18, ECO-054).
   - Every GUI follows the visual identity in Nogat `design/`: tokens, both
     themes, the project's mark, Archiwista's shell (DEV-15.3, ECO-055).
+  - Every GUI links to the others through the kit's app menu and hands data
+    off as `nogat-handoff/1` through the kit's `nogat-handoff.js`; copies of
+    Nogat's kit, tokens, marks and schemas are byte-identical and reported by
+    `drift`; Nogat runs no GUI (DEV-15.4 to DEV-15.6, DEV-18.1, HUB-1.1,
+    HUB-4.1, ECO-050, ECO-058).
   - The registry's optional `gui` interface: the command that serves a
     project's browser GUI (HUB-2.1).
   - A candidate's `members.toml` holds the commit every consumer pins; the
