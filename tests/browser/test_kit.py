@@ -1,0 +1,506 @@
+"""The GUI kit in a browser: design/kit/ (DEV-15.4, DEV-15.5, ECO-058).
+
+The kit is plain ES modules copied by every GUI, so it is tested where it
+runs: Chromium through Playwright, on pages served from a throwaway
+directory over HTTP. The schema checks of `nogat-handoff.js` are compared
+with the Python `jsonschema` validator on the same documents.
+"""
+
+from __future__ import annotations
+
+import copy
+import functools
+import http.server
+import json
+import shutil
+import threading
+from collections.abc import Iterator
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+import pytest
+from playwright.sync_api import Browser, Page, Playwright, sync_playwright
+
+ROOT = Path(__file__).resolve().parents[2]
+ENVELOPE: dict[str, Any] = json.loads(
+    (ROOT / "schemas" / "exchange" / "handoff-1.schema.json").read_text(
+        encoding="utf-8"
+    )
+)
+INSECURE_HOST = "nogat.test"
+
+PAGE = """<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="kit/nogat-app-menu.css">
+<script type="module" src="kit/nogat-app-menu.js"></script>
+</head>
+<body>
+<header><span id="before" tabindex="0">przed</span>
+<nogat-app-menu current="hydrolog" marks="marks/"></nogat-app-menu></header>
+<main><textarea id="field" hidden></textarea></main>
+</body>
+</html>
+"""
+
+
+class _Quiet(http.server.SimpleHTTPRequestHandler):
+    def log_message(self, format: str, *args: Any) -> None:
+        pass
+
+
+@pytest.fixture(scope="module")
+def site(tmp_path_factory: pytest.TempPathFactory) -> Iterator[str]:
+    """Base URL of the kit, marks and a test page, served over HTTP."""
+    directory = tmp_path_factory.mktemp("site")
+    shutil.copytree(ROOT / "design" / "kit", directory / "kit")
+    shutil.copytree(ROOT / "design" / "marks", directory / "marks")
+    (directory / "page.html").write_text(PAGE, encoding="utf-8")
+    handler = functools.partial(_Quiet, directory=str(directory))
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    yield f"127.0.0.1:{server.server_address[1]}"
+    server.shutdown()
+    thread.join()
+
+
+@pytest.fixture(scope="module")
+def playwright() -> Iterator[Playwright]:
+    with sync_playwright() as p:
+        yield p
+
+
+@pytest.fixture(scope="module")
+def browser(playwright: Playwright) -> Iterator[Browser]:
+    # nogat.test resolves to 127.0.0.1 but is not a secure context, like a LAN address.
+    browser = playwright.chromium.launch(
+        args=[f"--host-resolver-rules=MAP {INSECURE_HOST} 127.0.0.1"]
+    )
+    yield browser
+    browser.close()
+
+
+@pytest.fixture
+def page(browser: Browser, site: str) -> Iterator[Page]:
+    context = browser.new_context(
+        permissions=["clipboard-read", "clipboard-write"], accept_downloads=True
+    )
+    page = context.new_page()
+    errors: list[str] = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(f"http://{site}/page.html")
+    page.wait_for_function("customElements.get('nogat-app-menu') !== undefined")
+    yield page
+    context.close()
+    assert errors == []
+
+
+def _set_apps(page: Page, apps: dict[str, str]) -> None:
+    page.evaluate(
+        "apps => { document.querySelector('nogat-app-menu').apps = apps; }", apps
+    )
+
+
+def _handoff(page: Page, script: str, *args: Any) -> Any:
+    """Run `script` (a function of the module `h` and `args`) in the page."""
+    return page.evaluate(
+        f"async args => {{ const h = await import('/kit/nogat-handoff.js'); "
+        f"return ({script})(h, ...args); }}",
+        list(args),
+    )
+
+
+# The app menu (DEV-15.4)
+
+APPS = {
+    "hydrograf": "https://hydrograf.example/",
+    "hydrolog": "http://127.0.0.1:8070/",
+    "archiwista": "https://archiwista.example/",
+}
+
+
+def test_menu_is_not_drawn_without_another_gui(page: Page) -> None:
+    menu = page.locator("nogat-app-menu")
+    assert menu.is_hidden()
+    _set_apps(page, {"hydrolog": "http://127.0.0.1:8070/"})
+    assert menu.is_hidden()
+    _set_apps(page, {"Hydrograf": "javascript:alert(1)", "archiwista": "ftp://x/"})
+    assert menu.is_hidden()
+
+
+def test_menu_resolves_a_path_against_the_page(page: Page, site: str) -> None:
+    _set_apps(page, {"archiwista": "/archiwista/"})
+    page.get_by_role("button", name="Aplikacje").click()
+    link = page.locator("a.nogat-app-menu-item")
+    assert link.evaluate("a => a.href") == f"http://{site}/archiwista/"
+
+
+def test_menu_lists_the_table_in_order_with_the_current_gui_not_a_link(
+    page: Page,
+) -> None:
+    _set_apps(page, APPS)
+    page.get_by_role("button", name="Aplikacje").click()
+    items = page.locator(".nogat-app-menu-item")
+    assert items.all_inner_texts() == [
+        "Hydrograf\nZlewnie i hydrogramy na mapie",
+        "Hydrolog\nTa aplikacja",
+        "Archiwista\nMagazyny danych: mapa, katalog, stacje",
+    ]
+    links = page.locator("a.nogat-app-menu-item")
+    assert [
+        (link.get_attribute("href"), link.get_attribute("target"))
+        for link in links.all()
+    ] == [
+        ("https://hydrograf.example/", "nogat-hydrograf"),
+        ("https://archiwista.example/", "nogat-archiwista"),
+    ]
+    assert page.locator('[aria-current="page"]').inner_text().startswith("Hydrolog")
+
+
+def test_menu_takes_the_table_from_the_apps_attribute(page: Page) -> None:
+    page.evaluate(
+        "apps => document.querySelector('nogat-app-menu')"
+        ".setAttribute('apps', JSON.stringify(apps))",
+        {"obserwator": "http://127.0.0.1:8000/"},
+    )
+    page.get_by_role("button", name="Aplikacje").click()
+    assert page.locator("a.nogat-app-menu-item").get_attribute("href") == (
+        "http://127.0.0.1:8000/"
+    )
+
+
+def test_menu_closes_on_escape_outside_click_and_focus_leaving(page: Page) -> None:
+    _set_apps(page, APPS)
+    button = page.get_by_role("button", name="Aplikacje")
+    listing = page.locator(".nogat-app-menu-list")
+    button.click()
+    assert listing.is_visible()
+    assert button.get_attribute("aria-expanded") == "true"
+    page.keyboard.press("Escape")
+    assert listing.is_hidden()
+    assert page.evaluate("document.activeElement.textContent") == "Aplikacje"
+    button.click()
+    page.mouse.click(5, 300)
+    assert listing.is_hidden()
+    button.click()
+    page.locator("#before").focus()
+    assert listing.is_hidden()
+    assert button.get_attribute("aria-expanded") == "false"
+
+
+def test_menu_keeps_only_its_icon_on_a_phone(page: Page) -> None:
+    _set_apps(page, APPS)
+    page.set_viewport_size({"width": 390, "height": 800})
+    assert page.locator(".nogat-app-menu-label").is_hidden()
+    page.get_by_role("button", name="Aplikacje").click()
+    box = page.locator(".nogat-app-menu-list").bounding_box()
+    assert box is not None
+    assert box["x"] == 8
+    assert box["width"] == 390 - 16
+
+
+# The hand-off (DEV-15.5)
+
+
+@pytest.mark.parametrize(
+    ("subject", "name"),
+    [
+        ("Kamiennik — Świerzawa", "Kamiennik — Świerzawa.handoff.json"),
+        ('a/b\\c:d*e?f"g<h>i|j', "a-b-c-d-e-f-g-h-i-j.handoff.json"),
+        ("  dwa   słowa  ", "dwa słowa.handoff.json"),
+        ("tab\t\nnowa", "tab-nowa.handoff.json"),
+        ("x\u0000\u001fy", "x-y.handoff.json"),
+        ("", "hydrograf.handoff.json"),
+        (" /// ", "-.handoff.json"),
+    ],
+)
+def test_file_name_of_a_handoff(page: Page, subject: str, name: str) -> None:
+    assert _handoff(page, "(h, s) => h.fileName(s, 'hydrograf')", subject) == name
+
+
+def test_download_writes_two_space_json_with_a_final_newline(page: Page) -> None:
+    doc = ENVELOPE["examples"][0]
+    with page.expect_download() as info:
+        name = _handoff(page, "(h, d) => h.downloadHandoff(d)", doc)
+    download = info.value
+    assert download.suggested_filename == name == "Kamiennik — Świerzawa.handoff.json"
+    text = download.path().read_text(encoding="utf-8")
+    assert json.loads(text) == doc
+    assert text.startswith('{\n  "schema": "nogat-handoff/1",\n  "created_at"')
+    assert text.endswith("\n}\n")
+
+
+def test_copy_uses_the_clipboard_in_a_secure_context(page: Page) -> None:
+    doc = ENVELOPE["examples"][0]
+    where = _handoff(
+        page, "(h, d) => h.copyHandoff(d, document.getElementById('field'))", doc
+    )
+    assert where == "clipboard"
+    assert page.locator("#field").is_hidden()
+    text = _handoff(page, "h => h.readClipboard()")
+    assert json.loads(text) == doc
+    assert text.endswith("}\n")
+
+
+def test_copy_falls_back_to_a_selected_field_without_a_secure_context(
+    browser: Browser, site: str
+) -> None:
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto(f"http://{site.replace('127.0.0.1', INSECURE_HOST)}/page.html")
+    assert page.evaluate("isSecureContext") is False
+    doc = ENVELOPE["examples"][0]
+    where = _handoff(
+        page, "(h, d) => h.copyHandoff(d, document.getElementById('field'))", doc
+    )
+    assert where == "field"
+    field = page.locator("#field")
+    assert field.is_visible()
+    selected = page.evaluate(
+        "() => { const f = document.getElementById('field');"
+        " return f.value.slice(f.selectionStart, f.selectionEnd); }"
+    )
+    assert json.loads(selected) == doc
+    assert _handoff(page, "h => h.readClipboard()") is None
+    with pytest.raises(Exception, match="clipboard unavailable"):
+        _handoff(page, "(h, d) => h.copyHandoff(d)", doc)
+    context.close()
+
+
+def test_read_handoff_names_what_is_not_a_handoff(page: Page) -> None:
+    read = "(h, text, schema) => h.readHandoff(text, schema)"
+    bad_json = _handoff(page, read, "{nie json", ENVELOPE)
+    assert bad_json["doc"] is None
+    assert bad_json["problems"][0]["keyword"] == "json"
+    assert bad_json["problems"][0]["message"].startswith("To nie jest tekst JSON")
+    other = _handoff(page, read, '{"schema": "hydrolog-network/1"}', ENVELOPE)
+    assert other["problems"] == [
+        {
+            "path": "",
+            "keyword": "schema",
+            "message": "To nie jest przekazanie nogat-handoff/1.",
+        }
+    ]
+    doc = copy.deepcopy(ENVELOPE["examples"][0])
+    del doc["subject"]
+    doc["producer"]["tool"] = "Hydrograf"
+    result = _handoff(page, read, json.dumps(doc), ENVELOPE)
+    assert result["doc"]["schema"] == "nogat-handoff/1"
+    assert sorted((p["path"], p["message"]) for p in result["problems"]) == [
+        ("", "brak pola „subject”"),
+        ("/producer/tool", "niezgodne ze wzorem ^[a-z][a-z0-9]*$"),
+    ]
+
+
+def test_labels_name_the_target_in_its_case(page: Page) -> None:
+    labels = _handoff(
+        page,
+        "h => [h.TEXTS.copyTo('hydrolog'), h.TEXTS.loadFrom('archiwista'),"
+        " h.TEXTS.open('archiwista'), h.TEXTS.open('nowy')]",
+    )
+    assert labels == [
+        "Kopiuj do Hydrologa",
+        "Wczytaj z Archiwisty",
+        "Otwórz Archiwistę",
+        "Otwórz Nowy",
+    ]
+
+
+# The schema check, against Python's jsonschema
+
+KEYWORDS: dict[str, Any] = {
+    "$defs": {"id": {"type": "string", "pattern": "^\\w[\\w.-]*$", "maxLength": 8}},
+    "type": "object",
+    "required": ["kind"],
+    "properties": {
+        "kind": {"enum": ["a", "b", {"c": [1]}]},
+        "fixed": {"const": {"x": [1, 2]}},
+        "count": {"type": "integer", "minimum": 1, "maximum": 9},
+        "share": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "step": {"multipleOf": 0.5},
+        "name": {"type": "string", "minLength": 2, "maxLength": 3},
+        "id": {"$ref": "#/$defs/id"},
+        "ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": True},
+        "pair": {
+            "type": "array",
+            "prefixItems": [{"type": "string"}, {"type": "number"}],
+            "items": False,
+            "minItems": 2,
+        },
+        "nested": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {"a": {"type": ["string", "null"]}},
+            "patternProperties": {"^x_": {"type": "boolean"}},
+            "propertyNames": {"maxLength": 4},
+            "maxProperties": 2,
+        },
+        "either": {"anyOf": [{"type": "string"}, {"type": "number", "minimum": 10}]},
+        "one": {"oneOf": [{"type": "integer"}, {"type": "number", "minimum": 5}]},
+        "never": {"not": {"type": "string"}},
+        "shape": {
+            "type": "object",
+            "if": {"properties": {"k": {"const": "circle"}}},
+            "then": {"required": ["r"]},
+            "else": {"required": ["w"]},
+        },
+        "all": {"allOf": [{"minLength": 1}, {"pattern": "^[ąę]+$"}]},
+    },
+    "dependentRequired": {"count": ["name"]},
+}
+
+KEYWORD_CASES: list[Any] = [
+    {"kind": "a"},
+    {"kind": {"c": [1]}},
+    {"kind": {"c": [2]}},
+    {},
+    [],
+    {"kind": "a", "fixed": {"x": [1, 2]}},
+    {"kind": "a", "fixed": {"x": [2, 1]}},
+    {"kind": "a", "count": 3, "name": "ab"},
+    {"kind": "a", "count": 3},
+    {"kind": "a", "count": 3.0, "name": "ab"},
+    {"kind": "a", "count": 3.5, "name": "ab"},
+    {"kind": "a", "count": 0, "name": "ab"},
+    {"kind": "a", "count": 10, "name": "ab"},
+    {"kind": "a", "share": 0},
+    {"kind": "a", "share": 0.5},
+    {"kind": "a", "share": 1},
+    {"kind": "a", "step": 2.5},
+    {"kind": "a", "step": 2.3},
+    {"kind": "a", "name": "a"},
+    {"kind": "a", "name": "abcd"},
+    {"kind": "a", "name": "😀😀"},
+    {"kind": "a", "id": "Z1"},
+    {"kind": "a", "id": "-Z1"},
+    {"kind": "a", "id": "Zbyt_dlugie"},
+    {"kind": "a", "ids": ["Z1", "Z2"]},
+    {"kind": "a", "ids": ["Z1", "Z1"]},
+    {"kind": "a", "ids": ["Z1", 2]},
+    {"kind": "a", "pair": ["x", 1]},
+    {"kind": "a", "pair": ["x", "y"]},
+    {"kind": "a", "pair": ["x", 1, 2]},
+    {"kind": "a", "pair": ["x"]},
+    {"kind": "a", "nested": {"a": None, "x_on": True}},
+    {"kind": "a", "nested": {"a": 1}},
+    {"kind": "a", "nested": {"b": "?"}},
+    {"kind": "a", "nested": {"x_on": "tak"}},
+    {"kind": "a", "nested": {"x_long": True}},
+    {"kind": "a", "nested": {"a": "", "x_1": True, "x_2": False}},
+    {"kind": "a", "either": "x"},
+    {"kind": "a", "either": 12},
+    {"kind": "a", "either": 3},
+    {"kind": "a", "one": 3},
+    {"kind": "a", "one": 5.5},
+    {"kind": "a", "one": 6},
+    {"kind": "a", "one": "x"},
+    {"kind": "a", "never": 1},
+    {"kind": "a", "never": "x"},
+    {"kind": "a", "shape": {"k": "circle", "r": 1}},
+    {"kind": "a", "shape": {"k": "circle", "w": 1}},
+    {"kind": "a", "shape": {"k": "square", "w": 1}},
+    {"kind": "a", "shape": {"k": "square"}},
+    {"kind": "a", "all": "ąę"},
+    {"kind": "a", "all": "ae"},
+    {"kind": "a", "all": ""},
+]
+
+
+def _envelope_cases() -> list[Any]:
+    example = ENVELOPE["examples"][0]
+    cases: list[Any] = [copy.deepcopy(e) for e in ENVELOPE["examples"]]
+
+    def changed(**fields: Any) -> dict[str, Any]:
+        doc: dict[str, Any] = copy.deepcopy(example)
+        doc.update(fields)
+        return doc
+
+    cases += [
+        changed(schema="nogat-handoff/2"),
+        changed(created_at="2026-11-02 10:15"),
+        changed(created_at="2026-11-02T10:15:00+01:00"),
+        changed(subject=""),
+        changed(provenance={}),
+        changed(provenance={"Rain": {"source": "pmaxtp"}}),
+        changed(provenance={"rainfall": {}}),
+        changed(provenance={"rainfall": {"source": "PMAXTP"}}),
+        changed(node_provenance={}),
+        changed(node_provenance={"Z1": {}}),
+        changed(node_provenance={"Z1": {"watershed": {"source": "hydrograf"}}}),
+        changed(payload={"name": "bez schematu"}),
+        changed(payload={"schema": "hydrolog-network"}),
+        changed(result={}),
+        changed(result={"peak_discharge_m3s": -1}),
+        changed(result={"computed_with": {"tool": "hydrolog"}}),
+        changed(producer={"tool": "hydrograf"}),
+        changed(extra_field=1),
+    ]
+    return cases
+
+
+def _js_problems(page: Page, cases: list[Any], schema: Any) -> list[list[str]]:
+    found: list[list[str]] = _handoff(
+        page,
+        "(h, cases, schema) =>"
+        " cases.map(c => h.validate(c, schema).map(p => p.keyword))",
+        cases,
+        schema,
+    )
+    return found
+
+
+@pytest.mark.parametrize(
+    ("schema", "cases"),
+    [(KEYWORDS, KEYWORD_CASES), (ENVELOPE, _envelope_cases())],
+    ids=["keywords", "envelope"],
+)
+def test_validate_agrees_with_jsonschema(
+    page: Page, schema: dict[str, Any], cases: list[Any]
+) -> None:
+    validator = jsonschema.Draft202012Validator(schema)
+    found = _js_problems(page, cases, schema)
+    for case, keywords in zip(cases, found, strict=True):
+        assert (keywords == []) == validator.is_valid(case), (case, keywords)
+    assert {k for ks in found for k in ks} >= (
+        {
+            "type",
+            "required",
+            "const",
+            "enum",
+            "minimum",
+            "maximum",
+            "exclusiveMinimum",
+            "exclusiveMaximum",
+            "multipleOf",
+            "minLength",
+            "maxLength",
+            "pattern",
+            "uniqueItems",
+            "minItems",
+            "false",
+            "additionalProperties",
+            "propertyNames",
+            "maxProperties",
+            "anyOf",
+            "oneOf",
+            "not",
+            "dependentRequired",
+        }
+        if schema is KEYWORDS
+        else {"const", "pattern", "minLength", "required", "minProperties", "minimum"}
+    )
+
+
+def test_every_problem_has_a_polish_message(page: Page) -> None:
+    messages = _handoff(
+        page,
+        "(h, cases, schema) => cases.flatMap(c => h.validate(c, schema))"
+        ".map(p => p.message)",
+        KEYWORD_CASES,
+        KEYWORDS,
+    )
+    assert messages
+    assert all(isinstance(m, str) and m and "undefined" not in m for m in messages)

@@ -1,7 +1,9 @@
 # Plan: shared GUI of the ecosystem
 
 Status 2026-10-20: idea; scope and design not written yet. Requirement:
-HUB-5.2.
+HUB-5.2. Since 2026-11-12 the scope and its owner are in the
+[GUI hub](2026-11-01-nogat-gui-platform.md) (stage 2), a new project; the
+storage question below stays open.
 
 ## Goal
 

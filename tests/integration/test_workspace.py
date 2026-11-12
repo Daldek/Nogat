@@ -95,7 +95,8 @@ def test_drift_reports_each_consumer_state(
         ]
     }
     assert ecosystem.report_drift(registry) == 0
-    rows = {line.split()[0]: line for line in capsys.readouterr().out.splitlines()[1:]}
+    pins, copies = capsys.readouterr().out.split("\n\n")
+    rows = {line.split()[0]: line for line in pins.splitlines()[1:]}
     assert "branch release/0.8" in rows["App"]
     assert "branch pin" in rows["App"]
     assert "commit 26ee459 (backend/pyproject.toml, tool.uv.sources)" in rows["Web"]
@@ -104,6 +105,17 @@ def test_drift_reports_each_consumer_state(
     assert "not valid TOML" in rows["Broken"]
     assert rows["Bare"].endswith("no manifest")
     assert rows["Absent"].endswith("no checkout")
+    # None of the checkouts is a git repository: no copy is read.
+    assert copies.split()[:4] == ["project", "copy", "source", "state"]
+    assert [line.split()[0] for line in copies.splitlines()[1:]] == [
+        "Producer",
+        "App",
+        "Web",
+        "Broken",
+        "Bare",
+        "Absent",
+    ]
+    assert all(line.endswith("no checkout") for line in copies.splitlines()[1:])
 
 
 def test_renamed_project_is_read_from_its_repository_directory(
@@ -138,7 +150,8 @@ def test_renamed_project_is_read_from_its_repository_directory(
         ]
     }
     assert ecosystem.report_drift(registry) == 0
-    rows = {line.split()[0]: line for line in capsys.readouterr().out.splitlines()[1:]}
+    pins = capsys.readouterr().out.split("\n\n")[0]
+    rows = {line.split()[0]: line for line in pins.splitlines()[1:]}
     assert rows["App"].split()[1] == "Renamed"
     assert "commit 71bae77 (pyproject.toml, tool.uv.sources)" in rows["App"]
 
@@ -534,3 +547,89 @@ def test_members_rejects_anything_but_full_commits_of_projects(
     with pytest.raises(ecosystem.RegistryError) as caught:
         ecosystem.members({"projects": [_project("Producer")]}, tmp_path)
     assert caught.value.code == "data_error"
+
+
+def _repository(directory: Path, files: dict[str, str]) -> str:
+    """Commit `files` in the repository `directory`, made when missing; the commit."""
+    if not (directory / ".git").exists():
+        _git(directory.parent, "init", "-q", str(directory))
+    for name, text in files.items():
+        _write(directory / name, text)
+    _git(directory, "add", "-A")
+    _git(directory, "commit", "-q", "--allow-empty", "-m", "x")
+    return _git(directory, "rev-parse", "HEAD")
+
+
+HANDOFF = "schemas/exchange/handoff-1.schema.json"
+TOKENS = ":root { --nogat-ink: #102030; }\n"
+HEADER = (
+    "/* Copied from Nogat design/tokens.css at commit 29e7e1c (DEV-15.3). "
+    "Do not edit here:\n   change Nogat, then copy again. */\n"
+)
+
+
+def test_copies_of_nogat_files_are_current_behind_or_modified(
+    workspace: Path,
+) -> None:
+    nogat = workspace / "_nogat"
+    _repository(
+        nogat,
+        {
+            HANDOFF: '{"v": 1}\n',
+            "schemas/agent/result-1.schema.json": '{"r": 1}\n',
+            "design/tokens.css": TOKENS,
+            "design/README.md": "not copied\n",
+        },
+    )
+    second = _repository(nogat, {HANDOFF: '{"v": 2}\n'})
+    restored = _repository(nogat, {HANDOFF: '{"v": 1}\n'})
+    _repository(nogat, {HANDOFF: '{"v": 3}\n'})
+    _repository(
+        workspace / "Alpha",
+        {
+            "schemas/nogat/handoff-1.schema.json": '{"v": 1}\n',
+            "web/tokens.css": HEADER + TOKENS,
+            "docs/result-1.schema.json": '{"r": "edited"}\n',
+            "README.md": "Alpha\n",
+        },
+    )
+    _write(workspace / "Alpha" / "untracked" / "handoff-1.schema.json", "{}\n")
+    _repository(
+        workspace / "Beta",
+        {
+            "a/handoff-1.schema.json": '{"v": 3}\n',
+            "b/handoff-1.schema.json": '{"v": 2}\n',
+            # A comment that does not name Nogat stays part of the copy.
+            "tokens.css": "/* Our tokens. */\n" + TOKENS,
+        },
+    )
+    (workspace / "Plain").mkdir()
+    registry = {
+        "projects": [
+            _project("Nogat", profiles=["hub"]),
+            _project("Alpha"),
+            _project("Beta"),
+            _project("Plain"),
+            _project("Absent"),
+        ]
+    }
+    assert ecosystem.copy_rows(registry, nogat) == [
+        (
+            "Alpha",
+            "docs/result-1.schema.json",
+            "schemas/agent/result-1.schema.json",
+            "modified",
+        ),
+        (
+            "Alpha",
+            "schemas/nogat/handoff-1.schema.json",
+            HANDOFF,
+            f"behind {restored[:7]}",
+        ),
+        ("Alpha", "web/tokens.css", "design/tokens.css", "current"),
+        ("Beta", "a/handoff-1.schema.json", HANDOFF, "current"),
+        ("Beta", "b/handoff-1.schema.json", HANDOFF, f"behind {second[:7]}"),
+        ("Beta", "tokens.css", "design/tokens.css", "modified"),
+        ("Plain", "—", "—", "no checkout"),
+        ("Absent", "—", "—", "no checkout"),
+    ]

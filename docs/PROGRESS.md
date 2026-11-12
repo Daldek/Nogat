@@ -159,10 +159,11 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    Hydrolog's wave A, `e004a5d` on `feature/gui`). Hydrolog's waves A to C
    are done (`a328656`) and its GUI is served on 127.0.0.1:8070 behind a
    Cloudflare tunnel (changes on 2026-11-01 and 2026-11-02). Next:
-   Archiwista and Obserwator adopt the identity (steps 5 and 7). The platform draft
-   `docs/plans/2026-11-01-nogat-gui-platform.md` (author's decisions A1–A5,
-   B1–B6 recorded; 10 questions open) is deferred to a later session by the
-   author; it may replace steps 5 to 7.
+   Archiwista and Obserwator adopt the identity (steps 5 and 7). GUI platform
+   in two stages (author, 2026-11-12; Nogat runs no GUI): stage 1
+   `docs/plans/2026-11-12-gui-links-and-handoff.md` (approved; Nogat's steps
+   1-3 done on `plan/gui-hub`, steps 4-7 in the GUIs next); stage 2, the GUI
+   hub, `docs/plans/2026-11-01-nogat-gui-platform.md` (`Approved: pending`).
 5. Archiwista's release (decision D2 of the projects plan, 2026-10-31,
    replacing the separate v0.3 and v0.4 of 2026-10-29): one release holding
    v0.3, v0.4 and the projects, after step 5 of that plan, outside the first
@@ -192,8 +193,7 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    `ed3b8a0`, approved by the author on 2026-11-03, no PR by the author's
    decision). The merged topic branches are deleted locally and on `origin`
    except `feature/hydrolog-gui-mockup`, kept because the shared checkout
-   serves the mockup on :8765. The GUI platform plan
-   (`docs/plans/2026-11-01-nogat-gui-platform.md`) stays `Approved:
+   serves the mockup on :8765. The GUI plans of item 4 stay `Approved:
    pending`. The tools' branches await the author's review and release:
    - Hydrograf: v0.5.0 frozen on `develop` (`f3404cd`, pushed; code of
      `d62646c` with the producer pins and hashes of the rewrite); next,

@@ -9,8 +9,11 @@ Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 ## 1. Role
 
 **HUB-1.1** Nogat holds:
-1. this standard (`standards/`) and the schemas of the shared agent
-   documents (`schemas/agent/`, AGI-4.1);
+1. this standard (`standards/`), the schemas of the shared agent
+   documents (`schemas/agent/`, AGI-4.1) and of the documents exchanged
+   between GUIs (`schemas/exchange/`), and the visual identity and GUI kit
+   that GUIs copy (`design/`, DEV-15.3 to DEV-15.6); Nogat itself runs no
+   GUI (ECO-058);
 2. the project registry (`ecosystem.yaml`);
 3. tooling that reads the registry (drift report, workspace sync, MCP
    configuration, routing table for agents, checks of this standard);
@@ -129,7 +132,9 @@ the package exists, HUB-7.3) reads the checkouts (HUB §3) and prints, for each
 active runtime or optional dependency, the consumer's pin from its
 `python_manifests` against the producer's latest `v*` tag, and states whether
 it is current, behind, a commit or branch pin, or a range that excludes the
-latest tag.
+latest tag. It also reports each project's copies of Nogat's schemas, error
+registry, tokens, marks and kit as current, behind (the Nogat commit named) or
+modified (DEV-15.6).
 
 **HUB-4.2** `nogat mcp config --client claude|cursor|codex|vscode` prints a
 configuration with every ecosystem MCP server, from registry data.

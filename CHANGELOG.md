@@ -8,6 +8,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- GUI platform stage 1, Nogat's steps 1 to 3
+  (`docs/plans/2026-11-12-gui-links-and-handoff.md`, approved 2026-11-12):
+  ECO-058 and DEV-15.4 to DEV-15.6 (the app menu, the hand-off, copies byte
+  for byte); `[nogat] gui` in DEV-18.1; HUB-1.1 and ECO-050 name
+  `schemas/exchange/`. The GUI kit 0.1.0 in `design/kit/`: the custom
+  element `<nogat-app-menu>`, `nogat-handoff.js` (file name, text, clipboard
+  with a fallback field, download, the schema check with Polish messages)
+  and `nogat-kit.json`; the menu in the specimen and both mockups. Browser
+  tests in `tests/browser/` (Playwright in the dev group; CI installs
+  Chromium). `drift` reports each project's copies of Nogat's schemas, error
+  registry, tokens, marks and kit as current, behind or modified (HUB-4.1).
 - `node_provenance` in `nogat-handoff/1`, which stays `/1` (AGI-4.1): the
   optional origin of each node of a network payload, keyed by node id, each
   entry keyed by input like `provenance` (`watershed`, `runoff`, `rainfall`,
@@ -197,6 +208,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- GUI plans split in two stages (the author, 2026-11-12): Nogat stays `hub`
+  without a GUI. Stage 1, new plan
+  `docs/plans/2026-11-12-gui-links-and-handoff.md`: a menu in every GUI
+  leading to the others, one hand-off by file and clipboard (a DEV §15 rule
+  and the kit's `nogat-handoff.js`), and a report of schema, token and kit copies
+  in `drift`. Stage 2, `docs/plans/2026-11-01-nogat-gui-platform.md`
+  retitled „the GUI hub”: one window and one sign-in in a new project
+  (working name `guihub`; C1), the kit kept in Nogat `design/kit/` (C2),
+  deferred until stage 1 (C3); Hydrolog's existing GUI, the published
+  hand-off and Obserwator's name taken in. Stage 1 approved 2026-11-12;
+  stage 2 `Approved: pending`.
 - Registry: Hydrograf's routes gain „Preview a network of subcatchments while
   placing control points (areas, reach lengths, outlines)” -> `POST
   /api/delineate-network/preview` (its ADR-081, `develop` `97498bb`);

@@ -1,6 +1,7 @@
 # Nogat CI (DEV-7.7): runs scripts/gate.sh. Linux only until Nogat ships the
 # `nogat` package; then it switches to standards/ci/ci.yml. Commit range and
-# author logic are those of the template (DEV-4.5).
+# author logic are those of the template (DEV-4.5). Chromium is installed
+# before the gate for the browser tests of the GUI kit (tests/browser).
 name: CI
 
 on:
@@ -29,6 +30,10 @@ jobs:
         with:
           python-version: "3.12"
           enable-cache: true
+      - name: Chromium for the kit's browser tests
+        run: |
+          uv sync --locked
+          uv run --no-sync playwright install --with-deps chromium
       - name: Gate
         env:
           GATE_COMMIT_RANGE: >-
