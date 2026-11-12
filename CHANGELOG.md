@@ -208,6 +208,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- GUI platform stage 1 done (2026-11-12): Hydrolog, Hydrograf, Archiwista and
+  Obserwator carry the kit's app menu and hand-off, merged and deployed at the
+  author's request; the plan's Results record the commits, the public
+  addresses (Obserwator's a placeholder on :8060 for now), the `drift`
+  outcome and the candidates for kit 0.1.1. PROGRESS lists port 8060 and the
+  public hosts.
 - GUI plans split in two stages (the author, 2026-11-12): Nogat stays `hub`
   without a GUI. Stage 1, new plan
   `docs/plans/2026-11-12-gui-links-and-handoff.md`: a menu in every GUI
