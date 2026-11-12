@@ -91,7 +91,7 @@ These rows supersede the rows above where they differ.
 | Archiwista | `feature/archiwista-projects`, `4027755`; on :8090 since 2026-11-03 ~00:00 | The project-area fix (A1) and draft sets, open or closed with `pins_sha256`, one producer per set (A2), deployed with `TMPDIR` on disk (A3). The rebuild of the index to schema 17 dropped the sessions, the job history and 18 drawn rectangles; they are kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`. Renaming `archiwista-state/2` to `/1` is deferred to the release preparation (the author's rule: identifiers `<name>/<N>` not yet released on `main` stay at `/1`) |
 | Nogat | `develop`, merge `ed3b8a0` (2026-11-03) | The whole stack (`fix/hub-gaps` … `plan/archiwista-sets-hydrograf`) is merged into `develop` and its topic branches are deleted, except `feature/hydrolog-gui-mockup`, which the shared checkout keeps for the mockup on :8765. The sets plan records A1 to A3 and H1 as done, A4 and A5 waiting for the author, H2 and S5 postponed after Hydrograf v0.5.0 (item 7) |
 
-Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8070 Hydrolog (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the `nogat-specimen` container keeps 8765. Hydrograf's other instance: Hydroni 8081 (kaczawa2 ran on 8082 from 2026-11-11 to 2026-11-12).
+Ports of the local GUIs, settled 2026-11-02: 8000 IMGWTools, 8060 Obserwator (since 2026-11-12: a placeholder, `obserwator-public.service`), 8070 Hydrolog (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the `nogat-specimen` container keeps 8765. Hydrograf's other instance: Hydroni 8081 (kaczawa2 ran on 8082 from 2026-11-11 to 2026-11-12). Public hosts: `hydrograf-test`, `hydrolog-test`, `archiwista-test` and `obserwator-test.debever.pl`, the last three behind Cloudflare Access.
 
 ### Changes on 2026-11-05 and 2026-11-06
 
@@ -161,9 +161,9 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    Cloudflare tunnel (changes on 2026-11-01 and 2026-11-02). Next:
    Archiwista and Obserwator adopt the identity (steps 5 and 7). GUI platform
    in two stages (author, 2026-11-12; Nogat runs no GUI): stage 1
-   `docs/plans/2026-11-12-gui-links-and-handoff.md` (approved; Nogat's steps
-   1-3 done on `plan/gui-hub`, steps 4-7 in the GUIs next); stage 2, the GUI
-   hub, `docs/plans/2026-11-01-nogat-gui-platform.md` (`Approved: pending`).
+   `docs/plans/2026-11-12-gui-links-and-handoff.md` (approved; steps 1-8 done,
+   every GUI merged and deployed with the app menu, its Results); stage 2, the
+   GUI hub, `docs/plans/2026-11-01-nogat-gui-platform.md` (`Approved: pending`).
 5. Archiwista's release (decision D2 of the projects plan, 2026-10-31,
    replacing the separate v0.3 and v0.4 of 2026-10-29): one release holding
    v0.3, v0.4 and the projects, after step 5 of that plan, outside the first

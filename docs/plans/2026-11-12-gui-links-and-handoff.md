@@ -153,3 +153,50 @@ step 2; step 3 may run beside them.
   Archiwista, Hydrograf, Hydrolog and Retman (`bc72b92`), and Hydrolog's
   `handoff-1` in its local checkout (`chore/pins-candidate-2`; its
   `origin/develop` holds the current one); everything else current.
+- 2026-11-12, step 4, Hydrolog `272c228` (its ADR-0027), merged into
+  `develop` as `b980187` and pushed (the author's approval of the same day):
+  the menu in the top bar, the table through `GET api/session` (`gui`, read
+  from `[nogat] gui` on every request), the hand-off's write and read
+  through the kit, the file named after the subject; copies refreshed. Gate
+  green (7694 passed). Production `hydrolog-gui.service` switched to
+  `b980187`; `~/.config/nogat/nogat.toml` lists the three public addresses.
+- 2026-11-12, step 5, Hydrograf `60b85a1` and `e85448c` (its ADR-082),
+  merged as `48bf24a` and pushed: the menu on its three pages, the table from
+  `HYDROGRAF_GUI` through `GET /api/gui`, `frontend/js/handoff.js` on the
+  kit, tokens and `error_registry.json` refreshed. Gate green (2244 passed).
+  Production switched: the checkout fast-forwarded, `HYDROGRAF_GUI` in its
+  `.env`, the API container recreated; `https://hydrograf-test.debever.pl/`
+  shows the menu with Hydrolog and Archiwista.
+- 2026-11-12, step 7, Obserwator `60d7460` (its ADR-011), merged as
+  `6d21a68` and pushed: the menu in `base.html` from `[nogat] gui`; Pico's
+  `nav` rules needed three app rules to keep off the menu's list. Gate green.
+  Its running API container (`imgwtools-api`, built 2026-08-02 from an old
+  worktree) is not rebuilt: its pages are in no public deployment.
+- 2026-11-12, step 6, Archiwista `81df4a9` (its A-ADR-054), merged as
+  `bd754b6` and pushed after a green full gate (2882 passed, 71 min): the
+  menu in its shell, the table from `[nogat] gui` through `/session`, the
+  station card's hand-off through the kit, `handoff-1` and
+  `error_registry.json` refreshed. The public server (`archiwista-public`,
+  :8090) runs `bd754b6` since 2026-11-12 (with `develop`'s changes since
+  `cd29b6f`; backup and rollback in
+  `~/data/archiwista-public/backup-2026-11-12/`); `archiwista doctor` names
+  the four GUIs of its `nogat.toml`.
+- 2026-11-12, Obserwator's public address: `obserwator-test.debever.pl`
+  (the author's tunnel host, behind Cloudflare Access) serves a placeholder
+  in the identity with the menu from 127.0.0.1:8060
+  (`obserwator-public.service`, files in `~/data/obserwator-public/`), until
+  its GUI exists (plan in Obserwator, pending). The four GUI tables of the
+  public deployment list Hydrograf, Hydrolog, Archiwista and Obserwator.
+- 2026-11-12, step 8: `drift` shows every copy current in the checkouts of
+  Hydrograf, Archiwista and Obserwator; Hydrolog's checkout is on an older
+  branch (`chore/pins-candidate-2`), so its `handoff-1` and
+  `error_registry.json` show behind there while `develop` holds the current
+  ones; Retman's `error_registry.json` is behind (`bc72b92`), outside this
+  plan.
+- Kit 0.1.0 lacks, as found in steps 4 to 7: a label for the copy fallback
+  field and the subject in `TEXTS.copied`; list styles that resist a page's
+  `nav ul` rules; a border on the menu button for GUIs whose buttons have
+  one; in `validate`, `\w` of a pattern is ASCII in JavaScript but Unicode in
+  Python's `jsonschema` (a node id `Ś1`), a `oneOf` names no branch, a
+  leading byte order mark is kept by `readHandoff`, and bounds print as
+  `0.5`, not `0,5`. Candidates for kit 0.1.1.
