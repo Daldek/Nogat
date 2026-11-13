@@ -8,6 +8,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Provider attribution in every product, the author's order of 2026-11-13
+  (`docs/plans/2026-11-13-provider-attribution.md`, step 1): DEV §20 and
+  ECO-059 hold the IMGW-PIB lines S and P (danepubliczne.imgw.pl and
+  hydro.imgw.pl, with H for the latter), PS, PP and the monograph M for
+  PMAXTP, C and CP for ČHMÚ under CC BY 4.0, verbatim; the IMGW-PIB
+  terms-of-use notice N with the addresses of the terms; the surfaces and
+  the forms in CSV, JSON, Parquet, ZIP, images, reports, API and CLI; data of
+  hydro.imgw.pl never shown as archive. `nogat-handoff/1` gains the
+  optional arrays `attribution` and `terms_notice` and stays `/1`
+  (AGI-4.1); its examples carry the PMAXTP lines, and contract tests cover
+  both fields. Projects copy the schema in their own branches (DEV-15.6).
 - GUI platform stage 1, Nogat's steps 1 to 3
   (`docs/plans/2026-11-12-gui-links-and-handoff.md`, approved 2026-11-12):
   ECO-058 and DEV-15.4 to DEV-15.6 (the app menu, the hand-off, copies byte

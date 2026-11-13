@@ -58,7 +58,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | Document | Covers |
 |---|---|
 | [DECISIONS.md](DECISIONS.md) | Decisions behind the standard, with reasons and rejected options (ECO-…) |
-| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, tests, errors, logging, security, licence and contributions, agent workflow, user environment, data output (DEV-…) |
+| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, tests, errors, logging, security, licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
 | [ERROR_REGISTRY.md](ERROR_REGISTRY.md) + [error_registry.json](error_registry.json) | Shared error codes, exit codes, HTTP statuses (ERR-…) |
@@ -82,6 +82,13 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - Every product with IMGW-PIB or ČHMÚ data carries the lines their terms
+    prescribe, verbatim, on every surface: S and P (danepubliczne.imgw.pl,
+    hydro.imgw.pl with H), PS, PP and the monograph for PMAXTP, C and CP for
+    ČHMÚ under CC BY 4.0, and the notice of the IMGW-PIB terms of use with
+    their addresses; data of hydro.imgw.pl are never shown as archive;
+    `nogat-handoff/1` gains the optional `attribution` and `terms_notice`
+    and stays `/1` (DEV §20, DEV-15.5, AGI-4.1, ECO-059).
   - Numbers count from `main`: a version of the standard exists from its tag
     on `main`, and `develop` carries the next one; a document's `<n>`
     increments only past a number released on the producer's `main`. The

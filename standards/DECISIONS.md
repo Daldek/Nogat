@@ -68,6 +68,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
+| [ECO-059](#eco-059-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
 
 ---
 
@@ -1117,3 +1118,35 @@ HUB-2.4). The kit in the hub's repository (every GUI would depend on an app).
 **Consequence.** Each GUI adopts the kit in its own session (steps 4 to 7 of
 the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
 (DEV-1.2).
+
+## ECO-059 Every product carries the providers' attribution
+
+**Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
+lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
+for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
+hydrological service; PS, PP and the monograph M for PMAXTP; C and CP for
+ČHMÚ. Products with IMGW-PIB data also show the notice of its terms of use
+with the addresses of the terms that apply. JSON documents, results and
+`nogat-handoff/1` carry the lines in two optional arrays of strings,
+`attribution` and `terms_notice`, so a consumer shows them and carries them
+on; the hand-off stays `/1` (AGI-4.1). Plan:
+`docs/plans/2026-11-13-provider-attribution.md`.
+
+**Why.** The author's order of 2026-11-13, read against the terms that day:
+§5 ust. 1, 3 and 4 and §2 pkt 3 of the IMGW-PIB terms
+(https://danepubliczne.imgw.pl/regulations), ust. 1 and 2 of the PMAXTP
+terms, the terms of the hydrological service
+(https://hydro.imgw.pl/#/regulamin) and CC BY 4.0 §3(a)(1) of ČHMÚ's open
+data. Results pass through several tools (PMAXTP from Obserwator into
+Hydrolog, Hydrograf and Hydraulik), and a line lost on the way is a breach in
+the last product.
+
+**Rejected.** The lines in `provenance` (it holds keyed origins, not text a
+person reads). Objects with a provider, a data set and texts (lines equal
+byte for byte merge without them, and the consumer only shows text). The
+lines in an About page or a tooltip only (the terms bind the product
+itself). One English wording (the terms prescribe the Polish sentences).
+
+**Consequence.** Each project applies DEV §20 in its own branch and copies
+the new `handoff-1.schema.json` byte for byte (DEV-15.6); until then a copy
+of today accepts both fields as unknown.

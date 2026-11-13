@@ -726,3 +726,95 @@ streamed. `status` is `written` or `replaced` in plain mode and `new`,
 (`conflict`, DEV-19.14) and `not_empty` (`conflict`: a root that holds other
 files and is no store). A tool adds no registry code for the convention
 (ERR-1).
+
+---
+
+## 20. Provider attribution
+
+Every profile. A product is anything a project shows, writes or returns
+with a provider's data or with results derived from them. The lines below
+are quoted byte for byte: Polish quotation marks „ ”, en dashes –, no final
+full stop except in N, never paraphrased or translated away; in an English
+context the Polish line stays and an English gloss MAY follow it.
+
+| Mark | Line |
+|---|---|
+| S | Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy |
+| P | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone |
+| H | Dane pochodzą z serwisu hydrologicznego IMGW-PIB https://hydro.imgw.pl |
+| PS | Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, dane pochodzą ze strony https://klimat.imgw.pl/opady-maksymalne |
+| PP | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego pochodzące ze strony https://klimat.imgw.pl/opady-maksymalne zostały przetworzone |
+| M | „Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022 |
+| C | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) |
+| CP | Dane ČHMÚ zostały przetworzone (`<what was done>`) |
+| N | Dane IMGW-PIB można wykorzystywać nieodpłatnie do celów prywatnych (niezarobkowych). Wykorzystanie w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie (m.in. planowanie w gospodarowaniu wodami, art. 317 Prawa wodnego) wymaga umowy z IMGW-PIB. |
+| RD | Regulamin: https://danepubliczne.imgw.pl/regulations |
+| RH | Regulamin: https://hydro.imgw.pl/#/regulamin |
+| RK | Regulamin: https://klimat.imgw.pl/opady-maksymalne |
+
+**DEV-20.1** A product with IMGW-PIB data other than PMAXTP (archives and
+current data of danepubliczne.imgw.pl, operational data and station
+locations of hydro.imgw.pl and its backend hydro-back.imgw.pl) carries S,
+and S and P once the data were processed in any way: parsed, harmonised,
+reformatted, aggregated, charted or used to compute a result; data of
+hydro.imgw.pl add H. Only a verbatim, untouched copy of an IMGW-PIB file
+carries S alone.
+*Why:* §5 ust. 3 and 4 of the IMGW-PIB terms, repeated by the terms of the
+hydrological service (ECO-059).
+
+**DEV-20.2** A product with PMAXTP data (powietrze.imgw.pl, klimat.imgw.pl)
+carries PS and M, and PP as well once the data were processed: a design
+rainfall, hyetograph, hydrograph, model input, or a table or file in another
+form. For PMAXTP these lines replace S and P.
+*Why:* ust. 1 and 2 of the PMAXTP terms, which require the monograph and the
+project's address (ECO-059).
+
+**DEV-20.3** A product with ČHMÚ data carries C (the creator, the address of
+the material, the licence and its link) and, once the data were modified, CP
+naming what was done; an English context MAY use English equivalents of C
+and CP with the same elements.
+*Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-059).
+
+**DEV-20.4** A product with data of several providers carries every line that
+applies, in the order S, P, H, PS, PP, M, C, CP, each once. A project keeps the
+lines in one place in its code, and every surface takes them from there.
+*Why:* lines equal byte for byte merge across tools without duplicates.
+
+**DEV-20.5** The lines are visible and legible, never in a tooltip only, on
+every surface with the data or results derived from them:
+
+| Surface | Where the lines go |
+|---|---|
+| GUI | map popups and panels, charts, tables, current measurements, the footer of the view |
+| CSV | trailing columns `attribution` and `terms_notice`, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline. Columns a project already has stay (DEV-20.6) |
+| JSON | the fields `attribution` and `terms_notice` (DEV-20.6, DEV-20.7) |
+| Parquet | the file metadata keys `attribution` and `terms_notice`, each a JSON array of the lines |
+| ZIP | an attribution or README file inside the archive |
+| PNG, SVG | footer lines drawn in the image |
+| print, PDF, generated reports | a visible line on the page or in the report |
+| API, REST, MCP | the fields `attribution` and `terms_notice` of the response (DEV-20.6, DEV-20.7) |
+| CLI | the human-readable output that prints data or results |
+| model inputs | a header comment of the file, or an attribution file beside it where the format has no comments |
+
+*Why:* the terms bind every product made with the data (ECO-059).
+
+**DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
+`attribution`, an array of the lines as strings. A consumer shows the lines it
+receives with the data and carries them into its own products and further
+hand-offs, merged without duplicates; a field a project already has for them
+(a CSV column, `license.attribution` of a sidecar, DEV-19.16) stays.
+*Why:* the obligation follows the data through every tool (ECO-059).
+
+**DEV-20.7** Every GUI view and every exported product with IMGW-PIB data
+also shows N and the terms that apply, one line each in the order RD
+(danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK (PMAXTP), right after the
+attribution lines and on the surfaces of DEV-20.5; a JSON document, result or
+hand-off has them in `terms_notice`, an array of strings carried on like
+`attribution`.
+*Why:* free use is private use only; business use, sites with advertising and
+the purposes the terms list need an agreement with IMGW-PIB (ECO-059).
+
+**DEV-20.8** Data of hydro.imgw.pl are operational: a product shows them as
+current with their time and never stores them or presents them as archive.
+*Why:* operational data are not the verified archive of danepubliczne.imgw.pl,
+and no project keeps them (ECO-059).
