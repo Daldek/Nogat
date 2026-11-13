@@ -133,8 +133,8 @@ active runtime or optional dependency, the consumer's pin from its
 `python_manifests` against the producer's latest `v*` tag, and states whether
 it is current, behind, a commit or branch pin, or a range that excludes the
 latest tag. It also reports each project's copies of Nogat's schemas, error
-registry, tokens, marks and kit as current, behind (the Nogat commit named) or
-modified (DEV-15.6).
+registry, reference module (DEV-12.9), tokens, marks and kit as current,
+behind (the Nogat commit named) or modified (DEV-15.6).
 
 **HUB-4.2** `nogat mcp config --client claude|cursor|codex|vscode` prints a
 configuration with every ecosystem MCP server, from registry data.

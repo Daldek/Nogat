@@ -45,13 +45,13 @@ convention = "numpy"
 
 [tool.mypy]
 strict = true
-mypy_path = "scripts"
-files = ["scripts", "tests"]
+mypy_path = "scripts,standards/reference"
+files = ["scripts", "standards/reference", "tests"]
 
 [tool.pytest.ini_options]
 addopts = ["--strict-markers"]
 testpaths = ["tests"]
-pythonpath = ["scripts"]
+pythonpath = ["scripts", "standards/reference"]
 markers = [
     "live: needs real network services",
     "db: needs a database",
@@ -59,7 +59,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["scripts"]
+source = ["scripts", "standards/reference"]
 
 [tool.coverage.report]
 fail_under = 80

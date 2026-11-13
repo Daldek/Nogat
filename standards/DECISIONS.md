@@ -71,10 +71,11 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063 | 2026-11-13 |
-| [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | accepted | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066 | 2026-11-13 |
+| [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
 | [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
+| [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 
 ---
 
@@ -1252,6 +1253,9 @@ address, error and application logs included; the regulamin names the
 operator's mail service and may name the processor's cookie against bots,
 in three more keys of `[nogat.operator]`.
 
+**Amended by ECO-066 (2026-11-13):** every server logs as DEV §12 says; the
+access log keeps the class of the User-Agent, not the User-Agent.
+
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
 operator alone uses, so no user's e-mail address is collected. Archiwista is
@@ -1302,6 +1306,11 @@ Obserwator gaining „Zgłoś uwagę”; the author sets `[nogat.operator]` and 
 `terms_effective` before the three are opened.
 
 ## ECO-063 Regulamin 1.0 after its review: no IP address in any log
+
+**Amended by ECO-066 (2026-11-13):** nginx keeps no error log instead of one
+at `crit`, which still names the client of a failed TLS handshake; § 8 ust. 3
+says what reaches the journal and that the access log keeps only the kind of
+program.
 
 **Decision.** Before its first publication, regulamin 1.0 is replaced by the
 shortened text of a legal review of 2026-11-13, with the operator's decisions
@@ -1431,3 +1440,57 @@ hand-off stays `/1`. Obserwator, Hydrograf, Hydrolog, Archiwista, Hydraulik
 and Retman change their constants and tests in their own branches and copy
 kit 0.6.0 and the schema; files already written with H or N are rewritten
 when next produced, never edited by hand.
+
+## ECO-066 One logging convention for every server, without root
+
+**Decision.** Every server of the ecosystem, Hydrograf, Hydrolog's GUI,
+Obserwator's GUI and REST server and Archiwista, logs the same way (DEV-12.4
+to DEV-12.9): access, application and lifecycle records in one JSON Lines
+format, `nogat-log/1`, with fixed keys and no other; daily files
+`<state_dir>/<project>/logs/<kind>-YYYY-MM-DD.jsonl` that the server itself
+deletes once 14 days old, at start and at 00:00 UTC; on standard output and
+error only lifecycle records and errors reduced to their type; uvicorn's
+access log off and the app's middleware writing it; nginx without logs of
+its own; Docker's `local` driver capped at three files of 1 MB. No log holds
+an IP address, a cookie, a credential header, a request body or an uploaded
+file's name; the User-Agent becomes a class, `browser`, `bot`, `script` or
+`none`; query parameters that may carry personal data keep only their name;
+the request id never reaches the client. `state_dir` joins `[nogat]`
+(DEV-18.1), by default `platformdirs.user_state_path("nogat")`, mounted into a
+container. The reference module `standards/reference/nogat_logging.py` with
+the schema `schemas/log/record-1.schema.json` implements it; both are copied
+byte for byte and reported by `drift`. Regulamin 1.0, still unpublished, is
+revised in place in § 8 ust. 3 (kit 0.6.1). Plan:
+`docs/plans/2026-11-13-unified-logging.md`.
+
+**Why.** The author's request of 2026-11-13: „Czy możesz ujednolicić
+logowanie we wszystkich aplikacjach i zdefiniować je w Nogacie?”. Four
+servers logged four ways, Hydrograf's nginx and API to the system journal,
+Hydrolog one line per request to the user journal, Obserwator's GUI to files
+of its own and its mockup uvicorn's lines with client addresses to the user
+journal, and both journals keep entries without a time limit. A time limit
+in journald needs root and changes the whole host, so each server deletes
+its own files, and what reaches the journal or Docker names no request. A
+full User-Agent with a time and a path can single out a person (the legal
+review of 2026-11-13); its class still tells robots, scripts and browsers
+apart. nginx names the client in errors of a request at every level, `crit`
+included for failed TLS handshakes on a server that terminates TLS, as the
+dedicated server outside Cloudflare will; the app sees every request worth a
+record, pages included through `X-Accel-Redirect`.
+
+**Rejected.** `MaxRetentionSec` in journald (root, the whole host;
+Hydrograf's `docker/journald.conf` was never installed). nginx writing daily
+files that the API deletes (its `log_format` cannot drop query parameters,
+write `duration_ms` or a time in UTC with `Z`, and would be a second writer
+of one format). The full User-Agent (personal data the operation does not
+need) and none at all (robots not told apart). `error_log` at `crit` (TLS
+errors name the client). Logs in `data_dir` (state, not data to back up).
+Docker's `journald` or `json-file` drivers (no time limit; `json-file` grows
+without `max-size`). The request id in a response header (a person could
+quote it and tie a record to themselves).
+
+**Consequence.** DEV-15.10 points to DEV §12, amending ECO-062 and ECO-063;
+kit 0.6.1 carries the revised § 8 ust. 3. Hydrograf, Hydrolog, Obserwator and
+Archiwista copy the module and the schema and migrate in their own branches;
+the journal entries written before the migration are removed as the plan
+says.

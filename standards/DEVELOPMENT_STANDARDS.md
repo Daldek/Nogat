@@ -364,6 +364,77 @@ configure handlers or call `print`.
 **DEV-12.3** Use `%`-style arguments in log calls; never log secrets, tokens
 or credential-bearing URLs.
 
+**DEV-12.4** A server, an `app` or a tool's command that answers HTTP such as
+`gui serve`, keeps three logs: the access log, one record per HTTP request it
+answers; the application log, its warnings, errors and exceptions; and
+lifecycle records of its start, with a summary of its settings, its stop and
+the deletion of old files. A record is one JSON object per line of UTF-8 JSON
+Lines, valid against Nogat `schemas/log/record-1.schema.json` (`nogat-log/1`),
+which admits no key but these:
+
+| Key | In | Value |
+|---|---|---|
+| `time` | every record | RFC 3339 in UTC with `Z` |
+| `level` | every record | `debug`, `info`, `warning`, `error` or `critical` |
+| `app` | every record | the project's name in lower case |
+| `version` | every record | the server's version |
+| `kind` | every record | `access`, `app` or `lifecycle` |
+| `request_id` | every record | 16 random hexadecimal digits of the request it belongs to, never sent to the client; `null` outside a request |
+| `method`, `path`, `status`, `bytes`, `duration_ms` | `access` | the method, the path with its query (DEV-12.5), the status, the bytes of the body sent, the time to the last byte |
+| `agent` | `access` | the class of the User-Agent (DEV-12.5) |
+| `event`, `message`, `error` | `app` | a stable code or the logger's name, the message, the exception's `type`, `message` and `stack` or `null` |
+| `event`, `message`, `settings` | `lifecycle` | `start`, `stop`, `prune` or another stage of the server, a fixed text, in `start` the summary of the settings |
+
+*Why:* one format, read the same way in every project (ECO-066).
+
+**DEV-12.5** No log holds a client's IP address, a cookie, a credential
+header, a request body or an uploaded file's name, and an IP address in a
+message, traceback or path is written `[ip]`; the User-Agent is kept only as
+`agent`: `bot` when it names a robot, `browser` when it starts with
+`Mozilla/`, `script` for any other value, `none` without one. In `path` a
+query parameter that may carry personal data or a credential (`REDACTED` of
+the reference module: free text, names, e-mail, tokens and keys) keeps only
+its name, and static content (files, map tiles, documents the same for every
+client) answered below 400 is not logged.
+*Why:* a log serves operation; an address, a full User-Agent or a search text
+could single out a person (ECO-066).
+
+**DEV-12.6** Records go to `<state_dir>/<project>/logs/<kind>-YYYY-MM-DD.jsonl`
+by the UTC date of `time`, `state_dir` resolved as DEV-18.1 says, in an app
+too, and the server deletes a file once its date is 14 days old: at start and
+at each 00:00 UTC. In a container, `NOGAT_STATE_DIR` names the directory in
+which the host's `<state_dir>/<project>` is mounted as `<project>`, so the
+files land where a server outside a container writes them.
+*Why:* the deletion needs no root, journald or Docker setting (ECO-066).
+
+**DEV-12.7** Standard output and error, and with them the journal or the
+container's log, get only the lifecycle records and the app records of level
+`error` and `critical`, these with `request_id` and `message` `null` and
+`error` holding only its `type`, whatever the level of DEV-12.2. A
+container's logging driver is `local` with `max-size: "1m"` and
+`max-file: "3"`.
+*Why:* what outlives the 14 days names no request (ECO-066).
+
+**DEV-12.8** uvicorn runs with `access_log=False` and `log_config=None`
+(`--no-access-log --log-level warning` on its command line): the server's own
+middleware writes the access log, outermost, so that it records the rate
+limit's answers too, and the server configures no other log handler. nginx
+in front of a server keeps no log: `access_log off;` and
+`error_log /dev/null;`, which also drops the rejections of `limit_req` and
+`limit_conn`, and it passes no `X-Request-ID`.
+*Why:* nginx names the client in an error of a request at every level, `crit`
+included (ECO-066).
+
+**DEV-12.9** A Python server does all of this with Nogat
+[standards/reference/nogat_logging.py](reference/nogat_logging.py), copied byte
+for byte (DEV-15.6): `ServerLog` for the files, the deletion, standard error
+and the application log, `AccessLog` for the ASGI middleware. Its README gives,
+with its path, the command that reads its logs:
+`jq -cs 'sort_by(.time)[] | select(.kind != "access" or .status >= 500)' <state_dir>/<project>/logs/*.jsonl`;
+use is counted by the statistics of DEV-15.11, never from the logs.
+*Why:* one implementation to review, and `drift` names every copy that is
+behind or edited (ECO-066).
+
 ---
 
 ## 13. Security
@@ -454,10 +525,11 @@ missing or refused.
 *Why:* three implementations differed in file name, text and clipboard
 (ECO-058).
 
-**DEV-15.6** Files of Nogat's kit, tokens, marks and schemas are copied byte
-for byte and never edited in the project (a token copy keeps only the
-leading comment of DEV-15.3); a change is made in Nogat and copied again.
-`drift` reports each copy as current, behind or modified (HUB-4.1).
+**DEV-15.6** Files of Nogat's kit, tokens, marks, schemas and reference module
+(DEV-12.9) are copied byte for byte and never edited in the project (a token
+copy keeps only the leading comment of DEV-15.3); a change is made in Nogat
+and copied again. `drift` reports each copy as current, behind or modified
+(HUB-4.1).
 *Why:* copies that drift unseen split the shared look and contracts again.
 
 **DEV-15.7** A public GUI, one that a deployment with `[nogat.operator]`
@@ -495,19 +567,12 @@ the window only and is never written to disk or a log.
 *Why:* protection against excessive requests without storing addresses
 (ECO-062).
 
-**DEV-15.10** No log of a public GUI, its app's or its reverse proxy's,
-access, error or application, holds the client's IP address. An access log
-holds per request only its time, method, path with query, status, size,
-duration, a random request id and the User-Agent. The app's loggers write no
-`client` field or request scope, its server's own access log off (uvicorn
-`--no-access-log`); nginx, which names the client in every error of a
-request, sets `limit_req_log_level` and `limit_conn_log_level` below the
-level of the GUI's `error_log` and that level to `crit`, unless a filter
-drops the address before a line is written. Every log is deleted after 14
-days.
+**DEV-15.10** A public GUI and its reverse proxy log only as DEV-12.4 to
+DEV-12.9 say, which § 8 of its regulamin describes: no IP address in any log,
+access, error or application, the access and application logs deleted after
+14 days, and nothing on standard output or error that names a request.
 *Why:* logs serve the operation of the service, not the identification of
-its users, and the regulamin says the server stores no IP address (ECO-062,
-ECO-063).
+its users, and the regulamin says so (ECO-062, ECO-063, ECO-066).
 
 **DEV-15.11** A public GUI counts its use in daily totals only. For each
 request the rate limit counts, a visitor is the HMAC-SHA-256 of the client IP
@@ -613,7 +678,8 @@ the session that resolves it closes the issue.
 **DEV-18.1** Shared settings live in one TOML file, `nogat.toml`, in the user
 configuration directory (`platformdirs.user_config_path("nogat")`, or the path
 in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
-`cache_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4, and the
+`cache_dir`, `state_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4,
+and the
 table `operator` of who runs a deployment open to others, DEV-15.7: `name`,
 `email`, `terms_effective` (a date), `processor`, who carries the traffic and
 processes IP addresses for the operator, `processor_transfer`, the sentence
@@ -633,7 +699,9 @@ works without it and without the `nogat` package.
 `platformdirs.user_data_path("nogat")`), one directory per tool,
 `<data_dir>/<tool>`, unless the user sets a store root (`--root`,
 `<TOOL>_ROOT`, `[<tool>] root`; DEV-19.2). Caches live in `<cache_dir>/<tool>`
-(`cache_dir` default `platformdirs.user_cache_path("nogat")`); tools do not
+(`cache_dir` default `platformdirs.user_cache_path("nogat")`), and state kept
+between runs, such as a server's logs (DEV-12.6), in `<state_dir>/<tool>`
+(`state_dir` default `platformdirs.user_state_path("nogat")`); tools do not
 write caches or state into the current working directory.
 
 **DEV-18.3** Tool-specific environment variables are named `<TOOL>_<KEY>`;

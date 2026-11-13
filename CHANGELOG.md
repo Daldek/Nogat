@@ -8,6 +8,23 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- One logging convention for every server, the author's request of
+  2026-11-13 (`docs/plans/2026-11-13-unified-logging.md`, step 1; ECO-066,
+  amending ECO-062 and ECO-063): DEV-12.4 to DEV-12.9 define the access,
+  application and lifecycle records of `nogat-log/1` (JSON Lines with fixed
+  keys, `schemas/log/record-1.schema.json`), files
+  `<state_dir>/<project>/logs/<kind>-YYYY-MM-DD.jsonl` that the server deletes
+  after 14 days, standard output and error with lifecycle records and errors
+  reduced to their type, the User-Agent as a class (`browser`, `bot`,
+  `script`, `none`), query parameters that may carry personal data without
+  their values, uvicorn's and nginx's own logs off and Docker's `local`
+  driver; DEV-15.10 points to them and `state_dir` joins DEV-18.1 and
+  DEV-18.2. The reference module `standards/reference/nogat_logging.py`
+  (standard library only) implements them, with unit and contract tests;
+  `drift` reports copies of the module and of `schemas/log/` (HUB-4.1,
+  DEV-15.6); mypy, pytest and coverage take in `standards/reference/`. Kit
+  0.6.1: § 8 ust. 3 of regulamin 1.0 says what reaches the journal and that
+  the access log keeps only the kind of program.
 - One compact strip of provider lines per GUI view, the author's request of
   2026-11-13 (`docs/plans/2026-11-13-compact-attribution.md`, step 1;
   ECO-064, amending ECO-060): DEV-20.5 and DEV-20.7 put on screen only S, P,

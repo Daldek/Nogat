@@ -254,6 +254,7 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
 14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, merged): N1 done; next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms (question 4).
 15. One compact strip of provider lines per GUI view (ECO-064, plan `docs/plans/2026-11-13-compact-attribution.md`, approved 2026-11-13): step 1 (Nogat, kit 0.5.0) merged into `develop` (`751e978`), kit 0.5.1 (every regulamin link in a new tab) merged (`9940bb8`); ECO-065 (no N or H, RD, RH, RK renamed, kit 0.6.0) on `feat/minimal-provider-texts`, not merged; next each project applies the migration in the provider-attribution plan, copies kit 0.6.0 and keeps one `<nogat-sources>` per view.
+16. One logging convention for every server (ECO-066, plan `docs/plans/2026-11-13-unified-logging.md`, approved 2026-11-13): step 1 (Nogat: DEV-12.4 to DEV-12.9, `standards/reference/nogat_logging.py`, `schemas/log/`, kit 0.6.1) on `feat/unified-logging`, not merged; next Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista copy the module (steps 2 to 6); deleting `claude-agent`'s user journal, with the mockup's 673 lines of client addresses, waits for the author's one root step.
 
 ## Open questions
 
