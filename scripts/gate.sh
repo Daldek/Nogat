@@ -2,8 +2,8 @@
 # Nogat quality gate (DEV-7.6, HUB-2.3). It follows standards/ci/gate.sh and
 # adds the hub's own steps: the registry and the generated map and AGENTS.md,
 # and shellcheck and actionlint over the CI templates Nogat ships. Tool
-# versions come from uv.lock. Coverage measures scripts/ until the `nogat`
-# package exists (deviation DEV-5.1 in CLAUDE.md).
+# versions come from uv.lock. Coverage measures scripts/ and standards/reference/
+# until the `nogat` package exists (deviation DEV-5.1 in CLAUDE.md).
 #
 # Usage: scripts/gate.sh [extra pytest arguments]
 set -euo pipefail

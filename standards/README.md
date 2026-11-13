@@ -66,6 +66,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | [ECOSYSTEM_HUB.md](ECOSYSTEM_HUB.md) | Nogat role, `ecosystem.yaml`, local workspace, generated outputs, cross-project plans and requests, standard versioning, the `nogat` package (HUB-…) |
 | [ADOPTION_PLAN.md](ADOPTION_PLAN.md) | Per-project changes by phase, history rewrite procedure, order |
 | [ci/](ci/README.md) | Templates for `scripts/gate.sh`, the commit-message check, GitHub Actions workflows and Dependabot (DEV-7.6, DEV-7.7, DEV-13.6) |
+| [reference/](reference/nogat_logging.py) | The reference module of server logs, `nogat_logging.py`, that every Python server copies byte for byte (DEV-12.9) |
 
 ## Open decisions
 
@@ -82,6 +83,17 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - One logging convention for every server: access, application and
+    lifecycle records in `nogat-log/1` JSON Lines under
+    `<state_dir>/<project>/logs/`, deleted by the server after 14 days;
+    standard output and error get only lifecycle records and errors reduced
+    to their type; the User-Agent as a class of four values; query parameters
+    that may carry personal data without their values; uvicorn's and nginx's
+    own logs off; Docker's `local` driver; `state_dir` in `[nogat]`; the
+    reference module `reference/nogat_logging.py` and the schema
+    `schemas/log/record-1.schema.json`, reported by `drift`; regulamin 1.0
+    § 8 ust. 3 revised in place in kit 0.6.1 (DEV-12.4 to DEV-12.9,
+    DEV-15.6, DEV-15.10, DEV-18.1, DEV-18.2, HUB-4.1, ECO-066).
   - Products carry only what the providers require and link their terms:
     the terms-of-use notice N and the line H are gone, the terms lines RD,
     RH and RK name the terms they link („Regulamin danych IMGW-PIB: …”),
