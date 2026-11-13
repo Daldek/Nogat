@@ -71,12 +71,6 @@ BLOCKS: dict[str, str] = {
     "esri": "the Esri World Imagery basemap",
 }
 
-# Blocks that follow from the listed ones and are never listed themselves.
-IMGW_BLOCKS = frozenset({"imgw", "imgw-hydro", "pmaxtp"})
-DERIVED: dict[str, str] = {
-    "imgw-terms": "kept with any of imgw, imgw-hydro and pmaxtp",
-}
-
 PLACEHOLDER = re.compile(r"\{\{([a-z][a-z0-9_]*)\}\}")
 BLOCK_OPEN = re.compile(r"^<!-- block: ([a-z][a-z0-9-]*) -->$", re.MULTILINE)
 MARKER = re.compile(r"^<!-- (?:block: (?P<name>[a-z][a-z0-9-]*)|/block) -->$")
@@ -216,19 +210,17 @@ def blocks(template: str) -> list[str]:
 
 
 def kept(listed: Iterable[str]) -> set[str]:
-    """Return the blocks kept for the `listed` ones, with the derived blocks.
+    """Return the blocks kept for the `listed` ones.
 
     Raises
     ------
     ValueError
-        When a name is no block or is a derived one.
+        When a name is no block.
     """
     chosen = set(listed)
     unknown = sorted(chosen - set(BLOCKS))
     if unknown:
         raise ValueError(f"not a block of the terms: {', '.join(unknown)}")
-    if chosen & IMGW_BLOCKS:
-        chosen.add("imgw-terms")
     return chosen
 
 
@@ -241,8 +233,8 @@ def fill(
 ) -> str:
     """Return the template with its blocks chosen and its placeholders filled.
 
-    A block named in `listed` (or derived from them) keeps its lines and
-    loses its two marker lines; any other block goes with its markers. Each
+    A block named in `listed` keeps its lines and loses its two marker
+    lines; any other block goes with its markers. Each
     `{{name}}` becomes its value, HTML-escaped when `markup` is true (the
     `.html` template) and as is for the `.md` source. Every placeholder
     needs a value; only those in `OPTIONAL` may be empty.

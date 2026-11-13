@@ -14,7 +14,7 @@ Serwisy wykorzystują dane IMGW-PIB:
 - dane operacyjne (stany wód i ich klasy) i położenie stacji z serwisu <https://hydro.imgw.pl>, pobierane z hydro-back.imgw.pl i pokazywane tylko jako bieżące, z czasem pomiaru, bez przechowywania;
 - opady maksymalne PMAXTP z <https://klimat.imgw.pl/opady-maksymalne>, z których serwisy obliczają opady projektowe, hietogramy i hydrogramy.
 
-Każdy widok, plik i wynik z tymi danymi podaje źródło i informację o przetworzeniu w brzmieniu Państwa regulaminów, a przy PMAXTP także opis monografii. Regulamin serwisów informuje użytkowników, że wykorzystanie danych IMGW-PIB w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie wymaga umowy z IMGW-PIB.
+Każdy widok, plik i wynik z tymi danymi podaje źródło i informację o przetworzeniu w brzmieniu Państwa regulaminów, a przy PMAXTP także opis monografii. Regulamin serwisów odsyła użytkowników do regulaminów IMGW-PIB, którym podlega korzystanie z danych pobranych z serwisów.
 
 Uprzejmie proszę o potwierdzenie, że takie wykorzystanie jest wykorzystaniem do celów prywatnych (niezarobkowych) w rozumieniu § 2 pkt 2 i § 5 regulaminu serwisu danepubliczne.imgw.pl, warunków korzystania z informacji serwisu hydro.imgw.pl i regulaminu udostępniania danych projektu PMAXTP, oraz że pobieranie danych z hydro-back.imgw.pl mieści się w tych warunkach. Jeśli któraś z tych form wymaga umowy albo zmian, będę wdzięczny za informację.
 

@@ -15,7 +15,7 @@ The provider lines of ECO-060 took too much of every GUI: Obserwator showed abou
 | Where | What |
 |---|---|
 | The strip, one per view, the kit's `<nogat-sources>` | 12 px, `--text-3`; S, P, PS, PP and CK („Źródło: ČHMÚ, CC BY 4.0”, linked to https://opendata.chmi.cz and the licence), each once in the order of DEV-20.4; then „Źródła i warunki”. At most two lines at 1440 px for one IMGW-PIB family with ČHMÚ, a third when a view shows both families (the five sentences measure 3306 px at 12 px Lato); wrapping on phones |
-| The dialog behind „Źródła i warunki” | Every line (S, P, H, PS, PP, M, C, CP), the terms (N, RD, RH, RK) and „Regulamin serwisu” where the GUI serves one |
+| The dialog behind „Źródła i warunki” | Every line (S, P, PS, PP, M, C, CP), the terms (RD, RH, RK) and „Regulamin serwisu” where the GUI serves one; H and N dropped by ECO-065 |
 | A welcome window, where the GUI has one | The same content on the first visit, through `fillSources()`; without one, the dialog is reached from the strip and the footer |
 | Files, exports, PNG and SVG, print views, hand-offs, API, CLI and MCP | Unchanged: the full lines, `attribution` and `terms_notice` |
 

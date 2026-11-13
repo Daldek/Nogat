@@ -1,11 +1,12 @@
-"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061 to ECO-063).
+"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061 to ECO-065).
 
 Every GUI fills the template with the fields and blocks the kit's README
 lists; these tests pin that the template, the reference filling and the
 README name the same fields and blocks, that the provider lines are those
-of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, that
-the version the regulamin names is the newest entry of its history, and
-which fields a deployment may leave empty.
+of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, that a
+data-source block holds only its provider's lines and the link to its terms
+(DEV-20.7), that the version the regulamin names is the newest entry of its
+history, and which fields a deployment may leave empty.
 """
 
 from __future__ import annotations
@@ -49,7 +50,7 @@ def test_the_page_has_exactly_the_documented_fields() -> None:
 
 
 def test_the_page_has_exactly_the_documented_blocks() -> None:
-    assert set(terms.blocks(PAGE)) == set(terms.BLOCKS) | set(terms.DERIVED)
+    assert set(terms.blocks(PAGE)) == set(terms.BLOCKS)
     assert terms.blocks(PAGE) == terms.blocks(SOURCE)
     assert PAGE.count("<!-- /block -->") == len(terms.blocks(PAGE))
 
@@ -59,15 +60,32 @@ def test_the_readme_documents_every_field_and_block(name: str) -> None:
     assert f"| `{name}` |" in README
 
 
-@pytest.mark.parametrize("mark", ["S", "P", "H", "PS", "PP", "M", "C", "N"])
+@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "M", "C"])
 def test_the_provider_lines_are_those_of_dev_20(mark: str) -> None:
     assert f"\n> {LINES[mark]}\n" in SOURCE
 
 
 @pytest.mark.parametrize("mark", ["RD", "RH", "RK"])
-def test_the_terms_of_imgw_pib_are_linked(mark: str) -> None:
-    address = LINES[mark].removeprefix("Regulamin: ")
-    assert f"Regulamin: <{address}>" in SOURCE
+def test_the_terms_of_imgw_pib_are_linked_as_dev_20_names_them(mark: str) -> None:
+    label, address = LINES[mark].split(": ", 1)
+    assert f"\n{label}: <{address}>\n" in SOURCE
+
+
+# A provider's name, its required lines, then at most one link to its terms.
+SOURCE_BLOCK = re.compile(
+    r"### [^\n]+\n\n(?:> [^\n]+\n)+(?:\n[^<>:\n]+: <https://[^>\n]+>\n)?"
+)
+
+
+@pytest.mark.parametrize("name", list(terms.BLOCKS))
+def test_a_source_block_holds_only_its_provider_lines_and_terms(name: str) -> None:
+    block = re.search(
+        rf"^<!-- block: {name} -->\n(?P<body>.*?)^<!-- /block -->$",
+        SOURCE,
+        re.MULTILINE | re.DOTALL,
+    )
+    assert block is not None
+    assert SOURCE_BLOCK.fullmatch(block["body"])
 
 
 def test_section_3_opens_with_the_footer_statement_of_dev_15_8() -> None:

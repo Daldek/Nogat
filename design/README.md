@@ -256,17 +256,17 @@ The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends th
 Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sources.js` as a module, and put one element per view where its data end, e.g. under the map or at the foot of the panel; never one per card or popup.
 
 ```html
-<nogat-sources attribution='["Źródłem pochodzenia danych jest …"]' terms-notice='["Dane IMGW-PIB można …"]' terms="regulamin.html"></nogat-sources>
+<nogat-sources attribution='["Źródłem pochodzenia danych jest …"]' terms-notice='["Regulamin danych IMGW-PIB: …"]' terms="regulamin.html"></nogat-sources>
 ```
 
 | Attribute or property | Value |
 | --- | --- |
 | `attribution` (attribute, JSON) or `element.attribution` (array) | The full lines the view's data carry, the API's `attribution`: the union over the data shown |
-| `terms-notice` (attribute, JSON) or `element.termsNotice` (array) | The API's `terms_notice` (N, RD, RH, RK) |
+| `terms-notice` (attribute, JSON) or `element.termsNotice` (array) | The API's `terms_notice`, the links to the providers' terms (RD, RH, RK) |
 | `terms` | The address of the GUI's `regulamin.html` (DEV-15.7); omitted where the GUI serves none |
 
 The strip is 12 px in `--text-3`: of the full lines it shows S, P, PS and PP, recognised byte for byte, and C as the short form CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC BY 4.0” linked, each once in the order of DEV-20.4, then the button „Źródła i warunki”.
-Any other line (H, M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged; with both arrays empty the element is not drawn.
+Any other line (M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged; with both arrays empty the element is not drawn.
 The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”, which opens in a new tab like the menu's „Regulamin”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
 `element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.
 A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; the module also exports `LINES` (S, P, PS, PP, C, CK), `SOURCES_TEXTS` and `screenMarks(attribution)`.
@@ -283,13 +283,14 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
-Terms (DEV-15.7, ECO-061 to ECO-063): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
+Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
 The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `main`. A change of its text once published raises that version, adds its entry to the history and releases a new kit version; the operator then sets a new `terms_effective`, the day the GUIs publish it, since a new version takes effect on publication. Until its first publication, version 1.0 is revised in place, each revision in a new kit version.
 Its § 3 opens with the statement every view shows in its footer (DEV-15.8); the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, so a GUI serves the page only once it follows them.
+Its § 5 says once that use of data taken from the service is governed by the providers' terms, and each data-source block holds only the provider's name, the lines it requires and the link to its terms or licence, never a summary of them (DEV-20.7, ECO-065).
 
 Filling, in this order (reference: `fill` in [scripts/terms.py](../scripts/terms.py)):
 
-1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers. The block `imgw-terms` follows the others and is never listed: it stays with any of `imgw`, `imgw-hydro` and `pmaxtp`.
+1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers.
 2. Fields. Replace every `{{name}}` with its value, HTML-escaped (`&`, `<`, `>`, `"`, `'`). Every field needs a value, non-empty except `processor_transfer`, `processor_cookie` and `mail_transfer`, each a whole sentence or empty: with a field missing, or with a `{{` left, the GUI serves no page and no link.
 
 The GUI fills at start or at build with its own code; a page filled from an older kit version is filled again when the kit is copied.
