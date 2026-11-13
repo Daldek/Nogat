@@ -107,9 +107,9 @@ def test_kept_keeps_only_the_listed_blocks(listed: list[str], kept: set[str]) ->
     assert terms.kept(listed) == kept
 
 
-# `feedback` was a block of kit 0.2.0 and `imgw-terms` a derived one until kit
-# 0.6.0: a GUI that still lists either is told so.
-@pytest.mark.parametrize("name", ["imgw-terms", "feedback", "ads"])
+# `feedback` was a block of kit 0.2.0, `imgw-terms` a derived one until kit
+# 0.6.0 and `esri` a block until kit 0.6.2: a GUI that still lists one is told so.
+@pytest.mark.parametrize("name", ["imgw-terms", "feedback", "esri", "ads"])
 def test_kept_refuses_unknown_blocks(name: str) -> None:
     with pytest.raises(ValueError, match=name):
         terms.kept([name])

@@ -566,6 +566,8 @@ HEADER = (
     "/* Copied from Nogat design/tokens.css at commit 29e7e1c (DEV-15.3). "
     "Do not edit here:\n   change Nogat, then copy again. */\n"
 )
+LOGGING = '"""Logs of a Nogat server."""\n'
+RECORD = "schemas/log/record-1.schema.json"
 
 
 def test_copies_of_nogat_files_are_current_behind_or_modified(
@@ -578,6 +580,8 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             HANDOFF: '{"v": 1}\n',
             "schemas/agent/result-1.schema.json": '{"r": 1}\n',
             "design/tokens.css": TOKENS,
+            "standards/reference/nogat_logging.py": LOGGING,
+            RECORD: '{"l": 1}\n',
             "design/README.md": "not copied\n",
         },
     )
@@ -590,6 +594,7 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "schemas/nogat/handoff-1.schema.json": '{"v": 1}\n',
             "web/tokens.css": HEADER + TOKENS,
             "docs/result-1.schema.json": '{"r": "edited"}\n',
+            "src/alpha/nogat_logging.py": LOGGING,
             "README.md": "Alpha\n",
         },
     )
@@ -601,6 +606,8 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "b/handoff-1.schema.json": '{"v": 2}\n',
             # A comment that does not name Nogat stays part of the copy.
             "tokens.css": "/* Our tokens. */\n" + TOKENS,
+            "backend/core/nogat_logging.py": LOGGING + "# edited\n",
+            "schemas/record-1.schema.json": '{"l": 1}\n',
         },
     )
     (workspace / "Plain").mkdir()
@@ -626,9 +633,22 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             HANDOFF,
             f"behind {restored[:7]}",
         ),
+        (
+            "Alpha",
+            "src/alpha/nogat_logging.py",
+            "standards/reference/nogat_logging.py",
+            "current",
+        ),
         ("Alpha", "web/tokens.css", "design/tokens.css", "current"),
         ("Beta", "a/handoff-1.schema.json", HANDOFF, "current"),
         ("Beta", "b/handoff-1.schema.json", HANDOFF, f"behind {second[:7]}"),
+        (
+            "Beta",
+            "backend/core/nogat_logging.py",
+            "standards/reference/nogat_logging.py",
+            "modified",
+        ),
+        ("Beta", "schemas/record-1.schema.json", RECORD, "current"),
         ("Beta", "tokens.css", "design/tokens.css", "modified"),
         ("Plain", "—", "—", "no checkout"),
         ("Absent", "—", "—", "no checkout"),

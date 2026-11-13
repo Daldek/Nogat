@@ -55,7 +55,9 @@ scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 schemas/exchange/      nogat-handoff/1, the envelope of data handed between GUIs
+schemas/log/           nogat-log/1, one record of a server's logs (DEV-12.4)
 standards/             the standard; ci/ holds the templates projects copy
+standards/reference/   nogat_logging.py, the server logs Python servers copy (DEV-12.9)
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
@@ -86,7 +88,7 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 ## Deviations
 
 - DEV-5.1: no `src/nogat/` until the `nogat` package exists (HUB §7); code
-  lives in `scripts/`, coverage measures `scripts/`.
+  lives in `scripts/` and `standards/reference/`, which coverage measures.
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).

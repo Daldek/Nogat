@@ -29,6 +29,33 @@ the standard are listed in [standards/README.md](standards/README.md).
   `<nogat-admin-status>`, each usable alone; `design/README.md`, the
   specimen `specimen-admin.html` on a fake API in the page, contract tests
   and browser tests against a fake API under CSP `'self'`.
+- Lines for GUGiK, ISRIC SoilGrids and ČÚZK data, step 1 of
+  `docs/plans/2026-11-13-terms-fix.md` (ECO-068, amending ECO-060 and
+  ECO-064): DEV §20 gains G, SG and Z with the strip forms GK, SK and ZK,
+  and DEV-20.9 to DEV-20.11; DEV-20.4 orders S, P, PS, PP, M, C, CP, G, SG,
+  Z; `<products>`, `<period>` and `<date>` have one written form; a basemap
+  loaded live from GUGiK is credited on the map. DEV-15.7: a GUI loads no
+  script, style or font from another server. Kit 0.6.2: `<nogat-sources>`
+  shows one GK naming the products of every G of the view, SK and ZK, with
+  „CC BY 4.0” linked; contract and browser tests, the strip's line budget
+  at 1440 px included.
+- One logging convention for every server, the author's request of
+  2026-11-13 (`docs/plans/2026-11-13-unified-logging.md`, step 1; ECO-066,
+  amending ECO-062 and ECO-063): DEV-12.4 to DEV-12.9 define the access,
+  application and lifecycle records of `nogat-log/1` (JSON Lines with fixed
+  keys, `schemas/log/record-1.schema.json`), files
+  `<state_dir>/<project>/logs/<kind>-YYYY-MM-DD.jsonl` that the server deletes
+  after 14 days, standard output and error with lifecycle records and errors
+  reduced to their type, the User-Agent as a class (`browser`, `bot`,
+  `script`, `none`), query parameters that may carry personal data without
+  their values, uvicorn's and nginx's own logs off and Docker's `local`
+  driver; DEV-15.10 points to them and `state_dir` joins DEV-18.1 and
+  DEV-18.2. The reference module `standards/reference/nogat_logging.py`
+  (standard library only) implements them, with unit and contract tests;
+  `drift` reports copies of the module and of `schemas/log/` (HUB-4.1,
+  DEV-15.6); mypy, pytest and coverage take in `standards/reference/`. Kit
+  0.6.1: § 8 ust. 3 of regulamin 1.0 says what reaches the journal and that
+  the access log keeps only the kind of program.
 - One compact strip of provider lines per GUI view, the author's request of
   2026-11-13 (`docs/plans/2026-11-13-compact-attribution.md`, step 1;
   ECO-064, amending ECO-060): DEV-20.5 and DEV-20.7 put on screen only S, P,
@@ -515,6 +542,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- Regulamin 1.0, published in Hydrograf and Hydrolog on 2026-11-13, is
+  corrected in place on the author's decision (ECO-068, kit 0.6.2): the
+  block `gugik` names „Główny Urząd Geodezji i Kartografii – GUGiK” and
+  links GUGiK's conditions of reuse instead of the geoportal's terms; the
+  block `esri` is gone (Esri's basemaps need Esri software or an ArcGIS
+  subscription) and `scripts/terms.py` refuses it; § 8 ust. 5 names the map
+  layers of other providers beside the basemap; „Historia zmian” links the
+  template's history on `develop`. `design/README.md` records the version
+  and each GUI's blocks; the regulamin plan and its draft register of
+  processing follow.
 - GUI kit 0.5.1: „Regulamin” in the app menu and „Regulamin serwisu” in the
   `<nogat-sources>` dialog and in `fillSources()` open in a new tab
   (`target="_blank"`, `rel="noopener"`); they replaced the GUI's own tab,

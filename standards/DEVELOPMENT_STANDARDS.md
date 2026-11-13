@@ -364,6 +364,77 @@ configure handlers or call `print`.
 **DEV-12.3** Use `%`-style arguments in log calls; never log secrets, tokens
 or credential-bearing URLs.
 
+**DEV-12.4** A server, an `app` or a tool's command that answers HTTP such as
+`gui serve`, keeps three logs: the access log, one record per HTTP request it
+answers; the application log, its warnings, errors and exceptions; and
+lifecycle records of its start, with a summary of its settings, its stop and
+the deletion of old files. A record is one JSON object per line of UTF-8 JSON
+Lines, valid against Nogat `schemas/log/record-1.schema.json` (`nogat-log/1`),
+which admits no key but these:
+
+| Key | In | Value |
+|---|---|---|
+| `time` | every record | RFC 3339 in UTC with `Z` |
+| `level` | every record | `debug`, `info`, `warning`, `error` or `critical` |
+| `app` | every record | the project's name in lower case |
+| `version` | every record | the server's version |
+| `kind` | every record | `access`, `app` or `lifecycle` |
+| `request_id` | every record | 16 random hexadecimal digits of the request it belongs to, never sent to the client; `null` outside a request |
+| `method`, `path`, `status`, `bytes`, `duration_ms` | `access` | the method, the path with its query (DEV-12.5), the status, the bytes of the body sent, the time to the last byte |
+| `agent` | `access` | the class of the User-Agent (DEV-12.5) |
+| `event`, `message`, `error` | `app` | a stable code or the logger's name, the message, the exception's `type`, `message` and `stack` or `null` |
+| `event`, `message`, `settings` | `lifecycle` | `start`, `stop`, `prune` or another stage of the server, a fixed text, in `start` the summary of the settings |
+
+*Why:* one format, read the same way in every project (ECO-066).
+
+**DEV-12.5** No log holds a client's IP address, a cookie, a credential
+header, a request body or an uploaded file's name, and an IP address in a
+message, traceback or path is written `[ip]`; the User-Agent is kept only as
+`agent`: `bot` when it names a robot, `browser` when it starts with
+`Mozilla/`, `script` for any other value, `none` without one. In `path` a
+query parameter that may carry personal data or a credential (`REDACTED` of
+the reference module: free text, names, e-mail, tokens and keys) keeps only
+its name, and static content (files, map tiles, documents the same for every
+client) answered below 400 is not logged.
+*Why:* a log serves operation; an address, a full User-Agent or a search text
+could single out a person (ECO-066).
+
+**DEV-12.6** Records go to `<state_dir>/<project>/logs/<kind>-YYYY-MM-DD.jsonl`
+by the UTC date of `time`, `state_dir` resolved as DEV-18.1 says, in an app
+too, and the server deletes a file once its date is 14 days old: at start and
+at each 00:00 UTC. In a container, `NOGAT_STATE_DIR` names the directory in
+which the host's `<state_dir>/<project>` is mounted as `<project>`, so the
+files land where a server outside a container writes them.
+*Why:* the deletion needs no root, journald or Docker setting (ECO-066).
+
+**DEV-12.7** Standard output and error, and with them the journal or the
+container's log, get only the lifecycle records and the app records of level
+`error` and `critical`, these with `request_id` and `message` `null` and
+`error` holding only its `type`, whatever the level of DEV-12.2. A
+container's logging driver is `local` with `max-size: "1m"` and
+`max-file: "3"`.
+*Why:* what outlives the 14 days names no request (ECO-066).
+
+**DEV-12.8** uvicorn runs with `access_log=False` and `log_config=None`
+(`--no-access-log --log-level warning` on its command line): the server's own
+middleware writes the access log, outermost, so that it records the rate
+limit's answers too, and the server configures no other log handler. nginx
+in front of a server keeps no log: `access_log off;` and
+`error_log /dev/null;`, which also drops the rejections of `limit_req` and
+`limit_conn`, and it passes no `X-Request-ID`.
+*Why:* nginx names the client in an error of a request at every level, `crit`
+included (ECO-066).
+
+**DEV-12.9** A Python server does all of this with Nogat
+[standards/reference/nogat_logging.py](reference/nogat_logging.py), copied byte
+for byte (DEV-15.6): `ServerLog` for the files, the deletion, standard error
+and the application log, `AccessLog` for the ASGI middleware. Its README gives,
+with its path, the command that reads its logs:
+`jq -cs 'sort_by(.time)[] | select(.kind != "access" or .status >= 500)' <state_dir>/<project>/logs/*.jsonl`;
+use is counted by the statistics of DEV-15.11, never from the logs.
+*Why:* one implementation to review, and `drift` names every copy that is
+behind or edited (ECO-066).
+
 ---
 
 ## 13. Security
@@ -455,10 +526,11 @@ missing or refused.
 *Why:* three implementations differed in file name, text and clipboard
 (ECO-058).
 
-**DEV-15.6** Files of Nogat's kit, tokens, marks and schemas are copied byte
-for byte and never edited in the project (a token copy keeps only the
-leading comment of DEV-15.3); a change is made in Nogat and copied again.
-`drift` reports each copy as current, behind or modified (HUB-4.1).
+**DEV-15.6** Files of Nogat's kit, tokens, marks, schemas and reference module
+(DEV-12.9) are copied byte for byte and never edited in the project (a token
+copy keeps only the leading comment of DEV-15.3); a change is made in Nogat
+and copied again. `drift` reports each copy as current, behind or modified
+(HUB-4.1).
 *Why:* copies that drift unseen split the shared look and contracts again.
 
 **DEV-15.7** A public GUI, one that a deployment with `[nogat.operator]`
@@ -472,10 +544,13 @@ attribution lines (DEV-20.5), and the app menu and `<nogat-sources>` pass it
 in their `terms` attribute; every such link opens a new tab
 (`target="_blank"`, `rel="noopener"`). A GUI run without
 `[nogat.operator]`, or used only by its operator behind a sign-in, has
-neither page nor link.
+neither page nor link. A GUI loads no script, style or font from another
+server: only basemaps and map layers come from their providers' servers.
 *Why:* one text tells everyone who uses a public GUI its rules and what
 happens to their data (RODO art. 13; ECO-061, ECO-062); a link that replaced
-the GUI's tab would end its session and lose the user's work.
+the GUI's tab would end its session and lose the user's work; § 8 ust. 5
+names only the providers of map layers as receiving the visitor's IP
+address (ECO-068).
 
 **DEV-15.8** Every view of a public GUI but its admin page (DEV-15.13) shows
 in its footer or status bar, beside „Regulamin”, the statement
@@ -497,19 +572,12 @@ the window only and is never written to disk or a log.
 *Why:* protection against excessive requests without storing addresses
 (ECO-062).
 
-**DEV-15.10** No log of a public GUI, its app's or its reverse proxy's,
-access, error or application, holds the client's IP address. An access log
-holds per request only its time, method, path with query, status, size,
-duration, a random request id and the User-Agent. The app's loggers write no
-`client` field or request scope, its server's own access log off (uvicorn
-`--no-access-log`); nginx, which names the client in every error of a
-request, sets `limit_req_log_level` and `limit_conn_log_level` below the
-level of the GUI's `error_log` and that level to `crit`, unless a filter
-drops the address before a line is written. Every log is deleted after 14
-days.
+**DEV-15.10** A public GUI and its reverse proxy log only as DEV-12.4 to
+DEV-12.9 say, which § 8 of its regulamin describes: no IP address in any log,
+access, error or application, the access and application logs deleted after
+14 days, and nothing on standard output or error that names a request.
 *Why:* logs serve the operation of the service, not the identification of
-its users, and the regulamin says the server stores no IP address (ECO-062,
-ECO-063).
+its users, and the regulamin says so (ECO-062, ECO-063, ECO-066).
 
 **DEV-15.11** A public GUI counts its use in daily totals only, the requests
 of its admin panel not counted (DEV-15.13). For each request the rate limit
@@ -651,7 +719,8 @@ the session that resolves it closes the issue.
 **DEV-18.1** Shared settings live in one TOML file, `nogat.toml`, in the user
 configuration directory (`platformdirs.user_config_path("nogat")`, or the path
 in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
-`cache_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4, and the
+`cache_dir`, `state_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4,
+and the
 table `operator` of who runs a deployment open to others, DEV-15.7: `name`,
 `email`, `terms_effective` (a date), `processor`, who carries the traffic and
 processes IP addresses for the operator, `processor_transfer`, the sentence
@@ -671,7 +740,9 @@ works without it and without the `nogat` package.
 `platformdirs.user_data_path("nogat")`), one directory per tool,
 `<data_dir>/<tool>`, unless the user sets a store root (`--root`,
 `<TOOL>_ROOT`, `[<tool>] root`; DEV-19.2). Caches live in `<cache_dir>/<tool>`
-(`cache_dir` default `platformdirs.user_cache_path("nogat")`); tools do not
+(`cache_dir` default `platformdirs.user_cache_path("nogat")`), and state kept
+between runs, such as a server's logs (DEV-12.6), in `<state_dir>/<tool>`
+(`state_dir` default `platformdirs.user_state_path("nogat")`); tools do not
 write caches or state into the current working directory.
 
 **DEV-18.3** Tool-specific environment variables are named `<TOOL>_<KEY>`;
@@ -888,13 +959,28 @@ Polish line stays and an English gloss MAY follow it.
 | C | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) |
 | CK | Źródło: ČHMÚ, CC BY 4.0 |
 | CP | Dane ČHMÚ zostały przetworzone (`<what was done>`) |
+| G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone |
+| GK | Źródło: GUGiK (`<products>`) |
+| SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone |
+| SK | Źródło: ISRIC SoilGrids, CC BY 4.0 |
+| Z | Źródło: Český úřad zeměměřický a katastrální (ČÚZK), `<products>` (pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone |
+| ZK | Źródło: ČÚZK, CC BY 4.0 |
 | RD | Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations |
 | RH | Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin |
 | RK | Regulamin danych PMAXTP: https://klimat.imgw.pl/opady-maksymalne |
 
-CK is the short form of C for the strip of a GUI view only (DEV-20.5), with
-„ČHMÚ” linked to https://opendata.chmi.cz and „CC BY 4.0” to the licence; it
-is never written into a product.
+CK, GK, SK and ZK are the short forms of C, G, SG and Z for the strip of a
+GUI view only (DEV-20.5) and are never written into a product: CK with
+„ČHMÚ” linked to https://opendata.chmi.cz and „CC BY 4.0” to the licence, SK
+and ZK with „CC BY 4.0” linked to the licence, and one GK naming the
+products of every G of the view, each once.
+
+In G and Z, `<products>` names the products used, joined by „, ” (e.g.
+„NMT, BDOT10k” of GUGiK, „RÚIAN” of ČÚZK); `<period>` the year in which the
+data used were created, or the first and the last joined by an en dash
+(„2020–2025”); `<date>` the day they were downloaded, `YYYY-MM-DD`, or the
+first and the last joined by a spaced en dash („2026-03-24 – 2026-10-29”);
+both from the Kartograf metadata of the files.
 
 RD, RH and RK, the terms lines, each name the terms they link and have the
 form „Regulamin <whose terms>: <address>”, so a reader of `ATTRIBUTION.txt`
@@ -924,8 +1010,9 @@ and CP with the same elements.
 *Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-060).
 
 **DEV-20.4** A product with data of several providers carries every line that
-applies, in the order S, P, PS, PP, M, C, CP, each once. A project keeps the
-lines in one place in its code, and every surface takes them from there.
+applies, in the order S, P, PS, PP, M, C, CP, G, SG, Z, each once. A project
+keeps the lines in one place in its code, and every surface takes them from
+there.
 *Why:* lines equal byte for byte merge across tools without duplicates.
 
 **DEV-20.5** The lines are visible and legible, never in a tooltip only, on
@@ -952,10 +1039,11 @@ merges its lines in, each once and in order.
 A GUI view shows one strip for all its data, the kit's `<nogat-sources>`,
 not one per panel, card, chart or popup: 12 px in the muted text colour, at
 most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
-with ČHMÚ, a third allowed when the view shows both, wrapping on phones. It
-holds the on-screen lines S, P, PS, PP and CK, those the view's data need,
-each once in the order of DEV-20.4, and ends with „Źródła i warunki”, which
-opens a dialog with every line (S, P, PS, PP, M, C, CP) and the terms of
+with the short forms, a third allowed when the view shows both, wrapping on
+phones. It holds the on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those
+the view's data need, each once in the order of DEV-20.4, a short form in
+the place of its full line, and ends with „Źródła i warunki”, which opens a
+dialog with every line (S, P, PS, PP, M, C, CP, G, SG, Z) and the terms of
 DEV-20.7 (RD, RH, RK), and with „Regulamin” where the GUI serves one
 (DEV-15.7). A GUI with a welcome window shows the same full content there on
 the first visit; one without it reaches the dialog from the strip and the
@@ -964,7 +1052,8 @@ fields `attribution` and `terms_notice` keep the full lines.
 
 *Why:* the terms bind every product made with the data (ECO-060); the
 IMGW-PIB and PMAXTP terms require their sentences on the product, while CC
-BY 4.0 lets a link carry ČHMÚ's details (ECO-064).
+BY 4.0 lets a link carry ČHMÚ's details (ECO-064); GUGiK, ISRIC and ČÚZK
+are named the same way, their full lines one click away (ECO-068).
 
 **DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
 `attribution`, an array of the lines as strings. A consumer shows the lines it
@@ -980,8 +1069,9 @@ attribution lines and on the surfaces of DEV-20.5, in a GUI view in the
 dialog behind its strip; a JSON document, result or hand-off has them in
 `terms_notice`, an array of strings carried on like `attribution`. No
 product restates, summarises or paraphrases a provider's terms: it carries
-the lines of the table and links the rest. ČHMÚ data take no terms line,
-since C names the licence with its link.
+the lines of the table and links the rest. ČHMÚ, ISRIC and ČÚZK data take
+no terms line, since C, SG and Z name the licence with its link, nor do
+GUGiK data, whose conditions of reuse a regulamin links in its § 5.
 *Why:* the providers' own terms are the only binding text, and a summary
 can mis-state them; products carry only what the providers require (the
 author's principle of 2026-11-13, ECO-065); a dialog one click from the data
@@ -993,3 +1083,19 @@ never stored or presented as archive; station locations from it MAY be kept
 as reference data with their lines (DEV-20.1).
 *Why:* operational data are not the verified archive of danepubliczne.imgw.pl,
 and no project keeps them (ECO-060).
+
+**DEV-20.9** A product with GUGiK data (NMT, BDOT10k, PRG and the other data
+of geoportal.gov.pl) or results derived from them carries G; a basemap a GUI
+loads live from GUGiK's services is credited in the map's own attribution
+instead, the orthophoto as „Ortofotomapa © GUGiK”.
+*Why:* pkt 1 and 2 of GUGiK's conditions of reuse: its full name, the time
+the data were created and acquired, and a note that they were processed
+(ECO-068).
+
+**DEV-20.10** A product with ISRIC SoilGrids data or results derived from
+them carries SG.
+*Why:* SoilGrids is under CC BY 4.0, §3(a)(1) (ECO-068).
+
+**DEV-20.11** A product with ČÚZK data (RÚIAN and the other data of ČÚZK) or
+results derived from them carries Z.
+*Why:* ČÚZK's open data are under CC BY 4.0, §3(a)(1) (ECO-068).
