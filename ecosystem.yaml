@@ -190,6 +190,12 @@ projects:
       - id: obserwator-testing
         kind: library
         summary: obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
+      - id: obserwator-data
+        kind: store
+        summary: Planned (ECO-059) data root of harmonized series, station catalogs and analysis results under a marker of its own, built from Archiwista's raw root; Obserwator holds the production copy, Archiwista a backup.
+      - id: obserwator-analyses
+        kind: dataset
+        summary: Planned (ECO-059) results of the station analyses computed by Hydrolog, one version per station, analysis and options, with the series and Hydrolog versions (analyses build, read, export).
     depends_on:
       - project: Kartograf
         kind: data
@@ -197,6 +203,18 @@ projects:
         via: [store]
         exchange: [kartograf-store/1]
         note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+      - project: Archiwista
+        kind: data
+        status: planned
+        via: [store]
+        exchange: [archiwista-raw-root]
+        note: No import (ECO-059); series build, the catalog build and analyses build read the raw root without writing it and write only the data root, once at the start and at each yearly refresh.
+      - project: Hydrolog
+        kind: optional
+        status: planned
+        via: [cli, file]
+        exchange: [hydrolog-result/1, hydrolog-series/1]
+        note: No package dependency (ECO-059); analyses build runs a configured hydrolog program's batch over series export files and stores one hydrolog-result/1 per call; a person's subset is one CLI call computed on the fly and never stored; the GUI hands a series to Hydrolog as nogat-handoff/1 around hydrolog-series/1.
 
   - name: Hydrolog
     summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
@@ -276,7 +294,7 @@ projects:
         via: [library, file]
         exchange: [obserwator-pmaxtp, obserwator-series-csv]
         uses: [fetch_pmaxtp]
-        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`.
+        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`. Planned (ECO-059) a batch entry that reads the series export files of Obserwator's analyses build, and „Wczytaj z Obserwatora” opening Obserwator's hand-off.
       - project: Kartograf
         kind: data
         status: active
@@ -453,6 +471,9 @@ projects:
       - id: archiwista-project/1
         kind: manifest
         summary: archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054).
+      - id: archiwista-raw-root
+        kind: dataset
+        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root.
     depends_on:
       - project: Kartograf
         kind: runtime
@@ -465,8 +486,8 @@ projects:
         kind: optional
         status: planned
         via: [library, store]
-        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1]
-        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data]
+        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Planned (ECO-059) downloads into its raw root through Obserwator's library, series and catalogs read from Obserwator's data root, of which it keeps a backup copy.
       - project: Hydrolog
         kind: data
         status: active

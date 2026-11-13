@@ -253,6 +253,8 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
 13. The origin of each node in the hand-off: plan `docs/plans/2026-11-10-node-provenance-in-handoff.md`, done 2026-11-11. `node_provenance` in `nogat-handoff/1`
    (step 1); Hydrograf's `POST /api/delineate-network` writes it (step 2, `develop` `824bebd`, on Hydroni since 2026-11-11, production pending the author);
    Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
+14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, branch `plan/station-data-and-analyses`): N1 done (the decision, the planned edges);
+   next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms for the public instance (question 4).
 
 ## Open questions
 

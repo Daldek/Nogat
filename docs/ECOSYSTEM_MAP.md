@@ -42,6 +42,8 @@ flowchart LR
   src_gugik --> Archiwista
   src_osm --> Archiwista
   Kartograf -. store, no package .-> Obserwator
+  Archiwista -. planned: store .-> Obserwator
+  Hydrolog -. planned: cli/file .-> Obserwator
   Obserwator -- library/file --> Hydrolog
   Kartograf -. file, no package .-> Hydrolog
   Kartograf -- library --> Hydrograf
@@ -78,6 +80,8 @@ flowchart LR
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
 | Obserwator | Kartograf | data | active | store | `kartograf-store/1` |
+| Obserwator | Archiwista | data | planned | store | `archiwista-raw-root` |
+| Obserwator | Hydrolog | optional | planned | cli, file | `hydrolog-result/1`, `hydrolog-series/1` |
 | Hydrolog | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-series-csv` |
 | Hydrolog | Kartograf | data | active | file | `kartograf-files` |
 | Hydrograf | Kartograf | runtime | active | library | `kartograf-files`, `kartograf-meta/1` |
@@ -92,13 +96,15 @@ flowchart LR
 | Retman | Hydrolog | optional | active | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
-| Archiwista | Obserwator | optional | planned | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1` |
+| Archiwista | Obserwator | optional | planned | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1`, `obserwator-data` |
 | Archiwista | Hydrolog | data | active | file | `hydrolog-series/1` |
 
 ### Details
 
 - **Obserwator → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
-- **Hydrolog → Obserwator**: uses `fetch_pmaxtp`; precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`.
+- **Obserwator → Archiwista**: No import (ECO-059); series build, the catalog build and analyses build read the raw root without writing it and write only the data root, once at the start and at each yearly refresh.
+- **Obserwator → Hydrolog**: No package dependency (ECO-059); analyses build runs a configured hydrolog program's batch over series export files and stores one hydrolog-result/1 per call; a person's subset is one CLI call computed on the fly and never stored; the GUI hands a series to Hydrolog as nogat-handoff/1 around hydrolog-series/1.
+- **Hydrolog → Obserwator**: uses `fetch_pmaxtp`; precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`. Planned (ECO-059) a batch entry that reads the series export files of Obserwator's analyses build, and „Wczytaj z Obserwatora” opening Obserwator's hand-off.
 - **Hydrolog → Kartograf**: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Kartograf ADR-025).
 - **Hydrograf → Kartograf**: uses `DownloadManager`, `GugikProvider`, `MetadataCache`, `download_landcover`, `calculate_hsg`, `hsg_statistics`, `iter_store`, `list_segments`, `SheetParser`, `find_sheets_for_bbox`, `find_sheets_for_geometry`
 - **Hydrograf → Hydrolog**: uses `WatershedParameters`, `ConcentrationTime`, `HydrographGenerator`, `NashIUH`, `BetaHietogram`, `BlockHietogram`, `EulerIIHietogram`; POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
@@ -109,7 +115,7 @@ flowchart LR
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
-- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19).
+- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Planned (ECO-059) downloads into its raw root through Obserwator's library, series and catalogs read from Obserwator's data root, of which it keeps a backup copy.
 - **Archiwista → Hydrolog**: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
 
 ## What each project provides
@@ -147,6 +153,8 @@ flowchart LR
 | `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
 | `obserwator-pmaxtp` | document | Hydrolog, Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
+| `obserwator-data` | store | Archiwista (planned) | Planned (ECO-059) data root of harmonized series, station catalogs and analysis results under a marker of its own, built from Archiwista's raw root; Obserwator holds the production copy, Archiwista a backup. |
+| `obserwator-analyses` | dataset | — | Planned (ECO-059) results of the station analyses computed by Hydrolog, one version per station, analysis and options, with the series and Hydrolog versions (analyses build, read, export). |
 
 ### Hydrolog
 
@@ -156,13 +164,13 @@ flowchart LR
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
 | `hydrolog-hydrograph-csv` | dataset | Hydraulik | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
 | `hydrolog-network/1` | document | Hydrograf | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
-| `hydrolog-result/1` | document | Hydraulik, Retman | Result envelope (command, inputs, result, files with SHA-256, notices). |
+| `hydrolog-result/1` | document | Obserwator (planned), Hydraulik, Retman | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
 | `hydrolog-command-list/1` | catalog | Retman | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
 | `hydrolog-commands/1` | catalog | Retman | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
 | `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
 | `hydrolog-gui` | service | — | Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host. |
-| `hydrolog-series/1` | document | Archiwista | A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020). |
+| `hydrolog-series/1` | document | Obserwator (planned), Archiwista | A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020). |
 | `hydrolog-testing` | library | Hydraulik | hydrolog.testing builds network documents, the tables route network writes and the precip hietogram envelope with the real code, offline, for the contract tests of consumers (DEV-10.6, Hydrolog ADR-0011). |
 
 ### Hydrograf
@@ -184,6 +192,7 @@ flowchart LR
 | `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
 | `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
+| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root. |
 
 ## External data sources
 

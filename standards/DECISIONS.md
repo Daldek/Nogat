@@ -63,11 +63,12 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
-| [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | accepted | 2026-10-31 |
+| [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059 | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
+| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 
 ---
 
@@ -986,6 +987,11 @@ function, and each gives the command of a stored version from its metadata
 with `unsupported` where the metadata does not rebuild the call. Plan:
 `docs/plans/2026-10-31-archiwista-projects.md` (option B).
 
+**Amended by ECO-059 (2026-11-13):** for the station data of IMGW-PIB and
+ČHMÚ, Archiwista orders the downloads, through Obserwator's library, and
+keeps the raw data; Obserwator keeps the harmonized series, catalogs and
+analysis results in a data root of its own.
+
 **Why.** The notion was split in three: `kartograf-project/1`,
 `imgw-project/1` and Archiwista's projects with access, own data and
 snapshots. In the producers' model a pin exists only inside a task and only
@@ -1117,3 +1123,45 @@ HUB-2.4). The kit in the hub's repository (every GUI would depend on an app).
 **Consequence.** Each GUI adopts the kit in its own session (steps 4 to 7 of
 the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
 (DEV-1.2).
+
+## ECO-059 Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog
+
+**Decision.** For the hydro-meteorological station data of IMGW-PIB and
+ČHMÚ each project has one role. Archiwista orders every download and keeps
+the raw data (the archives as published with their sidecars, the archived
+station metadata, the PMAXTP cells) in a raw root of the `obserwator-store/1`
+layout; the download code stays Obserwator's library, which Archiwista calls
+into that root. Obserwator reads the raw root without writing it, parses it
+into harmonized series and station catalogs in a data root of its own,
+stores there the results of the analyses, and serves both (GUI, files, REST,
+MCP); Obserwator holds the production data root, and Archiwista keeps a
+backup copy of the whole data root. Hydrolog computes every analysis;
+Obserwator starts Hydrolog's program and does not import it. Everything is
+computed once, at the start; once a year, when IMGW-PIB and ČHMÚ publish new
+packages, they are downloaded and the data root is rebuilt and recomputed. A
+result for a subset a person chooses is computed on the fly and never
+stored. Operational data, such as IMGW-PIB's warning and alarm levels, are
+not archived. Kartograf's data and roles do not change. Plan:
+`docs/plans/2026-11-12-station-data-and-analyses.md`.
+
+**Why.** The author's decisions of 2026-11-12 and 2026-11-13. One Obserwator
+store held the raw archives, the series, the catalogs and the PMAXTP cells,
+so a public Obserwator would carry every raw archive; Archiwista already
+ordered its downloads through Obserwator's library; and the author's
+analyses had no home, as Obserwator's PRD and Archiwista's scope both leave
+statistics to Hydrolog.
+
+**Rejected.** Moving the download code to Archiwista (about 7,900 lines and
+their tests move, and the archive contracts leave the code that writes
+them). One root with each project's directories (a public Obserwator would
+carry every raw archive). Obserwator computing the simple analyses itself
+(two codes for one number). Obserwator importing Hydrolog (Hydrolog is not
+on PyPI and depends on Obserwator optionally). Every result computed on
+request (the cost on a small server). Storing the results of a person's
+subsets (data no one asked to keep).
+
+**Consequence.** ECO-054's producers that download, check and keep the
+versioned store are, for these data, Obserwator's library called by
+Archiwista and Archiwista's raw root. Obserwator, Archiwista and Hydrolog
+change in their own sessions and plans, producers first (HUB-5.2); until
+then the registry lists the new edges as `planned`.

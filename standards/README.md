@@ -132,6 +132,10 @@ DOC-11.1).
     Nogat's kit, tokens, marks and schemas are byte-identical and reported by
     `drift`; Nogat runs no GUI (DEV-15.4 to DEV-15.6, DEV-18.1, HUB-1.1,
     HUB-4.1, ECO-050, ECO-058).
+  - Station data of IMGW-PIB and ČHMÚ: Archiwista orders the downloads
+    through Obserwator's library and keeps the raw data, Obserwator keeps
+    the harmonized series, catalogs and analysis results, Hydrolog computes
+    every analysis; amends ECO-054 (ECO-059).
   - The registry's optional `gui` interface: the command that serves a
     project's browser GUI (HUB-2.1).
   - A candidate's `members.toml` holds the commit every consumer pins; the
