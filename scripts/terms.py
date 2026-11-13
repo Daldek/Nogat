@@ -68,7 +68,6 @@ BLOCKS: dict[str, str] = {
     "isric": "ISRIC SoilGrids",
     "wody-polskie": "flood hazard maps of Wody Polskie",
     "osm": "OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal)",
-    "esri": "the Esri World Imagery basemap",
 }
 
 PLACEHOLDER = re.compile(r"\{\{([a-z][a-z0-9_]*)\}\}")

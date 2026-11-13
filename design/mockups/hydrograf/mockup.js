@@ -201,7 +201,7 @@
   var ATTRIB = {
     openfreemap: "OpenFreeMap © OpenMapTiles, dane © OpenStreetMap · NMT GUGiK",
     "gugik-osm": "© OpenStreetMap, GUGiK · NMT GUGiK",
-    "esri-ortho": "Esri, Maxar, Earthstar Geographics · NMT GUGiK",
+    "gugik-ortho": "Ortofotomapa © GUGiK · NMT GUGiK",
     none: "NMT GUGiK"
   };
   document.querySelectorAll('input[name="basemap"]').forEach(function (r) {

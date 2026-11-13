@@ -1,8 +1,9 @@
-"""The kit's sources strip, design/kit/nogat-sources.js (DEV-20.5, ECO-064).
+"""The kit's sources strip, design/kit/nogat-sources.js (DEV-20.5, ECO-064, ECO-068).
 
-The element recognises the on-screen lines byte for byte, so its copies of
-them must be the lines of the table of DEV §20; its button carries the label
-DEV-20.5 names; and every attribute it observes is documented for the GUIs.
+The element recognises the on-screen lines byte for byte, the values of G and
+Z by their place, so its copies of them must be the lines of the table of
+DEV §20; its button carries the label DEV-20.5 names; and every attribute it
+observes is documented for the GUIs.
 """
 
 from __future__ import annotations
@@ -33,11 +34,15 @@ RULE = re.search(
 )
 
 
+# The lines shown and the full lines whose short forms are shown.
+KNOWN = ["S", "P", "PS", "PP", "C", "CK", "G", "GK", "SG", "SK", "Z", "ZK"]
+
+
 def test_the_element_knows_exactly_the_on_screen_lines() -> None:
-    assert set(SCRIPT_LINES) == {"S", "P", "PS", "PP", "C", "CK"}
+    assert set(SCRIPT_LINES) == set(KNOWN)
 
 
-@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "C", "CK"])
+@pytest.mark.parametrize("mark", KNOWN)
 def test_each_line_is_that_of_dev_20(mark: str) -> None:
     assert SCRIPT_LINES[mark] == TABLE[mark]
 

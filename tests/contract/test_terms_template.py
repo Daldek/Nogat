@@ -1,4 +1,4 @@
-"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061 to ECO-065).
+"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061 to ECO-068).
 
 Every GUI fills the template with the fields and blocks the kit's README
 lists; these tests pin that the template, the reference filling and the
@@ -6,7 +6,8 @@ README name the same fields and blocks, that the provider lines are those
 of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, that a
 data-source block holds only its provider's lines and the link to its terms
 (DEV-20.7), that the version the regulamin names is the newest entry of its
-history, and which fields a deployment may leave empty.
+history, which links the published text on `develop`, and which fields a
+deployment may leave empty.
 """
 
 from __future__ import annotations
@@ -71,6 +72,16 @@ def test_the_terms_of_imgw_pib_are_linked_as_dev_20_names_them(mark: str) -> Non
     assert f"\n{label}: <{address}>\n" in SOURCE
 
 
+def test_the_gugik_block_names_gugik_as_g_does() -> None:
+    name = LINES["G"].split(", `<products>`")[0]
+    assert f"<!-- block: gugik -->\n### GUGiK\n\n> {name}\n" in SOURCE
+
+
+def test_no_block_offers_esri_imagery() -> None:
+    # Esri's basemaps need Esri software or an ArcGIS subscription (ECO-068).
+    assert "esri" not in terms.blocks(SOURCE)
+
+
 # A provider's name, its required lines, then at most one link to its terms.
 SOURCE_BLOCK = re.compile(
     r"### [^\n]+\n\n(?:> [^\n]+\n)+(?:\n[^<>:\n]+: <https://[^>\n]+>\n)?"
@@ -100,6 +111,14 @@ def test_the_version_is_the_newest_entry_of_the_history() -> None:
     entries = HISTORY_ENTRY.findall(history)
     assert VERSION.findall(body) == entries[:1]
     assert len(set(entries)) == len(entries)
+
+
+def test_the_history_links_the_template_on_develop() -> None:
+    # The published text lives on develop; main waits for the author (ECO-068).
+    history = SOURCE.split("\n## Historia zmian\n")[1]
+    assert history.endswith(
+        ": <https://github.com/Daldek/Nogat/commits/develop/design/kit/nogat-terms.md>\n"
+    )
 
 
 def test_the_page_loads_no_script_and_nothing_remote() -> None:

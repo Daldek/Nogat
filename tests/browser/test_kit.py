@@ -74,7 +74,23 @@ LINES = {
     )
 }
 CP = "Dane ČHMÚ zostały przetworzone (agregacja do dobowych sum)"
-OTHER = "Źródło: GUGiK"
+OTHER = "Źródło: Państwowe Gospodarstwo Wodne Wody Polskie"
+LICENCE = "https://creativecommons.org/licenses/by/4.0/"
+
+
+def _filled(mark: str, **values: str) -> str:
+    """The line `mark` of DEV §20 with its values."""
+    line = LINES[mark]
+    for name, value in values.items():
+        line = line.replace(f"`<{name}>`", value)
+    return line
+
+
+G_NMT = _filled("G", products="NMT", period="2020–2025", date="2026-10-29")
+G_BDOT = _filled(
+    "G", products="NMT, BDOT10k", period="2020–2026", date="2026-03-24 – 2026-10-29"
+)
+Z = _filled("Z", products="RÚIAN", date="2026-11-13")
 
 
 TERMS_VALUES = {
@@ -398,17 +414,21 @@ def _strip_lines(page: Page) -> int:
 IMGW = [LINES[m] for m in ("S", "P")]
 PMAXTP = [LINES[m] for m in ("PS", "PP", "M")]
 NOTICE = [LINES[m] for m in ("RD", "RH", "RK")]
+OTHERS = [LINES["C"], G_BDOT, LINES["SG"], Z]
 
 
 def test_strip_shows_the_on_screen_lines_once_in_order(
     sources: tuple[Page, list[str]],
 ) -> None:
     page, _ = sources
-    full = [OTHER, LINES["C"], CP, *reversed(PMAXTP), *IMGW, LINES["S"]]
-    _lines(page, full, NOTICE)
+    full = [OTHER, Z, LINES["SG"], G_NMT, LINES["C"], CP, G_BDOT, *reversed(PMAXTP)]
+    _lines(page, [*full, *IMGW, LINES["S"]], NOTICE)
     strip = page.locator(".nogat-sources-strip")
     assert page.locator(".nogat-sources-line").all_text_contents() == [
         *(LINES[m] for m in ("S", "P", "PS", "PP", "CK")),
+        _filled("GK", products="NMT, BDOT10k"),
+        LINES["SK"],
+        LINES["ZK"],
     ]
     assert strip.evaluate("e => getComputedStyle(e).fontSize") == "12px"
     assert page.get_by_role("button", name="Źródła i warunki").is_visible()
@@ -417,7 +437,9 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
         ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
         ("ČHMÚ", "https://opendata.chmi.cz"),
-        ("CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"),
+        ("CC BY 4.0", LICENCE),
+        ("CC BY 4.0", LICENCE),
+        ("CC BY 4.0", LICENCE),
     ]
 
 
@@ -427,8 +449,18 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ([*IMGW, LINES["C"]], 2),
         ([*PMAXTP, LINES["C"]], 2),
         ([*IMGW, *PMAXTP, LINES["C"], CP], 3),
+        ([*IMGW, *OTHERS], 2),
+        ([*PMAXTP, *OTHERS], 2),
+        ([*IMGW, *PMAXTP, *OTHERS, CP], 3),
     ],
-    ids=["imgw-chmi", "pmaxtp-chmi", "both-families-chmi"],
+    ids=[
+        "imgw-chmi",
+        "pmaxtp-chmi",
+        "both-families-chmi",
+        "imgw-short-forms",
+        "pmaxtp-short-forms",
+        "both-families-short-forms",
+    ],
 )
 def test_strip_takes_at_most_two_lines_per_imgw_family_at_1440_px(
     sources: tuple[Page, list[str]], attribution: list[str], most: int
