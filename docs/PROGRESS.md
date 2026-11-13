@@ -253,7 +253,7 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    (step 1); Hydrograf's `POST /api/delineate-network` writes it (step 2, `develop` `824bebd`, on Hydroni since 2026-11-11, production pending the author);
    Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
 14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, merged): N1 done; next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms (question 4).
-15. One compact strip of provider lines per GUI view (ECO-064, plan `docs/plans/2026-11-13-compact-attribution.md`, approved 2026-11-13): step 1 (Nogat, kit 0.5.0) done on `feat/compact-attribution`, not merged; next Obserwator, Hydrolog, Hydrograf and Archiwista copy the kit and keep one `<nogat-sources>` per view.
+15. One compact strip of provider lines per GUI view (ECO-064, plan `docs/plans/2026-11-13-compact-attribution.md`, approved 2026-11-13): step 1 (Nogat, kit 0.5.0) merged into `develop` (`751e978`); kit 0.5.1 on `fix/sources-regulamin-tab` opens every regulamin link in a new tab (DEV-15.7), not merged; next Obserwator, Hydrolog, Hydrograf and Archiwista copy kit 0.5.1 and keep one `<nogat-sources>` per view.
 
 ## Open questions
 

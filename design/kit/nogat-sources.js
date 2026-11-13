@@ -5,7 +5,8 @@
 // „Źródła i warunki”, which opens a dialog with every line and the terms. `attribution`
 // and `terms-notice` hold JSON arrays, the API's `attribution` and `terms_notice`; the
 // properties `attribution` and `termsNotice` take the arrays themselves. `terms` is the
-// address of the GUI's regulamin.html (DEV-15.7), linked from the dialog.
+// address of the GUI's regulamin.html (DEV-15.7), linked from the dialog in a new tab, so
+// the GUI's own tab and its session stay.
 // `fillSources(container, {attribution, termsNotice, terms})` writes the same full
 // content into a welcome window of the GUI's own.
 // No shadow DOM: the page's stylesheet nogat-sources.css styles it with the tokens.
@@ -169,6 +170,8 @@ export function fillSources(container, { attribution, termsNotice, terms } = {})
     const a = document.createElement("a");
     a.href = regulamin;
     a.textContent = SOURCES_TEXTS.regulamin;
+    a.target = "_blank";
+    a.rel = "noopener";
     line.append(a);
     parts.push(line);
   }

@@ -251,7 +251,7 @@ App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a mo
 The app sets `element.apps` (or the `apps` attribute, as JSON) to the deployment's `[nogat.gui]` table of `nogat.toml`, e.g. `{"hydrograf": "https://hydrograf.example/", "archiwista": "/archiwista/"}`.
 Addresses resolve against the page; only http and https stay. With no GUI but the current one the element is not drawn. An entry opens its GUI in the tab `nogat-<name>`: Chromium reuses that tab unless one of the two pages sends `Cross-Origin-Opener-Policy`, which costs one more tab.
 The menu styles itself with the tokens and falls back to light values, so a GUI without `tokens.css` shows it too.
-The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”; the menu is not the only link, since it is not drawn without another GUI.
+The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”, opened in a new tab (`target="_blank"`, `rel="noopener"`) so the GUI's own tab and its session stay; the menu is not the only link, since it is not drawn without another GUI.
 
 Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sources.js` as a module, and put one element per view where its data end, e.g. under the map or at the foot of the panel; never one per card or popup.
 
@@ -267,7 +267,7 @@ Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sou
 
 The strip is 12 px in `--text-3`: of the full lines it shows S, P, PS and PP, recognised byte for byte, and C as the short form CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC BY 4.0” linked, each once in the order of DEV-20.4, then the button „Źródła i warunki”.
 Any other line (H, M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged; with both arrays empty the element is not drawn.
-The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
+The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”, which opens in a new tab like the menu's „Regulamin”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
 `element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.
 A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; the module also exports `LINES` (S, P, PS, PP, C, CK), `SOURCES_TEXTS` and `screenMarks(attribution)`.
 The element loads nothing and needs no inline script or style, so it runs under CSP `'self'`.
