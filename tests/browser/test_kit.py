@@ -492,6 +492,7 @@ def test_dialog_shows_every_line_and_the_terms_and_traps_focus(
     assert dialog.is_hidden()
     button.click()
     page.mouse.click(5, 5)
+    page.wait_for_function("() => seen.length >= 6")
     assert dialog.is_hidden()
     assert page.evaluate("seen") == ["nogat-sources-open", "nogat-sources-close"] * 3
     button.click()
