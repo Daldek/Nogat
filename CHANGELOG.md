@@ -8,6 +8,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Station data and analyses, step N1 (`docs/plans/2026-11-12-station-data-and-analyses.md`,
+  approved 2026-11-13): ECO-059, amending ECO-054, gives the station data
+  of IMGW-PIB and ČHMÚ one role per project: raw data in Archiwista,
+  downloaded through Obserwator's library; the production data root
+  (harmonized series, catalogs, analysis results) in Obserwator, with a
+  backup in Archiwista; every computation in Hydrolog. The registry's
+  planned edges Obserwator → Archiwista and Obserwator → Hydrolog, the
+  planned items `archiwista-raw-root`, `obserwator-data` and
+  `obserwator-analyses`, and the notes of Archiwista → Obserwator and
+  Hydrolog → Obserwator; `docs/ECOSYSTEM_MAP.md` regenerated.
 - GUI platform stage 1, Nogat's steps 1 to 3
   (`docs/plans/2026-11-12-gui-links-and-handoff.md`, approved 2026-11-12):
   ECO-058 and DEV-15.4 to DEV-15.6 (the app menu, the hand-off, copies byte
