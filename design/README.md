@@ -12,7 +12,8 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu and sources strip, since modules do not load from `file://` |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the manifest `nogat-kit.json` |
+| [specimen-admin.html](specimen-admin.html) | The kit's admin panel on a fake API in the page ([specimen-admin.js](specimen-admin.js), key `nogat`); served over HTTP like the specimen |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -339,6 +340,79 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `isric` | ISRIC SoilGrids | Hydrograf |
 | `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
 | `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf; Obserwator with a map |
+
+Admin panel (DEV-15.13, ECO-067): the admin page of a GUI, at `/admin/`, is the shell `<nogat-admin>` alone. Link `nogat-admin.css`, load `nogat-admin.js` as a module and put the app's own sections inside the element; the page adds only `<meta name="robots" content="noindex">` and its own scripts.
+
+```html
+<link rel="stylesheet" href="../nogat/tokens.css">
+<link rel="stylesheet" href="../nogat/nogat-admin.css">
+<script type="module" src="../nogat/nogat-admin.js"></script>
+<script type="module" src="admin.js"></script>
+…
+<nogat-admin app="Hydrograf" project="hydrograf" back="../" marks="../nogat/marks/">
+  <section data-admin-section="resources" data-label="Zasoby">…</section>
+</nogat-admin>
+```
+
+| Attribute or property of `<nogat-admin>` | Value |
+| --- | --- |
+| `app` | The GUI's name; the top bar shows it, a middle dot and „Administracja” |
+| `project` | The registry name in lower case: the key is kept in `sessionStorage` under `<project>/admin-key/1`, the name takes the tool's accent, and the statistics file is named after it |
+| `back` | The address of „Wróć do aplikacji”, default `../` |
+| `api` | The address of the admin API with a final slash, resolved against the page; default `../api/admin/`, the API of DEV-15.13 seen from `/admin/` |
+| `marks` | Optional: the directory of Nogat's marks, e.g. `../nogat/marks/`; with it the top bar shows `<project>.svg` |
+| `auth` (attribute) or `element.auth` | `key`, the default: the key prompt and `X-Admin-Key`; `session`, for an app with accounts: no prompt, no „Wyloguj”, requests carry the page's cookies |
+
+Without a key the shell shows the prompt („Zaloguj się”, „Klucz administratora”, „Zaloguj”). It checks a key with `GET feedback?limit=1` below `api` before keeping it and names a refusal by its reason: „Serwer nie ma ustawionego klucza administratora.” (`admin_key_not_configured`), „Podaj klucz administratora.” (`admin_key_missing`), „Nieprawidłowy klucz. Spróbuj ponownie.” (`admin_key_invalid`), else „Brak dostępu.”.
+With a key it shows the navigation „Zgłoszenia”, „Statystyki”, „Stan”, then each child `<section data-admin-section="id" data-label="…">` in document order, and one section at a time: the one the URL hash names (`#feedback`, `#stats`, `#status` or the app's id), else the first. The three ids are the shell's.
+„Wyloguj”, and in key mode every `401`, forget the key and return to the prompt; nothing of the panel stays on the page.
+
+| Member of `<nogat-admin>` | Use |
+| --- | --- |
+| `adminFetch(path, init)` | `fetch` for the app's own sections: `path` is resolved against `api` (`adminFetch("resources")` asks `../api/admin/resources`), the key goes as `X-Admin-Key` (none with `auth="session"`), and `credentials: "same-origin"` and `cache: "no-store"` apply unless `init` sets them; it resolves to the `Response` as `fetch` does, and a `401` returns to the prompt (with `auth="session"` it fires `nogat-admin-unauthorized` instead) |
+| `section` | The id of the section shown, `null` at the prompt; setting it moves the URL hash |
+| `signOut()` | What „Wyloguj” does |
+
+| Event (bubbles) | `detail` | Fired |
+| --- | --- | --- |
+| `nogat-admin-section` | `{id}` | when a section is shown: after the sign-in, on navigation and on a change of the hash; an app's section loads its data then |
+| `nogat-admin-signout` | `{reason}` | when the key is forgotten: `signout` for „Wyloguj”, else the reason of the `401` |
+| `nogat-admin-unauthorized` | `{status, reason}` | on a `401` the prompt does not answer: through the shell with `auth="session"`, or from a view on its own; the app's sign-in takes over |
+
+The shell starts, and a view alone sends its first request, once the page's module scripts have run (`DOMContentLoaded`), so the app's script attaches its listeners and its `adminFetch` first.
+
+The views work in the shell and alone in an app's own view, as Archiwista's „Zgłoszenia”: `<nogat-admin-feedback endpoint="/api/v1/admin/feedback" auth="session">`, its `adminFetch` adding the app's CSRF header.
+
+| Element | Shows |
+| --- | --- |
+| `<nogat-admin-feedback>` | The reports, 50 per page and newest first („Poprzednia strona”, „Następna strona”), „Nieprzeczytane: {unread} z {total}”, „Tylko nieprzeczytane” (the reports of the page shown, since the core API has no filter), each report's number, time and text with „nowe” while unread, its context folded under „Kontekst”, „Oznacz jako przeczytane” or „Oznacz jako nieprzeczytane”, and „Usuń” after the question „Usunąć zgłoszenie #{id}?” („Usuń”, „Anuluj”): Tab stays in it, Esc, „Anuluj” and a click outside cancel, and focus returns to the report |
+| `<nogat-admin-stats>` | „7 dni”, „30 dni”, „90 dni” or „Cały okres” as a table of „Data”, „Odwiedzający”, „Odsłony”, „Otwarte stacje”, „Obliczenia” and „Pobrania”, one row per day, ending with „Razem”, where the visitors are the „suma dziennych odwiedzających”; „Pobierz CSV” saves the days shown, built in the browser |
+| `<nogat-admin-status>` | „Aplikacja”, „Wersja”, „Uruchomiona”, „Czas działania”, „Katalog danych”, „Wolne miejsce”, and „Kontrole”, each check with „OK”, „Ostrzeżenie” or „Błąd” |
+
+| Attribute or property of a view | Value |
+| --- | --- |
+| `endpoint` | The route, resolved against the page; default `../api/admin/feedback`, `../api/admin/stats` or `../api/admin/status`; in the shell its `api` sets it |
+| `auth` | `session`: the view's requests go through `fetch` with the page's cookies and never a key, in the shell too |
+| `project` | `<nogat-admin-stats>` alone: names its CSV file, as the shell's `project` does |
+| `element.adminFetch` | The function every request of the view goes through, `(url, init) => Promise<Response>`: by default the nearest `<nogat-admin>`'s `adminFetch`; alone or with `auth="session"`, `fetch` with `credentials: "same-origin"` and `cache: "no-store"`; an app whose requests need more assigns its own |
+| `load()` | Asks the route again and redraws; the shell calls it when the view's section is shown |
+| `clear()` | Drops what the view shows; the shell calls it when it returns to the prompt |
+
+`<nogat-admin-stats>` asks `from` the day 6, 29 or 89 days before today (UTC) and `to` today, both days included; „Cały okres” asks `from=1970-01-01`. Its file is `<project>-stats-<first>-<last>.csv`: the keys of DEV-15.11 as the header, then one line per day, comma-separated, LF, without the totals.
+
+Every GUI answers the core API of DEV-15.13, each answer JSON with `Cache-Control: no-store` and each refusal the error document of `unauthorized` with `details.reason`:
+
+| Route | Answer |
+|---|---|
+| `GET /api/admin/feedback?limit=&offset=` | `{items, total, unread_count}`, newest first; `limit` 1 to 200, default 50 |
+| `PATCH /api/admin/feedback/{id}` with `{"is_read": bool}` | the report |
+| `DELETE /api/admin/feedback/{id}` | `{"status": "deleted"}`; an unknown id answers `404 not_found` |
+| `GET /api/admin/stats?from=&to=` | `{days, totals}`: the lines of `stats.jsonl` (DEV-15.11) between the two UTC days, default the last 30, plus the current day as counted so far; `totals` sums every key but `visitors` |
+| `GET /api/admin/status` | `{app, version, started_at, uptime_s, data_dir, disk: {free_bytes, total_bytes}, checks: [{name, status, detail}]}`, `status` one of `ok`, `warning`, `failed`; each GUI names its checks in its README |
+
+A deployment protects exactly `/admin`, `/admin/*` and `/api/admin/*` (Cloudflare Access on the test deployment); the rest of the GUI stays public.
+The elements load nothing but their requests to the API and need no inline script or style, so they run under CSP `'self'`; every text of a report is a text node.
+[specimen-admin.html](specimen-admin.html) runs the shell on a fake API inside the page, [specimen-admin.js](specimen-admin.js), which is not a kit file; the key is `nogat`.
 
 ## Adopting
 

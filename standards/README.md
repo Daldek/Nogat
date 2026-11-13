@@ -83,6 +83,17 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - One admin panel for every GUI that stores reports or statistics: the
+    page at `/admin/` and the API under `/api/admin/`, nothing else to
+    protect; every admin route checks `X-Admin-Key` against
+    `<PREFIX>ADMIN_API_KEY` or `<PREFIX>ADMIN_API_KEY_FILE`, read per
+    request, and refuses with `401 unauthorized` and the reason
+    `admin_key_not_configured`, `admin_key_missing` or `admin_key_invalid`;
+    no key is generated or logged; one core API for the reports, the
+    statistics and the status; the page is the kit's `<nogat-admin>`, with
+    no footer statement, regulamin link, app menu or stats count (DEV-15.13,
+    DEV-15.4, DEV-15.7, DEV-15.8, DEV-15.11, DEV-15.12, ERR-1, ECO-067, kit
+    0.7.0).
   - Products with GUGiK, ISRIC SoilGrids or ČÚZK data carry the new lines
     G, SG or Z, after CP, and a GUI view's strip their short forms GK, SK
     and ZK; a GUI loads no script, style or font from another server;

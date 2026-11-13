@@ -76,6 +76,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
+| [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
 | [ECO-068](#eco-068-regulamin-10-corrected-in-place-gugik-isric-and-čúzk-lines) | Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines | accepted | 2026-11-13 |
 
 ---
@@ -1502,6 +1503,62 @@ kit 0.6.1 carries the revised § 8 ust. 3. Hydrograf, Hydrolog, Obserwator and
 Archiwista copy the module and the schema and migrate in their own branches;
 the journal entries written before the migration are removed as the plan
 says.
+
+## ECO-067 One admin panel for every GUI
+
+**Decision.** A GUI that stores reports or statistics serves its admin panel
+at `/admin/` and its admin API under `/api/admin/`, an app's own API prefix
+kept (Archiwista's `/api/v1/admin/`), and no other admin path, so a
+deployment protects exactly `/admin`, `/admin/*` and `/api/admin/*`
+(Cloudflare Access on the test deployment). Every admin route checks
+`X-Admin-Key` in constant time against `admin_api_key`, read per request from
+`<PREFIX>ADMIN_API_KEY` or the file `<PREFIX>ADMIN_API_KEY_FILE` names
+(Hydrograf no prefix, Hydrolog `HYDROLOG_`, Obserwator `OBSERWATOR_`); a
+refusal is `401 unauthorized` with the reason `admin_key_not_configured`,
+`admin_key_missing` or `admin_key_invalid`; no key is generated and none is
+logged; an app with accounts checks its own role instead and keeps the rest.
+Every panel is the kit's `<nogat-admin>` (kit 0.7.0): „Zgłoszenia”,
+„Statystyki” and „Stan” on one core API of five routes, the same in every
+GUI, then the app's own functions as further sections with routes of their
+own under `/api/admin/`; each view also works alone inside an app's own
+view. The page is the operator's, not a public view: no footer statement,
+regulamin link, app menu or stats count, `noindex`, `Cache-Control:
+no-store`, CSP `'self'`, the rate limit kept (DEV-15.13). Plan:
+`docs/plans/2026-11-13-admin-panel.md`.
+
+**Why.** The author's decision of 2026-11-13: the operator handles each GUI
+in the same place and the same way. Each GUI did it differently. Hydrograf
+had a Bootstrap page at `/admin.html`, the only Bootstrap page of the app,
+with reports, resources, DEM bootstrap, cleanup and uploads, and without a
+configured key it drew a random one and logged it. Hydrolog had a Preact page
+at `/admin/` with reports only, its key read per request, `401
+admin_key_not_configured` without one. Obserwator had no page: its reports
+were read with `jq` from `feedback.jsonl`, a deviation from DEV-15.12
+recorded in its `CLAUDE.md`. Archiwista showed reports in a view of its own
+behind its accounts. Four paths, four sign-ins and three ways to read the
+same report format left four things to protect and learn; a key written to a
+log is a secret in every copy of the log.
+
+**Rejected.** Each GUI keeping its own panel (the four ways above). A key
+generated when none is set (Hydrograf's, written to its log; without a key
+the routes refuse with `admin_key_not_configured`). Left out of the
+decision: logs in the panel (the unified logging writes files the operator
+reads directly), accounts for the public GUIs, and one admin across the GUIs
+(the GUI hub, stage 2 of ECO-058).
+
+**Consequence.** DEV-15.13 is new; DEV-15.12 sends its operator routes to
+it, and DEV-15.4, DEV-15.7, DEV-15.8 and DEV-15.11 name the admin page as
+the exception it was: the operator's, not a public view. Kit 0.7.0 ships
+`nogat-admin.js` and `nogat-admin.css`. In their own branches Hydrolog
+replaces its Preact page with the kit and adds `stats` and `status`;
+Hydrograf moves `/admin.html` to `/admin/` on the kit, rewrites its own
+sections on the tokens with `adminFetch`, folds its dashboard into `status`,
+drops Bootstrap and its generated key; Obserwator gains
+`OBSERWATOR_ADMIN_API_KEY`, the routes over `feedback.jsonl` and the page,
+and drops the deviation and its `jq` instructions; Archiwista shows
+`<nogat-admin-feedback>` in its own view behind its accounts. The author
+sets each key and Cloudflare Access on the three paths of the test
+deployment.
 
 ## ECO-068 Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines
 

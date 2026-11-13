@@ -8,6 +8,27 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- One admin panel for every GUI, the author's decision of 2026-11-13
+  (`docs/plans/2026-11-13-admin-panel.md`, step 1; ECO-067): DEV-15.13 puts
+  the panel at `/admin/` (`/admin` answers `308`) and its API under
+  `/api/admin/`, nothing else, so a deployment protects three paths; every
+  admin route checks `X-Admin-Key` in constant time against
+  `<PREFIX>ADMIN_API_KEY` or `<PREFIX>ADMIN_API_KEY_FILE`, read per request,
+  and refuses with `401 unauthorized` and the reason
+  `admin_key_not_configured`, `admin_key_missing` or `admin_key_invalid`;
+  no key is generated or logged; one core API (`feedback`, `stats`,
+  `status`); the page has no footer statement, regulamin link, app menu or
+  stats count, `noindex`, `Cache-Control: no-store` and CSP `'self'`.
+  DEV-15.12 sends its operator routes to DEV-15.13, DEV-15.4, DEV-15.7,
+  DEV-15.8 and DEV-15.11 leave out the admin page, ERR-1 points to the new
+  reasons. GUI kit 0.7.0 adds `nogat-admin.js` and `.css`: the shell
+  `<nogat-admin>` (top bar, key prompt, „Zgłoszenia”, „Statystyki”, „Stan”
+  and the app's own sections, the section in the URL hash, `adminFetch`,
+  `auth="session"`) and the views `<nogat-admin-feedback>`,
+  `<nogat-admin-stats>` (CSV built in the browser) and
+  `<nogat-admin-status>`, each usable alone; `design/README.md`, the
+  specimen `specimen-admin.html` on a fake API in the page, contract tests
+  and browser tests against a fake API under CSP `'self'`.
 - Lines for GUGiK, ISRIC SoilGrids and ČÚZK data, step 1 of
   `docs/plans/2026-11-13-terms-fix.md` (ECO-068, amending ECO-060 and
   ECO-064): DEV §20 gains G, SG and Z with the strip forms GK, SK and ZK,
