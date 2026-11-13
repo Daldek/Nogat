@@ -82,6 +82,12 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - Products carry only what the providers require and link their terms:
+    the terms-of-use notice N and the line H are gone, the terms lines RD,
+    RH and RK name the terms they link („Regulamin danych IMGW-PIB: …”),
+    and no product restates a provider's terms; the regulamin's source
+    blocks hold only the provider, its lines and the link (DEV §20,
+    DEV-20.4, DEV-20.7, ECO-065, kit 0.6.0).
   - Every link to a GUI's regulamin, in its footer, the app menu and
     `<nogat-sources>`, opens a new tab, so the GUI's session stays
     (DEV-15.7, kit 0.5.1).

@@ -264,6 +264,24 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Products carry only what the providers require and link the rest, the
+  author's principle of 2026-11-13 (ECO-065, amending ECO-060 and ECO-064;
+  amendments of `docs/plans/2026-11-13-provider-attribution.md` and
+  `docs/plans/2026-11-13-gui-terms.md`). DEV §20 drops the terms-of-use
+  notice N, our summary of the IMGW-PIB terms that also mis-stated their
+  §3 ust. 2, and H, which no terms require; the terms lines name what they
+  link: RD „Regulamin danych IMGW-PIB: …”, RH „Regulamin serwisu
+  hydrologicznego IMGW-PIB: …”, RK „Regulamin danych PMAXTP: …”, and
+  `terms_notice` holds only them. DEV-20.4 orders S, P, PS, PP, M, C, CP;
+  DEV-20.7 forbids restating a provider's terms. GUI kit 0.6.0: the
+  regulamin's source blocks hold the provider, its lines and the link to
+  its terms or licence; `imgw-terms`, „W skrócie…” and every description
+  of what a provider allows are gone; § 5 says once that the providers'
+  terms govern data taken from the service, § 6, § 7 and § 9 no longer
+  repeat it; regulamin still 1.0. `scripts/terms.py` has no derived
+  blocks. The examples of `handoff-1.schema.json` carry RK alone; the
+  hand-off stays `/1`. The provider-attribution plan lists what each
+  project changes and which stored files it rebuilds.
 - Regulamin 1.0 after its legal review, GUI kit 0.4.0 (ECO-063, amending
   ECO-062; `docs/plans/2026-11-13-gui-terms.md`): the review's text, about a
   third shorter with the same twelve sections, fields and blocks, and the

@@ -69,11 +69,12 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | accepted | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | accepted | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065 | 2026-11-13 |
+| [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 
 ---
 
@@ -1177,6 +1178,10 @@ then the registry lists the new edges as `planned`.
 S, P, PS, PP and the short form CK of C, and the full lines and terms in a
 dialog behind „Źródła i warunki”; products keep the full lines.
 
+**Amended by ECO-065 (2026-11-13):** the terms-of-use notice N and the line
+H are gone; `terms_notice` holds only the links RD, RH and RK, each naming
+the terms it links.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1337,6 +1342,9 @@ checks the Cloudflare zone and keeps a one-page register of processing.
 
 ## ECO-064 One compact strip of provider lines per GUI view
 
+**Amended by ECO-065 (2026-11-13):** the dialog holds the lines and the
+links RD, RH and RK, without H and N.
+
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
 (DEV-20.5). The strip holds only the sentences the providers require on the
@@ -1374,3 +1382,52 @@ panel or card (the clutter the author asked to remove).
 **Consequence.** DEV-20.5 and DEV-20.7 are amended and kit 0.5.0 ships
 `<nogat-sources>`. Hydrograf, Hydrolog, Archiwista and Obserwator replace
 their per-panel lines with one strip per view in their own branches.
+
+## ECO-065 Products link the providers' terms and never restate them
+
+**Decision.** A product carries only what the providers require verbatim and
+links to each provider's own terms, never a summary or paraphrase of them.
+The terms-of-use notice N („Dane IMGW-PIB można wykorzystywać
+nieodpłatnie…”) is dropped everywhere. H („Dane pochodzą z serwisu
+hydrologicznego IMGW-PIB https://hydro.imgw.pl”) is dropped too: neither
+the IMGW-PIB terms nor those of hydro.imgw.pl require it, and S and P with
+RH cover data of hydro.imgw.pl. The terms lines become plain links named
+after the terms they open: RD „Regulamin danych IMGW-PIB:
+https://danepubliczne.imgw.pl/regulations”, RH „Regulamin serwisu
+hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin”, RK
+„Regulamin danych PMAXTP: https://klimat.imgw.pl/opady-maksymalne”, and
+`terms_notice` holds only them; ČHMÚ needs none, since C names the licence
+with its link. S, P, PS, PP, M, C, CP and the on-screen CK are unchanged.
+The regulamin's source blocks keep the provider's name, the required lines
+and the link to its terms or licence; the block `imgw-terms` and every
+description of what a provider allows are gone, and § 5 and § 6 say once
+that use of data taken from the service is governed by the providers' terms
+linked in § 5. The author's statement of decision 1 of ECO-062, in the
+footer and § 3, stays: it describes the service, not a provider's terms.
+Regulamin 1.0, still unpublished, is revised in place in kit 0.6.0. Plans:
+`docs/plans/2026-11-13-provider-attribution.md`,
+`docs/plans/2026-11-13-gui-terms.md`.
+
+**Why.** The author's principle of 2026-11-13: „Tam, gdzie się da,
+odsyłamy do regulaminu dostawcy danych. Treści w naszych produktach mają być
+ograniczone do minimum.” N was our paraphrase and mis-stated §3 ust. 2 of
+the IMGW-PIB terms: its example „planowanie w gospodarowaniu wodami, art. 317
+Prawa wodnego” was our pick, and „art. 317” shortened „art. 317 ust. 1”. A
+link cannot drift from the text it opens; a summary can. H was not required
+(the legal review of 2026-11-13 noted it).
+
+**Rejected.** A corrected N (still our wording of terms that only the
+provider's text states bindingly). Dropping `terms_notice` and putting the
+links in `attribution` (the IMGW-PIB lines and the links serve different
+purposes, and every project already carries both arrays). One line linking
+all IMGW-PIB terms (each product names only the terms of the data it holds).
+A terms line for ČHMÚ (C already links the licence).
+
+**Consequence.** DEV §20 loses H and N, DEV-20.4 orders S, P, PS, PP, M, C,
+CP, and DEV-20.7 forbids restating a provider's terms; kit 0.6.0 carries the
+shortened regulamin and `scripts/terms.py` loses the derived block. The
+`handoff-1.schema.json` examples carry RK alone in `terms_notice`; the
+hand-off stays `/1`. Obserwator, Hydrograf, Hydrolog, Archiwista, Hydraulik
+and Retman change their constants and tests in their own branches and copy
+kit 0.6.0 and the schema; files already written with H or N are rewritten
+when next produced, never edited by hand.

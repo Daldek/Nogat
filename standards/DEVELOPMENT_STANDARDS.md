@@ -837,38 +837,40 @@ files and is no store). A tool adds no registry code for the convention
 Every profile. A product is anything a project shows, writes or returns
 with a provider's data or with results derived from them. The lines below
 are quoted byte for byte: Polish quotation marks „ ”, en dashes –, no final
-full stop except in N, never paraphrased or translated away; in an English
-context the Polish line stays and an English gloss MAY follow it.
+full stop, never paraphrased or translated away; in an English context the
+Polish line stays and an English gloss MAY follow it.
 
 | Mark | Line |
 |---|---|
 | S | Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy |
 | P | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone |
-| H | Dane pochodzą z serwisu hydrologicznego IMGW-PIB https://hydro.imgw.pl |
 | PS | Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, dane pochodzą ze strony https://klimat.imgw.pl/opady-maksymalne |
 | PP | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego pochodzące ze strony https://klimat.imgw.pl/opady-maksymalne zostały przetworzone |
 | M | „Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022 |
 | C | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) |
 | CK | Źródło: ČHMÚ, CC BY 4.0 |
 | CP | Dane ČHMÚ zostały przetworzone (`<what was done>`) |
-| N | Dane IMGW-PIB można wykorzystywać nieodpłatnie do celów prywatnych (niezarobkowych). Wykorzystanie w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie (m.in. planowanie w gospodarowaniu wodami, art. 317 Prawa wodnego) wymaga umowy z IMGW-PIB. |
-| RD | Regulamin: https://danepubliczne.imgw.pl/regulations |
-| RH | Regulamin: https://hydro.imgw.pl/#/regulamin |
-| RK | Regulamin: https://klimat.imgw.pl/opady-maksymalne |
+| RD | Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations |
+| RH | Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin |
+| RK | Regulamin danych PMAXTP: https://klimat.imgw.pl/opady-maksymalne |
 
 CK is the short form of C for the strip of a GUI view only (DEV-20.5), with
 „ČHMÚ” linked to https://opendata.chmi.cz and „CC BY 4.0” to the licence; it
 is never written into a product.
 
+RD, RH and RK, the terms lines, each name the terms they link and have the
+form „Regulamin <whose terms>: <address>”, so a reader of `ATTRIBUTION.txt`
+or of a CSV column tells them from the attribution lines.
+
 **DEV-20.1** A product with IMGW-PIB data other than PMAXTP (archives and
 current data of danepubliczne.imgw.pl, operational data and station
 locations of hydro.imgw.pl and its backend hydro-back.imgw.pl) carries S,
 and S and P once the data were processed in any way: parsed, harmonised,
-reformatted, aggregated, charted or used to compute a result; data of
-hydro.imgw.pl add H. Only a verbatim, untouched copy of an IMGW-PIB file
-carries S alone.
+reformatted, aggregated, charted or used to compute a result. Only a
+verbatim, untouched copy of an IMGW-PIB file carries S alone.
 *Why:* §5 ust. 3 and 4 of the IMGW-PIB terms, repeated by the terms of the
-hydrological service (ECO-060).
+hydrological service (ECO-060); neither requires a line naming
+hydro.imgw.pl, which RH links (ECO-065).
 
 **DEV-20.2** A product with PMAXTP data (powietrze.imgw.pl, klimat.imgw.pl)
 carries PS and M, and PP as well once the data were processed: a design
@@ -884,7 +886,7 @@ and CP with the same elements.
 *Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-060).
 
 **DEV-20.4** A product with data of several providers carries every line that
-applies, in the order S, P, H, PS, PP, M, C, CP, each once. A project keeps the
+applies, in the order S, P, PS, PP, M, C, CP, each once. A project keeps the
 lines in one place in its code, and every surface takes them from there.
 *Why:* lines equal byte for byte merge across tools without duplicates.
 
@@ -915,8 +917,8 @@ most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
 with ČHMÚ, a third allowed when the view shows both, wrapping on phones. It
 holds the on-screen lines S, P, PS, PP and CK, those the view's data need,
 each once in the order of DEV-20.4, and ends with „Źródła i warunki”, which
-opens a dialog with every line (S, P, H, PS, PP, M, C, CP) and the terms of
-DEV-20.7 (N, RD, RH, RK), and with „Regulamin” where the GUI serves one
+opens a dialog with every line (S, P, PS, PP, M, C, CP) and the terms of
+DEV-20.7 (RD, RH, RK), and with „Regulamin” where the GUI serves one
 (DEV-15.7). A GUI with a welcome window shows the same full content there on
 the first visit; one without it reaches the dialog from the strip and the
 footer. Files, exports, PNG and SVG images, print views, hand-offs and the
@@ -934,14 +936,18 @@ hand-offs, merged without duplicates; a field a project already has for them
 *Why:* the obligation follows the data through every tool (ECO-060).
 
 **DEV-20.7** Every GUI view and every exported product with IMGW-PIB data
-also shows N and the terms that apply, one line each in the order RD
-(danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK (PMAXTP), right after the
+also carries the links to the terms that apply, one line each in the order
+RD (danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK (PMAXTP), right after the
 attribution lines and on the surfaces of DEV-20.5, in a GUI view in the
 dialog behind its strip; a JSON document, result or hand-off has them in
-`terms_notice`, an array of strings carried on like `attribution`.
-*Why:* free use is private use only; business use, sites with advertising and
-the purposes the terms list need an agreement with IMGW-PIB (ECO-060); a
-dialog one click from the data keeps the screen for the data (ECO-064).
+`terms_notice`, an array of strings carried on like `attribution`. No
+product restates, summarises or paraphrases a provider's terms: it carries
+the lines of the table and links the rest. ČHMÚ data take no terms line,
+since C names the licence with its link.
+*Why:* the providers' own terms are the only binding text, and a summary
+can mis-state them; products carry only what the providers require (the
+author's principle of 2026-11-13, ECO-065); a dialog one click from the data
+keeps the screen for the data (ECO-064).
 
 **DEV-20.8** Operational data of hydro.imgw.pl (water states and their
 classes, measurements, warnings) are shown as current with their time and

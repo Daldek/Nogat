@@ -44,10 +44,6 @@ Druga linia akapitu <https://example.org> & <{{source_url}}>.
 Dane.
 <!-- /block -->
 
-<!-- block: imgw-terms -->
-Warunki.
-<!-- /block -->
-
 <!-- block: osm -->
 Mapa.
 <!-- /block -->
@@ -96,24 +92,25 @@ def test_placeholders_and_blocks_of_a_template() -> None:
         "tokens_href",
         "kit_href",
     }
-    assert terms.blocks(page) == ["chmi", "imgw", "imgw-terms", "osm"]
+    assert terms.blocks(page) == ["chmi", "imgw", "osm"]
 
 
 @pytest.mark.parametrize(
     ("listed", "kept"),
     [
         ([], set()),
-        (["pmaxtp"], {"pmaxtp", "imgw-terms"}),
+        (["pmaxtp"], {"pmaxtp"}),
         (["chmi", "osm"], {"chmi", "osm"}),
     ],
 )
-def test_kept_adds_the_derived_blocks(listed: list[str], kept: set[str]) -> None:
+def test_kept_keeps_only_the_listed_blocks(listed: list[str], kept: set[str]) -> None:
     assert terms.kept(listed) == kept
 
 
-# `feedback` was a block of kit 0.2.0: a GUI that still lists it is told so.
+# `feedback` was a block of kit 0.2.0 and `imgw-terms` a derived one until kit
+# 0.6.0: a GUI that still lists either is told so.
 @pytest.mark.parametrize("name", ["imgw-terms", "feedback", "ads"])
-def test_kept_refuses_derived_and_unknown_blocks(name: str) -> None:
+def test_kept_refuses_unknown_blocks(name: str) -> None:
     with pytest.raises(ValueError, match=name):
         terms.kept([name])
 
@@ -126,7 +123,6 @@ def test_fill_keeps_listed_blocks_and_drops_the_rest() -> None:
         "<li>Trzeci: Example Inc. Dane mogą być przekazywane poza EOG.</li>"
     ) in page
     assert "<h3>IMGW</h3>" in page
-    assert "Warunki." in page
     assert "Mapa." not in page
     assert "<!--" not in page.split("-->", 1)[1]
     assert "{{" not in page

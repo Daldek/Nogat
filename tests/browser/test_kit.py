@@ -395,9 +395,9 @@ def _strip_lines(page: Page) -> int:
     return round(float(height) / float(line))
 
 
-IMGW = [LINES[m] for m in ("S", "P", "H")]
+IMGW = [LINES[m] for m in ("S", "P")]
 PMAXTP = [LINES[m] for m in ("PS", "PP", "M")]
-NOTICE = [LINES[m] for m in ("N", "RD", "RH", "RK")]
+NOTICE = [LINES[m] for m in ("RD", "RH", "RK")]
 
 
 def test_strip_shows_the_on_screen_lines_once_in_order(
@@ -448,11 +448,11 @@ def test_strip_takes_the_lines_from_the_attributes_and_hides_without_any(
         "([a, n]) => { const s = document.querySelector('nogat-sources');"
         " s.setAttribute('attribution', JSON.stringify(a));"
         " s.setAttribute('terms-notice', JSON.stringify(n)); }",
-        [[LINES["H"]], NOTICE[:3]],
+        [[LINES["M"]], NOTICE[:2]],
     )
     assert page.locator(".nogat-sources-line").count() == 0
     page.get_by_role("button", name="Źródła i warunki").click()
-    assert page.locator("dialog li").all_text_contents() == [LINES["H"], *NOTICE[:3]]
+    assert page.locator("dialog li").all_text_contents() == [LINES["M"], *NOTICE[:2]]
     page.keyboard.press("Escape")
     page.evaluate(
         "() => { const s = document.querySelector('nogat-sources');"
