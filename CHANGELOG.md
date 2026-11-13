@@ -255,6 +255,24 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Regulamin 1.0 after its legal review, GUI kit 0.4.0 (ECO-063, amending
+  ECO-062; `docs/plans/2026-11-13-gui-terms.md`): the review's text, about a
+  third shorter with the same twelve sections, fields and blocks, and the
+  operator's decisions on it. § 3 says the service is not one of IMGW-PIB,
+  ČHMÚ or another provider and shows their data processed; § 8 names the
+  processor's whole traffic and its own security logs, the statistics
+  without „anonimowe”, the art. 11 RODO limit of the rights, no sentence on
+  automated decisions, no `sessionStorage`; § 7 „na własne ryzyko” and no
+  liability for linked sites; § 12 the Polish text binding; „W skrócie…”
+  before the IMGW-PIB notice. DEV-15.10 covers every log, error and
+  application logs included (nginx's `limit_req_log_level` under its
+  `error_log` level; app loggers without `client`). `[nogat] operator`
+  (DEV-18.1) gains `mail_provider`, named in § 8, and the optional
+  `mail_transfer` and `processor_cookie`; `scripts/terms.py` lets the three
+  optional fields be empty, and contract tests pin which fields may be.
+  The plan records the review, the decisions and the author's open points,
+  with drafts of an e-mail to IMGW-PIB and of a register of processing in
+  `docs/plans/2026-11-13-gui-terms/`.
 - The regulamin template is version 1.0, in GUI kit 0.3.0, rewritten to the
   author's decisions of 2026-11-13: one version and one date for the three
   public GUIs, a „Historia zmian” linked to the template's history; no

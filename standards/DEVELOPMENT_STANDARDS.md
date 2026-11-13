@@ -493,12 +493,19 @@ the window only and is never written to disk or a log.
 *Why:* protection against excessive requests without storing addresses
 (ECO-062).
 
-**DEV-15.10** The access logs of a public GUI, its app's and its reverse
-proxy's, hold per request only its time, method, path with query, status,
-size, duration, a random request id and the User-Agent, never the client's
-IP address, and are deleted after 14 days.
+**DEV-15.10** No log of a public GUI, its app's or its reverse proxy's,
+access, error or application, holds the client's IP address. An access log
+holds per request only its time, method, path with query, status, size,
+duration, a random request id and the User-Agent. The app's loggers write no
+`client` field or request scope, its server's own access log off (uvicorn
+`--no-access-log`); nginx, which names the client in every error of a
+request, sets `limit_req_log_level` and `limit_conn_log_level` below the
+level of the GUI's `error_log` and that level to `crit`, unless a filter
+drops the address before a line is written. Every log is deleted after 14
+days.
 *Why:* logs serve the operation of the service, not the identification of
-its users (ECO-062).
+its users, and the regulamin says the server stores no IP address (ECO-062,
+ECO-063).
 
 **DEV-15.11** A public GUI counts its use in daily totals only. For each
 request the rate limit counts, a visitor is the HMAC-SHA-256 of the client IP
@@ -607,8 +614,12 @@ in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
 `cache_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4, and the
 table `operator` of who runs a deployment open to others, DEV-15.7: `name`,
 `email`, `terms_effective` (a date), `processor`, who carries the traffic and
-processes IP addresses for the operator, and `processor_transfer`, the
-sentence on that processor's transfers outside the EEA, empty without them);
+processes IP addresses for the operator, `processor_transfer`, the sentence
+on that processor's transfers outside the EEA, empty without them,
+`processor_cookie`, the sentence on its cookie against bots, empty without
+one, `mail_provider`, the service holding the operator's mailbox, and
+`mail_transfer`, the sentence on its processing outside the EEA, empty
+without it);
 section `[<tool>]` holds the tool's own keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before

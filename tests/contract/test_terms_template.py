@@ -1,10 +1,11 @@
-"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061, ECO-062).
+"""The kit's terms template, design/kit/nogat-terms.* (DEV-15.7, ECO-061 to ECO-063).
 
 Every GUI fills the template with the fields and blocks the kit's README
 lists; these tests pin that the template, the reference filling and the
 README name the same fields and blocks, that the provider lines are those
-of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, and that
-the version the regulamin names is the newest entry of its history.
+of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, that
+the version the regulamin names is the newest entry of its history, and
+which fields a deployment may leave empty.
 """
 
 from __future__ import annotations
@@ -102,3 +103,19 @@ def test_every_choice_of_blocks_fills_the_twelve_sections(listed: list[str]) -> 
     assert "<!-- block" not in page
     assert "<!-- /block" not in page
     assert re.findall(r"<h2>(\d+)\. ", page) == [str(n) for n in range(1, 13)]
+
+
+@pytest.mark.parametrize(
+    "name", ["processor_transfer", "processor_cookie", "mail_transfer"]
+)
+def test_a_deployment_may_leave_a_transfer_or_the_bot_cookie_empty(name: str) -> None:
+    values = dict.fromkeys(terms.PLACEHOLDERS, "x")
+    page = terms.fill(PAGE, {**values, name: ""}, [])
+    assert "{{" not in page
+
+
+@pytest.mark.parametrize("name", ["processor", "mail_provider"])
+def test_the_processor_and_the_mail_service_are_always_named(name: str) -> None:
+    values = dict.fromkeys(terms.PLACEHOLDERS, "x")
+    with pytest.raises(ValueError, match=f"missing values: {name};"):
+        terms.fill(PAGE, {**values, name: " "}, [])

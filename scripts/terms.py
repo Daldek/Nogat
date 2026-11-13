@@ -36,6 +36,14 @@ PLACEHOLDERS: dict[str, str] = {
     "processor_transfer": "deployment: `[nogat.operator] processor_transfer` "
     "in `nogat.toml`, the sentence on the processor's transfers outside the "
     "EEA; empty without them",
+    "processor_cookie": "deployment: `[nogat.operator] processor_cookie` in "
+    "`nogat.toml`, the sentence on the cookie the processor sets to protect "
+    "the service from bots; empty while it sets none",
+    "mail_provider": "deployment: `[nogat.operator] mail_provider` in "
+    "`nogat.toml`, the service holding the operator's mailbox",
+    "mail_transfer": "deployment: `[nogat.operator] mail_transfer` in "
+    "`nogat.toml`, the sentence on that mail service's processing outside "
+    "the EEA; empty without it",
     "software_licence": "project: `license` of its `pyproject.toml`, e.g. `MIT`",
     "source_url": "project: `repo` of its entry in `ecosystem.yaml`",
     "tokens_href": "project: the address of its copy of `tokens.css`, "
@@ -45,7 +53,7 @@ PLACEHOLDERS: dict[str, str] = {
 }
 
 # The only placeholders whose value may be empty (it must still be given).
-OPTIONAL = frozenset({"processor_transfer"})
+OPTIONAL = frozenset({"processor_transfer", "processor_cookie", "mail_transfer"})
 
 # Blocks a project keeps for its data sources by listing them; the rest are
 # dropped (DEV-15.7).

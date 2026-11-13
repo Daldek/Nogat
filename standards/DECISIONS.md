@@ -71,7 +71,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | accepted | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063 | 2026-11-13 |
+| [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | accepted | 2026-11-13 |
 
 ---
 
@@ -1236,6 +1237,11 @@ in `nogat.toml` before a deployment is opened to others.
 
 ## ECO-062 Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0
 
+**Amended by ECO-063 (2026-11-13):** no log of a public GUI holds an IP
+address, error and application logs included; the regulamin names the
+operator's mail service and may name the processor's cookie against bots,
+in three more keys of `[nogat.operator]`.
+
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
 operator alone uses, so no user's e-mail address is collected. Archiwista is
@@ -1284,3 +1290,42 @@ the retention field are gone; kit 0.3.0 carries regulamin 1.0. Hydrograf,
 Hydrolog and Obserwator adopt DEV-15.7 to DEV-15.12 in their own branches,
 Obserwator gaining „Zgłoś uwagę”; the author sets `[nogat.operator]` and one
 `terms_effective` before the three are opened.
+
+## ECO-063 Regulamin 1.0 after its review: no IP address in any log
+
+**Decision.** Before its first publication, regulamin 1.0 is replaced by the
+shortened text of a legal review of 2026-11-13, with the operator's decisions
+on it, in kit 0.4.0; the version stays 1.0, since no GUI has published it. No
+log of a public GUI or of its proxy, access, error or application, holds the
+client's IP address (DEV-15.10): nginx logs the rejections of its limits
+below the level of its error log, and the app's loggers name no client. The
+processor's sentence covers the whole traffic, the IP address included, and
+the processor's own security logs. § 3 says the service is not a service of
+IMGW-PIB, ČHMÚ or another provider and shows their data processed, instead
+of denying that the data are theirs. Three keys join `[nogat.operator]`
+(DEV-18.1): `mail_provider`, the service holding the operator's mailbox,
+named in § 8; `mail_transfer`, the sentence on its processing outside the
+EEA; and `processor_cookie`, the sentence on a cookie the processor sets
+against bots, empty while it sets none. The operator stays a private person
+outside any gainful or professional activity, and liability stays excluded
+except for intentional damage. Plan: `docs/plans/2026-11-13-gui-terms.md`.
+
+**Why.** The review found that nginx writes the client's address to its
+error log when `limit_req` rejects a request and that tracebacks may carry
+it, which would make the regulamin's „nie zapisuje adresów IP” untrue
+(RODO art. 5 ust. 1 lit. a, art. 13); that Cloudflare processes more than
+addresses; and that the mailbox is a recipient of personal data (art. 13
+ust. 1 lit. e). A shorter text loses no protection and is read.
+
+**Rejected.** A regulamin that admits addresses in the error log for 14 days
+(the operator keeps the promise and changes the logs instead). Gross
+negligence beside intent in the exclusion of liability (the operator's
+choice). A hosting processor (the server is the operator's own hardware).
+The cookie sentence fixed in the text (the processor's settings are not yet
+known, and the text must stay true either way). A postal address (the
+operator acts outside any gainful or professional activity, which he
+confirmed).
+
+**Consequence.** Kit 0.4.0. Hydrograf, Hydrolog and Obserwator adopt the
+wider DEV-15.10 with the rest of ECO-062; the operator sets the three keys,
+checks the Cloudflare zone and keeps a one-page register of processing.

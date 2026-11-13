@@ -82,6 +82,10 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - No log of a public GUI or its proxy, access, error or application,
+    holds the client's IP address; `[nogat] operator` gains
+    `mail_provider`, `mail_transfer` and `processor_cookie` (DEV-15.10,
+    DEV-18.1, ECO-063).
   - Public GUIs (Hydrograf, Hydrolog, Obserwator) are used without signing
     in; each shows the statement of what the services are in every footer,
     limits requests per IP address held in memory only, logs without IP
