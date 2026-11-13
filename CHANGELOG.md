@@ -10,7 +10,7 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 - Provider attribution in every product, the author's order of 2026-11-13
   (`docs/plans/2026-11-13-provider-attribution.md`, step 1): DEV §20 and
-  ECO-059 hold the IMGW-PIB lines S and P (danepubliczne.imgw.pl and
+  ECO-060 hold the IMGW-PIB lines S and P (danepubliczne.imgw.pl and
   hydro.imgw.pl, with H for the latter), PS, PP and the monograph M for
   PMAXTP, C and CP for ČHMÚ under CC BY 4.0, verbatim; the IMGW-PIB
   terms-of-use notice N with the addresses of the terms; the surfaces and

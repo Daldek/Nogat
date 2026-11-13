@@ -4,7 +4,7 @@ Approved: 2026-11-13, the author's order in session (attribution MUST be in ever
 
 Status: step 1 (Nogat) done 2026-11-13 on branch `fix/provider-attribution`; steps 2 to 7 in each project's own branch `fix/provider-attribution`; no merges, tags or releases.
 
-Requirements: DEV §20 and ECO-059 (added by step 1), DEV-15.5, DEV-15.6, DEV-19.16, AGI-4.1, HUB-5.2 (producers before consumers), DEV-17.5.
+Requirements: DEV §20 and ECO-060 (added by step 1), DEV-15.5, DEV-15.6, DEV-19.16, AGI-4.1, HUB-5.2 (producers before consumers), DEV-17.5.
 
 ## Goal
 
@@ -41,7 +41,7 @@ Order S, P, H, PS, PP, M, C, CP, then N, RD, RH, RK; each line once. A product w
 
 ## Steps
 
-1. Nogat: this plan, DEV §20, ECO-059, the two fields in `nogat-handoff/1` with contract tests.
+1. Nogat: this plan, DEV §20, ECO-060, the two fields in `nogat-handoff/1` with contract tests.
 2. Obserwator, the producer of the data.
 3. Hydrolog.
 4. Hydrograf.

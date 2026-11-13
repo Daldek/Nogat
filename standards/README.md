@@ -88,7 +88,7 @@ DOC-11.1).
     ČHMÚ under CC BY 4.0, and the notice of the IMGW-PIB terms of use with
     their addresses; data of hydro.imgw.pl are never shown as archive;
     `nogat-handoff/1` gains the optional `attribution` and `terms_notice`
-    and stays `/1` (DEV §20, DEV-15.5, AGI-4.1, ECO-059).
+    and stays `/1` (DEV §20, DEV-15.5, AGI-4.1, ECO-060).
   - Numbers count from `main`: a version of the standard exists from its tag
     on `main`, and `develop` carries the next one; a document's `<n>`
     increments only past a number released on the producer's `main`. The

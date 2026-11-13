@@ -68,7 +68,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
-| [ECO-059](#eco-059-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
 
 ---
 
@@ -1119,7 +1119,7 @@ HUB-2.4). The kit in the hub's repository (every GUI would depend on an app).
 the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
 (DEV-1.2).
 
-## ECO-059 Every product carries the providers' attribution
+## ECO-060 Every product carries the providers' attribution
 
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P

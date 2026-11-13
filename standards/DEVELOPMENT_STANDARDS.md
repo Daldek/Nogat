@@ -760,20 +760,20 @@ reformatted, aggregated, charted or used to compute a result; data of
 hydro.imgw.pl add H. Only a verbatim, untouched copy of an IMGW-PIB file
 carries S alone.
 *Why:* §5 ust. 3 and 4 of the IMGW-PIB terms, repeated by the terms of the
-hydrological service (ECO-059).
+hydrological service (ECO-060).
 
 **DEV-20.2** A product with PMAXTP data (powietrze.imgw.pl, klimat.imgw.pl)
 carries PS and M, and PP as well once the data were processed: a design
 rainfall, hyetograph, hydrograph, model input, or a table or file in another
 form. For PMAXTP these lines replace S and P.
 *Why:* ust. 1 and 2 of the PMAXTP terms, which require the monograph and the
-project's address (ECO-059).
+project's address (ECO-060).
 
 **DEV-20.3** A product with ČHMÚ data carries C (the creator, the address of
 the material, the licence and its link) and, once the data were modified, CP
 naming what was done; an English context MAY use English equivalents of C
 and CP with the same elements.
-*Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-059).
+*Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-060).
 
 **DEV-20.4** A product with data of several providers carries every line that
 applies, in the order S, P, H, PS, PP, M, C, CP, each once. A project keeps the
@@ -796,14 +796,14 @@ every surface with the data or results derived from them:
 | CLI | the human-readable output that prints data or results |
 | model inputs | a header comment of the file, or an attribution file beside it where the format has no comments |
 
-*Why:* the terms bind every product made with the data (ECO-059).
+*Why:* the terms bind every product made with the data (ECO-060).
 
 **DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
 `attribution`, an array of the lines as strings. A consumer shows the lines it
 receives with the data and carries them into its own products and further
 hand-offs, merged without duplicates; a field a project already has for them
 (a CSV column, `license.attribution` of a sidecar, DEV-19.16) stays.
-*Why:* the obligation follows the data through every tool (ECO-059).
+*Why:* the obligation follows the data through every tool (ECO-060).
 
 **DEV-20.7** Every GUI view and every exported product with IMGW-PIB data
 also shows N and the terms that apply, one line each in the order RD
@@ -812,9 +812,11 @@ attribution lines and on the surfaces of DEV-20.5; a JSON document, result or
 hand-off has them in `terms_notice`, an array of strings carried on like
 `attribution`.
 *Why:* free use is private use only; business use, sites with advertising and
-the purposes the terms list need an agreement with IMGW-PIB (ECO-059).
+the purposes the terms list need an agreement with IMGW-PIB (ECO-060).
 
-**DEV-20.8** Data of hydro.imgw.pl are operational: a product shows them as
-current with their time and never stores them or presents them as archive.
+**DEV-20.8** Operational data of hydro.imgw.pl (water states and their
+classes, measurements, warnings) are shown as current with their time and
+never stored or presented as archive; station locations from it MAY be kept
+as reference data with their lines (DEV-20.1).
 *Why:* operational data are not the verified archive of danepubliczne.imgw.pl,
-and no project keeps them (ECO-059).
+and no project keeps them (ECO-060).
