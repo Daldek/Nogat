@@ -435,11 +435,12 @@ shell of the guidelines (top bar, navigation rail, resizable side panel).
 *Why:* the GUIs serve one user as one family of tools (ECO-055).
 
 **DEV-15.4** A GUI shows the kit's app menu, `<nogat-app-menu>` from Nogat
-`design/kit/`, in its top bar left of the theme switch. It lists the GUIs
-whose address the deployment sets in `[nogat.gui]` of `nogat.toml`
-(DEV-18.1), one key per registry name in lower case; the app passes that
-table to its page, and with no other GUI set the menu is not drawn. An entry
-opens its GUI in the tab named `nogat-<name>`.
+`design/kit/`, in its top bar left of the theme switch, on every page but its
+admin page (DEV-15.13). It lists the GUIs whose address the deployment sets
+in `[nogat.gui]` of `nogat.toml` (DEV-18.1), one key per registry name in
+lower case; the app passes that table to its page, and with no other GUI set
+the menu is not drawn. An entry opens its GUI in the tab named
+`nogat-<name>`.
 *Why:* one person moves between the GUIs (ECO-058).
 
 **DEV-15.5** A GUI hands data to another as `nogat-handoff/1` (Nogat
@@ -465,22 +466,23 @@ leading comment of DEV-15.3); a change is made in Nogat and copied again.
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
 as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
-with each kit version it copies. Every view links „Regulamin” to it visibly
-in its footer or status bar, beside the attribution lines (DEV-20.5), and the
-app menu and `<nogat-sources>` pass it in their `terms` attribute; every such
-link opens a new tab (`target="_blank"`, `rel="noopener"`). A GUI run without
+with each kit version it copies. Every view but the admin page (DEV-15.13)
+links „Regulamin” to it visibly in its footer or status bar, beside the
+attribution lines (DEV-20.5), and the app menu and `<nogat-sources>` pass it
+in their `terms` attribute; every such link opens a new tab
+(`target="_blank"`, `rel="noopener"`). A GUI run without
 `[nogat.operator]`, or used only by its operator behind a sign-in, has
 neither page nor link.
 *Why:* one text tells everyone who uses a public GUI its rules and what
 happens to their data (RODO art. 13; ECO-061, ECO-062); a link that replaced
 the GUI's tab would end its session and lose the user's work.
 
-**DEV-15.8** Every view of a public GUI shows in its footer or status bar,
-beside „Regulamin”, the statement „Serwis jest niekomercyjny i bezpłatny, nie
-zawiera reklam i nie służy działalności gospodarczej operatora. Służy celom
-badawczym i edukacyjnym. Dane IMGW-PIB są w nim wykorzystywane do celów
-niezarobkowych, zgodnie z regulaminami IMGW-PIB.”, which opens § 3 of the
-terms.
+**DEV-15.8** Every view of a public GUI but its admin page (DEV-15.13) shows
+in its footer or status bar, beside „Regulamin”, the statement
+„Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
+działalności gospodarczej operatora. Służy celom badawczym i edukacyjnym.
+Dane IMGW-PIB są w nim wykorzystywane do celów niezarobkowych, zgodnie z
+regulaminami IMGW-PIB.”, which opens § 3 of the terms.
 *Why:* the author's statement of what the services are (ECO-062).
 
 **DEV-15.9** A public GUI limits the requests of each client IP address in
@@ -509,11 +511,12 @@ days.
 its users, and the regulamin says the server stores no IP address (ECO-062,
 ECO-063).
 
-**DEV-15.11** A public GUI counts its use in daily totals only. For each
-request the rate limit counts, a visitor is the HMAC-SHA-256 of the client IP
-address and the User-Agent under a 32-byte random salt drawn at start and at
-each 00:00 UTC; salt and hashes stay in memory to count the day's distinct
-visitors and are never written. Each UTC day is one JSON object per line of
+**DEV-15.11** A public GUI counts its use in daily totals only, the requests
+of its admin panel not counted (DEV-15.13). For each request the rate limit
+counts, a visitor is the HMAC-SHA-256 of the client IP address and the
+User-Agent under a 32-byte random salt drawn at start and at each 00:00 UTC;
+salt and hashes stay in memory to count the day's distinct visitors and are
+never written. Each UTC day is one JSON object per line of
 `<data_dir>/<project>/stats.jsonl` (DEV-18.2), in date order, with the keys
 below; the GUI rewrites the day's line at least every 10 minutes and at
 shutdown, adds to it after a restart (with a new salt), and names in its
@@ -539,10 +542,9 @@ adds itself (the view, the station, the view's parameters, the app version),
 never an IP address or User-Agent, as a report with the fields below, in the
 GUI's database or, without one, as a line of
 `<data_dir>/<project>/feedback.jsonl`, and answers
-`{"id": <id>, "status": "ok"}`; only the operator lists
-(`{items, total, unread_count}`), marks and deletes reports, at
-`/api/admin/feedback[/{id}]` behind the operator's sign-in, and deletes each
-once handled.
+`{"id": <id>, "status": "ok"}`; only the operator lists, marks and deletes
+reports, at `/api/admin/feedback[/{id}]` behind the sign-in of DEV-15.13, and
+deletes each once handled.
 
 | Field | Value |
 |---|---|
@@ -554,6 +556,42 @@ once handled.
 
 *Why:* reports carry no personal data, and one format serves every GUI
 (ECO-062).
+
+**DEV-15.13** A GUI that stores reports (DEV-15.12) or statistics
+(DEV-15.11) serves its admin panel at `/admin/` and its admin API under
+`/api/admin/`, an app whose API has a prefix of its own keeping it
+(`/api/v1/admin/`); `/admin` answers `308` to `/admin/`, and no other admin
+path exists, so a deployment protects exactly `/admin`, `/admin/*` and
+`/api/admin/*`. Every admin route checks the header `X-Admin-Key` in
+constant time against the credential `admin_api_key`, read per request from
+the environment variable `<PREFIX>ADMIN_API_KEY` or the file named by
+`<PREFIX>ADMIN_API_KEY_FILE` (DEV-18.4), `<PREFIX>` being the prefix of the
+GUI's other settings (`<TOOL>_` in a tool, DEV-18.3; empty where they have
+none); a failure answers `401` with the error document of `unauthorized`
+(AGI-6.3) and the reason `admin_key_not_configured`, `admin_key_missing` or
+`admin_key_invalid`. No key is generated and none is ever logged. An app
+with accounts replaces the key with its own role check and keeps everything
+else. The core API is the same in every GUI; an app's own sections use
+routes of their own under `/api/admin/`.
+
+| Route | Answer |
+|---|---|
+| `GET /api/admin/feedback?limit=&offset=` | `{items, total, unread_count}`, newest first; `limit` 1 to 200, default 50 |
+| `PATCH /api/admin/feedback/{id}` with `{"is_read": bool}` | the report |
+| `DELETE /api/admin/feedback/{id}` | `{"status": "deleted"}`; an unknown id answers `404 not_found` |
+| `GET /api/admin/stats?from=&to=` | `{days, totals}`: the lines of `stats.jsonl` (DEV-15.11) between the two UTC days, default the last 30, plus the current day as counted so far; `totals` sums every key but `visitors` |
+| `GET /api/admin/status` | `{app, version, started_at, uptime_s, data_dir, disk: {free_bytes, total_bytes}, checks: [{name, status, detail}]}`, `status` one of `ok`, `warning`, `failed`; each GUI names its checks in its README |
+
+The page is the kit's `<nogat-admin>` ([design/](../design/README.md)) with
+„Zgłoszenia”, „Statystyki” and „Stan”, then the app's own sections; it keeps
+the key in `sessionStorage` under `<project>/admin-key/1`, which „Wyloguj”
+forgets. It is the operator's, not a public view: no footer statement,
+regulamin link, app menu or stats count (DEV-15.4, DEV-15.7, DEV-15.8 and
+DEV-15.11 do not apply to it); `<meta name="robots" content="noindex">`;
+every admin answer `Cache-Control: no-store`; CSP `'self'`; its requests stay
+under the rate limit (DEV-15.9).
+*Why:* the operator handles every GUI in one place and one way, and a
+deployment protects three paths (ECO-067).
 
 ---
 

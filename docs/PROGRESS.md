@@ -254,6 +254,7 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
    Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
 14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, merged): N1 done; next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms (question 4).
 15. One compact strip of provider lines per GUI view (ECO-064, plan `docs/plans/2026-11-13-compact-attribution.md`, approved 2026-11-13): step 1 (Nogat, kit 0.5.0) merged into `develop` (`751e978`), kit 0.5.1 (every regulamin link in a new tab) merged (`9940bb8`); ECO-065 (no N or H, RD, RH, RK renamed, kit 0.6.0) on `feat/minimal-provider-texts`, not merged; next each project applies the migration in the provider-attribution plan, copies kit 0.6.0 and keeps one `<nogat-sources>` per view.
+16. One admin panel for every GUI (ECO-067, DEV-15.13, plan `docs/plans/2026-11-13-admin-panel.md`, approved 2026-11-13): step 1 (Nogat, kit 0.7.0 with `<nogat-admin>`) done on `feat/admin-panel`, not merged; next Hydrolog, Hydrograf, Obserwator and Archiwista copy kit 0.7.0 and adopt it (steps 2 to 5), then the author's keys and Cloudflare Access on `/admin`, `/admin/*`, `/api/admin/*` (step 6).
 
 ## Open questions
 
