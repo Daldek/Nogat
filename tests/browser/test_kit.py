@@ -24,7 +24,7 @@ from typing import Any
 import jsonschema
 import pytest
 import terms
-from playwright.sync_api import Browser, Page, Playwright, sync_playwright
+from playwright.sync_api import Browser, Locator, Page, Playwright, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
@@ -253,6 +253,23 @@ def test_menu_closes_on_escape_outside_click_and_focus_leaving(page: Page) -> No
     assert button.get_attribute("aria-expanded") == "false"
 
 
+def _opens_in_a_new_tab(page: Page, link: Locator, address: str) -> None:
+    """A click on `link` opens `address` in a new tab, no opener; `page` stays."""
+    assert (link.get_attribute("target"), link.get_attribute("rel")) == (
+        "_blank",
+        "noopener",
+    )
+    before = page.url
+    with page.context.expect_page() as info:
+        link.click()
+    tab = info.value
+    tab.wait_for_load_state()
+    assert tab.url == address
+    assert tab.evaluate("window.opener") is None
+    tab.close()
+    assert page.url == before
+
+
 def test_menu_ends_with_the_terms_link_when_given(page: Page, site: str) -> None:
     _set_apps(page, APPS)
     page.get_by_role("button", name="Aplikacje").click()
@@ -263,8 +280,7 @@ def test_menu_ends_with_the_terms_link_when_given(page: Page, site: str) -> None
     )
     page.get_by_role("button", name="Aplikacje").click()
     link = page.get_by_role("link", name="Regulamin")
-    assert link.evaluate("a => a.href") == f"http://{site}/regulamin.html"
-    assert link.get_attribute("target") is None
+    _opens_in_a_new_tab(page, link, f"http://{site}/regulamin.html")
     page.evaluate(
         "() => document.querySelector('nogat-app-menu')"
         ".setAttribute('terms', 'javascript:alert(1)')"
@@ -478,6 +494,9 @@ def test_dialog_shows_every_line_and_the_terms_and_traps_focus(
     page.mouse.click(5, 5)
     assert dialog.is_hidden()
     assert page.evaluate("seen") == ["nogat-sources-open", "nogat-sources-close"] * 3
+    button.click()
+    _opens_in_a_new_tab(page, regulamin, f"http://{site}/regulamin.html")
+    assert dialog.is_visible()
 
 
 def test_welcome_window_gets_the_dialogs_content(

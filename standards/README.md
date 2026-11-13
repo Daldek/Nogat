@@ -82,6 +82,9 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - Every link to a GUI's regulamin, in its footer, the app menu and
+    `<nogat-sources>`, opens a new tab, so the GUI's session stays
+    (DEV-15.7, kit 0.5.1).
   - A GUI view shows the providers' lines in one compact strip, the kit's
     `<nogat-sources>`: S, P, PS, PP and CK, the new short form of C, each
     once, then „Źródła i warunki”, a dialog with every line and the terms,

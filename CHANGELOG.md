@@ -476,6 +476,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- GUI kit 0.5.1: „Regulamin” in the app menu and „Regulamin serwisu” in the
+  `<nogat-sources>` dialog and in `fillSources()` open in a new tab
+  (`target="_blank"`, `rel="noopener"`); they replaced the GUI's own tab,
+  which in Hydrolog ended the in-memory session and deleted the uploaded
+  files. DEV-15.7 requires it of every regulamin link; browser tests click
+  both links and check that the GUI's tab stays.
 - Registry: Hydrolog's edge to Kartograf named the HSG rules „Hydrolog
   ADR-025”; they are Kartograf's ADR-025 (Hydrolog's ADR-0025 is the
   structure alone in the schematic). Map regenerated.

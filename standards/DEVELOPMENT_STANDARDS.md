@@ -467,11 +467,13 @@ as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
 with each kit version it copies. Every view links „Regulamin” to it visibly
 in its footer or status bar, beside the attribution lines (DEV-20.5), and the
-app menu passes it in its `terms` attribute; a GUI run without
+app menu and `<nogat-sources>` pass it in their `terms` attribute; every such
+link opens a new tab (`target="_blank"`, `rel="noopener"`). A GUI run without
 `[nogat.operator]`, or used only by its operator behind a sign-in, has
 neither page nor link.
 *Why:* one text tells everyone who uses a public GUI its rules and what
-happens to their data (RODO art. 13; ECO-061, ECO-062).
+happens to their data (RODO art. 13; ECO-061, ECO-062); a link that replaced
+the GUI's tab would end its session and lose the user's work.
 
 **DEV-15.8** Every view of a public GUI shows in its footer or status bar,
 beside „Regulamin”, the statement „Serwis jest niekomercyjny i bezpłatny, nie
