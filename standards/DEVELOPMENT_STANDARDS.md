@@ -789,12 +789,17 @@ every surface with the data or results derived from them:
 | CSV | trailing columns `attribution` and `terms_notice`, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline. Columns a project already has stay (DEV-20.6) |
 | JSON | the fields `attribution` and `terms_notice` (DEV-20.6, DEV-20.7) |
 | Parquet | the file metadata keys `attribution` and `terms_notice`, each a JSON array of the lines |
-| ZIP | an attribution or README file inside the archive |
+| ZIP | `ATTRIBUTION.txt` at the root of the archive |
+| plain files in a directory (DEV-19.1) | `ATTRIBUTION.txt` in the directory's root, listed in `files[]` |
 | PNG, SVG | footer lines drawn in the image |
 | print, PDF, generated reports | a visible line on the page or in the report |
 | API, REST, MCP | the fields `attribution` and `terms_notice` of the response (DEV-20.6, DEV-20.7) |
 | CLI | the human-readable output that prints data or results |
-| model inputs | a header comment of the file, or an attribution file beside it where the format has no comments |
+| model inputs | a header comment of the file, or `ATTRIBUTION.txt` beside it where the format has no comments |
+
+`ATTRIBUTION.txt` is UTF-8 with one line per line, the attribution lines and
+then the terms lines of DEV-20.7, in order; a later write to the same place
+merges its lines in, each once and in order.
 
 *Why:* the terms bind every product made with the data (ECO-060).
 
