@@ -27,7 +27,7 @@ Verbatim, with their meaning:
 1. „Kod pobierania zostaje biblioteką Obserwatora, którą Archiwista wywołuje” — B1: the download code stays Obserwator's library, and Archiwista calls it.
 2. „Surowy leży u Archiwisty, zharmonizowany też, ale tylko jako backup całego zakresu. Wersja produkcyjna leży u Obserwatora. Co do odświeżania — dane powinny być przeliczone raz, na początku i tyle, a pobieranie nowych będzie realizowane 1 raz w roku, gdy pojawią się nowe paczki danych publicznych. Jeżeli user liczy jakieś rzeczy dla wybranego wycinka danych, to robimy to w locie i nie jest to w żaden sposób zapisywane na stałe.” The raw data live in Archiwista; Archiwista also keeps the harmonized data, but only as a backup of the full range; the production harmonized data and results live in Obserwator. Everything is computed once, at the start; new data are downloaded once a year, when IMGW-PIB and ČHMÚ publish new packages. Computations for a subset a person chooses run on the fly and are never stored.
 3. „Nie, danych operacyjnych nie archiwizujemy” — IMGW-PIB's warning and alarm levels (operational data of hydro.imgw.pl) are not archived; a station's view shows ČHMÚ's thresholds and the characteristic levels only.
-4. IMGW-PIB's terms for the public instance: „do sprawdzenia” (to be checked); a research note follows.
+4. IMGW-PIB's terms for the public instance: „do sprawdzenia” (to be checked); the research note is under „Open question for the author”.
 
 As relayed in English the same day:
 
@@ -242,7 +242,16 @@ The author's answers of [2026-11-13](#the-authors-answers-2026-11-13) to the ope
 
 ## Open question for the author
 
-1. **IMGW-PIB's terms on the public instance** (question 4, „do sprawdzenia”). IMGW-PIB's notice reads „Do użytku prywatnego i badawczego; inne zastosowania wymagają sprawdzenia warunków IMGW-PIB, także wyjątków dla danych o wysokiej wartości.” (Obserwator `src/obserwator/messages/datasets.py:122-127`). Is serving IMGW-PIB series and analysis results to the Access audience within the terms? A research note follows; until it is answered the public instance stays behind Cloudflare Access.
+1. **IMGW-PIB's terms on the public instance** (question 4, „do sprawdzenia”): research done, confirmation pending. IMGW-PIB's notice reads „Do użytku prywatnego i badawczego; inne zastosowania wymagają sprawdzenia warunków IMGW-PIB, także wyjątków dla danych o wysokiej wartości.” (Obserwator `src/obserwator/messages/datasets.py:122-127`). Is serving IMGW-PIB series and analysis results to the Access audience within the terms?
+
+   Research note (2026-11-13, IMGW-PIB's regulations, https://danepubliczne.imgw.pl/regulations, read that day):
+
+   - §5 ust. 1: „Korzystający może używać nieodpłatnie udostępnionych danych do celów prywatnych, a w przypadku danych o wysokiej wartości w każdym celu.” Use for the purposes of §3 ust. 2 (business, and also water-management planning studies under art. 317 of Prawo wodne, agriculture, navigation, defence and others) needs a paid agreement.
+   - §2 pkt 2: „cel prywatny – użycie danych do celów prywatnych, niezarobkowych, w tym do celów prac magisterskich lub doktorskich”; §2 pkt 3: a business purpose includes „publikacja danych … na stronach internetowych, zawierających reklamy”.
+   - §5 ust. 3 and 4: every work or product carries „Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy” and, for processed data, „Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone”.
+   - §1 ust. 2 names Regulation (EU) 2023/138 (high-value datasets) as a legal basis, but the regulations do not list which of IMGW-PIB's datasets are high-value.
+
+   Reading: a non-commercial instance without advertising, with both texts on every view and every export, fits the private, non-profit purpose. A fully public instance, or any commercial or planning use, depends on whether IMGW-PIB treats its daily hydrological and meteorological archives as high-value datasets, which needs IMGW-PIB's written confirmation (biznes@imgw.pl, the request procedure of §8). Until then the public instance stays behind Cloudflare Access.
 
 ## Not in this plan
 
