@@ -31,8 +31,19 @@ PLACEHOLDERS: dict[str, str] = {
     "operator_email": "deployment: `[nogat.operator] email` in `nogat.toml`",
     "terms_effective": "deployment: `[nogat.operator] terms_effective` in "
     "`nogat.toml`, the date the filled terms take effect",
-    "log_retention_days": "deployment: `[nogat.operator] log_retention_days` "
-    "in `nogat.toml`, days the server keeps its access logs",
+    "processor": "deployment: `[nogat.operator] processor` in `nogat.toml`, "
+    "who carries the traffic and processes IP addresses for the operator",
+    "processor_transfer": "deployment: `[nogat.operator] processor_transfer` "
+    "in `nogat.toml`, the sentence on the processor's transfers outside the "
+    "EEA; empty without them",
+    "processor_cookie": "deployment: `[nogat.operator] processor_cookie` in "
+    "`nogat.toml`, the sentence on the cookie the processor sets to protect "
+    "the service from bots; empty while it sets none",
+    "mail_provider": "deployment: `[nogat.operator] mail_provider` in "
+    "`nogat.toml`, the service holding the operator's mailbox",
+    "mail_transfer": "deployment: `[nogat.operator] mail_transfer` in "
+    "`nogat.toml`, the sentence on that mail service's processing outside "
+    "the EEA; empty without it",
     "software_licence": "project: `license` of its `pyproject.toml`, e.g. `MIT`",
     "source_url": "project: `repo` of its entry in `ecosystem.yaml`",
     "tokens_href": "project: the address of its copy of `tokens.css`, "
@@ -41,7 +52,11 @@ PLACEHOLDERS: dict[str, str] = {
     "final slash, relative to the page, e.g. `nogat/`",
 }
 
-# Blocks a project keeps by listing them; the rest are dropped (DEV-15.7).
+# The only placeholders whose value may be empty (it must still be given).
+OPTIONAL = frozenset({"processor_transfer", "processor_cookie", "mail_transfer"})
+
+# Blocks a project keeps for its data sources by listing them; the rest are
+# dropped (DEV-15.7).
 BLOCKS: dict[str, str] = {
     "imgw": "IMGW-PIB data of danepubliczne.imgw.pl",
     "imgw-hydro": "IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl",
@@ -54,18 +69,12 @@ BLOCKS: dict[str, str] = {
     "wody-polskie": "flood hazard maps of Wody Polskie",
     "osm": "OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal)",
     "esri": "the Esri World Imagery basemap",
-    "cloudflare-access": "access through Cloudflare Access: "
-    "`[nogat.operator] cloudflare_access` in `nogat.toml`",
-    "accounts": "team accounts",
-    "session-cookie": "a session cookie of the GUI's own",
-    "feedback": "the „Zgłoś uwagę” form",
 }
 
 # Blocks that follow from the listed ones and are never listed themselves.
 IMGW_BLOCKS = frozenset({"imgw", "imgw-hydro", "pmaxtp"})
 DERIVED: dict[str, str] = {
     "imgw-terms": "kept with any of imgw, imgw-hydro and pmaxtp",
-    "no-cookies": "kept without session-cookie",
 }
 
 PLACEHOLDER = re.compile(r"\{\{([a-z][a-z0-9_]*)\}\}")
@@ -220,8 +229,6 @@ def kept(listed: Iterable[str]) -> set[str]:
         raise ValueError(f"not a block of the terms: {', '.join(unknown)}")
     if chosen & IMGW_BLOCKS:
         chosen.add("imgw-terms")
-    if "session-cookie" not in chosen:
-        chosen.add("no-cookies")
     return chosen
 
 
@@ -237,7 +244,8 @@ def fill(
     A block named in `listed` (or derived from them) keeps its lines and
     loses its two marker lines; any other block goes with its markers. Each
     `{{name}}` becomes its value, HTML-escaped when `markup` is true (the
-    `.html` template) and as is for the `.md` source.
+    `.html` template) and as is for the `.md` source. Every placeholder
+    needs a value; only those in `OPTIONAL` may be empty.
 
     Raises
     ------
@@ -246,7 +254,11 @@ def fill(
     """
     keep = kept(listed)
     names = placeholders(template)
-    missing = sorted(n for n in names if not str(values.get(n, "")).strip())
+    missing = sorted(
+        n
+        for n in names
+        if n not in values or (n not in OPTIONAL and not str(values[n]).strip())
+    )
     unknown = sorted(set(values) - set(PLACEHOLDERS))
     if missing or unknown:
         raise ValueError(

@@ -8,6 +8,21 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Rules for public GUIs, the author's decisions of 2026-11-13 on the
+  regulamin (`docs/plans/2026-11-13-gui-terms.md`, step 2; ECO-062, amending
+  ECO-061): Hydrograf, Hydrolog and Obserwator are used without signing in,
+  Cloudflare Access guarding only the operator's admin parts, and Archiwista,
+  private, serves no terms. DEV-15.8: the statement of what the services are
+  in every footer; DEV-15.9: a rate limit per IP address held in memory only
+  (300 requests in 60 s by default, `request_limit` and `request_window`;
+  `429` with `Retry-After` and a Polish message); DEV-15.10: access logs
+  without IP addresses, deleted after 14 days; DEV-15.11: anonymous daily
+  statistics (an HMAC of IP address and User-Agent under a daily salt, in
+  memory; daily totals in `<data_dir>/<project>/stats.jsonl`); DEV-15.12:
+  „Zgłoś uwagę” without contact fields, with an automatic context and one
+  report format, as JSON Lines in a GUI without a database. The plan records
+  the nine decisions and the adoption in each public GUI, Obserwator's new
+  form included.
 - Station data and analyses, step N1 (`docs/plans/2026-11-12-station-data-and-analyses.md`,
   approved 2026-11-13): ECO-059, amending ECO-054, gives the station data
   of IMGW-PIB and ČHMÚ one role per project: raw data in Archiwista,
@@ -240,6 +255,39 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Regulamin 1.0 after its legal review, GUI kit 0.4.0 (ECO-063, amending
+  ECO-062; `docs/plans/2026-11-13-gui-terms.md`): the review's text, about a
+  third shorter with the same twelve sections, fields and blocks, and the
+  operator's decisions on it. § 3 says the service is not one of IMGW-PIB,
+  ČHMÚ or another provider and shows their data processed; § 8 names the
+  processor's whole traffic and its own security logs, the statistics
+  without „anonimowe”, the art. 11 RODO limit of the rights, no sentence on
+  automated decisions, no `sessionStorage`; § 7 „na własne ryzyko” and no
+  liability for linked sites; § 12 the Polish text binding; „W skrócie…”
+  before the IMGW-PIB notice. DEV-15.10 covers every log, error and
+  application logs included (nginx's `limit_req_log_level` under its
+  `error_log` level; app loggers without `client`). `[nogat] operator`
+  (DEV-18.1) gains `mail_provider`, named in § 8, and the optional
+  `mail_transfer` and `processor_cookie`; `scripts/terms.py` lets the three
+  optional fields be empty, and contract tests pin which fields may be.
+  The plan records the review, the decisions and the author's open points,
+  with drafts of an e-mail to IMGW-PIB and of a register of processing in
+  `docs/plans/2026-11-13-gui-terms/`.
+- The regulamin template is version 1.0, in GUI kit 0.3.0, rewritten to the
+  author's decisions of 2026-11-13: one version and one date for the three
+  public GUIs, a „Historia zmian” linked to the template's history; no
+  reference to the act on electronic services; liability excluded except
+  for intentional damage; contact by e-mail only; RODO requests answered
+  within a month; the processor in two fields; the user addressed as „Ty”.
+  The personal-data blocks (`cloudflare-access`, `accounts`,
+  `session-cookie`, `feedback`, the derived `no-cookies`) and the field
+  `log_retention_days` are gone; the data-source blocks stay. DEV-15.7
+  covers public GUIs only; `[nogat] operator` (DEV-18.1) holds `name`,
+  `email`, `terms_effective`, `processor` and `processor_transfer`, without
+  `log_retention_days` and `cloudflare_access`. `scripts/terms.py` lets
+  only `processor_transfer` be empty; contract tests pin the statement of
+  DEV-15.8 in § 3 and the version against the history. The Hydrograf
+  mockup's form loses its contact field.
 - GUI platform stage 1 done (2026-11-12): Hydrolog, Hydrograf, Archiwista and
   Obserwator carry the kit's app menu and hand-off, merged and deployed at the
   author's request; the plan's Results record the commits, the public

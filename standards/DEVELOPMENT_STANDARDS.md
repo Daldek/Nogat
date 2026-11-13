@@ -460,16 +460,98 @@ leading comment of DEV-15.3); a change is made in Nogat and copied again.
 `drift` reports each copy as current, behind or modified (HUB-4.1).
 *Why:* copies that drift unseen split the shared look and contracts again.
 
-**DEV-15.7** A GUI that a deployment opens to other people serves its terms at
+**DEV-15.7** A public GUI, one that a deployment with `[nogat.operator]`
+(DEV-18.1) opens to anyone without signing in, serves its terms at
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
-as `design/README.md` says from `[nogat.operator]` and `[nogat.gui]` of
-`nogat.toml` (DEV-18.1) and from the project's own values, with the blocks of
-its data sources and personal data kept, and refilled with each kit version
-it copies. Every view links „Regulamin” to it visibly in its footer or status
-bar, beside the attribution lines (DEV-20.5), and the app menu passes it in
-its `terms` attribute; without `[nogat.operator]` there is neither page nor link.
-*Why:* a service offered to others needs terms (art. 8 of the Polish act on
-electronic services, RODO art. 13), one text for every GUI (ECO-061).
+as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
+project's own values, with the blocks of its data sources kept, and refilled
+with each kit version it copies. Every view links „Regulamin” to it visibly
+in its footer or status bar, beside the attribution lines (DEV-20.5), and the
+app menu passes it in its `terms` attribute; a GUI run without
+`[nogat.operator]`, or used only by its operator behind a sign-in, has
+neither page nor link.
+*Why:* one text tells everyone who uses a public GUI its rules and what
+happens to their data (RODO art. 13; ECO-061, ECO-062).
+
+**DEV-15.8** Every view of a public GUI shows in its footer or status bar,
+beside „Regulamin”, the statement „Serwis jest niekomercyjny i bezpłatny, nie
+zawiera reklam i nie służy działalności gospodarczej operatora. Służy celom
+badawczym i edukacyjnym. Dane IMGW-PIB są w nim wykorzystywane do celów
+niezarobkowych, zgodnie z regulaminami IMGW-PIB.”, which opens § 3 of the
+terms.
+*Why:* the author's statement of what the services are (ECO-062).
+
+**DEV-15.9** A public GUI limits the requests of each client IP address in
+its own server, the app or its reverse proxy (behind a proxy, the address the
+proxy reports, trusted only from it): by default 300 requests in 60 s, static
+files not counted, settable per GUI as `request_limit` and `request_window`
+(DEV-18.1); a GUI MAY give map tiles a limit of their own, named in its
+README. Over the limit it answers `429` with `Retry-After` in seconds, a page
+with „Zbyt wiele żądań. Spróbuj ponownie za <n> s.” and an API route with the
+error document of `rate_limited` (AGI-6.3); the address stays in memory for
+the window only and is never written to disk or a log.
+*Why:* protection against excessive requests without storing addresses
+(ECO-062).
+
+**DEV-15.10** No log of a public GUI, its app's or its reverse proxy's,
+access, error or application, holds the client's IP address. An access log
+holds per request only its time, method, path with query, status, size,
+duration, a random request id and the User-Agent. The app's loggers write no
+`client` field or request scope, its server's own access log off (uvicorn
+`--no-access-log`); nginx, which names the client in every error of a
+request, sets `limit_req_log_level` and `limit_conn_log_level` below the
+level of the GUI's `error_log` and that level to `crit`, unless a filter
+drops the address before a line is written. Every log is deleted after 14
+days.
+*Why:* logs serve the operation of the service, not the identification of
+its users, and the regulamin says the server stores no IP address (ECO-062,
+ECO-063).
+
+**DEV-15.11** A public GUI counts its use in daily totals only. For each
+request the rate limit counts, a visitor is the HMAC-SHA-256 of the client IP
+address and the User-Agent under a 32-byte random salt drawn at start and at
+each 00:00 UTC; salt and hashes stay in memory to count the day's distinct
+visitors and are never written. Each UTC day is one JSON object per line of
+`<data_dir>/<project>/stats.jsonl` (DEV-18.2), in date order, with the keys
+below; the GUI rewrites the day's line at least every 10 minutes and at
+shutdown, adds to it after a restart (with a new salt), and names in its
+README what it counts as each total.
+
+| Key | Value |
+|---|---|
+| `date` | the UTC day, `YYYY-MM-DD` |
+| `visitors` | distinct visitors of the day |
+| `page_views` | HTML pages served |
+| `stations_opened` | stations opened; 0 in a GUI without stations |
+| `analyses_run` | computations run |
+| `downloads` | files downloaded |
+
+*Why:* how the services are used, without tracking anyone and without a
+cookie (ECO-062).
+
+**DEV-15.12** A public GUI offers „Zgłoś uwagę”: one text field of 1 to
+5,000 characters with „Nie wpisuj danych osobowych. Jeśli chcesz odpowiedzi,
+napisz na <e-mail>” under it, `<e-mail>` being `[nogat.operator] email`, and
+no contact field. `POST /api/feedback` stores the text with a context the GUI
+adds itself (the view, the station, the view's parameters, the app version),
+never an IP address or User-Agent, as a report with the fields below, in the
+GUI's database or, without one, as a line of
+`<data_dir>/<project>/feedback.jsonl`, and answers
+`{"id": <id>, "status": "ok"}`; only the operator lists
+(`{items, total, unread_count}`), marks and deletes reports, at
+`/api/admin/feedback[/{id}]` behind the operator's sign-in, and deletes each
+once handled.
+
+| Field | Value |
+|---|---|
+| `id` | integer, ascending |
+| `created_at` | UTC time of receipt, ISO 8601 with offset |
+| `message` | the text |
+| `context` | object of at most 100 KB: `view`, `station` (`null` without one), `parameters`, `app_version` |
+| `is_read` | `false` until the operator marks it read |
+
+*Why:* reports carry no personal data, and one format serves every GUI
+(ECO-062).
 
 ---
 
@@ -531,9 +613,14 @@ configuration directory (`platformdirs.user_config_path("nogat")`, or the path
 in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
 `cache_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4, and the
 table `operator` of who runs a deployment open to others, DEV-15.7: `name`,
-`email`, `terms_effective` (a date), `log_retention_days` and
-`cloudflare_access`, a boolean); section `[<tool>]` holds the tool's own
-keys. A value
+`email`, `terms_effective` (a date), `processor`, who carries the traffic and
+processes IP addresses for the operator, `processor_transfer`, the sentence
+on that processor's transfers outside the EEA, empty without them,
+`processor_cookie`, the sentence on its cookie against bots, empty without
+one, `mail_provider`, the service holding the operator's mailbox, and
+`mail_transfer`, the sentence on its processing outside the EEA, empty
+without it);
+section `[<tool>]` holds the tool's own keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
 `[nogat]`), built-in default. Every tool reads the file with `tomllib` and

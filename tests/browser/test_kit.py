@@ -54,7 +54,11 @@ TERMS_VALUES = {
     "operator_name": "Jan Kowalski",
     "operator_email": "jan@example.org",
     "terms_effective": "2026-11-20",
-    "log_retention_days": "30",
+    "processor": "Cloudflare, Inc.",
+    "processor_transfer": "Dane mogą być przekazywane do USA.",
+    "processor_cookie": "",
+    "mail_provider": "Example Mail",
+    "mail_transfer": "",
     "software_licence": "MIT",
     "source_url": "https://github.com/Daldek/Hydrolog",
     "tokens_href": "tokens.css",
@@ -274,7 +278,10 @@ def test_terms_page_shows_twelve_sections_with_every_field_filled(
     page, requested = terms_page
     assert page.title() == "Regulamin serwisu Hydrolog"
     sections = page.locator("main h2").all_inner_texts()
-    assert [s.split(".")[0] for s in sections] == [str(n) for n in range(1, 13)]
+    assert [s.split(".")[0] for s in sections] == [
+        *(str(n) for n in range(1, 13)),
+        "Historia zmian",
+    ]
     text = page.locator("body").inner_text()
     assert "{{" not in text
     assert "Jan Kowalski" in text

@@ -264,12 +264,14 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
-Terms (DEV-15.7, ECO-061): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
+Terms (DEV-15.7, ECO-061 to ECO-063): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
+The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `main`. A change of its text once published raises that version, adds its entry to the history and releases a new kit version; the operator then sets a new `terms_effective`, the day the GUIs publish it, since a new version takes effect on publication. Until its first publication, version 1.0 is revised in place, each revision in a new kit version.
+Its § 3 opens with the statement every view shows in its footer (DEV-15.8); the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, so a GUI serves the page only once it follows them.
 
 Filling, in this order (reference: `fill` in [scripts/terms.py](../scripts/terms.py)):
 
-1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers. Two blocks follow the others and are never listed: `imgw-terms` stays with any of `imgw`, `imgw-hydro` and `pmaxtp`; `no-cookies` stays without `session-cookie`.
-2. Fields. Replace every `{{name}}` with its value, HTML-escaped (`&`, `<`, `>`, `"`, `'`). Every field needs a non-empty value: without one, or with a `{{` left, the GUI serves no page and no link.
+1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers. The block `imgw-terms` follows the others and is never listed: it stays with any of `imgw`, `imgw-hydro` and `pmaxtp`.
+2. Fields. Replace every `{{name}}` with its value, HTML-escaped (`&`, `<`, `>`, `"`, `'`). Every field needs a value, non-empty except `processor_transfer`, `processor_cookie` and `mail_transfer`, each a whole sentence or empty: with a field missing, or with a `{{` left, the GUI serves no page and no link.
 
 The GUI fills at start or at build with its own code; a page filled from an older kit version is filled again when the kit is copied.
 
@@ -279,8 +281,12 @@ The GUI fills at start or at build with its own code; a page filled from an olde
 | `service_url` | the deployment: the project's entry of `[nogat.gui]` in `nogat.toml` |
 | `operator_name` | the deployment: `[nogat.operator] name` |
 | `operator_email` | the deployment: `[nogat.operator] email`, published on the page |
-| `terms_effective` | the deployment: `[nogat.operator] terms_effective`, the date the filled terms take effect, e.g. `2026-11-20` |
-| `log_retention_days` | the deployment: `[nogat.operator] log_retention_days`, the days the server keeps its access logs |
+| `terms_effective` | the deployment: `[nogat.operator] terms_effective`, the day the filled terms are published and take effect, e.g. `2026-11-20` |
+| `processor` | the deployment: `[nogat.operator] processor`, who carries the traffic and processes IP addresses for the operator, e.g. `Cloudflare, Inc.` |
+| `processor_transfer` | the deployment: `[nogat.operator] processor_transfer`, the sentence on that processor's transfers outside the EEA; empty without them |
+| `processor_cookie` | the deployment: `[nogat.operator] processor_cookie`, the sentence on a cookie the processor sets to protect the service from bots, „Dostawca ruchu (Cloudflare, Inc.) może ustawić plik cookie niezbędny do ochrony serwisu przed botami; nie służy on śledzeniu.” with the processor's name; empty while it sets none |
+| `mail_provider` | the deployment: `[nogat.operator] mail_provider`, the service holding the operator's mailbox, e.g. `iCloud Mail (Apple)` |
+| `mail_transfer` | the deployment: `[nogat.operator] mail_transfer`, the sentence on that mail service's processing outside the EEA, „Mogą być przetwarzane poza Europejskim Obszarem Gospodarczym.”; empty without it |
 | `software_licence` | the project: `license` of its `pyproject.toml`, e.g. `MIT` |
 | `source_url` | the project: `repo` of its entry in `ecosystem.yaml` |
 | `tokens_href` | the project: the address of its copy of `tokens.css`, relative to the page |
@@ -291,27 +297,28 @@ The GUI fills at start or at build with its own code; a page filled from an olde
 name = "…"
 email = "…"
 terms_effective = 2026-11-20
-log_retention_days = 30
-cloudflare_access = true  # keeps the block cloudflare-access
+processor = "Cloudflare, Inc."
+processor_transfer = "Dane mogą być przekazywane do USA na podstawie decyzji Komisji Europejskiej w sprawie EU-U.S. Data Privacy Framework."
+processor_cookie = ""
+mail_provider = "iCloud Mail (Apple)"
+mail_transfer = "Mogą być przetwarzane poza Europejskim Obszarem Gospodarczym."
 ```
+
+A move to a host that keeps the data in the EEA changes `processor` and sets `processor_transfer = ""`; the text of the terms stays. `processor_cookie` is set once the processor's zone sets a cookie of its own (Cloudflare: Bot Fight Mode, challenges), and the zone runs no analytics beacon, since the terms say the service uses no external analytics. The server is the operator's own hardware, so no hosting provider is named; a move to a hosted server adds that provider to the terms in a new version.
 
 | Block | Kept for | GUIs, as a start to check in each adoption |
 | --- | --- | --- |
-| `imgw` | IMGW-PIB data of danepubliczne.imgw.pl | Archiwista, Obserwator; Hydrolog with station series |
-| `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Archiwista, Obserwator |
-| `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Archiwista, Obserwator |
-| `chmi` | ČHMÚ open data | Archiwista, Obserwator; Hydrolog with station series |
-| `gugik` | GUGiK data | Hydrograf, Archiwista |
-| `cuzk` | ČÚZK data | Archiwista |
-| `copernicus` | Copernicus data | Hydrograf, Archiwista |
-| `isric` | ISRIC SoilGrids | Hydrograf, Archiwista |
+| `imgw` | IMGW-PIB data of danepubliczne.imgw.pl | Obserwator; Hydrolog with station series |
+| `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Obserwator |
+| `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Obserwator |
+| `chmi` | ČHMÚ open data | Obserwator; Hydrolog with station series |
+| `gugik` | GUGiK data | Hydrograf |
+| `cuzk` | ČÚZK data | none yet |
+| `copernicus` | Copernicus data | Hydrograf |
+| `isric` | ISRIC SoilGrids | Hydrograf |
 | `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
-| `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf, Archiwista; Obserwator with a map |
+| `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf; Obserwator with a map |
 | `esri` | the Esri World Imagery basemap | Hydrograf |
-| `cloudflare-access` | `[nogat.operator] cloudflare_access = true` | the deployment's choice |
-| `accounts` | team accounts | Archiwista |
-| `session-cookie` | a session cookie of the GUI's own | Archiwista |
-| `feedback` | the „Zgłoś uwagę” form | Hydrograf, Hydrolog, Archiwista |
 
 ## Adopting
 

@@ -82,6 +82,17 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - No log of a public GUI or its proxy, access, error or application,
+    holds the client's IP address; `[nogat] operator` gains
+    `mail_provider`, `mail_transfer` and `processor_cookie` (DEV-15.10,
+    DEV-18.1, ECO-063).
+  - Public GUIs (Hydrograf, Hydrolog, Obserwator) are used without signing
+    in; each shows the statement of what the services are in every footer,
+    limits requests per IP address held in memory only, logs without IP
+    addresses for 14 days, counts visitors in anonymous daily totals and
+    takes „Zgłoś uwagę” reports without contact fields in one format; the
+    regulamin is version 1.0, its processor two keys of `[nogat] operator`
+    (DEV-15.7 to DEV-15.12, DEV-18.1, ECO-062).
   - A GUI open to other people serves one regulamin filled from the kit's
     template at `regulamin.html` and links „Regulamin” from every view and
     the app menu; `[nogat] operator` holds who runs the deployment
