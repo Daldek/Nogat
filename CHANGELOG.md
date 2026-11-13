@@ -8,6 +8,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- One compact strip of provider lines per GUI view, the author's request of
+  2026-11-13 (`docs/plans/2026-11-13-compact-attribution.md`, step 1;
+  ECO-064, amending ECO-060): DEV-20.5 and DEV-20.7 put on screen only S, P,
+  PS, PP and CK, the new short ČHMÚ line „Źródło: ČHMÚ, CC BY 4.0”, each
+  once, with „Źródła i warunki” opening every line and the terms; products
+  keep the full lines. Kit 0.5.0 adds `<nogat-sources>`
+  (`nogat-sources.js` and `.css`), which derives the strip from the API's
+  `attribution` and `terms_notice`, and `fillSources()` for a GUI's welcome
+  window; contract and browser tests, the specimen and `design/README.md`.
 - Rules for public GUIs, the author's decisions of 2026-11-13 on the
   regulamin (`docs/plans/2026-11-13-gui-terms.md`, step 2; ECO-062, amending
   ECO-061): Hydrograf, Hydrolog and Obserwator are used without signing in,

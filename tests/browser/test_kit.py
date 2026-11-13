@@ -1,10 +1,11 @@
-"""The GUI kit in a browser: design/kit/ (DEV-15.4, DEV-15.5, DEV-15.7, ECO-058).
+"""The GUI kit in a browser: design/kit/ (DEV-15.4, DEV-15.5, DEV-15.7, DEV-20.5).
 
 The kit is plain ES modules copied by every GUI, so it is tested where it
 runs: Chromium through Playwright, on pages served from a throwaway
 directory over HTTP. The schema checks of `nogat-handoff.js` are compared
 with the Python `jsonschema` validator on the same documents. The terms page
-is filled by the reference `fill` and served under CSP `'self'`.
+is filled by the reference `fill`; it and the sources strip are served under
+CSP `'self'`.
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ import copy
 import functools
 import http.server
 import json
+import re
 import shutil
 import threading
 from collections.abc import Iterator
@@ -47,6 +49,33 @@ PAGE = """<!doctype html>
 </html>
 """
 
+SOURCES_PAGE = """<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="kit/nogat-sources.css">
+<script type="module" src="kit/nogat-sources.js"></script>
+</head>
+<body>
+<main><nogat-sources terms="regulamin.html"></nogat-sources>
+<section id="welcome"></section></main>
+</body>
+</html>
+"""
+
+# The lines of the table of DEV §20, byte for byte.
+LINES = {
+    m["mark"]: m["line"]
+    for m in re.finditer(
+        r"^\| (?P<mark>[A-Z]{1,2}) \| (?P<line>.+) \|$",
+        (ROOT / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+}
+CP = "Dane ČHMÚ zostały przetworzone (agregacja do dobowych sum)"
+OTHER = "Źródło: GUGiK"
+
 
 TERMS_VALUES = {
     "service_name": "Hydrolog",
@@ -71,7 +100,7 @@ class _Quiet(http.server.SimpleHTTPRequestHandler):
         pass
 
     def end_headers(self) -> None:
-        if self.path.startswith("/regulamin.html"):
+        if self.path.startswith(("/regulamin.html", "/sources.html")):
             self.send_header("Content-Security-Policy", "default-src 'self'")
         super().end_headers()
 
@@ -84,6 +113,7 @@ def site(tmp_path_factory: pytest.TempPathFactory) -> Iterator[str]:
     shutil.copytree(ROOT / "design" / "marks", directory / "marks")
     shutil.copy(ROOT / "design" / "tokens.css", directory / "tokens.css")
     (directory / "page.html").write_text(PAGE, encoding="utf-8")
+    (directory / "sources.html").write_text(SOURCES_PAGE, encoding="utf-8")
     template = (ROOT / "design" / "kit" / "nogat-terms.html").read_text(
         encoding="utf-8"
     )
@@ -307,6 +337,223 @@ def test_terms_page_is_styled_in_both_themes(
     assert main.evaluate(background) == "rgb(250, 248, 248)"
     page.emulate_media(color_scheme="dark")
     assert main.evaluate(background) == "rgb(13, 17, 23)"
+
+
+# The sources strip (DEV-20.5, DEV-20.7, ECO-064)
+
+
+@pytest.fixture
+def sources(browser: Browser, site: str) -> Iterator[tuple[Page, list[str]]]:
+    """The strip's page at 1440 px under CSP `'self'`, and the addresses it requested.
+
+    A CSP violation, a console error or an uncaught exception fails the test.
+    """
+    context = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = context.new_page()
+    requested: list[str] = []
+    problems: list[str] = []
+    page.on("request", lambda r: requested.append(r.url))
+    page.on("console", lambda m: problems.append(m.text) if m.type == "error" else None)
+    page.on("pageerror", lambda e: problems.append(str(e)))
+    page.goto(f"http://{site}/sources.html")
+    page.wait_for_function("customElements.get('nogat-sources') !== undefined")
+    yield page, requested
+    context.close()
+    assert problems == []
+
+
+def _lines(page: Page, attribution: list[str], notice: list[str]) -> None:
+    page.evaluate(
+        "([a, n]) => { const s = document.querySelector('nogat-sources');"
+        " s.attribution = a; s.termsNotice = n; }",
+        [attribution, notice],
+    )
+
+
+def _strip_lines(page: Page) -> int:
+    """The number of text lines the strip takes."""
+    height, line = page.locator(".nogat-sources-strip").evaluate(
+        "e => [e.getBoundingClientRect().height,"
+        " parseFloat(getComputedStyle(e).lineHeight)]"
+    )
+    return round(float(height) / float(line))
+
+
+IMGW = [LINES[m] for m in ("S", "P", "H")]
+PMAXTP = [LINES[m] for m in ("PS", "PP", "M")]
+NOTICE = [LINES[m] for m in ("N", "RD", "RH", "RK")]
+
+
+def test_strip_shows_the_on_screen_lines_once_in_order(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    full = [OTHER, LINES["C"], CP, *reversed(PMAXTP), *IMGW, LINES["S"]]
+    _lines(page, full, NOTICE)
+    strip = page.locator(".nogat-sources-strip")
+    assert page.locator(".nogat-sources-line").all_text_contents() == [
+        *(LINES[m] for m in ("S", "P", "PS", "PP", "CK")),
+    ]
+    assert strip.evaluate("e => getComputedStyle(e).fontSize") == "12px"
+    assert page.get_by_role("button", name="Źródła i warunki").is_visible()
+    links = page.locator(".nogat-sources-line a")
+    assert [(a.text_content(), a.get_attribute("href")) for a in links.all()] == [
+        ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
+        ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
+        ("ČHMÚ", "https://opendata.chmi.cz"),
+        ("CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("attribution", "most"),
+    [
+        ([*IMGW, LINES["C"]], 2),
+        ([*PMAXTP, LINES["C"]], 2),
+        ([*IMGW, *PMAXTP, LINES["C"], CP], 3),
+    ],
+    ids=["imgw-chmi", "pmaxtp-chmi", "both-families-chmi"],
+)
+def test_strip_takes_at_most_two_lines_per_imgw_family_at_1440_px(
+    sources: tuple[Page, list[str]], attribution: list[str], most: int
+) -> None:
+    page, _ = sources
+    _lines(page, attribution, NOTICE)
+    assert _strip_lines(page) <= most
+
+
+def test_strip_takes_the_lines_from_the_attributes_and_hides_without_any(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    element = page.locator("nogat-sources")
+    assert element.is_hidden()
+    page.evaluate(
+        "([a, n]) => { const s = document.querySelector('nogat-sources');"
+        " s.setAttribute('attribution', JSON.stringify(a));"
+        " s.setAttribute('terms-notice', JSON.stringify(n)); }",
+        [[LINES["H"]], NOTICE[:3]],
+    )
+    assert page.locator(".nogat-sources-line").count() == 0
+    page.get_by_role("button", name="Źródła i warunki").click()
+    assert page.locator("dialog li").all_text_contents() == [LINES["H"], *NOTICE[:3]]
+    page.keyboard.press("Escape")
+    page.evaluate(
+        "() => { const s = document.querySelector('nogat-sources');"
+        " s.setAttribute('attribution', '{nie'); s.removeAttribute('terms-notice'); }"
+    )
+    assert element.is_hidden()
+
+
+def test_dialog_shows_every_line_and_the_terms_and_traps_focus(
+    sources: tuple[Page, list[str]], site: str
+) -> None:
+    page, _ = sources
+    full = [*IMGW, *PMAXTP, LINES["C"], CP]
+    _lines(page, full, NOTICE)
+    page.evaluate(
+        "() => { window.seen = []; for (const t of ['nogat-sources-open',"
+        " 'nogat-sources-close']) document.addEventListener(t, () => seen.push(t)); }"
+    )
+    button = page.get_by_role("button", name="Źródła i warunki")
+    button.click()
+    dialog = page.get_by_role("dialog", name="Źródła danych i warunki korzystania")
+    assert dialog.is_visible()
+    assert dialog.locator("li").all_text_contents() == [*full, *NOTICE]
+    regulamin = dialog.get_by_role("link", name="Regulamin serwisu")
+    assert regulamin.evaluate("a => a.href") == f"http://{site}/regulamin.html"
+    inside = "() => !!document.activeElement.closest('dialog')"
+    for _ in range(dialog.locator("a, button").count() + 2):
+        page.keyboard.press("Tab")
+        assert page.evaluate(inside)
+    page.keyboard.press("Shift+Tab")
+    assert page.evaluate(inside)
+    page.keyboard.press("Escape")
+    assert dialog.is_hidden()
+    assert page.evaluate("document.activeElement.textContent") == "Źródła i warunki"
+    button.click()
+    dialog.get_by_role("button", name="Zamknij").click()
+    assert dialog.is_hidden()
+    button.click()
+    page.mouse.click(5, 5)
+    assert dialog.is_hidden()
+    assert page.evaluate("seen") == ["nogat-sources-open", "nogat-sources-close"] * 3
+
+
+def test_welcome_window_gets_the_dialogs_content(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    full = [*IMGW, LINES["C"]]
+    _lines(page, full, NOTICE)
+    page.evaluate(
+        "async ([a, n]) => { const m = await import('/kit/nogat-sources.js');"
+        " m.fillSources(document.getElementById('welcome'),"
+        " {attribution: a, termsNotice: n, terms: 'javascript:alert(1)'}); }",
+        [full, NOTICE],
+    )
+    welcome = page.locator("#welcome")
+    assert welcome.locator("li").all_text_contents() == [*full, *NOTICE]
+    assert welcome.locator(".nogat-sources-regulamin").count() == 0
+    page.get_by_role("button", name="Źródła i warunki").click()
+    body = page.locator("dialog .nogat-sources-content")
+    assert body.locator("li").all_text_contents() == [*full, *NOTICE]
+
+
+def test_strip_and_dialog_follow_both_themes(sources: tuple[Page, list[str]]) -> None:
+    page, _ = sources
+    _lines(page, IMGW, NOTICE)
+    page.get_by_role("button", name="Źródła i warunki").click()
+    style = (
+        "() => [getComputedStyle(document.querySelector('.nogat-sources-strip')).color,"
+        " getComputedStyle(document.querySelector('dialog')).backgroundColor,"
+        " getComputedStyle(document.querySelector('dialog')).color]"
+    )
+    page.emulate_media(color_scheme="light")
+    assert page.evaluate(style) == [
+        "rgb(107, 101, 101)",
+        "rgb(255, 255, 255)",
+        "rgb(43, 43, 43)",
+    ]
+    page.emulate_media(color_scheme="dark")
+    assert page.evaluate(style) == [
+        "rgb(139, 148, 158)",
+        "rgb(22, 27, 34)",
+        "rgb(230, 237, 243)",
+    ]
+
+
+def test_strip_wraps_and_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    assert _strip_lines(page) > 3
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    page.get_by_role("button", name="Źródła i warunki").click()
+    box = page.locator("dialog").bounding_box()
+    assert box is not None
+    assert box["x"] >= 0
+    assert box["x"] + box["width"] <= 390
+    assert box["y"] >= 0
+    assert box["y"] + box["height"] <= 800
+    last = page.locator("dialog .nogat-sources-regulamin a")
+    last.scroll_into_view_if_needed()
+    assert last.is_visible()
+
+
+def test_strip_loads_nothing_but_the_kit(
+    sources: tuple[Page, list[str]], site: str
+) -> None:
+    page, requested = sources
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    page.get_by_role("button", name="Źródła i warunki").click()
+    assert {url.split("/")[2] for url in requested} == {site}
+    assert sorted(url.rsplit("/", 1)[1] for url in requested) == [
+        "nogat-sources.css",
+        "nogat-sources.js",
+        "sources.html",
+        "tokens.css",
+    ]
 
 
 # The hand-off (DEV-15.5)

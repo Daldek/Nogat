@@ -847,11 +847,16 @@ context the Polish line stays and an English gloss MAY follow it.
 | PP | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego pochodzące ze strony https://klimat.imgw.pl/opady-maksymalne zostały przetworzone |
 | M | „Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022 |
 | C | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) |
+| CK | Źródło: ČHMÚ, CC BY 4.0 |
 | CP | Dane ČHMÚ zostały przetworzone (`<what was done>`) |
 | N | Dane IMGW-PIB można wykorzystywać nieodpłatnie do celów prywatnych (niezarobkowych). Wykorzystanie w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie (m.in. planowanie w gospodarowaniu wodami, art. 317 Prawa wodnego) wymaga umowy z IMGW-PIB. |
 | RD | Regulamin: https://danepubliczne.imgw.pl/regulations |
 | RH | Regulamin: https://hydro.imgw.pl/#/regulamin |
 | RK | Regulamin: https://klimat.imgw.pl/opady-maksymalne |
+
+CK is the short form of C for the strip of a GUI view only (DEV-20.5), with
+„ČHMÚ” linked to https://opendata.chmi.cz and „CC BY 4.0” to the licence; it
+is never written into a product.
 
 **DEV-20.1** A product with IMGW-PIB data other than PMAXTP (archives and
 current data of danepubliczne.imgw.pl, operational data and station
@@ -886,7 +891,7 @@ every surface with the data or results derived from them:
 
 | Surface | Where the lines go |
 |---|---|
-| GUI | map popups and panels, charts, tables, current measurements, the footer of the view |
+| GUI | the strip of the view and the dialog behind it (below) |
 | CSV | trailing columns `attribution` and `terms_notice`, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline. Columns a project already has stay (DEV-20.6) |
 | JSON | the fields `attribution` and `terms_notice` (DEV-20.6, DEV-20.7) |
 | Parquet | the file metadata keys `attribution` and `terms_notice`, each a JSON array of the lines |
@@ -902,7 +907,22 @@ every surface with the data or results derived from them:
 then the terms lines of DEV-20.7, in order; a later write to the same place
 merges its lines in, each once and in order.
 
-*Why:* the terms bind every product made with the data (ECO-060).
+A GUI view shows one strip for all its data, the kit's `<nogat-sources>`,
+not one per panel, card, chart or popup: 12 px in the muted text colour, at
+most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
+with ČHMÚ, a third allowed when the view shows both, wrapping on phones. It
+holds the on-screen lines S, P, PS, PP and CK, those the view's data need,
+each once in the order of DEV-20.4, and ends with „Źródła i warunki”, which
+opens a dialog with every line (S, P, H, PS, PP, M, C, CP) and the terms of
+DEV-20.7 (N, RD, RH, RK), and with „Regulamin” where the GUI serves one
+(DEV-15.7). A GUI with a welcome window shows the same full content there on
+the first visit; one without it reaches the dialog from the strip and the
+footer. Files, exports, PNG and SVG images, print views, hand-offs and the
+fields `attribution` and `terms_notice` keep the full lines.
+
+*Why:* the terms bind every product made with the data (ECO-060); the
+IMGW-PIB and PMAXTP terms require their sentences on the product, while CC
+BY 4.0 lets a link carry ČHMÚ's details (ECO-064).
 
 **DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
 `attribution`, an array of the lines as strings. A consumer shows the lines it
@@ -914,11 +934,12 @@ hand-offs, merged without duplicates; a field a project already has for them
 **DEV-20.7** Every GUI view and every exported product with IMGW-PIB data
 also shows N and the terms that apply, one line each in the order RD
 (danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK (PMAXTP), right after the
-attribution lines and on the surfaces of DEV-20.5; a JSON document, result or
-hand-off has them in `terms_notice`, an array of strings carried on like
-`attribution`.
+attribution lines and on the surfaces of DEV-20.5, in a GUI view in the
+dialog behind its strip; a JSON document, result or hand-off has them in
+`terms_notice`, an array of strings carried on like `attribution`.
 *Why:* free use is private use only; business use, sites with advertising and
-the purposes the terms list need an agreement with IMGW-PIB (ECO-060).
+the purposes the terms list need an agreement with IMGW-PIB (ECO-060); a
+dialog one click from the data keeps the screen for the data (ECO-064).
 
 **DEV-20.8** Operational data of hydro.imgw.pl (water states and their
 classes, measurements, warnings) are shown as current with their time and
