@@ -11,7 +11,8 @@ VALUES = {
     "operator_name": "Jan Kowalski",
     "operator_email": "jan@example.org",
     "terms_effective": "2026-11-20",
-    "log_retention_days": "30",
+    "processor": "Example Inc",
+    "processor_transfer": "Dane mogą być przekazywane poza EOG.",
     "software_licence": "MIT",
     "source_url": "https://github.com/Daldek/Hydrograf",
     "tokens_href": "css/tokens.css",
@@ -26,10 +27,10 @@ Druga linia akapitu <https://example.org> & <{{source_url}}>.
 ## 1. Lista
 
 1. Pierwszy.
-<!-- block: feedback -->
-2. Zgłoszenia.
+<!-- block: chmi -->
+2. ČHMÚ.
 <!-- /block -->
-3. Trzeci.
+3. Trzeci: {{processor}}. {{processor_transfer}}
 
 - punkt
 - drugi
@@ -47,12 +48,8 @@ Dane.
 Warunki.
 <!-- /block -->
 
-<!-- block: no-cookies -->
-Bez cookie.
-<!-- /block -->
-
-<!-- block: session-cookie -->
-Cookie sesji.
+<!-- block: osm -->
+Mapa.
 <!-- /block -->
 """
 
@@ -77,8 +74,8 @@ def test_build_renders_the_subset() -> None:
 def test_build_keeps_a_list_open_across_block_markers() -> None:
     page = terms.build(SOURCE)
     assert (
-        "<ol>\n<li>Pierwszy.</li>\n<!-- block: feedback -->\n<li>Zgłoszenia.</li>\n"
-        "<!-- /block -->\n<li>Trzeci.</li>\n</ol>"
+        "<ol>\n<li>Pierwszy.</li>\n<!-- block: chmi -->\n<li>ČHMÚ.</li>\n"
+        "<!-- /block -->\n<li>Trzeci: {{processor}}. {{processor_transfer}}</li>\n</ol>"
     ) in page
 
 
@@ -93,32 +90,29 @@ def test_placeholders_and_blocks_of_a_template() -> None:
         "service_name",
         "operator_email",
         "source_url",
+        "processor",
+        "processor_transfer",
         "service_url",
         "tokens_href",
         "kit_href",
     }
-    assert terms.blocks(page) == [
-        "feedback",
-        "imgw",
-        "imgw-terms",
-        "no-cookies",
-        "session-cookie",
-    ]
+    assert terms.blocks(page) == ["chmi", "imgw", "imgw-terms", "osm"]
 
 
 @pytest.mark.parametrize(
     ("listed", "kept"),
     [
-        ([], {"no-cookies"}),
-        (["pmaxtp"], {"pmaxtp", "imgw-terms", "no-cookies"}),
-        (["session-cookie", "chmi"], {"session-cookie", "chmi"}),
+        ([], set()),
+        (["pmaxtp"], {"pmaxtp", "imgw-terms"}),
+        (["chmi", "osm"], {"chmi", "osm"}),
     ],
 )
 def test_kept_adds_the_derived_blocks(listed: list[str], kept: set[str]) -> None:
     assert terms.kept(listed) == kept
 
 
-@pytest.mark.parametrize("name", ["imgw-terms", "no-cookies", "ads"])
+# `feedback` was a block of kit 0.2.0: a GUI that still lists it is told so.
+@pytest.mark.parametrize("name", ["imgw-terms", "feedback", "ads"])
 def test_kept_refuses_derived_and_unknown_blocks(name: str) -> None:
     with pytest.raises(ValueError, match=name):
         terms.kept([name])
@@ -126,12 +120,14 @@ def test_kept_refuses_derived_and_unknown_blocks(name: str) -> None:
 
 def test_fill_keeps_listed_blocks_and_drops_the_rest() -> None:
     page = terms.fill(terms.build(SOURCE), VALUES, ["imgw"])
-    assert "<li>Zgłoszenia.</li>" not in page
-    assert "<li>Pierwszy.</li>\n<li>Trzeci.</li>" in page
+    assert "<li>ČHMÚ.</li>" not in page
+    assert (
+        "<li>Pierwszy.</li>\n"
+        "<li>Trzeci: Example Inc. Dane mogą być przekazywane poza EOG.</li>"
+    ) in page
     assert "<h3>IMGW</h3>" in page
     assert "Warunki." in page
-    assert "Bez cookie." in page
-    assert "Cookie sesji." not in page
+    assert "Mapa." not in page
     assert "<!--" not in page.split("-->", 1)[1]
     assert "{{" not in page
 
@@ -144,11 +140,22 @@ def test_fill_escapes_values_in_markup_only() -> None:
     assert source.startswith('# Regulamin A & "B" <c>\n')
 
 
+def test_fill_takes_an_empty_processor_transfer() -> None:
+    page = terms.fill(terms.build(SOURCE), {**VALUES, "processor_transfer": ""}, [])
+    assert "<li>Trzeci: Example Inc. </li>" in page
+    assert "{{" not in page
+
+
 @pytest.mark.parametrize(
     ("values", "message"),
     [
         ({k: v for k, v in VALUES.items() if k != "operator_email"}, "operator_email"),
         ({**VALUES, "operator_email": " "}, "operator_email"),
+        ({**VALUES, "processor": ""}, "missing values: processor;"),
+        (
+            {k: v for k, v in VALUES.items() if k != "processor_transfer"},
+            "missing values: processor_transfer;",
+        ),
         ({**VALUES, "theme": "dark"}, "unknown values: theme"),
     ],
 )

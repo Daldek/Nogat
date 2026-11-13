@@ -70,7 +70,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
-| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | accepted | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | accepted | 2026-11-13 |
 
 ---
 
@@ -1204,6 +1205,11 @@ of today accepts both fields as unknown.
 
 ## ECO-061 Every GUI serves one regulamin from Nogat's template
 
+**Amended by ECO-062 (2026-11-13):** the public GUIs are Hydrograf, Hydrolog
+and Obserwator, used without signing in, and Archiwista serves no terms; the
+template keeps blocks for data sources only, states fixed rules for logs,
+statistics, cookies and „Zgłoś uwagę”, and names its processor in two fields.
+
 **Decision.** A GUI open to other people serves its terms at
 `regulamin.html`, filled from the kit's template `nogat-terms.md` and the
 `nogat-terms.html` generated from it, and links „Regulamin” from every view
@@ -1227,3 +1233,54 @@ in the app menu (it is not drawn without another GUI).
 **Consequence.** Each GUI adopts the template in its own session; the
 operator's identity, contact and retention periods are the author's to set
 in `nogat.toml` before a deployment is opened to others.
+
+## ECO-062 Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0
+
+**Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
+uses them without signing in, and Cloudflare Access guards only the parts the
+operator alone uses, so no user's e-mail address is collected. Archiwista is
+the operator's private tool behind Access and serves no terms. A public GUI
+shows the author's statement of what the services are in every footer
+(DEV-15.8); limits requests per IP address, held in memory only, with `429`
+and `Retry-After` (DEV-15.9); logs requests without IP addresses and keeps
+the logs 14 days (DEV-15.10); counts visitors by a hash of IP address and
+User-Agent under a daily salt kept in memory, stores daily totals only and
+sets no cookie (DEV-15.11); and takes „Zgłoś uwagę” reports without contact
+fields, in one format, kept until handled (DEV-15.12). The regulamin becomes
+version 1.0, one version and one date for the three services: the operator,
+a private person named in `nogat.toml`, is reached by e-mail only; the
+processor that carries the traffic is two fields, so leaving Cloudflare
+changes values, not text; the act on electronic services is not invoked,
+since the operator acts outside any gainful or professional activity (its
+art. 2 pkt 6); liability is excluded except for intentional damage (art. 473
+§ 2 KC); RODO requests are answered within a month (art. 12 ust. 3) and other
+reports as time allows; a complaint goes to the President of UODO; a new
+version takes effect on publication, and a change history at the end links
+the template's history in Nogat. Plan: `docs/plans/2026-11-13-gui-terms.md`.
+
+**Why.** The author's nine decisions of 2026-11-13 on the template of
+ECO-061. Data a service never keeps need no retention period, no answer to an
+access request and no consent banner; an address held only for a rate window,
+or hashed under a salt gone the next day, protects the service and counts its
+use without following anyone. One statement and one text keep the three
+services saying the same, and one report format lets the operator read every
+GUI's reports the same way.
+
+**Rejected.** Cloudflare Access for every user (each would sign in with an
+e-mail address the operator then processes, and the services are meant to be
+public). Access logs with IP addresses (the limit and the statistics need
+them only in memory). Analytics with cookies or a third party (a consent
+banner and transfers for counts the server makes itself). A contact field in
+„Zgłoś uwagę” (personal data a report does not need; e-mail serves whoever
+wants an answer). One answer time for every report (one person runs the
+services; RODO's month stays for data requests). Retention and Cloudflare
+Access as deployment fields (one period, and no sign-in, in every public
+GUI). A postal address of the operator or of UODO (the author's choice:
+e-mail, and the office's web address).
+
+**Consequence.** ECO-061's blocks for Cloudflare Access, accounts, the
+session cookie and the feedback form, the derived block for no cookies and
+the retention field are gone; kit 0.3.0 carries regulamin 1.0. Hydrograf,
+Hydrolog and Obserwator adopt DEV-15.7 to DEV-15.12 in their own branches,
+Obserwator gaining „Zgłoś uwagę”; the author sets `[nogat.operator]` and one
+`terms_effective` before the three are opened.

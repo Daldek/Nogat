@@ -606,20 +606,14 @@
       </button>
     </div>
     <form class="modal-body" id="feedback-form">
-      <p>Opisz błąd lub pomysł. Zgłoszenie trafi do administratora Hydrografu.</p>
+      <p>Opisz błąd lub pomysł. Zgłoszenie trafi do operatora serwisu.</p>
       <div class="field">
         <label for="feedback-message">Wiadomość</label>
-        <textarea id="feedback-message" rows="6" maxlength="5000" required></textarea>
+        <textarea id="feedback-message" rows="6" maxlength="5000" required aria-describedby="feedback-hint"></textarea>
         <span class="counter" id="feedback-counter">0/5000</span>
+        <span class="hint" id="feedback-hint">Nie wpisuj danych osobowych. Jeśli chcesz odpowiedzi, napisz na kontakt@debever.pl</span>
       </div>
-      <div class="field">
-        <label for="feedback-contact">Kontakt <span class="muted">(opcjonalnie)</span></label>
-        <input type="text" id="feedback-contact" maxlength="200" placeholder="e-mail lub telefon">
-      </div>
-      <label class="check">
-        <input type="checkbox" id="feedback-diagnostics" checked>
-        <span>Dołącz dane diagnostyczne (adres strony, przeglądarka, stan mapy, ostatnie błędy)</span>
-      </label>
+      <p class="muted">Zgłoszenie zawiera też widok, jego parametry i wersję aplikacji.</p>
     </form>
     <div class="modal-foot">
       <button class="btn" type="button" id="feedback-cancel">Anuluj</button>
