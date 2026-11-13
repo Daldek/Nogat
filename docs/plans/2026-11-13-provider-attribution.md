@@ -29,7 +29,7 @@ DEV §20 holds the lines byte for byte and the surfaces; in short:
 | Data | Lines (`attribution`) | Notice (`terms_notice`) |
 |---|---|---|
 | danepubliczne.imgw.pl (archives, current API) | S; S and P when processed (nearly always: parsed, harmonised, reformatted, aggregated, charted, computed) | N, RD |
-| hydro.imgw.pl, hydro-back.imgw.pl (water-state classes, operational data, station locations) | S, P, H; shown as current, never stored or presented as archive (DEV-20.8) | N, RH |
+| hydro.imgw.pl, hydro-back.imgw.pl (water-state classes, operational data, station locations) | S, P, H; operational data (states, measurements, warnings) shown live with their time, never stored or presented as archive; station locations are reference data that may be kept with their lines (DEV-20.8, the author's decision of 2026-11-13) | N, RH |
 | PMAXTP (powietrze.imgw.pl tpmax-api, klimat.imgw.pl) | PS and M; PS, PP and M when processed (design rainfall, hyetographs, hydrographs, model inputs, tables in another form) | N, RK |
 | ČHMÚ open data | C; C and CP (what was done) when modified | none |
 

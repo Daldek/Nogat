@@ -1129,8 +1129,10 @@ hydrological service; PS, PP and the monograph M for PMAXTP; C and CP for
 with the addresses of the terms that apply. JSON documents, results and
 `nogat-handoff/1` carry the lines in two optional arrays of strings,
 `attribution` and `terms_notice`, so a consumer shows them and carries them
-on; the hand-off stays `/1` (AGI-4.1). Plan:
-`docs/plans/2026-11-13-provider-attribution.md`.
+on; the hand-off stays `/1` (AGI-4.1). Operational data of hydro.imgw.pl
+are only shown live, never stored; its station locations are reference data
+that may be kept with their lines (DEV-20.8, the author's decision of
+2026-11-13). Plan: `docs/plans/2026-11-13-provider-attribution.md`.
 
 **Why.** The author's order of 2026-11-13, read against the terms that day:
 §5 ust. 1, 3 and 4 and §2 pkt 3 of the IMGW-PIB terms
