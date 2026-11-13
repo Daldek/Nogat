@@ -8,6 +8,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Lines for GUGiK, ISRIC SoilGrids and ČÚZK data, step 1 of
+  `docs/plans/2026-11-13-terms-fix.md` (ECO-068, amending ECO-060 and
+  ECO-064): DEV §20 gains G, SG and Z with the strip forms GK, SK and ZK,
+  and DEV-20.9 to DEV-20.11; DEV-20.4 orders S, P, PS, PP, M, C, CP, G, SG,
+  Z; `<products>`, `<period>` and `<date>` have one written form; a basemap
+  loaded live from GUGiK is credited on the map. DEV-15.7: a GUI loads no
+  script, style or font from another server. Kit 0.6.2: `<nogat-sources>`
+  shows one GK naming the products of every G of the view, SK and ZK, with
+  „CC BY 4.0” linked; contract and browser tests, the strip's line budget
+  at 1440 px included.
 - One logging convention for every server, the author's request of
   2026-11-13 (`docs/plans/2026-11-13-unified-logging.md`, step 1; ECO-066,
   amending ECO-062 and ECO-063): DEV-12.4 to DEV-12.9 define the access,
@@ -511,6 +521,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- Regulamin 1.0, published in Hydrograf and Hydrolog on 2026-11-13, is
+  corrected in place on the author's decision (ECO-068, kit 0.6.2): the
+  block `gugik` names „Główny Urząd Geodezji i Kartografii – GUGiK” and
+  links GUGiK's conditions of reuse instead of the geoportal's terms; the
+  block `esri` is gone (Esri's basemaps need Esri software or an ArcGIS
+  subscription) and `scripts/terms.py` refuses it; § 8 ust. 5 names the map
+  layers of other providers beside the basemap; „Historia zmian” links the
+  template's history on `develop`. `design/README.md` records the version
+  and each GUI's blocks; the regulamin plan and its draft register of
+  processing follow.
 - GUI kit 0.5.1: „Regulamin” in the app menu and „Regulamin serwisu” in the
   `<nogat-sources>` dialog and in `fillSources()` open in a new tab
   (`target="_blank"`, `rel="noopener"`); they replaced the GUI's own tab,

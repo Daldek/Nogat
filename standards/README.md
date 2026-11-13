@@ -83,6 +83,14 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - Products with GUGiK, ISRIC SoilGrids or ČÚZK data carry the new lines
+    G, SG or Z, after CP, and a GUI view's strip their short forms GK, SK
+    and ZK; a GUI loads no script, style or font from another server;
+    regulamin 1.0, published on 2026-11-13, is corrected in place: the
+    block `gugik` links GUGiK's conditions of reuse, the block `esri` is
+    gone, § 8 ust. 5 names the map layers of other providers, and the
+    history links `develop` (DEV §20, DEV-20.4, DEV-20.5, DEV-20.7,
+    DEV-20.9 to DEV-20.11, DEV-15.7, ECO-068, kit 0.6.2).
   - One logging convention for every server: access, application and
     lifecycle records in `nogat-log/1` JSON Lines under
     `<state_dir>/<project>/logs/`, deleted by the server after 14 days;

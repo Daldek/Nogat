@@ -69,13 +69,14 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
+| [ECO-068](#eco-068-regulamin-10-corrected-in-place-gugik-isric-and-čúzk-lines) | Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines | accepted | 2026-11-13 |
 
 ---
 
@@ -1183,6 +1184,10 @@ dialog behind „Źródła i warunki”; products keep the full lines.
 H are gone; `terms_notice` holds only the links RD, RH and RK, each naming
 the terms it links.
 
+**Amended by ECO-068 (2026-11-13):** products with GUGiK, ISRIC SoilGrids or
+ČÚZK data carry G, SG or Z, after CP in the order of the lines, and a GUI
+view's strip shows them as GK, SK and ZK.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1354,6 +1359,9 @@ checks the Cloudflare zone and keeps a one-page register of processing.
 **Amended by ECO-065 (2026-11-13):** the dialog holds the lines and the
 links RD, RH and RK, without H and N.
 
+**Amended by ECO-068 (2026-11-13):** the strip also holds GK, SK and ZK, the
+short forms of G, SG and Z, and the dialog G, SG and Z.
+
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
 (DEV-20.5). The strip holds only the sentences the providers require on the
@@ -1494,3 +1502,56 @@ kit 0.6.1 carries the revised § 8 ust. 3. Hydrograf, Hydrolog, Obserwator and
 Archiwista copy the module and the schema and migrate in their own branches;
 the journal entries written before the migration are removed as the plan
 says.
+
+## ECO-068 Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines
+
+**Decision.** Regulamin 1.0, published in Hydrograf and Hydrolog on
+2026-11-13, is corrected and published again under the same number, on the
+author's decision; `terms_effective` becomes the day of the republication,
+from which any change raises the version. The block `gugik` names „Główny
+Urząd Geodezji i Kartografii – GUGiK” and links GUGiK's conditions of reuse
+instead of the geoportal's terms; the block `esri` is gone and `copernicus`
+stays for a later GUI; § 8 ust. 5 says that the basemap and the map layers
+of other providers come to the visitor's browser from their servers, and a
+GUI loads no script, style or font from another server (DEV-15.7).
+„Historia zmian” links the template's history on `develop`, where the
+published text lives. DEV §20 gains G for GUGiK data, SG for ISRIC
+SoilGrids and Z for ČÚZK (DEV-20.9 to DEV-20.11), after CP in the order of
+DEV-20.4, with the strip forms GK, SK and ZK that `<nogat-sources>` derives
+from them as it derives CK from C, one GK naming the products of every G of
+a view; a basemap loaded live from GUGiK is credited on the map
+(„Ortofotomapa © GUGiK”). Kit 0.6.2. Plan:
+`docs/plans/2026-11-13-terms-fix.md`.
+
+**Why.** The published text was untrue in three places and linked terms
+that do not bind: Hydrograf's results and files from GUGiK data (NMT,
+BDOT10k) and SoilGrids carried no source line, though pkt 1 and 2 of
+GUGiK's conditions of reuse
+(https://www.gov.pl/web/gugik/ponowne-wykorzystanie-informacji-sektora-publicznego)
+require its full name, the time the data were created and acquired and a
+note that they were processed, and CC BY 4.0 the creator, the licence and a
+note of changes; those conditions, not the geoportal's terms, bind reuse;
+Hydrograf's pipeline uses no CORINE (its ADR-061), and Esri's basemaps may
+be used only with Esri software or an ArcGIS subscription
+(https://www.esri.com/content/dam/arcgisonline/docs/tou_summary.pdf), which
+Hydrograf has not; and the flood map overlay of wody.isok.gov.pl and the
+script CDNs unpkg.com and cdn.jsdelivr.net also received the visitor's IP
+address. Obserwator's borders come from PRG and RÚIAN instead of Natural
+Earth (the author, 2026-11-13), which needs GUGiK's and ČÚZK's lines.
+`main` is released only on the author's word, so the history it linked did
+not hold the published text.
+
+**Rejected.** Version 1.1 (the author kept 1.0; the 1.1 of the logging
+branch was dropped before it was pushed). A terms line for GUGiK, ISRIC or
+ČÚZK (§ 5 of the regulamin links GUGiK's conditions; SG and Z name their
+licence). The block `esri` kept for a later GUI (no GUI uses Esri). Scripts
+from CDNs named in § 8 ust. 5 (vendored files give nobody the address). One
+GK for each G (a view's strip names each GUGiK product once).
+
+**Consequence.** DEV-20.4, DEV-20.5 and DEV-20.7 are amended, and with them
+ECO-060 and ECO-064; kit 0.6.2 carries the corrected regulamin and the strip
+forms. Hydrograf takes GUGiK's orthophoto instead of Esri's imagery, drops
+`copernicus` and `esri`, vendors its CDN files and carries G and SG;
+Obserwator builds its borders from PRG and RÚIAN and keeps `gugik` and
+`cuzk`; Hydrolog copies kit 0.6.2; Hydrograf and Hydrolog publish the
+corrected text on one day, Obserwator at its switch.
