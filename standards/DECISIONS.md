@@ -69,10 +69,11 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | accepted | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | accepted | 2026-11-13 |
 
 ---
 
@@ -1172,6 +1173,10 @@ then the registry lists the new edges as `planned`.
 
 ## ECO-060 Every product carries the providers' attribution
 
+**Amended by ECO-064 (2026-11-13):** a GUI view shows one compact strip with
+S, P, PS, PP and the short form CK of C, and the full lines and terms in a
+dialog behind „Źródła i warunki”; products keep the full lines.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1329,3 +1334,43 @@ confirmed).
 **Consequence.** Kit 0.4.0. Hydrograf, Hydrolog and Obserwator adopt the
 wider DEV-15.10 with the rest of ECO-062; the operator sets the three keys,
 checks the Cloudflare zone and keeps a one-page register of processing.
+
+## ECO-064 One compact strip of provider lines per GUI view
+
+**Decision.** A GUI view shows the providers' lines once, in one compact
+strip of 12 px muted text, not under every panel, card, chart or popup
+(DEV-20.5). The strip holds only the sentences the providers require on the
+product, S and P for IMGW-PIB data and PS and PP for PMAXTP, with ČHMÚ in
+the short form CK, „Źródło: ČHMÚ, CC BY 4.0”, linked to its open-data site
+and the licence; each once in the order of DEV-20.4. It ends with „Źródła i
+warunki”, a dialog with every line (H, M, the full C and CP included), the
+terms notice N with RD, RH and RK, and „Regulamin” where the GUI serves one;
+a GUI's welcome window shows the same on the first visit. The strip takes at
+most two lines at 1440 px for one IMGW-PIB family with ČHMÚ, and a third
+only in a view with both IMGW-PIB families (the five sentences measure 3306 px
+at 12 px Lato, more than two lines of 1440 px). Files, exports, images, print
+views, hand-offs and `attribution` and `terms_notice` keep the full lines.
+The kit's `<nogat-sources>` (kit 0.5.0) derives the strip from the full
+lines, so a GUI passes the API's arrays unchanged. Plan:
+`docs/plans/2026-11-13-compact-attribution.md`.
+
+**Why.** The author's request of 2026-11-13: the lines took too much of every
+GUI, Obserwator's most, about six lines under the map and a block under every
+card of its station panel. The legal floor stays: §5 ust. 3 and 4 of the
+IMGW-PIB terms and ust. 1 and 2 of the PMAXTP terms require their sentences
+on the product itself, so they stay on screen verbatim; CC BY 4.0 §3(a)(2)
+lets the attribution be given in any reasonable manner, a link to a page
+with the full information included, so ČHMÚ's line shrinks to a linked
+short form; H, M, CP, N and the terms' addresses are not sentences the terms
+require beside the data and move one click away.
+
+**Rejected.** The lines in a tooltip, a footer link or the regulamin only
+(the IMGW-PIB and PMAXTP sentences belong on the product). Shortened or
+merged IMGW-PIB sentences, such as S dropped because PS starts with it (PS
+names klimat.imgw.pl as the source, untrue of station data). Text below
+12 px (the five sentences still need three lines at 11 px). One strip per
+panel or card (the clutter the author asked to remove).
+
+**Consequence.** DEV-20.5 and DEV-20.7 are amended and kit 0.5.0 ships
+`<nogat-sources>`. Hydrograf, Hydrolog, Archiwista and Obserwator replace
+their per-panel lines with one strip per view in their own branches.

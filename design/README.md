@@ -11,8 +11,8 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | --- | --- |
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
-| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu, since modules do not load from `file://` |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7): the app menu `nogat-app-menu.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the manifest `nogat-kit.json` |
+| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu and sources strip, since modules do not load from `file://` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -252,6 +252,25 @@ The app sets `element.apps` (or the `apps` attribute, as JSON) to the deployment
 Addresses resolve against the page; only http and https stay. With no GUI but the current one the element is not drawn. An entry opens its GUI in the tab `nogat-<name>`: Chromium reuses that tab unless one of the two pages sends `Cross-Origin-Opener-Policy`, which costs one more tab.
 The menu styles itself with the tokens and falls back to light values, so a GUI without `tokens.css` shows it too.
 The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”; the menu is not the only link, since it is not drawn without another GUI.
+
+Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sources.js` as a module, and put one element per view where its data end, e.g. under the map or at the foot of the panel; never one per card or popup.
+
+```html
+<nogat-sources attribution='["Źródłem pochodzenia danych jest …"]' terms-notice='["Dane IMGW-PIB można …"]' terms="regulamin.html"></nogat-sources>
+```
+
+| Attribute or property | Value |
+| --- | --- |
+| `attribution` (attribute, JSON) or `element.attribution` (array) | The full lines the view's data carry, the API's `attribution`: the union over the data shown |
+| `terms-notice` (attribute, JSON) or `element.termsNotice` (array) | The API's `terms_notice` (N, RD, RH, RK) |
+| `terms` | The address of the GUI's `regulamin.html` (DEV-15.7); omitted where the GUI serves none |
+
+The strip is 12 px in `--text-3`: of the full lines it shows S, P, PS and PP, recognised byte for byte, and C as the short form CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC BY 4.0” linked, each once in the order of DEV-20.4, then the button „Źródła i warunki”.
+Any other line (H, M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged; with both arrays empty the element is not drawn.
+The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
+`element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.
+A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; the module also exports `LINES` (S, P, PS, PP, C, CK), `SOURCES_TEXTS` and `screenMarks(attribution)`.
+The element loads nothing and needs no inline script or style, so it runs under CSP `'self'`.
 
 Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 

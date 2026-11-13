@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="kit/nogat-app-menu.css">
 <script type="module" src="kit/nogat-app-menu.js"></script>
+<link rel="stylesheet" href="kit/nogat-sources.css">
+<script type="module" src="kit/nogat-sources.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -186,6 +188,9 @@
       <nogat-app-menu current="hydrograf" marks="marks/" apps='{"hydrograf": "mockups/hydrograf/", "hydrolog": "mockups/hydrolog/"}'></nogat-app-menu>
       <span class="note">kit/nogat-app-menu.js: the GUIs of the deployment's <code>[nogat.gui]</code> (DEV-15.4)</span>
     </div>
+    <h3>Sources strip</h3>
+    <nogat-sources attribution='["Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy", "Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone", "Dane pochodzą z serwisu hydrologicznego IMGW-PIB https://hydro.imgw.pl", "Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)"]' terms-notice='["Dane IMGW-PIB można wykorzystywać nieodpłatnie do celów prywatnych (niezarobkowych). Wykorzystanie w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie (m.in. planowanie w gospodarowaniu wodami, art. 317 Prawa wodnego) wymaga umowy z IMGW-PIB.", "Regulamin: https://danepubliczne.imgw.pl/regulations", "Regulamin: https://hydro.imgw.pl/#/regulamin"]'></nogat-sources>
+    <p class="note">kit/nogat-sources.js: one strip per view with S, P, PS, PP and the short ČHMÚ line; „Źródła i warunki” opens every line and the terms (DEV-20.5)</p>
     <h3>Code</h3>
     <pre>$ kartograf elevation download --check
 tiles: 42  missing: 0  size: 1.8 GB</pre>

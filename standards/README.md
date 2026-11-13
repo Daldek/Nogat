@@ -82,6 +82,11 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - A GUI view shows the providers' lines in one compact strip, the kit's
+    `<nogat-sources>`: S, P, PS, PP and CK, the new short form of C, each
+    once, then „Źródła i warunki”, a dialog with every line and the terms,
+    also in a welcome window; products keep the full lines (DEV-20.5,
+    DEV-20.7, ECO-064).
   - No log of a public GUI or its proxy, access, error or application,
     holds the client's IP address; `[nogat] operator` gains
     `mail_provider`, `mail_transfer` and `processor_cookie` (DEV-15.10,
