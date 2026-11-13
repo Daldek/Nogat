@@ -460,6 +460,17 @@ leading comment of DEV-15.3); a change is made in Nogat and copied again.
 `drift` reports each copy as current, behind or modified (HUB-4.1).
 *Why:* copies that drift unseen split the shared look and contracts again.
 
+**DEV-15.7** A GUI that a deployment opens to other people serves its terms at
+`regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
+as `design/README.md` says from `[nogat.operator]` and `[nogat.gui]` of
+`nogat.toml` (DEV-18.1) and from the project's own values, with the blocks of
+its data sources and personal data kept, and refilled with each kit version
+it copies. Every view links „Regulamin” to it visibly in its footer or status
+bar, beside the attribution lines (DEV-20.5), and the app menu passes it in
+its `terms` attribute; without `[nogat.operator]` there is neither page nor link.
+*Why:* a service offered to others needs terms (art. 8 of the Polish act on
+electronic services, RODO art. 13), one text for every GUI (ECO-061).
+
 ---
 
 ## 16. Licence and contributions
@@ -518,8 +529,11 @@ the session that resolves it closes the issue.
 **DEV-18.1** Shared settings live in one TOML file, `nogat.toml`, in the user
 configuration directory (`platformdirs.user_config_path("nogat")`, or the path
 in `NOGAT_CONFIG`). Section `[nogat]` holds shared keys (`data_dir`,
-`cache_dir`, `lang`, and the table `gui` of GUI addresses, DEV-15.4); section
-`[<tool>]` holds the tool's own keys. A value
+`cache_dir`, `lang`, the table `gui` of GUI addresses, DEV-15.4, and the
+table `operator` of who runs a deployment open to others, DEV-15.7: `name`,
+`email`, `terms_effective` (a date), `log_retention_days` and
+`cloudflare_access`, a boolean); section `[<tool>]` holds the tool's own
+keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
 `[nogat]`), built-in default. Every tool reads the file with `tomllib` and

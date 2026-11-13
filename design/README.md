@@ -12,7 +12,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu, since modules do not load from `file://` |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.6): the app menu `nogat-app-menu.js` and `.css`, the hand-off `nogat-handoff.js`, the manifest `nogat-kit.json` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7): the app menu `nogat-app-menu.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -245,12 +245,13 @@ Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
 ```html
-<nogat-app-menu current="hydrolog" marks="nogat/marks/"></nogat-app-menu>
+<nogat-app-menu current="hydrolog" marks="nogat/marks/" terms="regulamin.html"></nogat-app-menu>
 ```
 
 The app sets `element.apps` (or the `apps` attribute, as JSON) to the deployment's `[nogat.gui]` table of `nogat.toml`, e.g. `{"hydrograf": "https://hydrograf.example/", "archiwista": "/archiwista/"}`.
 Addresses resolve against the page; only http and https stay. With no GUI but the current one the element is not drawn. An entry opens its GUI in the tab `nogat-<name>`: Chromium reuses that tab unless one of the two pages sends `Cross-Origin-Opener-Policy`, which costs one more tab.
 The menu styles itself with the tokens and falls back to light values, so a GUI without `tokens.css` shows it too.
+The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”; the menu is not the only link, since it is not drawn without another GUI.
 
 Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 
@@ -262,6 +263,55 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `readFile(file)`, `readClipboard()` | The text of a picked file; the clipboard's, or `null` when refused (offer a field, `TEXTS.pasteByHand`) |
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
+
+Terms (DEV-15.7, ECO-061): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
+
+Filling, in this order (reference: `fill` in [scripts/terms.py](../scripts/terms.py)):
+
+1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers. Two blocks follow the others and are never listed: `imgw-terms` stays with any of `imgw`, `imgw-hydro` and `pmaxtp`; `no-cookies` stays without `session-cookie`.
+2. Fields. Replace every `{{name}}` with its value, HTML-escaped (`&`, `<`, `>`, `"`, `'`). Every field needs a non-empty value: without one, or with a `{{` left, the GUI serves no page and no link.
+
+The GUI fills at start or at build with its own code; a page filled from an older kit version is filled again when the kit is copied.
+
+| Field | Value from |
+| --- | --- |
+| `service_name` | the project: its name in the registry, e.g. `Hydrograf` |
+| `service_url` | the deployment: the project's entry of `[nogat.gui]` in `nogat.toml` |
+| `operator_name` | the deployment: `[nogat.operator] name` |
+| `operator_email` | the deployment: `[nogat.operator] email`, published on the page |
+| `terms_effective` | the deployment: `[nogat.operator] terms_effective`, the date the filled terms take effect, e.g. `2026-11-20` |
+| `log_retention_days` | the deployment: `[nogat.operator] log_retention_days`, the days the server keeps its access logs |
+| `software_licence` | the project: `license` of its `pyproject.toml`, e.g. `MIT` |
+| `source_url` | the project: `repo` of its entry in `ecosystem.yaml` |
+| `tokens_href` | the project: the address of its copy of `tokens.css`, relative to the page |
+| `kit_href` | the project: the address of its kit directory with a final slash, relative to the page, e.g. `nogat/` |
+
+```toml
+[nogat.operator]          # a deployment open to others (DEV-15.7, DEV-18.1)
+name = "…"
+email = "…"
+terms_effective = 2026-11-20
+log_retention_days = 30
+cloudflare_access = true  # keeps the block cloudflare-access
+```
+
+| Block | Kept for | GUIs, as a start to check in each adoption |
+| --- | --- | --- |
+| `imgw` | IMGW-PIB data of danepubliczne.imgw.pl | Archiwista, Obserwator; Hydrolog with station series |
+| `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Archiwista, Obserwator |
+| `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Archiwista, Obserwator |
+| `chmi` | ČHMÚ open data | Archiwista, Obserwator; Hydrolog with station series |
+| `gugik` | GUGiK data | Hydrograf, Archiwista |
+| `cuzk` | ČÚZK data | Archiwista |
+| `copernicus` | Copernicus data | Hydrograf, Archiwista |
+| `isric` | ISRIC SoilGrids | Hydrograf, Archiwista |
+| `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
+| `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf, Archiwista; Obserwator with a map |
+| `esri` | the Esri World Imagery basemap | Hydrograf |
+| `cloudflare-access` | `[nogat.operator] cloudflare_access = true` | the deployment's choice |
+| `accounts` | team accounts | Archiwista |
+| `session-cookie` | a session cookie of the GUI's own | Archiwista |
+| `feedback` | the „Zgłoś uwagę” form | Hydrograf, Hydrolog, Archiwista |
 
 ## Adopting
 

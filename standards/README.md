@@ -82,6 +82,10 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - A GUI open to other people serves one regulamin filled from the kit's
+    template at `regulamin.html` and links „Regulamin” from every view and
+    the app menu; `[nogat] operator` holds who runs the deployment
+    (DEV-15.7, DEV-18.1, ECO-061).
   - Every product with IMGW-PIB or ČHMÚ data carries the lines their terms
     prescribe, verbatim, on every surface: S and P (danepubliczne.imgw.pl,
     hydro.imgw.pl with H), PS, PP and the monograph for PMAXTP, C and CP for

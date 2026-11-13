@@ -69,6 +69,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | accepted | 2026-11-13 |
 
 ---
 
@@ -1152,3 +1153,29 @@ itself). One English wording (the terms prescribe the Polish sentences).
 **Consequence.** Each project applies DEV §20 in its own branch and copies
 the new `handoff-1.schema.json` byte for byte (DEV-15.6); until then a copy
 of today accepts both fields as unknown.
+
+## ECO-061 Every GUI serves one regulamin from Nogat's template
+
+**Decision.** A GUI open to other people serves its terms at
+`regulamin.html`, filled from the kit's template `nogat-terms.md` and the
+`nogat-terms.html` generated from it, and links „Regulamin” from every view
+and from the app menu (DEV-15.7). The template is Polish, carries the lines
+of DEV §20, and has fields filled from `[nogat.operator]` and `[nogat.gui]`
+of `nogat.toml` and from the project, and blocks a project keeps for its data
+sources and the personal data it processes. The filled page is plain HTML
+without a script. Plan: `docs/plans/2026-11-13-gui-terms.md`.
+
+**Why.** The author's order of 2026-11-13: every GUI needs terms. A service
+offered to others by electronic means needs terms (art. 8 of the Polish act
+on electronic services), the person whose data it processes must be told
+what and why (RODO art. 13), and the providers' terms bind whoever reuses
+their data. One text written once keeps four GUIs consistent.
+
+**Rejected.** Terms written by each project (four texts drifting apart).
+Filling in the browser from a JSON file (a legal page should read without a
+script). One page served by Nogat (Nogat runs no GUI, ECO-058). The link only
+in the app menu (it is not drawn without another GUI).
+
+**Consequence.** Each GUI adopts the template in its own session; the
+operator's identity, contact and retention periods are the author's to set
+in `nogat.toml` before a deployment is opened to others.
