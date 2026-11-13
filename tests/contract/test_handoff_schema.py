@@ -80,6 +80,8 @@ def test_example_node_provenance_names_nodes(index: int) -> None:
             }
         ),
         _with(node_provenance={"Dopływ_1.a-2": {"watershed": {"source": "user"}}}),
+        _without("attribution"),
+        _without("terms_notice"),
     ],
     ids=[
         "no-result",
@@ -92,6 +94,8 @@ def test_example_node_provenance_names_nodes(index: int) -> None:
         "node-origin-only",
         "node-inputs-beside-provenance",
         "node-id-of-the-payload-owner",
+        "no-attribution",
+        "no-terms-notice",
     ],
 )
 def test_handoff_valid(document: dict[str, Any]) -> None:
@@ -132,6 +136,14 @@ def test_required_field(required: str) -> None:
         _with(node_provenance={"Z1": {"watershed": "hydrograf"}}),
         _with(node_provenance={"": {"node": {"source": "user"}}}),
         _with(node_provenance=[{"Z1": {"watershed": {"source": "user"}}}]),
+        _with(attribution=[]),
+        _with(attribution=[EXAMPLE["attribution"][0], EXAMPLE["attribution"][0]]),
+        _with(attribution=[""]),
+        _with(attribution=EXAMPLE["attribution"][0]),
+        _with(attribution=[{"provider": "IMGW-PIB"}]),
+        _with(terms_notice=[]),
+        _with(terms_notice=[EXAMPLE["terms_notice"][0], EXAMPLE["terms_notice"][0]]),
+        _with(terms_notice=EXAMPLE["terms_notice"][0]),
     ],
     ids=[
         "schema-version",
@@ -158,6 +170,14 @@ def test_required_field(required: str) -> None:
         "node-origin-not-object",
         "empty-node-id",
         "node-provenance-not-object",
+        "empty-attribution",
+        "duplicate-attribution-line",
+        "empty-attribution-line",
+        "attribution-not-a-list",
+        "attribution-line-not-text",
+        "empty-terms-notice",
+        "duplicate-terms-notice-line",
+        "terms-notice-not-a-list",
     ],
 )
 def test_handoff_invalid(document: dict[str, Any]) -> None:

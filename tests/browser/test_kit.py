@@ -1,9 +1,10 @@
-"""The GUI kit in a browser: design/kit/ (DEV-15.4, DEV-15.5, ECO-058).
+"""The GUI kit in a browser: design/kit/ (DEV-15.4, DEV-15.5, DEV-15.7, ECO-058).
 
 The kit is plain ES modules copied by every GUI, so it is tested where it
 runs: Chromium through Playwright, on pages served from a throwaway
 directory over HTTP. The schema checks of `nogat-handoff.js` are compared
-with the Python `jsonschema` validator on the same documents.
+with the Python `jsonschema` validator on the same documents. The terms page
+is filled by the reference `fill` and served under CSP `'self'`.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from typing import Any
 
 import jsonschema
 import pytest
+import terms
 from playwright.sync_api import Browser, Page, Playwright, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -46,9 +48,28 @@ PAGE = """<!doctype html>
 """
 
 
+TERMS_VALUES = {
+    "service_name": "Hydrolog",
+    "service_url": "./",
+    "operator_name": "Jan Kowalski",
+    "operator_email": "jan@example.org",
+    "terms_effective": "2026-11-20",
+    "log_retention_days": "30",
+    "software_licence": "MIT",
+    "source_url": "https://github.com/Daldek/Hydrolog",
+    "tokens_href": "tokens.css",
+    "kit_href": "kit/",
+}
+
+
 class _Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format: str, *args: Any) -> None:
         pass
+
+    def end_headers(self) -> None:
+        if self.path.startswith("/regulamin.html"):
+            self.send_header("Content-Security-Policy", "default-src 'self'")
+        super().end_headers()
 
 
 @pytest.fixture(scope="module")
@@ -57,7 +78,14 @@ def site(tmp_path_factory: pytest.TempPathFactory) -> Iterator[str]:
     directory = tmp_path_factory.mktemp("site")
     shutil.copytree(ROOT / "design" / "kit", directory / "kit")
     shutil.copytree(ROOT / "design" / "marks", directory / "marks")
+    shutil.copy(ROOT / "design" / "tokens.css", directory / "tokens.css")
     (directory / "page.html").write_text(PAGE, encoding="utf-8")
+    template = (ROOT / "design" / "kit" / "nogat-terms.html").read_text(
+        encoding="utf-8"
+    )
+    (directory / "regulamin.html").write_text(
+        terms.fill(template, TERMS_VALUES, list(terms.BLOCKS)), encoding="utf-8"
+    )
     handler = functools.partial(_Quiet, directory=str(directory))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -191,6 +219,25 @@ def test_menu_closes_on_escape_outside_click_and_focus_leaving(page: Page) -> No
     assert button.get_attribute("aria-expanded") == "false"
 
 
+def test_menu_ends_with_the_terms_link_when_given(page: Page, site: str) -> None:
+    _set_apps(page, APPS)
+    page.get_by_role("button", name="Aplikacje").click()
+    assert page.locator(".nogat-app-menu-terms").count() == 0
+    page.evaluate(
+        "() => document.querySelector('nogat-app-menu')"
+        ".setAttribute('terms', 'regulamin.html')"
+    )
+    page.get_by_role("button", name="Aplikacje").click()
+    link = page.get_by_role("link", name="Regulamin")
+    assert link.evaluate("a => a.href") == f"http://{site}/regulamin.html"
+    assert link.get_attribute("target") is None
+    page.evaluate(
+        "() => document.querySelector('nogat-app-menu')"
+        ".setAttribute('terms', 'javascript:alert(1)')"
+    )
+    assert page.locator(".nogat-app-menu-terms").count() == 0
+
+
 def test_menu_keeps_only_its_icon_on_a_phone(page: Page) -> None:
     _set_apps(page, APPS)
     page.set_viewport_size({"width": 390, "height": 800})
@@ -200,6 +247,59 @@ def test_menu_keeps_only_its_icon_on_a_phone(page: Page) -> None:
     assert box is not None
     assert box["x"] == 8
     assert box["width"] == 390 - 16
+
+
+# The terms page (DEV-15.7)
+
+
+@pytest.fixture
+def terms_page(browser: Browser, site: str) -> Iterator[tuple[Page, list[str]]]:
+    """The filled terms page and the addresses it requested; no console error."""
+    context = browser.new_context()
+    page = context.new_page()
+    requested: list[str] = []
+    problems: list[str] = []
+    page.on("request", lambda r: requested.append(r.url))
+    page.on("console", lambda m: problems.append(m.text) if m.type == "error" else None)
+    page.on("pageerror", lambda e: problems.append(str(e)))
+    page.goto(f"http://{site}/regulamin.html")
+    yield page, requested
+    context.close()
+    assert problems == []
+
+
+def test_terms_page_shows_twelve_sections_with_every_field_filled(
+    terms_page: tuple[Page, list[str]], site: str
+) -> None:
+    page, requested = terms_page
+    assert page.title() == "Regulamin serwisu Hydrolog"
+    sections = page.locator("main h2").all_inner_texts()
+    assert [s.split(".")[0] for s in sections] == [str(n) for n in range(1, 13)]
+    text = page.locator("body").inner_text()
+    assert "{{" not in text
+    assert "Jan Kowalski" in text
+    assert page.get_by_role("link", name="jan@example.org").first.get_attribute(
+        "href"
+    ) == ("mailto:jan@example.org")
+    assert {url.split("/")[2] for url in requested} == {site}
+    assert sorted(url.rsplit("/", 1)[1] for url in requested) == [
+        "nogat-terms.css",
+        "regulamin.html",
+        "tokens.css",
+    ]
+
+
+def test_terms_page_is_styled_in_both_themes(
+    terms_page: tuple[Page, list[str]],
+) -> None:
+    page, _ = terms_page
+    main = page.locator("main.nogat-terms")
+    assert main.evaluate("e => getComputedStyle(e).maxWidth") == "768px"
+    background = "e => getComputedStyle(document.body).backgroundColor"
+    page.emulate_media(color_scheme="light")
+    assert main.evaluate(background) == "rgb(250, 248, 248)"
+    page.emulate_media(color_scheme="dark")
+    assert main.evaluate(background) == "rgb(13, 17, 23)"
 
 
 # The hand-off (DEV-15.5)

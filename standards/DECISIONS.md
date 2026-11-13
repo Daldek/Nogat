@@ -69,6 +69,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | accepted | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | accepted | 2026-11-13 |
 
 ---
 
@@ -1165,3 +1167,63 @@ versioned store are, for these data, Obserwator's library called by
 Archiwista and Archiwista's raw root. Obserwator, Archiwista and Hydrolog
 change in their own sessions and plans, producers first (HUB-5.2); until
 then the registry lists the new edges as `planned`.
+
+## ECO-060 Every product carries the providers' attribution
+
+**Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
+lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
+for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
+hydrological service; PS, PP and the monograph M for PMAXTP; C and CP for
+ČHMÚ. Products with IMGW-PIB data also show the notice of its terms of use
+with the addresses of the terms that apply. JSON documents, results and
+`nogat-handoff/1` carry the lines in two optional arrays of strings,
+`attribution` and `terms_notice`, so a consumer shows them and carries them
+on; the hand-off stays `/1` (AGI-4.1). Operational data of hydro.imgw.pl
+are only shown live, never stored; its station locations are reference data
+that may be kept with their lines (DEV-20.8, the author's decision of
+2026-11-13). Plan: `docs/plans/2026-11-13-provider-attribution.md`.
+
+**Why.** The author's order of 2026-11-13, read against the terms that day:
+§5 ust. 1, 3 and 4 and §2 pkt 3 of the IMGW-PIB terms
+(https://danepubliczne.imgw.pl/regulations), ust. 1 and 2 of the PMAXTP
+terms, the terms of the hydrological service
+(https://hydro.imgw.pl/#/regulamin) and CC BY 4.0 §3(a)(1) of ČHMÚ's open
+data. Results pass through several tools (PMAXTP from Obserwator into
+Hydrolog, Hydrograf and Hydraulik), and a line lost on the way is a breach in
+the last product.
+
+**Rejected.** The lines in `provenance` (it holds keyed origins, not text a
+person reads). Objects with a provider, a data set and texts (lines equal
+byte for byte merge without them, and the consumer only shows text). The
+lines in an About page or a tooltip only (the terms bind the product
+itself). One English wording (the terms prescribe the Polish sentences).
+
+**Consequence.** Each project applies DEV §20 in its own branch and copies
+the new `handoff-1.schema.json` byte for byte (DEV-15.6); until then a copy
+of today accepts both fields as unknown.
+
+## ECO-061 Every GUI serves one regulamin from Nogat's template
+
+**Decision.** A GUI open to other people serves its terms at
+`regulamin.html`, filled from the kit's template `nogat-terms.md` and the
+`nogat-terms.html` generated from it, and links „Regulamin” from every view
+and from the app menu (DEV-15.7). The template is Polish, carries the lines
+of DEV §20, and has fields filled from `[nogat.operator]` and `[nogat.gui]`
+of `nogat.toml` and from the project, and blocks a project keeps for its data
+sources and the personal data it processes. The filled page is plain HTML
+without a script. Plan: `docs/plans/2026-11-13-gui-terms.md`.
+
+**Why.** The author's order of 2026-11-13: every GUI needs terms. A service
+offered to others by electronic means needs terms (art. 8 of the Polish act
+on electronic services), the person whose data it processes must be told
+what and why (RODO art. 13), and the providers' terms bind whoever reuses
+their data. One text written once keeps four GUIs consistent.
+
+**Rejected.** Terms written by each project (four texts drifting apart).
+Filling in the browser from a JSON file (a legal page should read without a
+script). One page served by Nogat (Nogat runs no GUI, ECO-058). The link only
+in the app menu (it is not drawn without another GUI).
+
+**Consequence.** Each GUI adopts the template in its own session; the
+operator's identity, contact and retention periods are the author's to set
+in `nogat.toml` before a deployment is opened to others.

@@ -1,0 +1,194 @@
+<!doctype html>
+<!--
+  Nogat GUI kit: the terms page (DEV-15.7). Generated from nogat-terms.md by
+  `uv run scripts/ecosystem.py standard --write`; copy byte for byte (DEV-15.6),
+  fill its fields and blocks per deployment as the kit's README says.
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regulamin serwisu {{service_name}}</title>
+<link rel="stylesheet" href="{{tokens_href}}">
+<link rel="stylesheet" href="{{kit_href}}nogat-terms.css">
+</head>
+<body>
+<main class="nogat-terms">
+<h1>Regulamin serwisu {{service_name}}</h1>
+<p>Obowiązuje od {{terms_effective}}. Wzór regulaminu Nogat 0.2.0.</p>
+<h2>1. Definicje</h2>
+<ul>
+<li><strong>Serwis</strong>: aplikacja internetowa {{service_name}} pod adresem {{service_url}}, część ekosystemu narzędzi hydrologicznych Nogat.</li>
+<li><strong>Operator</strong>: osoba, która prowadzi Serwis (§ 2).</li>
+<li><strong>Użytkownik</strong>: każda osoba, która korzysta z Serwisu.</li>
+<li><strong>Dostawca danych</strong>: instytucja, której dane Serwis pokazuje lub przetwarza (§ 5).</li>
+<li><strong>Dane</strong>: dane Dostawców danych pokazywane lub przetwarzane w Serwisie.</li>
+<li><strong>Wyniki</strong>: wartości, tabele, wykresy, mapy i pliki, które Serwis oblicza lub tworzy z Danych albo z danych wprowadzonych przez Użytkownika.</li>
+<li><strong>Regulamin</strong>: ten dokument, regulamin świadczenia usług drogą elektroniczną w rozumieniu art. 8 ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną.</li>
+</ul>
+<h2>2. Operator</h2>
+<p>Serwis prowadzi {{operator_name}} jako osoba prywatna, poza działalnością gospodarczą. Kontakt z Operatorem: <a href="mailto:{{operator_email}}">{{operator_email}}</a>.</p>
+<h2>3. Cel i charakter Serwisu</h2>
+<ol>
+<li>Serwis jest bezpłatny i niekomercyjny: nie pobiera opłat, nie wyświetla reklam i nie służy działalności gospodarczej.</li>
+<li>Serwis jest narzędziem badawczym i edukacyjnym do przeglądania danych hydrologicznych, meteorologicznych i przestrzennych oraz do obliczeń hydrologicznych.</li>
+<li>Dane i Wyniki mają charakter wyłącznie informacyjny. Nie są oficjalnymi danymi, prognozami, ostrzeżeniami ani komunikatami IMGW-PIB, ČHMÚ ani innych Dostawców danych, a Wyniki nie są ekspertyzą ani opracowaniem urzędowym.</li>
+<li>Wyniki nie mogą być jedyną podstawą decyzji, w szczególności projektowych, inwestycyjnych, planistycznych lub dotyczących bezpieczeństwa ludzi i mienia, bez sprawdzenia przez osobę o odpowiednich kwalifikacjach i porównania z oficjalnymi źródłami.</li>
+<li>W sytuacji zagrożenia powodziowego lub meteorologicznego należy kierować się komunikatami IMGW-PIB (<a href="https://hydro.imgw.pl">https://hydro.imgw.pl</a>, <a href="https://meteo.imgw.pl">https://meteo.imgw.pl</a>) i służb, a nie Serwisem.</li>
+</ol>
+<h2>4. Dostęp</h2>
+<ol>
+<li>Do korzystania z Serwisu potrzebne są urządzenie z dostępem do internetu i aktualna przeglądarka internetowa z włączonym JavaScriptem.</li>
+<!-- block: cloudflare-access -->
+<li>Dostęp do Serwisu chroni usługa Cloudflare Access (Cloudflare, Inc.). Przed wejściem Użytkownik potwierdza swój adres e-mail w sposób wskazany na stronie logowania, na przykład kodem jednorazowym. Operator decyduje, które adresy mają dostęp.</li>
+<!-- /block -->
+<!-- block: accounts -->
+<li>Część funkcji Serwisu wymaga konta zespołu, które zakłada i wyłącza Operator lub wskazany przez niego administrator. Użytkownik nie udostępnia swojego konta innym osobom.</li>
+<!-- /block -->
+<li>Operator może w każdej chwili ograniczyć, zawiesić lub zakończyć dostęp do Serwisu albo jego części, także dla poszczególnych Użytkowników, w szczególności przy naruszeniu Regulaminu, przeciążeniu Serwisu lub zmianie warunków Dostawców danych.</li>
+</ol>
+<h2>5. Źródła danych i ich warunki</h2>
+<ol>
+<li>Serwis pokazuje Dane na warunkach ich Dostawców. Każdy widok, plik i wynik z Danymi zawiera wymagane przez Dostawcę informacje o źródle i o przetworzeniu danych.</li>
+<li>Kto wykorzystuje Dane lub Wyniki pobrane z Serwisu, w tym pliki, wykresy i zrzuty ekranu, sam odpowiada za spełnienie warunków Dostawców: zachowuje bez zmian podane niżej informacje o źródle i o przetworzeniu oraz przestrzega regulaminów i licencji Dostawców.</li>
+<li>Dostawcy danych nie są stronami Regulaminu i nie odpowiadają za Serwis ani za Wyniki.</li>
+</ol>
+<!-- block: imgw -->
+<h3>IMGW-PIB: dane publiczne</h3>
+<p>Dane pomiarowe i obserwacyjne Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego z serwisu <a href="https://danepubliczne.imgw.pl">https://danepubliczne.imgw.pl</a>, archiwalne i bieżące. Wymagane informacje:</p>
+<blockquote>
+<p>Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy</p>
+<p>Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone</p>
+</blockquote>
+<p>Regulamin: <a href="https://danepubliczne.imgw.pl/regulations">https://danepubliczne.imgw.pl/regulations</a></p>
+<!-- /block -->
+<!-- block: imgw-hydro -->
+<h3>IMGW-PIB: serwis hydrologiczny</h3>
+<p>Dane operacyjne (stany wód i ich klasy, pomiary) i położenie stacji z serwisu hydrologicznego IMGW-PIB <a href="https://hydro.imgw.pl">https://hydro.imgw.pl</a>. Dane operacyjne Serwis pokazuje wyłącznie jako bieżące, z czasem pomiaru; nie przechowuje ich i nie przedstawia jako archiwum. Wymagane informacje:</p>
+<blockquote>
+<p>Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy</p>
+<p>Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone</p>
+<p>Dane pochodzą z serwisu hydrologicznego IMGW-PIB https://hydro.imgw.pl</p>
+</blockquote>
+<p>Regulamin: <a href="https://hydro.imgw.pl/#/regulamin">https://hydro.imgw.pl/#/regulamin</a></p>
+<!-- /block -->
+<!-- block: pmaxtp -->
+<h3>IMGW-PIB: opady maksymalne PMAXTP</h3>
+<p>Opady maksymalne o określonym czasie trwania i prawdopodobieństwie przewyższenia z projektu PMAXTP (<a href="https://klimat.imgw.pl/opady-maksymalne">https://klimat.imgw.pl/opady-maksymalne</a>) oraz oparte na nich opady projektowe, hietogramy i hydrogramy. Wymagane informacje:</p>
+<blockquote>
+<p>Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, dane pochodzą ze strony https://klimat.imgw.pl/opady-maksymalne</p>
+<p>Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego pochodzące ze strony https://klimat.imgw.pl/opady-maksymalne zostały przetworzone</p>
+<p>„Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022</p>
+</blockquote>
+<p>Regulamin: <a href="https://klimat.imgw.pl/opady-maksymalne">https://klimat.imgw.pl/opady-maksymalne</a></p>
+<!-- /block -->
+<!-- block: imgw-terms -->
+<h3>Warunki korzystania z danych IMGW-PIB</h3>
+<blockquote>
+<p>Dane IMGW-PIB można wykorzystywać nieodpłatnie do celów prywatnych (niezarobkowych). Wykorzystanie w działalności gospodarczej, na stronach z reklamami lub do celów wymienionych w regulaminie (m.in. planowanie w gospodarowaniu wodami, art. 317 Prawa wodnego) wymaga umowy z IMGW-PIB.</p>
+</blockquote>
+<p>Te warunki wiążą każdego, kto wykorzystuje dane IMGW-PIB pobrane z Serwisu. Przy dalszym wykorzystaniu należy podawać tę informację wraz z adresami regulaminów IMGW-PIB podanymi powyżej.</p>
+<!-- /block -->
+<!-- block: chmi -->
+<h3>ČHMÚ</h3>
+<p>Otwarte dane Českého hydrometeorologického ústavu udostępnione na licencji Creative Commons Uznanie autorstwa 4.0 (CC BY 4.0). Serwis zmienia ich format i oblicza z nich Wyniki; każdy produkt podaje, co zrobiono z danymi. Wymagane informacje:</p>
+<blockquote>
+<p>Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)</p>
+<p>Dane ČHMÚ zostały przetworzone (…)</p>
+</blockquote>
+<p>W miejscu „…” produkt podaje, co zrobiono z danymi.</p>
+<!-- /block -->
+<!-- block: gugik -->
+<h3>GUGiK</h3>
+<p>Dane z państwowego zasobu geodezyjnego i kartograficznego udostępniane przez Główny Urząd Geodezji i Kartografii (<a href="https://www.geoportal.gov.pl">https://www.geoportal.gov.pl</a>), na przykład numeryczny model terenu, BDOT10k i ortofotomapa. Wykorzystanie zgodnie z ustawą Prawo geodezyjne i kartograficzne, z podaniem źródła: Główny Urząd Geodezji i Kartografii.</p>
+<!-- /block -->
+<!-- block: cuzk -->
+<h3>ČÚZK</h3>
+<p>Dane Českého úřadu zeměměřického a katastrálního (<a href="https://geoportal.cuzk.cz">https://geoportal.cuzk.cz</a>) na licencji CC BY 4.0 (<a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>), z podaniem źródła: ČÚZK.</p>
+<!-- /block -->
+<!-- block: copernicus -->
+<h3>Copernicus</h3>
+<p>Dane programu Copernicus, w tym Copernicus Land Monitoring Service (na przykład CORINE Land Cover), udostępniane na zasadach polityki danych Copernicus (<a href="https://land.copernicus.eu">https://land.copernicus.eu</a>), z podaniem źródła: © Unia Europejska, Copernicus Land Monitoring Service, Europejska Agencja Środowiska (EEA).</p>
+<!-- /block -->
+<!-- block: isric -->
+<h3>ISRIC SoilGrids</h3>
+<p>Dane glebowe SoilGrids ISRIC – World Soil Information (<a href="https://soilgrids.org">https://soilgrids.org</a>) na licencji CC BY 4.0 (<a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>), z podaniem źródła: ISRIC – World Soil Information.</p>
+<!-- /block -->
+<!-- block: wody-polskie -->
+<h3>Wody Polskie</h3>
+<p>Mapy zagrożenia powodziowego Państwowego Gospodarstwa Wodnego Wody Polskie (<a href="https://wody.gov.pl">https://wody.gov.pl</a>) na licencji CC BY 4.0 (<a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>), z podaniem źródła: Państwowe Gospodarstwo Wodne Wody Polskie.</p>
+<!-- /block -->
+<!-- block: osm -->
+<h3>OpenStreetMap</h3>
+<p>Podkłady mapowe z danych OpenStreetMap (© autorzy OpenStreetMap), na licencji Open Database License (<a href="https://www.openstreetmap.org/copyright">https://www.openstreetmap.org/copyright</a>), w tym kafelki OpenFreeMap (<a href="https://openfreemap.org">https://openfreemap.org</a>) i podkład OSM serwisu geoportal.gov.pl. Oznaczenie autorstwa jest na mapie.</p>
+<!-- /block -->
+<!-- block: esri -->
+<h3>Esri World Imagery</h3>
+<p>Podkład zdjęć satelitarnych i lotniczych Esri World Imagery (źródło: Esri, Maxar, Earthstar Geographics i społeczność użytkowników GIS) na warunkach Esri (<a href="https://www.esri.com/en-us/legal/terms/full-master-agreement">https://www.esri.com/en-us/legal/terms/full-master-agreement</a>). Oznaczenie autorstwa jest na mapie.</p>
+<!-- /block -->
+<h2>6. Obowiązki Użytkownika</h2>
+<ol>
+<li>Użytkownik korzysta z Serwisu zgodnie z prawem, Regulaminem i warunkami Dostawców danych (§ 5).</li>
+<li>Przy dalszym wykorzystaniu Danych lub Wyników Użytkownik zachowuje bez zmian informacje o źródle i o przetworzeniu danych, które Serwis do nich dołącza: w widoku, w plikach (<code>ATTRIBUTION.txt</code>, kolumny <code>attribution</code> i <code>terms_notice</code>) i w dokumentach (pola <code>attribution</code> i <code>terms_notice</code>).</li>
+<li>Użytkownik nie pobiera danych z Serwisu automatycznie (scraping, masowe zapytania) w sposób, który obciąża Serwis lub utrudnia korzystanie z niego innym; do pobierania wielu danych służą narzędzia ekosystemu Nogat i serwisy Dostawców danych.</li>
+<li>Użytkownik nie próbuje obejść zabezpieczeń Serwisu ani uzyskać dostępu do danych innych osób.</li>
+<li>Użytkownik nie przekazuje do Serwisu treści o charakterze bezprawnym.</li>
+</ol>
+<h2>7. Odpowiedzialność</h2>
+<ol>
+<li>Serwis jest udostępniany w stanie, w jakim jest, bez gwarancji poprawności, kompletności i aktualności Danych i Wyników oraz bez gwarancji dostępności.</li>
+<li>Wyniki oblicza otwarte oprogramowanie, które może zawierać błędy. Dane operacyjne mogą być niesprawdzone i niepełne.</li>
+<li>Operator nie odpowiada za decyzje podjęte na podstawie Danych lub Wyników ani za szkody wynikłe z korzystania z Serwisu lub z braku możliwości korzystania z niego, w granicach dopuszczalnych przez prawo; nie dotyczy to szkód wyrządzonych umyślnie.</li>
+<li>Za Dane odpowiadają Dostawcy danych na zasadach swoich regulaminów i licencji (§ 5); licencja CC BY 4.0 udostępnia materiał bez gwarancji (sekcja 5 licencji).</li>
+</ol>
+<h2>8. Dane osobowe</h2>
+<ol>
+<li>Administratorem danych osobowych przetwarzanych w Serwisie jest {{operator_name}}, kontakt: <a href="mailto:{{operator_email}}">{{operator_email}}</a>.</li>
+<li>Serwer zapisuje w dziennikach adres IP, czas, adres żądanej strony, kod odpowiedzi i identyfikator przeglądarki, aby zapewnić działanie i bezpieczeństwo Serwisu (art. 6 ust. 1 lit. f RODO: prawnie uzasadniony interes Operatora). Dzienniki są usuwane po {{log_retention_days}} dniach.</li>
+<!-- block: cloudflare-access -->
+<li>Cloudflare Access przetwarza adres e-mail Użytkownika, adres IP i czas logowania, aby udzielić dostępu tylko osobom wskazanym przez Operatora (art. 6 ust. 1 lit. f RODO), i zapisuje w przeglądarce niezbędny plik cookie z potwierdzeniem logowania (<code>CF_Authorization</code>). Cloudflare, Inc. przetwarza te dane w imieniu Operatora, także poza Europejskim Obszarem Gospodarczym, na podstawie mechanizmów przewidzianych w rozdziale V RODO. Dane są przechowywane przez okres przechowywania dzienników ustawiony na koncie Operatora w Cloudflare.</li>
+<!-- /block -->
+<!-- block: accounts -->
+<li>Dla konta zespołu Serwis przechowuje identyfikator i nazwę Użytkownika, jego role i grupy oraz dziennik jego działań, aby świadczyć usługę opisaną w Regulaminie (art. 6 ust. 1 lit. b RODO). Dane konta są przechowywane, dopóki konto istnieje, a dziennik działań przez okres ustawiony przez Operatora.</li>
+<!-- /block -->
+<!-- block: feedback -->
+<li>Formularz „Zgłoś uwagę” przesyła treść zgłoszenia, adres strony, opcjonalny kontakt podany przez Użytkownika i dane diagnostyczne o stanie widoku i przeglądarki. Służą one rozpatrzeniu zgłoszenia i ulepszaniu Serwisu (art. 6 ust. 1 lit. f RODO) i są przechowywane do czasu rozpatrzenia zgłoszenia, a potem usuwane.</li>
+<!-- /block -->
+<li>Ustawienia (motyw, układ widoków, układ współrzędnych) i wprowadzone dane wejściowe Serwis zapisuje wyłącznie w pamięci przeglądarki Użytkownika (localStorage, sessionStorage); nie trafiają one do Operatora, a Użytkownik może je usunąć w ustawieniach przeglądarki.</li>
+<!-- block: session-cookie -->
+<li>Serwis ustawia niezbędny plik cookie sesji, który wygasa po zamknięciu przeglądarki i służy wyłącznie utrzymaniu zalogowania.</li>
+<!-- /block -->
+<!-- block: no-cookies -->
+<li>Serwis nie ustawia własnych plików cookie.</li>
+<!-- /block -->
+<li>Serwis nie korzysta z narzędzi analitycznych ani reklamowych i nie podejmuje wobec Użytkowników decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu, w tym profilowaniu.</li>
+<li>Podanie danych jest dobrowolne, ale bez danych potrzebnych do logowania lub do odpowiedzi na zgłoszenie nie można skorzystać z danej funkcji.</li>
+<li>Użytkownikowi przysługuje prawo dostępu do swoich danych, ich sprostowania, usunięcia i ograniczenia przetwarzania, prawo do przenoszenia danych przetwarzanych na podstawie umowy oraz prawo sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie (art. 15–18, 20 i 21 RODO). Żądanie należy wysłać na adres Operatora.</li>
+<li>Użytkownik może wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa, <a href="https://uodo.gov.pl">https://uodo.gov.pl</a>).</li>
+</ol>
+<h2>9. Licencja oprogramowania</h2>
+<ol>
+<li>Oprogramowanie Serwisu jest otwarte i udostępnione na licencji {{software_licence}}; kod źródłowy: <a href="{{source_url}}">{{source_url}}</a>.</li>
+<li>Licencja oprogramowania nie obejmuje Danych: do Danych i do Wyników z nich utworzonych stosuje się warunki Dostawców danych (§ 5).</li>
+</ol>
+<h2>10. Reklamacje i kontakt</h2>
+<ol>
+<li>Uwagi, zgłoszenia błędów i reklamacje dotyczące Serwisu można wysyłać na adres <a href="mailto:{{operator_email}}">{{operator_email}}</a>.</li>
+<li>Reklamacja powinna zawierać opis problemu i adres kontaktowy do odpowiedzi. Operator odpowiada na nią w ciągu 30 dni od otrzymania.</li>
+</ol>
+<h2>11. Zmiany Regulaminu</h2>
+<ol>
+<li>Operator może zmienić Regulamin, w szczególności przy zmianie Serwisu, przepisów lub warunków Dostawców danych. Nowa wersja jest publikowana pod tym samym adresem z nową datą obowiązywania.</li>
+<li>Zmiana nie dotyczy korzystania z Serwisu przed jej wejściem w życie.</li>
+</ol>
+<h2>12. Postanowienia końcowe</h2>
+<ol>
+<li>Regulamin obowiązuje od {{terms_effective}}. Podstawą tej wersji jest wzór regulaminu Nogat 0.2.0.</li>
+<li>Do Regulaminu stosuje się prawo polskie. Regulamin nie ogranicza praw, które Użytkownikowi będącemu konsumentem przysługują na podstawie bezwzględnie obowiązujących przepisów.</li>
+</ol>
+</main>
+<footer class="nogat-terms-footer">
+<a href="{{service_url}}">Wróć do serwisu {{service_name}}</a>
+</footer>
+</body>
+</html>

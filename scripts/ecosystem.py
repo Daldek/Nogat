@@ -37,6 +37,7 @@ from urllib.parse import urlsplit
 import guide
 import jsonschema
 import standard
+import terms
 import yaml
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import SpecifierSet
@@ -1329,24 +1330,28 @@ def check_standard(registry: dict[str, Any], write: bool) -> int:
     """Run the checks of scripts/standard.py; Failure when any finds a problem.
 
     Generated outputs: the error tables of ERROR_REGISTRY.md and
-    schemas/agent/error-1.schema.json, both from error_registry.json.
+    schemas/agent/error-1.schema.json, both from error_registry.json, and
+    the kit's terms page design/kit/nogat-terms.html from nogat-terms.md.
     """
     path = STANDARDS / "ERROR_REGISTRY.md"
     errors = _read_json(STANDARDS / "error_registry.json")
     blocks = standard.error_tables(errors)
     schema = standard.error_schema(errors)
+    page = terms.build(_read(terms.SOURCE))
     if write:
         text = _read(path)
         fresh = standard.regenerate(text, blocks)
         if fresh != text:
             path.write_text(fresh, encoding="utf-8")
             print(f"wrote {_shown(path)}")
-        if not ERROR_SCHEMA.is_file() or _read(ERROR_SCHEMA) != schema:
-            ERROR_SCHEMA.write_text(schema, encoding="utf-8")
-            print(f"wrote {_shown(ERROR_SCHEMA)}")
+        for target, content in ((ERROR_SCHEMA, schema), (terms.PAGE, page)):
+            if not target.is_file() or _read(target) != content:
+                target.write_text(content, encoding="utf-8")
+                print(f"wrote {_shown(target)}")
     stale = [
         *standard.generated_problems(path, blocks, _shown(path)),
         *standard.file_problems(ERROR_SCHEMA, schema, _shown(ERROR_SCHEMA)),
+        *standard.file_problems(terms.PAGE, page, _shown(terms.PAGE)),
     ]
     problems = [
         *standard.id_problems(ROOT),

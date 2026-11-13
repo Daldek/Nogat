@@ -19,6 +19,7 @@ Obserwator from v3.0.0 (ECO-057); dated sections keep the old name.
 | Contradictions in standard 1.0 | done | ECO-042 to ECO-049 and consistency fixes |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Hand-off schema `nogat-handoff/1` | done 2026-11-02; `node_provenance` 2026-11-10 | `schemas/exchange/handoff-1.schema.json`, contract test; item 6 of the platform plan, approved ahead of the rest as N1 of Hydrolog's GUI; the origin of each node of a network added as step 1 of `plans/2026-11-10-node-provenance-in-handoff.md` (Next 13) |
+| Provider attribution and regulamin (ECO-060, ECO-061) | Nogat's steps merged into `develop` 2026-11-13 | DEV §20: the IMGW-PIB, hydro.imgw.pl, PMAXTP and ČHMÚ lines verbatim, the terms notice, surfaces and file forms; `attribution` and `terms_notice` in `nogat-handoff/1` (still `/1`). Kit 0.2.0: the regulamin template `nogat-terms.*`, the menu's `terms`, DEV-15.7, `[nogat] operator` (DEV-18.1); the operator's identity, e-mail and retention periods wait for the author. Projects adopt both in their branches (`plans/2026-11-13-provider-attribution.md`, `plans/2026-11-13-gui-terms.md`) |
 | Hydrolog's GUI in the registry | done 2026-11-02, branch `feature/hydrolog-gui-registry` | N2 of Hydrolog's GUI: the optional interface `gui` (HUB-2.1), Hydrolog's `hydrolog gui serve`, the route „Open Hydrolog's GUI in the browser” and `hydrolog-gui` in its `provides`; `AGENTS.md` and the map regenerated |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19 and AGI-3.4 and related rules, store markers in the registry, plan `docs/plans/2026-10-24-data-output.md` with the state of every project (Results, 2026-10-25) |
 | Integration dry run | done 2026-10-25 | historical baseline: six heads, four cross-tool flows and eight failures with owners (`docs/plans/2026-10-25-integration-dry-run.md`). The later final integration plan records the fixes and the pending post-fix repeat |
@@ -253,8 +254,7 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
 13. The origin of each node in the hand-off: plan `docs/plans/2026-11-10-node-provenance-in-handoff.md`, done 2026-11-11. `node_provenance` in `nogat-handoff/1`
    (step 1); Hydrograf's `POST /api/delineate-network` writes it (step 2, `develop` `824bebd`, on Hydroni since 2026-11-11, production pending the author);
    Hydrolog's Sieć reads and writes it (step 3, `develop` `3b28b15`); the registry edge Hydrograf → Hydrolog and the route of `delineate-network` (step 4).
-14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, branch `plan/station-data-and-analyses`): N1 done (the decision, the planned edges);
-   next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms for the public instance (question 4).
+14. Station data and analyses (ECO-059, plan `docs/plans/2026-11-12-station-data-and-analyses.md`, approved 2026-11-13, merged): N1 done; next Hydrolog's H1 to H4 under its own plan, then R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms (question 4).
 
 ## Open questions
 

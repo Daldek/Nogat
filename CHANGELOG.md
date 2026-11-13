@@ -18,6 +18,28 @@ the standard are listed in [standards/README.md](standards/README.md).
   planned items `archiwista-raw-root`, `obserwator-data` and
   `obserwator-analyses`, and the notes of Archiwista → Obserwator and
   Hydrolog → Obserwator; `docs/ECOSYSTEM_MAP.md` regenerated.
+- One regulamin for every GUI, the author's order of 2026-11-13
+  (`docs/plans/2026-11-13-gui-terms.md`, step 1): GUI kit 0.2.0 adds the
+  Polish template `nogat-terms.md`, the page `nogat-terms.html` generated
+  from it by `ecosystem.py standard --write` (checked by the gate) and
+  `nogat-terms.css`; fields filled from `[nogat.operator]` and `[nogat.gui]`
+  of `nogat.toml` and from the project, blocks for data sources and personal
+  data, the reference filling in `scripts/terms.py`. The app menu takes a
+  `terms` attribute and ends its list with „Regulamin”. DEV-15.7 (the page
+  at `regulamin.html`, the link in every view), the table `operator` in
+  DEV-18.1, ECO-061; unit, contract and browser tests (the filled page under
+  CSP `'self'` in both themes).
+- Provider attribution in every product, the author's order of 2026-11-13
+  (`docs/plans/2026-11-13-provider-attribution.md`, step 1): DEV §20 and
+  ECO-060 hold the IMGW-PIB lines S and P (danepubliczne.imgw.pl and
+  hydro.imgw.pl, with H for the latter), PS, PP and the monograph M for
+  PMAXTP, C and CP for ČHMÚ under CC BY 4.0, verbatim; the IMGW-PIB
+  terms-of-use notice N with the addresses of the terms; the surfaces and
+  the forms in CSV, JSON, Parquet, ZIP, images, reports, API and CLI; data of
+  hydro.imgw.pl never shown as archive. `nogat-handoff/1` gains the
+  optional arrays `attribution` and `terms_notice` and stays `/1`
+  (AGI-4.1); its examples carry the PMAXTP lines, and contract tests cover
+  both fields. Projects copy the schema in their own branches (DEV-15.6).
 - GUI platform stage 1, Nogat's steps 1 to 3
   (`docs/plans/2026-11-12-gui-links-and-handoff.md`, approved 2026-11-12):
   ECO-058 and DEV-15.4 to DEV-15.6 (the app menu, the hand-off, copies byte
