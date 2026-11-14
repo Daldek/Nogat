@@ -205,6 +205,29 @@ Phone (width <= 860 px):
 - Panels become bottom sheets: fixed above the bar (bottom 58 px), height `min(74vh, 640px)`, radius 16 px on the top corners, with a grip, a title and a close button. Resizers are hidden.
 - Form fields use 16 px text so iOS does not zoom.
 
+## Info texts
+
+The text behind „(i)”, in a help popover or in „Objaśnienie metod” follows DEV-15.14 (ECO-069): a definition, then the formula, how to read the value and the sources where they apply; Polish and impersonal; at most about 400 characters without the formula and the sources.
+It names no program, file, plan step or development status; a longer explanation goes to the GUI's guide, which it links.
+A good one:
+
+```text
+Opad efektywny Pₑ
+
+Część opadu, która odpływa po powierzchni terenu; reszta wsiąka w glebę
+lub zostaje zatrzymana przez roślinność i zagłębienia terenu.
+
+Pₑ = (P − 0,2·S)² / (P + 0,8·S) dla P > 0,2·S, w przeciwnym razie Pₑ = 0
+S = 25 400 / CN − 254
+gdzie: P – opad całkowity [mm], S – retencja maksymalna zlewni [mm],
+CN – parametr krzywej odpływu, 30–100 [–]
+
+Im wyższy CN, tym większa część opadu odpływa. Przy CN = 80 z opadu
+50 mm odpływa około 14 mm.
+
+Źródła: USDA-NRCS 2004, National Engineering Handbook, cz. 630, rozdz. 10
+```
+
 ## Marks
 
 - Frame: 32x32 rounded square, `rx="6"`, filled with `--mark-frame` `#0d1117` in both themes.

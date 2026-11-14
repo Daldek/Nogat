@@ -24,6 +24,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Info texts of a GUI, the author's request of 2026-11-14 (ECO-069):
+  DEV-15.14 gives every text behind „(i)”, in a help popover or in
+  „Objaśnienie metod” one shape (a definition, then the formula with its
+  symbols and units, how to read the value and the sources), Polish and
+  impersonal, without the author's or operator's experience, internal
+  identifiers, development status or implementation detail the user cannot
+  act on, at most about 400 characters without the formula and the sources;
+  `design/README.md` gains the section „Info texts” with one example.
 - The path away from IMGW-PIB after the first joint release, a draft plan
   (`docs/plans/2026-11-14-independence-from-imgw.md`, `Approved: pending`)
   with the research on ERA5 instead of PMAXTP, translated into English with

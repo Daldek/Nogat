@@ -83,6 +83,13 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - One shape for a GUI's info texts, behind „(i)”, in a help popover or in
+    „Objaśnienie metod”: a definition, then the formula, how to read the
+    value and the sources where they apply; Polish and impersonal; no
+    personal experience, internal identifier, development status or
+    implementation detail the user cannot act on; at most about 400
+    characters without the formula and the sources, the rest in the GUI's
+    guide (DEV-15.14, ECO-069).
   - One admin panel for every GUI that stores reports or statistics: the
     page at `/admin/` and the API under `/api/admin/`, nothing else to
     protect; every admin route checks `X-Admin-Key` against
