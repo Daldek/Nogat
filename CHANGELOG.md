@@ -17,6 +17,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- One place for the admin keys of a deployment, the author's decision of
+  2026-11-14: DEV-15.13 and the admin section of `design/README.md` keep each
+  GUI's key in `~/.config/nogat/keys/<project>-admin.key` (mode `0600`, or
+  `0640` with a container's group) and hand the app only its path in
+  `<PREFIX>ADMIN_API_KEY_FILE`.
 - The regulamin link without a footer, the author's decision of 2026-11-14
   (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
   ECO-062 and ECO-064): DEV-15.7 links „Regulamin” in exactly the app menu,
