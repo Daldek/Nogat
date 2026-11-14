@@ -1709,7 +1709,7 @@ varies with each producer). Leaving earlier lines unrecognised (old files
 must still be readable).
 
 **Consequence.** DEV-20.3 and DEV-20.4, the CP table entry and the ČHMÚ
-example in the regulamin change. The regulamin template becomes version 1.1
-because its published text changes; its first publication by each GUI needs
-its own `terms_effective`. Producers update their lines and copy kit 0.7.1
+example in the regulamin change. The regulamin stays version 1.0, corrected
+in place (the author, 2026-11-14: only the author raises its version), with
+no new `terms_effective`. Producers update their lines and copy kit 0.7.1
 in their repositories (DEV-17.5); old files are not edited in place.

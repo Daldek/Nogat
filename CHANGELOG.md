@@ -27,8 +27,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   once for modified ČHMÚ data; P, PP, G, SG and Z already have detail-free
   wording and stay unchanged. Readers recognise old parenthetical CP lines
   as CP and deduplicate them; kit 0.7.1 adds CP to `LINES` and normalises
-  old lines in its sources viewer. Regulamin template 1.1 changes the ČHMÚ
-  example; each GUI supplies a new `terms_effective` when publishing it
+  old lines in its sources viewer. The regulamin's ČHMÚ example changes in
+  place; the regulamin stays version 1.0 (only the author raises it)
   (DEV §20, DEV-20.3, DEV-20.4).
 - The regulamin link without a footer, the author's decision of 2026-11-14
   (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
