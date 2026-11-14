@@ -99,8 +99,14 @@ def route_problems(registry: dict[str, Any]) -> list[str]:
     return problems
 
 
-def _cell(text: str) -> str:
-    return text.replace("|", "\\|").replace("\n", " ")
+def cell(text: str) -> str:
+    """Return `text` as one cell of a Markdown table: no raw tag, pipe or newline."""
+    return (
+        text.replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("|", "\\|")
+        .replace("\n", " ")
+    )
 
 
 def _and(names: list[str]) -> str:
@@ -169,7 +175,7 @@ def render(registry: dict[str, Any]) -> str:
         state = "" if project["status"] == "active" else f" ({project['status']})"
         tool = f"[{project['name']}][{project['name'].lower()}]{state}"
         for route in project["routes"]:
-            out.append(f"| {_cell(route['task'])} | {tool} | `{route['command']}` |")
+            out.append(f"| {cell(route['task'])} | {tool} | `{route['command']}` |")
     out.append("")
     out += [f"[{p['name'].lower()}]: {guide_url(p)}" for p in routed]
 
@@ -183,7 +189,7 @@ def render(registry: dict[str, Any]) -> str:
     for project in members:
         out.append(
             f"| {project['name']} | {project['status']} | {_interfaces(project)} "
-            f"| {_cell(project['summary'])} |"
+            f"| {cell(project['summary'])} |"
         )
 
     out += [

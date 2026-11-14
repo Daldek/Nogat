@@ -115,6 +115,8 @@ After `git ls-remote` on 2026-11-12; these rows supersede the rows above where t
 | Kartograf | branch `fix/ci-cross-platform` `7f5baad7`, draft PR #1 „0.8.1: …” | Frozen until v0.8.0, so not merged: two Windows path tests and a mypy narrowing for Python 3.15 (tests only), and a real Windows race in `download/versions.ensure_dir` (a directory still being removed gives `PermissionError`; about 7 % of LAZ runs with 4 workers), retried with pauses and a regression test. Green on all six gate jobs. Before or after the tag: the author's call |
 | Nogat | `develop` | candidate-3 (Hydrolog `930915d`); `node_provenance` done (Next 13); the registry edge Hydrograf → Hydrolog and the routes of `delineate-network` and its preview |
 
+On 2026-11-14, Nogat's `refactor/dead-code` (not merged) removed dead and duplicated code from `scripts/`: one Markdown cell escaper (`guide.cell`), `load` reads through `_read`, `drift`'s redundant `no tags` branch and the test-only `markup` option of `terms.fill` gone; the documented reference `fill` stays.
+
 ## Next
 
 1. Close the remaining data-output documentation and CLI smoke in Kartograf,

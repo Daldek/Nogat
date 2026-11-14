@@ -132,14 +132,9 @@ def _read_json(path: Path) -> Any:
 def load() -> dict[str, Any]:
     """Read ecosystem.yaml; raise RegistryError when it cannot be read as a mapping."""
     try:
-        with REGISTRY.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-    except OSError as e:
-        raise RegistryError(
-            f"{REGISTRY.name}: cannot read: {e.strerror}", _os_code(e)
-        ) from e
+        data = yaml.safe_load(_read(REGISTRY))
     except yaml.YAMLError as e:
-        raise RegistryError(f"{REGISTRY.name}: not valid YAML: {e}") from e
+        raise RegistryError(f"{_shown(REGISTRY)}: not valid YAML: {e}") from e
     if not isinstance(data, dict):
         raise RegistryError(f"{REGISTRY.name}: top level must be a mapping")
     return data
@@ -251,15 +246,6 @@ def validate(registry: dict[str, Any]) -> list[str]:
     return problems
 
 
-def _cell(text: str) -> str:
-    return (
-        text.replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace("|", "\\|")
-        .replace("\n", " ")
-    )
-
-
 def _code(items: list[str]) -> str:
     return ", ".join(f"`{i}`" for i in items) if items else "—"
 
@@ -324,7 +310,7 @@ def render(registry: dict[str, Any]) -> str:
     for p in projects:
         out.append(
             f"| [{p['name']}]({p['repo']}) | {', '.join(p['profiles'])} "
-            f"| {p['status']} | {_cell(p['summary'])} |"
+            f"| {p['status']} | {guide.cell(p['summary'])} |"
         )
     out.append("")
 
@@ -374,7 +360,7 @@ def render(registry: dict[str, Any]) -> str:
             ]
             out.append(
                 f"| `{item['id']}` | {item['kind']} | {', '.join(consumers) or '—'} "
-                f"| {_cell(item['summary'])} |"
+                f"| {guide.cell(item['summary'])} |"
             )
         out.append("")
 
@@ -390,8 +376,8 @@ def render(registry: dict[str, Any]) -> str:
     for sid, s in sources.items():
         users = [p["name"] for p in projects if sid in p["data_sources"]]
         out.append(
-            f"| [{s['name']}]({s['url']}) | {s['country']} | {_cell(s['licence'])} "
-            f"| {', '.join(users) or '—'} |"
+            f"| [{s['name']}]({s['url']}) | {s['country']} "
+            f"| {guide.cell(s['licence'])} | {', '.join(users) or '—'} |"
         )
     out.append("")
     return "\n".join(out)
@@ -979,11 +965,7 @@ def report_drift(registry: dict[str, Any]) -> int:
                     where = f"{manifest}, {form}" if form else manifest
                     shown = value[:7] if kind == "commit" else value
                     pin = f"{kind} {shown} ({where})" if value else f"{kind} ({where})"
-                    state = (
-                        "no tags"
-                        if kind in ("tag", "range") and latest is None
-                        else _state(kind, value, latest)
-                    )
+                    state = _state(kind, value, latest)
                     rows.append((*who, pin, latest or "—", state))
             if not found:
                 rows.append((*who, "—", latest or "—", "not declared"))

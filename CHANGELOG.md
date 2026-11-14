@@ -6,6 +6,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Removed
+
+- Dead and duplicated code in `scripts/`: the two Markdown cell escapers of
+  `ecosystem.py` and `guide.py` are one, `guide.cell`, which now also escapes
+  `<` and `>` in AGENTS.md (no current entry has one; the files are
+  unchanged); `load` reads `ecosystem.yaml` through `_read`, so an unreadable
+  or non-UTF-8 registry is reported like every other file; `drift` no longer
+  repeats the `no tags` case `_state` already gives; `terms.fill` loses its
+  `markup` option, which only a test used (GUIs fill the HTML).
+
 ### Fixed
 
 - mypy on CI: `tests/unit/test_nogat_logging.py` passed the ASGI app's
