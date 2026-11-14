@@ -6,6 +6,12 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Fixed
+
+- mypy on CI: `tests/unit/test_nogat_logging.py` passed the ASGI app's
+  `Awaitable[None]` to `asyncio.run`, which takes a coroutine; the test now
+  wraps the call in a coroutine.
+
 ### Added
 
 - The path away from IMGW-PIB after the first joint release, a draft plan
