@@ -86,8 +86,8 @@ DOC-11.1).
   - A processing line never names the processing: CP is exactly „Dane ČHMÚ
     zostały przetworzone”; a reader treats old CP lines with parenthetical
     detail as CP, once. P, PP, G, SG and Z keep their existing detail-free
-    wording. Kit 0.7.1 carries CP in `LINES` and regulamin template 1.1
-    (DEV-20.3, DEV-20.4, ECO-071).
+    wording. Kit 0.7.1 carries CP in `LINES` and the regulamin 1.0 with the
+    ČHMÚ example corrected in place (DEV-20.3, DEV-20.4, ECO-071).
   - A public GUI links „Regulamin” in exactly the app menu, the foot of its
     left rail and its welcome window, through `fillSources()`; no footer or
     status bar carries the link or the statement, which opens § 3 of the
