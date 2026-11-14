@@ -18,6 +18,18 @@ of an unreleased version.
 **REL-1.3** Document schemas (`<tool>-<kind>/<n>`) are versioned independently
 of the package (AGI-4.1).
 
+**REL-1.4** Until the first release with its tag on `main`, Nogat's first,
+then each project's, every schema, document type, file format, protocol,
+the GUI kit and the regulamin are version 1: schema ids `<name>/1` and
+`<name>-1.schema.json`, file and database format 1, protocol 1, kit `1.0.0`
+and regulamin 1.0. Only the author's consent changes a version, and only a
+release with its tag on `main` confirms one. An agent never raises on its
+own a repository's package version, a schema id, a file or database format
+number, a protocol number, the kit version or the regulamin version. Copies
+of the kit are compared by their hashes (DEV-15.6), not by its version.
+*Why:* ECO-072; nothing is released, so a raised number marks no version
+any user could have.
+
 ## 2. Release procedure
 
 **REL-2.1** A release needs the author's approval for each merge and for the
