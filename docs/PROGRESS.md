@@ -22,6 +22,7 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | in progress | Nogat, Hydrograf, Hydrolog and Obserwator (GUI, REST server) merged; Archiwista (step 6) open; plan `2026-11-13-unified-logging.md` |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog, Obserwator and Archiwista, deployed 2026-11-14; Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 1) |
+| Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | in progress | Nogat on branch `feat/no-footer` (2026-11-14); Hydrograf, Hydrolog and Obserwator move the link to the rail's foot (Next 14); plan `2026-11-14-no-footer.md` |
 | One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-3/`: Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `930915d`, Retman `320a7d6`. `set check` on 2026-11-14: Hydrograf and Archiwista match; Retman and Hydraulik pin Hydrolog `759d7ef` (candidate-2), Hydraulik declares no Kartograf pin. `verify-candidate` (REL-6.5) does not exist yet |
 | Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
 | `nogat` package (HUB §7) | planned | |
@@ -95,6 +96,10 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
     then D (user rainfall), R (ERA5/CERRA × published coefficients from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
+14. Regulamin link without a footer (ECO-070, plan
+    `docs/plans/2026-11-14-no-footer.md`): Hydrograf, Hydrolog and
+    Obserwator drop the footer statement and link „Regulamin” from the app
+    menu, the rail's foot and their welcome window.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

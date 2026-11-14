@@ -8,6 +8,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- The regulamin link without a footer, the author's decision of 2026-11-14
+  (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
+  ECO-062 and ECO-064): DEV-15.7 links „Regulamin” in exactly the app menu,
+  a small, quiet link at the foot of the left rail (the last small item of
+  a phone's bottom bar or sheet) and the welcome window, where the
+  „Regulamin serwisu” of `fillSources()` is its only link; no footer or
+  status bar carries the link or a statement. DEV-15.8 keeps the statement
+  as the opening of § 3 only, DEV-15.13 and DEV-20.5 lose their footer.
+  `design/README.md` describes `.rail-terms`; the specimen and both mockups
+  link „Regulamin” from the menu and the rail. A browser test pins the
+  welcome window's link; the kit and regulamin 1.0 are unchanged.
 - Documentation audited against the code of 2026-11-14: `docs/PROGRESS.md`
   holds only Status, Next and Open questions, without the dated snapshots
   and the finished items (DOC-6.1); the plans of the admin panel, the

@@ -26,7 +26,7 @@ STANDARD = (ROOT / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding=
 # Rows of the table of DEV §20: | Mark | Line |
 LINE_ROW = re.compile(r"^\| (?P<mark>[A-Z]{1,2}) \| (?P<line>.+) \|$", re.MULTILINE)
 LINES = {m["mark"]: m["line"] for m in LINE_ROW.finditer(STANDARD)}
-# The statement every public GUI shows in its footer, quoted by DEV-15.8.
+# The statement that opens § 3, quoted by DEV-15.8.
 STATEMENT = re.search(
     r"^\*\*DEV-15\.8\*\*.*?„(?P<text>Serwis jest .+?)”",
     STANDARD,
@@ -99,7 +99,7 @@ def test_a_source_block_holds_only_its_provider_lines_and_terms(name: str) -> No
     assert SOURCE_BLOCK.fullmatch(block["body"])
 
 
-def test_section_3_opens_with_the_footer_statement_of_dev_15_8() -> None:
+def test_section_3_opens_with_the_statement_of_dev_15_8() -> None:
     assert STATEMENT is not None
     statement = " ".join(STATEMENT["text"].split())
     assert f"## 3. Charakter serwisu\n\n1. {statement}\n" in SOURCE

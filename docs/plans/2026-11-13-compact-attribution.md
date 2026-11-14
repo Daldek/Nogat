@@ -2,6 +2,8 @@
 
 Approved: 2026-11-13, the author (in session)
 
+Amended: 2026-11-14, ECO-070: a GUI has no footer; without a welcome window the dialog is reached from the strip only, and with one, the window's „Regulamin serwisu” is its regulamin link ([the plan](2026-11-14-no-footer.md)).
+
 Status: done 2026-11-13. Steps 1 to 5 merged into the `develop` of Nogat, Obserwator, Hydrolog, Hydrograf and Archiwista ([Results](#results)); no tags, no release.
 
 Requirements: DEV-20.5 and DEV-20.7 as amended by ECO-064, DEV §20, DEV-15.6, DEV-15.7, HUB-5.2 (producers before consumers), DEV-17.5.

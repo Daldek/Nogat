@@ -293,6 +293,12 @@ details.more .meta { margin-left: auto; color: var(--text-3); font-weight: var(-
 .rail-group .rail-item.module:hover { background: transparent; }
 .rail-item.sub { padding: 6px 0 5px; gap: 2px; font-size: 10px; }
 .rail-item.sub svg { width: 17px; height: 17px; }
+.rail-terms {
+  margin-top: auto; padding: var(--space-2) 0;
+  color: var(--rail-ink); text-decoration: none;
+  font-size: var(--text-xs);
+}
+.rail-terms:hover { color: var(--rail-ink-active); text-decoration: underline; }
 
 .main { grid-row: 2; grid-column: 2; min-width: 0; min-height: 0; }
 
@@ -776,6 +782,8 @@ pre.code .fold { color: color-mix(in srgb, var(--code-text) 55%, var(--code-bg))
   .rail-item { color: var(--text-2); padding: 6px 0 4px; width: 64px; }
   .rail-item:hover { background: transparent; color: var(--text); }
   .rail-item.active { background: transparent; color: var(--accent); font-weight: var(--weight-bold); }
+  .rail-terms { margin-top: 0; padding: 0 2px; color: var(--text-3); }
+  .rail-terms:hover { color: var(--text); }
   .main { grid-row: 2; grid-column: 1; }
 
   .view-layout { display: block; }

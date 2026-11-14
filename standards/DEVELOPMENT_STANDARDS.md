@@ -538,27 +538,36 @@ and copied again. `drift` reports each copy as current, behind or modified
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
 as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
-with each kit version it copies. Every view but the admin page (DEV-15.13)
-links „Regulamin” to it visibly in its footer or status bar, beside the
-attribution lines (DEV-20.5), and the app menu and `<nogat-sources>` pass it
-in their `terms` attribute; every such link opens a new tab
-(`target="_blank"`, `rel="noopener"`). A GUI run without
+with each kit version it copies. It links „Regulamin” to it in exactly
+these places, each link opening a new tab (`target="_blank"`,
+`rel="noopener"`): the end of the app menu, through its `terms` attribute;
+the foot of the GUI's left navigation rail, or of its left navigation where
+it has no rail, as a small, quiet link in the rail's muted text, which on a
+phone, where the rail becomes a bottom bar or sheet, stays as its last small
+item; and the GUI's welcome window, where it has one, which `fillSources()`
+given `terms` fills with „Regulamin serwisu”, its only regulamin link. No
+footer or status bar carries the link or a statement (DEV-15.8), and the
+admin page (DEV-15.13) has none. `<nogat-sources>` also passes it in its
+`terms` attribute to the dialog „Źródła i warunki”. A GUI run without
 `[nogat.operator]`, or used only by its operator behind a sign-in, has
 neither page nor link. A GUI loads no script, style or font from another
 server: only basemaps and map layers come from their providers' servers.
 *Why:* one text tells everyone who uses a public GUI its rules and what
-happens to their data (RODO art. 13; ECO-061, ECO-062); a link that replaced
-the GUI's tab would end its session and lose the user's work; § 8 ust. 5
-names only the providers of map layers as receiving the visitor's IP
-address (ECO-068).
+happens to their data (RODO art. 13; ECO-061, ECO-062); the rail is in every
+view and the menu is not drawn without another GUI, so the rail carries the
+link the menu cannot, while a footer took space the views need (ECO-070); a
+link that replaced the GUI's tab would end its session and lose the user's
+work; § 8 ust. 5 names only the providers of map layers as receiving the
+visitor's IP address (ECO-068).
 
-**DEV-15.8** Every view of a public GUI but its admin page (DEV-15.13) shows
-in its footer or status bar, beside „Regulamin”, the statement
+**DEV-15.8** The terms of a public GUI open § 3 with the statement
 „Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
 działalności gospodarczej operatora. Służy celom badawczym i edukacyjnym.
 Dane IMGW-PIB są w nim wykorzystywane do celów niezarobkowych, zgodnie z
-regulaminami IMGW-PIB.”, which opens § 3 of the terms.
-*Why:* the author's statement of what the services are (ECO-062).
+regulaminami IMGW-PIB.”; no view repeats it in a footer or status bar.
+*Why:* the author's statement of what the services are (ECO-062); the
+regulamin, one click away in every view (DEV-15.7), says it once, and a
+footer took space the views need (ECO-070).
 
 **DEV-15.9** A public GUI limits the requests of each client IP address in
 its own server, the app or its reverse proxy (behind a proxy, the address the
@@ -653,9 +662,9 @@ routes of their own under `/api/admin/`.
 The page is the kit's `<nogat-admin>` ([design/](../design/README.md)) with
 „Zgłoszenia”, „Statystyki” and „Stan”, then the app's own sections; it keeps
 the key in `sessionStorage` under `<project>/admin-key/1`, which „Wyloguj”
-forgets. It is the operator's, not a public view: no footer statement,
-regulamin link, app menu or stats count (DEV-15.4, DEV-15.7, DEV-15.8 and
-DEV-15.11 do not apply to it); `<meta name="robots" content="noindex">`;
+forgets. It is the operator's, not a public view: no regulamin link, app
+menu or stats count (DEV-15.4, DEV-15.7 and DEV-15.11 do not apply to it);
+`<meta name="robots" content="noindex">`;
 every admin answer `Cache-Control: no-store`; CSP `'self'`; its requests stay
 under the rate limit (DEV-15.9).
 *Why:* the operator handles every GUI in one place and one way, and a
@@ -1068,8 +1077,8 @@ the place of its full line, and ends with „Źródła i warunki”, which opens
 dialog with every line (S, P, PS, PP, M, C, CP, G, SG, Z) and the terms of
 DEV-20.7 (RD, RH, RK), and with „Regulamin” where the GUI serves one
 (DEV-15.7). A GUI with a welcome window shows the same full content there on
-the first visit; one without it reaches the dialog from the strip and the
-footer. Files, exports, PNG and SVG images, print views, hand-offs and the
+the first visit; one without it reaches the dialog from the strip. Files,
+exports, PNG and SVG images, print views, hand-offs and the
 fields `attribution` and `terms_notice` keep the full lines.
 
 *Why:* the terms bind every product made with the data (ECO-060); the

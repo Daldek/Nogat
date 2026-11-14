@@ -107,6 +107,12 @@
   .app strong { color: var(--tool); font-size: var(--text-md); }
   .app nav { margin-left: auto; display: flex; gap: var(--space-4); color: var(--text-2); font-size: var(--text-sm); }
 
+  /* Rail foot with the regulamin link (DEV-15.7) */
+  .rail-demo { width: 64px; height: 180px; display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-2) 0; background: var(--rail-bg); border-radius: var(--radius-md); }
+  .rail-demo .rail-item { width: 54px; padding: var(--space-2) 0; border-radius: var(--radius-md); background: var(--rail-active); color: var(--rail-ink-active); font-size: var(--text-xs); text-align: center; }
+  .rail-terms { margin-top: auto; padding: var(--space-2) 0; color: var(--rail-ink); font-size: var(--text-xs); text-decoration: none; }
+  .rail-terms:hover { color: var(--rail-ink-active); text-decoration: underline; }
+
   /* Marks */
   .marks { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-lg); }
   .marks.on-bg { background: var(--bg); }
@@ -185,8 +191,13 @@
     </div>
     <h3>App menu</h3>
     <div class="row">
-      <nogat-app-menu current="hydrograf" marks="marks/" apps='{"hydrograf": "mockups/hydrograf/", "hydrolog": "mockups/hydrolog/"}'></nogat-app-menu>
-      <span class="note">kit/nogat-app-menu.js: the GUIs of the deployment's <code>[nogat.gui]</code> (DEV-15.4)</span>
+      <nogat-app-menu current="hydrograf" marks="marks/" apps='{"hydrograf": "mockups/hydrograf/", "hydrolog": "mockups/hydrolog/"}' terms="kit/nogat-terms.html"></nogat-app-menu>
+      <span class="note">kit/nogat-app-menu.js: the GUIs of the deployment's <code>[nogat.gui]</code> (DEV-15.4), ending with „Regulamin” from <code>terms</code> (DEV-15.7)</span>
+    </div>
+    <h3>Regulamin link</h3>
+    <div class="row">
+      <nav class="rail-demo" aria-label="Widoki"><span class="rail-item">Mapa</span><a class="rail-terms" href="kit/nogat-terms.html" target="_blank" rel="noopener">Regulamin</a></nav>
+      <span class="note"><code>.rail-terms</code> at the foot of the rail, the last small item of the bar on a phone; with the menu's „Regulamin” and the welcome window's „Regulamin serwisu” (<code>fillSources</code>) the only links, no footer (DEV-15.7, DEV-15.8, ECO-070)</span>
     </div>
     <h3>Sources strip</h3>
     <nogat-sources attribution='["Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy", "Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone", "Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)", "Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, PRG (wytworzono 2026, pozyskano 2026-11-13); dane przetworzone", "Źródło: Český úřad zeměměřický a katastrální (ČÚZK), RÚIAN (pozyskano 2026-11-13), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone"]' terms-notice='["Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations", "Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin"]'></nogat-sources>

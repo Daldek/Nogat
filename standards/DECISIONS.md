@@ -70,15 +70,16 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
-| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066 | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070 | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
 | [ECO-068](#eco-068-regulamin-10-corrected-in-place-gugik-isric-and-čúzk-lines) | Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines | accepted | 2026-11-13 |
 | [ECO-069](#eco-069-info-texts-of-a-gui) | Info texts of a GUI | accepted | 2026-11-14 |
+| [ECO-070](#eco-070-the-regulamin-link-in-the-menu-the-rail-and-the-welcome-window) | The regulamin link in the menu, the rail and the welcome window | accepted | 2026-11-14 |
 
 ---
 
@@ -1229,6 +1230,9 @@ and Obserwator, used without signing in, and Archiwista serves no terms; the
 template keeps blocks for data sources only, states fixed rules for logs,
 statistics, cookies and „Zgłoś uwagę”, and names its processor in two fields.
 
+**Amended by ECO-070 (2026-11-14):** „Regulamin” is linked from the app
+menu, the foot of the left rail and the welcome window, not from a footer.
+
 **Decision.** A GUI open to other people serves its terms at
 `regulamin.html`, filled from the kit's template `nogat-terms.md` and the
 `nogat-terms.html` generated from it, and links „Regulamin” from every view
@@ -1262,6 +1266,9 @@ in three more keys of `[nogat.operator]`.
 
 **Amended by ECO-066 (2026-11-13):** every server logs as DEV §12 says; the
 access log keeps the class of the User-Agent, not the User-Agent.
+
+**Amended by ECO-070 (2026-11-14):** no footer or status bar shows the
+statement; it opens § 3 of the regulamin only.
 
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
@@ -1363,6 +1370,9 @@ links RD, RH and RK, without H and N.
 
 **Amended by ECO-068 (2026-11-13):** the strip also holds GK, SK and ZK, the
 short forms of G, SG and Z, and the dialog G, SG and Z.
+
+**Amended by ECO-070 (2026-11-14):** the welcome window's „Regulamin
+serwisu” is its only regulamin link, and no footer reaches the dialog.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -1645,3 +1655,36 @@ gate (the texts live in each GUI's own resources, in different shapes).
 **Consequence.** DEV-15.14 is added. Hydrograf, Hydrolog, Obserwator and
 Archiwista revise their info texts in their own repositories (DEV-17.5),
 moving method detail beyond the limit to their guides.
+
+## ECO-070 The regulamin link in the menu, the rail and the welcome window
+
+**Decision.** A public GUI links „Regulamin”, in a new tab, in exactly three
+places (DEV-15.7): the end of the app menu, as before; a small, quiet link
+at the foot of its left navigation rail, or of its left navigation where it
+has no rail, kept as the last small item where the rail becomes a bottom bar
+or sheet on a phone; and its welcome window, where it has one, through the
+„Regulamin serwisu” that `fillSources()` writes there, never a second link.
+No footer or status bar carries the link or the author's statement of what
+the services are; the statement stays as the opening of § 3 of the
+regulamin (DEV-15.8), whose text and version 1.0 do not change. The strip
+`<nogat-sources>` and its dialog „Źródła i warunki” with „Regulamin
+serwisu” stay as they are. Plan: `docs/plans/2026-11-14-no-footer.md`.
+
+**Why.** The author's decision of 2026-11-14: the footer statement takes
+space and the link is easy to reach elsewhere. The rail is in every view of
+a GUI, so a link at its foot replaces the footer's as the one the app menu,
+not drawn without another GUI, cannot be. The provider lines stay on screen,
+since § 5 of the IMGW-PIB terms requires them on the product (ECO-064).
+
+**Rejected.** Keeping the footer with the link alone (the space is the
+point). The statement in the status bar, the welcome window or a tooltip
+(the regulamin says it, one click away). The link only in the menu and the
+strip's dialog (the menu is not always drawn, and a dialog about the
+providers is not where a visitor looks for the service's terms). A second
+link in a welcome window beside „Regulamin serwisu” (one link per place).
+
+**Consequence.** DEV-15.7 lists the three places, DEV-15.8 keeps the
+statement in § 3 only, DEV-15.13 and DEV-20.5 lose their footer; the kit
+and regulamin 1.0 are unchanged. Hydrograf, Hydrolog and Obserwator remove
+their footer statement and link and add the rail's link in their own
+repositories (DEV-17.5); Archiwista serves no regulamin.

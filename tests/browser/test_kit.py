@@ -552,6 +552,24 @@ def test_welcome_window_gets_the_dialogs_content(
     assert body.locator("li").all_text_contents() == [*full, *NOTICE]
 
 
+def test_welcome_window_links_the_regulamin_only_when_given(
+    sources: tuple[Page, list[str]], site: str
+) -> None:
+    page, _ = sources
+    fill = (
+        "async ([a, terms]) => { const m = await import('/kit/nogat-sources.js');"
+        " m.fillSources(document.getElementById('welcome'),"
+        " {attribution: a, termsNotice: [], terms}); }"
+    )
+    page.evaluate(fill, [IMGW, "regulamin.html"])
+    welcome = page.locator("#welcome")
+    link = welcome.get_by_role("link", name="Regulamin serwisu")
+    assert link.count() == 1
+    _opens_in_a_new_tab(page, link, f"http://{site}/regulamin.html")
+    page.evaluate(fill, [IMGW, None])
+    assert welcome.get_by_role("link", name="Regulamin serwisu").count() == 0
+
+
 def test_strip_and_dialog_follow_both_themes(sources: tuple[Page, list[str]]) -> None:
     page, _ = sources
     _lines(page, IMGW, NOTICE)
