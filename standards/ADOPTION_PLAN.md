@@ -175,7 +175,7 @@ Until the rename of phase 6, a pin names each distribution as the tag's
 
 This is the early adoption snapshot, before the final integration fixes and
 pushes, not the current completion or publication status. The branch audit
-of 2026-10-28 is in [PROGRESS](../docs/PROGRESS.md#project-evidence-on-2026-10-28):
+of 2026-10-28 is in [PROGRESS](../docs/PROGRESS.md) up to commit `6e4e71b`:
 Hydrograf's quality tooling and producer migration, Archiwista's English
 documentation and message catalog, and Kartograf's message catalog have
 progressed beyond the cells below. `hydrolog.testing` is implemented on

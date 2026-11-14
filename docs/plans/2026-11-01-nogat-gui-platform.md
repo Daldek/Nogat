@@ -175,7 +175,7 @@ Hydraulik validates against commands-1 too
 an editor's server side (`GET /commands`, `POST /commands/parse`, `/validate`,
 `/format`, SPEC lines 3423-3426) but only „Wklej polecenie producenta” in its
 UI (`web/src/map/source.js:199-240`): BDOT10k and orthophoto are downloaded by
-pasting ([PROGRESS](../PROGRESS.md#next), item 6).
+pasting ([PROGRESS](../PROGRESS.md#next), item 9).
 
 ### Data between the apps
 

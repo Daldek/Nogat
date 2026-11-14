@@ -2,7 +2,7 @@
 
 Approved: 2026-11-01 (the author, after reviewing the specimen and the marks)
 
-Requirements: HUB-5.2, DEV-17.4. Item 4 of Next in
+Requirements: HUB-5.2, DEV-17.4. Item 11 of Next in
 [PROGRESS](../PROGRESS.md#next); the look of the
 [shared GUI](2026-10-20-unified-gui.md), whose scope and storage question it
 does not decide.

@@ -6,6 +6,18 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Changed
+
+- Documentation audited against the code of 2026-11-14: `docs/PROGRESS.md`
+  holds only Status, Next and Open questions, without the dated snapshots
+  and the finished items (DOC-6.1); the plans of the admin panel, the
+  unified logging, the terms fix and the compact attribution record their
+  Status and Results in every project; README, `CLAUDE.md`'s code map,
+  `standards/README.md` and `design/README.md` name the GUI kit,
+  `scripts/terms.py`, `tests/browser/`, the `set` commands, what `drift`
+  and the gate check, the four GUIs, `test_kit_manifest.py` and the
+  republication of regulamin 1.0 on 2026-11-14.
+
 ### Removed
 
 - Dead and duplicated code in `scripts/`: the two Markdown cell escapers of
