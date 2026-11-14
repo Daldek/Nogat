@@ -2,7 +2,7 @@
 
 Approved: 2026-11-13, the author (in session)
 
-Status: step 1 (Nogat) done 2026-11-13 on branch `feat/compact-attribution`; steps 2 to 5 in each project's own branch; no merges, tags or releases.
+Status: done 2026-11-13. Steps 1 to 5 merged into the `develop` of Nogat, Obserwator, Hydrolog, Hydrograf and Archiwista ([Results](#results)); no tags, no release.
 
 Requirements: DEV-20.5 and DEV-20.7 as amended by ECO-064, DEV §20, DEV-15.6, DEV-15.7, HUB-5.2 (producers before consumers), DEV-17.5.
 
@@ -30,3 +30,11 @@ Legal basis: §5 ust. 3 and 4 of the IMGW-PIB terms and ust. 1 and 2 of the PMAX
 5. Archiwista: the same for the map and the station views of its stores; no `terms` attribute, since it serves no regulamin (ECO-062).
 
 Each project checks in its own gate that every view has exactly one strip and that its exports still carry the full lines.
+
+## Results
+
+- 2026-11-13, step 1: Nogat `5406e5c`, merged into `develop` at `751e978` (kit 0.5.0; kit 0.5.1 at `9940bb8`).
+- 2026-11-13, step 2: Obserwator `47144ba` (kit 0.5.1), merged at `c594117`.
+- 2026-11-13, step 3: Hydrolog `faa32cf` (kit 0.5.1), merged at `f2978a4`.
+- 2026-11-13, step 4: Hydrograf `68dc905`, merged at `6615439`.
+- 2026-11-13, step 5: Archiwista `3bd512f`, merged at `1567b77`.

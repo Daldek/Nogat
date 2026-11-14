@@ -1,6 +1,6 @@
 # Visual identity of the Nogat ecosystem
 
-One look for every tool with a GUI: Archiwista and Hydrograf now, and any tool that gains one later.
+One look for every tool with a GUI: Archiwista, Hydrograf, Hydrolog and Obserwator now, and any tool that gains one later.
 The brand comes from debever.pl, the author's site: warm off-white and navy, a GitHub-dark night theme, the wave mark and Lato.
 The working UI comes from Archiwista: a dense 13 px interface, status colours and 32 px controls.
 Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md).
@@ -264,7 +264,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 ## Kit
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
-`nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit.py` fails when they disagree.
+`nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
@@ -309,7 +309,7 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
 Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065, ECO-066, ECO-068): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
-The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13 and corrected in place on the author's decision in kit 0.6.2 (ECO-068). From its republication on, any change of its text raises that version, adds its entry to the history and releases a new kit version; the operator then sets a new `terms_effective`, the day the GUIs publish it, since a new version takes effect on publication.
+The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13, corrected in place on the author's decision in kit 0.6.2 (ECO-068) and republished on 2026-11-14. From then on, any change of its text raises that version, adds its entry to the history and releases a new kit version; the operator then sets a new `terms_effective`, the day the GUIs publish it, since a new version takes effect on publication.
 Its § 3 opens with the statement every view shows in its footer (DEV-15.8); the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, the logs as DEV-12.4 to DEV-12.9 keep them (§ 8 ust. 3), so a GUI serves the page only once it follows them.
 Its § 5 says once that use of data taken from the service is governed by the providers' terms, and each data-source block holds only the provider's name, the lines it requires and the link to its terms or licence, never a summary of them (DEV-20.7, ECO-065). Its § 8 ust. 5 names the basemap and the map layers of the providers in § 5 as the only resources the visitor's browser fetches from other servers, which holds only while the GUI loads no script, style or font from elsewhere (DEV-15.7).
 

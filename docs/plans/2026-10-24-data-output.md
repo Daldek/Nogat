@@ -302,7 +302,7 @@ State of the projects on 2026-10-24, before the work:
 The table and project notes below record the early local branches before
 the final integration run and subsequent pushes. They are not the current
 completion or publication status. The pins table below is a later update;
-the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md#project-evidence-on-2026-10-28).
+the 2026-10-28 audit is in [PROGRESS](../PROGRESS.md) up to commit `6e4e71b`.
 
 | Project | Step | Branch (worktree), head | State |
 |---|---|---|---|

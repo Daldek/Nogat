@@ -2,7 +2,7 @@
 
 Approved: 2026-11-13, the author's request in session („Czy możesz ujednolicić logowanie we wszystkich aplikacjach i zdefiniować je w Nogacie?”)
 
-Status: step 1 (Nogat) done 2026-11-13 on branch `feat/unified-logging`; steps 2 to 6 in each project's own branch; no merges, tags or releases.
+Status: steps 1 to 5 done 2026-11-14, merged into the `develop` of Nogat, Hydrograf, Hydrolog and Obserwator ([Results](#results)); step 6 (Archiwista) open. No tags, no release.
 
 Requirements: DEV-12.4 to DEV-12.9, DEV-15.6, DEV-15.10, DEV-18.1, DEV-18.2, HUB-4.1 and ECO-066 (added or changed by step 1); DEV-12.3, DEV-15.9, DEV-15.11, HUB-5.2, DEV-17.5.
 
@@ -150,3 +150,7 @@ Measured on 2026-11-13 in the user journal of `claude-agent` (`journalctl --user
 ## Results
 
 - Step 1: commit on Nogat `feat/unified-logging` (see `CHANGELOG.md`); gate green. A run of the module under uvicorn 0.38 and Starlette 1.10 with `--proxy-headers --forwarded-allow-ips '*'` and `X-Forwarded-For`, `X-Real-IP` and `CF-Connecting-IP` set: no address in any file or on stderr, `?q=&email=&bbox=…` logged, one app record for a 500 that uvicorn reported too, stderr only JSON lifecycle and one reduced error, no `X-Request-Id` in the answers, the file of 2026-10-20 deleted at start.
+- Step 1 merged into Nogat's `develop` at `a41d971` (2026-11-13).
+- 2026-11-14, step 2: Hydrograf `b10f00f`, with the terms fix, merged at `f3a6c0e`.
+- 2026-11-14, step 3: Hydrolog `576bbac`, merged at `0273a3a`.
+- 2026-11-14, steps 4 and 5: Obserwator `0369f17` (ADR-019), the GUI and the REST server, merged at `961e79c`.

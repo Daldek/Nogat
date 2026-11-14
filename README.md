@@ -14,8 +14,10 @@ Nogat holds:
 - the routing table for agents, task to tool to entry command with a link to
   each tool's guide, generated from the registry: [`AGENTS.md`](AGENTS.md);
 - cross-project plans: [`docs/plans/`](docs/plans/);
-- the visual identity of every GUI (tokens, marks, guidelines):
-  [`design/`](design/README.md).
+- the visual identity of every GUI (tokens, marks, guidelines) and the GUI
+  kit every GUI copies: [`design/`](design/README.md);
+- the reference module of server logs every Python server copies:
+  [`standards/reference/`](standards/reference/nogat_logging.py).
 
 Nogat will also be the `nogat` package that installs every tool with one
 command (`uv tool install nogat`, [HUB §7](standards/ECOSYSTEM_HUB.md));
@@ -33,8 +35,9 @@ uv run scripts/ecosystem.py map --check      # fail when the map is stale
 uv run scripts/ecosystem.py agents           # regenerate AGENTS.md, the routing table
 uv run scripts/ecosystem.py agents --check   # fail when AGENTS.md is stale
 uv run scripts/ecosystem.py deps             # compare third-party dependencies across checkouts
-uv run scripts/ecosystem.py drift            # compare consumers' pins with producers' latest tags
+uv run scripts/ecosystem.py drift            # compare consumers' pins with producers' latest tags, and copies of Nogat's files
 uv run scripts/ecosystem.py standard         # check the standard's IDs, links, budgets, generated tables
+uv run scripts/ecosystem.py set check        # compare consumers' pins with the release set candidate
 ```
 
 `deps` and `drift` read the projects' checkouts next to Nogat, or under
@@ -43,10 +46,10 @@ uv run scripts/ecosystem.py standard         # check the standard's IDs, links, 
 holds structure only; versions and pins are read from the repositories.
 
 `scripts/gate.sh` sets up the environment from `uv.lock` and checks the
-scripts (ruff, mypy, pytest with coverage), the registry, the map and
-AGENTS.md, the CI templates (shellcheck, actionlint) and commit messages; CI
-runs it on every push and pull request. Working on Nogat itself:
-[CLAUDE.md](CLAUDE.md).
+scripts (ruff, mypy, pytest with coverage), the registry, the map,
+AGENTS.md and the release set's README, the standard, the CI templates
+(shellcheck, actionlint) and commit messages; CI runs it on every push and
+pull request. Working on Nogat itself: [CLAUDE.md](CLAUDE.md).
 
 ## Issues
 

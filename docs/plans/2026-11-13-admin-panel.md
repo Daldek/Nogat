@@ -2,7 +2,7 @@
 
 Approved: 2026-11-13, the author (in session)
 
-Status: approved 2026-11-13; step 1 (Nogat) done on branch `feat/admin-panel` (DEV-15.13, ECO-067, kit 0.7.0), not merged; steps 2 to 6 open.
+Status: done 2026-11-14 except the author's Cloudflare Access rules of step 6. Steps 1 to 5 merged into the `develop` of Nogat, Hydrolog, Hydrograf, Obserwator and Archiwista and deployed with their keys ([Results](#results)); no tags, no release.
 
 Requirements: DEV-15.6 (kit copied byte for byte), DEV-15.11, DEV-15.12, DEV-18.4, AGI-6.3 (error documents), HUB-5.2 (producers before consumers), DEV-17.5.
 
@@ -64,3 +64,12 @@ Each project checks in its own gate that the core routes answer as documented, t
 ## Not in scope
 
 Logs in the panel (the unified logging, decided on its own on `feat/unified-logging`, writes files the operator reads directly), accounts for the public GUIs, and a shared admin across GUIs (the future „GUI hub”).
+
+## Results
+
+- 2026-11-13, step 1: Nogat `096ec51`, merged into `develop` at `229ade3` (DEV-15.13, ECO-067, kit 0.7.0).
+- 2026-11-14, step 2: Hydrolog `cddfd1e` (kit 0.7.0) and `3da4b3b`, merged at `5286cb0`.
+- 2026-11-14, step 3: Hydrograf `0c64490` and `132d93f` (ADR-086), merged at `aa975b0`.
+- 2026-11-14, step 4: Obserwator `9d921cb` (ADR-020), merged at `0591b82`.
+- 2026-11-14, step 5: Archiwista `0981a4d`, merged at `b6b56d8`.
+- 2026-11-14, step 6: the four GUIs deployed with the panel and their keys. Open: Cloudflare Access on `/admin`, `/admin/*` and `/api/admin/*`, the author's step.

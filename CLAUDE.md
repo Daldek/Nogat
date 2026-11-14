@@ -16,8 +16,8 @@ project registry (`ecosystem.yaml`) and the tooling that reads it. Profile:
   `nogat-error/1` document, exit code from `error_registry.json` (HUB-4.8).
 - Never edit generated files or blocks: `docs/ECOSYSTEM_MAP.md` and `AGENTS.md`
   come from `ecosystem.yaml` (`uv run scripts/ecosystem.py map` and `agents`),
-  the tables in `standards/ERROR_REGISTRY.md` from `error_registry.json`
-  (`standard --write`).
+  the tables in `standards/ERROR_REGISTRY.md` from `error_registry.json` and
+  `design/kit/nogat-terms.html` from `nogat-terms.md` (`standard --write`).
 - `standards/legacy/`, `standards/templates/` and `standards/configs/` hold
   files of the shared standards of 2026-01-29 that preceded Nogat, kept
   verbatim until replaced (DOC-11.1); do not edit or copy them.
@@ -51,6 +51,7 @@ and `set bump` fetch first); `set apply` writes one consumer's manifests.
 scripts/ecosystem.py   registry: validate, map, agents, deps, drift, standard, set
 scripts/guide.py       AGENTS.md: the routing table, from the registry's routes
 scripts/standard.py    checks of the standard: IDs, links, budgets, copies
+scripts/terms.py       the regulamin of the GUI kit: HTML from its Markdown, the reference filling
 scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
@@ -59,9 +60,11 @@ schemas/log/           nogat-log/1, one record of a server's logs (DEV-12.4)
 standards/             the standard; ci/ holds the templates projects copy
 standards/reference/   nogat_logging.py, the server logs Python servers copy (DEV-12.9)
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
+design/kit/            the GUI kit GUIs copy: app menu, sources strip, hand-off, regulamin, admin panel
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent and hand-off schemas, AGENTS.md, Nogat's own error documents, design/
+tests/contract/        the agent, hand-off and log schemas, AGENTS.md, Nogat's own error documents, design/ and the kit
+tests/browser/         the kit's elements in Playwright
 ```
 
 ## Documentation map
