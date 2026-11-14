@@ -437,6 +437,7 @@ Every GUI answers the core API of DEV-15.13, each answer JSON with `Cache-Contro
 | `GET /api/admin/status` | `{app, version, started_at, uptime_s, data_dir, disk: {free_bytes, total_bytes}, checks: [{name, status, detail}]}`, `status` one of `ok`, `warning`, `failed`; each GUI names its checks in its README |
 
 A deployment protects exactly `/admin`, `/admin/*` and `/api/admin/*` (Cloudflare Access on the test deployment); the rest of the GUI stays public.
+The key the prompt asks for lives in one place per deployment, `~/.config/nogat/keys/<project>-admin.key` (mode `0600`, or `0640` with a group a container's user belongs to); the app gets only its path in `<PREFIX>ADMIN_API_KEY_FILE`, never the value in `.env`, a unit file or compose (DEV-15.13).
 The elements load nothing but their requests to the API and need no inline script or style, so they run under CSP `'self'`; every text of a report is a text node.
 [specimen-admin.html](specimen-admin.html) runs the shell on a fake API inside the page, [specimen-admin.js](specimen-admin.js), which is not a kit file; the key is `nogat`.
 

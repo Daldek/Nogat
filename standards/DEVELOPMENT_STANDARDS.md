@@ -646,7 +646,11 @@ the environment variable `<PREFIX>ADMIN_API_KEY` or the file named by
 GUI's other settings (`<TOOL>_` in a tool, DEV-18.3; empty where they have
 none); a failure answers `401` with the error document of `unauthorized`
 (AGI-6.3) and the reason `admin_key_not_configured`, `admin_key_missing` or
-`admin_key_invalid`. No key is generated and none is ever logged. An app
+`admin_key_invalid`. No key is generated and none is ever logged. A
+deployment keeps each GUI's key in one place,
+`<config>/nogat/keys/<project>-admin.key` (`~/.config/nogat/keys/`), mode
+`0600`, or `0640` with a group a container's user belongs to, and gives the
+app only its path in `<PREFIX>ADMIN_API_KEY_FILE`, never the value. An app
 with accounts replaces the key with its own role check and keeps everything
 else. The core API is the same in every GUI; an app's own sections use
 routes of their own under `/api/admin/`.
