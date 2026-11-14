@@ -661,6 +661,28 @@ under the rate limit (DEV-15.9).
 *Why:* the operator handles every GUI in one place and one way, and a
 deployment protects three paths (ECO-067).
 
+**DEV-15.14** An info text, behind „(i)”, in a help popover or in a
+section's „Objaśnienie metod”, explains to the GUI's user what a value or
+view means and how it is computed, in this order: a definition of one or two
+sentences, then, each only where it applies, the formula with its symbols and
+units, how to read the value in one or two sentences, and the sources (norms,
+literature, data provider). It is Polish, impersonal and descriptive („Suma
+opadów…”, „Liczona z…”), never in the first person, and addresses the user
+as „Ty” only in an instruction, as the regulamin does; a unit follows a space
+(„12 mm”, „[mm]” in a table head), a decimal a comma and a range an en dash
+(„5–10 min”). It holds no experience, opinion or past work of the author or
+the operator, no internal identifier (a plan step such as M12, an ADR number,
+a branch or plan name), no development status („prototyp”, „docelowo”, „w
+planie”), no detail the user cannot act on (the program, module, command,
+file, library or palette that computes or draws the value, the server's
+capabilities) unless a licence requires naming it, and no long list of
+output fields or file contents. Without its formula and sources it has at
+most about 400 characters; a longer explanation of a method belongs in the
+GUI's guide (instrukcja), which the info text links; an example is in
+[design/](../design/README.md#info-texts).
+*Why:* every GUI explains its values one way, short enough to read beside
+them (ECO-069).
+
 ---
 
 ## 16. Licence and contributions

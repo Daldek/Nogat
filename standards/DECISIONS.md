@@ -78,6 +78,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
 | [ECO-068](#eco-068-regulamin-10-corrected-in-place-gugik-isric-and-čúzk-lines) | Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines | accepted | 2026-11-13 |
+| [ECO-069](#eco-069-info-texts-of-a-gui) | Info texts of a GUI | accepted | 2026-11-14 |
 
 ---
 
@@ -1612,3 +1613,35 @@ forms. Hydrograf takes GUGiK's orthophoto instead of Esri's imagery, drops
 Obserwator builds its borders from PRG and RÚIAN and keeps `gugik` and
 `cuzk`; Hydrolog copies kit 0.6.2; Hydrograf and Hydrolog publish the
 corrected text on one day, Obserwator at its switch.
+
+## ECO-069 Info texts of a GUI
+
+**Decision.** Every info text of a GUI, behind „(i)”, in a help popover or in
+a section's „Objaśnienie metod”, has one shape (DEV-15.14): a definition of
+one or two sentences, then, where they apply, the formula with its symbols
+and units, how to read the value and the sources. It is Polish, impersonal
+and descriptive, „Ty” only in an instruction as in the regulamin; it says
+nothing of the author's or operator's experience, opinions or past work,
+no internal identifier, no development status, no implementation detail the
+user cannot act on unless a licence requires it, and no long list of fields
+or file contents; it has at most about 400 characters without the formula
+and the sources, and a longer explanation of a method goes to the GUI's
+guide. Units follow a space, decimals a comma, ranges an en dash.
+`design/README.md` shows one example.
+
+**Why.** The author's request of 2026-11-14: one standard and no needless
+detail. The GUIs explain their values in different shapes: Hydrograf's
+entries have up to twelve fields, among them a second paragraph on how
+Hydrograf uses the value, and run to several hundred characters; Hydrolog's
+have seven; Obserwator and Archiwista explain in titles and short
+descriptions. A user who opens two GUIs reads two styles, and detail the
+user cannot act on hides the definition.
+
+**Rejected.** Each GUI keeping its own shape (one job, one way). A kit
+component for info texts (the rule fixes the content; each GUI keeps its
+popover and its formula typesetting). A hard character limit checked by the
+gate (the texts live in each GUI's own resources, in different shapes).
+
+**Consequence.** DEV-15.14 is added. Hydrograf, Hydrolog, Obserwator and
+Archiwista revise their info texts in their own repositories (DEV-17.5),
+moving method detail beyond the limit to their guides.
