@@ -73,7 +73,7 @@ LINES = {
         re.MULTILINE,
     )
 }
-CP = "Dane ČHMÚ zostały przetworzone (agregacja do dobowych sum)"
+CP = LINES["CP"]
 OTHER = "Źródło: Państwowe Gospodarstwo Wodne Wody Polskie"
 LICENCE = "https://creativecommons.org/licenses/by/4.0/"
 
@@ -530,6 +530,25 @@ def test_dialog_shows_every_line_and_the_terms_and_traps_focus(
     button.click()
     _opens_in_a_new_tab(page, regulamin, f"http://{site}/regulamin.html")
     assert dialog.is_visible()
+
+
+def test_old_cp_lines_are_canonicalized_and_deduplicated(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    old = "Dane ČHMÚ zostały przetworzone (agregacja do dobowych sum)"
+    _lines(
+        page, [LINES["C"], old, CP, "Dane ČHMÚ zostały przetworzone (filtracja)"], []
+    )
+    assert page.locator(".nogat-sources-line").all_text_contents() == [LINES["CK"]]
+    page.get_by_role("button", name="Źródła i warunki").click()
+    assert page.locator("dialog li").all_text_contents() == [LINES["C"], CP]
+    page.evaluate(
+        "async a => { const m = await import('/kit/nogat-sources.js');"
+        " m.fillSources(document.getElementById('welcome'), {attribution: a}); }",
+        [old, CP],
+    )
+    assert page.locator("#welcome li").all_text_contents() == [CP]
 
 
 def test_welcome_window_gets_the_dialogs_content(
