@@ -22,8 +22,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | in progress | Nogat, Hydrograf, Hydrolog and Obserwator (GUI, REST server) merged; Archiwista (step 6) open; plan `2026-11-13-unified-logging.md` |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog, Obserwator and Archiwista, deployed 2026-11-14; Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 1) |
-| Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | in progress | Nogat on branch `feat/no-footer` (2026-11-14); Hydrograf, Hydrolog and Obserwator move the link to the rail's foot (Next 14); plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-3/`: Kartograf `d0990c8`, Obserwator `f9f4ee7`, Hydrolog `930915d`, Retman `320a7d6`. `set check` on 2026-11-14: Hydrograf and Archiwista match; Retman and Hydraulik pin Hydrolog `759d7ef` (candidate-2), Hydraulik declares no Kartograf pin. `verify-candidate` (REL-6.5) does not exist yet |
+| Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-4/` since 2026-11-14: Kartograf `c9afdd3`, Obserwator `0394af7`, Hydrolog `9e2cb61`, Retman `f6d9154`, Archiwista `0ff788e` (new member; the first release's scope of 2026-11-14: Nogat, Hydrograf, Obserwator, Kartograf, Hydrolog, Archiwista, Retman optional). `set check`: every consumer matches except Hydraulik (`feature/sfincs-swmm`, outside the first release). The GUI-only commits after the pins (Obserwator `c332ca9`, Hydrolog `547b7f4`, no footer, ECO-070) wait for the next candidate. `verify-candidate` (REL-6.5) does not exist yet |
 | Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
 | `nogat` package (HUB §7) | planned | |
 
@@ -46,11 +46,11 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    2026-11-13): N1 done; next Hydrolog's H1 to H4 under its own plan, then
    R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms
    (question 4).
-5. Release set: Retman and Hydraulik apply candidate-3 (`set apply
-   --project <P>`), or a next candidate takes a newer Hydrolog (Open
-   questions). Hydrolog v1.0.0 waits for Obserwator 3.0.0's tag (producers
-   first, HUB-5.2), `verify-candidate` and the author's versions. Plan
-   `docs/plans/2026-11-03-one-pin-set.md`.
+5. Release set: candidate-4 holds the members of the first release. Next:
+   a candidate with the GUI-only commits of 2026-11-14 (Obserwator, Hydrolog)
+   once consumers re-pin; `verify-candidate` (REL-6.5); the author's versions;
+   Hydrolog v1.0.0 after Obserwator 3.0.0's tag (producers first, HUB-5.2).
+   Hydraulik joins a later set. Plan `docs/plans/2026-11-03-one-pin-set.md`.
 6. Repeat the final integration run at explicitly recorded heads, with
    Hydrograf and Archiwista apart and the two flows of F2; record the
    outcome in the data-output plan. Before the first release set, reconcile
@@ -124,8 +124,8 @@ Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
 - The author's decisions: the final versions, with no tags in any project
-  until they are decided (Hydrolog v1.0.0 included); candidate-3 by Retman
-  and Hydraulik, or a next candidate with a newer Hydrolog; Windows as a
+  until they are decided (Hydrolog v1.0.0 included); the first release's
+  scope (2026-11-14, Next 5); Windows as a
   blocking CI job in Hydrolog; Hydroni on Hydrograf's current `develop`.
 - Hydrograf's network method (ADR-080), recorded with proposals in its
   `docs/PROGRESS.md`, no work until the author asks („na razie nic nie
