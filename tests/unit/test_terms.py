@@ -128,12 +128,10 @@ def test_fill_keeps_listed_blocks_and_drops_the_rest() -> None:
     assert "{{" not in page
 
 
-def test_fill_escapes_values_in_markup_only() -> None:
+def test_fill_escapes_values() -> None:
     values = {**VALUES, "service_name": 'A & "B" <c>'}
     page = terms.fill(terms.build(SOURCE), values, [])
     assert "<h1>Regulamin A &amp; &quot;B&quot; &lt;c&gt;</h1>" in page
-    source = terms.fill(SOURCE, values, [], markup=False)
-    assert source.startswith('# Regulamin A & "B" <c>\n')
 
 
 def test_fill_takes_an_empty_processor_transfer() -> None:

@@ -223,20 +223,13 @@ def kept(listed: Iterable[str]) -> set[str]:
     return chosen
 
 
-def fill(
-    template: str,
-    values: Mapping[str, str],
-    listed: Iterable[str],
-    *,
-    markup: bool = True,
-) -> str:
+def fill(template: str, values: Mapping[str, str], listed: Iterable[str]) -> str:
     """Return the template with its blocks chosen and its placeholders filled.
 
     A block named in `listed` keeps its lines and loses its two marker
-    lines; any other block goes with its markers. Each
-    `{{name}}` becomes its value, HTML-escaped when `markup` is true (the
-    `.html` template) and as is for the `.md` source. Every placeholder
-    needs a value; only those in `OPTIONAL` may be empty.
+    lines; any other block goes with its markers. Each `{{name}}` becomes
+    its value, HTML-escaped. Every placeholder needs a value; only those in
+    `OPTIONAL` may be empty.
 
     Raises
     ------
@@ -261,9 +254,4 @@ def fill(
         template,
     )
     text = re.sub(r"\n{3,}", "\n\n", text)
-
-    def value(m: re.Match[str]) -> str:
-        raw = str(values[m[1]])
-        return html.escape(raw) if markup else raw
-
-    return PLACEHOLDER.sub(value, text)
+    return PLACEHOLDER.sub(lambda m: html.escape(str(values[m[1]])), text)
