@@ -991,7 +991,7 @@ Polish line stays and an English gloss MAY follow it.
 | M | „Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022 |
 | C | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) |
 | CK | Źródło: ČHMÚ, CC BY 4.0 |
-| CP | Dane ČHMÚ zostały przetworzone (`<what was done>`) |
+| CP | Dane ČHMÚ zostały przetworzone |
 | G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone |
 | GK | Źródło: GUGiK (`<products>`) |
 | SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone |
@@ -1038,14 +1038,16 @@ project's address (ECO-060).
 
 **DEV-20.3** A product with ČHMÚ data carries C (the creator, the address of
 the material, the licence and its link) and, once the data were modified, CP
-naming what was done; an English context MAY use English equivalents of C
-and CP with the same elements.
+once, without describing how they were modified; an English context MAY use
+English equivalents of C and CP with the same elements.
 *Why:* ČHMÚ open data are under CC BY 4.0, §3(a)(1) (ECO-060).
 
-**DEV-20.4** A product with data of several providers carries every line that
-applies, in the order S, P, PS, PP, M, C, CP, G, SG, Z, each once. A project
-keeps the lines in one place in its code, and every surface takes them from
-there.
+**DEV-20.4** A product with data of several providers carries every applicable
+line once, in the order S, P, PS, PP, M, C, CP, G, SG, Z; when reading an old
+product, any line „Dane ČHMÚ zostały przetworzone (…)” is CP for recognition
+and deduplication, and new products use the canonical CP without parentheses.
+A project keeps the lines in one place in its code, and every surface takes
+them from there.
 *Why:* lines equal byte for byte merge across tools without duplicates.
 
 **DEV-20.5** The lines are visible and legible, never in a tooltip only, on

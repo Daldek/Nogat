@@ -1,9 +1,9 @@
-"""The kit's sources strip, design/kit/nogat-sources.js (DEV-20.5, ECO-064, ECO-068).
+"""The kit's sources strip, design/kit/nogat-sources.js (DEV-20.5, ECO-064, ECO-071).
 
 The element recognises the on-screen lines byte for byte, the values of G and
-Z by their place, so its copies of them must be the lines of the table of
-DEV §20; its button carries the label DEV-20.5 names; and every attribute it
-observes is documented for the GUIs.
+Z by their place, so its copies of them and CP must be the lines of the table
+of DEV §20; its button carries the label DEV-20.5 names; and every attribute
+it observes is documented for the GUIs.
 """
 
 from __future__ import annotations
@@ -34,11 +34,11 @@ RULE = re.search(
 )
 
 
-# The lines shown and the full lines whose short forms are shown.
-KNOWN = ["S", "P", "PS", "PP", "C", "CK", "G", "GK", "SG", "SK", "Z", "ZK"]
+# The lines shown, the full lines whose short forms are shown, and CP in the dialog.
+KNOWN = ["S", "P", "PS", "PP", "C", "CK", "CP", "G", "GK", "SG", "SK", "Z", "ZK"]
 
 
-def test_the_element_knows_exactly_the_on_screen_lines() -> None:
+def test_the_element_knows_exactly_the_provider_lines_it_recognises() -> None:
     assert set(SCRIPT_LINES) == set(KNOWN)
 
 

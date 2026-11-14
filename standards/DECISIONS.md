@@ -80,6 +80,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-068](#eco-068-regulamin-10-corrected-in-place-gugik-isric-and-čúzk-lines) | Regulamin 1.0 corrected in place; GUGiK, ISRIC and ČÚZK lines | accepted | 2026-11-13 |
 | [ECO-069](#eco-069-info-texts-of-a-gui) | Info texts of a GUI | accepted | 2026-11-14 |
 | [ECO-070](#eco-070-the-regulamin-link-in-the-menu-the-rail-and-the-welcome-window) | The regulamin link in the menu, the rail and the welcome window | accepted | 2026-11-14 |
+| [ECO-071](#eco-071-processing-lines-never-name-the-processing) | Processing lines never name the processing | accepted | 2026-11-14 |
 
 ---
 
@@ -1688,3 +1689,27 @@ statement in § 3 only, DEV-15.13 and DEV-20.5 lose their footer; the kit
 and regulamin 1.0 are unchanged. Hydrograf, Hydrolog and Obserwator remove
 their footer statement and link and add the rail's link in their own
 repositories (DEV-17.5); Archiwista serves no regulamin.
+
+## ECO-071 Processing lines never name the processing
+
+**Decision.** A processing line states that the data were processed, never how.
+CP in DEV §20 is exactly „Dane ČHMÚ zostały przetworzone”, once on a
+product with modified ČHMÚ data. P, PP, G, SG and Z already have this form
+and do not change. A reader of an older file treats any „Dane ČHMÚ zostały
+przetworzone (…)” as CP, irrespective of the words in parentheses, and
+deduplicates it with the new line. Kit 0.7.1 includes CP in `LINES`, and
+its sources viewer renders the canonical line when reading an old file.
+
+**Why.** The author's decision of 2026-11-14: a processing line never
+describes what was done. One fixed line is shorter, works unchanged across
+products and merges without duplicates.
+
+**Rejected.** A parenthetical summary, even a short one (the line then
+varies with each producer). Leaving earlier lines unrecognised (old files
+must still be readable).
+
+**Consequence.** DEV-20.3 and DEV-20.4, the CP table entry and the ČHMÚ
+example in the regulamin change. The regulamin template becomes version 1.1
+because its published text changes; its first publication by each GUI needs
+its own `terms_effective`. Producers update their lines and copy kit 0.7.1
+in their repositories (DEV-17.5); old files are not edited in place.

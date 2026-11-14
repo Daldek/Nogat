@@ -17,6 +17,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Processing lines do not describe the processing (ECO-071, the author's
+  decision of 2026-11-14). CP is exactly „Dane ČHMÚ zostały przetworzone”,
+  once for modified ČHMÚ data; P, PP, G, SG and Z already have detail-free
+  wording and stay unchanged. Readers recognise old parenthetical CP lines
+  as CP and deduplicate them; kit 0.7.1 adds CP to `LINES` and normalises
+  old lines in its sources viewer. Regulamin template 1.1 changes the ČHMÚ
+  example; each GUI supplies a new `terms_effective` when publishing it
+  (DEV §20, DEV-20.3, DEV-20.4).
 - The regulamin link without a footer, the author's decision of 2026-11-14
   (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
   ECO-062 and ECO-064): DEV-15.7 links „Regulamin” in exactly the app menu,
