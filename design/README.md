@@ -182,6 +182,7 @@ The app shell comes from Archiwista; use it for every tool with a map or a works
 - Shell: a grid of two columns (64 px rail, content) and two rows (`--header-height`, content).
 - Top bar spans both columns: `--surface`, bottom border `--line`. Left to right: mark at 24 px and the tool name in `--tool-<name>`, then the context (project, area, selection), then actions on the right.
 - Navigation rail: dark column of `.rail-item`s, 54 px wide, icon over a short label, `--radius-md`. Background `--rail-bg`, items `--rail-ink`, hover `--rail-hover`, active `--rail-active` with `--rail-ink-active`.
+- Regulamin (DEV-15.7, ECO-070): a public GUI ends its rail, or its left navigation where it has no rail, with a small, quiet link „Regulamin” to its `regulamin.html`, opened in a new tab (`target="_blank"`, `rel="noopener"`): `.rail-terms` at the foot, `--text-xs` in `--rail-ink`, no icon, hover `--rail-ink-active` and underlined. No footer or status bar carries the link or a statement (DEV-15.8).
 - Content: `.view-layout` grid of left panel, centre, right panel. Left panel 260-560 px (default 300), right panel 340-720 px (default 400), centre at least 480 px.
 - Resizer: 10 px hit area on the panel edge with a 2 px line; on hover or drag a 36 px thumb in `--accent`. Focusable: arrow keys move 16 px, Shift+arrow 64 px, double-click resets the default width.
 - Centre: a 46 px `.map-bar` (segmented control for the view plus a short hint) over the map.
@@ -194,6 +195,8 @@ The app shell comes from Archiwista; use it for every tool with a map or a works
 .rail-item { width: 54px; padding: var(--space-2) 0; border-radius: var(--radius-md); color: var(--rail-ink); font-size: var(--text-xs); text-align: center; }
 .rail-item:hover { background: var(--rail-hover); }
 .rail-item.active { background: var(--rail-active); color: var(--rail-ink-active); }
+.rail-terms { margin-top: auto; padding: var(--space-2) 0; color: var(--rail-ink); font-size: var(--text-xs); text-decoration: none; }
+.rail-terms:hover { color: var(--rail-ink-active); text-decoration: underline; }
 .view-layout { --left-w: 300px; --right-w: 400px; display: grid; grid-template-columns: var(--left-w) minmax(480px, 1fr) var(--right-w); min-height: 0; }
 .resizer { width: 10px; cursor: col-resize; }
 ```
@@ -201,7 +204,7 @@ The app shell comes from Archiwista; use it for every tool with a map or a works
 Phone (width <= 860 px):
 
 - Top bar 48 px.
-- The rail becomes a 58 px bottom bar: `--surface` background, `--line` top border, items in `--text-2`, active item in `--accent`.
+- The rail becomes a 58 px bottom bar: `--surface` background, `--line` top border, items in `--text-2`, active item in `--accent`. `.rail-terms` stays as its last small item, in `--text-3`; a GUI whose left navigation becomes a bottom sheet keeps it as the sheet's last item.
 - Panels become bottom sheets: fixed above the bar (bottom 58 px), height `min(74vh, 640px)`, radius 16 px on the top corners, with a grip, a title and a close button. Resizers are hidden.
 - Form fields use 16 px text so iOS does not zoom.
 
@@ -275,7 +278,7 @@ App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a mo
 The app sets `element.apps` (or the `apps` attribute, as JSON) to the deployment's `[nogat.gui]` table of `nogat.toml`, e.g. `{"hydrograf": "https://hydrograf.example/", "archiwista": "/archiwista/"}`.
 Addresses resolve against the page; only http and https stay. With no GUI but the current one the element is not drawn. An entry opens its GUI in the tab `nogat-<name>`: Chromium reuses that tab unless one of the two pages sends `Cross-Origin-Opener-Policy`, which costs one more tab.
 The menu styles itself with the tokens and falls back to light values, so a GUI without `tokens.css` shows it too.
-The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”, opened in a new tab (`target="_blank"`, `rel="noopener"`) so the GUI's own tab and its session stay; the menu is not the only link, since it is not drawn without another GUI.
+The `terms` attribute, the address of the GUI's filled terms (DEV-15.7), ends the list with the link „Regulamin”, opened in a new tab (`target="_blank"`, `rel="noopener"`) so the GUI's own tab and its session stay; the rail's link stays too (Layout), since the menu is not drawn without another GUI.
 
 Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sources.js` as a module, and put one element per view where its data end, e.g. under the map or at the foot of the panel; never one per card or popup.
 
@@ -294,7 +297,7 @@ C is shown as CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC 
 Any other line (M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged, never a short form; with both arrays empty the element is not drawn.
 The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”, which opens in a new tab like the menu's „Regulamin”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
 `element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.
-A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; the module also exports `LINES` (S, P, PS, PP, C, CK, G, GK, SG, SK, Z, ZK, as DEV §20 writes them, a value as `` `<name>` ``), `SOURCES_TEXTS` and `screenMarks(attribution)`.
+A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; given `terms`, its „Regulamin serwisu” is the welcome window's regulamin link (DEV-15.7), so the window carries no second one. The module also exports `LINES` (S, P, PS, PP, C, CK, G, GK, SG, SK, Z, ZK, as DEV §20 writes them, a value as `` `<name>` ``), `SOURCES_TEXTS` and `screenMarks(attribution)`.
 The element loads nothing and needs no inline script or style, so it runs under CSP `'self'`.
 
 Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
@@ -308,9 +311,9 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
-Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065, ECO-066, ECO-068): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`.
+Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065, ECO-066, ECO-068, ECO-070): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`. It links the page in exactly three places: the app menu's `terms`, the rail's `.rail-terms` (Layout) and, where it has one, the welcome window through `fillSources()`; the dialog of `<nogat-sources>` links it too.
 The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13, corrected in place on the author's decision in kit 0.6.2 (ECO-068) and republished on 2026-11-14. From then on, any change of its text raises that version, adds its entry to the history and releases a new kit version; the operator then sets a new `terms_effective`, the day the GUIs publish it, since a new version takes effect on publication.
-Its § 3 opens with the statement every view shows in its footer (DEV-15.8); the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, the logs as DEV-12.4 to DEV-12.9 keep them (§ 8 ust. 3), so a GUI serves the page only once it follows them.
+Its § 3 opens with the author's statement of what the services are (DEV-15.8), which no view repeats in a footer or status bar; the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, the logs as DEV-12.4 to DEV-12.9 keep them (§ 8 ust. 3), so a GUI serves the page only once it follows them.
 Its § 5 says once that use of data taken from the service is governed by the providers' terms, and each data-source block holds only the provider's name, the lines it requires and the link to its terms or licence, never a summary of them (DEV-20.7, ECO-065). Its § 8 ust. 5 names the basemap and the map layers of the providers in § 5 as the only resources the visitor's browser fetches from other servers, which holds only while the GUI loads no script, style or font from elsewhere (DEV-15.7).
 
 Filling, in this order (reference: `fill` in [scripts/terms.py](../scripts/terms.py)):

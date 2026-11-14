@@ -83,6 +83,10 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - A public GUI links „Regulamin” in exactly the app menu, the foot of its
+    left rail and its welcome window, through `fillSources()`; no footer or
+    status bar carries the link or the statement, which opens § 3 of the
+    regulamin only (DEV-15.7, DEV-15.8, DEV-15.13, DEV-20.5, ECO-070).
   - One shape for a GUI's info texts, behind „(i)”, in a help popover or in
     „Objaśnienie metod”: a definition, then the formula, how to read the
     value and the sources where they apply; Polish and impersonal; no

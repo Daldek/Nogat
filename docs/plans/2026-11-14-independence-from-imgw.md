@@ -55,7 +55,7 @@ Producers before consumers (HUB-5.2); each project in its own session and branch
 ### Nogat
 
 - N1. `data_sources` (HUB-2.7): `c3s` (Copernicus Climate Change Service: ERA5, ERA5-Land, CERRA, CERRA-Land; CC BY 4.0), `dwd` (KOSTRA-DWD-2020; CC BY 4.0), `knmi` (EURADCLIM; CC BY 4.0), `chmi-perun` once its licence is confirmed; `c3s` and the others in the `data_sources` of the projects that access them directly. `imgw-pib` stays for Obserwator.
-- N2. DEV §20: the C3S attribution line (research §2.2) and the citation of the study's article next to S, P, PS, PP, M, RK; the regulamin kit gains a `copernicus` block and a variant of the footer statement for a commercial instance.
+- N2. DEV §20: the C3S attribution line (research §2.2) and the citation of the study's article next to S, P, PS, PP, M, RK; the regulamin kit gains a `copernicus` block and a variant of the statement that opens § 3 (DEV-15.8) for a commercial instance.
 - N3. The written question to IMGW-PIB (biznes@imgw.pl), the four points of research §3.6, as a draft next to this plan, sent by the author before any commercial start; the answer archived.
 
 ### Obserwator (download)
