@@ -8,6 +8,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- The path away from IMGW-PIB after the first joint release, a draft plan
+  (`docs/plans/2026-11-14-independence-from-imgw.md`, `Approved: pending`)
+  with the research on ERA5 instead of PMAXTP, translated into English with
+  its sources: the author's decisions of 2026-11-14 (non-commercial today;
+  the release scope; D, then R, A as its check, C only on demand; a written
+  question to IMGW-PIB before any commercial start), Hydrograf's parts that
+  depend on PMAXTP, steps for Nogat, Obserwator, Hydrolog and Hydrograf, and
+  the open questions.
 - One admin panel for every GUI, the author's decision of 2026-11-13
   (`docs/plans/2026-11-13-admin-panel.md`, step 1; ECO-067): DEV-15.13 puts
   the panel at `/admin/` (`/admin` answers `308`) and its API under
