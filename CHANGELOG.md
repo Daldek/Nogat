@@ -6,6 +6,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Added
+
+- Release set `candidate-4` (REL-6.4), the members of the first release
+  (the author's scope of 2026-11-14): Kartograf `c9afdd3`, Obserwator
+  `0394af7`, Hydrolog `9e2cb61`, Retman `f6d9154`, and Archiwista as a new
+  member at `0ff788e`; every consumer applied it except Hydraulik, which joins
+  a later set. DEV-19.12 names Obserwator's data-root marker
+  `obserwator-data.json`.
+
 ### Changed
 
 - The regulamin link without a footer, the author's decision of 2026-11-14

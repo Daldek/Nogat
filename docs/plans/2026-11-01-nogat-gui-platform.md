@@ -474,6 +474,7 @@ taking `route network` tables, Hydrograf on MapLibre to share a map shell.
 1. Module code: in each tool's package (recommended, HUB-1.2), or in the hub?
 2. Shared roles: `admin` and `store_writer` (recommended), or also a read-only one?
 3. Archiwista team accounts moving under the hub: imported once, or started afresh?
+   Answered 2026-11-14: started afresh; today's accounts were for testing only.
 4. Archiwista's groups and sharing under the hub: kept there (recommended), or sent?
 5. Topology 2: a proxied local mode in Archiwista, or local TLS in the hub?
 6. Hand-off: an envelope around `hydrolog-network/1` (C2) or a flat document;

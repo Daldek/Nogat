@@ -905,7 +905,9 @@ marker file name alone (DEV-19.12).
 document of schema `<tool>-store/1` with at least the fields `schema`, `tool`,
 `created_at` and `producer_version`. The markers are `kartograf-store.json`
 and `obserwator-store.json`; a tool looks for exactly these names and imports
-nothing from another tool.
+nothing from another tool. Obserwator's data root beside its raw root
+(Obserwator ADR-017) holds `obserwator-data.json` (`obserwator-data/1`), which
+a tool looking for stores treats the same way.
 *Why:* each tool refuses another's store without depending on it (ECO-051).
 
 **DEV-19.13** A tool creates the marker on its first write into an empty or
