@@ -119,7 +119,11 @@ def _call(
     async def send(message: Message) -> None:
         sent.append(message)
 
-    asyncio.run(app(scope, receive, send))
+    async def call() -> None:
+        # ASGIApp returns Awaitable[None]; asyncio.run needs a coroutine.
+        await app(scope, receive, send)
+
+    asyncio.run(call())
     return sent
 
 
