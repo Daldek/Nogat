@@ -1,7 +1,8 @@
 """The GUI kit's manifest, design/kit/nogat-kit.json (DEV-15.6).
 
-A GUI copies the kit byte for byte; the manifest's version and hashes are
-what a copy is compared with, so they must describe the files Nogat ships.
+A GUI copies the kit byte for byte; the manifest's hashes are what a copy is
+compared with, so they must describe the files Nogat ships. The version
+stays 1.0.0 until the author decides otherwise (REL-1.4).
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ def test_manifest_lists_every_kit_file_with_its_hash() -> None:
         if p.is_file() and p.name != "nogat-kit.json"
     }
     assert MANIFEST["files"] == shipped, (
-        "design/kit/nogat-kit.json is stale: update the hashes and the version"
+        "design/kit/nogat-kit.json is stale: update the hashes, not the version"
     )
 
 

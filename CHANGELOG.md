@@ -17,6 +17,16 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Everything is version 1 until the first release, the author's rule of
+  2026-11-14 (REL-1.4, ECO-072): every schema, document type, file format,
+  protocol, the GUI kit and the regulamin stay version 1 until Nogat's
+  release tag on `main`, then each project's; only the author's consent
+  changes a version, and agents never raise one on their own. The kit's
+  `nogat-kit.json` says `1.0.0` instead of 0.7.1, its files and hashes
+  unchanged; copies are compared by hashes. AGI-4.1 needs the author's
+  consent to raise a released schema number; DEV-15.7 and `design/README.md`
+  refill the regulamin with each copy of the kit. Nogat's own schemas are
+  all `/1`.
 - One place for the admin keys of a deployment, the author's decision of
   2026-11-14: DEV-15.13 and the admin section of `design/README.md` keep each
   GUI's key in `~/.config/nogat/keys/<project>-admin.key` (mode `0600`, or

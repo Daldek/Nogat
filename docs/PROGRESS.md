@@ -17,8 +17,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there |
-| Visual identity and GUI kit (DEV §15) | done in Nogat | `design/`: tokens, marks, specimen, mockups; kit 0.7.1 (app menu, sources strip, hand-off, regulamin, admin panel); Hydrograf, Hydrolog, Obserwator and Archiwista ship older copies pending the CP update |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (kit 0.6.2, kit 0.7.1) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md` |
+| Visual identity and GUI kit (DEV §15) | done in Nogat | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); Hydrograf, Hydrolog, Obserwator and Archiwista ship older copies pending the CP update |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | in progress | Nogat, Hydrograf, Hydrolog and Obserwator (GUI, REST server) merged; Archiwista (step 6) open; plan `2026-11-13-unified-logging.md` |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog, Obserwator and Archiwista, deployed 2026-11-14; Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 1) |
@@ -30,7 +30,7 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 ## Next
 
 1. CP without detail (ECO-071): producers use the fixed line once, treat old
-   parenthetical CP as CP on read and copy kit 0.7.1 (regulamin 1.0 corrected
+   parenthetical CP as CP on read and copy kit 1.0.0 (regulamin 1.0 corrected
    in place, no new `terms_effective`).
 2. Info texts of a GUI (ECO-069, DEV-15.14, example in `design/README.md`):
    Hydrograf, Hydrolog, Obserwator and Archiwista revise their „(i)” texts,

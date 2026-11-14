@@ -81,6 +81,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-069](#eco-069-info-texts-of-a-gui) | Info texts of a GUI | accepted | 2026-11-14 |
 | [ECO-070](#eco-070-the-regulamin-link-in-the-menu-the-rail-and-the-welcome-window) | The regulamin link in the menu, the rail and the welcome window | accepted | 2026-11-14 |
 | [ECO-071](#eco-071-processing-lines-never-name-the-processing) | Processing lines never name the processing | accepted | 2026-11-14 |
+| [ECO-072](#eco-072-everything-is-version-1-until-the-first-release) | Everything is version 1 until the first release | accepted | 2026-11-14 |
 
 ---
 
@@ -1713,3 +1714,34 @@ example in the regulamin change. The regulamin stays version 1.0, corrected
 in place (the author, 2026-11-14: only the author raises its version), with
 no new `terms_effective`. Producers update their lines and copy kit 0.7.1
 in their repositories (DEV-17.5); old files are not edited in place.
+
+## ECO-072 Everything is version 1 until the first release
+
+**Decision.** Until the first official release, Nogat's tag on `main` and
+then each project's, every schema, document type, file format, protocol,
+the GUI kit and the regulamin are version 1 (REL-1.4). Only the author's
+consent changes a version, and only a release with its tag on `main`
+confirms one. An agent never raises on its own a repository's package
+version, a schema id (`<name>/N`, `<name>-N.schema.json`), a file or
+database format number, a protocol number, the kit version or the regulamin
+version. The kit, at 0.7.1, becomes `1.0.0` with its files unchanged, and
+stays `1.0.0` until the author decides; a GUI's copy is compared with
+Nogat's by the hash of each file (DEV-15.6), never by the version.
+
+**Why.** The author's rule of 2026-11-14. Nothing has been released, so a
+number raised on a branch marks no version any user could have, as ECO-056
+found for the standard and its documents; the kit's eleven 0.x versions of
+2026-11-12 to 2026-11-14 said only that files changed, which the hashes
+already say.
+
+**Rejected.** Raising the kit version per change (no copy is compared by
+it). Keeping 0.7.1 (the kit would carry a number the author never chose).
+Letting agents raise a schema or format number at a breaking change before
+the release (AGI-4.1 already keeps an unreleased number).
+
+**Consequence.** REL-1.4; AGI-4.1 raises a released number only with the
+author's consent. `design/kit/nogat-kit.json` says `1.0.0`; DEV-15.7
+and `design/README.md` refill a GUI's regulamin with each copy of the kit,
+not each kit version. Nogat's own schemas are already `/1`. Past entries of
+the CHANGELOG, the plans' results and the ECO records keep the kit versions
+they named.

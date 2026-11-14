@@ -176,8 +176,9 @@ starts the MCP server (AGI §5).
 
 **AGI-4.1** Every machine-readable document has a top-level `schema` field
 `<tool>-<kind>/<n>`. Adding optional fields keeps `<n>`, so consumers accept
-unknown fields; removing or changing meaning increments it, but only past a
-number released on the producer's `main`: a breaking change to an unreleased
+unknown fields; removing or changing meaning increments it, with the
+author's consent (REL-1.4), but only past a number released on the
+producer's `main`: a breaking change to an unreleased
 document keeps its number. The schemas of the result envelope, the error
 document and the catalog are Nogat's `schemas/agent/` (`result-1`,
 `error-1`, `commands-1`); each project copies them with

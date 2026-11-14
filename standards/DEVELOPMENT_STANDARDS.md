@@ -538,7 +538,7 @@ and copied again. `drift` reports each copy as current, behind or modified
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
 as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
-with each kit version it copies. It links „Regulamin” to it in exactly
+with each copy of the kit. It links „Regulamin” to it in exactly
 these places, each link opening a new tab (`target="_blank"`,
 `rel="noopener"`): the end of the app menu, through its `terms` attribute;
 the foot of the GUI's left navigation rail, or of its left navigation where

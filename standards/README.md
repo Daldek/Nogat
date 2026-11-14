@@ -83,6 +83,14 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - Everything is version 1 until the first release with its tag on `main`,
+    Nogat's first, then each project's: schemas, document types, file and
+    database formats, protocols, the GUI kit (`1.0.0`, from 0.7.1 with its
+    files unchanged) and the regulamin (1.0). Only the author's consent
+    changes a version; an agent never raises a package version, a schema
+    id, a format or protocol number, the kit version or the regulamin
+    version on its own; kit copies are compared by hashes, not by version
+    (REL-1.4, AGI-4.1, DEV-15.7, ECO-072).
   - A processing line never names the processing: CP is exactly „Dane ČHMÚ
     zostały przetworzone”; a reader treats old CP lines with parenthetical
     detail as CP, once. P, PP, G, SG and Z keep their existing detail-free

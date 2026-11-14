@@ -268,6 +268,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
 `nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
+The version stays `1.0.0` until the author decides otherwise (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
@@ -321,7 +322,7 @@ Filling, in this order (reference: `fill` in [scripts/terms.py](../scripts/terms
 1. Blocks. A block is the lines between `<!-- block: <name> -->` and `<!-- /block -->`, each marker on a line of its own. Keep the lines of every block the project lists below, without the two marker lines; drop every other block with its markers.
 2. Fields. Replace every `{{name}}` with its value, HTML-escaped (`&`, `<`, `>`, `"`, `'`). Every field needs a value, non-empty except `processor_transfer`, `processor_cookie` and `mail_transfer`, each a whole sentence or empty: with a field missing, or with a `{{` left, the GUI serves no page and no link.
 
-The GUI fills at start or at build with its own code; a page filled from an older kit version is filled again when the kit is copied.
+The GUI fills at start or at build with its own code; a page filled from older kit files is filled again when the kit is copied.
 
 | Field | Value from |
 | --- | --- |
