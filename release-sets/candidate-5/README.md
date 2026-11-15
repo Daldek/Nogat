@@ -11,6 +11,6 @@ consumer and `set bump <P>` moves a member.
 |---|---|
 | Kartograf | [`c9afdd3f85b164b21e3ab2ce1b8cc02c050712f1`](https://github.com/Daldek/Kartograf/commit/c9afdd3f85b164b21e3ab2ce1b8cc02c050712f1) |
 | Obserwator | [`f4f6a8deddbc8f2811e623e6c58147d4fb6a2ec8`](https://github.com/Daldek/Obserwator/commit/f4f6a8deddbc8f2811e623e6c58147d4fb6a2ec8) |
-| Hydrolog | [`d09e59725a0f9d6ae93aca7d37ef468d6b595275`](https://github.com/Daldek/Hydrolog/commit/d09e59725a0f9d6ae93aca7d37ef468d6b595275) |
-| Hydrograf | [`1f8e5799005b06ba6571eac7edca888c0336dae0`](https://github.com/Daldek/Hydrograf/commit/1f8e5799005b06ba6571eac7edca888c0336dae0) |
+| Hydrolog | [`3ce7ee847df14f7aaec7abbefd828d389eb7aae8`](https://github.com/Daldek/Hydrolog/commit/3ce7ee847df14f7aaec7abbefd828d389eb7aae8) |
+| Hydrograf | [`bf4a777c200df5d38940ca3380afc3b0dbb6381b`](https://github.com/Daldek/Hydrograf/commit/bf4a777c200df5d38940ca3380afc3b0dbb6381b) |
 | Archiwista | [`747ee1f0046628446bed52fec3bc9f018c4d4a23`](https://github.com/Daldek/Archiwista/commit/747ee1f0046628446bed52fec3bc9f018c4d4a23) |
