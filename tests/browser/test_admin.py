@@ -574,12 +574,9 @@ def test_an_app_section_follows_the_core_three_and_the_hash_names_the_section(
     page = tabs().page
     _sign_in(page)
     nav = page.get_by_role("navigation", name="Sekcje panelu")
-    assert nav.get_by_role("link").all_inner_texts() == [
-        "Zgłoszenia",
-        "Statystyki",
-        "Stan",
-        "Zasoby",
-    ]
+    expect(nav.get_by_role("link")).to_have_text(
+        ["Zgłoszenia", "Statystyki", "Stan", "Zasoby"]
+    )
     expect(nav.get_by_role("link", name="Zgłoszenia")).to_have_attribute(
         "aria-current", "page"
     )
