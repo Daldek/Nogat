@@ -634,6 +634,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- A flaky browser test of the admin panel: the section links of the
+  navigation were read once, right after signing in, and CI (run of
+  `3859a30`) read none; the test now waits for the four links.
+
 - mypy on CI: `tests/unit/test_nogat_logging.py` passed the ASGI app's
   `Awaitable[None]` to `asyncio.run`, which takes a coroutine; the test now
   wraps the call in a coroutine.
