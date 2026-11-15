@@ -8,14 +8,18 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Release set `candidate-5` (REL-6.4), the members of the first joint release
+  (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
+  Hydrograf `281fc5e` and Archiwista `4e9ece8`; every pin between them
+  matches the set. Retman and Hydraulik apply it in their own sessions.
 - `schemas/agent/command-list-1.schema.json`: the summary
   `<tool>-command-list/1` of `commands list --json` gets its schema; AGI-2.4
   no longer says that `commands list` returns `<tool>-commands/1` (ECO-075).
   Kartograf's, Obserwator's and Hydrolog's lists validate against it
   unchanged.
 - ECO-074: the author names the members of a release set (REL-6.1). The
-  first set is Hydrograf, Hydrolog, Obserwator and Archiwista, with
-  Kartograf the producer they pin; Retman and Hydraulik join a later set;
+  first set is Kartograf, Hydrograf, Hydrolog, Obserwator and Archiwista;
+  Retman and Hydraulik join a later set;
   Hydrolog's next release is 0.8.0. ECO-054 and the first-release-set plan
   are marked as amended.
 - Release set `candidate-4` (REL-6.4), the members of the first release
