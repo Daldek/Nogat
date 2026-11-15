@@ -339,7 +339,7 @@ projects:
         status: active
         via: [library, file]
         exchange: [watershed-parameters, hydrolog-python-api, hydrolog-network/1]
-        uses: [WatershedParameters, ConcentrationTime, HydrographGenerator, NashIUH, BetaHietogram, BlockHietogram, EulerIIHietogram]
+        uses: [WatershedParameters, SCSCN, HydrographGenerator, NashIUH, SCSUnitHydrograph, BetaHietogram, BlockHietogram, EulerIIHietogram, calculate_weighted_cn, thiessen_polygons, inverse_distance_weighting]
         note: POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
       - project: Obserwator
         kind: runtime

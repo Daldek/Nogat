@@ -63,7 +63,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
-| [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059 | 2026-10-31 |
+| [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
@@ -83,6 +83,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-071](#eco-071-processing-lines-never-name-the-processing) | Processing lines never name the processing | accepted | 2026-11-14 |
 | [ECO-072](#eco-072-everything-is-version-1-until-the-first-release) | Everything is version 1 until the first release | accepted | 2026-11-14 |
 | [ECO-073](#eco-073-long-jobs-run-outside-the-agents-session) | Long jobs run outside the agent's session | accepted | 2026-11-15 |
+| [ECO-074](#eco-074-the-author-names-the-members-of-a-release-set) | The author names the members of a release set | accepted | 2026-11-15 |
 
 ---
 
@@ -1006,6 +1007,9 @@ with `unsupported` where the metadata does not rebuild the call. Plan:
 keeps the raw data; Obserwator keeps the harmonized series, catalogs and
 analysis results in a data root of its own.
 
+**Amended by ECO-074 (2026-11-15):** Archiwista is a member of the first
+release set; its consequence for the set's order no longer applies.
+
 **Why.** The notion was split in three: `kartograf-project/1`,
 `imgw-project/1` and Archiwista's projects with access, own data and
 snapshots. In the producers' model a pin exists only inside a task and only
@@ -1767,3 +1771,30 @@ the jobs (the deployment needs them whole).
 
 **Consequence.** DEV-17.6. Obserwator resumes an interrupted
 `analyses build` from its staged stations in its release 3.0.1.
+
+## ECO-074 The author names the members of a release set
+
+**Decision.** The members of a release set are the active projects the
+author names for it (REL-6.1), not every active project with a package. The
+first set holds Hydrograf, Hydrolog, Obserwator and Archiwista; Kartograf is
+in its `members.toml` as the producer they pin (REL-6.4); Retman and
+Hydraulik join a later set. An app among the members, Hydrograf, is
+released by its own tag at the set's commits of its producers and is not
+installed by `nogat`. Hydrolog's next release is 0.8.0, the version its
+`develop` carries (`0.8.0.dev0`).
+
+**Why.** The author's decision of 2026-11-15. The four GUIs share the kit,
+the regulamin and one deployment, so they ship together; the rule of
+`import_name` would have taken Retman, which waits for its evaluation, and
+left out Hydrograf, the GUI most users reach first.
+
+**Rejected.** Membership by `distribution.import_name` alone (the previous
+REL-6.1). A registry field for membership (a set is a decision of one
+release, not a property of a project).
+
+**Consequence.** REL-6.1. `release-sets/candidate-5/members.toml` records
+Kartograf, Obserwator, Hydrolog, Hydrograf and Archiwista; `set check` no
+longer compares Retman's pins, which follow the set in Retman's own
+session. Decision D3 of `docs/plans/2026-10-31-archiwista-projects.md` and
+the members named in `docs/plans/2026-10-20-first-release-set.md` are
+superseded.

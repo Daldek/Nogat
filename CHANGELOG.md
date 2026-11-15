@@ -8,6 +8,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- ECO-074: the author names the members of a release set (REL-6.1). The
+  first set is Hydrograf, Hydrolog, Obserwator and Archiwista, with
+  Kartograf the producer they pin; Retman and Hydraulik join a later set;
+  Hydrolog's next release is 0.8.0. ECO-054 and the first-release-set plan
+  are marked as amended.
 - Release set `candidate-4` (REL-6.4), the members of the first release
   (the author's scope of 2026-11-14): Kartograf `c9afdd3`, Obserwator
   `0394af7`, Hydrolog `9e2cb61`, Retman `f6d9154`, and Archiwista as a new
