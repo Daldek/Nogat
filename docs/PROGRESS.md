@@ -75,8 +75,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    (author's decision 2026-11-15). Next candidate: GUI-only commits (Obserwator, Hydrolog)
    once consumers re-pin; the candidate's `pyproject.toml` and `uv.lock`
    (REL-6.4) and `verify-candidate` (REL-6.5), neither of which exists yet;
-   the author's versions; Hydrolog v1.0.0 after Obserwator 3.0.0's tag
-   (producers first, HUB-5.2). Plan `docs/plans/2026-11-03-one-pin-set.md`.
+   the author's versions, Hydrolog's next release being 0.8.0 (ECO-074),
+   producers first (HUB-5.2). Plan `docs/plans/2026-11-03-one-pin-set.md`.
 7. Repeat the final integration run at explicitly recorded heads, with
    Hydrograf and Archiwista apart and the two flows of F2; record the
    outcome in the data-output plan. Before the first release set, reconcile
@@ -148,7 +148,7 @@ Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
 - The author's decisions: the final versions, with no tags in any project
-  until they are decided (Hydrolog v1.0.0 included); Windows as a
+  until they are decided; Windows as a
   blocking CI job in Hydrolog; Hydroni on Hydrograf's current `develop`.
 - Hydrograf's network method (ADR-080), recorded with proposals in its
   `docs/PROGRESS.md`, no work until the author asks („na razie nic nie

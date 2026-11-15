@@ -29,6 +29,10 @@ Hydrograf, an app without a package, and Hydraulik, research (REL-5.4).
 Version numbers are written in the release pull requests (REL-2.1), after a
 candidate passed; this plan names none.
 
+Superseded on 2026-11-15 by ECO-074: the author names the members, and the
+first set is Hydrograf, Hydrolog, Obserwator and Archiwista, with Kartograf
+the producer they pin; Retman and Hydraulik join a later set.
+
 ## Steps
 
 1. **Start clean.** Adoption phases 1 to 4 are done, and every member's tree

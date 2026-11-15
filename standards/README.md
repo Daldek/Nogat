@@ -83,6 +83,9 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - The author names the members of a release set; an app among them is
+    released by its own tag at the set's commits and is not installed by
+    `nogat` (REL-6.1, ECO-074).
   - Everything is version 1 until the first release with its tag on `main`,
     Nogat's first, then each project's: schemas, document types, file and
     database formats, protocols, the GUI kit (`1.0.0`, from 0.7.1 with its

@@ -142,12 +142,15 @@ the commit it pins.
 
 **REL-6.1** A release set is what one `nogat` release installs: every member
 at one release and every third-party package at one exact version, verified
-together (REL-6.5). Members are the active projects, other than Nogat, whose
-registry entry sets `distribution.import_name`. The published set is the
-`nogat` repository at tag `vX.Y.Z`: its `pyproject.toml` and its `uv.lock`,
-universal for Linux, macOS and Windows (`[tool.uv] environments`). It is not
-copied elsewhere, and the registry does not record it.
-*Why:* ECO-025, ECO-037.
+together (REL-6.5). Members are the active projects, other than Nogat, that
+the author names for the set (ECO-074). A member whose registry entry sets
+no `distribution.import_name`, an app, is not installed by `nogat`: it is
+released by its own tag (REL-2.1) at the set's commits of its producers. The
+published set is the `nogat` repository at tag `vX.Y.Z`: its
+`pyproject.toml` and its `uv.lock`, universal for Linux, macOS and Windows
+(`[tool.uv] environments`). It is not copied elsewhere, and the registry
+does not record it.
+*Why:* ECO-025, ECO-037, ECO-074.
 
 **REL-6.2** Each third-party package has one version across the set,
 development tools (ruff, mypy, pytest, pytest-cov) included. Each member
