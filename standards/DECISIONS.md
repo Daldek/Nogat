@@ -1780,17 +1780,18 @@ the jobs (the deployment needs them whole).
 
 **Decision.** The members of a release set are the active projects the
 author names for it (REL-6.1), not every active project with a package. The
-first set holds Hydrograf, Hydrolog, Obserwator and Archiwista; Kartograf is
-in its `members.toml` as the producer they pin (REL-6.4); Retman and
-Hydraulik join a later set. An app among the members, Hydrograf, is
+first set holds Kartograf, Hydrograf, Hydrolog, Obserwator and Archiwista;
+Retman and Hydraulik join a later set. An app among the members, Hydrograf, is
 released by its own tag at the set's commits of its producers and is not
 installed by `nogat`. Hydrolog's next release is 0.8.0, the version its
 `develop` carries (`0.8.0.dev0`).
 
 **Why.** The author's decision of 2026-11-15. The four GUIs share the kit,
-the regulamin and one deployment, so they ship together; the rule of
-`import_name` would have taken Retman, which waits for its evaluation, and
-left out Hydrograf, the GUI most users reach first.
+the regulamin and one deployment, so they ship together, and Kartograf is
+the producer two of them pin, whose tag their release pull requests need
+(REL-2.1, REL-6.6); the rule of `import_name` would have taken Retman,
+which waits for its evaluation, and left out Hydrograf, the GUI most users
+reach first.
 
 **Rejected.** Membership by `distribution.import_name` alone (the previous
 REL-6.1). A registry field for membership (a set is a decision of one

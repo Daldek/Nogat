@@ -68,8 +68,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    (question 4).
 6. Release set and deployment (2026-11-15): **candidate-4 stays** (author's decision;
    small bugs to fix first). The author's scope of the first joint release
-   (2026-11-15): Nogat, Hydrograf, Hydrolog, Obserwator and Archiwista, with
-   Kartograf a pinned producer; Retman and Hydraulik join a later set.
+   (2026-11-15): Nogat, Kartograf, Hydrograf, Hydrolog, Obserwator and
+   Archiwista (ECO-074); Retman and Hydraulik join a later set.
    Deployment state, members' heads and the pins that differ: Status.
    **Hydrograf admin-panel store re-processing** deferred to after the first joint release
    (author's decision 2026-11-15). Next candidate: GUI-only commits (Obserwator, Hydrolog)
