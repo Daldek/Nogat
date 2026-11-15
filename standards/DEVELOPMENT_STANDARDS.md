@@ -747,6 +747,18 @@ the session that resolves it closes the issue.
 *Why:* keeps each project's scope intact; the issue tracker is the list
 (ECO-043).
 
+**DEV-17.6** An agent runs a job that may last more than about 10 minutes
+(a full download or sync, `series build`, `analyses build`, a bootstrap, a
+full scan, a long gate) outside its session: as a user systemd unit,
+`systemd-run --user --unit=<project>-<job> --collect` with its output and
+errors in files (`-p StandardOutput=file:<path>`,
+`-p StandardError=file:<path>`), on an account with lingering enabled
+(`loginctl enable-linger`). A background job of the agent's own session is
+only for shorter work. The agent reads the unit's state and log files, and
+names the unit and the files in its report.
+*Why:* a session's background job ends with the session, and its partial
+result with it (ECO-073).
+
 ---
 
 ## 18. User environment (profile `tool`)

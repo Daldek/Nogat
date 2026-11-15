@@ -82,6 +82,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-070](#eco-070-the-regulamin-link-in-the-menu-the-rail-and-the-welcome-window) | The regulamin link in the menu, the rail and the welcome window | accepted | 2026-11-14 |
 | [ECO-071](#eco-071-processing-lines-never-name-the-processing) | Processing lines never name the processing | accepted | 2026-11-14 |
 | [ECO-072](#eco-072-everything-is-version-1-until-the-first-release) | Everything is version 1 until the first release | accepted | 2026-11-14 |
+| [ECO-073](#eco-073-long-jobs-run-outside-the-agents-session) | Long jobs run outside the agent's session | accepted | 2026-11-15 |
 
 ---
 
@@ -1745,3 +1746,24 @@ and `design/README.md` refill a GUI's regulamin with each copy of the kit,
 not each kit version. Nogat's own schemas are already `/1`. Past entries of
 the CHANGELOG, the plans' results and the ECO records keep the kit versions
 they named.
+
+## ECO-073 Long jobs run outside the agent's session
+
+**Decision.** A job that may last more than about 10 minutes runs as a user
+systemd unit with its output in files, not as a background job of the
+agent's session (DEV-17.6). A producer whose long command builds many
+independent parts keeps the parts it has finished and resumes from them
+after an interruption, where the parts' inputs are unchanged.
+
+**Why.** On 2026-11-15 the agent's session ended during Obserwator's
+`analyses build` for the deployment, at station 2332 of 3240 after about
+2 hours; the build was the session's background job and ended with it, and
+its next start removes the staged stations as leftovers, so the work was
+lost. A user unit on a lingering account outlives the session and the
+login.
+
+**Rejected.** `nohup` or `setsid` (no state to query, no name). Shortening
+the jobs (the deployment needs them whole).
+
+**Consequence.** DEV-17.6. Obserwator resumes an interrupted
+`analyses build` from its staged stations in its release 3.0.1.
