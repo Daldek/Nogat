@@ -59,7 +59,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-047](#eco-047-plan-approval-is-a-line-in-the-plan) | Plan approval is a line in the plan | accepted | 2026-10-21 |
 | [ECO-048](#eco-048-nogats-agentsmd-routes-and-links) | Nogat's AGENTS.md routes and links | accepted | 2026-10-21 |
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
-| [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | amended by ECO-058 | 2026-10-21 |
+| [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | amended by ECO-058, ECO-075 | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
@@ -84,6 +84,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-072](#eco-072-everything-is-version-1-until-the-first-release) | Everything is version 1 until the first release | accepted | 2026-11-14 |
 | [ECO-073](#eco-073-long-jobs-run-outside-the-agents-session) | Long jobs run outside the agent's session | accepted | 2026-11-15 |
 | [ECO-074](#eco-074-the-author-names-the-members-of-a-release-set) | The author names the members of a release set | accepted | 2026-11-15 |
+| [ECO-075](#eco-075-the-catalog-summary-is-its-own-document) | The catalog summary is its own document | accepted | 2026-11-15 |
 
 ---
 
@@ -878,6 +879,9 @@ its MCP `families`.
 **Amended by ECO-058 (2026-11-12):** the envelope `nogat-handoff/1` that
 GUIs exchange is a canonical schema too, in `schemas/exchange/`, copied and
 checked the same way; `drift` reports every copy (DEV-15.6).
+
+**Amended by ECO-075 (2026-11-15):** the summary of the catalog,
+`<tool>-command-list/1`, has its own schema `command-list-1`.
 
 **Why.** AGENT_INTERFACE.md defined the documents in prose only, without
 examples; seven projects could each claim AGI-1.2 and still emit different
@@ -1799,3 +1803,29 @@ until they apply the set in their own sessions. Decision D3 of
 `docs/plans/2026-10-31-archiwista-projects.md` and
 the members named in `docs/plans/2026-10-20-first-release-set.md` are
 superseded.
+
+## ECO-075 The catalog summary is its own document
+
+**Decision.** `<tool> commands list --json` and `<tool>_commands_list`
+return the summary `<tool>-command-list/1`: one entry per command with at
+least `name`, `operation_id`, `summary` and `read_only`, other fields
+allowed. `<tool> commands schema --json` and `<tool>_commands_schema` return
+the full catalog `<tool>-commands/1`. Nogat's `schemas/agent/` holds
+`command-list-1.schema.json` beside `commands-1.schema.json` (AGI-2.4,
+AGI-4.1).
+
+**Why.** AGI-2.4 said both commands return `<tool>-commands/1`, while
+AGI-5.9 called the list a summary, the registry declared
+`<tool>-command-list/1` for Kartograf, Obserwator and Hydrolog, and all
+three return it; the plan of 2026-11-04 left the wording to the standard.
+The end-to-end run of 2026-11-15 found the conflict again. The three tools'
+lists validate against the new schema unchanged.
+
+**Rejected.** A full catalog from `commands list` (an API change in three
+producers before their release, and every command's options in the first
+answer of a discovery, against AGI-5.9). No schema for the summary (a
+document nobody validates drifts, ECO-050).
+
+**Consequence.** AGI-2.4, AGI-4.1. The tools copy the new schema with the
+next copy of `schemas/agent/` and validate their list in contract tests;
+`drift` reports the copy. No document changes its number (REL-1.4).

@@ -8,6 +8,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- `schemas/agent/command-list-1.schema.json`: the summary
+  `<tool>-command-list/1` of `commands list --json` gets its schema; AGI-2.4
+  no longer says that `commands list` returns `<tool>-commands/1` (ECO-075).
+  Kartograf's, Obserwator's and Hydrolog's lists validate against it
+  unchanged.
 - ECO-074: the author names the members of a release set (REL-6.1). The
   first set is Hydrograf, Hydrolog, Obserwator and Archiwista, with
   Kartograf the producer they pin; Retman and Hydraulik join a later set;
