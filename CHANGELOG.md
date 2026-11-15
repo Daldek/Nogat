@@ -15,6 +15,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   a later set. DEV-19.12 names Obserwator's data-root marker
   `obserwator-data.json`.
 
+- DEV-17.6 and ECO-073 (the author's rule of 2026-11-15): an agent runs a
+  job that may last more than about 10 minutes as a user systemd unit with
+  its output in files, not as a background job of its session, which ends
+  with the session.
+
 ### Changed
 
 - Everything is version 1 until the first release, the author's rule of
