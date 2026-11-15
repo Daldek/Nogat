@@ -639,6 +639,13 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- The registry's Obserwator entry after its ADR-017: `obserwator-store/1` is
+  the raw root (`<data_dir>/obserwator-raw`, `OBSERWATOR_RAW_ROOT`), and the
+  data root and the stored analyses are `obserwator-data/1` and
+  `obserwator-analyses/1`, implemented rather than planned; the edges
+  Obserwator → Hydrolog (analyses build runs Hydrolog's `commands batch`) and
+  Archiwista → Obserwator (its adapter reads the data root) are active.
+
 - A flaky browser test of the admin panel: the section links of the
   navigation were read once, right after signing in, and CI (run of
   `3859a30`) read none; the test now waits for the four links.
