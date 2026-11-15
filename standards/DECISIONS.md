@@ -1793,8 +1793,9 @@ REL-6.1). A registry field for membership (a set is a decision of one
 release, not a property of a project).
 
 **Consequence.** REL-6.1. `release-sets/candidate-5/members.toml` records
-Kartograf, Obserwator, Hydrolog, Hydrograf and Archiwista; `set check` no
-longer compares Retman's pins, which follow the set in Retman's own
-session. Decision D3 of `docs/plans/2026-10-31-archiwista-projects.md` and
+Kartograf, Obserwator, Hydrolog, Hydrograf and Archiwista. `set check`
+still reads every consumer, so it reports Retman's and Hydraulik's pins
+until they apply the set in their own sessions. Decision D3 of
+`docs/plans/2026-10-31-archiwista-projects.md` and
 the members named in `docs/plans/2026-10-20-first-release-set.md` are
 superseded.
