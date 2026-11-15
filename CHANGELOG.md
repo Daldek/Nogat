@@ -8,6 +8,10 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Release set `candidate-5` (REL-6.4), the members of the first joint release
+  (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
+  Hydrograf `281fc5e` and Archiwista `4e9ece8`; every pin between them
+  matches the set. Retman and Hydraulik apply it in their own sessions.
 - `schemas/agent/command-list-1.schema.json`: the summary
   `<tool>-command-list/1` of `commands list --json` gets its schema; AGI-2.4
   no longer says that `commands list` returns `<tool>-commands/1` (ECO-075).

@@ -3,7 +3,7 @@
 # generated from this file (`set readme`).
 
 [Kartograf]
-commit = "c9afdd3f85b164b21e3ab2ce1b8cc02c050712f1"
+commit = "e14bc78c014e9d3e19ad0e8fd8e1764e5191018a"
 
 [Obserwator]
 commit = "f4f6a8deddbc8f2811e623e6c58147d4fb6a2ec8"
@@ -12,7 +12,7 @@ commit = "f4f6a8deddbc8f2811e623e6c58147d4fb6a2ec8"
 commit = "3ce7ee847df14f7aaec7abbefd828d389eb7aae8"
 
 [Hydrograf]
-commit = "bf4a777c200df5d38940ca3380afc3b0dbb6381b"
+commit = "281fc5e714688ad39dcc76b0921287125e88bf90"
 
 [Archiwista]
-commit = "e534b401633908fbfc03092fad0b512029ca98e9"
+commit = "4e9ece8ae240c861284975bcbe359529449ed804"

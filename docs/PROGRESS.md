@@ -40,7 +40,7 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, on branch `chore/release-prep-2026-11-15`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-4 stays** (author's decision 2026-11-15; small bugs to fix first before next candidate). Members' `origin/develop` at 14:17 UTC on 2026-11-15, before the members' candidate-5 preparation: Kartograf `c9afdd3`, Obserwator `fdb7b50`, Hydrograf `a4bf1a4`, Hydrolog `e5df06d` (v0.8.0.dev0), Retman `6f213da`, Archiwista `747ee1f` (deployed at `7a11c76`). `set check` reports pins that differ from candidate-4 in Archiwista (Obserwator `3816b3c`), Retman (Obserwator `3816b3c`, Hydrolog `e5df06d`), Hydrograf (Hydrolog `e5df06d`; candidate-4 holds `9e2cb61`, which reports v1.0.0.dev0) and Hydraulik (a later set); Hydrolog's pin matches |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-5** (2026-11-15), the members of the first joint release (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8` (develop `d82982a`, v0.8.0.dev0), Hydrograf `281fc5e`, Archiwista `4e9ece8`, each gate green before its merge. `set check`: every pin between the members matches; Retman and Hydraulik differ until they apply the set in their own sessions (a later set) |
 | Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
 | `nogat` package (HUB §7) | planned | |
 
@@ -66,17 +66,15 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    2026-11-13): N1 done; next Hydrolog's H1 to H4 under its own plan, then
    R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms
    (question 4).
-6. Release set and deployment (2026-11-15): **candidate-4 stays** (author's decision;
-   small bugs to fix first). The author's scope of the first joint release
-   (2026-11-15): Nogat, Kartograf, Hydrograf, Hydrolog, Obserwator and
+6. Release set and deployment (2026-11-15): **candidate-5** holds the members of the
+   first joint release (2026-11-15): Nogat, Kartograf, Hydrograf, Hydrolog, Obserwator and
    Archiwista (ECO-074); Retman and Hydraulik join a later set.
    Deployment state, members' heads and the pins that differ: Status.
    **Hydrograf admin-panel store re-processing** deferred to after the first joint release
-   (author's decision 2026-11-15). Next candidate: GUI-only commits (Obserwator, Hydrolog)
-   once consumers re-pin; the candidate's `pyproject.toml` and `uv.lock`
-   (REL-6.4) and `verify-candidate` (REL-6.5), neither of which exists yet;
+   (author's decision 2026-11-15). Before the tags: the candidate's `pyproject.toml` and
+   `uv.lock` (REL-6.4) and `verify-candidate` (REL-6.5), neither of which exists yet;
    the author's versions, Hydrolog's next release being 0.8.0 (ECO-074),
-   producers first (HUB-5.2). Plan `docs/plans/2026-11-03-one-pin-set.md`.
+   producers first (HUB-5.2, REL-6.6). Plan `docs/plans/2026-11-03-one-pin-set.md`.
 7. Repeat the final integration run at explicitly recorded heads, with
    Hydrograf and Archiwista apart and the two flows of F2; record the
    outcome in the data-output plan. Before the first release set, reconcile
