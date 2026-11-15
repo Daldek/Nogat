@@ -153,7 +153,7 @@ projects:
     provides:
       - id: obserwator-store/1
         kind: store
-        summary: Versioned store (archives, stations, series) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator (OBSERWATOR_ROOT), obserwator store init, and read API store_info, iter_store, read_meta, read_series, command_for_version.
+        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version.
       - id: obserwator-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
@@ -190,12 +190,12 @@ projects:
       - id: obserwator-testing
         kind: library
         summary: obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
-      - id: obserwator-data
+      - id: obserwator-data/1
         kind: store
-        summary: Planned (ECO-059) data root of harmonized series, station catalogs and analysis results under a marker of its own, built from Archiwista's raw root; Obserwator holds the production copy, Archiwista a backup.
-      - id: obserwator-analyses
+        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy.
+      - id: obserwator-analyses/1
         kind: dataset
-        summary: Planned (ECO-059) results of the station analyses computed by Hydrolog, one version per station, analysis and options, with the series and Hydrolog versions (analyses build, read, export).
+        summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
     depends_on:
       - project: Kartograf
         kind: data
@@ -211,7 +211,7 @@ projects:
         note: No import (ECO-059); series build, the catalog build and analyses build read the raw root without writing it and write only the data root, once at the start and at each yearly refresh.
       - project: Hydrolog
         kind: optional
-        status: planned
+        status: active
         via: [cli, file]
         exchange: [hydrolog-result/1, hydrolog-series/1]
         note: No package dependency (ECO-059); analyses build runs a configured hydrolog program's batch over series export files and stores one hydrolog-result/1 per call; a person's subset is one CLI call computed on the fly and never stored; the GUI hands a series to Hydrolog as nogat-handoff/1 around hydrolog-series/1.
@@ -294,7 +294,7 @@ projects:
         via: [library, file]
         exchange: [obserwator-pmaxtp, obserwator-series-csv]
         uses: [fetch_pmaxtp]
-        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`. Planned (ECO-059) a batch entry that reads the series export files of Obserwator's analyses build, and „Wczytaj z Obserwatora” opening Obserwator's hand-off.
+        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`, and `commands batch` runs the calls of Obserwator's analyses build over its series export files (ECO-059). „Wczytaj z Obserwatora” opening Obserwator's hand-off is planned.
       - project: Kartograf
         kind: data
         status: active
@@ -484,10 +484,10 @@ projects:
         note: Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
       - project: Obserwator
         kind: optional
-        status: planned
+        status: active
         via: [library, store]
-        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data]
-        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Planned (ECO-059) downloads into its raw root through Obserwator's library, series and catalogs read from Obserwator's data root, of which it keeps a backup copy.
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data/1]
+        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
       - project: Hydrolog
         kind: data
         status: active
