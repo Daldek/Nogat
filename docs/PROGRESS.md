@@ -1,14 +1,30 @@
 # Progress
 
-Audited on 2026-11-14 against Nogat's `develop` (`6e4e71b`) and the `origin/develop` of the
+Audited on 2026-11-15 against Nogat's `develop` (`c0a9f36`, DEV-17.6 merged) and the `origin/develop` of the
 projects after `git fetch`; release-set pins by `set check`. History is the git log, the
 CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from v3.0.0
 (ECO-057); its local checkout may still be the directory `IMGWTools`.
 
+## Deployment and storage (author's decision 2026-11-15)
+
+- **Archiwista store `agent-tmp`** ("Magazyn agent-tmp") on NAS: CIFS mount at /mnt/magazyn/agent-tmp (//magazyn.local/agent-tmp), holds:
+  - kartograf = /mnt/magazyn/agent-tmp/hydroni/kartograf (kartograf-store/1)
+  - obserwator raw = /mnt/magazyn/agent-tmp/obserwator (2825 archives, moved from ~/data/obserwator-target/raw)
+  - project kaczawa = /mnt/magazyn/agent-tmp/hydroni/projekty/kaczawa (area 792 km², set 2026-1: 194 NMT sheets, 10 BDOT10k counties, 1 HSG raster)
+  - BDOT10k counties and unpinned data also held
+  - NAS usage: 66 GB of 300 GB
+- **Obserwator data** (processed, local, served fast) = /home/claude-agent/data/obserwator-target/data
+- **Obserwator service** (obserwator-public.service) deployed at 3816b3c with OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator
+- **Hydrograf** instances: :8080 live (cache removed), :8081 Hydroni test; admin-panel store re-processing deferred to after the first joint release
+- **Archiwista deployed** at 7a11c76 on :8090; project h07 rebound to agent-tmp (2909 pins)
+- **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut
+- **Backups** retained: ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
+
+
 ## Status
 
 | Component | State | Note |
-|---|---|---|
+| Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session
 | Standard 1.0 | in progress | not yet published to `main`; tagged `std-1.0` when it is (HUB-6.1); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056) |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; `routes` name the commands of every tool's integration branch (HUB-2.9) |
 | `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
@@ -23,7 +39,7 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog, Obserwator and Archiwista, deployed 2026-11-14; Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 1) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | `release-sets/candidate-4/` since 2026-11-14: Kartograf `c9afdd3`, Obserwator `0394af7`, Hydrolog `9e2cb61`, Retman `f6d9154`, Archiwista `0ff788e` (new member; the first release's scope of 2026-11-14: Nogat, Hydrograf, Obserwator, Kartograf, Hydrolog, Archiwista, Retman optional). `set check`: every consumer matches except Hydraulik (`feature/sfincs-swmm`, outside the first release). The GUI-only commits after the pins (Obserwator `c332ca9`, Hydrolog `547b7f4`, no footer, ECO-070) wait for the next candidate. `verify-candidate` (REL-6.5) does not exist yet |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-4 stays** (author's decision 2026-11-15; small bugs to fix first before next candidate). Members' current develop: Obserwator `3816b3c` (synop data, analyses build), Hydrograf `e1ead6d` (Hydrolog pin e5df06d), Hydrolog `e5df06d` (v0.8.0.dev0), Retman `6f213da` (Obserwator pin 3816b3c), Archiwista `7a11c76` (deployed). **Pin mismatch**: candidate-4 Hydrolog `9e2cb61` (reports v1.0.0.dev0) vs current e5df06d; Kaczawa project in store; synop sync 1882 archives new; Hydrograf bootstrap validated; other consumers via `set check` match |
 | Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
 | `nogat` package (HUB §7) | planned | |
 
@@ -49,8 +65,13 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    2026-11-13): N1 done; next Hydrolog's H1 to H4 under its own plan, then
    R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms
    (question 4).
-6. Release set: candidate-4 holds the members of the first release. Next:
-   a candidate with the GUI-only commits of 2026-11-14 (Obserwator, Hydrolog)
+6. Release set and deployment (2026-11-15): **candidate-4 stays** (author's decision;
+   small bugs to fix first). Deployment state in PROGRESS Status. Members' current develop:
+   Obserwator 3816b3c (synop data, analyses build), Hydrograf e1ead6d, Hydrolog e5df06d
+   (v0.8.0.dev0), Retman 6f213da, Archiwista 7a11c76 (deployed). **Hydrolog pin mismatch**:
+   candidate-4 holds 9e2cb61 (v1.0.0.dev0) vs current e5df06d; small bugs to fix.
+   **Hydrograf admin-panel store re-processing** deferred to after the first joint release
+   (author's decision 2026-11-15). Next candidate: GUI-only commits (Obserwator, Hydrolog)
    once consumers re-pin; `verify-candidate` (REL-6.5); the author's versions;
    Hydrolog v1.0.0 after Obserwator 3.0.0's tag (producers first, HUB-5.2).
    Hydraulik joins a later set. Plan `docs/plans/2026-11-03-one-pin-set.md`.
