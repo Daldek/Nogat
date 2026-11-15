@@ -83,6 +83,9 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - `commands list --json` returns the summary `<tool>-command-list/1`,
+    with its schema `command-list-1`; `commands schema --json` returns the
+    catalog `<tool>-commands/1` (AGI-2.4, AGI-4.1, ECO-075).
   - The author names the members of a release set; an app among them is
     released by its own tag at the set's commits and is not installed by
     `nogat` (REL-6.1, ECO-074).

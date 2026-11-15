@@ -102,10 +102,16 @@ the write targets of DEV-19.1 have `output` and `root`).
 *Why:* enums and bounds let agents fill parameters without reading prose;
 `path_role` drives the sandbox (AGI-5.8).
 
-**AGI-2.4** The catalog is serialisable as `<tool>-commands/1` JSON
-(schema in AGI-4.1) and returned by `<tool> commands list --json`,
-`<tool> commands schema --command "<group> <verb>" --json` and the MCP
-catalog tools (AGI-5.9).
+**AGI-2.4** The catalog is serialised in two documents (schemas in
+AGI-4.1): the summary `<tool>-command-list/1`, one entry per command with
+at least `name`, `operation_id`, `summary` and `read_only`, returned by
+`<tool> commands list --json` and the MCP tool `<tool>_commands_list`; and
+the full catalog `<tool>-commands/1`, returned by `<tool> commands schema
+[--command "<group> <verb>"] --json` and the MCP tool
+`<tool>_commands_schema` (AGI-5.9).
+*Why:* discovery starts from a short list; the options, rules and examples
+of every command in one answer cost an agent's context before it has chosen
+a command (ECO-075).
 
 ---
 
@@ -181,7 +187,7 @@ author's consent (REL-1.4), but only past a number released on the
 producer's `main`: a breaking change to an unreleased
 document keeps its number. The schemas of the result envelope, the error
 document and the catalog are Nogat's `schemas/agent/` (`result-1`,
-`error-1`, `commands-1`); each project copies them with
+`error-1`, `command-list-1`, `commands-1`); each project copies them with
 `error_registry.json` (ERR-3), and its contract tests validate its documents
 against them. Domain schemas are published in the package
 (`src/<package>/schemas/`) and listed in the catalog.
