@@ -237,6 +237,46 @@ def test_catalog_invalid(document: dict[str, Any]) -> None:
     assert _errors("commands", document) != []
 
 
+ENTRY: dict[str, Any] = {
+    "name": "dem download",
+    "operation_id": "kartograf_dem_download",
+    "summary": "Download a DEM for an area.",
+    "read_only": False,
+    "families": ["core", "dem"],
+}
+COMMAND_LIST: dict[str, Any] = {
+    "schema": "kartograf-command-list/1",
+    "tool": "kartograf",
+    "version": "0.8.0",
+    "commands": [ENTRY],
+}
+
+
+def _entry(**changes: Any) -> dict[str, Any]:
+    return _with(COMMAND_LIST, commands=[_with(ENTRY, **changes)])
+
+
+def test_command_list_valid() -> None:
+    assert _errors("command-list", COMMAND_LIST) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _with(COMMAND_LIST, schema="kartograf-commands/1"),
+        _with(COMMAND_LIST, commands=[]),
+        _entry(name="download"),
+        _entry(operation_id="kartograf_download"),
+        _entry(read_only="no"),
+        _with(
+            COMMAND_LIST, commands=[{k: v for k, v in ENTRY.items() if k != "summary"}]
+        ),
+    ],
+)
+def test_command_list_invalid(document: dict[str, Any]) -> None:
+    assert _errors("command-list", document) != []
+
+
 @pytest.mark.parametrize(
     "argv",
     [["map", "--chek"], ["no-such-command"]],
