@@ -20,70 +20,6 @@ the standard are listed in [standards/README.md](standards/README.md).
   its output in files, not as a background job of its session, which ends
   with the session.
 
-### Changed
-
-- Everything is version 1 until the first release, the author's rule of
-  2026-11-14 (REL-1.4, ECO-072): every schema, document type, file format,
-  protocol, the GUI kit and the regulamin stay version 1 until Nogat's
-  release tag on `main`, then each project's; only the author's consent
-  changes a version, and agents never raise one on their own. The kit's
-  `nogat-kit.json` says `1.0.0` instead of 0.7.1, its files and hashes
-  unchanged; copies are compared by hashes. AGI-4.1 needs the author's
-  consent to raise a released schema number; DEV-15.7 and `design/README.md`
-  refill the regulamin with each copy of the kit. Nogat's own schemas are
-  all `/1`.
-- One place for the admin keys of a deployment, the author's decision of
-  2026-11-14: DEV-15.13 and the admin section of `design/README.md` keep each
-  GUI's key in `~/.config/nogat/keys/<project>-admin.key` (mode `0600`, or
-  `0640` with a container's group) and hand the app only its path in
-  `<PREFIX>ADMIN_API_KEY_FILE`.
-- Processing lines do not describe the processing (ECO-071, the author's
-  decision of 2026-11-14). CP is exactly „Dane ČHMÚ zostały przetworzone”,
-  once for modified ČHMÚ data; P, PP, G, SG and Z already have detail-free
-  wording and stay unchanged. Readers recognise old parenthetical CP lines
-  as CP and deduplicate them; kit 0.7.1 adds CP to `LINES` and normalises
-  old lines in its sources viewer. The regulamin's ČHMÚ example changes in
-  place; the regulamin stays version 1.0 (only the author raises it)
-  (DEV §20, DEV-20.3, DEV-20.4).
-- The regulamin link without a footer, the author's decision of 2026-11-14
-  (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
-  ECO-062 and ECO-064): DEV-15.7 links „Regulamin” in exactly the app menu,
-  a small, quiet link at the foot of the left rail (the last small item of
-  a phone's bottom bar or sheet) and the welcome window, where the
-  „Regulamin serwisu” of `fillSources()` is its only link; no footer or
-  status bar carries the link or a statement. DEV-15.8 keeps the statement
-  as the opening of § 3 only, DEV-15.13 and DEV-20.5 lose their footer.
-  `design/README.md` describes `.rail-terms`; the specimen and both mockups
-  link „Regulamin” from the menu and the rail. A browser test pins the
-  welcome window's link; the kit and regulamin 1.0 are unchanged.
-- Documentation audited against the code of 2026-11-14: `docs/PROGRESS.md`
-  holds only Status, Next and Open questions, without the dated snapshots
-  and the finished items (DOC-6.1); the plans of the admin panel, the
-  unified logging, the terms fix and the compact attribution record their
-  Status and Results in every project; README, `CLAUDE.md`'s code map,
-  `standards/README.md` and `design/README.md` name the GUI kit,
-  `scripts/terms.py`, `tests/browser/`, the `set` commands, what `drift`
-  and the gate check, the four GUIs, `test_kit_manifest.py` and the
-  republication of regulamin 1.0 on 2026-11-14.
-
-### Removed
-
-- Dead and duplicated code in `scripts/`: the two Markdown cell escapers of
-  `ecosystem.py` and `guide.py` are one, `guide.cell`, which now also escapes
-  `<` and `>` in AGENTS.md (no current entry has one; the files are
-  unchanged); `load` reads `ecosystem.yaml` through `_read`, so an unreadable
-  or non-UTF-8 registry is reported like every other file; `drift` no longer
-  repeats the `no tags` case `_state` already gives; `terms.fill` loses its
-  `markup` option, which only a test used (GUIs fill the HTML).
-
-### Fixed
-
-- mypy on CI: `tests/unit/test_nogat_logging.py` passed the ASGI app's
-  `Awaitable[None]` to `asyncio.run`, which takes a coroutine; the test now
-  wraps the call in a coroutine.
-
-### Added
-
 - Info texts of a GUI, the author's request of 2026-11-14 (ECO-069):
   DEV-15.14 gives every text behind „(i)”, in a help popover or in
   „Objaśnienie metod” one shape (a definition, then the formula with its
@@ -404,6 +340,60 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- Documentation audited on 2026-11-15 before release-set candidate-5:
+  `docs/PROGRESS.md` gains the separator row of its Status table and states
+  the author's scope of the first joint release (Nogat, Hydrograf, Hydrolog,
+  Obserwator and Archiwista; Kartograf a pinned producer; Retman and
+  Hydraulik later), the members' heads and the pins `set check` reports as
+  different, the kit copies the four GUIs carry, Archiwista's step 6 of the
+  unified logging and the missing candidate lock (REL-6.4) and
+  `verify-candidate` (REL-6.5); the plans of the unified logging and of the
+  regulamin link without a footer record their merges; `CHANGELOG.md` keeps
+  one heading per kind of change under `[Unreleased]`.
+- Everything is version 1 until the first release, the author's rule of
+  2026-11-14 (REL-1.4, ECO-072): every schema, document type, file format,
+  protocol, the GUI kit and the regulamin stay version 1 until Nogat's
+  release tag on `main`, then each project's; only the author's consent
+  changes a version, and agents never raise one on their own. The kit's
+  `nogat-kit.json` says `1.0.0` instead of 0.7.1, its files and hashes
+  unchanged; copies are compared by hashes. AGI-4.1 needs the author's
+  consent to raise a released schema number; DEV-15.7 and `design/README.md`
+  refill the regulamin with each copy of the kit. Nogat's own schemas are
+  all `/1`.
+- One place for the admin keys of a deployment, the author's decision of
+  2026-11-14: DEV-15.13 and the admin section of `design/README.md` keep each
+  GUI's key in `~/.config/nogat/keys/<project>-admin.key` (mode `0600`, or
+  `0640` with a container's group) and hand the app only its path in
+  `<PREFIX>ADMIN_API_KEY_FILE`.
+- Processing lines do not describe the processing (ECO-071, the author's
+  decision of 2026-11-14). CP is exactly „Dane ČHMÚ zostały przetworzone”,
+  once for modified ČHMÚ data; P, PP, G, SG and Z already have detail-free
+  wording and stay unchanged. Readers recognise old parenthetical CP lines
+  as CP and deduplicate them; kit 0.7.1 adds CP to `LINES` and normalises
+  old lines in its sources viewer. The regulamin's ČHMÚ example changes in
+  place; the regulamin stays version 1.0 (only the author raises it)
+  (DEV §20, DEV-20.3, DEV-20.4).
+- The regulamin link without a footer, the author's decision of 2026-11-14
+  (`docs/plans/2026-11-14-no-footer.md`, step 1; ECO-070, amending ECO-061,
+  ECO-062 and ECO-064): DEV-15.7 links „Regulamin” in exactly the app menu,
+  a small, quiet link at the foot of the left rail (the last small item of
+  a phone's bottom bar or sheet) and the welcome window, where the
+  „Regulamin serwisu” of `fillSources()` is its only link; no footer or
+  status bar carries the link or a statement. DEV-15.8 keeps the statement
+  as the opening of § 3 only, DEV-15.13 and DEV-20.5 lose their footer.
+  `design/README.md` describes `.rail-terms`; the specimen and both mockups
+  link „Regulamin” from the menu and the rail. A browser test pins the
+  welcome window's link; the kit and regulamin 1.0 are unchanged.
+- Documentation audited against the code of 2026-11-14: `docs/PROGRESS.md`
+  holds only Status, Next and Open questions, without the dated snapshots
+  and the finished items (DOC-6.1); the plans of the admin panel, the
+  unified logging, the terms fix and the compact attribution record their
+  Status and Results in every project; README, `CLAUDE.md`'s code map,
+  `standards/README.md` and `design/README.md` name the GUI kit,
+  `scripts/terms.py`, `tests/browser/`, the `set` commands, what `drift`
+  and the gate check, the four GUIs, `test_kit_manifest.py` and the
+  republication of regulamin 1.0 on 2026-11-14.
+
 - Products carry only what the providers require and link the rest, the
   author's principle of 2026-11-13 (ECO-065, amending ECO-060 and ECO-064;
   amendments of `docs/plans/2026-11-13-provider-attribution.md` and
@@ -632,7 +622,21 @@ the standard are listed in [standards/README.md](standards/README.md).
   and raises `store_unavailable` (`no_marker`) and an unreadable marker
   (`data_error`); both producers do the same.
 
+### Removed
+
+- Dead and duplicated code in `scripts/`: the two Markdown cell escapers of
+  `ecosystem.py` and `guide.py` are one, `guide.cell`, which now also escapes
+  `<` and `>` in AGENTS.md (no current entry has one; the files are
+  unchanged); `load` reads `ecosystem.yaml` through `_read`, so an unreadable
+  or non-UTF-8 registry is reported like every other file; `drift` no longer
+  repeats the `no tags` case `_state` already gives; `terms.fill` loses its
+  `markup` option, which only a test used (GUIs fill the HTML).
+
 ### Fixed
+
+- mypy on CI: `tests/unit/test_nogat_logging.py` passed the ASGI app's
+  `Awaitable[None]` to `asyncio.run`, which takes a coroutine; the test now
+  wraps the call in a coroutine.
 
 - Regulamin 1.0, published in Hydrograf and Hydrolog on 2026-11-13, is
   corrected in place on the author's decision (ECO-068, kit 0.6.2): the

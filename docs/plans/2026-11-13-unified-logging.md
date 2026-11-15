@@ -2,7 +2,7 @@
 
 Approved: 2026-11-13, the author's request in session („Czy możesz ujednolicić logowanie we wszystkich aplikacjach i zdefiniować je w Nogacie?”)
 
-Status: steps 1 to 5 done 2026-11-14, merged into the `develop` of Nogat, Hydrograf, Hydrolog and Obserwator ([Results](#results)); step 6 (Archiwista) open. No tags, no release.
+Status: steps 1 to 6 done; steps 1 to 5 merged 2026-11-14 into the `develop` of Nogat, Hydrograf, Hydrolog and Obserwator, step 6 into Archiwista's ([Results](#results)); the removal of the journal entries written before the migration is the author's root step. No tags, no release.
 
 Requirements: DEV-12.4 to DEV-12.9, DEV-15.6, DEV-15.10, DEV-18.1, DEV-18.2, HUB-4.1 and ECO-066 (added or changed by step 1); DEV-12.3, DEV-15.9, DEV-15.11, HUB-5.2, DEV-17.5.
 
@@ -154,3 +154,4 @@ Measured on 2026-11-13 in the user journal of `claude-agent` (`journalctl --user
 - 2026-11-14, step 2: Hydrograf `b10f00f`, with the terms fix, merged at `f3a6c0e`.
 - 2026-11-14, step 3: Hydrolog `576bbac`, merged at `0273a3a`.
 - 2026-11-14, steps 4 and 5: Obserwator `0369f17` (ADR-019), the GUI and the REST server, merged at `961e79c`.
+- 2026-11-14, step 6: Archiwista `7eba202` (its A-ADR-057), merged at `8573a93`.

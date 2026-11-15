@@ -1,6 +1,6 @@
 # Progress
 
-Audited on 2026-11-15 against Nogat's `develop` (`c0a9f36`, DEV-17.6 merged) and the `origin/develop` of the
+Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`) and the `origin/develop` of the
 projects after `git fetch`; release-set pins by `set check`. History is the git log, the
 CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from v3.0.0
 (ECO-057); its local checkout may still be the directory `IMGWTools`.
@@ -24,7 +24,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 ## Status
 
 | Component | State | Note |
-| Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session
+|---|---|---|
+| Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session |
 | Standard 1.0 | in progress | not yet published to `main`; tagged `std-1.0` when it is (HUB-6.1); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056) |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; `routes` name the commands of every tool's integration branch (HUB-2.9) |
 | `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
@@ -33,30 +34,30 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`, so they resolve once each project is merged there |
-| Visual identity and GUI kit (DEV §15) | done in Nogat | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); Hydrograf, Hydrolog, Obserwator and Archiwista ship older copies pending the CP update |
+| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); the copies of the kit, the marks and the tokens in Hydrograf, Hydrolog, Obserwator and Archiwista match Nogat's at their `origin/develop` of 2026-11-15 (SHA-256, the tokens apart from their DEV-15.3 header) |
 | Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md` |
-| Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | in progress | Nogat, Hydrograf, Hydrolog and Obserwator (GUI, REST server) merged; Archiwista (step 6) open; plan `2026-11-13-unified-logging.md` |
+| Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog, Obserwator and Archiwista, deployed 2026-11-14; Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
-| Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 1) |
+| Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-4 stays** (author's decision 2026-11-15; small bugs to fix first before next candidate). Members' current develop: Obserwator `3816b3c` (synop data, analyses build), Hydrograf `e1ead6d` (Hydrolog pin e5df06d), Hydrolog `e5df06d` (v0.8.0.dev0), Retman `6f213da` (Obserwator pin 3816b3c), Archiwista `7a11c76` (deployed). **Pin mismatch**: candidate-4 Hydrolog `9e2cb61` (reports v1.0.0.dev0) vs current e5df06d; Kaczawa project in store; synop sync 1882 archives new; Hydrograf bootstrap validated; other consumers via `set check` match |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-4 stays** (author's decision 2026-11-15; small bugs to fix first before next candidate). Members' `origin/develop` at 14:17 UTC on 2026-11-15, before the members' candidate-5 preparation: Kartograf `c9afdd3`, Obserwator `fdb7b50`, Hydrograf `a4bf1a4`, Hydrolog `e5df06d` (v0.8.0.dev0), Retman `6f213da`, Archiwista `747ee1f` (deployed at `7a11c76`). `set check` reports pins that differ from candidate-4 in Archiwista (Obserwator `3816b3c`), Retman (Obserwator `3816b3c`, Hydrolog `e5df06d`), Hydrograf (Hydrolog `e5df06d`; candidate-4 holds `9e2cb61`, which reports v1.0.0.dev0) and Hydraulik (a later set); Hydrolog's pin matches |
 | Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
 | `nogat` package (HUB §7) | planned | |
 
 ## Next
 
-1. CP without detail (ECO-071): producers use the fixed line once, treat old
-   parenthetical CP as CP on read and copy kit 1.0.0 (regulamin 1.0 corrected
-   in place, no new `terms_effective`).
+1. CP without detail (ECO-071): producers use the fixed line once and treat
+   old parenthetical CP as CP on read (regulamin 1.0 corrected in place, no
+   new `terms_effective`); the four GUIs carry kit 1.0.0 on their `develop`
+   (2026-11-15).
 2. Info texts of a GUI (ECO-069, DEV-15.14, example in `design/README.md`):
    Hydrograf, Hydrolog, Obserwator and Archiwista revise their „(i)” texts,
    help popovers and „Objaśnienie metod” to it, method detail beyond about
    400 characters moving to their guides.
-3. Unified logging, step 6: Archiwista copies `nogat_logging.py` (plan
-   `docs/plans/2026-11-13-unified-logging.md`). Deleting `claude-agent`'s
-   user journal, with the mockup's 673 lines of client addresses, waits for
-   the author's one root step (the plan's „Journal entries written before
-   the migration”).
+3. Unified logging: deleting `claude-agent`'s user journal, with the
+   mockup's 673 lines of client addresses, waits for the author's one root
+   step (`docs/plans/2026-11-13-unified-logging.md`, „Journal entries
+   written before the migration”).
 4. Admin panel, step 6: the author sets Cloudflare Access on `/admin`,
    `/admin/*` and `/api/admin/*` of hydrograf-test, hydrolog-test and
    obserwator-test (`docs/plans/2026-11-13-admin-panel.md`).
@@ -66,15 +67,16 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms
    (question 4).
 6. Release set and deployment (2026-11-15): **candidate-4 stays** (author's decision;
-   small bugs to fix first). Deployment state in PROGRESS Status. Members' current develop:
-   Obserwator 3816b3c (synop data, analyses build), Hydrograf e1ead6d, Hydrolog e5df06d
-   (v0.8.0.dev0), Retman 6f213da, Archiwista 7a11c76 (deployed). **Hydrolog pin mismatch**:
-   candidate-4 holds 9e2cb61 (v1.0.0.dev0) vs current e5df06d; small bugs to fix.
+   small bugs to fix first). The author's scope of the first joint release
+   (2026-11-15): Nogat, Hydrograf, Hydrolog, Obserwator and Archiwista, with
+   Kartograf a pinned producer; Retman and Hydraulik join a later set.
+   Deployment state, members' heads and the pins that differ: Status.
    **Hydrograf admin-panel store re-processing** deferred to after the first joint release
    (author's decision 2026-11-15). Next candidate: GUI-only commits (Obserwator, Hydrolog)
-   once consumers re-pin; `verify-candidate` (REL-6.5); the author's versions;
-   Hydrolog v1.0.0 after Obserwator 3.0.0's tag (producers first, HUB-5.2).
-   Hydraulik joins a later set. Plan `docs/plans/2026-11-03-one-pin-set.md`.
+   once consumers re-pin; the candidate's `pyproject.toml` and `uv.lock`
+   (REL-6.4) and `verify-candidate` (REL-6.5), neither of which exists yet;
+   the author's versions; Hydrolog v1.0.0 after Obserwator 3.0.0's tag
+   (producers first, HUB-5.2). Plan `docs/plans/2026-11-03-one-pin-set.md`.
 7. Repeat the final integration run at explicitly recorded heads, with
    Hydrograf and Archiwista apart and the two flows of F2; record the
    outcome in the data-output plan. Before the first release set, reconcile
@@ -96,7 +98,8 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    `feature/sfincs-swmm`.
 10. Archiwista's release (decision D2 of
    `docs/plans/2026-10-31-archiwista-projects.md`): one release holding
-   v0.3, v0.4 and the projects, outside the first release set (D3, REL-5.4).
+   v0.3, v0.4 and the projects, in the first joint release by the author's
+   scope of 2026-11-15 (D3 had kept it outside).
    Open: the author's three-computer run of its v0.4 LAN runbook. Gaps found
    in use: Kartograf KD-3/KD-4 (Archiwista's „U źródła” offers only nmt, nmpt
    and laz) and KH (plans show no size); Kartograf's LAZ sidecars carry no
@@ -120,21 +123,18 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
     then D (user rainfall), R (ERA5/CERRA × published coefficients from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
-15. Regulamin link without a footer (ECO-070, plan
-    `docs/plans/2026-11-14-no-footer.md`): Hydrograf, Hydrolog and
-    Obserwator drop the footer statement and link „Regulamin” from the app
-    menu, the rail's foot and their welcome window.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
-`nogat-specimen` container keeps 8765 and serves the mockups from the shared
-checkout's `feature/hydrolog-gui-mockup`. Hydrograf's other instance:
+`nogat-specimen` container keeps 8765 and serves `design/` of the shared
+checkout, on `develop` since 2026-11-15 (the container had exited when
+checked that day). Hydrograf's other instance:
 Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
 `archiwista-test` and `obserwator-test.debever.pl`.
 
 ## Open questions
 
-- Publishing 1.0 to `main` (tag `std-1.0`, Next 7) and replacing the legacy
+- Publishing 1.0 to `main` (tag `std-1.0`, Next 8) and replacing the legacy
   `standards/templates/` and `standards/configs/` (ADOPTION_PLAN 0.1, 0.4):
   the author's step, because those files are owned by root and the agents
   here have no root.
@@ -148,8 +148,7 @@ Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
 - The author's decisions: the final versions, with no tags in any project
-  until they are decided (Hydrolog v1.0.0 included); the first release's
-  scope (2026-11-14, Next 5); Windows as a
+  until they are decided (Hydrolog v1.0.0 included); Windows as a
   blocking CI job in Hydrolog; Hydroni on Hydrograf's current `develop`.
 - Hydrograf's network method (ADR-080), recorded with proposals in its
   `docs/PROGRESS.md`, no work until the author asks („na razie nic nie
