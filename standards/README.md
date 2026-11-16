@@ -83,6 +83,12 @@ DOC-11.1).
 ## Changelog
 
 - 1.0 (not yet published):
+  - The first `nogat` release is `0.1.0`; `nogat` stays `0.y` until the
+    author makes a release `1.0.0` (HUB-7.4, ECO-076).
+  - `verify-candidate` runs `set verify`: members with a package in the
+    candidate's environment, an app on its own lock, a member without the
+    profile `tool` on Linux only; the run URL is `runs` in `members.toml`
+    (REL-6.4, REL-6.5, HUB-4.9, ECO-077).
   - `commands list --json` returns the summary `<tool>-command-list/1`,
     with its schema `command-list-1`; `commands schema --json` returns the
     catalog `<tool>-commands/1` (AGI-2.4, AGI-4.1, ECO-075).

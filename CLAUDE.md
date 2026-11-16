@@ -39,6 +39,7 @@ uv run scripts/ecosystem.py set check    # consumers' pins against the release s
 uv run scripts/ecosystem.py set apply --project P [--path DIR]   # pin P to the set
 uv run scripts/ecosystem.py set bump P [--rev REF]   # move P, regenerate the README
 uv run scripts/ecosystem.py set readme [--check]     # release-sets/candidate-<N>/README.md
+uv run scripts/ecosystem.py set verify --workdir DIR [--member P]   # suites of REL-6.5
 ```
 
 Checkouts of the other projects are siblings of Nogat or under

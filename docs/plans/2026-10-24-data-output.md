@@ -399,7 +399,9 @@ Integration check: the early dry run and the final run of 2026-10-25 are
 recorded in [the dry-run plan](2026-10-25-integration-dry-run.md) and
 [the final integration plan](2026-10-25-final-integration.md). The latter
 records fixes for F1–F5 and F7–F8, the open F6 history work and the
-Hydrograf/Archiwista environment conflict. The post-fix repeat remains open;
+Hydrograf/Archiwista environment conflict. The post-fix repeat ran on
+2026-11-16 at candidate-5:
+[the integration run of candidate-5](2026-11-16-candidate-5-integration.md);
 the audit of 2026-10-28 ran no tests or gates.
 
 The current branch audit supersedes the waiting states above: Retman's

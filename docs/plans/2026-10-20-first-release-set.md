@@ -1,7 +1,9 @@
 # Plan: first release set
 
-Status: proposed. Requirements: REL §6, REL-2.1, REL-5.3, HUB-5.2, ECO-025,
-ECO-037. Details phase 5 of the
+Approved: 2026-11-16 (the author: build the candidate's `pyproject.toml`, its
+`uv.lock` and `verify-candidate`, then run the integration run; the first
+`nogat` release is `0.1.0`, ECO-076). Requirements: REL §6, REL-2.1,
+REL-5.3, HUB-5.2, ECO-025, ECO-037. Details phase 5 of the
 [adoption plan](../../standards/ADOPTION_PLAN.md).
 
 ## Goal
@@ -97,4 +99,15 @@ without), so no third-party conflict blocks a candidate.
 | Hydrograf | pins release tags older than the heads of Kartograf, Hydrolog and IMGWTools; does not run on Kartograf `develop` |
 | Hydraulik | uncommitted proof of concept |
 
-Candidates: none yet.
+Candidates: candidate-1 to candidate-4 held members' commits only (the pins
+plan, `2026-11-03-one-pin-set.md`). candidate-5 (2026-11-16) is the first
+with step 3: its `pyproject.toml` installs Kartograf `[mcp]`, Obserwator
+`[full]`, Hydrolog `[all]` and Archiwista `[obserwator]` at the set's commits
+with the union of their `dev` groups, and its `uv.lock` resolves 127 packages
+for the three platforms, one version each. The pins between members equal
+the set's commits (`set check`), so none is overridden. Hydrograf, an app,
+is verified on its own lock (ECO-077). Step 4's workflow is
+`.github/workflows/verify-candidate.yml`, which runs `set verify`; it can
+be dispatched once it is on `main`. The local run of the same command, the
+members' own gates and the flows are in
+[the integration run of candidate-5](2026-11-16-candidate-5-integration.md).

@@ -8,6 +8,29 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- `release-sets/candidate-5/pyproject.toml` and its `uv.lock`, universal for
+  Linux, macOS and Windows (REL-6.4): Kartograf `[mcp]`, Obserwator
+  `[full]`, Hydrolog `[all]` and Archiwista `[obserwator]` at the set's
+  commits, the union of their `dev` groups; 127 packages, one version each.
+  Hydrograf, an app, is not installed (REL-6.1).
+- `scripts/ecosystem.py set verify --workdir DIR [--member P]` and the
+  workflow `.github/workflows/verify-candidate.yml` (REL-6.5, ECO-077): each
+  member's offline suite at its commit, in the candidate's environment or,
+  for an app, on its own lock; members without the profile `tool` on Linux
+  only. `set bump` moves the member's `rev` in the candidate's
+  `pyproject.toml` and drops the recorded runs; `set readme --check` fails
+  when the `pyproject.toml` installs other commits; `members.toml` records
+  passing runs as `runs`, shown in the README.
+- ECO-076, the author's decision of 2026-11-16: the first `nogat` release is
+  `0.1.0` and `nogat` stays `0.y` until the author makes a release `1.0.0`
+  (HUB-7.4); `pyproject.toml` carries `0.1.0.dev0`.
+- The integration run of candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`),
+  the repeat the final integration run of 2026-10-25 left open: every
+  member's suite in the candidate's environment and on its own lock, and
+  eight flows offline. The known failures C1 to C6 (Kartograf does not treat
+  `obserwator-data.json` as a store; an Archiwista test that depends on the
+  umask; two Archiwista Firefox tests crashing with Playwright 1.65.2; three
+  hints and plan rows) are left to the members' next releases.
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them

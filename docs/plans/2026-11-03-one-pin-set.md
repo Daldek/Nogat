@@ -158,3 +158,8 @@ Obserwator `1ee5457`, Hydrolog `4fad769`) until its next rebuild, which
 needs new images only. Still open: Hydrolog v1.0.0 waits for its producers
 (HUB-5.2; Obserwator 3.0.0 is not tagged) and for `verify-candidate`
 (REL-6.5), which does not exist yet.
+
+D6 closed 2026-11-16: candidate-5 has its `pyproject.toml` and `uv.lock`,
+`set verify` and the workflow `verify-candidate` exist, and `set bump` moves
+a member's `rev` in the candidate's `pyproject.toml` (HUB-4.9, ECO-077).
+Hydrograf stays apart from Archiwista (`affine`), on its own lock.
