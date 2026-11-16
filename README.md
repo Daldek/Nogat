@@ -33,6 +33,8 @@ cd Nogat/release-sets/v0.1.0
 uv sync --locked --no-dev
 ```
 
+The members' commands are then in `.venv/bin/`.
+
 Nogat will also be the `nogat` package that installs every tool with one
 command ([HUB §7](standards/ECOSYSTEM_HUB.md)); it does not exist yet.
 

@@ -18,16 +18,16 @@ the standard are listed in [standards/README.md](standards/README.md).
   packages as candidate-6's lock. The `nogat` package (HUB §7, ADOPTION_PLAN
   5.4) does not exist yet, so the set is installed as an environment,
   `uv sync --locked --no-dev` in `release-sets/v0.1.0/`, not with
-  `uv tool install` (a deviation from HUB-7.1 and HUB-7.2).
+  `uv tool install` (a deviation from HUB-7.1, HUB-7.2 and REL-6.1).
 - Standard 1.0 is published: it reaches `main` with this release, and the
   merge commit is tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4). Known
   deviations: the legacy `standards/templates/` and `standards/configs/`
   are owned by root, so they reach `main` unchanged and replacing them
   stays the author's step (ADOPTION_PLAN 0.1, DOC-11.1); candidate-6 was
-  verified only on this machine by `set verify`, and the workflow
-  `verify-candidate` becomes dispatchable once it is on `main` (REL-6.5);
-  with the author's approval, `develop` and `main` are merged locally
-  without pull requests, as the members were, because `gh` is not
+  verified only on the author's machine by `set verify`, not by the
+  workflow `verify-candidate`, which reaches `main` with this release
+  (REL-6.5); with the author's approval, `develop` and `main` are merged
+  locally without pull requests, as the members were, because `gh` is not
   installed (DEV-3.6, REL-2.1).
 - `release-sets/candidate-5/pyproject.toml` and its `uv.lock`, universal for
   Linux, macOS and Windows (REL-6.4): Kartograf `[mcp]`, Obserwator
@@ -51,15 +51,18 @@ the standard are listed in [standards/README.md](standards/README.md).
   eight flows offline. The known failures C1 to C6 (Kartograf does not treat
   `obserwator-data.json` as a store; an Archiwista test that depends on the
   umask; two Archiwista Firefox tests crashing with Playwright 1.65.2; three
-  hints and plan rows) are left to the members' next releases.
+  hints and plan rows; an Archiwista test that depends on timing under load)
+  are left to the members' next releases.
 - Release set `candidate-6` (REL-6.4): the members after their release
-  documentation; `set verify` on this machine passes except the known C2
-  and C3. The members are released from it, producers first: Kartograf
-  `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`,
-  Archiwista `v0.3.0` (the plan of the integration run of candidate-5,
-  „candidate-6 and the releases”). Documentation-only and pin-only commits
-  ran reduced checks instead of the whole gate (the author's decision of
-  2026-11-16, a deviation from DEV-7.6).
+  documentation; `set verify` on the author's machine passes except the
+  known C2 and C3, and the gate of Obserwator's release commit adds C7, a
+  test that depends on the length of `TMPDIR`. The members are released
+  from it, producers first: Kartograf `v0.8.0`, Obserwator `v3.0.0`,
+  Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` (the plan of
+  the integration run of candidate-5, „candidate-6 and the releases”).
+  Documentation-only and pin-only commits ran reduced checks instead of the
+  whole gate (the author's decision of 2026-11-16, a deviation from
+  DEV-7.6).
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them

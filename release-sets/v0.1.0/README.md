@@ -25,10 +25,13 @@ cd Nogat/release-sets/v0.1.0
 uv sync --locked --no-dev
 ```
 
+The members' commands (`kartograf`, `obserwator`, `hydrolog`, `archiwista`)
+are then in `.venv/bin/`.
+
 ## Verification
 
 candidate-6 was verified on Linux by `uv run scripts/ecosystem.py set verify`
-on this author's machine, not by the workflow verify-candidate, which runs
+on the author's machine, not by the workflow `verify-candidate`, which runs
 only from `main` (REL-6.5 deviation): every member passed except the known
 failures C2 and C3 of Archiwista's tests
 ([the integration run](../../docs/plans/2026-11-16-candidate-5-integration.md)).
