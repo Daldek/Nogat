@@ -306,9 +306,13 @@ Risks:
 - The graph of both basins (806,916 nodes in the scenario's 7 parts) in one API process, loaded at start: its memory is unmeasured.
 - The Odra (~119,000 km²): at most 2,250 km² per window at 5 m means at least 53 parts; the measured 72 graph nodes per km² give about 8.6 M nodes, and 6.3 MiB per km² of data, tiles and database (`REPORT.md:96`, `:373-382`) about 0.7 TiB [INFERENCE: linear].
 
-Open questions for the author:
+Topics to settle before implementation (the author, before this plan's `Approved:` line or at the latest before H1 starts):
 
-1. Formats after the release: the instance-wide segment numbers keep the API, the tiles and `hydrolog-network/1` as they are, and `instance.json` gains `basins` beside `area`; may these additions stay version 1 (ECO-072)?
+1. **Formats after the release (ECO-072).** The instance-wide segment numbers keep the API, the tiles and `hydrolog-network/1` as they are, and `instance.json` gains `basins` beside `area`. Coordinator's proposal: these stay version 1. A change stays within `/N` when it only adds optional fields or values that an existing reader can ignore, as the schemas already mark additions „Optional within `/1`” (AGI-4.1). Removing a field, renaming one or changing its meaning raises the version, with the author's consent. The rule is to be recorded once as an ECO decision, shared with the operational-series plan (its Q8).
+2. **One grid for all basins of an instance** [proposed in Grid and cell size]: the basins of one instance share the coarsest grid, and a basin wanted at a finer cell size gets its own instance. Without it, readers must find which basin holds a clicked point.
+3. **Canals with the river's MPHP prefix** (Risks, side channels misread): is H2's list of such lines enough, or must they be resolved (cut or kept) before a basin's partition passes?
+4. **E7-GAP-04 outside this plan:** the outlet is moved silently to the end of the segment at the chosen threshold (up to 5.3 km, or onto another river), with no warning for a truncated catchment and no outline of the instance's area (`REPORT.md` E7-GAP-04, A3). The author kept it out of this plan; where it goes (a small Hydrograf fix after the release, proposed) is to be decided.
+5. **PROGRESS numbering:** this branch and `plan/operational-series` both add PROGRESS item 15; the second to merge renumbers.
 
 ## Follow-ups (outside this plan's steps)
 
