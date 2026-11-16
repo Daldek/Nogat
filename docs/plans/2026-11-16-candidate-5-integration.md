@@ -99,6 +99,7 @@ fixed in its project's next release.
 | C4 | Obserwator's plain plan into another tool's store lists `ATTRIBUTION.txt` as `write` while the run refuses every target (DEV-19.10, DEV-19.11) | — | Obserwator |
 | C5 | Obserwator's `no_marker` hint does not name the path (DEV-19.13); Kartograf's `nested_store` error has no `hint` (ERR-5) | — | Obserwator, Kartograf |
 | C6 | `archiwista test_unreadable_cached_as_code_and_timeout_not_cached` once (`PreviewTimeoutError`, limit 1 s) in the first run, with the gate beside it on four cores; it passed in the repeat and in the gate | Timing under load | Archiwista |
+| C7 | Obserwator `tests/unit/test_agent_guide.py::test_instructions_are_english_and_hold_the_rules_and_the_mode_below_2_kib[read]`, in the gate of its release commit | The MCP instructions carry the path of the test's temporary directory, so a long `TMPDIR` takes them past the 2,048-byte limit (2,050); it fails the same way on `develop` without the release commit and passes with `/tmp` and in a repeat of the gate. A defect of the test | Obserwator |
 
 The findings of the scenario test of 2026-11-15/16 on the Barycz and the
 Bóbr (`~/workspace/_e2e/2026-11-15/scenario/REPORT.md`) are also left to the
@@ -111,3 +112,58 @@ next releases by the author's decision of 2026-11-16.
 - `live` tests, Hydrograf's `db` tests, Archiwista's `perf` and `smb` tests,
   any real download.
 - Retman and Hydraulik, which join a later set.
+
+## candidate-6 and the releases (2026-11-16)
+
+The author's decisions of 2026-11-16: Kartograf v0.8.0 (the PGW data and the
+size-probe fixes merged after its freeze of 2026-11-03 are admitted),
+Obserwator v3.0.0, Hydrolog v0.8.0, Hydrograf v0.5.0, Archiwista v0.3.0;
+Nogat is released separately. Two rounds of documentation closed every
+member for its release: the release text and the deferred defects, then the
+style of the documentation against DOC §1 to §10; each merged into the
+member's `develop`.
+
+**Deviation from DEV-7.6, the author's decision of 2026-11-16.** A commit
+that changes documentation only, and a commit that only moves a pin to a
+producer commit whose code is unchanged, ran `ruff format --check`, `ruff
+check`, mypy, the tests that read the changed files (README examples,
+contract tests, the tests of the pinned producer's calls) and the commit
+step, not the whole suite; the whole suite ran in `set verify` of
+candidate-6 and in the gate of each release commit. Hydrograf, whose gate
+takes about 2 minutes, ran it whole.
+
+**candidate-6** (`release-sets/candidate-6/`): Kartograf `7a1eb11`,
+Obserwator `11eedea`, Hydrolog `1be867d`, Hydrograf `1aa66f1`, Archiwista
+`95b0540`; between candidate-5 and candidate-6 the producers change only
+documentation, and the lock moves only the members (127 packages). `set
+check`: every pin between the members matches. `set verify` (unit
+`nogat-candidate6-verify`, 6,413 s): Kartograf 8,651 passed, Obserwator
+3,432, Hydrolog 8,855, Hydrograf 2,392 on its own lock, Archiwista 3,024
+passed and 3 failed (C2 and C3 only).
+
+**Deviation from REL-6.5.** The workflow `verify-candidate` is not on Nogat's
+`main` (Nogat's release comes later), so candidate-6 ran only on this
+machine (Linux, Python 3.12) and its `members.toml` has no `runs`. macOS,
+Windows and Python 3.15 are covered only by each member's own CI on its
+own lock.
+
+**Releases**, producers first (REL-6.6). Each release commit changes the
+version, the CHANGELOG heading and, in a consumer, the pins (commit → tag)
+and the supported ranges (REL-5.6), with `uv.lock`; its full gate passes
+before the commit; then `develop` → `main` with a merge commit and the
+annotated tag on it.
+
+| Member | Release commit | `main` | Tag | Gate of the release commit |
+|---|---|---|---|---|
+| Kartograf | `1245289` | `333ef5c` | `v0.8.0` | GATE OK, 8,651 passed |
+| Obserwator | `b407c1a` | `707b4a5` | `v3.0.0` | GATE OK, 3,432 passed (C7 failed in the first run) |
+| Hydrolog | `6fb8af6` | `3353fc5` | `v0.8.0` | GATE OK, 8,855 passed |
+| Hydrograf | `d8906eb` | `634fce6` | `v0.5.0` | GATE OK, 2,392 passed |
+| Archiwista | `babc880` | `7fd25e8` | `v0.3.0` | GATE OK, 3,027 passed (umask 077) |
+
+Each tag is annotated and points at the merge commit on `main`, whose tree
+equals the member's `develop` after the release commit. The members'
+`develop` still carries the release version; each opens its next cycle
+(`X.Y.(Z+1).dev0`, a new `[Unreleased]`) with its next change. Nogat's own
+release (`v0.1.0`, ECO-076) is next and separate: it puts candidate-6 with
+the tags in place of the commits (HUB-7.2, REL-6.6).
