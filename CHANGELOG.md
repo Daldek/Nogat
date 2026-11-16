@@ -8,6 +8,9 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Large basins in one Hydrograf instance, a draft plan
+  (`docs/plans/2026-11-16-large-basins.md`, `Approved: pending`): JCWP parts
+  joined at BDOT10k inlets, one database, gauges as control and segments.
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them
