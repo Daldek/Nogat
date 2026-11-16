@@ -338,12 +338,14 @@ Risks:
 - **R7. Temperature:** some stations give one reading a day at 06:00 UTC, others hourly.
 - **R8. Archiwista's queue:** a 4 h night job holds one of two network places.
 
-Open questions for the author:
+Topics to settle before implementation (the author, before this plan's `Approved:` line or at the latest before N0 starts; the plan ships after the first joint release):
 
 - **Q3.** Scheduling in Archiwista: schedule entries in `ScanScheduler` (i, proposed), or a user systemd timer that runs `archiwista jobs start download` into the queue (ii, no scheduling code in Archiwista)?
-- **Q8.** Formats after the release: `obserwator-subdaily/1` is new. Do the new slot form `series:<key>:<YYYY-MM>` and the new `time_unit` values `hour` stay within version 1 of `obserwator-data/1` (ECO-072)?
+- **Q8.** Formats after the release: `obserwator-subdaily/1` is new. Do the new slot form `series:<key>:<YYYY-MM>` and the new `time_unit` value `hour` stay within version 1 of `obserwator-data/1` (ECO-072)? Coordinator's proposal: yes. A change stays within `/N` when it only adds optional fields or values an existing reader can ignore (AGI-4.1); here the one reader that tells series apart by `time_unit`, Archiwista, is changed in the same plan (A1). The rule is to be recorded once as an ECO decision, shared with the large-basins plan (its topic 1).
 - **Q9.** Backups: is a copy outside the NAS wanted for the raw root (another disk or off-site), or does the NAS copy suffice?
 - **Q10.** ČHMÚ's validated hourly set (`cz.chmi.hydro_hourly`) as the verified tier for ČHMÚ: in this plan (proposed), or later?
+- **Q11.** Telemetry in the series at 1 h from the full-hour samples (proposed, Resolution of the series), or a 10-min series as well?
+- **Q12.** PROGRESS numbering: this branch and `plan/large-basins` both add PROGRESS item 15; the second to merge renumbers.
 
 ## Follow-ups (outside this plan's steps)
 
