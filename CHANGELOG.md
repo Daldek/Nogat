@@ -8,6 +8,13 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Operational hydro series of IMGW-PIB and ČHMÚ, a draft plan
+  (`docs/plans/2026-11-16-operational-series.md`, `Approved: pending`): a
+  nightly harvest through Archiwista's queue kept as an unverified tier
+  (DEV-20.8 to be amended), replaced by IMGW-PIB's monthly telemetry and
+  ČHMÚ's validated hourly year, hourly sub-daily series with a tier column,
+  a chart of the current readings, pruning off by default and rsync
+  snapshots of the store on the NAS.
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them

@@ -121,6 +121,19 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
     then D (user rainfall), R (ERA5/CERRA × published coefficients from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
+15. Operational hydro series of IMGW-PIB and ČHMÚ: draft plan
+    `docs/plans/2026-11-16-operational-series.md` (`Approved: pending`,
+    branch `plan/operational-series`, not merged), after the first joint
+    release: a nightly harvest of hydro-back's hourly operational data and
+    ČHMÚ's `recent` day, 02:30–06:30 in Archiwista's queue, trimmed to the
+    UTC day at 1 h; IMGW-PIB's monthly telemetry and ČHMÚ's validated
+    hourly year replacing them; one sub-daily series per provider at 1 h
+    with a tier column; a chart in Obserwator's „teraz”; on-demand deltas
+    in memory only; pruning of superseded versions off by default; weekly
+    and monthly rsync snapshots of the store on the NAS. Needs N0 (DEV-20.8
+    amended). Open: scheduling in Archiwista, the slot and `time_unit`
+    additions within version 1, a copy outside the NAS, ČHMÚ's validated
+    hourly set in scope.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
