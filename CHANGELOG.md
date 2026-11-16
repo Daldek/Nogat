@@ -31,6 +31,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   `obserwator-data.json` as a store; an Archiwista test that depends on the
   umask; two Archiwista Firefox tests crashing with Playwright 1.65.2; three
   hints and plan rows) are left to the members' next releases.
+- Release set `candidate-6` (REL-6.4): the members after their release
+  documentation; `set verify` on this machine passes except the known C2
+  and C3. The members are released from it, producers first: Kartograf
+  `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`,
+  Archiwista `v0.3.0` (the plan of the integration run of candidate-5,
+  „candidate-6 and the releases”). Documentation-only and pin-only commits
+  ran reduced checks instead of the whole gate (the author's decision of
+  2026-11-16, a deviation from DEV-7.6).
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them
