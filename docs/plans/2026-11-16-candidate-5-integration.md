@@ -49,10 +49,10 @@ to `develop`).
 | Member | Environment | Result | Coverage | Time |
 |---|---|---|---|---|
 | Kartograf | candidate | 8,651 passed | 95.37 % | 481 s |
-| Obserwator | candidate | 3,325 passed, 152 skipped (no browser for the lock's Playwright) | 94.57 % | 295 s |
+| Obserwator | candidate | first run 3,325 passed, 152 skipped (no browser); repeat 3,432 passed, 45 skipped | 94.57 % | 471 s |
 | Hydrolog | candidate | first run 234 errors (no browser); repeat 8,855 passed | 94.27 % | 765 s |
 | Hydrograf | own lock | 2,392 passed | 87.24 % | 175 s |
-| Archiwista | candidate | first run 2,732 passed, 2 failed, 293 errors (no browser); repeat below | — | 2,622 s |
+| Archiwista | candidate | first run 2,732 passed, 2 failed, 293 errors (no browser); repeat 3,024 passed, 3 failed (C2, C3) | 93.68 % | 4,394 s |
 
 The errors of the first run are this machine's: the candidate's Playwright
 1.65.2 needs Chromium build 1255 and Firefox build 1572, which were not
@@ -98,7 +98,7 @@ fixed in its project's next release.
 | C3 | Archiwista `tests/e2e/test_station_chart.py::test_an_incomplete_year_is_a_hollow_dot_whose_tooltip_names_the_missing_half[firefox]` and `tests/e2e/test_stations_map.py::test_legend_counter_and_chips_stand_beside_the_map[firefox]` in the candidate's environment | Firefox 159 (Playwright 1.65.2, the set's version) crashes the page (`TargetClosedError: Page crashed`), deterministically; both pass with the Playwright 1.64.0 of Archiwista's own lock, and their Chromium cases pass in both. The set keeps 1.65.2 (the author) | Archiwista |
 | C4 | Obserwator's plain plan into another tool's store lists `ATTRIBUTION.txt` as `write` while the run refuses every target (DEV-19.10, DEV-19.11) | — | Obserwator |
 | C5 | Obserwator's `no_marker` hint does not name the path (DEV-19.13); Kartograf's `nested_store` error has no `hint` (ERR-5) | — | Obserwator, Kartograf |
-| C6 | `archiwista test_unreadable_cached_as_code_and_timeout_not_cached` once (`PreviewTimeoutError`, limit 1 s) in the first run, with the gate beside it on four cores | Timing under load | Archiwista |
+| C6 | `archiwista test_unreadable_cached_as_code_and_timeout_not_cached` once (`PreviewTimeoutError`, limit 1 s) in the first run, with the gate beside it on four cores; it passed in the repeat and in the gate | Timing under load | Archiwista |
 
 The findings of the scenario test of 2026-11-15/16 on the Barycz and the
 Bóbr (`~/workspace/_e2e/2026-11-15/scenario/REPORT.md`) are also left to the
