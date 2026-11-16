@@ -122,11 +122,16 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
 15. Large basins in one Hydrograf instance: draft plan
-    `docs/plans/2026-11-16-large-basins.md` (`Approved: pending`) from the
-    scenario test of 2026-11-15 (E7-08, E7-09, GEO-01) and the author's
-    discussion of 2026-11-16: parts as JCWP aggregates joined at BDOT10k
-    inlets in one database, gauges as control and as analysis segments.
-    Open: the interim 10 m run, the tolerances, Czechia (GEO-06).
+    `docs/plans/2026-11-16-large-basins.md` (`Approved: pending`, branch
+    `plan/large-basins`, not merged) from the scenario test of 2026-11-15
+    (E7-08, E7-09) and the author's two rounds of 2026-11-16: JCWP parts
+    within a fixed cell budget under the 8 GB cap, joined at BDOT10k inlets
+    in topological order, one database for several basins (the Barycz and
+    the Bóbr in one instance), Archiwista unchanged; gauges and Czechia are
+    later extensions. Hydrograf's `feature/large-basins` (worktree
+    `~/workspace/wt/hydrograf-large-basins`) has no code until `Approved:`
+    and merges after the first joint release. Open: the memory measurement
+    with Hydroni stopped, mixed cell sizes, format additions after the release.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
