@@ -10,10 +10,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 - Large basins in one Hydrograf instance, a draft plan
   (`docs/plans/2026-11-16-large-basins.md`, `Approved: pending`): the
-  network's topology first, then JCWP parts of at most 90 M grid cells with
-  exactly one outlet each, on one grid per basin, joined at main-river
-  inlets, side channels cut, one database for several basins; gauges only a
-  possible extension.
+  network's topology first, then parts as sets of whole JCWP of at most 90 M
+  grid cells, checked before any bootstrap (main-river outlet edges over
+  10 km², no cycle), on one grid per basin, joined at main-river inlets, side
+  channels cut, one database for several basins; gauges only a possible
+  extension.
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them

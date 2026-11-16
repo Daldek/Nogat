@@ -124,11 +124,12 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 15. Large basins in one Hydrograf instance: draft plan
     `docs/plans/2026-11-16-large-basins.md` (`Approved: pending`, branch
     `plan/large-basins`, not merged) from the scenario test of 2026-11-15
-    (E7-08, E7-09, E7-GAP-03) and the author's four rounds of 2026-11-16:
+    (E7-08, E7-09, E7-GAP-03) and the author's five rounds of 2026-11-16:
     the network's topology first (side channels cut, the JCWP graph), then
-    parts as connected upstream subtrees of at most 90 M grid cells, each
-    with exactly one outlet (else an error before any bootstrap), on one
-    grid per basin, joined at main-river inlets; one database for several
+    parts as any sets of whole JCWP of at most 90 M grid cells, checked
+    before any bootstrap (every JCWP in one part, outlet edges on main
+    rivers over 10 km², no cycle, else an error), on one grid per basin,
+    joined at main-river inlets, many per receiver; one database for several
     basins (the Barycz and the Bóbr in one instance), Archiwista unchanged;
     gauges and Czechia are later extensions. Hydrograf's
     `feature/large-basins` (worktree `~/workspace/wt/hydrograf-large-basins`)
