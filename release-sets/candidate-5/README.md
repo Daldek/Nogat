@@ -14,3 +14,7 @@ consumer and `set bump <P>` moves a member.
 | Hydrolog | [`3ce7ee847df14f7aaec7abbefd828d389eb7aae8`](https://github.com/Daldek/Hydrolog/commit/3ce7ee847df14f7aaec7abbefd828d389eb7aae8) |
 | Hydrograf | [`939b55f0792cc9d2aca9c48ba171927f4ed54b16`](https://github.com/Daldek/Hydrograf/commit/939b55f0792cc9d2aca9c48ba171927f4ed54b16) |
 | Archiwista | [`800231cc919f59538c4498dee0d94bc8ad3e88df`](https://github.com/Daldek/Archiwista/commit/800231cc919f59538c4498dee0d94bc8ad3e88df) |
+
+## Verification
+
+Not verified at these commits: no run of the workflow verify-candidate (REL-6.5).

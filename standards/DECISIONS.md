@@ -85,6 +85,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-073](#eco-073-long-jobs-run-outside-the-agents-session) | Long jobs run outside the agent's session | accepted | 2026-11-15 |
 | [ECO-074](#eco-074-the-author-names-the-members-of-a-release-set) | The author names the members of a release set | accepted | 2026-11-15 |
 | [ECO-075](#eco-075-the-catalog-summary-is-its-own-document) | The catalog summary is its own document | accepted | 2026-11-15 |
+| [ECO-076](#eco-076-nogat-starts-at-010) | Nogat starts at 0.1.0 | accepted | 2026-11-16 |
+| [ECO-077](#eco-077-verify-candidate-runs-an-app-on-its-own-lock) | verify-candidate runs an app on its own lock | accepted | 2026-11-16 |
 
 ---
 
@@ -1830,3 +1832,58 @@ document nobody validates drifts, ECO-050).
 **Consequence.** AGI-2.4, AGI-4.1. The tools copy the new schema with the
 next copy of `schemas/agent/` and validate their list in contract tests;
 `drift` reports the copy. No document changes its number (REL-1.4).
+
+## ECO-076 Nogat starts at 0.1.0
+
+**Decision.** The first `nogat` release, the first release set, is tagged
+`v0.1.0`, and `develop` carries `0.1.0.dev0` until then (REL-1.1). `nogat`
+stays `0.y` until every tool of the ecosystem is in a set, the tools are
+stable and users have tested them; only then, and only by the author's
+decision, is a release `1.0.0`. Until then HUB-7.4 numbers each release
+within `0.y`. The standard's own version, 1.0 with its tag `std-1.0`
+(HUB-6.1, ECO-056), is a separate number and does not change.
+
+**Why.** The author's decision of 2026-11-16: Nogat is still in development,
+and a `1.0.0` would promise users a stability that neither the set nor
+its tools have yet. In `0.y` a minor release may break (REL-1.1), which
+matches a set whose members still change their interfaces.
+
+**Rejected.** `1.0.0` for the first set (it claims stability before users
+have tested anything). Keeping `0.0.0` until the release (REL-1.1 asks
+`develop` to carry the version of the next release).
+
+**Consequence.** HUB-7.4. Nogat's `pyproject.toml` and the candidate's carry
+`0.1.0.dev0`; the release pull request of the first set sets `0.1.0`
+(REL-2.1, REL-6.6).
+
+## ECO-077 verify-candidate runs an app on its own lock
+
+**Decision.** `verify-candidate` runs `uv run scripts/ecosystem.py set
+verify`. A member with a package runs its offline suite from its checkout in
+the candidate's environment, its marker expression and coverage floor being
+its own pytest and coverage settings. An app among the members (Hydrograf),
+which the candidate's lock does not install (REL-6.1), runs its suite on its
+own lock, whose pins of the producers `set check` holds at the set's
+commits. A member whose profiles hold no `tool` (Hydrograf, Archiwista) runs
+on Linux only, as its own CI does (DEV-7.7). The URL of a passing run is the
+top-level `runs` of `members.toml`, from which the README is generated; `set
+bump` drops it with the old commit. `set readme --check` fails when the
+candidate's `pyproject.toml` installs other commits than `members.toml`.
+
+**Why.** ECO-074 made an app a member after REL-6.5 was written, and
+Hydrograf cannot share the candidate's environment: it caps `affine<3`
+(its ADR-062, until pyflwdir 0.5.13) while Archiwista needs `affine>=3`.
+Hydrograf and Archiwista are Linux applications until their ports, so their
+suites on macOS and Windows would report the platform, not the set. The
+README is generated, so the record of a run needs a place in the file it is
+generated from.
+
+**Rejected.** One lock with conflicting groups (uv `conflicts`), which would
+hold two versions of `affine`, against REL-6.2. Leaving Hydrograf unverified
+(it is the GUI most users reach first, ECO-074). A matrix job per member
+(the members of a set change; one job per platform keeps the workflow
+independent of them). A hand-edited README (the gate would call it stale).
+
+**Consequence.** REL-6.4, REL-6.5, HUB-4.9.
+`.github/workflows/verify-candidate.yml`; `release-sets/candidate-5/` holds
+`pyproject.toml` and `uv.lock`.
