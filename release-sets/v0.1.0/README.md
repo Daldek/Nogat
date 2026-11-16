@@ -22,7 +22,7 @@ environment, not with `uv tool install`:
 ```bash
 git clone --branch v0.1.0 https://github.com/Daldek/Nogat
 cd Nogat/release-sets/v0.1.0
-uv sync --locked --no-dev
+uv sync --locked --no-dev --python 3.12
 ```
 
 The members' commands (`kartograf`, `obserwator`, `hydrolog`, `archiwista`)
@@ -30,11 +30,12 @@ are then in `.venv/bin/`.
 
 ## Verification
 
-candidate-6 was verified on Linux by `uv run scripts/ecosystem.py set verify`
-on the author's machine, not by the workflow `verify-candidate`, which runs
-only from `main` (REL-6.5 deviation): every member passed except the known
-failures C2 and C3 of Archiwista's tests
+candidate-6 was verified on Linux with Python 3.12 by
+`uv run scripts/ecosystem.py set verify` on the author's machine, not by the
+workflow `verify-candidate`, which runs only from `main` (REL-6.5 deviation),
+so Python 3.12 on Linux is the verified platform (REL-7.1). Every member
+passed except the known failures C2 and C3 of Archiwista's tests
 ([the integration run](../../docs/plans/2026-11-16-candidate-5-integration.md)).
 Each member's release commit then passed its full gate. This set installs
-from its lock with `uv sync --locked --no-dev`, and each member reports its
-release version.
+from its lock with `uv sync --locked --no-dev --python 3.12`, and each member
+reports its release version.

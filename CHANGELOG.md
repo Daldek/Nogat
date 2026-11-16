@@ -17,7 +17,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   own lock, not installed by the set) and Archiwista `v0.3.0`; the same 127
   packages as candidate-6's lock. The `nogat` package (HUB §7, ADOPTION_PLAN
   5.4) does not exist yet, so the set is installed as an environment,
-  `uv sync --locked --no-dev` in `release-sets/v0.1.0/`, not with
+  `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with
   `uv tool install` (a deviation from HUB-7.1, HUB-7.2 and REL-6.1).
 - Standard 1.0 is published: it reaches `main` with this release, and the
   merge commit is tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4). Known

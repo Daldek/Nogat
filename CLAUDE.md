@@ -101,3 +101,8 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
   and `uv.lock`, and is installed as an environment, `uv sync --locked
   --no-dev` there, with no generated dependency list and no
   `uv tool install`.
+- DEV-3.6, REL-2.1: no ruleset for `main` and `develop` yet (ADOPTION_PLAN
+  0.6) and no `gh` here, so merges into `main` are made locally without pull
+  requests, with the author's approval; v0.1.0's release changes are the
+  commits from `78e0149` (release set, version) to the merge into `main`,
+  not one release commit.

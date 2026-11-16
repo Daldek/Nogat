@@ -30,7 +30,7 @@ environment:
 ```bash
 git clone --branch v0.1.0 https://github.com/Daldek/Nogat
 cd Nogat/release-sets/v0.1.0
-uv sync --locked --no-dev
+uv sync --locked --no-dev --python 3.12
 ```
 
 The members' commands are then in `.venv/bin/`.
