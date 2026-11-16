@@ -1,6 +1,7 @@
 # Progress
 
-Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`) and the `origin/develop` of the
+Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`), updated 2026-11-16 by the
+candidate's lock, `verify-candidate` and the integration run (`feature/verify-candidate`), and the `origin/develop` of the
 projects after `git fetch`; release-set pins by `set check`. History is the git log, the
 CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from v3.0.0
 (ECO-057); its local checkout may still be the directory `IMGWTools`.
@@ -40,8 +41,10 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, on branch `chore/release-prep-2026-11-15`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-5** (2026-11-15), the members of the first joint release (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8` (develop `d82982a`, v0.8.0.dev0), Hydrograf `939b55f` (a sheet missing at 5 m from the set's 1 m NMT, its ADR-087, found by the scenario test of 2026-11-15), Archiwista `800231c` (project files group-readable, its A-ADR-058, found by the scenario test), each gate green before its merge. `set check`: every pin between the members matches; Retman and Hydraulik differ until they apply the set in their own sessions (a later set) |
-| Final integration run | in progress | the run of 2026-10-25 found F1 to F8, all fixed (`docs/plans/2026-10-25-final-integration.md`); the repeat is pending and must run Hydrograf (`affine<3` until pyflwdir 0.5.13, its ADR-062) and Archiwista (`affine>=3`) apart |
+| One set of pins (HUB-4.9, REL-6.4) | in progress | **candidate-5** (2026-11-15), the members of the first joint release (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8` (develop `d82982a`, v0.8.0.dev0), Hydrograf `939b55f` (a sheet missing at 5 m from the set's 1 m NMT, its ADR-087, found by the scenario test of 2026-11-15), Archiwista `800231c` (project files group-readable, its A-ADR-058, found by the scenario test), each gate green before its merge. `set check`: every pin between the members matches; Retman and Hydraulik differ until they apply the set in their own sessions (a later set). Since 2026-11-16 the candidate has its `pyproject.toml` and `uv.lock` (127 packages, three platforms, Hydrograf apart, ECO-077) |
+| `verify-candidate` (REL-6.5, ECO-077) | done on the branch | `set verify` and `.github/workflows/verify-candidate.yml` on `feature/verify-candidate`; the workflow runs once it is on `main` |
+| Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2) |
+| Nogat's version (ECO-076) | decided | the first `nogat` release is `0.1.0`; `pyproject.toml` carries `0.1.0.dev0`; `1.0.0` only by the author's decision (HUB-7.4) |
 | `nogat` package (HUB §7) | planned | |
 
 ## Next
@@ -71,17 +74,20 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    Archiwista (ECO-074); Retman and Hydraulik join a later set.
    Deployment state, members' heads and the pins that differ: Status.
    **Hydrograf admin-panel store re-processing** deferred to after the first joint release
-   (author's decision 2026-11-15). Before the tags: the candidate's `pyproject.toml` and
-   `uv.lock` (REL-6.4) and `verify-candidate` (REL-6.5), neither of which exists yet;
-   the author's versions, Hydrolog's next release being 0.8.0 (ECO-074),
-   producers first (HUB-5.2, REL-6.6). Plan `docs/plans/2026-11-03-one-pin-set.md`.
-7. Repeat the final integration run at explicitly recorded heads, with
-   Hydrograf and Archiwista apart and the two flows of F2; record the
-   outcome in the data-output plan. Before the first release set, reconcile
-   consumers' progress text with their manifests and close the data-output
-   documentation and CLI smoke in Kartograf and the live plain-mode smoke in
-   Obserwator (each project in its own session, DEV-3.4). When a tool
-   renames a command, change its `routes` and run `agents` (CLAUDE.md).
+   (author's decision 2026-11-15). Done 2026-11-16 on `feature/verify-candidate`: the
+   candidate's `pyproject.toml` and `uv.lock` (REL-6.4) and `verify-candidate`
+   (REL-6.5, ECO-077). Before the tags: the merge of that branch and of the
+   workflow into `main` (the author's), a dispatched run of `verify-candidate`
+   on the three platforms, its URL in `members.toml` (`runs`); the author's
+   versions, `nogat` `0.1.0` (ECO-076) and Hydrolog 0.8.0 (ECO-074),
+   producers first (HUB-5.2, REL-6.6). Plans `docs/plans/2026-11-03-one-pin-set.md`,
+   `docs/plans/2026-10-20-first-release-set.md`.
+7. Done 2026-11-16: the integration run at candidate-5
+   (`docs/plans/2026-11-16-candidate-5-integration.md`). Its known failures
+   C1 to C6 and the findings of the scenario test of 2026-11-15/16 (Barycz,
+   Bóbr) are fixed in the members' next releases (the author's decision of
+   2026-11-16). When a tool renames a command, change its `routes` and run
+   `agents` (CLAUDE.md).
 8. Publish 1.0 to `main` with the author (ADOPTION_PLAN 0.3, 0.4). Numbers
    count from `main` (ECO-056, plan
    `docs/plans/2026-11-03-numbering-from-main.md`): steps 1 (Nogat) and 2
@@ -141,8 +147,7 @@ Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
   request is merged. Private vulnerability reporting (DEV-13.7) is the
   author's GitHub setting; GitHub's API reported it off on 2026-11-09.
 - No record of approval, so no `Approved:` line (DEV-17.4):
-  `2026-10-20-first-release-set.md` (proposed) and `2026-10-20-unified-gui.md`
-  (an idea).
+  `2026-10-20-unified-gui.md` (an idea).
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
 - The author's decisions: the final versions, with no tags in any project

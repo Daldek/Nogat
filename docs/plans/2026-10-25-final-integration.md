@@ -272,3 +272,6 @@ needs; the other three ran with it set (none of them has an MCP server).
    data-output plan). Open: repeat the run for the members that changed, with
    Hydrograf and Archiwista apart, and the two flows of F2, and record it in
    the Results of the data-output plan.
+   Done 2026-11-16 at candidate-5, with Hydrograf on its own lock and the
+   flow of F2 that stays among the members (Hydraulik is not one):
+   [the integration run of candidate-5](2026-11-16-candidate-5-integration.md).
