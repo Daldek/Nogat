@@ -15,11 +15,13 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
   - BDOT10k counties and unpinned data also held
   - NAS usage: 66 GB of 300 GB
 - **Obserwator data** (processed, local, served fast) = /home/claude-agent/data/obserwator-target/data
-- **Obserwator service** (obserwator-public.service) deployed at 3816b3c with OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator
-- **Hydrograf** instances: :8080 live (cache removed), :8081 Hydroni test; admin-panel store re-processing deferred to after the first joint release
-- **Archiwista deployed** at 7a11c76 on :8090; project h07 rebound to agent-tmp (2909 pins)
+- **Released versions deployed 2026-11-16** (checkouts detached at the tags, venvs `uv sync --locked --all-extras --reinstall-package <pkg>`, then the unit restarted; each smoke-checked on 127.0.0.1 and its public host):
+  - Hydrolog `v0.8.0` (`hydrolog-gui.service`, worktree `~/workspace/Hydrolog-gui`, was `e5df06d`), with Obserwator 3.0.0 as its extra; Obserwator's analyses call this venv's `hydrolog`
+  - Obserwator `v3.0.0` (`obserwator-public.service`, `~/data/obserwator-public/app-target`, was `3816b3c`; code unchanged but the version), OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator; its stored analyses are those of 2026-11-15 (Hydrolog 0.8.0.dev0), not rebuilt
+  - Archiwista `v0.3.0` (`archiwista-public.service`, `~/data/archiwista-public/app`, was `7a11c76`) with Kartograf 0.8.0 and Obserwator 3.0.0; no index or state migration
+  - Hydrograf `v0.5.0` on :8080 (`~/workspace/Hydrograf` detached at the tag, was local `develop` `1577dbc`; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.0, Obserwator 3.0.0, Hydrolog 0.8.0; alembic `007`, no migration); Hydroni :8081 unchanged; admin-panel store re-processing deferred to after the first joint release
 - **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut
-- **Backups** retained: ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
+- **Backups** retained: `/data/nmt/deploy-backup-2026-11-16/` (before the deployment of the releases: `hydrograf-hydro_db.dump`, `hydrograf.env`, Archiwista state and index, Hydrolog's feedback, `~/.local/share/nogat` and `~/.local/state/nogat`, the user units, `deployed-before.txt`), image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
 
 
 ## Status
