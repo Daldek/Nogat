@@ -82,15 +82,25 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      194 sheets and does not clip to the area: without `--units` the area
      serves only the coverage check and `instance.json`, and the set holds
      no PGW units file. Production was built by hand (`process_dem`, then a
-     cut to the kept units, 792.009 km²). So the re-processing runs first
-     into a separate staging instance and is compared with production;
-     production switches only on the author's acceptance (the author's
-     decision of 2026-11-16).
-   - Obserwator rebuilds its stored analyses with Hydrolog 0.8.0 once the
-     series of the ČHMÚ stations are downloaded (a night job of
-     2026-11-16/17); the deployed ones are of 2026-11-15, Hydrolog
-     0.8.0.dev0. It also refreshes its copies in `schemas/nogat/` from
-     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+   cut to the kept units, 792.009 km²). The staging run of 2026-11-16
+   (instance `hgstaging`, 127.0.0.1:8083, v0.5.0, 29 min; its README in
+   `~/data/hydrograf-staging/`) confirms it: 981.5 km² at 10 000 m² with
+   594 outlets against production's 792.009 km² and one, the land cover of
+   the 10 whole counties, the Kaczawa above its outlet 797.4 km²; inside,
+   the shares differ little and the Kamiennik is 136.92 km² on both. Not a
+   drop-in replacement: production switches only after a cut to the area
+   (S5) or with PGW units in the set, on the author's acceptance (the
+   author's decision of 2026-11-16).
+  - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to about
+    06:00, `~/tmp/chmi-night/`) downloads the daily archives of the 2,474
+    Czech ČHMÚ stations of the catalog into the raw root, one station per
+    call, paced over the night (41,271 files; about 2,800 meteo files are
+    not published and 75 hydro stations have none), then builds the series
+    `cz.chmi.hydro_daily` and `cz.chmi.meteo_daily` and the analyses of
+    every station with Hydrolog 0.8.0 (the deployed ones are of 2026-11-15,
+    Hydrolog 0.8.0.dev0). Obserwator also refreshes its copies in
+    `schemas/nogat/` from `std-1.0` (its D6,
+    `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle
