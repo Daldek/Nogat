@@ -124,15 +124,16 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
 15. Large basins in one Hydrograf instance: draft plan
     `docs/plans/2026-11-16-large-basins.md` (`Approved: pending`, branch
     `plan/large-basins`, not merged) from the scenario test of 2026-11-15
-    (E7-08, E7-09) and the author's three rounds of 2026-11-16: JCWP parts
-    of at most 90 M grid cells under the 8 GB cap, on one grid per basin
-    (its coarsest DEM input), joined at main-river inlets only, side
-    channels cut (a single-flow D8 tree), one database for several basins
-    (the Barycz and the Bóbr in one instance), Archiwista unchanged; gauges
-    and Czechia are later extensions. Hydrograf's `feature/large-basins`
-    (worktree `~/workspace/wt/hydrograf-large-basins`) has no code until
-    `Approved:` and merges after the first joint release. Open: whether
-    the format additions after the release stay version 1 (ECO-072).
+    (E7-08, E7-09, E7-GAP-03) and the author's four rounds of 2026-11-16:
+    the network's topology first (side channels cut, the JCWP graph), then
+    parts as connected upstream subtrees of at most 90 M grid cells, each
+    with exactly one outlet (else an error before any bootstrap), on one
+    grid per basin, joined at main-river inlets; one database for several
+    basins (the Barycz and the Bóbr in one instance), Archiwista unchanged;
+    gauges and Czechia are later extensions. Hydrograf's
+    `feature/large-basins` (worktree `~/workspace/wt/hydrograf-large-basins`)
+    has no code until `Approved:` and merges after the first joint release.
+    Open: whether the format additions after the release stay version 1.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

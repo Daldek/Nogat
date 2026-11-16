@@ -9,8 +9,9 @@ the standard are listed in [standards/README.md](standards/README.md).
 ### Added
 
 - Large basins in one Hydrograf instance, a draft plan
-  (`docs/plans/2026-11-16-large-basins.md`, `Approved: pending`): JCWP parts
-  of at most 90 M grid cells on one grid per basin, joined at main-river
+  (`docs/plans/2026-11-16-large-basins.md`, `Approved: pending`): the
+  network's topology first, then JCWP parts of at most 90 M grid cells with
+  exactly one outlet each, on one grid per basin, joined at main-river
   inlets, side channels cut, one database for several basins; gauges only a
   possible extension.
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
