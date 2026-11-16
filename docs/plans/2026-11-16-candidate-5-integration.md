@@ -164,6 +164,14 @@ annotated tag on it.
 Each tag is annotated and points at the merge commit on `main`, whose tree
 equals the member's `develop` after the release commit. The members'
 `develop` still carries the release version; each opens its next cycle
-(`X.Y.(Z+1).dev0`, a new `[Unreleased]`) with its next change. Nogat's own
-release (`v0.1.0`, ECO-076) is next and separate: it puts candidate-6 with
-the tags in place of the commits (HUB-7.2, REL-6.6).
+(`X.Y.(Z+1).dev0`, a new `[Unreleased]`) with its next change.
+
+**Nogat's release** (2026-11-17, ECO-076): `v0.1.0`, the release commit
+`78e0149` on `develop` with `release-sets/v0.1.0/`, candidate-6 with the
+tags in place of the commits and the same 127 packages (HUB-7.2, REL-6.6);
+`develop` → `main` merged locally without a pull request, with the
+author's approval, and the merge commit tagged `v0.1.0` and `std-1.0`.
+There is no `nogat` package yet (HUB §7), so the set is installed as an
+environment, `uv sync --locked --no-dev` in `release-sets/v0.1.0/`. The
+workflow `verify-candidate` reaches `main` with it; candidate-6 stays
+verified only by the local `set verify` above.

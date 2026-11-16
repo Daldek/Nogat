@@ -6,8 +6,29 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-17
+
 ### Added
 
+- Release set `v0.1.0` (`release-sets/v0.1.0/`, REL-6.6, HUB-7.2), the first
+  release of the ecosystem: candidate-6 with each member's commit replaced
+  by its annotated release tag on the member's `main`, Kartograf `v0.8.0`,
+  Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0` (an app on its
+  own lock, not installed by the set) and Archiwista `v0.3.0`; the same 127
+  packages as candidate-6's lock. The `nogat` package (HUB §7, ADOPTION_PLAN
+  5.4) does not exist yet, so the set is installed as an environment,
+  `uv sync --locked --no-dev` in `release-sets/v0.1.0/`, not with
+  `uv tool install` (a deviation from HUB-7.1 and HUB-7.2).
+- Standard 1.0 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4). Known
+  deviations: the legacy `standards/templates/` and `standards/configs/`
+  are owned by root, so they reach `main` unchanged and replacing them
+  stays the author's step (ADOPTION_PLAN 0.1, DOC-11.1); candidate-6 was
+  verified only on this machine by `set verify`, and the workflow
+  `verify-candidate` becomes dispatchable once it is on `main` (REL-6.5);
+  with the author's approval, `develop` and `main` are merged locally
+  without pull requests, as the members were, because `gh` is not
+  installed (DEV-3.6, REL-2.1).
 - `release-sets/candidate-5/pyproject.toml` and its `uv.lock`, universal for
   Linux, macOS and Windows (REL-6.4): Kartograf `[mcp]`, Obserwator
   `[full]`, Hydrolog `[all]` and Archiwista `[obserwator]` at the set's
@@ -23,7 +44,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   passing runs as `runs`, shown in the README.
 - ECO-076, the author's decision of 2026-11-16: the first `nogat` release is
   `0.1.0` and `nogat` stays `0.y` until the author makes a release `1.0.0`
-  (HUB-7.4); `pyproject.toml` carries `0.1.0.dev0`.
+  (HUB-7.4); `pyproject.toml` and `uv.lock` carry `0.1.0`.
 - The integration run of candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`),
   the repeat the final integration run of 2026-10-25 left open: every
   member's suite in the candidate's environment and on its own lock, and
@@ -385,6 +406,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- The documentation states the released `v0.1.0` and `std-1.0`: the README
+  installs the set from `release-sets/v0.1.0/`; `standards/README.md`,
+  `standards/ADOPTION_PLAN.md` (0.1, 0.3, 0.4, 5.2 to 5.4),
+  `docs/PROGRESS.md` (Status, Next, Open questions) and the plans of the
+  first release set, the integration run of candidate-5, numbers from
+  `main`, Archiwista's sets and the path away from IMGW-PIB record the
+  releases and their deviations; `CLAUDE.md` records the deviation from
+  HUB-7.1 and HUB-7.2 until the `nogat` package exists.
 - Documentation audited on 2026-11-15 before release-set candidate-5:
   `docs/PROGRESS.md` gains the separator row of its Status table and states
   the author's scope of the first joint release (Nogat, Hydrograf, Hydrolog,
@@ -585,10 +614,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   standard exists from its tag on `main` and `develop` carries the next one
   (HUB-6.1); a document's `<n>` increments only past a number released on
   the producer's `main` (AGI-4.1). The drafts called 2.0 and 2.1 are 1.0 in
-  `standards/`, `ecosystem.yaml` and `error_registry.json`, to be tagged
-  `std-1.0`; `standards/legacy/v1.0/` is now `standards/legacy/shared-2026-01/`,
-  the shared standards of 2026-01-29 that preceded Nogat. Plan:
-  `docs/plans/2026-11-03-numbering-from-main.md`, step 1.
+  `standards/`, `ecosystem.yaml` and `error_registry.json`, tagged
+  `std-1.0` with this release; `standards/legacy/v1.0/` is now
+  `standards/legacy/shared-2026-01/`, the shared standards of 2026-01-29
+  that preceded Nogat. Plan: `docs/plans/2026-11-03-numbering-from-main.md`,
+  step 1.
 
 - `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
   2026-11-03) and its topic branches deleted except
@@ -608,10 +638,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   wrong call, 1 only for a defect; the last stderr line is the
   `nogat-error/1` document. Migration: scripts that tested for exit 1 test
   for a non-zero exit or read the document.
-- Standard 2.1, not yet published, settles the contradictions found in its
-  review (ECO-042 to ECO-049 and consistency fixes; list in
-  `standards/README.md`). The CI template and Nogat's CI check commits of
-  `hotfix/*` pull requests into `main` (DEV-4.5).
+- Standard 2.1, the draft published as 1.0 (ECO-056), settles the
+  contradictions found in its review (ECO-042 to ECO-049 and consistency
+  fixes; list in `standards/README.md`). The CI template and Nogat's CI
+  check commits of `hotfix/*` pull requests into `main` (DEV-4.5).
 - `ecosystem.yaml` and the map: `kartograf-store` and `imgw-store/1` name their
   root markers, and IMGWTools exchanges only `kartograf-store` with Kartograf
   because nested stores are refused by marker file name (DEV-19.12,
@@ -750,3 +780,6 @@ the standard are listed in [standards/README.md](standards/README.md).
   trailer name or the e-mail of the tool (Devin and GitHub bot addresses
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
+
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0

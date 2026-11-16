@@ -2,7 +2,7 @@
 
 Approved: pending
 
-Status: a to-do recorded on 2026-11-14 from the research [era5-instead-of-pmaxtp.md](2026-11-14-independence-from-imgw/era5-instead-of-pmaxtp.md) and the author's decisions of that day; not an approved plan, so no code starts (DEV-17.4). Work begins only after the first joint release (decision 2) and this plan's `Approved:` line.
+Status: a to-do recorded on 2026-11-14 from the research [era5-instead-of-pmaxtp.md](2026-11-14-independence-from-imgw/era5-instead-of-pmaxtp.md) and the author's decisions of that day; not an approved plan, so no code starts (DEV-17.4). Work begins only after the first joint release (decision 2) and this plan's `Approved:` line. The first joint release is out (Nogat `v0.1.0`, 2026-11-17); the `Approved:` line is still pending.
 
 Requirements: DEV-17.4, DEV-17.5, HUB-2.7, HUB-5.2 (producers before consumers), DEV §20, ECO-059 (roles of Archiwista, Obserwator and Hydrolog for hydro-meteorological data).
 

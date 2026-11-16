@@ -6,7 +6,8 @@ Retman and Archiwista.
 
 Nogat holds:
 
-- the shared standard for all projects: [`standards/`](standards/README.md);
+- the shared standard for all projects, 1.0 (tag `std-1.0`):
+  [`standards/`](standards/README.md);
 - the project registry: [`ecosystem.yaml`](ecosystem.yaml), validated by
   [`schemas/ecosystem.schema.json`](schemas/ecosystem.schema.json);
 - the map of dependencies and exchanged data, generated from the registry:
@@ -19,9 +20,21 @@ Nogat holds:
 - the reference module of server logs every Python server copies:
   [`standards/reference/`](standards/reference/nogat_logging.py).
 
+The ecosystem's first release, `v0.1.0`, is the release set
+[`release-sets/v0.1.0/`](release-sets/v0.1.0/README.md): Kartograf,
+Obserwator, Hydrolog and Archiwista at their release tags, with every
+third-party package at one verified version; Hydrograf, an app, is
+released by its own tag at the same producers. Install it as an
+environment:
+
+```bash
+git clone --branch v0.1.0 https://github.com/Daldek/Nogat
+cd Nogat/release-sets/v0.1.0
+uv sync --locked --no-dev
+```
+
 Nogat will also be the `nogat` package that installs every tool with one
-command (`uv tool install nogat`, [HUB §7](standards/ECOSYSTEM_HUB.md));
-it is not published yet.
+command ([HUB §7](standards/ECOSYSTEM_HUB.md)); it does not exist yet.
 
 Templates for every project's quality gate and CI are in
 [`standards/ci/`](standards/ci/README.md).

@@ -96,3 +96,7 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).
+- HUB-7.1, HUB-7.2: until the `nogat` package exists a release set is
+  installed as an environment, `uv sync --locked --no-dev` in
+  `release-sets/vX.Y.Z/` (`v0.1.0`), with no generated dependency list and
+  no `uv tool install`.

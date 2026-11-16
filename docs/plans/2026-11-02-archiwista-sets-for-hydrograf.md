@@ -815,4 +815,4 @@ changed by Archiwista (A2).
 | A3 | Archiwista, instance :8090 | `4027755` deployed 2026-11-03 ~00:00 with `TMPDIR` on disk; the index rebuild to schema 17 dropped sessions, job history and 18 drawn rectangles, kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`; `archiwista-state/2` back to `/1` deferred to the release preparation |
 | A4, A5 | Archiwista, data | wait for the author |
 | H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `1794f76` (production since 2026-11-02 22:18) |
-| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag) |
+| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag); v0.5.0 is tagged on 2026-11-16 (`634fce6`), and both now wait for A5 |
