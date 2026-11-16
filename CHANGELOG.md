@@ -414,9 +414,15 @@ the standard are listed in [standards/README.md](standards/README.md).
   `standards/ADOPTION_PLAN.md` (0.1, 0.3, 0.4, 5.2 to 5.4),
   `docs/PROGRESS.md` (Status, Next, Open questions) and the plans of the
   first release set, the integration run of candidate-5, numbers from
-  `main`, Archiwista's sets and the path away from IMGW-PIB record the
-  releases and their deviations; `CLAUDE.md` records the deviation from
-  HUB-7.1 and HUB-7.2 until the `nogat` package exists.
+  `main`, one set of pins, Archiwista's sets and the path away from
+  IMGW-PIB record the releases and their deviations; `CLAUDE.md` records
+  the deviation from HUB-7.1, HUB-7.2 and REL-6.1 until the `nogat` package
+  exists. PROGRESS and the plan of Archiwista's sets record A4 and A5 as
+  done (project `kaczawa`, set `2026-1`, closed 2026-11-15) and the next
+  steps: Hydrograf re-processes its production from that set into a
+  separate staging instance, compared with production, which switches only
+  on the author's acceptance; Obserwator rebuilds its analyses with
+  Hydrolog 0.8.0 after the series of the ČHMÚ stations are downloaded.
 - Documentation audited on 2026-11-15 before release-set candidate-5:
   `docs/PROGRESS.md` gains the separator row of its Status table and states
   the author's scope of the first joint release (Nogat, Hydrograf, Hydrolog,

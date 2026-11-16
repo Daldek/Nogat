@@ -1,18 +1,19 @@
 # Progress
 
 Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`), updated 2026-11-16 by the
-candidate's lock, `verify-candidate`, the integration run, the members' releases and Nogat's
-release `v0.1.0` with standard 1.0 (`std-1.0`, 2026-11-17), and the `origin/develop` of the
-projects after `git fetch`; release-set pins by `set check`. History is the git log, the
-CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from v3.0.0
-(ECO-057); its local checkout may still be the directory `IMGWTools`.
+candidate's lock, `verify-candidate`, the integration run, the members' releases, Nogat's
+release `v0.1.0` with standard 1.0 (`std-1.0`, 2026-11-17), the closed set `kaczawa`/`2026-1`
+and the `origin/develop` of the projects after `git fetch`; release-set pins by `set check`.
+History is the git log, the CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is
+called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the directory
+`IMGWTools`.
 
 ## Deployment and storage (author's decision 2026-11-15)
 
 - **Archiwista store `agent-tmp`** ("Magazyn agent-tmp") on NAS: CIFS mount at /mnt/magazyn/agent-tmp (//magazyn.local/agent-tmp), holds:
   - kartograf = /mnt/magazyn/agent-tmp/hydroni/kartograf (kartograf-store/1)
   - obserwator raw = /mnt/magazyn/agent-tmp/obserwator (2825 archives, moved from ~/data/obserwator-target/raw)
-  - project kaczawa = /mnt/magazyn/agent-tmp/hydroni/projekty/kaczawa (area 792 km², set 2026-1: 194 NMT sheets, 10 BDOT10k counties, 1 HSG raster)
+  - project kaczawa = /mnt/magazyn/agent-tmp/hydroni/projekty/kaczawa (area 792 km², set 2026-1 closed 2026-11-15T00:00:04Z: 194 NMT sheets, 10 BDOT10k counties, 1 HSG raster, no PGW units file)
   - BDOT10k counties and unpinned data also held
   - NAS usage: 66 GB of 300 GB
 - **Obserwator data** (processed, local, served fast) = ~/data/obserwator-target/data
@@ -74,13 +75,22 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    R1, O1 to O4 and Obserwator's GUI plan. Open: IMGW-PIB's terms
    (question 4).
 6. Follow-ups of `v0.1.0`, owned by the members, each in its own session:
-   Hydrograf re-processes its production from Archiwista's project
-   `kaczawa`, set `2026-1` (the admin-panel store re-processing the author
-   deferred on 2026-11-15 to after the first joint release; see 11);
-   Obserwator rebuilds its stored analyses with Hydrolog 0.8.0 (the deployed
-   ones are of 2026-11-15, Hydrolog 0.8.0.dev0) and refreshes its copies in
-   `schemas/nogat/` from `std-1.0` (its D6,
-   `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+   - Hydrograf re-processes its production from Archiwista's project
+     `kaczawa`, set `2026-1` (H2 and S5 of 11; the admin-panel store
+     re-processing the author deferred on 2026-11-15 to after the first
+     joint release). A bootstrap from a set processes the whole mosaic of
+     194 sheets and does not clip to the area: without `--units` the area
+     serves only the coverage check and `instance.json`, and the set holds
+     no PGW units file. Production was built by hand (`process_dem`, then a
+     cut to the kept units, 792.009 km²). So the re-processing runs first
+     into a separate staging instance and is compared with production;
+     production switches only on the author's acceptance (the author's
+     decision of 2026-11-16).
+   - Obserwator rebuilds its stored analyses with Hydrolog 0.8.0 once the
+     series of the ČHMÚ stations are downloaded (a night job of
+     2026-11-16/17); the deployed ones are of 2026-11-15, Hydrolog
+     0.8.0.dev0. It also refreshes its copies in `schemas/nogat/` from
+     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle
@@ -109,10 +119,10 @@ CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is called Obserwator from
    survey work, so Archiwista's „pobrane” badge never matches LAZ (a
    `request` issue for Kartograf, not filed).
 11. Archiwista's sets as Hydrograf's only Kartograf input
-    (`docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`): A1 to A3 and
-    H1 done; A4 (Kaczawa moved to `projects/kaczawa`) and A5 (the set built
-    and closed) wait for the author; H2 and S5, postponed until Hydrograf
-    v0.5.0, are unblocked by its tag (2026-11-16) and wait for A5.
+    (`docs/plans/2026-11-02-archiwista-sets-for-hydrograf.md`): A1 to A5 and
+    H1 done; A4 and A5 as the project `kaczawa` and its set `2026-1`, closed
+    2026-11-15 (Deployment and storage). H2 and S5 are next: the staging
+    re-processing of 6.
 12. Visual identity (`docs/plans/2026-11-01-visual-identity.md`): step 5,
     Archiwista's copy of `tokens.css`, is not on its `develop` (it ships the
     kit). GUI platform stage 2, the GUI hub,

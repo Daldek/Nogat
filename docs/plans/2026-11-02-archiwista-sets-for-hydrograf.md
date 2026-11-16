@@ -10,8 +10,9 @@ Hydrograf's store migration plan (`docs/plans/2026-11-02-store-migration.md`
 on Hydrograf's `feature/store-migration`, worktree `Hydrograf-store`).
 Decided: the author's answers of 2026-11-02 are in „Decisions of the
 author”; D6 was decided since (Archiwista deployed with `TMPDIR` on disk).
-Status on 2026-11-03: A1 to A3 and H1 done, A4 and A5 wait for the author,
-H2 and S5 postponed until after Hydrograf v0.5.0 (Results).
+Status on 2026-11-16: A1 to A5 and H1 done; H2 and S5, the re-processing
+of Hydrograf's production from the set, come next, first into a separate
+staging instance (Results).
 
 ## Goal
 
@@ -813,6 +814,6 @@ changed by Archiwista (A2).
 | A1 | Archiwista, `feature/archiwista-projects` | the area fix committed and gated; done |
 | A2 | Archiwista, `feature/archiwista-projects` | draft sets committed as `21eff04`..`6ece8ca` (PROGRESS `4027755`), A-ADR-049 erratum 6, index schema 17; full gate green on that tree (2026-11-02, 2749 passed) |
 | A3 | Archiwista, instance :8090 | `4027755` deployed 2026-11-03 ~00:00 with `TMPDIR` on disk; the index rebuild to schema 17 dropped sessions, job history and 18 drawn rectangles, kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`; `archiwista-state/2` back to `/1` deferred to the release preparation |
-| A4, A5 | Archiwista, data | wait for the author |
+| A4, A5 | Archiwista, data | done, in another form than the steps above: the project `kaczawa` on the NAS store `agent-tmp` (`hydroni/projekty/kaczawa`), created 2026-11-14, area 792 km²; its set `2026-1` closed 2026-11-15T00:00:04Z (Hydrograf's bootstrap dry run shows „zamknięty 2026-11-15T00:00:04Z”), 205 pins from local files with no calls: 194 NMT sheets, ten BDOT10k counties and the HSG raster of D4's box; no PGW units file |
 | H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `1794f76` (production since 2026-11-02 22:18) |
-| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag); v0.5.0 is tagged on 2026-11-16 (`634fce6`), and both now wait for A5 |
+| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0, tagged on 2026-11-16 (`634fce6`); A5 is done, so both are next, in Hydrograf's session. A bootstrap from the set processes the whole mosaic of 194 sheets and does not clip to the area: without `--units` the area serves only the coverage check and `instance.json`, and the set holds no PGW units file. Production was built by hand (`process_dem`, then a cut to the kept units, 792.009 km²). So the re-processing runs first into a separate staging instance and is compared with production, and production switches only on the author's acceptance (the author's decision of 2026-11-16) |
