@@ -1,0 +1,496 @@
+# Ecosystem registry (HUB §2, ECO-002): projects, dependencies and data exchanged
+# between them. Structure only; versions and pins are read from the repositories:
+# `uv run scripts/ecosystem.py drift`.
+# Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
+
+schema: nogat-ecosystem/1
+standard_version: "1.0"
+
+data_sources:
+  - id: gugik
+    name: GUGiK (Główny Urząd Geodezji i Kartografii)
+    country: PL
+    url: https://www.geoportal.gov.pl
+    licence: free reuse with attribution (Prawo geodezyjne i kartograficzne)
+  - id: cuzk
+    name: ČÚZK (Český úřad zeměměřický a katastrální)
+    country: CZ
+    url: https://geoportal.cuzk.cz
+    licence: CC BY 4.0
+  - id: clms
+    name: Copernicus Land Monitoring Service (CORINE Land Cover)
+    country: EU
+    url: https://land.copernicus.eu
+    licence: Copernicus data policy, attribution required
+  - id: soilgrids
+    name: ISRIC SoilGrids
+    country: global
+    url: https://soilgrids.org
+    licence: CC BY 4.0
+  - id: imgw-pib
+    name: IMGW-PIB (archives, live API, PMAXTP atlas)
+    country: PL
+    url: https://danepubliczne.imgw.pl
+    licence: IMGW-PIB terms of reuse, attribution required
+  - id: chmi
+    name: ČHMÚ open data
+    country: CZ
+    url: https://opendata.chmi.cz
+    licence: CC BY 4.0
+  - id: osm
+    name: OpenStreetMap
+    country: global
+    url: https://www.openstreetmap.org
+    licence: ODbL
+
+projects:
+  - name: Nogat
+    summary: Ecosystem hub with standards, registry and map; future user package installing all tools.
+    profiles: [hub]
+    status: active
+    repo: https://github.com/Daldek/Nogat
+    visibility: public
+    distribution: {pypi: null, import_name: null}
+    interfaces: {cli: null, mcp: null, rest: null, python: null}
+    data_sources: []
+    provides: []
+    depends_on: []
+
+  - name: Kartograf
+    summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Kartograf
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: kartograf}
+    interfaces:
+      cli: kartograf
+      mcp: kartograf-mcp
+      rest: null
+      python: kartograf
+    routes:
+      - task: Download elevation models (NMT, NMPT), LAZ point clouds or contours of an area
+        command: kartograf elevation download
+      - task: Download orthophotos of an area
+        command: kartograf imagery download
+      - task: Download land cover of an area (BDOT10k, CORINE and others)
+        command: kartograf landcover download
+      - task: Download a SoilGrids soil layer of an area
+        command: kartograf soil download
+      - task: Classify hydrologic soil groups (HSG) of an area from SoilGrids texture it downloads itself
+        command: kartograf soil hsg
+      - task: Download boundaries, cadastre, 3D models, names, maps or geodetic data (find the group first)
+        command: kartograf commands list
+      - task: Read what a Kartograf store already holds
+        command: kartograf store overview
+    data_sources: [gugik, cuzk, clms, soilgrids]
+    provides:
+      - id: kartograf-files
+        kind: dataset
+        summary: Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions.
+      - id: kartograf-meta/1
+        kind: sidecar
+        summary: "<file>.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version."
+      - id: kartograf-store/1
+        kind: store
+        summary: Versioned store (versions/<label>_<sha8>/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root <data_dir>/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root).
+      - id: kartograf-download/1
+        kind: document
+        summary: "Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections."
+      - id: kartograf-plan/1
+        kind: document
+        summary: Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode.
+      - id: kartograf-availability/1
+        kind: document
+        summary: Years, systems, resolutions and completeness of DEM coverage for an area.
+      - id: kartograf-command-list/1
+        kind: catalog
+        summary: Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery.
+      - id: kartograf-commands/1
+        kind: catalog
+        summary: One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command.
+      - id: kartograf-result/1
+        kind: document
+        summary: Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11.
+      - id: kartograf-error/1
+        kind: document
+        summary: Error document with code, hint and exit code, the last line of stderr.
+      - id: kartograf-testing
+        kind: library
+        summary: kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
+    depends_on: []
+
+  - name: Obserwator
+    summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
+    profiles: [tool, app]
+    status: active
+    repo: https://github.com/Daldek/Obserwator
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: obserwator, import_name: obserwator}
+    interfaces:
+      cli: obserwator
+      mcp: obserwator mcp
+      rest: obserwator server (/api/v1)
+      python: obserwator
+    routes:
+      - task: Find IMGW-PIB or ČHMÚ stations by name, river or code
+        command: obserwator stations find
+      - task: Download archive data of stations into a versioned store
+        command: obserwator store sync
+      - task: Download archive files as published, as plain files
+        command: obserwator datasets download
+      - task: Read the series of a station from the store
+        command: obserwator series read
+      - task: Export the series of a station as CSV with the provider's attribution
+        command: obserwator series export
+      - task: Fetch current hydrological data of IMGW-PIB stations (live, not stored)
+        command: obserwator current hydro
+      - task: Get PMAXTP design precipitation of a point in Poland
+        command: obserwator pmaxtp fetch
+    data_sources: [imgw-pib, chmi]
+    provides:
+      - id: obserwator-store/1
+        kind: store
+        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version.
+      - id: obserwator-meta/1
+        kind: sidecar
+        summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
+      - id: obserwator-series/1
+        kind: dataset
+        summary: Parquet series per station with series.json index (periods, year type, units, coverage).
+      - id: obserwator-plan/1
+        kind: document
+        summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
+      - id: obserwator-observation/1
+        kind: document
+        summary: History of published HTTP signals per archive file.
+      - id: chmi-json/1
+        kind: document
+        summary: Canonical JSON form of ČHMÚ files used for content-based pins.
+      - id: obserwator-result/1
+        kind: document
+        summary: "Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}."
+      - id: obserwator-command-list/1
+        kind: catalog
+        summary: Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list.
+      - id: obserwator-commands/1
+        kind: catalog
+        summary: One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command.
+      - id: obserwator-archives
+        kind: dataset
+        summary: IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions.
+      - id: obserwator-series-csv
+        kind: dataset
+        summary: CSV export of series with units and IMGW-PIB attribution (series export --output FILE).
+      - id: obserwator-pmaxtp
+        kind: document
+        summary: PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult).
+      - id: obserwator-testing
+        kind: library
+        summary: obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
+      - id: obserwator-data/1
+        kind: store
+        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy.
+      - id: obserwator-analyses/1
+        kind: dataset
+        summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
+    depends_on:
+      - project: Kartograf
+        kind: data
+        status: active
+        via: [store]
+        exchange: [kartograf-store/1]
+        note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+      - project: Archiwista
+        kind: data
+        status: planned
+        via: [store]
+        exchange: [archiwista-raw-root]
+        note: No import (ECO-059); series build, the catalog build and analyses build read the raw root without writing it and write only the data root, once at the start and at each yearly refresh.
+      - project: Hydrolog
+        kind: optional
+        status: active
+        via: [cli, file]
+        exchange: [hydrolog-result/1, hydrolog-series/1]
+        note: No package dependency (ECO-059); analyses build runs a configured hydrolog program's batch over series export files and stores one hydrolog-result/1 per call; a person's subset is one CLI call computed on the fly and never stored; the GUI hands a series to Hydrolog as nogat-handoff/1 around hydrolog-series/1.
+
+  - name: Hydrolog
+    summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Hydrolog
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: hydrolog}
+    interfaces:
+      cli: hydrolog
+      mcp: hydrolog mcp
+      rest: null
+      python: hydrolog
+      gui: hydrolog gui serve
+    routes:
+      - task: Compute the time of concentration of a watershed
+        command: hydrolog tc watershed
+      - task: Compute effective precipitation of a rain by SCS-CN
+        command: hydrolog scs effective
+      - task: Build a design hyetograph (block, triangular, Beta, Euler II)
+        command: hydrolog precip hietogram
+      - task: Compute the design direct-runoff hydrograph of a watershed
+        command: hydrolog hydrograph generate
+      - task: Route a hydrograph through a reach, a reservoir or a river network
+        command: hydrolog route network
+      - task: Compute morphometry indicators of a watershed
+        command: hydrolog morphometry watershed
+      - task: Compute flood quantiles from annual maxima, for example of an Obserwator export
+        command: hydrolog stats flood-frequency
+      - task: Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have
+        command: hydrolog soil hsg
+      - task: Open Hydrolog's GUI in the browser
+        command: hydrolog gui serve
+    data_sources: []
+    provides:
+      - id: watershed-parameters
+        kind: document
+        summary: WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input.
+      - id: hydrolog-hsg
+        kind: dataset
+        summary: HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters.
+      - id: hydrolog-hydrograph-csv
+        kind: dataset
+        summary: Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one <id>.csv per node with --output-dir; the hand-off to hydraulic models.
+      - id: hydrolog-network/1
+        kind: document
+        summary: River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package.
+      - id: hydrolog-result/1
+        kind: document
+        summary: Result envelope (command, inputs, result, files with SHA-256, notices).
+      - id: hydrolog-error/1
+        kind: document
+        summary: Error envelope with registry code, details and hint.
+      - id: hydrolog-command-list/1
+        kind: catalog
+        summary: Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery.
+      - id: hydrolog-commands/1
+        kind: catalog
+        summary: One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command.
+      - id: hydrolog-python-api
+        kind: library
+        summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork).
+      - id: hydrolog-gui
+        kind: service
+        summary: Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host.
+      - id: hydrolog-series/1
+        kind: document
+        summary: A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020).
+      - id: hydrolog-testing
+        kind: library
+        summary: hydrolog.testing builds network documents, the tables route network writes and the precip hietogram envelope with the real code, offline, for the contract tests of consumers (DEV-10.6, Hydrolog ADR-0011).
+    depends_on:
+      - project: Obserwator
+        kind: optional
+        status: active
+        via: [library, file]
+        exchange: [obserwator-pmaxtp, obserwator-series-csv]
+        uses: [fetch_pmaxtp]
+        note: precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`, and `commands batch` runs the calls of Obserwator's analyses build over its series export files (ECO-059). „Wczytaj z Obserwatora” opening Obserwator's hand-off is planned.
+      - project: Kartograf
+        kind: data
+        status: active
+        via: [file]
+        exchange: [kartograf-files]
+        note: No package dependency; `soil hsg` reads SoilGrids clay, sand and silt GeoTIFFs, plain files of `kartograf soil download --output-dir` (`files[].path`). HSG rules ported from Kartograf (Kartograf ADR-025).
+
+  - name: Hydrograf
+    summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
+    profiles: [app]
+    status: active
+    repo: https://github.com/Daldek/Hydrograf
+    python_manifests: [backend/pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: null}
+    interfaces: {cli: null, mcp: null, rest: /api, python: null}
+    routes:
+      - task: Delineate the watershed of a point in Poland and read its parameters
+        command: POST /api/delineate-watershed
+      - task: Generate a design hydrograph for a point in Poland from PMAXTP rainfall
+        command: POST /api/generate-hydrograph
+      - task: Delineate a network of subcatchments at control points (closing section, tributaries, gauges)
+        command: POST /api/delineate-network
+      - task: Preview a network of subcatchments while placing control points (areas, reach lengths, outlines)
+        command: POST /api/delineate-network/preview
+      - task: Cut a terrain profile along a line
+        command: POST /api/terrain-profile
+    data_sources: [gugik, osm]
+    provides:
+      - id: hydrograf-rest
+        kind: service
+        summary: REST API with watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t) and CSV exports; MVT tiles.
+    depends_on:
+      - project: Kartograf
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [kartograf-files, kartograf-meta/1]
+        uses: [DownloadManager, GugikProvider, MetadataCache, download_landcover, calculate_hsg, hsg_statistics, iter_store, list_segments, SheetParser, find_sheets_for_bbox, find_sheets_for_geometry]
+      - project: Hydrolog
+        kind: runtime
+        status: active
+        via: [library, file]
+        exchange: [watershed-parameters, hydrolog-python-api, hydrolog-network/1]
+        uses: [WatershedParameters, SCSCN, HydrographGenerator, NashIUH, SCSUnitHydrograph, BetaHietogram, BlockHietogram, EulerIIHietogram, calculate_weighted_cn, thiessen_polygons, inverse_distance_weighting]
+        note: POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
+      - project: Obserwator
+        kind: runtime
+        status: active
+        via: [library]
+        exchange: [obserwator-pmaxtp]
+        uses: [fetch_pmaxtp]
+      - project: Hydraulik
+        kind: runtime
+        status: planned
+        via: [service]
+        exchange: [hydraulik-job]
+        note: Hydraulik as an external compute node fed with a catchment domain.
+
+  - name: Hydraulik
+    summary: Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling.
+    profiles: [tool]
+    status: research
+    repo: https://github.com/Daldek/Hydraulik
+    branch: feature/sfincs-swmm
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: hydraulik}
+    interfaces: {cli: hydraulik, mcp: null, rest: null, python: hydraulik}
+    routes:
+      - task: Check which engines (SFINCS, SWMM) this machine can run
+        command: hydraulik engines check
+      - task: Fetch terrain, land cover and soil groups of a model area through Kartograf
+        command: hydraulik terrain download
+      - task: Write a design rain table from a Hydrolog shape and a PMAXTP depth
+        command: hydraulik rainfall build
+      - task: Build a SFINCS flood model directory from terrain and rain
+        command: hydraulik model build
+      - task: Run a SFINCS flood model and read its maxima and water balance
+        command: hydraulik model run
+      - task: Couple a SFINCS model with an EPA SWMM sewer network
+        command: hydraulik model couple
+      - task: Run a SWMM sewer network alone with an inflow hydrograph
+        command: hydraulik swmm run
+    data_sources: []
+    provides:
+      - id: hydraulik-job
+        kind: contract
+        summary: Planned hydraulik.spec contracts (JobSpec, InputBundle, RunStatus, ResultManifest) and web products.
+    depends_on:
+      - project: Kartograf
+        kind: optional
+        status: active
+        via: [cli]
+        exchange: [kartograf-files, kartograf-commands/1, kartograf-result/1, kartograf-download/1, kartograf-plan/1, kartograf-error/1]
+        uses: [elevation download, landcover download, soil hsg, commands schema]
+        note: Starts the kartograf program and never imports it. terrain download plans every product with --check, then fetches into one sub-directory of --output-dir per product (DEV-19.5, DEV-19.6), namely the elevation, the BDOT10k GeoPackage of the area's counties (landcover download --product bdot10k; land cover and roads, which model build paints into the grid) and the soil groups; the options come from commands schema, and a Kartograf whose output_dir is not path_role output is refused. A model built from the user's own rasters needs none of it.
+      - project: Obserwator
+        kind: optional
+        status: active
+        via: [library, file]
+        exchange: [obserwator-pmaxtp, obserwator-result/1]
+        uses: [fetch_pmaxtp]
+        note: rainfall build takes the PMAXTP depth from fetch_pmaxtp (extra rainfall) or from the document that obserwator pmaxtp fetch --json prints.
+      - project: Hydrolog
+        kind: optional
+        status: active
+        via: [library, file]
+        exchange: [hydrolog-python-api, hydrolog-result/1, hydrolog-hydrograph-csv, hydrolog-testing]
+        uses: [BlockHietogram, TriangularHietogram, BetaHietogram, EulerIIHietogram]
+        note: rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
+
+  - name: Retman
+    summary: Polish natural-language command layer over Kartograf, Obserwator and Hydrolog.
+    profiles: [tool]
+    status: active
+    repo: https://github.com/Daldek/Retman
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: retman}
+    interfaces: {cli: retman, mcp: null, rest: null, python: retman}
+    routes:
+      - task: Plan a download, export or calculation written in Polish, then run it once confirmed
+        command: retman plan run
+    data_sources: []
+    provides: []
+    depends_on:
+      - project: Kartograf
+        kind: optional
+        status: active
+        via: [library]
+        exchange: [kartograf-command-list/1, kartograf-commands/1, kartograf-result/1, kartograf-download/1, kartograf-error/1, kartograf-meta/1]
+      - project: Obserwator
+        kind: optional
+        status: active
+        via: [library]
+        exchange: [obserwator-command-list/1, obserwator-commands/1, obserwator-result/1, obserwator-plan/1, obserwator-store/1, obserwator-archives, obserwator-series-csv, obserwator-testing]
+      - project: Hydrolog
+        kind: optional
+        status: active
+        via: [library]
+        exchange: [hydrolog-command-list/1, hydrolog-commands/1, hydrolog-result/1]
+      - project: Hydrograf
+        kind: optional
+        status: planned
+        via: [rest]
+        exchange: [hydrograf-rest]
+        note: Retman PRD roadmap.
+
+  - name: Archiwista
+    summary: Web browser and manager of Kartograf and Obserwator stores.
+    profiles: [app]
+    status: active
+    repo: https://github.com/Daldek/Archiwista
+    python_manifests: [pyproject.toml]
+    visibility: public
+    distribution: {pypi: null, import_name: archiwista}
+    interfaces: {cli: archiwista, mcp: null, rest: /api/v1, python: null}
+    routes:
+      - task: Browse a Kartograf store on a map in the browser
+        command: archiwista serve
+      - task: Search the file catalog of a Kartograf store from a script
+        command: archiwista search
+      - task: Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP
+        command: archiwista project-export
+    data_sources: [gugik, osm]
+    provides:
+      - id: archiwista-rest
+        kind: service
+        summary: REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE).
+      - id: archiwista-sources
+        kind: contract
+        summary: Source adapter protocol registered through the archiwista.sources entry point.
+      - id: archiwista-project/1
+        kind: manifest
+        summary: archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054).
+      - id: archiwista-raw-root
+        kind: dataset
+        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root.
+    depends_on:
+      - project: Kartograf
+        kind: runtime
+        status: active
+        via: [library, store]
+        exchange: [kartograf-store/1, kartograf-meta/1, kartograf-plan/1]
+        uses: [list_segments, list_partitions, iter_store, read_sidecar, describe_segment, file_footprint, link_target, pinned_transform, command_for_file]
+        note: Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
+      - project: Obserwator
+        kind: optional
+        status: active
+        via: [library, store]
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data/1]
+        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
+      - project: Hydrolog
+        kind: data
+        status: active
+        via: [file]
+        exchange: [hydrolog-series/1]
+        note: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.

@@ -1,0 +1,15 @@
+# Release set candidate-3 (REL-6.4): the commit of each member.
+# Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is
+# generated from this file (`set readme`).
+
+[Kartograf]
+commit = "d0990c89da88e73b9081fe33a151ba9d27b4f820"
+
+[Obserwator]
+commit = "f9f4ee7927ba520d3e82d3e289872090ae24e2ec"
+
+[Hydrolog]
+commit = "930915d5eee94ece17682e288fbab64c7f7cc5c1"
+
+[Retman]
+commit = "320a7d69b382f274f0b1a14ee5a7d3872457ae12"

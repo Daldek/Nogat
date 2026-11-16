@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Daldek/Nogat/schemas/ecosystem.schema.json",
+  "title": "nogat-ecosystem/1",
+  "description": "Registry of ecosystem projects: structure only (ECOSYSTEM_HUB §2, ECO-034). Versions and pins are read from the repositories.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "standard_version", "data_sources", "projects"],
+  "properties": {
+    "schema": {"const": "nogat-ecosystem/1"},
+    "standard_version": {"type": "string", "pattern": "^\\d+\\.\\d+$"},
+    "data_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "country", "url", "licence"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "name": {"type": "string"},
+          "country": {"type": "string"},
+          "url": {"type": "string", "format": "uri"},
+          "licence": {"type": "string"}
+        }
+      }
+    },
+    "projects": {"type": "array", "items": {"$ref": "#/$defs/project"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9./-]*$"},
+    "nullable_string": {"type": ["string", "null"]},
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name", "summary", "profiles", "status", "repo", "visibility",
+        "distribution", "interfaces", "data_sources", "provides", "depends_on"
+      ],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Z][A-Za-z]+$"},
+        "summary": {"type": "string", "maxLength": 100},
+        "profiles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["tool", "app", "hub"]}
+        },
+        "status": {"enum": ["active", "research", "paused", "archived"]},
+        "repo": {"type": "string", "pattern": "^https://"},
+        "branch": {
+          "description": "Branch holding the project's code when it is not develop; `set check` reads the manifests at origin/<branch> (REL-6.4).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$"
+        },
+        "python_manifests": {
+          "description": "Repository-relative files declaring Python dependencies (pyproject.toml, requirements*.txt).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[^/~][^:]*$"}
+        },
+        "visibility": {"enum": ["public", "private"]},
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pypi", "import_name"],
+          "properties": {
+            "pypi": {"$ref": "#/$defs/nullable_string"},
+            "import_name": {"$ref": "#/$defs/nullable_string"}
+          }
+        },
+        "interfaces": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cli", "mcp", "rest", "python"],
+          "properties": {
+            "cli": {"$ref": "#/$defs/nullable_string"},
+            "mcp": {"$ref": "#/$defs/nullable_string"},
+            "rest": {"$ref": "#/$defs/nullable_string"},
+            "python": {"$ref": "#/$defs/nullable_string"},
+            "gui": {
+              "description": "Optional: the command that serves the project's browser GUI on this computer.",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "routes": {
+          "description": "Rows of the routing table of AGENTS.md (HUB-4.3): a task and the command that starts it.",
+          "type": "array",
+          "items": {"$ref": "#/$defs/route"}
+        },
+        "data_sources": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "provides": {"type": "array", "items": {"$ref": "#/$defs/provided"}},
+        "depends_on": {"type": "array", "items": {"$ref": "#/$defs/dependency"}}
+      }
+    },
+    "provided": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "summary"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["dataset", "sidecar", "store", "manifest", "document", "catalog", "library", "service", "contract"]},
+        "summary": {"type": "string"}
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "command"],
+      "properties": {
+        "task": {"type": "string", "minLength": 1, "maxLength": 100},
+        "command": {"type": "string", "pattern": "^[^`|\\n]+$"}
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project", "kind", "status", "via", "exchange"],
+      "properties": {
+        "project": {"type": "string"},
+        "kind": {"enum": ["runtime", "optional", "dev", "data"]},
+        "status": {"enum": ["active", "planned"]},
+        "via": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["library", "cli", "mcp", "rest", "service", "store", "file"]}
+        },
+        "exchange": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "uses": {"type": "array", "items": {"type": "string"}},
+        "note": {"type": "string"}
+      }
+    }
+  }
+}

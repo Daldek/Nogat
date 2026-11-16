@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Nogat: próbka panelu administracyjnego (klucz: nogat)</title>
+<link rel="icon" type="image/svg+xml" href="marks/hydrolog.svg">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="kit/nogat-admin.css">
+<script type="module" src="specimen-admin.js"></script>
+<script type="module" src="kit/nogat-admin.js"></script>
+</head>
+<body>
+<!-- The admin page of a GUI (DEV-15.13) is the shell alone. api="api/admin/" because this
+     specimen sits beside its kit; a GUI's page at /admin/ keeps the default ../api/admin/.
+     specimen-admin.js answers the API inside the page; the key is "nogat". -->
+<nogat-admin app="Hydrolog" project="hydrolog" back="specimen.html" marks="marks/" api="api/admin/">
+<section data-admin-section="resources" data-label="Zasoby">
+<h2 class="nogat-admin-heading">Zasoby</h2>
+<p class="nogat-admin-note">Sekcja aplikacji: jej skrypt pyta swoją trasę przez adminFetch, gdy sekcja się pokazuje.</p>
+<ul id="specimen-resources"></ul>
+</section>
+</nogat-admin>
+</body>
+</html>
