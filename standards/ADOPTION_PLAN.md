@@ -15,10 +15,10 @@ author's approval for merges, tags, force-pushes and history rewrites
 
 | # | Item | Requirement |
 |---|---|---|
-| 0.1 | Templates: the gate and CI templates are in `standards/ci/` (done); document templates and configs replace the legacy `standards/templates/` and `standards/configs/`, which are owned by root, so the author replaces them; until then the legacy files are not valid | DOC-11.1, DEV-7.6, DEV-7.7 |
+| 0.1 | Templates: the gate and CI templates are in `standards/ci/` (done); document templates and configs replace the legacy `standards/templates/` and `standards/configs/`, which are owned by root, so the author replaces them; until then the legacy files are not valid (they reached `main` unchanged with `std-1.0`, a known deviation) | DOC-11.1, DEV-7.6, DEV-7.7 |
 | 0.2 | Registry (`ecosystem.yaml`, schema, `scripts/ecosystem.py`, generated `docs/ECOSYSTEM_MAP.md`) and the hub README in English (done) | HUB §2, HUB §4, ECO-005 |
-| 0.3 | Pending Nogat work committed in small Conventional commits as Daldek on a topic branch and merged by pull request | DEV-4.1, DEV-4.2, DEV-3.3 |
-| 0.4 | Standard 1.0 merged to `main` and tagged `std-1.0` | HUB-6.1, ERR-3 |
+| 0.3 | Pending Nogat work committed in small Conventional commits as Daldek on a topic branch and merged by pull request (done 2026-11-17 with `v0.1.0`; with the author's approval the merges into `develop` and `main` are local, without pull requests, because `gh` is not installed) | DEV-4.1, DEV-4.2, DEV-3.3 |
+| 0.4 | Standard 1.0 merged to `main` and tagged `std-1.0` (done 2026-11-17, the merge commit of `v0.1.0`) | HUB-6.1, ERR-3 |
 | 0.5 | Nogat `CLAUDE.md` and generated `AGENTS.md`, both done: the routing table with links to the tools' AGENTS.md | DOC §3, DOC §4, HUB-4.3 |
 | 0.6 | Ruleset for `main` and `develop`, tag ruleset for `v*`, private vulnerability reporting, contribution files (`SECURITY.md`, `CONTRIBUTING.md`, `docs/CLA.md`, `CONTRIBUTORS.md`, pull-request template with the CLA box) | DEV-3.6, DEV-13.7, DEV-16.2, DEV-16.4 |
 
@@ -142,9 +142,9 @@ Until the rename of phase 6, a pin names each distribution as the tag's
 | # | Item | Requirement |
 |---|---|---|
 | 5.1 | Consumers that cannot run on a producer's development head migrate on a branch that pins the producer's commit, and declare the range from the producer's development version | REL-5.3, REL-5.6, DEV-3.4 |
-| 5.2 | `verify-candidate` workflow in Nogat, merged to `main`; candidates, fixed and repeated until the run is green | REL-6.4, REL-6.5 |
-| 5.3 | Member releases, producers first (release pull request, merge commit, annotated tag); commit pins replaced by tags and supported ranges narrowed to the release | REL-2.1, REL-5.6, REL-6.6 |
-| 5.4 | `nogat` package (`src/nogat/`, the commands of HUB-7.3, the members' commands in `[project.scripts]`, dependency list generated from the lock), released as a git tag | HUB §7, REL-6.6, ECO-026 |
+| 5.2 | `verify-candidate` workflow in Nogat, merged to `main`; candidates, fixed and repeated until the run is green (the workflow merged to `main` 2026-11-17 with `v0.1.0`; candidate-6, the first set, was verified only on the author's machine by `set verify`, a deviation from REL-6.5) | REL-6.4, REL-6.5 |
+| 5.3 | Member releases, producers first (release pull request, merge commit, annotated tag); commit pins replaced by tags and supported ranges narrowed to the release (done 2026-11-16 for the members of the first set: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0`, merged locally without pull requests with the author's approval; Retman and Hydraulik join a later set) | REL-2.1, REL-5.6, REL-6.6 |
+| 5.4 | `nogat` package (`src/nogat/`, the commands of HUB-7.3, the members' commands in `[project.scripts]`, dependency list generated from the lock), released as a git tag (not done: the first set, `v0.1.0`, is released without it and installs as an environment from `release-sets/v0.1.0/`) | HUB §7, REL-6.6, ECO-026 |
 | 5.5 | Ecosystem user documentation `docs/user/` with executable recipes | DOC §12 |
 
 ## Phase 6: PyPI

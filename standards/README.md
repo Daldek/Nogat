@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.0 · not yet published; tagged `std-1.0` when it reaches `main` (HUB-6.1)
+Standard 1.0 · published 2026-11-17, tagged `std-1.0` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -75,14 +75,15 @@ None.
 ## Legacy
 
 [legacy/shared-2026-01/](legacy/shared-2026-01/) holds the shared standards of
-2026-01-29 that preceded Nogat; they were never on Nogat's `main` (ECO-056).
+2026-01-29 that preceded Nogat; they were never a standard on Nogat's `main`
+(ECO-056), which holds them only as this archive.
 The root-owned `templates/` and `configs/` directories come from them and are
-not valid for this standard; the author replaces them (ADOPTION_PLAN 0.1,
-DOC-11.1).
+not valid for this standard; they reached `main` unchanged with `std-1.0`,
+and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
-- 1.0 (not yet published):
+- 1.0 (published 2026-11-17, tag `std-1.0`):
   - The first `nogat` release is `0.1.0`; `nogat` stays `0.y` until the
     author makes a release `1.0.0` (HUB-7.4, ECO-076).
   - `verify-candidate` runs `set verify`: members with a package in the
