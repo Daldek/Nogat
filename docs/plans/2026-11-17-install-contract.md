@@ -13,7 +13,10 @@ Requirements: DEV-6.2, DEV-6.3 (uv, `uv sync --locked` in every environment, con
   - **Servers:** an image and service templates for every app with a GUI or an API, built from the same released package and lock.
 - Linux is the priority. macOS and Windows are wanted for local tools, but not at any cost.
 - The system stays open, but its author will commercialise it later: he wants to earn on processing (preparing areas and data) and on operating the whole. He does not want installation made too easy for inexperienced users. The model is Deltares: open code, with some conveniences (built binaries) behind registration.
-- Open: whether the images are public, and where a deployment repository lives.
+- The server stack is every server, each GUI's public instance included (Hydrolog's GUI too, as the others): Hydrograf (API, PostGIS, nginx, the bootstrap), Archiwista, the public GUIs of Obserwator and Hydrolog, and their back end (stores, nightly jobs, backups, updates, monitoring). The local tools are the libraries, CLIs and MCP servers a person installs for themselves.
+- Images: I2 now (no published images; the Dockerfiles and compose files are public, built images only for clients), I3 later (a private registry, access after registration).
+- The licence stays MIT: a copy cannot be prevented or proven anyway.
+- Open: where a deployment repository lives.
 
 ## What differs today (2026-11-17)
 
@@ -61,7 +64,7 @@ A new section of DEV, one rule per point, the same in every project:
    - macOS and Windows are best effort and non-blocking, for the tools' CLI and the local GUIs (Hydrolog's CI is the model).
    - Servers run on Linux only.
 
-## Open: images and how open they are
+## Images and openness
 
 With MIT code, a closed image is a speed bump, not a protection: anyone can build it from the Dockerfile. The value the author sells is elsewhere:
 - prepared areas and data sets (the bootstrap of a region, curated stores);
@@ -73,14 +76,11 @@ With MIT code, a closed image is a speed bump, not a protection: anyone can buil
 | I1 | Public images for every server (GHCR) | the portfolio; easiest for anyone, competitors included |
 | I2 | No published images: the Dockerfiles and compose files are public, a user builds them; built images only for clients | a competent administrator installs it, an inexperienced user does not; no infrastructure |
 | I3 | Images in a private registry; access tokens issued after registration, by hand at first (the Deltares model) | lead collection and control; a little upkeep per token |
-| I4 | Public images of the local tools (e.g. Hydrolog's GUI) for the portfolio; the server stack (Hydrograf, Archiwista, data processing) as I2 or I3 | a demo for everyone, the operational stack for clients |
+| I4 | Public images of the local tools for the portfolio; the server stack as I2 or I3 | a demo for everyone, the operational stack for clients |
 
-[proposed] I4 with I2 for the server stack now (no registry to run), moving to I3 when the first clients come.
+Chosen (the author, 2026-11-17): I2 now for every server, Hydrolog's GUI included, then I3. CI builds every image (S4) to prove it builds, and publishes none; a client gets an image by the deployment, later from the private registry.
 
-The licence is a separate question, the author's decision:
-- All projects are MIT with a single copyright holder. Future versions can change licence; released ones stay MIT.
-- EUPL-1.2 (the EU's own licence) or AGPL-3.0 would require a competitor who runs a modified copy as a service to publish the changes. MIT does not.
-- A future dual licence needs the CLA of DEV-16.2 (its text waits for the author) before any outside contribution.
+The licence stays MIT (the author, 2026-11-17). The CLA of DEV-16.2 is still needed before outside contributions, as DEV §16 requires.
 
 ## Steps [proposed]
 
@@ -97,7 +97,7 @@ The licence is a separate question, the author's decision:
 
 ## Open questions
 
-1. Images: I1, I2, I3 or I4, and when to move to I3.
-2. The licence of future versions: MIT, EUPL-1.2 or AGPL-3.0; the CLA text before it matters.
+1. When I3 starts, and how a client registers (by hand at first).
+2. Whether the portfolio plan's demo (P4) runs on an instance the author hosts, since no public image exists under I2.
 3. The deployment repository or `deploy/` in Nogat (also C4 of the portfolio plan).
 4. Whether `nogat service render` belongs in the `nogat` package (HUB-7.3 lists its commands) or in the deployment repository.
