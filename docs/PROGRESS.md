@@ -137,7 +137,12 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      per-period `OverflowError` of `hydrometrics rating-curve`, the rating
      curve fit that does not converge (to be examined), the threshold of 0
      or below 0 of `low_flow_sequences`, and its GUI report #1 (the
-     horizontal axis of „Obliczenia składowe” shows absurdly small values).
+     horizontal axis of „Obliczenia składowe” shows absurdly small values),
+     and a notice and an unreliable mark on a physically implausible
+     rating curve or period (e.g. IMGW 150170070 Głuchołazy: b 6.5 and
+     h0 −88 cm in 1981–1990, b 6.6 and h0 −179 cm in 2001–2010, periods
+     that mix the stage shifts of 1998–1999 and 2008; the author's decision
+     of 2026-11-17).
      The 50 reports of the GUIs (Hydrograf 30, Hydrolog 12, Obserwator 8)
      were reviewed and marked read on 2026-11-17; no replies are prepared
      (the author's decision).
@@ -158,7 +163,13 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      (the cut to the area), large basins, E3-03, E5b-02, E5b-04 (Hydrograf
      0.6.0), E2-09/KH (Kartograf), E2-10 and E7-02 (Archiwista), E3-02 and
      the features of Obserwator's „Release 3.0.1” (3.1.0, waits for the
-     author).
+     author). From the check of 150170070 (the author, 2026-11-17):
+     Hydrolog's rating-curve periods from detected stage shifts at a
+     steady discharge instead of fixed decades, with gauge-zero changes the
+     user may give (Obserwator's report #3); Obserwator shows or hides the
+     unreliable periodic curves with a warning, and its station card says
+     that IMGW's daily Q are derived from IMGW's own rating curves, not
+     measured.
 8. Nogat after `v0.1.0`: `develop` opens its next cycle (`0.y.z.dev0`,
    REL-1.1) with its next change, and the standard's next version on
    `develop` is 1.1 (HUB-6.1); the next candidate is the first that the
