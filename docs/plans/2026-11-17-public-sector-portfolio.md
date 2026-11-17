@@ -43,7 +43,7 @@ Missing: metadata in DCAT-AP-PL or GeoDCAT-AP, OGC services (WMS/WMTS), an acces
   - **A.** Archiwista stays an internal tool and exports DCAT for a public CKAN;
   - **B.** Archiwista also serves a DCAT endpoint that dane.gov.pl or CKAN harvests.
 
-  A is safer for a client, B cheaper. [proposed] A first; B only if a client asks.
+  The author's decision (2026-11-17): A. Archiwista is a private store, even though it holds mostly public data, because firms may keep their projects in it. It exports DCAT and serves no harvest endpoint.
 - C2. DEV-2.1 keeps all documentation in English, but deliverables for Polish clients need Polish. Resolved by the installation plan (`2026-11-17-install-contract.md`, the author's decision of 2026-11-17): the public projects stay English, and the Polish install, backup, update and restore runbooks live in the private deployment repository, so no deviation of DEV-2.1 is needed. The GUIs' texts and Hydrograf's guide are Polish already.
 - C3. The register of references cannot live in Nogat: its repository is public, and a client's name, scope and acceptance protocol may be confidential. Resolved the same way: it lives in the private deployment repository. Nogat keeps only public case descriptions, each approved by its client.
 - C4. Nogat „downloads and computes nothing itself”, and a demo stack (CKAN, map server) is deployment, not a tool. Resolved the same way: the demo stack lives in the private deployment repository. The demo runs on an instance the author hosts, or the author deploys it himself (the author, 2026-11-17).
@@ -74,6 +74,6 @@ Order: P1, P3 and P7 first (cheap and visible), then P4 (the demo), then P2, P5 
 
 ## Open questions
 
-1. C1: Archiwista's DCAT as an export only (A) or also as a harvest endpoint (B).
-2. Which public datasets the demo publishes first: the Kaczawa set, an Obserwator series, or both.
-3. dane.gov.pl publishes the DCAT-AP-PL profile (<https://dane.gov.pl/dcat-ap-pl/>) for Polish publishers and serves its own catalog as DCAT-AP-PL RDF (`api.dane.gov.pl/1.4/catalog.rdf`). How it takes in an outside catalog, by harvesting a DCAT-AP-PL endpoint or through its partners' API (its API validator), is to be checked with its documentation before P3 fixes its output. [INFERENCE: DCAT-AP-PL RDF is the format it expects.]
+1. dane.gov.pl publishes the DCAT-AP-PL profile (<https://dane.gov.pl/dcat-ap-pl/>) for Polish publishers and serves its own catalog as DCAT-AP-PL RDF (`api.dane.gov.pl/1.4/catalog.rdf`). How it takes in an outside catalog, by harvesting a DCAT-AP-PL endpoint or through its partners' API (its API validator), is to be checked with its documentation before P3 fixes its output. [INFERENCE: DCAT-AP-PL RDF is the format it expects.]
+
+Decided (the author, 2026-11-17): the demo (P4) publishes both the Kaczawa set and an Obserwator station series.
