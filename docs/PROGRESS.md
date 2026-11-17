@@ -21,7 +21,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
   - Hydrolog `v0.8.0` (`hydrolog-gui.service`, worktree `~/workspace/Hydrolog-gui`, was `e5df06d`), with Obserwator 3.0.0 as its extra; Obserwator's analyses call this venv's `hydrolog`
   - Obserwator `v3.0.0` (`obserwator-public.service`, `~/data/obserwator-public/app-target`, was `3816b3c`; code unchanged but the version), OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator; its stored analyses are those of 2026-11-15 (Hydrolog 0.8.0.dev0), not rebuilt (Next 6)
   - Archiwista `v0.3.0` (`archiwista-public.service`, `~/data/archiwista-public/app`, was `7a11c76`) with Kartograf 0.8.0 and Obserwator 3.0.0; no index or state migration
-  - Hydrograf `v0.5.0` on :8080 (`~/workspace/Hydrograf` detached at the tag, was local `develop` `1577dbc`; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.0, Obserwator 3.0.0, Hydrolog 0.8.0; alembic `007`, no migration); Hydroni :8081 unchanged; admin-panel store re-processing deferred to after the first joint release, now a follow-up (Next 6)
+  - Hydrograf `v0.5.0` on :8080 (`~/workspace/Hydrograf` detached at the tag, was local `develop` `1577dbc`; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.0, Obserwator 3.0.0, Hydrolog 0.8.0; alembic `007`, no migration); Hydroni :8081 unchanged. On 2026-11-17 17:05–17:10 (the author's decision) production took its data from Archiwista's set `kaczawa/2026-2`, cut in the staging instance `hgstaging` (Next 6): the seven data tables restored data-only (feedback kept), the rasters, `hydro_merged.gpkg`, the boundary, `frontend/data` (its `results/` kept) and the tiles copied; every probe point equals staging; backup and rollback in `/data/nmt/hydrograf-backup-2026-11-17/` and `~/data/hydrograf-staging/README`
 - **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut
 - **Backups** retained: `/data/nmt/deploy-backup-2026-11-16/` (before the deployment of the releases: `hydrograf-hydro_db.dump`, `hydrograf.env`, Archiwista state and index, Hydrolog's feedback, `~/.local/share/nogat` and `~/.local/state/nogat`, the user units, `deployed-before.txt`), image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
 
@@ -93,8 +93,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      depressions and every probe point. It differs in the soil groups
      (B 90.98 / C 8.66 % against 90.78 / 8.86 %, the set's raster) and the
      PMAXTP grid of the mosaic's box (depths up to about 0.75 % higher).
-     Production switches only on the author's acceptance (the author's
-     decision of 2026-11-16); the cut belongs in Hydrograf (S5).
+     Production took these data on 2026-11-17 (Deployment and storage);
+     the cut belongs in Hydrograf (S5), so a later re-processing needs no
+     hand-run scripts.
    - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to
      2026-11-17 08:07, `~/tmp/chmi-night/`) downloaded the daily archives
      of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
