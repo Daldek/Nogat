@@ -94,7 +94,7 @@ The licence stays MIT (the author, 2026-11-17). The CLA of DEV-16.2 is still nee
 | S6 | the author's machine | production moved to the contract: the stack of S5; Hydrograf without the development override |
 | S7 | later | PyPI names `nogat-<project>` (ADOPTION_PLAN 6.1); `nogat service render <tool>` only if hand-made units repeat |
 
-## Deployment repository and service templates [proposed]
+## Deployment repository and service templates (the author's decision, 2026-11-17)
 
 - **One private repository**, e.g. `Daldek/wdrozenia`, for everything about running instances:
   - the combined compose of the server stack;
@@ -106,9 +106,24 @@ The licence stays MIT (the author, 2026-11-17). The CLA of DEV-16.2 is still nee
 - **What a client needs from public sources stays in each project:** its Dockerfile, compose file, systemd unit template and English install section. A competent administrator can therefore build and run any server without the private repository (I2). The private repository adds the combination, the data and the operating knowledge, which is what the author sells.
 - **No `nogat service render` command now.** Each server's repository ships its own unit template next to its compose file; the deployment repository fills them in. A command in the `nogat` package (HUB-7.3) waits until the same filling-in repeats by hand for several instances.
 
+## Versions
+
+Every step of the contract is a feature, and some rename a variable or move a directory. None goes into the patch releases now being prepared (defects only).
+
+| Project | Release with the contract | Why |
+|---|---|---|
+| Nogat | standard 1.1 (HUB-6.1); `nogat` 0.2.0 with the next set | a new DEV section; the set's members take minor bumps, which HUB-7.4 counts as major in `0.y`, so `nogat` raises its minor |
+| Archiwista | 0.4.0 | S2 changes how it is installed and started (REL-1.1: in `0.y.z` a minor bump may break) |
+| Hydrograf | 0.6.0 | S3, S4 and the production overlay as default; with its other minor work (S5, the cut to the area) |
+| Hydrolog | 0.9.0 | S3, S4 for its GUI server |
+| Obserwator | 3.1.0 if every change is additive; 4.0.0 if a variable, directory or command is renamed (from 1.0 only a major bump may break) | [proposed] additive: its names already follow `OBSERWATOR_*` and DEV §18 |
+| Kartograf | its next minor, only if `config show` needs a field | it has no server |
+
+Order: the patches first (0.8.1, 3.0.1, 0.8.1, 0.5.1, 0.3.1), then the contract on each `develop`, released with each project's next minor; then a candidate and `nogat` 0.2.0.
+
 ## Open questions
 
 1. The name of the private deployment repository.
 2. How a client registers when I3 starts (by hand at first).
 
-Decided (the author, 2026-11-17): I3 starts with the first client. The portfolio plan's demo (P4) runs on an instance the author hosts, or the author deploys it himself.
+Decided (the author, 2026-11-17): I3 starts with the first client. The portfolio plan's demo (P4) runs on an instance the author hosts, or the author deploys it himself. The deployment repository and the service templates as recommended above.
