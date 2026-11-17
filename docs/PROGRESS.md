@@ -82,16 +82,19 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      closed by `piotr` on 2026-11-17 (an agent's session on the author's
      request): four calls, 222 pins, the inputs of `2026-1` with the PGW
      units of the area (`hydro/pl_pgw`, 2023-09-15). The bootstrap has no
-     cut to the area: from `2026-1` and from `2026-2` with `--units`
-     (ADR-071 processing, the same results) the staging instance
-     `hgstaging` (127.0.0.1:8083, v0.5.0, about 30 min each; its README in
-     `~/data/hydrograf-staging/`) gives 981.5 km² at 10 000 m² with 594
-     outlets against production's 792.009 km² and one, and the land cover
-     of the 10 whole counties; inside, the shares differ little and the
-     Kamiennik is 136.92 km² on both. Production was built by hand
-     (`process_dem`, then a cut to the kept units). It switches only after
-     that cut, in Hydrograf (S5) or by the runbook's scripts, on the
-     author's acceptance (the author's decision of 2026-11-16).
+     cut to the area (`--units` is ADR-071's processing, the same results):
+     the staging instance `hgstaging` (127.0.0.1:8083, v0.5.0; its README
+     in `~/data/hydrograf-staging/`) gave 981.5 km² at 10 000 m² with 594
+     outlets. Cut on 2026-11-17 by the runbook's scripts as production was
+     (kaczawa2's K3–K12, adapted: the project's area as the boundary, and
+     the 10 km² outlet segment cut to it because it runs on past the
+     outlet), it equals production: the stream tables per threshold
+     (792.009 km², one outlet), the land cover, `bdot_streams`, the
+     depressions and every probe point. It differs in the soil groups
+     (B 90.98 / C 8.66 % against 90.78 / 8.86 %, the set's raster) and the
+     PMAXTP grid of the mosaic's box (depths up to about 0.75 % higher).
+     Production switches only on the author's acceptance (the author's
+     decision of 2026-11-16); the cut belongs in Hydrograf (S5).
    - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to
      2026-11-17 08:07, `~/tmp/chmi-night/`) downloaded the daily archives
      of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
@@ -100,11 +103,13 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      `cz.chmi.hydro_daily`, and rebuilds the analyses of every station with
      Hydrolog 0.8.0. The series `cz.chmi.meteo_daily` fails: Obserwator
      3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
-     observation term (85 of 3,351 files: `SRA` at 05:00 or 07:00, `T`,
-     `TMA` and `TMI` at 05:00, 07:00, 11:00, 12:00, 19:00 or 21:00), a
-     defect for its next release. Obserwator also refreshes its copies in
-     `schemas/nogat/` from `std-1.0` (its D6,
-     `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+     observation term (85 of 3,351 files). Fixed on Obserwator's branch
+     `fix/3.0.1` (ADR-003 erratum of 2026-11-17: a daily value at any
+     observation term is that day's), with C4, its part of C5, C7 and
+     E3-06; its full gate passed (3,446 tests). The release of 3.0.1 waits
+     for the author's approval; the meteo series is built after it.
+     Obserwator also refreshes its copies in `schemas/nogat/` from
+     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle
