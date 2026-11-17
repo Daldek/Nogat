@@ -108,18 +108,25 @@ The licence stays MIT (the author, 2026-11-17). The CLA of DEV-16.2 is still nee
 
 ## Versions
 
-Every step of the contract is a feature, and some rename a variable or move a directory. None goes into the patch releases now being prepared (defects only).
+The author's decision (2026-11-17): the contract is split by what an update can break, and none of it enters the patch releases now being prepared, whose scope is closed. The contract is the release after them.
+
+- **Additive, as a patch or with no release at all:**
+  - files that do not change the installed package: Dockerfiles, compose files, unit templates, install documentation;
+  - fixes of the author's deployment (Hydrograf's development override; done in the deployment repository);
+  - new variables and `/health` where they only add, the old names still working.
+- **A minor release:** whatever renames or moves something, or changes how a tool is installed or started:
+  - Archiwista as a package;
+  - renamed variables or directories.
 
 | Project | Release with the contract | Why |
 |---|---|---|
-| Nogat | standard 1.1 (HUB-6.1); `nogat` 0.2.0 with the next set | a new DEV section; the set's members take minor bumps, which HUB-7.4 counts as major in `0.y`, so `nogat` raises its minor |
+| Nogat | standard 1.1 (HUB-6.1); `nogat` 0.2.0 with the next set if a member takes a minor | a new DEV section; HUB-7.4 counts a member's minor bump in `0.y` as major |
 | Archiwista | 0.4.0 | S2 changes how it is installed and started (REL-1.1: in `0.y.z` a minor bump may break) |
-| Hydrograf | 0.6.0 | S3, S4 and the production overlay as default; with its other minor work (S5, the cut to the area) |
-| Hydrolog | 0.9.0 | S3, S4 for its GUI server |
-| Obserwator | 3.1.0 if every change is additive; 4.0.0 if a variable, directory or command is renamed (from 1.0 only a major bump may break) | [proposed] additive: its names already follow `OBSERWATOR_*` and DEV §18 |
-| Kartograf | its next minor, only if `config show` needs a field | it has no server |
+| Hydrograf, Hydrolog | the next patch if every change is additive, else the next minor (0.6.0, 0.9.0) | S3 and S4 for their servers |
+| Obserwator | 3.0.2 or 3.1.0 if additive; 4.0.0 only if something is renamed (from 1.0 only a major bump may break) | [proposed] additive: its names already follow `OBSERWATOR_*` and DEV §18 |
+| Kartograf | none, unless `config show` needs a field | it has no server |
 
-Order: the patches first (0.8.1, 3.0.1, 0.8.1, 0.5.1, 0.3.1), then the contract on each `develop`, released with each project's next minor; then a candidate and `nogat` 0.2.0.
+Order: the current patches first (Kartograf 0.8.1, Obserwator 3.0.1, Hydrolog 0.8.1, Hydrograf 0.5.1, Archiwista 0.3.1), unchanged; then the contract on each `develop` as the next release; then a candidate and the next `nogat`.
 
 ## Open questions
 
