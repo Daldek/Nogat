@@ -105,7 +105,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      station with Hydrolog 0.8.0 (6 h 9 min; the service shows them):
      IMGW-PIB 3,240 stations, 83,704 analyses ok and 1,000 failed at 201
      stations (the 2026-11-15 build with 0.8.0.dev0: 2,093 at 1,066); ČHMÚ
-     796 stations (23 before), 31,971 ok and 265 failed at 55. The series
+     796 stations (23 before), 31,971 ok and 265 failed at 55. Almost all
+     failures are series too short for the method (Mann–Kendall, flood and
+     low-flow frequency, homogeneity and precipitation quantiles with 0 to 2
+     years against the 3 needed; incomplete months or years); defects for
+     Hydrolog 0.8.1: `hydrometrics rating-curve` per period ends in an
+     `OverflowError` (8 stations: `_level_at` inverts a curve whose `b` is
+     near zero, `operations/hydrometrics.py:276`), its fit does not converge
+     at 5 stations, and `low_flow_sequences` refuses a threshold of 0 (Q)
+     or below 0 (H) instead of a notice. The series
      `cz.chmi.meteo_daily` fails: Obserwator
      3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
      observation term (85 of 3,351 files). Fixed on Obserwator's branch
