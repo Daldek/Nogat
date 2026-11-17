@@ -127,7 +127,31 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle
    (`X.Y.(Z+1).dev0`) with its next change. When a tool renames a command,
-   change its `routes` and run `agents` (CLAUDE.md).
+   change its `routes` and run `agents` (CLAUDE.md). The patch scope, defects
+   only, approved by the author on 2026-11-17, producers first:
+   - Obserwator 3.0.1: done on `fix/3.0.1` (Next 6); not released yet, by
+     the author's decision.
+   - Kartograf 0.8.1: C1, its part of C5, E5a-01, GEO-02 (to be checked),
+     E2-04.
+   - Hydrolog 0.8.1: its part of E5b-08, E5b-07 (at least a notice), the
+     per-period `OverflowError` of `hydrometrics rating-curve`, the rating
+     curve fit that does not converge (to be examined), the threshold of 0
+     or below 0 of `low_flow_sequences`.
+   - Hydrograf 0.5.1, after Hydrolog: E3-04, E5b-05, E5b-06, E5b-09,
+     E5b-01, E5b-08, E4-02, E4-03, HG-E2E-01 to 03, its PROGRESS Next 17,
+     the `dem_mosaic.vrt` a bootstrap leaves; from the external test report
+     of 2026-11-02 (author's copy in `~/tmp/feedback/`): A2 (Snyder's Lc
+     only in the advanced mode, the Tc method not disabled for Snyder), B2
+     (= G05-1) and B3 (Esc both hides and clears). Its M2 (touch has no
+     hover) and M3 (profile and sheets overlap on a phone), once confirmed,
+     go to 0.6.0; U3, the „Logowanie” link to `/admin/` in the rail, stays
+     (the author: accounts may come later).
+   - Archiwista 0.3.1: E7-01, E2-06, E2-05, the tests C2, C3, C6.
+   - Then a new candidate and Nogat 0.1.1. Minor releases with a plan: S5
+     (the cut to the area), large basins, E3-03, E5b-02, E5b-04 (Hydrograf
+     0.6.0), E2-09/KH (Kartograf), E2-10 and E7-02 (Archiwista), E3-02 and
+     the features of Obserwator's „Release 3.0.1” (3.1.0, waits for the
+     author).
 8. Nogat after `v0.1.0`: `develop` opens its next cycle (`0.y.z.dev0`,
    REL-1.1) with its next change, and the standard's next version on
    `develop` is 1.1 (HUB-6.1); the next candidate is the first that the
