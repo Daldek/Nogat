@@ -166,10 +166,17 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      author). From the check of 150170070 (the author, 2026-11-17):
      Hydrolog's rating-curve periods from detected stage shifts at a
      steady discharge instead of fixed decades, with gauge-zero changes the
-     user may give (Obserwator's report #3); Obserwator shows or hides the
-     unreliable periodic curves with a warning, and its station card says
-     that IMGW's daily Q are derived from IMGW's own rating curves, not
-     measured.
+     user may give (Obserwator's report #3), since IMGW-PIB publishes no
+     history of gauge zeros (checked 2026-11-17: the daily, monthly and
+     half-year archives, `lista_zmian_hydro.txt`, `lista_stacji_hydro.csv`,
+     the API and hydro.imgw.pl give only the current zero, e.g. 279.88 m
+     EVRF2007 at 150170070; the hydrological yearbooks 2018–2025 give each
+     year's P.z. of their stations only, with no remark code for a change;
+     IMGW re-computes archived Q after a change of the stage–discharge
+     relation, so its H is raw and its Q is homogenised); Obserwator shows
+     or hides the unreliable periodic curves with a warning, and its station
+     card says that IMGW's daily Q are derived from IMGW's own rating
+     curves, not measured.
 8. Nogat after `v0.1.0`: `develop` opens its next cycle (`0.y.z.dev0`,
    REL-1.1) with its next change, and the standard's next version on
    `develop` is 1.1 (HUB-6.1); the next candidate is the first that the
