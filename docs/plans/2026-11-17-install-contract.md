@@ -36,7 +36,7 @@ A new section of DEV, one rule per point, the same in every project:
    - The server is an extra (`[gui]`, `[api]`), and `<tool> serve` (or the existing `gui serve`) starts it.
    - Archiwista becomes such a package; no app runs from a checkout.
 2. **Configuration.**
-   - `nogat.toml` is found through `NOGAT_CONFIG`, with `data_dir`, `cache_dir` and `state_dir` (DEV-18).
+   - `nogat.toml` is found through `NOGAT_CONFIG`, with `data_dir`, `cache_dir` and `state_dir` (DEV-18.1, DEV-18.2).
    - Variables are named `<TOOL>_*`. Credentials come from files named by `<TOOL>_*_FILE`, e.g. the admin key.
    - `<tool> config show --json` reports all of it.
 3. **Server.**
