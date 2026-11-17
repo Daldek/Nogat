@@ -76,30 +76,34 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    (question 4).
 6. Follow-ups of `v0.1.0`, owned by the members, each in its own session:
    - Hydrograf re-processes its production from Archiwista's project
-     `kaczawa`, set `2026-1` (H2 and S5 of 11; the admin-panel store
-     re-processing the author deferred on 2026-11-15 to after the first
-     joint release). A bootstrap from a set processes the whole mosaic of
-     194 sheets and does not clip to the area: without `--units` the area
-     serves only the coverage check and `instance.json`, and the set holds
-     no PGW units file. Production was built by hand (`process_dem`, then a
-     cut to the kept units, 792.009 km²). The staging run of 2026-11-16
-     (instance `hgstaging`, 127.0.0.1:8083, v0.5.0, 29 min; its README in
-     `~/data/hydrograf-staging/`) confirms it: 981.5 km² at 10 000 m² with
-     594 outlets against production's 792.009 km² and one, the land cover
-     of the 10 whole counties, the Kaczawa above its outlet 797.4 km²;
-     inside, the shares differ little and the Kamiennik is 136.92 km² on
-     both. Not a drop-in replacement: production switches only after a cut
-     to the area (S5) or with PGW units in the set, on the author's
-     acceptance (the author's decision of 2026-11-16).
-   - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to about
-     06:00, `~/tmp/chmi-night/`) downloads the daily archives of the 2,474
-     Czech ČHMÚ stations of the catalog into the raw root, one station per
-     call, paced over the night (41,271 files; about 2,800 meteo files are
-     not published and 75 hydro stations have none), then builds the series
-     `cz.chmi.hydro_daily` and `cz.chmi.meteo_daily` and the analyses of
-     every station with Hydrolog 0.8.0 (the deployed ones are of
-     2026-11-15, Hydrolog 0.8.0.dev0). Obserwator also refreshes its copies
-     in `schemas/nogat/` from `std-1.0` (its D6,
+     `kaczawa` (H2 and S5 of 11; the admin-panel store re-processing the
+     author deferred on 2026-11-15 to after the first joint release). Its
+     set `2026-2` was built in the web interface by the plan's A5 and
+     closed by `piotr` on 2026-11-17 (an agent's session on the author's
+     request): four calls, 222 pins, the inputs of `2026-1` with the PGW
+     units of the area (`hydro/pl_pgw`, 2023-09-15). The bootstrap has no
+     cut to the area: from `2026-1` and from `2026-2` with `--units`
+     (ADR-071 processing, the same results) the staging instance
+     `hgstaging` (127.0.0.1:8083, v0.5.0, about 30 min each; its README in
+     `~/data/hydrograf-staging/`) gives 981.5 km² at 10 000 m² with 594
+     outlets against production's 792.009 km² and one, and the land cover
+     of the 10 whole counties; inside, the shares differ little and the
+     Kamiennik is 136.92 km² on both. Production was built by hand
+     (`process_dem`, then a cut to the kept units). It switches only after
+     that cut, in Hydrograf (S5) or by the runbook's scripts, on the
+     author's acceptance (the author's decision of 2026-11-16).
+   - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to
+     2026-11-17 08:07, `~/tmp/chmi-night/`) downloaded the daily archives
+     of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
+     station per call (41,271 files, none failed; about 2,800 meteo files
+     are not published and 75 hydro stations have none), built the series
+     `cz.chmi.hydro_daily`, and rebuilds the analyses of every station with
+     Hydrolog 0.8.0. The series `cz.chmi.meteo_daily` fails: Obserwator
+     3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
+     observation term (85 of 3,351 files: `SRA` at 05:00 or 07:00, `T`,
+     `TMA` and `TMI` at 05:00, 07:00, 11:00, 12:00, 19:00 or 21:00), a
+     defect for its next release. Obserwator also refreshes its copies in
+     `schemas/nogat/` from `std-1.0` (its D6,
      `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
