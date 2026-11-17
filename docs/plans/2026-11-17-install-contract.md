@@ -89,15 +89,26 @@ The licence stays MIT (the author, 2026-11-17). The CLA of DEV-16.2 is still nee
 | S1 | Nogat | an ECO decision and the DEV section of the contract above; the registry's `interfaces` name the server extra and the image |
 | S2 | Archiwista | a package with `archiwista serve` from `uv tool install`; the checkout run becomes development only |
 | S3 | Obserwator, Hydrolog, Archiwista, Hydrograf | the contract's variables, `/health`, directories and `config show` fields where they differ (each in its own branch) |
-| S4 | each server | a Dockerfile from the release tag and a compose file; CI builds the image (published per the images question) |
-| S5 | Nogat | `nogat service render <tool>` for systemd units, or templates in the deployment repository |
-| S6 | deployment repository or `deploy/` (open) | the combined compose, backup, update and restore runbooks in Polish (the deviation C2 of `2026-11-17-public-sector-portfolio.md`) |
-| S7 | the author's machine | production moved to the contract: the units from S5 or compose from S4; Hydrograf without the development override |
-| S8 | later | PyPI names `nogat-<project>` (ADOPTION_PLAN 6.1) |
+| S4 | each server | a Dockerfile from the release tag, a compose file and a systemd unit template in the project's repository (public, English); CI builds the image and publishes none (I2) |
+| S5 | private deployment repository | the combined compose of the server stack, the overlays of each instance (the author's, Hydroni, later a client's; no secrets), backup, update and restore runbooks in Polish |
+| S6 | the author's machine | production moved to the contract: the stack of S5; Hydrograf without the development override |
+| S7 | later | PyPI names `nogat-<project>` (ADOPTION_PLAN 6.1); `nogat service render <tool>` only if hand-made units repeat |
+
+## Deployment repository and service templates [proposed]
+
+- **One private repository**, e.g. `Daldek/wdrozenia`, for everything about running instances:
+  - the combined compose of the server stack;
+  - each instance's overlay and settings, with secrets kept outside Git;
+  - the Polish runbooks: install, backup, update, restore;
+  - the register of references.
+  
+  It answers C3 and C4 of the portfolio plan in one place. It is private because instances and clients are not public. Nogat's „computes nothing itself” stays true.
+- **What a client needs from public sources stays in each project:** its Dockerfile, compose file, systemd unit template and English install section. A competent administrator can therefore build and run any server without the private repository (I2). The private repository adds the combination, the data and the operating knowledge, which is what the author sells.
+- **No `nogat service render` command now.** Each server's repository ships its own unit template next to its compose file; the deployment repository fills them in. A command in the `nogat` package (HUB-7.3) waits until the same filling-in repeats by hand for several instances.
 
 ## Open questions
 
-1. When I3 starts, and how a client registers (by hand at first).
-2. Whether the portfolio plan's demo (P4) runs on an instance the author hosts, since no public image exists under I2.
-3. The deployment repository or `deploy/` in Nogat (also C4 of the portfolio plan).
-4. Whether `nogat service render` belongs in the `nogat` package (HUB-7.3 lists its commands) or in the deployment repository.
+1. The name of the private deployment repository.
+2. How a client registers when I3 starts (by hand at first).
+
+Decided (the author, 2026-11-17): I3 starts with the first client. The portfolio plan's demo (P4) runs on an instance the author hosts, or the author deploys it himself.
