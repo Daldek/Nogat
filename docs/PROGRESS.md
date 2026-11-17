@@ -131,10 +131,10 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    only, approved by the author on 2026-11-17, producers first:
    - Obserwator 3.0.1: done on `fix/3.0.1` (Next 6); not released yet, by
      the author's decision.
-  - Kartograf 0.8.1: done on `fix/0.8.1` (C1, its part of C5, E5a-01: a
-    repeated `--sheet` is refused); full gate passed (8,664 tests). GEO-02
-    stays (a convention; a fix would break callers), E2-04 is a feature and
-    moves to a minor.
+   - Kartograf 0.8.1: done on `fix/0.8.1` (C1, its part of C5, E5a-01: a
+     repeated `--sheet` is refused); full gate passed (8,664 tests). GEO-02
+     stays (a convention; a fix would break callers), E2-04 is a feature and
+     moves to a minor.
    - Hydrolog 0.8.1: its part of E5b-08, E5b-07 (at least a notice), the
      per-period `OverflowError` of `hydrometrics rating-curve`, the rating
      curve fit that does not converge (to be examined), the threshold of 0
@@ -160,16 +160,16 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      (= G05-1) and B3 (Esc both hides and clears). Its M2 (touch has no
      hover) and M3 (profile and sheets overlap on a phone), once confirmed,
      go to 0.6.0; U3, the „Logowanie” link to `/admin/` in the rail, stays
-    (the author: accounts may come later).
-    Done on `fix/0.5.1`, E5b-06 by Hydrolog's catalog notices; full gate
-    passed (2,404 tests). Left: E3-04 (needs the author's amendment of
-    ADR-083) and Next 17 (a feature).
-  - Archiwista 0.3.1: done on `fix/0.3.1` (E7-01 with A-ADR-049 erratum 9,
-    E2-06, C2, C6; C3 marked as known under Playwright 1.65.2); full gate
-    passed (3,029 tests). E2-05 is left: it needs a geometry-countries API
-    of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
-    obszar projektu…” is no longer exercised.
-  - Merges, tags and deployment of the four wait for the author's approval.
+     (the author: accounts may come later).
+     Done on `fix/0.5.1`, E5b-06 by Hydrolog's catalog notices; full gate
+     passed (2,404 tests). Left: E3-04 (needs the author's amendment of
+     ADR-083) and Next 17 (a feature).
+   - Archiwista 0.3.1: done on `fix/0.3.1` (E7-01 with A-ADR-049 erratum 9,
+     E2-06, C2, C6; C3 marked as known under Playwright 1.65.2); full gate
+     passed (3,029 tests). E2-05 is left: it needs a geometry-countries API
+     of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
+     obszar projektu…” is no longer exercised.
+   - Merges, tags and deployment of the four wait for the author's approval.
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
