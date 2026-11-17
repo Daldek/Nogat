@@ -101,8 +101,12 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
      station per call (41,271 files, none failed; about 2,800 meteo files
      are not published and 75 hydro stations have none), built the series
-     `cz.chmi.hydro_daily`, and rebuilds the analyses of every station with
-     Hydrolog 0.8.0. The series `cz.chmi.meteo_daily` fails: Obserwator
+     `cz.chmi.hydro_daily` (20 min) and rebuilt the analyses of every
+     station with Hydrolog 0.8.0 (6 h 9 min; the service shows them):
+     IMGW-PIB 3,240 stations, 83,704 analyses ok and 1,000 failed at 201
+     stations (the 2026-11-15 build with 0.8.0.dev0: 2,093 at 1,066); ČHMÚ
+     796 stations (23 before), 31,971 ok and 265 failed at 55. The series
+     `cz.chmi.meteo_daily` fails: Obserwator
      3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
      observation term (85 of 3,351 files). Fixed on Obserwator's branch
      `fix/3.0.1` (ADR-003 erratum of 2026-11-17: a daily value at any
