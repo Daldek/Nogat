@@ -136,7 +136,11 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    - Hydrolog 0.8.1: its part of E5b-08, E5b-07 (at least a notice), the
      per-period `OverflowError` of `hydrometrics rating-curve`, the rating
      curve fit that does not converge (to be examined), the threshold of 0
-     or below 0 of `low_flow_sequences`.
+     or below 0 of `low_flow_sequences`, and its GUI report #1 (the
+     horizontal axis of „Obliczenia składowe” shows absurdly small values).
+     The 50 reports of the GUIs (Hydrograf 30, Hydrolog 12, Obserwator 8)
+     were reviewed and marked read on 2026-11-17; no replies are prepared
+     (the author's decision).
    - Hydrograf 0.5.1, after Hydrolog: E3-04, E5b-05, E5b-06, E5b-09,
      E5b-01, E5b-08, E4-02, E4-03, HG-E2E-01 to 03, its PROGRESS Next 17,
      the `dem_mosaic.vrt` a bootstrap leaves; from the external test report
@@ -147,6 +151,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      go to 0.6.0; U3, the „Logowanie” link to `/admin/` in the rail, stays
      (the author: accounts may come later).
    - Archiwista 0.3.1: E7-01, E2-06, E2-05, the tests C2, C3, C6.
+   - Each patch is made in a new worktree of its repository on a topic
+     branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
+     `fix/3.0.1`.
    - Then a new candidate and Nogat 0.1.1. Minor releases with a plan: S5
      (the cut to the area), large basins, E3-03, E5b-02, E5b-04 (Hydrograf
      0.6.0), E2-09/KH (Kartograf), E2-10 and E7-02 (Archiwista), E3-02 and
