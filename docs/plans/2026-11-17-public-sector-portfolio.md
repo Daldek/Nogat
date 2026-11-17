@@ -44,13 +44,10 @@ Missing: metadata in DCAT-AP-PL or GeoDCAT-AP, OGC services (WMS/WMTS), an acces
   - **B.** Archiwista also serves a DCAT endpoint that dane.gov.pl or CKAN harvests.
 
   A is safer for a client, B cheaper. [proposed] A first; B only if a client asks.
-- C2. DEV-2.1 keeps all documentation in English; deliverables for Polish clients need Polish. [proposed] A deviation: user and deployment guides of a delivered component may be Polish, as the GUIs' texts and Hydrograf's guide already are; developer documentation stays English.
-- C3. The register of references cannot live in Nogat: its repository is public, and a client's name, scope and acceptance protocol may be confidential. [proposed] A private place outside every public repository, chosen by the author; Nogat keeps only public case descriptions approved by the client.
-- C4. Nogat „downloads and computes nothing itself”. A demo stack (CKAN, map server) is deployment, not a tool. Options:
-  - **A.** a new private or public deployment repository;
-  - **B.** `deploy/` in Nogat, as configuration only.
-
-  [proposed] A, to keep the hub's scope.
+- C2. DEV-2.1 keeps all documentation in English, but deliverables for Polish clients need Polish. Resolved by the installation plan (`2026-11-17-install-contract.md`, the author's decision of 2026-11-17): the public projects stay English, and the Polish install, backup, update and restore runbooks live in the private deployment repository, so no deviation of DEV-2.1 is needed. The GUIs' texts and Hydrograf's guide are Polish already.
+- C3. The register of references cannot live in Nogat: its repository is public, and a client's name, scope and acceptance protocol may be confidential. Resolved the same way: it lives in the private deployment repository. Nogat keeps only public case descriptions, each approved by its client.
+- C4. Nogat „downloads and computes nothing itself”, and a demo stack (CKAN, map server) is deployment, not a tool. Resolved the same way: the demo stack lives in the private deployment repository. The demo runs on an instance the author hosts, or the author deploys it himself (the author, 2026-11-17).
+- Data licences (the author, 2026-11-17): the clients are public institutions that obtain their own licences, IMGW-PIB's included, so the licences of the sources do not shape the steps below.
 
 ## Steps [proposed]
 
@@ -60,12 +57,12 @@ Each step is small enough to be one branch of one project, and each ends in some
 |---|---|---|---|
 | P1 | Nogat | DEV §15 gains an accessibility rule (WCAG 2.1 AA for every GUI, a declaration of accessibility per deployment); the e2e suites of the four GUIs run axe-core on their main views | WCAG |
 | P2 | each GUI | the violations P1 finds fixed, the declaration of accessibility per public instance | WCAG |
-| P3 | Archiwista | export of a closed set to DCAT-AP-PL (JSON-LD and Turtle) from the existing sidecars and pins, validated by SHACL in its tests; GeoDCAT-AP fields where the sidecars have them | metadata |
-| P4 | deployment (C4) | a demo: one closed set → its DCAT in CKAN (Docker) → one Hydrograf result and one Kartograf product as WMS from QGIS Server with a QML style, EPSG:2180 | the whole chain |
+| P3 | Archiwista | export of a closed set to DCAT-AP-PL (RDF/XML, Turtle and JSON-LD) from the existing sidecars and pins, validated by SHACL in its tests; GeoDCAT-AP fields where the sidecars have them | metadata |
+| P4 | private deployment repository | a demo: one closed set → its DCAT in CKAN (Docker) → one Hydrograf result and one Kartograf product as WMS from QGIS Server with a QML style, EPSG:2180 | the whole chain |
 | P5 | Kartograf, Hydrograf | GeoTIFF outputs as COG where they are served; styles (QML, SLD) shipped beside the products the demo serves | OGC readiness |
 | P6 | each GUI | one installation path (Docker Compose or one documented `uv` path), backup and update runbooks in Polish | handover |
 | P7 | Nogat (public) | case descriptions in Polish: the Kaczawa (watershed parameters from a closed data set, 792 km²), the h07 area (2,941 km² by PGW units), the Kamiennik flood model, the IMGW-PIB and ČHMÚ station archive with analyses; each with its data, method, standards and a link | portfolio |
-| P8 | private (C3) | the register of references: client, year, scope, acceptance document, how metadata and maps were done | references |
+| P8 | private deployment repository | the register of references: client, year, scope, acceptance document, how metadata and maps were done | references |
 
 Order: P1, P3 and P7 first (cheap and visible), then P4 (the demo), then P2, P5 and P6. INSPIRE (ISO 19115/19139) only when a client is bound by it.
 
@@ -78,8 +75,5 @@ Order: P1, P3 and P7 first (cheap and visible), then P4 (the demo), then P2, P5 
 ## Open questions
 
 1. C1: Archiwista's DCAT as an export only (A) or also as a harvest endpoint (B).
-2. C2: the deviation for Polish deployment documentation.
-3. C3: where the register of references lives.
-4. C4: where the demo stack lives.
-5. Which public datasets the demo publishes first: the Kaczawa set, an Obserwator series, or both.
-6. Whether dane.gov.pl harvests DCAT-AP-PL directly, or only through its own formats: to be checked before P3 fixes its output.
+2. Which public datasets the demo publishes first: the Kaczawa set, an Obserwator series, or both.
+3. dane.gov.pl publishes the DCAT-AP-PL profile (<https://dane.gov.pl/dcat-ap-pl/>) for Polish publishers and serves its own catalog as DCAT-AP-PL RDF (`api.dane.gov.pl/1.4/catalog.rdf`). How it takes in an outside catalog, by harvesting a DCAT-AP-PL endpoint or through its partners' API (its API validator), is to be checked with its documentation before P3 fixes its output. [INFERENCE: DCAT-AP-PL RDF is the format it expects.]
