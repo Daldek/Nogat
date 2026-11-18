@@ -141,8 +141,9 @@ Order: the current patches first (Kartograf 0.8.1, Obserwator 3.0.1, Hydrolog 0.
 
 ## Open questions
 
-1. Will the first client expose his own port 443 (the Caddy variant of rule 12 is then needed in S4) or accept a tunnel the author operates?
-2. Is Tuesday 04:00 Europe/Warsaw the maintenance window of the author's instances (rule 13)?
+1. Whether the first client exposes his own port 443: the author has no client yet (2026-11-18). S4 therefore ships the `cloudflared` edge only; the Caddy variant of rule 12 is written when a client needs it.
+
+Decided (the author, 2026-11-18): the maintenance window of the author's instances is Tuesday 04:00 Europe/Warsaw (rule 13). The same day, on the author's approval, Hydroni's nginx moved to 1.31.9 (Hydrograf's the same day), the public user units of Obserwator, Hydrolog and Archiwista got the confinement of rule 10 that a user unit can apply (`NoNewPrivileges`, `RestrictAddressFamilies`, `SystemCallArchitectures`, `LockPersonality`, `RestrictRealtime`), and Hydrograf's `develop` pins its images by digest with Dependabot for them (rules 9, 13). The containers of Hydrograf and Hydroni already ran with `no-new-privileges` and `cap_drop: ALL`.
 
 Decided (the author, 2026-11-17): I3 starts with the first client. The portfolio plan's demo (P4) runs on an instance the author hosts, or the author deploys it himself. The deployment repository and the service templates as recommended above.
 
