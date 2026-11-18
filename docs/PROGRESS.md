@@ -200,7 +200,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      by run 44307348408 at `chore/candidate-9`), after every member's
      round of fix releases is closed (the author, 2026-11-18): today
      Archiwista 0.3.2 (E3-05, G01-1, E7-03, E7-12, §6 B1, Next 2 and the
-     paste fix; a new candidate pins its tag). Obserwator's test-only fix
+     paste fix; all on Archiwista's `develop` at `270da33`, full gate 3,043
+     passed; the release waits for the author; a new candidate pins its
+     tag). Obserwator's test-only fix
      stays a commit of `develop` (`8edccf7`), with no 3.0.2. Minor
      releases with a plan: S5 (the cut to the area), large basins, E3-03,
      E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
