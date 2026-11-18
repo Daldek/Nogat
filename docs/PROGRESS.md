@@ -196,7 +196,12 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
-   - Then Nogat 0.1.1 from candidate-7 (waits for the author). Minor
+   - Then Nogat 0.1.1 from the last candidate (now candidate-9, verified
+     by run 44307348408 at `chore/candidate-9`), after every member's
+     round of fix releases is closed (the author, 2026-11-18): today
+     Archiwista 0.3.2 (E3-05, G01-1, E7-03, E7-12, §6 B1, Next 2 and the
+     paste fix; a new candidate pins its tag). Obserwator's test-only fix
+     stays a commit of `develop` (`8edccf7`), with no 3.0.2. Minor
      releases with a plan: S5 (the cut to the area), large basins, E3-03,
      E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
      E7-02 (Archiwista), E3-02 and the features planned as Obserwator's
