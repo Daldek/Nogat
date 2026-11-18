@@ -1,0 +1,67 @@
+[
+  {
+    "formula": "toy_kirpich",
+    "case_id": "short_gentle",
+    "source": {
+      "citation": "Toy source of the tests, no published value",
+      "locator": "table 2, row 1",
+      "access": "open"
+    },
+    "inputs": {"length_km": 0.5, "slope_m_per_m": 0.01},
+    "expected": {"tc_min": 13.7},
+    "printed_precision": {"length_km": 0.01, "slope_m_per_m": 0.0001, "tc_min": 0.1},
+    "conventions": ["L in km, S in m/m, tc in min"],
+    "second_source": {
+      "citation": "Toy data of the tests",
+      "locator": "table 1",
+      "access": "author-provided"
+    },
+    "status": "second_source"
+  },
+  {
+    "formula": "toy_kirpich",
+    "case_id": "one_kilometre",
+    "source": {
+      "citation": "Toy source of the tests, no published value",
+      "locator": "table 2, row 2",
+      "access": "open"
+    },
+    "inputs": {"length_km": 1.0, "slope_m_per_m": 0.05},
+    "expected": {"tc_min": 12.6},
+    "printed_precision": {"length_km": 0.01, "slope_m_per_m": 0.0001, "tc_min": 0.1},
+    "conventions": ["L in km, S in m/m, tc in min"],
+    "status": "single_source"
+  },
+  {
+    "formula": "toy_kirpich",
+    "case_id": "rounded_slope_factor",
+    "source": {
+      "citation": "Toy source of the tests, no published value",
+      "locator": "example 3",
+      "access": "open"
+    },
+    "inputs": {"length_km": 5.0, "slope_m_per_m": 0.05},
+    "expected": {"tc_min": 43.6},
+    "printed_precision": {"length_km": 0.01, "slope_m_per_m": 0.0001, "tc_min": 0.1},
+    "intermediate_rounding": [
+      {"step": "S**b rounded to 3.17 before the product", "effect": {"tc_min": 0.02}}
+    ],
+    "conventions": ["L in km, S in m/m, tc in min"],
+    "status": "single_source"
+  },
+  {
+    "formula": "toy_kirpich",
+    "case_id": "long_steep",
+    "source": {
+      "citation": "Toy source of the tests, no published value",
+      "locator": "table 2, row 3",
+      "access": "open"
+    },
+    "inputs": {"length_km": 30.0, "slope_m_per_m": 0.2},
+    "expected": {"tc_min": 101.5},
+    "printed_precision": {"length_km": 0.1, "slope_m_per_m": 0.001, "tc_min": 0.1},
+    "tolerance": {"rel": 0.0005, "reason": "the source prints c with three digits"},
+    "conventions": ["L in km, S in m/m, tc in min"],
+    "status": "single_source"
+  }
+]

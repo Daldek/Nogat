@@ -6,6 +6,27 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Added
+
+- The reference module of formulas, `standards/reference/nogat_formulas.py`
+  (CMP-8.1), which every project that computes copies byte for byte:
+  `FormulaSpec` and `TierBSpec` with sources, physical, applicability and
+  typical ranges, test bounds, constraints, constants, outputs, properties
+  and the trap checklist per family; `validate` and `check_outputs` (CMP §3,
+  CMP §4) raising the project's own exceptions through a small `Errors`
+  protocol and returning notices; the exact units table and `convert`; the
+  generated range and type cases, `run_case`, the Hypothesis profiles and
+  strategies and the property assertions (CMP-6.5, CMP-6.9); `assert_within`
+  with reasons, reference cases with the tolerance of CMP-6.1 and the
+  frozen-oracle reader (CMP-6.4); cards, `docs/FORMULAS.md` and the
+  docstring, tolerance and spec checks (CMP-2.6, CMP-2.7, CMP-6.8). Its tests
+  run it against a correct toy formula and wrong ones, each with one defect
+  that a generator or an assertion catches (CMP-8.2).
+- `schemas/formula/card-1.schema.json`, `nogat-formula-card/1`, the schema of
+  the generated cards; `drift` reports the projects' copies of it and of the
+  module.
+- Hypothesis, mutmut and NumPy in the development dependencies (CMP-8.3).
+
 ### Fixed
 
 - `set verify` syncs the core dependencies of each member's own lock into a

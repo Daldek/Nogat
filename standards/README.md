@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.0 · published 2026-11-17, tagged `std-1.0` (HUB-6.1)
+Standard 1.1 · in preparation on `develop`; the published version is 1.0, tagged `std-1.0` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -34,7 +34,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
   one line (a reason or an ECO reference). Dated facts and the state of named
   projects stay out of rules.
 - Requirement IDs are `PREFIX-n.m` (`ERR-n` in the error registry), with
-  prefix `DEV`, `DOC`, `AGI`, `ERR`, `REL` or `HUB`; a section is cited as
+  prefix `DEV`, `DOC`, `AGI`, `ERR`, `REL`, `HUB` or `CMP`; a section is cited as
   `PREFIX §n`, for example `DEV §18`; `ECO-nnn` is a decision in
   [DECISIONS.md](DECISIONS.md).
 - IDs are stable: never renumbered, never reused. A deleted requirement
@@ -61,12 +61,14 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
+| [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, mutation testing, gross defects (CMP-…) |
 | [ERROR_REGISTRY.md](ERROR_REGISTRY.md) + [error_registry.json](error_registry.json) | Shared error codes, exit codes, HTTP statuses (ERR-…) |
 | [RELEASE_AND_DISTRIBUTION.md](RELEASE_AND_DISTRIBUTION.md) | Versioning, release procedure, channels (PyPI, GitHub Releases, MCP Registry), MCP Registry entry, dependencies between projects, release sets, support (REL-…) |
 | [ECOSYSTEM_HUB.md](ECOSYSTEM_HUB.md) | Nogat role, `ecosystem.yaml`, local workspace, generated outputs, cross-project plans and requests, standard versioning, the `nogat` package (HUB-…) |
 | [ADOPTION_PLAN.md](ADOPTION_PLAN.md) | Per-project changes by phase, history rewrite procedure, order |
 | [ci/](ci/README.md) | Templates for `scripts/gate.sh`, the commit-message check, GitHub Actions workflows and Dependabot (DEV-7.6, DEV-7.7, DEV-13.6) |
 | [reference/](reference/nogat_logging.py) | The reference module of server logs, `nogat_logging.py`, that every Python server copies byte for byte (DEV-12.9) |
+| [reference/nogat_formulas.py](reference/nogat_formulas.py) | The reference module of formula specs, checks and generated tests, copied byte for byte by every project that computes (CMP-8.1) |
 
 ## Open decisions
 
@@ -83,6 +85,14 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
+- 1.1 (in preparation on `develop`):
+  - New topic document COMPUTATIONS.md with the prefix `CMP`: every formula
+    of a project that computes (`computes: true` in the registry) is
+    declared once by a spec, refuses physically impossible input and failed
+    preconditions, warns outside its applicability range, never returns a
+    non-finite or impossible value, and is verified by reference cases,
+    oracles and generated range, type and property tests; gross defects are
+    released at once (CMP §1 to CMP §9, ECO-078).
 - 1.0 (published 2026-11-17, tag `std-1.0`):
   - The first `nogat` release is `0.1.0`; `nogat` stays `0.y` until the
     author makes a release `1.0.0` (HUB-7.4, ECO-076).

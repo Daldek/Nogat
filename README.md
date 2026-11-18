@@ -18,7 +18,11 @@ Nogat holds:
 - the visual identity of every GUI (tokens, marks, guidelines) and the GUI
   kit every GUI copies: [`design/`](design/README.md);
 - the reference module of server logs every Python server copies:
-  [`standards/reference/`](standards/reference/nogat_logging.py).
+  [`standards/reference/`](standards/reference/nogat_logging.py);
+- the reference module of formulas every project that computes copies, with
+  the schema of its formula cards:
+  [`standards/reference/nogat_formulas.py`](standards/reference/nogat_formulas.py),
+  [`schemas/formula/`](schemas/formula/card-1.schema.json).
 
 The ecosystem's first release, `v0.1.0`, is the release set
 [`release-sets/v0.1.0/`](release-sets/v0.1.0/README.md): Kartograf,
