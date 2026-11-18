@@ -4,7 +4,7 @@
 # Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
 
 schema: nogat-ecosystem/1
-standard_version: "1.0"
+standard_version: "1.1"
 
 data_sources:
   - id: gugik
@@ -60,6 +60,7 @@ projects:
     summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Kartograf
     python_manifests: [pyproject.toml]
     visibility: public
@@ -125,6 +126,7 @@ projects:
     summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
     profiles: [tool, app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Obserwator
     python_manifests: [pyproject.toml]
     visibility: public
@@ -220,6 +222,7 @@ projects:
     summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrolog
     python_manifests: [pyproject.toml]
     visibility: public
@@ -306,6 +309,7 @@ projects:
     summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
     profiles: [app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrograf
     python_manifests: [backend/pyproject.toml]
     visibility: public
@@ -358,6 +362,7 @@ projects:
     summary: Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling.
     profiles: [tool]
     status: research
+    computes: true
     repo: https://github.com/Daldek/Hydraulik
     branch: feature/sfincs-swmm
     python_manifests: [pyproject.toml]

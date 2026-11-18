@@ -1,6 +1,6 @@
 # Ecosystem hub (Nogat)
 
-Part of standard 1.0 · IDs `HUB-…`
+Part of standard 1.1 · IDs `HUB-…`
 
 Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 
@@ -32,7 +32,9 @@ fields are those of `schemas/ecosystem.schema.json`, shown below;
 `python_manifests`, `branch` (the branch holding a project's code when it is
 not `develop`, HUB-4.9), `routes`, `interfaces.gui` (the command that serves
 the project's browser GUI on the user's computer, given only by a project
-that has one) and, in a dependency, `uses` and `note` are optional.
+that has one), `computes` (true for a project whose formulas fall under
+CMP §1; absent means false) and, in a dependency, `uses` and `note` are
+optional.
 
 ```yaml
 schema: nogat-ecosystem/1

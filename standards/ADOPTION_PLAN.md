@@ -1,6 +1,6 @@
 # Adoption plan for standard 1.0
 
-Part of standard 1.0 · no requirement IDs
+Part of standard 1.1 · no requirement IDs
 
 Each item names the requirement it implements. Work happens in later
 sessions, one project per session, on a topic branch (DEV-3.1), with the

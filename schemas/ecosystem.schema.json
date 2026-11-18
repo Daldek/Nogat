@@ -52,6 +52,10 @@
           "type": "string",
           "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$"
         },
+        "computes": {
+          "description": "True for a project whose formulas fall under the computation standard (CMP §1); absent means false.",
+          "type": "boolean"
+        },
         "python_manifests": {
           "description": "Repository-relative files declaring Python dependencies (pyproject.toml, requirements*.txt).",
           "type": "array",
