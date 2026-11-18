@@ -1887,3 +1887,44 @@ independent of them). A hand-edited README (the gate would call it stale).
 **Consequence.** REL-6.4, REL-6.5, HUB-4.9.
 `.github/workflows/verify-candidate.yml`; `release-sets/candidate-5/` holds
 `pyproject.toml` and `uv.lock`.
+
+## ECO-078 Formulas are declared once, checked at their limits and verified
+
+**Decision.** A project that computes (`computes: true`) declares each Tier A
+formula once, in code, by a `FormulaSpec` of Nogat's reference module
+`nogat_formulas.py`, copied byte for byte; the spec drives the run-time checks,
+the generated range, type and property tests, and the generated cards and
+`docs/FORMULAS.md`. Physically impossible input and a failed precondition are
+refused with `validation_error`; input outside the applicability range gives
+the result with the notice `outside_applicability`; a formula never returns a
+non-finite or impossible value. Evidence is at least two of reference cases,
+oracles and properties; R and other external tools are frozen oracles stored as
+data; tables are transcribed twice; mutation testing gates releases for
+Tier A. A gross defect (CMP-9.1) is released at once (CMP-9.2).
+
+**Why.** The author, 2026-11-18: correctness of the formulas is the
+ecosystem's foundation and academics will audit them; tests must cover
+typical, extreme, boundary and out-of-range inputs, declared types, numerical
+traps and impossible values. The author chose error for impossible input and
+a warning outside applicability, every project that computes as the scope, the
+definition of a gross defect, and open sources first. Fable reviewed the first
+draft: one declaration instead of a card beside the code (a range written
+twice will differ), tiers (auditors' time goes to Tier A), preconditions as a
+third class, generated tests (a hundred formulas times every input and kind of
+value cannot be written by hand consistently), frozen oracles (R in CI is
+fragile and hides versions), double transcription of tables (the riskiest
+artefacts), `formula_version` on stored results (a defect's results must be
+found), and verification kept apart from validation.
+
+**Rejected.** Hand-written TOML cards reconciled with the code by a test
+(checks only what it enumerates). A card per unit conversion (one units table
+instead). Running R in the tests. Withdrawing an `unreferenced` formula from
+the public interface (an `info` notice instead: Hydrolog's users rely on
+formulas that no open worked example covers yet). Propagating the
+uncertainty of empirical formulas and tables of sensitivity (research, not
+verification). A wrong equation or constant only in a document, with correct
+code, as a gross defect (it misleads no result; a wrong unit or range stays
+gross).
+
+**Consequence.** CMP §1 to CMP §9, HUB-2.1 (`computes`). Plan
+`docs/plans/2026-11-18-computation-standard.md`.

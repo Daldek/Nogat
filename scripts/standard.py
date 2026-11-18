@@ -15,7 +15,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-PREFIXES = ("DEV", "DOC", "AGI", "ERR", "REL", "HUB")
+PREFIXES = ("DEV", "DOC", "AGI", "ERR", "REL", "HUB", "CMP")
 _P = "|".join(PREFIXES)
 DEFINITION = re.compile(rf"^\*\*(?P<id>(?:{_P})-\d+(?:\.\d+)?)\*\*", re.MULTILINE)
 CITED_ID = re.compile(rf"(?<![\w-])(?P<id>(?:{_P})-\d+(?:\.\d+)?)(?!\w)")
