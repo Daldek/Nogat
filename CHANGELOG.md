@@ -6,6 +6,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Fixed
+
+- `set verify` syncs the core dependencies of each member's own lock into a
+  throwaway environment before the member's suite, so the uv cache holds
+  them for its offline install tests, as in the member's own CI. On a fresh
+  cache (`verify-candidate` of candidate-7, every runner) Obserwator's
+  library-install tests could not install `pydantic-core` 2.50.1 of its own
+  lock offline, since the candidate's sync had cached only the set's 2.50.4.
+
 ## [0.1.0] - 2026-11-17
 
 ### Added
