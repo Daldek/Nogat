@@ -2,7 +2,7 @@
 
 Approved: pending
 
-Status: a draft of 2026-11-17 after the author's choice of path C the same day. It is not approved, so no code starts (DEV-17.4). Proposals are marked „[proposed]”; the open questions are the author's.
+Status: a draft of 2026-11-17 after the author's choice of path C the same day; on 2026-11-18, after nginx2root (five nginx RCEs fixed in 1.31.9, and a Linux SCTP use-after-free that escapes a container to host root), the author delegated the open points to Fable, weighing security, ease of deployment and ease of maintenance equally; Fable's decisions are rules 9 to 13 below and the two former open questions (review: `~/workspace/wt/logs/fable-install-contract.md`). The plan is still not approved, so no code starts (DEV-17.4). Proposals are marked „[proposed]”.
 
 Requirements: DEV-6.2, DEV-6.3 (uv, `uv sync --locked` in every environment, container builds included), DEV-6.5 (extras), DEV-12.4 (server logs), DEV §18 (`nogat.toml`, directories, variables, `config show`), DEV-16.2 (CLA), HUB-7.1 to HUB-7.3 (the `nogat` package), REL (releases), DEV-17.5 and DEV-3.4 (each project in its own session and branch).
 
@@ -63,6 +63,15 @@ A new section of DEV, one rule per point, the same in every project:
    - Linux is supported and blocking in CI.
    - macOS and Windows are best effort and non-blocking, for the tools' CLI and the local GUIs (Hydrolog's CI is the model).
    - Servers run on Linux only.
+
+9. **Companion images** (Fable, 2026-11-18). Every image that is not built from a tool (nginx, PostGIS, cloudflared, the Python base image) is written in the compose file or Dockerfile as `name:X.Y.Z@sha256:…`; no floating tag anywhere, `latest` included. Dependabot (`docker` ecosystem, weekly) opens the bump in each repository. `nogat doctor` compares the digest of every running container with the pinned one and reports drift. The pin lives in the project's public compose file (a client's source under I2); an overlay never sets `image:` for a companion.
+10. **Containers** (Fable, 2026-11-18). Every service runs as a non-root `user:` (uid/gid from the deployment, rule 4) on a port ≥ 1024, with `read_only: true` and `tmpfs` for what must be written, `cap_drop: [ALL]` (no `cap_add` unless the runbook names the capability and why), `security_opt: [no-new-privileges:true, seccomp:nogat-seccomp.json]` and a `pids_limit`; no `privileged`, no Docker socket, no host network. `nogat-seccomp.json` is Docker's default profile plus a deny of `socket()` with protocol SCTP (132); it lives in Nogat and each project copies it next to its compose file. Hydrograf's nginx uses the unprivileged nginx image on port 8080.
+    - **Units.** The systemd unit template sets `NoNewPrivileges=yes`, `RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6`, `SystemCallArchitectures=native`, `PrivateTmp=yes`, `ProtectHome=read-only`, `ProtectSystem=strict` with `ReadWritePaths=` for `data_dir`, `state_dir` and `cache_dir`; options a user unit cannot apply are commented lines for a system unit.
+11. **Host** (Fable, 2026-11-18). `/etc/modprobe.d/nogat.conf` disables modules no server needs: `install sctp /bin/false`, likewise `dccp`, `rds` and `tipc`. Unattended OS security updates are on; a kernel update is followed by a reboot in the next maintenance window. `nogat doctor` reports a loaded blocked module, a pending reboot and an unsupported Docker Engine.
+12. **Edge** (Fable, 2026-11-18). Each host runs exactly one edge: `cloudflared` (the default where the author operates: no open port, TLS and Access at Cloudflare) or Caddy (where a client exposes port 443 himself). Every server, Hydrograf's nginx included, binds `127.0.0.1` or an internal compose network only and is reached through the edge; Hydrograf's nginx stays an internal server of static files and tiles. The edge is a companion image under rule 9; trusted proxies (rule 3) are the edge's address.
+13. **Updates** (Fable, 2026-11-18). Dependabot alerts (`pip`, `docker`) are on in every repository, the deployment repository included. CI runs Trivy on each image it builds (S4) and weekly against the latest release tag. A critical advisory (remote code execution or container escape) in a running component is applied within 24 h; everything else in the weekly window (default Tuesday 04:00 Europe/Warsaw, set per instance in the deployment repository). Each update is recorded in the deployment repository's register (date, component, from→to digest, instances).
+
+Rejected (Fable, 2026-11-18): exposing each server separately (four TLS endpoints to patch and misconfigure); replacing Hydrograf's nginx with Caddy now (rework of static and tile serving; internal, pinned and unprivileged nginx is enough; revisit in S7); `kernel.modules_disabled=1` (breaks Docker and later drivers); keeping a vulnerable image for rollback (a rollback goes to the previous patched version); a seccomp profile per project (one copied file).
 
 ## Images and openness
 
@@ -126,11 +135,15 @@ The author's decision (2026-11-17): the contract is split by what an update can 
 | Obserwator | 3.0.2 or 3.1.0 if additive; 4.0.0 only if something is renamed (from 1.0 only a major bump may break) | [proposed] additive: its names already follow `OBSERWATOR_*` and DEV §18 |
 | Kartograf | none, unless `config show` needs a field | it has no server |
 
+A companion image bump (rule 9) changes only the compose file: a commit in the project, without a release, and a patch tag of the deployment repository (Fable, 2026-11-18).
+
 Order: the current patches first (Kartograf 0.8.1, Obserwator 3.0.1, Hydrolog 0.8.1, Hydrograf 0.5.1, Archiwista 0.3.1), unchanged; then the contract on each `develop` as the next release; then a candidate and the next `nogat`.
 
 ## Open questions
 
-1. The name of the private deployment repository.
-2. How a client registers when I3 starts (by hand at first).
+1. Will the first client expose his own port 443 (the Caddy variant of rule 12 is then needed in S4) or accept a tunnel the author operates?
+2. Is Tuesday 04:00 Europe/Warsaw the maintenance window of the author's instances (rule 13)?
 
 Decided (the author, 2026-11-17): I3 starts with the first client. The portfolio plan's demo (P4) runs on an instance the author hosts, or the author deploys it himself. The deployment repository and the service templates as recommended above.
+
+Decided (Fable for the author, 2026-11-18): the deployment repository is `Daldek/wdrozenia`, private, with Dependabot on. Registration under I3 is by hand with the first client: the author issues a read-only, package-scoped GHCR token valid one year and records it in the register; no form until a third client asks.
