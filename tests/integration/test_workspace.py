@@ -642,9 +642,14 @@ def test_set_verify_checks_out_each_member_and_reports_failed_suites(
     )
     _write(directory / "uv.lock", "")
     ran: list[tuple[str, Path]] = []
+    envs: dict[Path, dict[str, str]] = {}
 
-    def suite(command: list[str], cwd: Path) -> int:
+    def suite(
+        command: list[str], cwd: Path, extra_env: dict[str, str] | None = None
+    ) -> int:
         ran.append((" ".join(command), cwd))
+        if extra_env:
+            envs[cwd] = extra_env
         return 1 if cwd.name == "Producer" and "pytest" in command else 0
 
     monkeypatch.setattr(ecosystem, "_run_suite", suite)
@@ -657,6 +662,14 @@ def test_set_verify_checks_out_each_member_and_reports_failed_suites(
     assert {cwd.name for _, cwd in ran} == {"candidate-1", "Producer", "Library"}
     suites = [(c, cwd) for c, cwd in ran if " -m pytest " in c]
     assert [f"--cov={cwd.name.lower()}" in c for c, cwd in suites] == [True, True]
+    # Each package member's own lock is synced first, into an environment
+    # outside its checkout, so its offline install tests find its versions.
+    for name in ("Producer", "Library"):
+        commands = [c for c, cwd in ran if cwd.name == name]
+        assert commands[0].startswith("uv sync --locked --no-install-project")
+        assert " -m pytest " in commands[1]
+        own = Path(envs[workdir / name]["UV_PROJECT_ENVIRONMENT"])
+        assert workdir / name not in own.parents
     for name in ("Producer", "Library"):
         assert _git(workdir / name, "rev-parse", "HEAD") == commits[name]
 

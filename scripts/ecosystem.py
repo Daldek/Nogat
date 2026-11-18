@@ -27,6 +27,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -1432,13 +1433,16 @@ def _member_checkout(project: dict[str, Any], commit: str, workdir: Path) -> Pat
     return repo
 
 
-def _run_suite(command: list[str], cwd: Path) -> int:
+def _run_suite(
+    command: list[str], cwd: Path, extra_env: dict[str, str] | None = None
+) -> int:
     """Run a command with output to the terminal; its exit code.
 
     `VIRTUAL_ENV` of Nogat's own environment is dropped, so uv uses the
     environment of the project it is given.
     """
     env = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"}
+    env.update(extra_env or {})
     print(f"$ {' '.join(command)}  (in {cwd})", flush=True)
     try:
         return subprocess.run(command, cwd=cwd, env=env, check=False).returncode
@@ -1458,10 +1462,13 @@ def verify(
     A member with a package runs from its checkout in the candidate's
     environment (`uv sync --locked`), where every member is a wheel; the
     marker expression and coverage floor are the member's own pytest and
-    coverage settings. An app, a member without a package, runs on its own
-    lock (`uv sync --locked --all-extras` in the directory of its first
-    manifest). A member whose profiles hold no `tool` runs on Linux only
-    (DEV-7.7). Failure `conflict` when a suite or the candidate's sync fails.
+    coverage settings. Before its suite, the core dependencies of its own
+    lock are synced into a throwaway environment, so the uv cache holds them
+    for its offline install tests, as in its own CI. An app, a member without
+    a package, runs on its own lock (`uv sync --locked --all-extras` in the
+    directory of its first manifest). A member whose profiles hold no `tool`
+    runs on Linux only (DEV-7.7). Failure `conflict` when a suite, the sync
+    of a member's own lock or the candidate's sync fails.
     """
     commits = members(registry, directory)
     unknown = [n for n in names if n not in commits]
@@ -1503,6 +1510,27 @@ def verify(
         print(f"\n== {name} {commit[:7]} ({where})", flush=True)
         report = ["--cov-report=term-missing:skip-covered", "-q"]
         if package:
+            # A member's tests may install its wheel offline with the core
+            # dependencies of its own lock (a library-install test), from the
+            # uv cache that syncing its checkout fills in its own CI; the
+            # candidate's sync fills it with the set's versions only.
+            own = workdir / f"{name}-own-lock"
+            code = _run_suite(
+                [
+                    "uv",
+                    "sync",
+                    "--locked",
+                    "--no-install-project",
+                    "--no-default-groups",
+                ],
+                repo,
+                {"UV_PROJECT_ENVIRONMENT": str(own)},
+            )
+            shutil.rmtree(own, ignore_errors=True)
+            if code:
+                rows.append((name, commit[:7], where, f"own lock failed (exit {code})"))
+                failed.append(name)
+                continue
             code = _run_suite(
                 [
                     "uv",
