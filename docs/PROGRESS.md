@@ -129,8 +129,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    (`X.Y.(Z+1).dev0`) with its next change. When a tool renames a command,
    change its `routes` and run `agents` (CLAUDE.md). The patch scope, defects
    only, approved by the author on 2026-11-17, producers first:
-   - Obserwator 3.0.1: done on `fix/3.0.1` (Next 6); not released yet, by
-     the author's decision.
+   - Obserwator 3.0.1: done on `fix/3.0.1` (Next 6); released with the
+     others (the author's decision of 2026-11-17), and the features planned
+     on 2026-11-14 as its 3.0.1 move to 3.1.0.
    - Kartograf 0.8.1: done on `fix/0.8.1` (C1, its part of C5, E5a-01: a
      repeated `--sheet` is refused); full gate passed (8,664 tests). GEO-02
      stays (a convention; a fix would break callers), E2-04 is a feature and
@@ -169,15 +170,38 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      passed (3,029 tests). E2-05 is left: it needs a geometry-countries API
      of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
      obszar projektu…” is no longer exercised.
-   - Merges, tags and deployment of the four wait for the author's approval.
+   - **Released 2026-11-18** with the author's approval, producers first
+     (REL-6.6), merged locally without pull requests: each `fix/<topic>`
+     merged into `develop`, the consumers pinned in `chore/pins-candidate-7`
+     (Hydrograf also words Hydrolog's new notice `uh_substeps` in Polish;
+     Archiwista's doctor test reads the installed version of Kartograf),
+     **candidate-7** (`release-sets/candidate-7/`: Kartograf `723d430`,
+     Obserwator `f3b42e0`, Hydrolog `c7d731a`, Hydrograf `2911669`,
+     Archiwista `6313292`; `set check` ok between the members) and its
+     `set verify` on this machine (unit `nogat-candidate7-verify`: Kartograf
+     8,664 passed, Obserwator 3,446, Hydrolog 8,891, Hydrograf 2,404 on its
+     own lock, Archiwista 3,027 and 2 xfailed, C3). Each release commit
+     (`chore/release-X.Y.Z`: version, CHANGELOG heading, pins commit → tag,
+     `uv.lock`) passed its full gate, then `develop` → `main` with a merge
+     commit and the annotated tag on it: Kartograf `v0.8.1` (`9817ab7`),
+     Obserwator `v3.0.1` (`533c42a`), Hydrolog `v0.8.1` (`bf35db2`),
+     Hydrograf `v0.5.1` (`a86e8ce`), Archiwista `v0.3.1` (`0b66beb`).
+     REL-6.5 deviation: the releases followed the local `set verify`;
+     `verify-candidate` was dispatched on `chore/candidate-7` afterwards
+     (run 44218266654). CI of `main`: Kartograf's macOS job on Python 3.12
+     failed `test_the_gate_of_agi_5_13_over_stdio` (cold start 5.06 s
+     against 5 s), as `v0.8.0`'s macOS job failed `test_cz_laz` (OSError):
+     slow-runner flakes, the other jobs green. Deployment waits for the
+     author's approval.
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
-   - Then a new candidate and Nogat 0.1.1. Minor releases with a plan: S5
-     (the cut to the area), large basins, E3-03, E5b-02, E5b-04 (Hydrograf
-     0.6.0), E2-09/KH (Kartograf), E2-10 and E7-02 (Archiwista), E3-02 and
-     the features of Obserwator's „Release 3.0.1” (3.1.0, waits for the
-     author). From the check of 150170070 (the author, 2026-11-17):
+   - Then Nogat 0.1.1 from candidate-7 (waits for the author). Minor
+     releases with a plan: S5 (the cut to the area), large basins, E3-03,
+     E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
+     E7-02 (Archiwista), E3-02 and the features planned as Obserwator's
+     3.0.1 (3.1.0, the author's decision of 2026-11-17). From the check of
+     150170070 (the author, 2026-11-17):
      Hydrolog's rating-curve periods from detected stage shifts at a
      steady discharge instead of fixed decades, with gauge-zero changes the
      user may give (Obserwator's report #3), since IMGW-PIB publishes no
