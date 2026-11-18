@@ -57,14 +57,16 @@ scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 schemas/exchange/      nogat-handoff/1, the envelope of data handed between GUIs
+schemas/formula/       nogat-formula-card/1, the card of a formula (CMP-2.6)
 schemas/log/           nogat-log/1, one record of a server's logs (DEV-12.4)
 standards/             the standard; ci/ holds the templates projects copy
-standards/reference/   nogat_logging.py, the server logs Python servers copy (DEV-12.9)
+standards/reference/   modules projects copy: nogat_logging.py, server logs (DEV-12.9); nogat_formulas.py, formula specs, checks and generated tests (CMP-8.1)
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
 design/kit/            the GUI kit GUIs copy: app menu, sources strip, hand-off, regulamin, admin panel
+tests/formula_toys.py  toy formulas, a right one and wrong ones, for the tests of nogat_formulas (CMP-8.2)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent, hand-off and log schemas, AGENTS.md, Nogat's own error documents, design/ and the kit
+tests/contract/        the agent, hand-off, log and formula-card schemas, AGENTS.md, Nogat's own error documents, design/ and the kit
 tests/browser/         the kit's elements in Playwright
 ```
 

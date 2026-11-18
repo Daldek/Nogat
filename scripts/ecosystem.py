@@ -70,13 +70,16 @@ OPTION = re.compile(r"\s+--?[A-Za-z]")
 COPIED_PATHS = (
     "schemas/agent",
     "schemas/exchange",
+    "schemas/formula",
     "schemas/log",
     "standards/error_registry.json",
+    "standards/reference/nogat_formulas.py",
     "standards/reference/nogat_logging.py",
     "design/tokens.css",
     "design/marks",
     "design/kit",
 )
+COPIED_SCHEMAS = ("schemas/agent", "schemas/exchange", "schemas/formula", "schemas/log")
 COPY_HEADER = re.compile(rb"\A/\*.*?\*/(\r?\n)?", re.DOTALL)
 
 
@@ -800,9 +803,9 @@ def _declared_pins(
 def nogat_sources(root: Path) -> list[str]:
     """Nogat's files that projects copy, tracked at HEAD of `root` (DEV-15.6).
 
-    Agent, exchange and log schemas, the error registry, the reference logging
-    module (DEV-12.9), the tokens, the marks and every file of the kit; paths
-    relative to `root`, sorted.
+    Agent, exchange, formula-card and log schemas, the error registry, the
+    reference modules of logs and formulas (DEV-12.9, CMP-8.1), the tokens, the
+    marks and every file of the kit; paths relative to `root`, sorted.
     """
     listed = _git(
         root, "ls-tree", "-r", "-z", "--name-only", "HEAD", "--", *COPIED_PATHS
@@ -816,10 +819,7 @@ def nogat_sources(root: Path) -> list[str]:
         if (
             path in COPIED_PATHS
             or path.startswith("design/kit/")
-            or (
-                parent in ("schemas/agent", "schemas/exchange", "schemas/log")
-                and suffix == ".json"
-            )
+            or (parent in COPIED_SCHEMAS and suffix == ".json")
             or (parent == "design/marks" and suffix == ".svg")
         ):
             sources.append(path)
