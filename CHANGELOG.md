@@ -29,6 +29,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Fixed
 
+- The first example of `nogat-handoff/1` records Hydrolog 0.9.0's result
+  (formula audit of 2026-11-18): 57.9 m³/s at 400 min and 1,046,737.6 m³,
+  was 57.8786 m³/s and 1,046,712.9 m³. The Beta hyetograph is built from
+  exact differences of its distribution function (audit item T35) and
+  Kirpich's time of concentration uses the source's constant 0.0078 for feet
+  with the exact foot (−0.136 %, item T8). The schema itself is unchanged;
+  Hydrolog, Hydrograf and Archiwista re-copy it with their next update
+  (SHA-256 `10de3e18…`).
 - `set verify` syncs the core dependencies of each member's own lock into a
   throwaway environment before the member's suite, so the uv cache holds
   them for its offline install tests, as in the member's own CI. On a fresh
