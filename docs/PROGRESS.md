@@ -25,7 +25,6 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 - **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut. On 2026-11-18 `/` was full (0 B free, the meteo series build failed): the pytest temporary data of the gates, the venvs of `release-sets/*`, the checkouts of `set verify` and Docker's unused build cache were deleted, the scratch of 2026-11-01 to 2026-11-15 in `~/data/tmp`, the gates' logs, `~/tmp/nogat-run-2026-11-16`, `~/tmp/release-2026-11-16` and `~/workspace/archiwista-scratch` moved to `/mnt/magazyn/agent-tmp/archiwum-2026-11-18/` (the share keeps no symbolic links); 46 GB free after. Left in `~/data/tmp` because their copy is incomplete: `arch-tidy`, `h1-smoke`, `kclean`, `o1`, `o2` and two Firefox profiles (about 3 GB)
 - **Backups** retained: `/data/nmt/deploy-backup-2026-11-18/` (before the deployment of the patch releases, the same contents as `deploy-backup-2026-11-16/`), image `hydrograf-api:rollback-2026-11-18`; `/data/nmt/deploy-backup-2026-11-16/`, image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
 
-
 ## Status
 
 | Component | State | Note |
@@ -52,6 +51,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
 | Nogat's version (ECO-076) | done 2026-11-17 | `v0.1.0`, the release set `release-sets/v0.1.0/` (REL-6.6, HUB-7.2); `pyproject.toml` and `uv.lock` carry `0.1.0`; merged into `main` locally without a pull request, with the author's approval; `1.0.0` only by the author's decision (HUB-7.4) |
 | `nogat` package (HUB §7) | planned | not in `v0.1.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
+| Providers beyond the national services (Gdańskie Wody first) | planned | plan `docs/plans/2026-11-20-hydromet-providers.md` (branch `plan/hydromet-providers`), the author's answers of 2026-11-20 (adapter per provider, full path, hourly series); approval pending; the provider's regulamin blocks storing and the public GUI |
 
 ## Next
 
