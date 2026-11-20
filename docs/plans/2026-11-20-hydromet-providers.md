@@ -4,6 +4,8 @@ Approved: pending (the author's answers of 2026-11-20 below; the open questions 
 
 Requirements: DEV-17.4, HUB-5.2, DEV-18.4, DEV §19, DEV §20, AGI-3.4, ECO-002.
 
+Releases (the author, 2026-11-20): step 0 is a fix of Obserwator `v3.1.1`; steps 2 to 5 are Obserwator `v3.2.0`, after `v3.1.0` keeps its scope; the consumers' steps 6 and 7 follow in their own next minors.
+
 ## The author's answers (2026-11-20)
 
 - Aim: „zacząć pracę nad dodawaniem kolejnych źródeł danych hydrometeorologicznych. Będą to inne podmioty niż służby hydrometeo, np. urzędy, uniwersytety lub inne podmioty. Trzeba więc zaplanować jak dalej dodawać nowych dostawców.” The first candidate is `https://pomiary.gdanskiewody.pl/rest/`.
@@ -78,7 +80,7 @@ A provider is added only after a note in Obserwator's `docs/` (one per provider)
 
 ## Steps (producers first)
 
-0. **Obserwator, now:** `.env` is not in `.gitignore` (`git check-ignore .env` exits 1), while credentials may live in `.env`. Add it in the first Obserwator change.
+0. **Obserwator `v3.1.1`:** `.env` is not in `.gitignore` (`git check-ignore .env` exits 1), while credentials may live in `.env`. Add it.
 1. **Nogat:** this plan; `ecosystem.yaml` `data_sources` gets `gdanskie-wody` (PL, `https://pomiary.gdanskiewody.pl`, licence from its terms) and Obserwator's `data_sources` and summaries mention it; DEV §20 table of provider lines (P9); the reasons of P4 in the error registry; `docs/ECOSYSTEM_MAP.md` and AGENTS.md regenerated. The routing rows saying „IMGW-PIB or ČHMÚ” are rewritten when step 5 ships, not before.
 2. **Obserwator, ADR „provider adapters”** (P1, P2): extract the interface and move IMGW-PIB and ČHMÚ. The full gate and the fixture stores must give the same bytes. No Gdańskie Wody code yet.
 3. **Obserwator, credentials and errors** (P3, P4): settings, `config show`, `.env.example`, `CLAUDE.md`, messages pl/en.
