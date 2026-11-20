@@ -4,7 +4,7 @@ Approved: pending (the author's answers of 2026-11-20 below; the open questions 
 
 Requirements: DEV-17.4, HUB-5.2, DEV-18.4, DEV §19, DEV §20, AGI-3.4, ECO-002.
 
-Releases (the author, 2026-11-20): step 0 is a fix of Obserwator `v3.1.1`; steps 2 to 5 are Obserwator `v3.2.0`, after `v3.1.0` keeps its scope; the consumers' steps 6 and 7 follow in their own next minors.
+Releases (the author, 2026-11-20): step 0 is a fix of Obserwator `v3.1.1`; steps 2 to 5 and ČHMÚ's groundwater (step 5a) are Obserwator `v3.2.0`, after `v3.1.0` keeps its scope; the consumers' steps 6 and 7 follow in their own next minors.
 
 ## The author's answers (2026-11-20)
 
@@ -86,6 +86,7 @@ A provider is added only after a note in Obserwator's `docs/` (one per provider)
 3. **Obserwator, credentials and errors** (P3, P4): settings, `config show`, `.env.example`, `CLAUDE.md`, messages pl/en.
 4. **Obserwator, `hour`** (P5): registry, series schema (additive), reader, exports (CSV/JSON/Parquet), the GUI's charts for hourly data, and daily aggregation by the provider's day.
 5. **Obserwator, Gdańskie Wody adapter** (P6–P8, P10–P13): intake note; datasets `pl.gdanskiewody.stations` (station source) and `pl.gdanskiewody.hourly`; parsers with fixtures recorded from the live API (key never in fixtures); `store sync`/`check`, `series build`, `store catalog --provider gdanskie-wody`, `stations find`; attribution and the raw-data notice; `source_class` in the registry (`nmhs` for IMGW-PIB and ČHMÚ); in the GUI the class switch and class headings of P12, the outlines of P13 and the panel badge of P11, in the same change, because a class switch with an empty „Inne źródła” has nothing to separate; `@pytest.mark.live` tests that skip without the key. Storing and the public GUI wait for the terms (question 1).
+5a. **Obserwator, ČHMÚ groundwater** (the author, 2026-11-20; P7): datasets of the provider ČHMÚ from `https://opendata.chmi.cz/hydrology/groundwater/` (`historical`, `recent`, `now`, `characteristic`; 1,928 objects, 1933–2024 and monthly files from 2025-01, checked 2026-11-20). The level in m a.s.l. is `H_asl` of P7, the spring yield and the water temperature have their own variables, and groundwater objects (bore, spring) are a station kind of their own. Its facts and the checks before code are in Obserwator's `docs/PROGRESS.md`, „Release 3.2.0”. No adapter of a new provider is needed, so it may land before or after step 2.
 6. **Archiwista:** its jobs download through Obserwator's library, so it needs the credential in its deployment, the new datasets in its job choices and the catalog path `stations/versions/gdanskie-wody/` in its reader. Its GUI shows the source class (P11) from Obserwator's registry.
 7. **Hydrolog / Retman:** Hydrolog's `hydrolog-series/1` hand-off is checked for hourly input (hyetographs, tc); Retman's manifest is refreshed from `commands schema` (drift check), no code expected.
 8. **Nogat:** registry drift, release set, PROGRESS.
@@ -96,7 +97,7 @@ A provider is added only after a note in Obserwator's `docs/` (one per provider)
 2. **Hour labels.** Does `2026-11-19 06:00:00` with `rain` 1.3 mean the sum over 06:00–07:00 or over 05:00–06:00? To be asked of `pomiary@gdanskiewody.pl` or derived from a comparison with the daily total on the site.
 3. **Units and datums** of `temp`, `pressure`, `humidity`, `sun`, `windlevel`, `flow` and the water-quality quantities, and the vertical datum of `water` (PL-EVRF2007-NH or older).
 4. **Backfill.** Whether the provider accepts about 0.7 million requests, at what rate, or offers a bulk export.
-5. **Next providers.** Which offices or universities follow (named by the author). Each one passes the intake before code.
+5. **Next providers.** Which offices or universities follow (named by the author). Each one passes the intake before code. PIG-PIB's groundwater monitoring (MWP) is the author's to decide (2026-11-20): publicly one month of measurements only, the history on a paper request.
 
 ## Results
 
