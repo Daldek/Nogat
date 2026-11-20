@@ -172,39 +172,35 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
      obszar projektu…” is no longer exercised.
    - **Released 2026-11-18** with the author's approval, producers first
-     (REL-6.6), merged locally without pull requests: each `fix/<topic>`
-     merged into `develop`, the consumers pinned in `chore/pins-candidate-7`
-     (Hydrograf also words Hydrolog's new notice `uh_substeps` in Polish;
-     Archiwista's doctor test reads the installed version of Kartograf),
-     **candidate-7** (`release-sets/candidate-7/`: Kartograf `723d430`,
-     Obserwator `f3b42e0`, Hydrolog `c7d731a`, Hydrograf `2911669`,
-     Archiwista `6313292`; `set check` ok between the members) and its
-     `set verify` on this machine (unit `nogat-candidate7-verify`: Kartograf
-     8,664 passed, Obserwator 3,446, Hydrolog 8,891, Hydrograf 2,404 on its
-     own lock, Archiwista 3,027 and 2 xfailed, C3). Each release commit
-     (`chore/release-X.Y.Z`: version, CHANGELOG heading, pins commit → tag,
-     `uv.lock`) passed its full gate, then `develop` → `main` with a merge
-     commit and the annotated tag on it: Kartograf `v0.8.1` (`9817ab7`),
+     (REL-6.6), merged locally without pull requests, from candidate-7
+     (`set verify` on this machine; REL-6.5 deviation: `verify-candidate`
+     ran afterwards, run 44218266654): Kartograf `v0.8.1` (`9817ab7`),
      Obserwator `v3.0.1` (`533c42a`), Hydrolog `v0.8.1` (`bf35db2`),
-     Hydrograf `v0.5.1` (`a86e8ce`), Archiwista `v0.3.1` (`0b66beb`).
-     REL-6.5 deviation: the releases followed the local `set verify`;
-     `verify-candidate` was dispatched on `chore/candidate-7` afterwards
-     (run 44218266654). CI of `main`: Kartograf's macOS job on Python 3.12
-     failed `test_the_gate_of_agi_5_13_over_stdio` (cold start 5.06 s
-     against 5 s), as `v0.8.0`'s macOS job failed `test_cz_laz` (OSError):
-     slow-runner flakes, the other jobs green. Deployment waits for the
-     author's approval.
+     Hydrograf `v0.5.1` (`a86e8ce`), Archiwista `v0.3.1` (`0b66beb`);
+     deployed the same day (Deployment and storage). CI of `main`:
+     Kartograf's macOS job on Python 3.12 failed
+     `test_the_gate_of_agi_5_13_over_stdio` (cold start 5.06 s against
+     5 s), a slow-runner flake. Kartograf `v0.8.2` followed the same evening
+     as a hotfix outside the round.
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
-   - Then Nogat 0.1.1 from the last candidate (now candidate-9, verified
-     by run 44307348408 at `chore/candidate-9`), after every member's
-     round of fix releases is closed (the author, 2026-11-18): today
-     Archiwista 0.3.2 (E3-05, G01-1, E7-03, E7-12, §6 B1, Next 2 and the
-     paste fix; all on Archiwista's `develop` at `270da33`, full gate 3,043
-     passed; the release waits for the author; a new candidate pins its
-     tag). Obserwator's test-only fix
-     stays a commit of `develop` (`8edccf7`), with no 3.0.2. Minor
+   - Then Nogat 0.1.1 from **candidate-10** (2026-11-20, `chore/candidate-10`,
+     run 44775327473 passed on its second attempt): Kartograf `v0.8.2`
+     (hotfix of 2026-11-18, the USDA texture limits clay 20 % and 27 %),
+     Obserwator `8edccf7` (3.0.1 as released, no 3.0.2), Hydrolog
+     `v0.8.1`, Hydrograf `be17d7a` (nginx 1.31.9 and pinned images,
+     Kartograf `v0.8.2`, `0.5.2.dev0`; gate 2,404 passed) and Archiwista
+     `060bf34` (the fixes of 0.3.2 and Kartograf `v0.8.2`; gate 3,043
+     passed). The author took Hydrograf 0.5.2 and Archiwista 0.3.2 into
+     this round (2026-11-20); their releases wait for his approval, then
+     Nogat 0.1.1 with the tags. Flaky in the first attempt, passed on the
+     rerun: Hydrolog's `test_leaving_or_reloading_the_page_ends_its_session`
+     (macOS, Python 3.15) and Archiwista's
+     `test_verify_runs_offline_and_marks_each_pin_while_network_jobs_say_why[firefox]`
+     (Ubuntu, Python 3.12; „Stylesheet not loaded” of the map view while
+     the test ends, 1 in 55 local runs), both for their next releases.
+     Minor
      releases with a plan: S5 (the cut to the area), large basins, E3-03,
      E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
      E7-02 (Archiwista), E3-02 and the features planned as Obserwator's
