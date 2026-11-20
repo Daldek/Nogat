@@ -1,6 +1,6 @@
 [project]
 name = "nogat"
-version = "0.1.0"
+version = "0.1.1"
 description = "Hub of the Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista ecosystem: shared standard, project registry and registry tooling."
 requires-python = ">=3.12"
 license = "MIT"
