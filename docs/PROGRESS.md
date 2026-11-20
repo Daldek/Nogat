@@ -50,7 +50,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Members' releases (REL-2.1, REL-6.6) | done 2026-11-16 | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”); merged locally without pull requests (`gh` is not installed), with the author's approval; verified locally only (REL-6.5 deviation: the workflow reached Nogat's `main` only with `v0.1.0`) |
 | `verify-candidate` (REL-6.5, ECO-077) | done 2026-11-17 | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` with `v0.1.0` and dispatchable from there; not run yet: candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
-| Nogat's version (ECO-076) | done 2026-11-17 | `v0.1.0`, the release set `release-sets/v0.1.0/` (REL-6.6, HUB-7.2); `pyproject.toml` and `uv.lock` carry `0.1.0`; merged into `main` locally without a pull request, with the author's approval; `1.0.0` only by the author's decision (HUB-7.4) |
+| Nogat's version (ECO-076) | done 2026-11-20 | `v0.1.1` (`a973bf0`), the patch release set `release-sets/v0.1.1/` from `main` (REL-2.4, REL-6.6), merged back into `develop`; `v0.1.0` 2026-11-17; merged into `main` locally without a pull request, with the author's approval; `1.0.0` only by the author's decision (HUB-7.4) |
 | `nogat` package (HUB §7) | planned | not in `v0.1.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
 
 ## Next
@@ -185,16 +185,16 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
-   - Then Nogat 0.1.1 from **candidate-10** (2026-11-20, `chore/candidate-10`,
-     run 44775327473 passed on its second attempt): Kartograf `v0.8.2`
-     (hotfix of 2026-11-18, the USDA texture limits clay 20 % and 27 %),
-     Obserwator `8edccf7` (3.0.1 as released, no 3.0.2), Hydrolog
-     `v0.8.1`, Hydrograf `be17d7a` (nginx 1.31.9 and pinned images,
-     Kartograf `v0.8.2`, `0.5.2.dev0`; gate 2,404 passed) and Archiwista
-     `060bf34` (the fixes of 0.3.2 and Kartograf `v0.8.2`; gate 3,043
-     passed). The author took Hydrograf 0.5.2 and Archiwista 0.3.2 into
-     this round (2026-11-20); their releases wait for his approval, then
-     Nogat 0.1.1 with the tags. Flaky in the first attempt, passed on the
+   - **Nogat 0.1.1 released 2026-11-20** with the author's approval from
+     **candidate-10** (run 44775327473 passed on its second attempt):
+     Kartograf `v0.8.2` (hotfix of 2026-11-18, the USDA texture limits
+     clay 20 % and 27 %), Obserwator `v3.0.1` (the set verified `8edccf7`,
+     the same package), Hydrolog `v0.8.1`, Hydrograf `v0.5.2` (`2f6da1d`:
+     nginx 1.31.9 and pinned images, Kartograf `v0.8.2`; gate 2,404
+     passed) and Archiwista `v0.3.2` (`514162d`: the fixes of 0.3.2 and
+     Kartograf `v0.8.2`; gate 3,043 passed); Nogat `v0.1.1` from the
+     branch `hotfix/release-set-0.1.1` of `main`, so standard 1.1 stays on
+     `develop`. Deployment waits for the author. Flaky in the first attempt, passed on the
      rerun: Hydrolog's `test_leaving_or_reloading_the_page_ends_its_session`
      (macOS, Python 3.15) and Archiwista's
      `test_verify_runs_offline_and_marks_each_pin_while_network_jobs_say_why[firefox]`
