@@ -24,16 +24,16 @@ Nogat holds:
   [`standards/reference/nogat_formulas.py`](standards/reference/nogat_formulas.py),
   [`schemas/formula/`](schemas/formula/card-1.schema.json).
 
-The ecosystem's first release, `v0.1.0`, is the release set
-[`release-sets/v0.1.0/`](release-sets/v0.1.0/README.md): Kartograf,
+The ecosystem's current release, `v0.1.1`, is the release set
+[`release-sets/v0.1.1/`](release-sets/v0.1.1/README.md): Kartograf,
 Obserwator, Hydrolog and Archiwista at their release tags, with every
 third-party package at one verified version; Hydrograf, an app, is
 released by its own tag at the same producers. Install it as an
 environment:
 
 ```bash
-git clone --branch v0.1.0 https://github.com/Daldek/Nogat
-cd Nogat/release-sets/v0.1.0
+git clone --branch v0.1.1 https://github.com/Daldek/Nogat
+cd Nogat/release-sets/v0.1.1
 uv sync --locked --no-dev --python 3.12
 ```
 

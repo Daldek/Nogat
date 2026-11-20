@@ -44,6 +44,27 @@ the standard are listed in [standards/README.md](standards/README.md).
   library-install tests could not install `pydantic-core` 2.50.1 of its own
   lock offline, since the candidate's sync had cached only the set's 2.50.4.
 
+## [0.1.1] - 2026-11-20
+
+### Added
+
+- Release set `v0.1.1` (`release-sets/v0.1.1/`, REL-6.6, HUB-7.2), a patch
+  release set: candidate-10 (`release-sets/candidate-10/`, verified by run
+  44775327473 of verify-candidate) with each member's commit replaced by its
+  annotated release tag, Kartograf `v0.8.2`, Obserwator `v3.0.1`, Hydrolog
+  `v0.8.1`, Hydrograf `v0.5.2` (an app on its own lock, not installed by the
+  set) and Archiwista `v0.3.2`; the same 127 packages and third-party
+  versions as candidate-10's lock. It carries Hydrograf's pinned images with
+  nginx 1.31.9, a security fix between sets (REL-6.6), Kartograf's hotfix of
+  the USDA texture classes at clay = 20 % and 27 % (HSG B becomes C on those
+  cells) and the members' defect fixes of 2026-11-18. Released from a branch
+  of `main` (REL-2.4), so standard 1.1, in preparation on `develop`, is not
+  part of it; the published standard stays 1.0.
+
+### Changed
+
+- README installs the set `v0.1.1`.
+
 ## [0.1.0] - 2026-11-17
 
 ### Added
@@ -828,5 +849,6 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0
