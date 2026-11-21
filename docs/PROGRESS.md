@@ -42,7 +42,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
 | Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); the copies of the kit, the marks and the tokens in Hydrograf, Hydrolog, Obserwator and Archiwista match Nogat's at their `origin/develop` of 2026-11-15 (SHA-256, the tokens apart from their DEV-15.3 header) |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md` |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone since 2026-11-21 (ECO-080; Obserwator and Hydrolog `develop`, Hydrograf and Archiwista with their next change); plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
 | Formula reference module (CMP-8.1, standard 1.1) | done on `test/computation-standard` | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; not merged into `develop` |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
@@ -99,33 +99,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      Production took these data on 2026-11-17 (Deployment and storage);
      the cut belongs in Hydrograf (S5), so a later re-processing needs no
      hand-run scripts.
-   - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to
-     2026-11-17 08:07, `~/tmp/chmi-night/`) downloaded the daily archives
-     of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
-     station per call (41,271 files, none failed; about 2,800 meteo files
-     are not published and 75 hydro stations have none), built the series
-     `cz.chmi.hydro_daily` (20 min) and rebuilt the analyses of every
-     station with Hydrolog 0.8.0 (6 h 9 min; the service shows them):
-     IMGW-PIB 3,240 stations, 83,704 analyses ok and 1,000 failed at 201
-     stations (the 2026-11-15 build with 0.8.0.dev0: 2,093 at 1,066); ČHMÚ
-     796 stations (23 before), 31,971 ok and 265 failed at 55. Almost all
-     failures are series too short for the method (Mann–Kendall, flood and
-     low-flow frequency, homogeneity and precipitation quantiles with 0 to 2
-     years against the 3 needed; incomplete months or years); defects for
-     Hydrolog 0.8.1: `hydrometrics rating-curve` per period ends in an
-     `OverflowError` (8 stations: `_level_at` inverts a curve whose `b` is
-     near zero, `operations/hydrometrics.py:276`), its fit does not converge
-     at 5 stations, and `low_flow_sequences` refuses a threshold of 0 (Q)
-     or below 0 (H) instead of a notice. The series
-     `cz.chmi.meteo_daily` fails: Obserwator
-     3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
-     observation term (85 of 3,351 files). Fixed on Obserwator's branch
-     `fix/3.0.1` (ADR-003 erratum of 2026-11-17: a daily value at any
-     observation term is that day's), with C4, its part of C5, C7 and
-     E3-06; its full gate passed (3,446 tests). The release of 3.0.1 waits
-     for the author's approval; the meteo series is built after it.
-     Obserwator also refreshes its copies in `schemas/nogat/` from
-     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+   - Obserwator: the user unit `chmi-night` (2026-11-16/17,
+     `~/tmp/chmi-night/`) downloaded the daily archives of the 2,474 ČHMÚ
+     stations into the raw root (41,271 files, none failed), built
+     `cz.chmi.hydro_daily` and rebuilt the analyses with Hydrolog 0.8.0;
+     the defects it found went into Obserwator `v3.0.1` and Hydrolog
+     `v0.8.1` (Next 7), and `cz.chmi.meteo_daily` was built on 2026-11-21
+     (Deployment and storage). Obserwator also refreshes its copies in
+     `schemas/nogat/` from `std-1.0` (its D6,
+     `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle

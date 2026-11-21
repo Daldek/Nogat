@@ -24,7 +24,14 @@ from typing import Any
 import jsonschema
 import pytest
 import terms
-from playwright.sync_api import Browser, Locator, Page, Playwright, sync_playwright
+from playwright.sync_api import (
+    Browser,
+    Locator,
+    Page,
+    Playwright,
+    expect,
+    sync_playwright,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
@@ -612,12 +619,50 @@ def test_strip_and_dialog_follow_both_themes(sources: tuple[Page, list[str]]) ->
     ]
 
 
-def test_strip_wraps_and_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+def test_strip_folds_to_one_line_on_a_phone_and_unfolds_in_place(
+    sources: tuple[Page, list[str]],
+) -> None:
     page, _ = sources
     page.set_viewport_size({"width": 390, "height": 800})
     _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.get_by_role("button", name="więcej")
+    assert _strip_lines(page) == 1
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    assert toggle.get_attribute("aria-expanded") == "false"
+    box = page.locator(".nogat-sources-line").first.bounding_box()
+    assert box is not None
+    assert 0 <= box["x"] < 390
+    assert page.get_by_role("button", name="Źródła i warunki").is_visible()
+    toggle.click()
+    unfold = page.get_by_role("button", name="zwiń")
+    assert unfold.get_attribute("aria-expanded") == "true"
     assert _strip_lines(page) > 3
     assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    unfold.click()
+    assert _strip_lines(page) == 1
+    assert page.get_by_role("button", name="więcej").is_visible()
+
+
+def test_strip_offers_to_unfold_only_a_phone_line_that_is_cut(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.locator(".nogat-sources-toggle")
+    assert _strip_lines(page) > 1
+    assert toggle.is_hidden()
+    page.set_viewport_size({"width": 390, "height": 800})
+    expect(toggle).to_be_visible()
+    assert _strip_lines(page) == 1
+    _lines(page, [LINES["C"]], NOTICE)
+    assert _strip_lines(page) == 1
+    assert toggle.is_hidden()
+
+
+def test_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
     page.get_by_role("button", name="Źródła i warunki").click()
     box = page.locator("dialog").bounding_box()
     assert box is not None

@@ -1100,9 +1100,11 @@ merges its lines in, each once and in order.
 A GUI view shows one strip for all its data, the kit's `<nogat-sources>`,
 not one per panel, card, chart or popup: 12 px in the muted text colour, at
 most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
-with the short forms, a third allowed when the view shows both, wrapping on
-phones. It holds the on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those
-the view's data need, each once in the order of DEV-20.4, a short form in
+with the short forms, a third allowed when the view shows both. On a screen
+up to 860 px wide it is one line: the lines start on it, cut with an
+ellipsis, and „więcej” unfolds them in place (ECO-080). It holds the
+on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those the view's data
+need, each once in the order of DEV-20.4, a short form in
 the place of its full line, and ends with „Źródła i warunki”, which opens a
 dialog with every line (S, P, PS, PP, M, C, CP, G, SG, Z) and the terms of
 DEV-20.7 (RD, RH, RK), and with „Regulamin” where the GUI serves one
