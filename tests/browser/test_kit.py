@@ -461,9 +461,9 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ([*IMGW, *PMAXTP, *OTHERS, CP], 3),
     ],
     ids=[
-        "imgw-chmi",
-        "pmaxtp-chmi",
-        "both-families-chmi",
+        "imgw-chmu",
+        "pmaxtp-chmu",
+        "both-families-chmu",
         "imgw-short-forms",
         "pmaxtp-short-forms",
         "both-families-short-forms",

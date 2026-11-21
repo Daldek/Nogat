@@ -28,7 +28,7 @@ flowchart LR
     src_clms(["clms"])
     src_soilgrids(["soilgrids"])
     src_imgw_pib(["imgw-pib"])
-    src_chmi(["chmi"])
+    src_chmu(["chmu"])
     src_osm(["osm"])
   end
   src_gugik --> Kartograf
@@ -36,7 +36,7 @@ flowchart LR
   src_clms --> Kartograf
   src_soilgrids --> Kartograf
   src_imgw_pib --> Obserwator
-  src_chmi --> Obserwator
+  src_chmu --> Obserwator
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
   src_gugik --> Archiwista
@@ -96,7 +96,7 @@ flowchart LR
 | Retman | Hydrolog | optional | active | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
-| Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1`, `obserwator-data/1` |
+| Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmu-json/1`, `obserwator-data/1` |
 | Archiwista | Hydrolog | data | active | file | `hydrolog-series/1` |
 
 ### Details
@@ -145,7 +145,7 @@ flowchart LR
 | `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). |
 | `obserwator-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
-| `chmi-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
+| `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
 | `obserwator-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
 | `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
