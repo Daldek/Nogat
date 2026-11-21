@@ -64,13 +64,15 @@ Common words MUST be translated (`road_class`, not `klasa`).
 *Why:* official names are what users and agents search for.
 
 **DEV-2.5** An identifier naming a data provider (a provider id, a dataset
-key, a slug, a registry id, a block, a module or test name) uses the
-provider's national acronym without diacritics, in the identifier's case:
-IMGW-PIB as `IMGW-PIB`, `pl.imgw.*`, `imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`,
-`chmu`. Text for people keeps the name with diacritics („ČHMÚ”), and the
-provider's own addresses stay as it publishes them (`opendata.chmi.cz`).
+key, a slug, a registry id, a block, a module or test name, a part of a file
+name) uses the provider's national acronym without diacritics and without
+its legal suffix, in the identifier's case: IMGW-PIB as `IMGW`, `pl.imgw.*`,
+`imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`, `chmu`. Text for people keeps the full
+name with diacritics („IMGW-PIB”, „ČHMÚ”), and the provider's own addresses
+stay as it publishes them (`opendata.chmi.cz`).
 *Why:* one naming for every provider; the English acronym of one beside the
-national one of the other was a second convention (ECO-082).
+national one of the other, and `IMGW-PIB` beside `pl.imgw.*`, were second
+conventions (ECO-082).
 
 ---
 
@@ -1017,7 +1019,7 @@ writes into `output_dir` under a name it picks, is named
 |---|---|
 | `<tool>` | the project's name in the registry, `obserwator`, `hydrograf` |
 | `<content>` | what the file holds, in English, lower case, words joined by `-`: `stations`, `series`, `network-nodes`, `stats`, `handoff` |
-| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a method), a provider's id in lower case (`imgw-pib`, `chmu`), dates `YYYY-MM-DD` (a moment adds `_HHMMSSZ` in UTC), and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
+| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a method), a provider's id in lower case (`imgw`, `chmu`), dates `YYYY-MM-DD` (a moment adds `_HHMMSSZ` in UTC), and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
 | `<extension>` | the format's own, lower case: `csv`, `json`, `geojson`, `zip` |
 
 The name holds only ASCII letters, digits, `.`, `-` and `_`. Not named so: a

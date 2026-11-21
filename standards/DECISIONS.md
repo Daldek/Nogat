@@ -2055,12 +2055,15 @@ round's releases. The regulamin stays 1.0.
 ## ECO-082 Providers named by their national acronyms; two attribution columns in a CSV
 
 **Decision.** An identifier naming a data provider uses its national
-acronym without diacritics (DEV-2.5): ČHMÚ is `CHMU` / `chmu` where the
-code said the English `CHMI` / `chmi`, in Obserwator's provider id, dataset
-keys `cz.chmu.*`, slugs `chmu_*` and the store directories named by them,
-in Nogat's registry ids `chmu` and `chmu-json/1` and in the regulamin's
-block `chmu`; IMGW-PIB's identifiers (`IMGW-PIB`, `pl.imgw.*`) are national
-already. Text for people keeps „ČHMÚ”, and the provider's addresses
+acronym without diacritics and without its legal suffix (DEV-2.5): ČHMÚ is
+`CHMU` / `chmu` where the code said the English `CHMI` / `chmi`, in
+Obserwator's provider id, dataset keys `cz.chmu.*`, slugs `chmu_*` and the
+store directories named by them, in Nogat's registry ids `chmu` and
+`chmu-json/1` and in the regulamin's block `chmu`; IMGW-PIB is `IMGW` /
+`imgw` where the code said `IMGW-PIB` / `imgw-pib` (Obserwator's provider
+id, Nogat's registry id, file names), its `pl.imgw.*` keys unchanged (the
+author, later the same day: „IMGW-PIB moze byc skracane do IMGW”). Text for
+people keeps „IMGW-PIB” and „ČHMÚ”, and the provider's addresses
 (`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
 and `terms_notice` only (DEV-20.5): `attribution_source` and
 `attribution_processed` go. No old name is accepted as input beside the new

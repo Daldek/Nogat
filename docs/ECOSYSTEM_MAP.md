@@ -27,7 +27,7 @@ flowchart LR
     src_cuzk(["cuzk"])
     src_clms(["clms"])
     src_soilgrids(["soilgrids"])
-    src_imgw_pib(["imgw-pib"])
+    src_imgw(["imgw"])
     src_chmu(["chmu"])
     src_osm(["osm"])
   end
@@ -35,7 +35,7 @@ flowchart LR
   src_cuzk --> Kartograf
   src_clms --> Kartograf
   src_soilgrids --> Kartograf
-  src_imgw_pib --> Obserwator
+  src_imgw --> Obserwator
   src_chmu --> Obserwator
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
