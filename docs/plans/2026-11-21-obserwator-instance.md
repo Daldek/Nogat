@@ -1,8 +1,8 @@
 # Plan: Obserwator deployed for an operator with its own network
 
-Approved: pending
+Approved: 2026-11-21, the author (in session: „filtr ma działać na obu serwerach. zatwierdzam plan A.”)
 
-Status: a draft of 2026-11-21 from the author's direction of the same day, revised the same day with his answers to questions 1 to 3, 5 and 6; not approved, so no code starts (DEV-17.4). The design marks its own proposals „[proposed]”.
+Status: approved 2026-11-21 with the author's answers of the same day; steps 1 to 5 in progress for Obserwator `v3.1.0`. The design's proposals marked „[proposed]” are approved with it.
 
 Requirements: DEV-17.4, DEV-18.1 to DEV-18.4, DEV-12.4 to DEV-12.9, DEV-13, DEV-15.4, DEV-15.7, DEV-15.8, DEV §20, HUB-5.2. Related plans: `2026-11-20-hydromet-providers.md` (branch `plan/hydromet-providers`, P1 to P13), `2026-11-17-install-contract.md` (branch `plan/install-contract`, rules 1 to 13).
 
@@ -23,6 +23,7 @@ Releases [proposed]: steps 1 to 5 are Obserwator `v3.1.0`, beside its scope deci
 - The client's name and logo on the instance: yes.
 - PMAXTP: a switch of its own.
 - The client's network: the class `other`.
+- The instance's filter applies to both servers, the GUI's and the REST API (I3).
 
 ## What exists (2026-11-21, Obserwator `develop` `73574bb`)
 
@@ -78,10 +79,6 @@ A precedent for an area: Archiwista's project area is one WGS84 polygon in a Geo
 5. **Obserwator, documents** (I11, I12): `SECURITY.md`, USAGE „Deploying an instance for an operator”, the layout-version check; a demonstration instance on this machine (a featured provider and an area, `clip`), smoke-checked on 127.0.0.1.
 6. **Obserwator `v3.2.0`, the file-fed provider** (I13), with the adapters of `hydromet-providers` steps 2 and 3.
 7. **Nogat:** registry drift, the release set of the round, PROGRESS.
-
-## Open questions
-
-1. **The REST server** (I3): the instance section applies to both servers, the GUI's (`obserwator gui serve`, the page's own private API) and the REST API (`obserwator server`, `/api/v1`, for scripts and agents); or to the GUI only, with the REST server not exposed by such a deployment? [proposed] both: with the GUI only, a REST server on the same data root serves the providers and stations the GUI hides.
 
 ## Results
 
