@@ -86,6 +86,12 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 ## Changelog
 
 - 1.1 (in preparation on `develop`):
+  - A file a tool names for a user (a GUI's download, a REST attachment, a
+    file a command writes into `output_dir` under a name it picks) is
+    `<tool>_<content>_<qualifiers>.<extension>`: the registry name, English
+    content words, identifiers unchanged, ISO dates and a person's text in
+    lower-case ASCII with `-`; the hand-off file is
+    `<producer>_handoff_<subject>.json` (DEV-19.21, DEV-15.5, ECO-083).
   - An identifier naming a data provider uses its national acronym without
     diacritics (`CHMU`, `cz.chmu.*`, `chmu` for ČHMÚ, as `IMGW-PIB` and
     `pl.imgw.*`), and a CSV carries the lines in `attribution` and

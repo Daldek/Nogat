@@ -771,7 +771,7 @@ def test_stats_shows_the_days_of_a_period_with_totals_and_saves_them_as_csv(
     with page.expect_download() as info:
         page.get_by_role("button", name="Pobierz CSV").click()
     download = info.value
-    assert download.suggested_filename == "hydrolog-stats-2026-08-01-2026-11-13.csv"
+    assert download.suggested_filename == "hydrolog_stats_2026-08-01_2026-11-13.csv"
     lines = [",".join(KEYS), *(",".join(str(d[k]) for k in KEYS) for d in DAYS)]
     assert Path(download.path()).read_text(encoding="utf-8") == "\n".join(lines) + "\n"
 
