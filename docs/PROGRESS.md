@@ -257,12 +257,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     their consumers; released only when the whole round is done, the
     author's decision): every member's `develop` holds its part; CI is green
     on the blocking jobs except Archiwista's (a Firefox page error on leaving
-    the map view, being fixed on `fix/map-teardown`): Obserwator `047aeda` (with the Windows
-    fixes of the instance), Hydrolog `eaf7f4b` (`0.9.0.dev6`), Hydrograf `d23cb02`
-    (Hydrolog 0.9.0 adapted: Jg, Euler II from the PMAXTP curve, whole
-    steps, the standard's refusals, `formula_versions`; ADR-088 proposed),
-    Archiwista `9e9e365` (Obserwator 3.1.0, a subset series read correctly);
-    Kartograf unchanged at `v0.8.2`. Their pins name development commits
+    the map view, being fixed on `fix/map-teardown`): Obserwator `64f6abb`
+    (with the Windows fixes of the instance and ECO-080's strip), Hydrolog
+    `47d492f` (`0.9.0.dev6`, ECO-080's strip), Hydrograf `d23cb02` (Hydrolog
+    0.9.0 adapted: Jg, Euler II from the PMAXTP curve, whole steps, the
+    standard's refusals, `formula_versions`; ADR-088 proposed), Archiwista
+    `9e9e365` (Obserwator 3.1.0, a subset series read correctly); Kartograf
+    unchanged at `v0.8.2`. Hydrograf's and Archiwista's kit copies (step 4
+    of `2026-11-21-phone-sources-strip.md`) are on their
+    `feat/phone-sources-strip`. Their pins name development commits
     and are moved to one set in the candidate. Waiting for the author: the
     Approved lines of `2026-11-18-computation-standard.md` and
     `2026-11-19-hydrolog-0.9.0-consumers.md`, the consumers' version
