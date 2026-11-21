@@ -27,7 +27,7 @@ data_sources:
     country: global
     url: https://soilgrids.org
     licence: CC BY 4.0
-  - id: imgw-pib
+  - id: imgw
     name: IMGW-PIB (archives, live API, PMAXTP atlas)
     country: PL
     url: https://danepubliczne.imgw.pl
@@ -152,7 +152,7 @@ projects:
         command: obserwator current hydro
       - task: Get PMAXTP design precipitation of a point in Poland
         command: obserwator pmaxtp fetch
-    data_sources: [imgw-pib, chmu]
+    data_sources: [imgw, chmu]
     provides:
       - id: obserwator-store/1
         kind: store
