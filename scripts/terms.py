@@ -74,7 +74,7 @@ BLOCKS: dict[str, str] = {
     "imgw": "IMGW-PIB data of danepubliczne.imgw.pl",
     "imgw-hydro": "IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl",
     "pmaxtp": "PMAXTP of IMGW-PIB",
-    "chmi": "ČHMÚ open data",
+    "chmu": "ČHMÚ open data",
     "gugik": "GUGiK data (geoportal.gov.pl)",
     "cuzk": "ČÚZK data",
     "copernicus": "Copernicus data (CORINE and other CLMS layers)",

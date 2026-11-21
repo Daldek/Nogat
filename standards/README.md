@@ -86,6 +86,10 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 ## Changelog
 
 - 1.1 (in preparation on `develop`):
+  - An identifier naming a data provider uses its national acronym without
+    diacritics (`CHMU`, `cz.chmu.*`, `chmu` for ČHMÚ, as `IMGW-PIB` and
+    `pl.imgw.*`), and a CSV carries the lines in `attribution` and
+    `terms_notice` only (DEV-2.5, DEV-20.5, DEV-20.6, ECO-082).
   - On a screen up to 860 px wide the GUI sources strip folds to one line,
     the lines cut with an ellipsis and unfolded in place by „więcej”
     (DEV-20.5, ECO-080).

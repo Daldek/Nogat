@@ -32,7 +32,7 @@ data_sources:
     country: PL
     url: https://danepubliczne.imgw.pl
     licence: IMGW-PIB terms of reuse, attribution required
-  - id: chmi
+  - id: chmu
     name: ČHMÚ open data
     country: CZ
     url: https://opendata.chmi.cz
@@ -152,7 +152,7 @@ projects:
         command: obserwator current hydro
       - task: Get PMAXTP design precipitation of a point in Poland
         command: obserwator pmaxtp fetch
-    data_sources: [imgw-pib, chmi]
+    data_sources: [imgw-pib, chmu]
     provides:
       - id: obserwator-store/1
         kind: store
@@ -169,7 +169,7 @@ projects:
       - id: obserwator-observation/1
         kind: document
         summary: History of published HTTP signals per archive file.
-      - id: chmi-json/1
+      - id: chmu-json/1
         kind: document
         summary: Canonical JSON form of ČHMÚ files used for content-based pins.
       - id: obserwator-result/1
@@ -495,7 +495,7 @@ projects:
         kind: optional
         status: active
         via: [library, store]
-        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data/1]
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmu-json/1, obserwator-data/1]
         note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
       - project: Hydrolog
         kind: data

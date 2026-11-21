@@ -63,6 +63,15 @@ used as identifiers when they are the official name of a dataset or system.
 Common words MUST be translated (`road_class`, not `klasa`).
 *Why:* official names are what users and agents search for.
 
+**DEV-2.5** An identifier naming a data provider (a provider id, a dataset
+key, a slug, a registry id, a block, a module or test name) uses the
+provider's national acronym without diacritics, in the identifier's case:
+IMGW-PIB as `IMGW-PIB`, `pl.imgw.*`, `imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`,
+`chmu`. Text for people keeps the name with diacritics („ČHMÚ”), and the
+provider's own addresses stay as it publishes them (`opendata.chmi.cz`).
+*Why:* one naming for every provider; the English acronym of one beside the
+national one of the other was a second convention (ECO-082).
+
 ---
 
 ## 3. Git
@@ -1082,7 +1091,7 @@ every surface with the data or results derived from them:
 | Surface | Where the lines go |
 |---|---|
 | GUI | the strip of the view and the dialog behind it (below) |
-| CSV | trailing columns `attribution` and `terms_notice`, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline. Columns a project already has stay (DEV-20.6) |
+| CSV | trailing columns `attribution` and `terms_notice` only, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline; no other column repeats the lines (ECO-082) |
 | JSON | the fields `attribution` and `terms_notice` (DEV-20.6, DEV-20.7) |
 | Parquet | the file metadata keys `attribution` and `terms_notice`, each a JSON array of the lines |
 | ZIP | `ATTRIBUTION.txt` at the root of the archive |
@@ -1122,7 +1131,7 @@ are named the same way, their full lines one click away (ECO-068).
 `attribution`, an array of the lines as strings. A consumer shows the lines it
 receives with the data and carries them into its own products and further
 hand-offs, merged without duplicates; a field a project already has for them
-(a CSV column, `license.attribution` of a sidecar, DEV-19.16) stays.
+outside a CSV (`license.attribution` of a sidecar, DEV-19.16) stays.
 *Why:* the obligation follows the data through every tool (ECO-060).
 
 **DEV-20.7** Every GUI view and every exported product with IMGW-PIB data

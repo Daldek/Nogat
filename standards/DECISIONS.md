@@ -69,7 +69,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
@@ -91,6 +91,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
 | [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
 | [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
+| [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
 
 ---
 
@@ -1212,6 +1213,10 @@ the terms it links.
 ČÚZK data carry G, SG or Z, after CP in the order of the lines, and a GUI
 view's strip shows them as GK, SK and ZK.
 
+**Amended by ECO-082 (2026-11-21):** a CSV carries the lines in its trailing
+columns `attribution` and `terms_notice` only; no column a project had
+before repeats them.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -2045,3 +2050,38 @@ author's consent and copies are compared by their hashes (DEV-15.6); the
 manifest's own hash changes, so `drift` names every GUI copy until it is
 refreshed. Obserwator, Hydrolog, Hydrograf and Archiwista copy it for the
 round's releases. The regulamin stays 1.0.
+
+## ECO-082 Providers named by their national acronyms; two attribution columns in a CSV
+
+**Decision.** An identifier naming a data provider uses its national
+acronym without diacritics (DEV-2.5): ČHMÚ is `CHMU` / `chmu` where the
+code said the English `CHMI` / `chmi`, in Obserwator's provider id, dataset
+keys `cz.chmu.*`, slugs `chmu_*` and the store directories named by them,
+in Nogat's registry ids `chmu` and `chmu-json/1` and in the regulamin's
+block `chmu`; IMGW-PIB's identifiers (`IMGW-PIB`, `pl.imgw.*`) are national
+already. Text for people keeps „ČHMÚ”, and the provider's addresses
+(`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
+and `terms_notice` only (DEV-20.5): `attribution_source` and
+`attribution_processed` go. No old name is accepted as input beside the new
+one; files a tool stored under an old name are read under the new one, so
+they need no download again. Every schema and format stays `/1`. Plan:
+`docs/plans/2026-11-21-national-provider-names.md`.
+
+**Why.** The author's decision of 2026-11-21: the code mixed the Polish
+acronym of IMGW-PIB with the English one of ČHMÚ. The two dropped columns
+repeated the first two cells of `attribution` (the stations export of
+2026-11-21: S and P for IMGW-PIB, C and CP for ČHMÚ). The ecosystem is
+still in development, so the change is minor and keeps `/1`.
+
+**Rejected.** The English acronyms for both providers (IMGW-PIB has none in
+use). Aliases for the old names (a second way, ECO-056). The two columns kept
+beside `attribution` (the same lines twice). A new major version of the
+formats (the author's choice for a development stage).
+
+**Consequence.** DEV-2.5 is new; DEV-20.5 and DEV-20.6 are amended, and with
+them ECO-060. The kit's `nogat-terms.md`, `nogat-terms-operator.md` and
+`nogat-terms.html` change with their hashes; its version stays `1.1.0`
+(ECO-081). A GUI that lists the block `chmi` is refused until it lists
+`chmu`. Obserwator, Hydrolog, Archiwista and Hydrograf follow in their own
+branches (plan steps 2 to 5); Hydrolog still reads the two old columns in
+files written before, as lines, not data. Dated records keep the old names.

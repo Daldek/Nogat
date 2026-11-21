@@ -362,7 +362,7 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `imgw` | IMGW-PIB data of danepubliczne.imgw.pl | Obserwator; Hydrolog with station series |
 | `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Obserwator |
 | `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Obserwator |
-| `chmi` | ČHMÚ open data | Obserwator; Hydrolog with station series |
+| `chmu` | ČHMÚ open data | Obserwator; Hydrolog with station series |
 | `gugik` | GUGiK data | Hydrograf, Obserwator |
 | `cuzk` | ČÚZK data | Obserwator |
 | `copernicus` | Copernicus data | none |
