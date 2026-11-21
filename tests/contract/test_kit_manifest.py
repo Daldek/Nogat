@@ -2,7 +2,7 @@
 
 A GUI copies the kit byte for byte; the manifest's hashes are what a copy is
 compared with, so they must describe the files Nogat ships. The version
-stays 1.0.0 until the author decides otherwise (REL-1.4).
+moves only with the author's consent (REL-1.4, ECO-081).
 """
 
 from __future__ import annotations

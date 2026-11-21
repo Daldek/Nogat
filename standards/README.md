@@ -89,6 +89,8 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - On a screen up to 860 px wide the GUI sources strip folds to one line,
     the lines cut with an ellipsis and unfolded in place by „więcej”
     (DEV-20.5, ECO-080).
+  - The GUI kit becomes version 1.1.0: the draft regulamin for operators and
+    the strip folded on a phone (ECO-081).
   - An instance that an operator other than the author runs may show the
     operator's logo and name beside the project's mark, which stays as the
     favicon and in the top bar, with the logo served from the GUI's own

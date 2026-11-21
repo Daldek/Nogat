@@ -47,6 +47,11 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- ECO-081: the GUI kit's version becomes `1.1.0` (the author, 2026-11-21),
+  for the draft regulamin for operators (ECO-079) and the strip folded on a
+  phone (ECO-080); every GUI copies the manifest for the round's releases.
+  Plans `2026-11-18-computation-standard.md` and
+  `2026-11-19-hydrolog-0.9.0-consumers.md` approved.
 - ECO-080, DEV-20.5: on a screen up to 860 px wide the kit's
   `<nogat-sources>` folds its strip to one line, the lines cut with an
   ellipsis, then „więcej”, shown while the line cuts them, which unfolds the

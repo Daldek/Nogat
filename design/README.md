@@ -269,7 +269,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
 `nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
-The version stays `1.0.0` until the author decides otherwise (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
+The version, `1.1.0` since ECO-081, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 

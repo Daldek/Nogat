@@ -254,9 +254,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     ADR-088 proposed), Archiwista `9e9e365`; Kartograf stays `v0.8.2`. CI
     green except Archiwista (Firefox map teardown, `fix/map-teardown`); the
     kit copies of Hydrograf and Archiwista on `feat/phone-sources-strip`.
-    Author: Approved lines of the computation-standard and Hydrolog-0.9.0
-    plans, the versions (Hydrograf 0.6.0 proposed), the kit's version,
-    Nogat `0.2.0`/`std-1.1` (proposed). Then candidate-11 and the releases.
+    The author decided on 2026-11-21: both plans approved, Hydrograf
+    `0.6.0` = the Hydrolog adaptation only, kit `1.1.0` (ECO-081, every GUI
+    copies it), Nogat `0.2.0` with `std-1.1`. Next: candidate-11, releases.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

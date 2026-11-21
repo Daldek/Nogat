@@ -90,6 +90,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-078](#eco-078-formulas-are-declared-once-checked-at-their-limits-and-verified) | Formulas are declared once, checked at their limits and verified | accepted | 2026-11-18 |
 | [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
 | [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
+| [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
 
 ---
 
@@ -2023,3 +2024,24 @@ wider than a phone (a desktop strip takes at most three lines, ECO-064).
 `nogat-sources.css` change with their hashes; its version stays `1.0.0`
 (REL-1.4, ECO-072). Obserwator and Hydrolog copy them for `v3.1.0` and
 `v0.9.0`, Hydrograf and Archiwista with their next change.
+
+## ECO-081 The kit becomes 1.1.0 with Nogat 0.2.0
+
+**Decision.** The GUI kit's version becomes `1.1.0` in
+`design/kit/nogat-kit.json`, confirmed by Nogat's `v0.2.0` on `main`
+(REL-1.4). Every GUI of the round copies the manifest with the kit's files.
+
+**Why.** The author's decision of 2026-11-21 („5 - zgodnie z propozycja”).
+Kit `1.0.0` was released with Nogat `v0.1.0` and `v0.1.1`; since then the
+kit gained a file, the draft regulamin for operators (ECO-079), and a
+behaviour, the strip folded on a phone (ECO-080), with no file removed and no
+attribute or event of an element changed, so the change is minor.
+
+**Rejected.** Keeping `1.0.0` (a released number would name two different
+sets of files).
+
+**Consequence.** ECO-072's rule stands: the version moves only with the
+author's consent and copies are compared by their hashes (DEV-15.6); the
+manifest's own hash changes, so `drift` names every GUI copy until it is
+refreshed. Obserwator, Hydrolog, Hydrograf and Archiwista copy it for the
+round's releases. The regulamin stays 1.0.
