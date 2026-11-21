@@ -155,6 +155,7 @@ flowchart LR
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
 | `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. |
 | `obserwator-analyses/1` | dataset | — | Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export). |
+| `obserwator-gui` | service | — | Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079). |
 
 ### Hydrolog
 
