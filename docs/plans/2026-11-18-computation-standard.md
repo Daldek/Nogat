@@ -1,6 +1,6 @@
 # Plan: verified formulas in every project that computes
 
-Approved: pending (requested by the author on 2026-11-18: „zaplanuj cały standard dla takich testów, który będzie dostępny na poziomie Nogata i zaciągany do pozostałych projektów”)
+Approved: 2026-11-21, the author (in session: „7 - zgodnie z propozycja”, approving this plan and `2026-11-19-hydrolog-0.9.0-consumers.md`; requested on 2026-11-18: „zaplanuj cały standard dla takich testów, który będzie dostępny na poziomie Nogata i zaciągany do pozostałych projektów”)
 
 Status: steps 1 and 3 in progress.
 
