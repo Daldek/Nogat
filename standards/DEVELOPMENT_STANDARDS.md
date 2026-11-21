@@ -67,7 +67,9 @@ Common words MUST be translated (`road_class`, not `klasa`).
 key, a slug, a registry id, a block, a module or test name, a part of a file
 name) uses the provider's national acronym without diacritics and without
 its legal suffix, in the identifier's case: IMGW-PIB as `IMGW`, `pl.imgw.*`,
-`imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`, `chmu`. Text for people keeps the full
+`imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`, `chmu`. A slug or a store directory of
+one provider's data starts with that acronym (`imgw_hydro_daily`,
+`chmu_hydro_daily`, `imgw_stations`). Text for people keeps the full
 name with diacritics („IMGW-PIB”, „ČHMÚ”), and the provider's own addresses
 stay as it publishes them (`opendata.chmi.cz`).
 *Why:* one naming for every provider; the English acronym of one beside the

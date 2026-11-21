@@ -2062,7 +2062,11 @@ store directories named by them, in Nogat's registry ids `chmu` and
 `chmu-json/1` and in the regulamin's block `chmu`; IMGW-PIB is `IMGW` /
 `imgw` where the code said `IMGW-PIB` / `imgw-pib` (Obserwator's provider
 id, Nogat's registry id, file names), its `pl.imgw.*` keys unchanged (the
-author, later the same day: „IMGW-PIB moze byc skracane do IMGW”). Text for
+author, later the same day: „IMGW-PIB moze byc skracane do IMGW”); every
+slug and store directory of one provider starts with its acronym, so
+IMGW-PIB's `hydro_daily` becomes `imgw_hydro_daily` and its catalog moves
+from `stations/versions` to `stations/versions/imgw_stations` beside
+`chmu_stations` (the author: „katalog serii też do ujednolicenia”). Text for
 people keeps „IMGW-PIB” and „ČHMÚ”, and the provider's addresses
 (`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
 and `terms_notice` only (DEV-20.5): `attribution_source` and
