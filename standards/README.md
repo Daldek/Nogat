@@ -86,6 +86,13 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 ## Changelog
 
 - 1.1 (in preparation on `develop`):
+  - An instance that an operator other than the author runs may show the
+    operator's logo and name beside the project's mark, which stays as the
+    favicon and in the top bar, with the logo served from the GUI's own
+    origin; it serves the operator's own regulamin, drafted from the kit's
+    `nogat-terms-operator.md`, in place of regulamin 1.0, whose statement of
+    § 3 belongs to the author's instances (DEV-15.3, DEV-15.7, DEV-15.8,
+    ECO-079).
   - New topic document COMPUTATIONS.md with the prefix `CMP`: every formula
     of a project that computes (`computes: true` in the registry) is
     declared once by a spec, refuses physically impossible input and failed

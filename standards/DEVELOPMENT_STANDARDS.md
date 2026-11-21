@@ -502,8 +502,13 @@ No build step is required; vendored libraries keep their licence files.
 [design/](../design/README.md): a copy of `tokens.css` that names the Nogat
 commit it came from and no colour, font or size outside its tokens, the light
 and the dark theme, the project's mark as favicon and in the top bar, and the
-shell of the guidelines (top bar, navigation rail, resizable side panel).
-*Why:* the GUIs serve one user as one family of tools (ECO-055).
+shell of the guidelines (top bar, navigation rail, resizable side panel). An
+instance that an operator other than the author runs MAY show the operator's
+logo and name in the top bar beside the project's mark, never in its place or
+as the favicon; the logo is served from the GUI's own origin.
+*Why:* the GUIs serve one user as one family of tools (ECO-055); the
+operator's mark names who runs an instance, the project's names the software
+(ECO-079).
 
 **DEV-15.4** A GUI shows the kit's app menu, `<nogat-app-menu>` from Nogat
 `design/kit/`, in its top bar left of the theme switch, on every page but its
@@ -538,9 +543,12 @@ and copied again. `drift` reports each copy as current, behind or modified
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
 as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
-with each copy of the kit. It links „Regulamin” to it in exactly
-these places, each link opening a new tab (`target="_blank"`,
-`rel="noopener"`): the end of the app menu, through its `terms` attribute;
+with each copy of the kit; on an instance that an operator other than the
+author runs, the operator's own regulamin in its place, which the kit's draft
+`nogat-terms-operator.md` starts, built and filled the same way. It links
+„Regulamin” to it in exactly these places, each link opening a new tab
+(`target="_blank"`, `rel="noopener"`): the end of the app menu, through its
+`terms` attribute;
 the foot of the GUI's left navigation rail, or of its left navigation where
 it has no rail, as a small, quiet link in the rail's muted text, which on a
 phone, where the rail becomes a bottom bar or sheet, stays as its last small
@@ -553,15 +561,17 @@ admin page (DEV-15.13) has none. `<nogat-sources>` also passes it in its
 neither page nor link. A GUI loads no script, style or font from another
 server: only basemaps and map layers come from their providers' servers.
 *Why:* one text tells everyone who uses a public GUI its rules and what
-happens to their data (RODO art. 13; ECO-061, ECO-062); the rail is in every
-view and the menu is not drawn without another GUI, so the rail carries the
-link the menu cannot, while a footer took space the views need (ECO-070); a
+happens to their data (RODO art. 13; ECO-061, ECO-062), and regulamin 1.0
+names the author as the operator, which another operator is not (ECO-079);
+the rail is in every view and the menu is not drawn without another GUI, so
+the rail carries the link the menu cannot, while a footer took space the
+views need (ECO-070); a
 link that replaced the GUI's tab would end its session and lose the user's
 work; § 8 ust. 5 names only the providers of map layers as receiving the
 visitor's IP address (ECO-068).
 
-**DEV-15.8** The terms of a public GUI open § 3 with the statement
-„Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
+**DEV-15.8** The terms of a public GUI that the author runs open § 3 with the
+statement „Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
 działalności gospodarczej operatora. Służy celom badawczym i edukacyjnym.
 Dane IMGW-PIB są w nim wykorzystywane do celów niezarobkowych, zgodnie z
 regulaminami IMGW-PIB.”; no view repeats it in a footer or status bar.
