@@ -690,19 +690,22 @@ def test_strip_loads_nothing_but_the_kit(
     ]
 
 
-# The hand-off (DEV-15.5)
+# The hand-off (DEV-15.5) and its file name (DEV-19.21)
 
 
 @pytest.mark.parametrize(
     ("subject", "name"),
     [
-        ("Kamiennik — Świerzawa", "Kamiennik — Świerzawa.handoff.json"),
-        ('a/b\\c:d*e?f"g<h>i|j', "a-b-c-d-e-f-g-h-i-j.handoff.json"),
-        ("  dwa   słowa  ", "dwa słowa.handoff.json"),
-        ("tab\t\nnowa", "tab-nowa.handoff.json"),
-        ("x\u0000\u001fy", "x-y.handoff.json"),
-        ("", "hydrograf.handoff.json"),
-        (" /// ", "-.handoff.json"),
+        ("Kamiennik — Świerzawa", "hydrograf_handoff_kamiennik-swierzawa.json"),
+        ("Łódź, ŁĄKA żółć", "hydrograf_handoff_lodz-laka-zolc.json"),
+        ('a/b\\c:d*e?f"g<h>i|j', "hydrograf_handoff_a-b-c-d-e-f-g-h-i-j.json"),
+        ("  dwa   słowa  ", "hydrograf_handoff_dwa-slowa.json"),
+        ("tab\t\nnowa", "hydrograf_handoff_tab-nowa.json"),
+        ("x\u0000\u001fy", "hydrograf_handoff_x-y.json"),
+        ("Q_max 2026.11", "hydrograf_handoff_q-max-2026-11.json"),
+        ("", "hydrograf_handoff.json"),
+        (" /// ", "hydrograf_handoff.json"),
+        ("Москва", "hydrograf_handoff.json"),
     ],
 )
 def test_file_name_of_a_handoff(page: Page, subject: str, name: str) -> None:
@@ -714,7 +717,8 @@ def test_download_writes_two_space_json_with_a_final_newline(page: Page) -> None
     with page.expect_download() as info:
         name = _handoff(page, "(h, d) => h.downloadHandoff(d)", doc)
     download = info.value
-    assert download.suggested_filename == name == "Kamiennik — Świerzawa.handoff.json"
+    assert download.suggested_filename == name
+    assert name == "hydrolog_handoff_kamiennik-swierzawa.json"
     text = download.path().read_text(encoding="utf-8")
     assert json.loads(text) == doc
     assert text.startswith('{\n  "schema": "nogat-handoff/1",\n  "created_at"')

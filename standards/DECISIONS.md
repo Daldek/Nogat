@@ -92,6 +92,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
 | [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
 | [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
+| [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
 
 ---
 
@@ -2085,3 +2086,46 @@ them ECO-060. The kit's `nogat-terms.md`, `nogat-terms-operator.md` and
 `chmu`. Obserwator, Hydrolog, Archiwista and Hydrograf follow in their own
 branches (plan steps 2 to 5); Hydrolog still reads the two old columns in
 files written before, as lines, not data. Dated records keep the old names.
+
+## ECO-083 One pattern for the files a tool names for a user
+
+**Decision.** A file whose name a project chooses for a user (a GUI's
+download, a REST attachment, a file a command writes into `output_dir` under
+a name it picks) is named `<tool>_<content>_<qualifiers>.<extension>`
+(DEV-19.21): the registry name first, the content in English words joined by
+`-`, the qualifiers after `_` with identifiers unchanged, ISO dates and a
+person's text reduced to lower-case ASCII with `-`, only ASCII letters,
+digits, `.`, `-` and `_`. The kit's statistics file becomes
+`<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+project, as the shell does) and its hand-off file
+`<producer>_handoff_<subject>.json`, the producer being the envelope's
+`producer.tool`, which the schema requires; `nogat-handoff.js` exports the
+reduction of a person's text as `nameSlug`. Plan:
+`docs/plans/2026-11-21-download-file-names.md`.
+
+**Why.** The author's decision of 2026-11-21 („Cały ekosystem w tej
+rundzie”, „Angielskie”, „Tak, z nazwą narzędzia na początku”), after
+Obserwator's station list: each tool named its files its own way, with
+Polish and English words, `-` and `_`, the tool's name and the station's
+code each in a different place, and a downloads folder did not tell which
+tool wrote a file. The hand-off loses `.handoff.json`: no reader needs the
+suffix, since the kit's `readFile` reads any picked file and Hydrolog's
+pickers accept `.json,application/json`, and the content word `handoff`
+marks the file as the suffix did, so a second pattern for one kind of file
+is not kept. The subject, a person's text, was kept with spaces and
+diacritics, which the rule leaves out of names.
+
+**Rejected.** Polish content words (the code, the schemas and the
+identifiers are English, DEV-2.1). Names without the tool's name (the
+author's choice). `<subject>.handoff.json` kept as an exception (a reader
+would need it, none does). The tool's name last (the author's choice). `-`
+between the parts (content words, dates and a person's text hold `-`, so the
+parts could not be told apart).
+
+**Consequence.** DEV-19.21 is new and DEV-15.5 is amended. The kit's
+`nogat-admin.js` and `nogat-handoff.js` change with their hashes; its
+version stays `1.1.0` (ECO-081). Obserwator, Hydrolog, Hydrograf and
+Archiwista rename their downloads, attachments and default output names in
+their own branches and copy the kit (plan steps 2 to 5), with their
+manuals and labels that name `….handoff.json`; Kartograf keeps the names
+of plain mode (DEV-19.5). No old name is kept beside a new one.

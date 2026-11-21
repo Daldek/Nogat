@@ -531,10 +531,11 @@ the menu is not drawn. An entry opens its GUI in the tab named
 **DEV-15.5** A GUI hands data to another as `nogat-handoff/1` (Nogat
 `schemas/exchange/handoff-1.schema.json`) through the kit's `nogat-handoff.js`.
 The producer offers „Kopiuj do <GUI in genitive>” and „Plik przekazania”; the
-file is `<subject>.handoff.json` in 2-space JSON with a final newline. The
-consumer offers „Wczytaj z <GUI in genitive>” with „Plik przekazania…” and
-„Wklej ze schowka”, checks the envelope against its copy of the schema and
-the payload against its owner's schema, and names each problem in Polish.
+file is `<producer>_handoff_<subject>.json` (DEV-19.21) in 2-space JSON with
+a final newline. The consumer offers „Wczytaj z <GUI in genitive>” with
+„Plik przekazania…” and „Wklej ze schowka”, checks the envelope against its
+copy of the schema and the payload against its owner's schema, and names each
+problem in Polish.
 Copying falls back to a selected text field where the Clipboard API is
 missing or refused.
 *Why:* three implementations differed in file name, text and clipboard
@@ -1006,6 +1007,25 @@ streamed. `status` is `written` or `replaced` in plain mode and `new`,
 (`conflict`, DEV-19.14) and `not_empty` (`conflict`: a root that holds other
 files and is no store). A tool adds no registry code for the convention
 (ERR-1).
+
+**DEV-19.21** (`tool`, `app`) A file whose name a project chooses for a user,
+a GUI's download, a REST attachment (`Content-Disposition`) or a file a command
+writes into `output_dir` under a name it picks, is named
+`<tool>_<content>_<qualifiers>.<extension>`:
+
+| Part | Value |
+|---|---|
+| `<tool>` | the project's name in the registry, `obserwator`, `hydrograf` |
+| `<content>` | what the file holds, in English, lower case, words joined by `-`: `stations`, `series`, `network-nodes`, `stats`, `handoff` |
+| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a provider's id `imgw-pib`, a method), dates `YYYY-MM-DD`, and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
+| `<extension>` | the format's own, lower case: `csv`, `json`, `geojson`, `zip` |
+
+The name holds only ASCII letters, digits, `.`, `-` and `_`. Not named so: a
+data file of a store's plain mode, which keeps its unit's name, often the
+provider's (DEV-19.5), a store's own files, `ATTRIBUTION.txt` (DEV-20.5) and
+a name the caller gives (`output`).
+*Why:* the name tells which tool wrote a file and what it holds, the same way
+in every tool (ECO-083).
 
 ---
 

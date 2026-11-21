@@ -47,6 +47,19 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- ECO-083, DEV-19.21, DEV-15.5 (the author, 2026-11-21): a file a tool names
+  for a user, a GUI's download, a REST attachment or a file a command writes
+  into `output_dir` under a name it picks, is
+  `<tool>_<content>_<qualifiers>.<extension>`. The kit's statistics file is
+  `<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+  project), was `<project>-stats-<first>-<last>.csv`; the hand-off file is
+  `<producer>_handoff_<subject>.json`, the subject in lower-case ASCII with
+  `-`, was `<subject>.handoff.json`; `nogat-handoff.js` exports that
+  reduction as `nameSlug`. Their hashes are in `nogat-kit.json`, whose
+  version stays `1.1.0`; `design/README.md`. Migration: a GUI copies the
+  kit again and names its own downloads by the rule; a manual or label that
+  names `….handoff.json` names the new file. Plan
+  `docs/plans/2026-11-21-download-file-names.md`, step 1.
 - ECO-082, DEV-2.5, DEV-20.5, DEV-20.6 (the author, 2026-11-21): an
   identifier naming a data provider uses its national acronym without
   diacritics, so ČHMÚ is `chmu` where it was `chmi`: the registry's data

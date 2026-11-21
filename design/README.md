@@ -309,7 +309,8 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | --- | --- |
 | `TEXTS.copyTo(name)`, `TEXTS.file`, `TEXTS.loadFrom(name)`, `TEXTS.openFile`, `TEXTS.paste`, `TEXTS.open(name)` | The labels: „Kopiuj do Hydrologa”, „Plik przekazania”, „Wczytaj z Hydrografa”, „Plik przekazania…”, „Wklej ze schowka”, „Otwórz Archiwistę” |
 | `copyHandoff(doc, field)` | Clipboard in a secure context; otherwise the text goes selected into `field` and the result is `"field"` (show `TEXTS.copyByHand`) |
-| `downloadHandoff(doc)` | Saves `<subject>.handoff.json`, 2-space JSON with a final newline; returns the name |
+| `downloadHandoff(doc)` | Saves `<producer>_handoff_<subject>.json` (DEV-19.21), the producer `doc.producer.tool`, the subject through `nameSlug` (`hydrograf_handoff_kamiennik-swierzawa.json`, `hydrograf_handoff.json` when nothing of it remains), 2-space JSON with a final newline; returns the name |
+| `fileName(subject, producer)`, `nameSlug(text)` | That name; a person's text as a part of a file name: lower-case ASCII without diacritics, each run of other characters one `-`, none at either end (`Kamiennik — Świerzawa` → `kamiennik-swierzawa`), for a GUI's own downloads too |
 | `readFile(file)`, `readClipboard()` | The text of a picked file; the clipboard's, or `null` when refused (offer a field, `TEXTS.pasteByHand`) |
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
@@ -430,12 +431,12 @@ The views work in the shell and alone in an app's own view, as Archiwista's „Z
 | --- | --- |
 | `endpoint` | The route, resolved against the page; default `../api/admin/feedback`, `../api/admin/stats` or `../api/admin/status`; in the shell its `api` sets it |
 | `auth` | `session`: the view's requests go through `fetch` with the page's cookies and never a key, in the shell too |
-| `project` | `<nogat-admin-stats>` alone: names its CSV file, as the shell's `project` does |
+| `project` | `<nogat-admin-stats>` alone: names its CSV file, as the shell's `project` does; `nogat` without it |
 | `element.adminFetch` | The function every request of the view goes through, `(url, init) => Promise<Response>`: by default the nearest `<nogat-admin>`'s `adminFetch`; alone or with `auth="session"`, `fetch` with `credentials: "same-origin"` and `cache: "no-store"`; an app whose requests need more assigns its own |
 | `load()` | Asks the route again and redraws; the shell calls it when the view's section is shown |
 | `clear()` | Drops what the view shows; the shell calls it when it returns to the prompt |
 
-`<nogat-admin-stats>` asks `from` the day 6, 29 or 89 days before today (UTC) and `to` today, both days included; „Cały okres” asks `from=1970-01-01`. Its file is `<project>-stats-<first>-<last>.csv`: the keys of DEV-15.11 as the header, then one line per day, comma-separated, LF, without the totals.
+`<nogat-admin-stats>` asks `from` the day 6, 29 or 89 days before today (UTC) and `to` today, both days included; „Cały okres” asks `from=1970-01-01`. Its file is `<project>_stats_<first>_<last>.csv` (DEV-19.21), e.g. `hydrolog_stats_2026-08-01_2026-11-13.csv`: the keys of DEV-15.11 as the header, then one line per day, comma-separated, LF, without the totals.
 
 Every GUI answers the core API of DEV-15.13, each answer JSON with `Cache-Control: no-store` and each refusal the error document of `unauthorized` with `details.reason`:
 
