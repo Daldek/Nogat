@@ -47,6 +47,19 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- ECO-082, DEV-2.5, DEV-20.5, DEV-20.6 (the author, 2026-11-21): an
+  identifier naming a data provider uses its national acronym without
+  diacritics, so ČHMÚ is `chmu` where it was `chmi`: the registry's data
+  source `chmu` and exchange format `chmu-json/1`, the regulamin's block
+  `chmu` in `nogat-terms.md`, `nogat-terms-operator.md` and
+  `nogat-terms.html` (their hashes in `nogat-kit.json`, whose version stays
+  `1.1.0`), `BLOCKS` of `scripts/terms.py` and `design/README.md`; texts for
+  people keep „ČHMÚ” and the address `opendata.chmi.cz` stays. A CSV's
+  attribution columns are `attribution` and `terms_notice` only. Migration:
+  a GUI lists the block `chmu` in its regulamin filling (`chmi` is refused)
+  and copies the kit again; a project drops the CSV columns
+  `attribution_source` and `attribution_processed`. Plan
+  `docs/plans/2026-11-21-national-provider-names.md`, step 1.
 - ECO-081: the GUI kit's version becomes `1.1.0` (the author, 2026-11-21),
   for the draft regulamin for operators (ECO-079) and the strip folded on a
   phone (ECO-080); every GUI copies the manifest for the round's releases.

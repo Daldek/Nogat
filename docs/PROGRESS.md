@@ -256,7 +256,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     kit copies of Hydrograf and Archiwista on `feat/phone-sources-strip`.
     The author decided on 2026-11-21: both plans approved, Hydrograf
     `0.6.0` = the Hydrolog adaptation only, kit `1.1.0` (ECO-081, every GUI
-    copies it), Nogat `0.2.0` with `std-1.1`. Next: candidate-11, releases.
+    copies it), Nogat `0.2.0` with `std-1.1`; ČHMÚ named `chmu` and the CSV
+    with two attribution columns first (ECO-082, plan
+    `2026-11-21-national-provider-names.md`). Next: candidate-11, releases.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
