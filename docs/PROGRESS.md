@@ -99,33 +99,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      Production took these data on 2026-11-17 (Deployment and storage);
      the cut belongs in Hydrograf (S5), so a later re-processing needs no
      hand-run scripts.
-   - Obserwator: the user unit `chmi-night` (2026-11-16 23:05 to
-     2026-11-17 08:07, `~/tmp/chmi-night/`) downloaded the daily archives
-     of the 2,474 Czech ČHMÚ stations of the catalog into the raw root, one
-     station per call (41,271 files, none failed; about 2,800 meteo files
-     are not published and 75 hydro stations have none), built the series
-     `cz.chmi.hydro_daily` (20 min) and rebuilt the analyses of every
-     station with Hydrolog 0.8.0 (6 h 9 min; the service shows them):
-     IMGW-PIB 3,240 stations, 83,704 analyses ok and 1,000 failed at 201
-     stations (the 2026-11-15 build with 0.8.0.dev0: 2,093 at 1,066); ČHMÚ
-     796 stations (23 before), 31,971 ok and 265 failed at 55. Almost all
-     failures are series too short for the method (Mann–Kendall, flood and
-     low-flow frequency, homogeneity and precipitation quantiles with 0 to 2
-     years against the 3 needed; incomplete months or years); defects for
-     Hydrolog 0.8.1: `hydrometrics rating-curve` per period ends in an
-     `OverflowError` (8 stations: `_level_at` inverts a curve whose `b` is
-     near zero, `operations/hydrometrics.py:276`), its fit does not converge
-     at 5 stations, and `low_flow_sequences` refuses a threshold of 0 (Q)
-     or below 0 (H) instead of a notice. The series
-     `cz.chmi.meteo_daily` fails: Obserwator
-     3.0.0 refuses the whole build at a row whose `TIMEFUNC` is an old
-     observation term (85 of 3,351 files). Fixed on Obserwator's branch
-     `fix/3.0.1` (ADR-003 erratum of 2026-11-17: a daily value at any
-     observation term is that day's), with C4, its part of C5, C7 and
-     E3-06; its full gate passed (3,446 tests). The release of 3.0.1 waits
-     for the author's approval; the meteo series is built after it.
-     Obserwator also refreshes its copies in `schemas/nogat/` from
-     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+   - Obserwator: the user unit `chmi-night` (2026-11-16/17,
+     `~/tmp/chmi-night/`) downloaded the daily archives of the 2,474 ČHMÚ
+     stations into the raw root (41,271 files, none failed), built
+     `cz.chmi.hydro_daily` and rebuilt the analyses with Hydrolog 0.8.0;
+     the defects it found went into Obserwator `v3.0.1` and Hydrolog
+     `v0.8.1` (Next 7), and `cz.chmi.meteo_daily` was built on 2026-11-21
+     (Deployment and storage). Obserwator also refreshes its copies in
+     `schemas/nogat/` from `std-1.0` (its D6,
+     `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle

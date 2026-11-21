@@ -4,7 +4,7 @@ Approved: 2026-11-21, the author (in session: „filtr ma działać na obu serwe
 
 Status: steps 1 to 5 done on 2026-11-21 and merged into the `develop` of Nogat (`fa425fd`) and Obserwator (`9b920f8`, full gate passed at `55dd035`); not released: Obserwator `v3.1.0` waits for the end of the round and the author's approval. Step 6 is `v3.2.0`, step 7 the round's release set. The design's proposals marked „[proposed]” were approved with it.
 
-Requirements: DEV-17.4, DEV-18.1 to DEV-18.4, DEV-12.4 to DEV-12.9, DEV-13, DEV-15.4, DEV-15.7, DEV-15.8, DEV §20, HUB-5.2. Related plans: `2026-11-20-hydromet-providers.md` (branch `plan/hydromet-providers`, P1 to P13), `2026-11-17-install-contract.md` (branch `plan/install-contract`, rules 1 to 13).
+Requirements: DEV-17.4, DEV-18.1 to DEV-18.4, DEV-12.4 to DEV-12.9, DEV §13, DEV-15.4, DEV-15.7, DEV-15.8, DEV §20, HUB-5.2. Related plans: `2026-11-20-hydromet-providers.md` (branch `plan/hydromet-providers`, P1 to P13), `2026-11-17-install-contract.md` (branch `plan/install-contract`, rules 1 to 13).
 
 Releases [proposed]: steps 1 to 5 are Obserwator `v3.1.0`, beside its scope decided on 2026-11-14 to 2026-11-20; step 6, the operator's own network, joins `v3.2.0` with the provider adapters of `hydromet-providers`. Nothing is tagged before the whole round ends (the author, 2026-11-21).
 
