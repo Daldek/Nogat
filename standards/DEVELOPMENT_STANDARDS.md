@@ -1017,13 +1017,13 @@ writes into `output_dir` under a name it picks, is named
 |---|---|
 | `<tool>` | the project's name in the registry, `obserwator`, `hydrograf` |
 | `<content>` | what the file holds, in English, lower case, words joined by `-`: `stations`, `series`, `network-nodes`, `stats`, `handoff` |
-| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a provider's id `imgw-pib`, a method), dates `YYYY-MM-DD`, and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
+| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a method), a provider's id in lower case (`imgw-pib`, `chmu`), dates `YYYY-MM-DD` (a moment adds `_HHMMSSZ` in UTC), and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
 | `<extension>` | the format's own, lower case: `csv`, `json`, `geojson`, `zip` |
 
 The name holds only ASCII letters, digits, `.`, `-` and `_`. Not named so: a
-data file of a store's plain mode, which keeps its unit's name, often the
-provider's (DEV-19.5), a store's own files, `ATTRIBUTION.txt` (DEV-20.5) and
-a name the caller gives (`output`).
+file that keeps the name of its unit in a store, often the provider's
+(DEV-19.5), a store's own files, `ATTRIBUTION.txt` (DEV-20.5) and a file the
+caller names (`output` or another option that gives the name).
 *Why:* the name tells which tool wrote a file and what it holds, the same way
 in every tool (ECO-083).
 
