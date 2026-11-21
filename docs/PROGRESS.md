@@ -247,14 +247,30 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     question to IMGW-PIB before any commercial start.
 15. Obserwator deployed for an operator with its own network
     (`docs/plans/2026-11-21-obserwator-instance.md`, approved 2026-11-21):
-    step 1 done on `feat/operator-instance` (ECO-079: DEV-15.3 allows the
-    operator's logo and name beside the mark, DEV-15.7 serves the operator's
-    own regulamin; the kit's draft `nogat-terms-operator.md`, kit still
-    `1.0.0`; `obserwator-gui` and `[obserwator.instance]` in the registry);
-    steps 2 to 5 are Obserwator `v3.1.0`, step 6 its `v3.2.0`, step 7 the
-    release set of the round. Before a client gets the draft, a lawyer of
-    the author's choice reviews it; whether the added file raises the kit
-    to `1.1.0` is the author's call (REL-1.4).
+    steps 1 to 5 done and merged (ECO-079: DEV-15.3 allows the operator's
+    logo and name beside the mark, DEV-15.7 serves the operator's own
+    regulamin; the kit's draft `nogat-terms-operator.md`, kit still `1.0.0`;
+    Obserwator ADR-025); step 6 is Obserwator `v3.2.0`, step 7 the release
+    set of the round. Before a client gets the draft, a lawyer of the
+    author's choice reviews it.
+16. The release round of 2026-11-21 (Obserwator 3.1.0, Hydrolog 0.9.0 and
+    their consumers; released only when the whole round is done, the
+    author's decision): every member's `develop` holds its part; CI is green
+    on the blocking jobs except Archiwista's (a Firefox page error on leaving
+    the map view, being fixed on `fix/map-teardown`): Obserwator `047aeda` (with the Windows
+    fixes of the instance), Hydrolog `eaf7f4b` (`0.9.0.dev6`), Hydrograf `d23cb02`
+    (Hydrolog 0.9.0 adapted: Jg, Euler II from the PMAXTP curve, whole
+    steps, the standard's refusals, `formula_versions`; ADR-088 proposed),
+    Archiwista `9e9e365` (Obserwator 3.1.0, a subset series read correctly);
+    Kartograf unchanged at `v0.8.2`. Their pins name development commits
+    and are moved to one set in the candidate. Waiting for the author: the
+    Approved lines of `2026-11-18-computation-standard.md` and
+    `2026-11-19-hydrolog-0.9.0-consumers.md`, the consumers' version
+    numbers (Hydrograf's scope: 0.6.0 with the Hydrolog adaptation only was
+    proposed), the kit's version (`1.0.0` or `1.1.0` for the added draft,
+    REL-1.4), and Nogat's version and standard (`0.2.0` with `std-1.1` was
+    proposed). Then candidate-11, `set verify`, `verify-candidate`, the
+    releases producers first and Nogat's.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
