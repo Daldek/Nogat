@@ -273,6 +273,12 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     release set of the round. Before a client gets the draft, a lawyer of
     the author's choice reviews it; whether the added file raises the kit
     to `1.1.0` is the author's call (REL-1.4).
+16. The sources strip folded to one line on a phone (ECO-080, DEV-20.5,
+    `docs/plans/2026-11-21-phone-sources-strip.md`, approved 2026-11-21):
+    step 1 on `feat/phone-sources-strip`, the kit's `nogat-sources.js` and
+    `.css` with their hashes (kit still `1.0.0`); steps 2 and 3 are the
+    copies of Obserwator `v3.1.0` and Hydrolog `v0.9.0`, step 4 those of
+    Hydrograf and Archiwista with their next change (`drift` names them).
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

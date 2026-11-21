@@ -45,6 +45,16 @@ the standard are listed in [standards/README.md](standards/README.md).
   module.
 - Hypothesis, mutmut and NumPy in the development dependencies (CMP-8.3).
 
+### Changed
+
+- ECO-080, DEV-20.5: on a screen up to 860 px wide the kit's
+  `<nogat-sources>` folds its strip to one line, the lines cut with an
+  ellipsis, then „więcej”, shown while the line cuts them, which unfolds the
+  strip in place („zwiń” folds it again), and „Źródła i warunki”; wider
+  screens are unchanged. The element's `expanded` property and attribute
+  hold the state, `clipped` marks a cut line. The kit's version stays
+  `1.0.0`. Plan `docs/plans/2026-11-21-phone-sources-strip.md`.
+
 ### Fixed
 
 - The first example of `nogat-handoff/1` records Hydrolog 0.9.0's result

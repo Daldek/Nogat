@@ -73,7 +73,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -89,6 +89,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-077](#eco-077-verify-candidate-runs-an-app-on-its-own-lock) | verify-candidate runs an app on its own lock | accepted | 2026-11-16 |
 | [ECO-078](#eco-078-formulas-are-declared-once-checked-at-their-limits-and-verified) | Formulas are declared once, checked at their limits and verified | accepted | 2026-11-18 |
 | [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
+| [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
 
 ---
 
@@ -1400,6 +1401,9 @@ short forms of G, SG and Z, and the dialog G, SG and Z.
 **Amended by ECO-070 (2026-11-14):** the welcome window's „Regulamin
 serwisu” is its only regulamin link, and no footer reaches the dialog.
 
+**Amended by ECO-080 (2026-11-21):** on a screen up to 860 px wide the strip
+folds to one line, unfolded in place by „więcej”.
+
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
 (DEV-20.5). The strip holds only the sentences the providers require on the
@@ -1989,3 +1993,33 @@ kit version for the added draft (only the author changes it, REL-1.4).
 author decides (REL-1.4). Obserwator implements both for `v3.1.0` (plan
 steps 2 to 4); another GUI adopts them when an operator needs it
 (DEV-17.5).
+
+## ECO-080 The sources strip folds to one line on a phone
+
+**Decision.** On a screen up to 860 px wide, the kit's phone, the strip of
+`<nogat-sources>` takes one line (DEV-20.5): its on-screen lines start on it
+in the order of DEV-20.4 and are cut with an ellipsis where they no longer
+fit, then come the button „więcej” and „Źródła i warunki”. „więcej” shows
+only while the line cuts them; it unfolds the strip in place, wrapped as on
+a wider screen, and then reads „zwiń”. A wider screen is unchanged. The
+element keeps the state as its attribute `expanded` and marks a cut line
+with `clipped`. Plan: `docs/plans/2026-11-21-phone-sources-strip.md`.
+
+**Why.** The author's decision of 2026-11-21: Obserwator's view „Stacje” on
+an iPhone 13 (390 × 844 px) gave the wrapped strip 127 px, five lines over
+the map. Folded, the lines still begin on the product and one tap shows
+them whole where they stand, so the IMGW-PIB and PMAXTP sentences are never
+only in the dialog, which ECO-064 rejected. The remaining risk, named to the
+author: § 5 ust. 3 and 4 of the IMGW-PIB terms and ust. 1 and 2 of the
+PMAXTP terms want their sentences on the product, and the folded line shows
+their beginning only.
+
+**Rejected.** The strip as „Źródła i warunki” alone on a phone (the
+sentences behind the dialog, as ECO-064 rejected). The lines kept wrapped
+and the strip moved below the view's content (the author's choice). A fold
+wider than a phone (a desktop strip takes at most three lines, ECO-064).
+
+**Consequence.** DEV-20.5 is amended. The kit's `nogat-sources.js` and
+`nogat-sources.css` change with their hashes; its version stays `1.0.0`
+(REL-1.4, ECO-072). Obserwator and Hydrolog copy them for `v3.1.0` and
+`v0.9.0`, Hydrograf and Archiwista with their next change.
