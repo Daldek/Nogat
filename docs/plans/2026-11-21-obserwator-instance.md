@@ -82,4 +82,4 @@ A precedent for an area: Archiwista's project area is one WGS84 polygon in a Geo
 
 ## Results
 
-None yet.
+- Step 1 (2026-11-21, `feat/operator-instance`): ECO-079 amends DEV-15.3 (the operator's logo and name beside the mark, which stays as the favicon and in the top bar; the logo from the GUI's own origin), DEV-15.7 (the operator's own regulamin in place of regulamin 1.0) and DEV-15.8 (its statement on the author's instances only). The kit's draft `design/kit/nogat-terms-operator.md` has the fields and source blocks of regulamin 1.0 plus two the operator writes in (`operator_address`, `operator_register`); an operator's copy is built with `build` and filled with `fill` of `scripts/terms.py`, and a copy still opening with the draft's comment or keeping a field the GUI does not fill is refused (`design/README.md`, „Operator's terms”). The kit stays `1.0.0`. The registry gains `gui: obserwator gui serve` and the service `obserwator-gui`, which names `[obserwator.instance]`. Open: the lawyer's review of the draft, and whether the added file raises the kit to `1.1.0` (the author, REL-1.4).

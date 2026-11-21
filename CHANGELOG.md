@@ -8,6 +8,24 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- ECO-079: an instance of a GUI that an operator other than the author runs
+  may show the operator's logo and name in the top bar beside the project's
+  mark, which stays as the favicon and in the top bar, the logo served from
+  the GUI's own origin (DEV-15.3); it serves the operator's own regulamin in
+  place of regulamin 1.0, whose statement of § 3 belongs to the author's
+  instances (DEV-15.7, DEV-15.8). Plan
+  `docs/plans/2026-11-21-obserwator-instance.md`, step 1.
+- The kit's draft regulamin for operators, `design/kit/nogat-terms-operator.md`,
+  in Polish, a template and not legal advice: the operator is the service
+  provider and the controller of personal data, the software is provided as
+  is under its licence, keeping the data providers' terms is the operator's
+  and the author's part ends with the deployment; the fields and source
+  blocks of regulamin 1.0, so a GUI builds and fills it the same way, plus
+  two fields the operator writes in (`BY_HAND` in `scripts/terms.py`). Its
+  hash is in `nogat-kit.json`, whose version stays `1.0.0` (REL-1.4).
+- The registry names Obserwator's GUI, `obserwator gui serve`, and its
+  service `obserwator-gui` with the instance section `[obserwator.instance]`
+  of `nogat.toml`.
 - The reference module of formulas, `standards/reference/nogat_formulas.py`
   (CMP-8.1), which every project that computes copies byte for byte:
   `FormulaSpec` and `TierBSpec` with sources, physical, applicability and

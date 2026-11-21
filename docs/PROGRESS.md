@@ -261,6 +261,16 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     then D (user rainfall), R (ERA5/CERRA × published coefficients from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
+15. Obserwator deployed for an operator with its own network
+    (`docs/plans/2026-11-21-obserwator-instance.md`, approved 2026-11-21):
+    step 1 done on `feat/operator-instance` (ECO-079: DEV-15.3 allows the
+    operator's logo and name beside the mark, DEV-15.7 serves the operator's
+    own regulamin; the kit's draft `nogat-terms-operator.md`, kit still
+    `1.0.0`; `obserwator-gui` and `[obserwator.instance]` in the registry);
+    steps 2 to 5 are Obserwator `v3.1.0`, step 6 its `v3.2.0`, step 7 the
+    release set of the round. Before a client gets the draft, a lawyer of
+    the author's choice reviews it; whether the added file raises the kit
+    to `1.1.0` is the author's call (REL-1.4).
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
