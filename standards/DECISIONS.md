@@ -2062,8 +2062,9 @@ block `chmu`; IMGW-PIB's identifiers (`IMGW-PIB`, `pl.imgw.*`) are national
 already. Text for people keeps „ČHMÚ”, and the provider's addresses
 (`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
 and `terms_notice` only (DEV-20.5): `attribution_source` and
-`attribution_processed` go. No old name is accepted beside the new one, and
-every schema and format stays `/1`. Plan:
+`attribution_processed` go. No old name is accepted as input beside the new
+one; files a tool stored under an old name are read under the new one, so
+they need no download again. Every schema and format stays `/1`. Plan:
 `docs/plans/2026-11-21-national-provider-names.md`.
 
 **Why.** The author's decision of 2026-11-21: the code mixed the Polish
