@@ -24,7 +24,14 @@ from typing import Any
 import jsonschema
 import pytest
 import terms
-from playwright.sync_api import Browser, Locator, Page, Playwright, expect, sync_playwright
+from playwright.sync_api import (
+    Browser,
+    Locator,
+    Page,
+    Playwright,
+    expect,
+    sync_playwright,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
