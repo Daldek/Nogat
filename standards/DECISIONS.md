@@ -64,14 +64,14 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
-| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
+| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
-| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070 | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
 | [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
@@ -87,6 +87,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-075](#eco-075-the-catalog-summary-is-its-own-document) | The catalog summary is its own document | accepted | 2026-11-15 |
 | [ECO-076](#eco-076-nogat-starts-at-010) | Nogat starts at 0.1.0 | accepted | 2026-11-16 |
 | [ECO-077](#eco-077-verify-candidate-runs-an-app-on-its-own-lock) | verify-candidate runs an app on its own lock | accepted | 2026-11-16 |
+| [ECO-078](#eco-078-formulas-are-declared-once-checked-at-their-limits-and-verified) | Formulas are declared once, checked at their limits and verified | accepted | 2026-11-18 |
+| [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
 
 ---
 
@@ -1039,6 +1041,10 @@ for Archiwista, which follows in its own session (REL-5.4).
 
 ## ECO-055 One visual identity for every GUI
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs may show the operator's logo and name beside the project's
+mark, which stays as the favicon and in the top bar.
+
 **Decision.** Every GUI of the ecosystem (Archiwista, Hydrograf, the web GUI
 of IMGWTools and any later one) uses the identity in Nogat `design/`: shared
 tokens in one plain CSS file, light and dark, with the brand of debever.pl
@@ -1246,6 +1252,10 @@ statistics, cookies and „Zgłoś uwagę”, and names its processor in two fie
 **Amended by ECO-070 (2026-11-14):** „Regulamin” is linked from the app
 menu, the foot of the left rail and the welcome window, not from a footer.
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs serves the operator's own regulamin, drafted from the kit's
+`nogat-terms-operator.md`, in place of regulamin 1.0.
+
 **Decision.** A GUI open to other people serves its terms at
 `regulamin.html`, filled from the kit's template `nogat-terms.md` and the
 `nogat-terms.html` generated from it, and links „Regulamin” from every view
@@ -1282,6 +1292,9 @@ access log keeps the class of the User-Agent, not the User-Agent.
 
 **Amended by ECO-070 (2026-11-14):** no footer or status bar shows the
 statement; it opens § 3 of the regulamin only.
+
+**Amended by ECO-079 (2026-11-21):** the statement of DEV-15.8 and regulamin
+1.0 belong to the instances the author runs.
 
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
@@ -1928,3 +1941,51 @@ gross).
 
 **Consequence.** CMP §1 to CMP §9, HUB-2.1 (`computes`). Plan
 `docs/plans/2026-11-18-computation-standard.md`.
+
+## ECO-079 An operator's instance: its name and logo beside the mark, its own regulamin
+
+**Decision.** An instance of a GUI that an operator other than the author
+runs on its own infrastructure may show the operator's logo and name in the
+top bar beside the project's mark; the project's mark stays as the favicon
+and first in the top bar and is never replaced, and the logo is a file of
+the deployment served from the GUI's own origin (DEV-15.3). Such an instance
+serves the operator's own regulamin in place of regulamin 1.0, which names
+the author as a private, non-commercial operator and stays for the author's
+instances with the statement of DEV-15.8 (DEV-15.7). The kit carries a
+draft for operators, `nogat-terms-operator.md`, in the Markdown and with the
+fields and data-source blocks of regulamin 1.0, so a GUI builds and fills
+it the same way: the operator is the service provider and the controller of
+personal data; the software is provided as is under its licence, without
+warranty or liability for availability, data or results; keeping the data
+providers' terms (DEV §20) is the operator's; the author's part ends with
+the deployment; the operator handles contact and complaints. The draft is a
+template, not legal advice, and says so; a lawyer of the author's choice
+reviews it before an operator gets it. Plan:
+`docs/plans/2026-11-21-obserwator-instance.md` (I14, I15).
+
+**Why.** The author's answers of 2026-11-21: a client runs Obserwator on his
+own infrastructure with his name and logo; the payment is only for the
+deployment, operating the instance is the client's, and so is the
+regulamin, for which the author prepares only a draft that protects his
+interests. The project's mark names the software and keeps the family of
+tools recognisable (ECO-055); the operator's name tells a visitor who runs
+the service. A logo from the GUI's own origin needs no new origin in the
+CSP and keeps DEV-15.7's rule that a GUI loads nothing but maps from other
+servers. Regulamin 1.0 does not invoke the act on electronic services,
+since its operator acts outside any gainful activity (ECO-062); an operator
+in business is a service provider under that act, so the draft adds the
+technical requirements, the conclusion of the contract and complaints.
+
+**Rejected.** The operator's logo in place of the project's mark or as the
+favicon (the instance would pass for another product). A logo loaded from
+the operator's server (a remote resource and a new CSP origin). Regulamin
+1.0 filled with the operator's values (its § 2, § 3 and § 8 would state what
+is false for him). A regulamin the author writes and keeps for each client
+(the author does not operate the instance and gives no legal advice). A new
+kit version for the added draft (only the author changes it, REL-1.4).
+
+**Consequence.** DEV-15.3, DEV-15.7 and DEV-15.8 are amended. The kit adds
+`nogat-terms-operator.md` with its hash; its version stays `1.0.0` until the
+author decides (REL-1.4). Obserwator implements both for `v3.1.0` (plan
+steps 2 to 4); another GUI adopts them when an operator needs it
+(DEV-17.5).

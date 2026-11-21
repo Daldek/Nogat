@@ -13,7 +13,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu and sources strip, since modules do not load from `file://` |
 | [specimen-admin.html](specimen-admin.html) | The kit's admin panel on a fake API in the page ([specimen-admin.js](specimen-admin.js), key `nogat`); served over HTTP like the specimen |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the operator's draft terms `nogat-terms-operator.md`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -181,6 +181,7 @@ The app shell comes from Archiwista; use it for every tool with a map or a works
 
 - Shell: a grid of two columns (64 px rail, content) and two rows (`--header-height`, content).
 - Top bar spans both columns: `--surface`, bottom border `--line`. Left to right: mark at 24 px and the tool name in `--tool-<name>`, then the context (project, area, selection), then actions on the right.
+- Operator's mark (DEV-15.3, ECO-079): on an instance an operator other than the author runs, the top bar may show the operator's logo, at most 24 px high, and name right of the tool name, after a 1 px `--line` divider, the name in `--text-2` at `--weight-medium`. The project's mark and name stay first and the favicon stays the project's mark; the logo is a file of the deployment served from the GUI's own origin (no other server, no new CSP origin), as `<img>` with the operator's name as `alt`, never inlined.
 - Navigation rail: dark column of `.rail-item`s, 54 px wide, icon over a short label, `--radius-md`. Background `--rail-bg`, items `--rail-ink`, hover `--rail-hover`, active `--rail-active` with `--rail-ink-active`.
 - Regulamin (DEV-15.7, ECO-070): a public GUI ends its rail, or its left navigation where it has no rail, with a small, quiet link „Regulamin” to its `regulamin.html`, opened in a new tab (`target="_blank"`, `rel="noopener"`): `.rail-terms` at the foot, `--text-xs` in `--rail-ink`, no icon, hover `--rail-ink-active` and underlined. No footer or status bar carries the link or a statement (DEV-15.8).
 - Content: `.view-layout` grid of left panel, centre, right panel. Left panel 260-560 px (default 300), right panel 340-720 px (default 400), centre at least 480 px.
@@ -367,6 +368,14 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `isric` | ISRIC SoilGrids | Hydrograf |
 | `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
 | `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf; Obserwator with a map |
+
+Operator's terms (DEV-15.7, ECO-079): [nogat-terms-operator.md](kit/nogat-terms-operator.md) is a draft regulamin in Polish for an instance an operator other than the author runs on its own infrastructure, where regulamin 1.0, which names the author as a private, non-commercial operator, does not apply. It keeps the twelve sections, the Markdown, the fields and the data-source blocks of `nogat-terms.md`, so a GUI renders it with the subset of `build` and fills it with `fill` of [scripts/terms.py](../scripts/terms.py) as above, from the same values; it states that the operator is the service provider and the controller of personal data, that the software is provided as is under its licence without warranty or liability for availability, data or results, that keeping the data providers' terms is the operator's, and that the author's part ends with the deployment, and it adds what the act on electronic services asks of a provider acting in business: the technical requirements, the conclusion of the contract and complaints within 14 days.
+It is a template, not legal advice, and opens with a comment saying so: a lawyer reviews it before an operator gets it and adapts it to the operator's deployment. The operator copies it into the deployment's own files, outside the GUI's checkout, writes in the fields below, checks § 3, § 4 and § 8 against the deployment and removes the comment; a GUI serves the operator's copy in place of the kit's page and refuses one that does not start with its `# ` title or keeps a field it does not fill. A GUI copies the draft with the rest of the kit, since its manifest lists it, but never serves it as its terms. The draft has no version of its own: the operator's copy is version 1.0 of the operator's regulamin, which the operator versions from then on.
+
+| Field | Value from |
+| --- | --- |
+| `operator_address` | the operator, in its copy: its seat or address |
+| `operator_register` | the operator, in its copy: the register and number that identify it, e.g. `KRS 0000000000, NIP 0000000000` |
 
 Admin panel (DEV-15.13, ECO-067): the admin page of a GUI, at `/admin/`, is the shell `<nogat-admin>` alone. Link `nogat-admin.css`, load `nogat-admin.js` as a module and put the app's own sections inside the element; the page adds only `<meta name="robots" content="noindex">` and its own scripts.
 
