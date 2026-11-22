@@ -145,6 +145,9 @@ Recorded in the providers plan `2026-11-20-hydromet-providers.md` as P14 to P16;
 | E3 | The polling rate follows the source (P16). |
 | E4 | Releases (the author, 2026-11-22: „CAMELS przesuwa się na 3.4.0, a Gdańskie Wody wchodzą jako v3.3.0”): this plan ships with Obserwator `v3.2.0` (the captures, sub-daily series, telemetry replacement and the chart; steps O1–O4, O6) and Archiwista's minor beside it (A1, A2, A4: indexing, the nightly schedule, backups, which must run from the first capture, since the captures are the only copy of what the API forgets after 6 weeks); Gdańskie Wody is `v3.3.0`, CAMELS-PL `v3.4.0`. |
 | E5 | Replacement is precedence, not deletion (the author, 2026-11-22: „zamiast usuwać (tylko na żądanie), to podmieniamy źródło dla danego miesiąca, a to co zostało pobrane z API i tak zostaje w archiwum dla ewentualnego porównania”): when a month's telemetry (ČHMÚ: the validated year) arrives, the month's series is rebuilt from it (Precedence below), and the captured API answers stay in the raw root for comparison, never deleted. Only superseded versions of the derived series (rebuildable from the raw root) may be pruned, on demand only (D4); `store prune` (O5, A3) leaves `v3.2.0` and waits for a later release. |
+| E6 | Everything outside `v3.2.0`, `v3.3.0` and `v3.4.0` (including `store prune`) comes in `v3.5.0` at the earliest („2. tak”). |
+| E7 | Backups (Q9): the NAS copy for now; a copy outside the NAS waits for the author („na razie nie mam innego miejsca na kopie zapasowe, będę musiał to przemyśleć”). R5 stays open. |
+| E8 | Telemetry enters the series at 1 h only (Q11: „tylko co godzinę”); the 10-min records stay readable in the raw root. |
 
 ## Design
 
