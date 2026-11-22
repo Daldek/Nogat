@@ -148,6 +148,9 @@ Recorded in the providers plan `2026-11-20-hydromet-providers.md` as P14 to P16;
 | E6 | Everything outside `v3.2.0`, `v3.3.0` and `v3.4.0` (including `store prune`) comes in `v3.5.0` at the earliest („2. tak”). |
 | E7 | Backups (Q9): the NAS copy for now; a copy outside the NAS waits for the author („na razie nie mam innego miejsca na kopie zapasowe, będę musiał to przemyśleć”). R5 stays open. |
 | E8 | Telemetry enters the series at 1 h only (Q11: „tylko co godzinę”); the 10-min records stay readable in the raw root. |
+| E9 | Scheduling (Q3: „timer systemd”): the nightly run, the telemetry and validated-year checks and the captures' polling of P16 are Obserwator commands run by user systemd timers (`OnCalendar`, `Persistent=true` for a missed night), shipped as `.service`/`.timer` templates and a `docker-compose` service in Obserwator's deployment guide; an operator without Archiwista (a client's instance runs Obserwator and Hydrolog only) loses nothing. Backups likewise: an `rsync` script with its timer in the deployment guide, not an Archiwista job kind. D3 is superseded; Archiwista indexes, shows and serves what the timers wrote. The sections „Nightly job”, „Locking” (Archiwista's claims) and „Backups” (who) below read with this change. |
+| E10 | ČHMÚ's validated hourly set (`cz.chmu.hydro_hourly`, Q10: „tak, dodać ten drugi zbiór w 3.2.0”) is the verified tier of ČHMÚ's sub-daily series in `v3.2.0`, replacing the `recent` hours year by year, with its history; R6 is checked on the data before the series is built. |
+| E11 | Names follow ECO-082 (2026-11-21), which came after this plan's design: `cz.chmu.*` for `cz.chmi.*`, slugs `imgw_*`/`chmu_*`; the design keeps the old spelling only where it quotes the past. „On demand (D2)” and the follow-up „warnings and water-state classes stay live only” are superseded by E1 (P14): every live answer is captured. |
 
 ## Design
 
@@ -320,10 +323,10 @@ Each step runs in its own session and branch under the project's `CLAUDE.md` (DE
 | O5 | Obserwator | `store prune` (off by default, `--check`, pins honoured) | O1, A3 | a prune plan on a fixture with pinned and superseded versions |
 | O6 | Obserwator | GUI: the delta in memory, the route, the chart in „teraz” | O4 | the GUI on the test instance |
 | A1 | Archiwista | Index and show `time_unit` `hour` and `obserwator-subdaily/1`, and the monthly slots | O4 | contract test with `obserwator.testing` |
-| A2 | Archiwista | Schedule entries (i) or the documented timer (ii), the window end passed to the call, catch-up after a missed night | O3 | a night run and a missed-night catch-up on the test instance |
+| A2 | Obserwator (was Archiwista; E9) | The `.service`/`.timer` templates and the `docker-compose` service for the night, the telemetry and validated-year checks and the captures' polling; the window end passed to the call; catch-up after a missed night (`Persistent=true`, `--days`) | O3 | a night run and a missed-night catch-up on the test instance |
 | A3 | Archiwista | Export of the versions its projects pin, for `store prune --keep` | — | a project's pins in the export |
-| A4 | Archiwista | Job kind `backup` (rsync snapshots, retention, the monthly restore test) | A2 | a restore test passes on the test instance |
-| D1 | Operator | Production: the schedule, the first backfill `--days 40`, the backup target | O6, A2, A4 | the first week of nights and one weekly snapshot |
+| A4 | Obserwator (was Archiwista; E9) | The backup script and its timer (rsync snapshots, retention, the monthly restore test) in the deployment guide | A2 | a restore test passes on the test instance |
+| D1 | Operator | Production: the timers, the first backfill `--days 40`, the backup target | O6, A2, A4 | the first week of nights and one weekly snapshot |
 
 ## Acceptance
 
@@ -355,11 +358,11 @@ Risks:
 
 Topics to settle before implementation (the author, before this plan's `Approved:` line or at the latest before N0 starts; the plan ships after the first joint release):
 
-- **Q3.** Scheduling in Archiwista: schedule entries in `ScanScheduler` (i, proposed), or a user systemd timer that runs `archiwista jobs start download` into the queue (ii, no scheduling code in Archiwista)?
+- **Q3.** Answered (E9): user systemd timers running Obserwator's commands.
 - **Q8.** Formats after the release: `obserwator-subdaily/1` is new. Do the new slot form `series:<key>:<YYYY-MM>` and the new `time_unit` value `hour` stay within version 1 of `obserwator-data/1` (ECO-072)? Coordinator's proposal: yes. A change stays within `/N` when it only adds optional fields or values an existing reader can ignore (AGI-4.1); here the one reader that tells series apart by `time_unit`, Archiwista, is changed in the same plan (A1). The rule is to be recorded once as an ECO decision, shared with the large-basins plan (its topic 1).
-- **Q9.** Backups: is a copy outside the NAS wanted for the raw root (another disk or off-site), or does the NAS copy suffice?
-- **Q10.** ČHMÚ's validated hourly set (`cz.chmi.hydro_hourly`) as the verified tier for ČHMÚ: in this plan (proposed), or later?
-- **Q11.** Telemetry in the series at 1 h from the full-hour samples (proposed, Resolution of the series), or a 10-min series as well?
+- **Q9.** Answered for now (E7): the NAS copy; a copy outside the NAS waits for the author.
+- **Q10.** Answered (E10): `cz.chmu.hydro_hourly` in `v3.2.0`.
+- **Q11.** Answered (E8): 1 h only.
 - **Q12.** PROGRESS numbering: this branch and `plan/large-basins` both add PROGRESS item 15; the second to merge renumbers.
 
 ## Follow-ups (outside this plan's steps)
