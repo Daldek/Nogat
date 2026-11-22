@@ -253,9 +253,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     Hydrograf `0.6.0` = the Hydrolog adaptation, kit `1.1.0` (ECO-081),
     Nogat `0.2.0` with `std-1.1`, providers by national acronyms in
     identifiers (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one
-    pattern of file names (DEV-19.21, ECO-083). `develop`: Hydrograf
-    `3a4ecf9` done; Obserwator, Hydrolog and Archiwista integrate their
-    branches on `chore/round-integration` (2026-11-22). The production
+    pattern of file names (DEV-19.21, ECO-083). Every member's `develop`
+    holds its part with its full gate (2026-11-22): Obserwator `de06926`,
+    Hydrolog `ede288a`, Hydrograf `3a4ecf9`, Archiwista `bfd42c8`. The production
     rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10 (several
     gates at once); production serves its old data root, and the 3.1.0
     deploy builds a new one anyway. Next: candidate-11, releases.

@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „Jeszcze jedna rzecz do ujednolicenia - nazwy pobieranych plikow”, then the choices „Cały ekosystem w tej rundzie”, „Angielskie”, „Tak, z nazwą narzędzia na początku” out of: the whole ecosystem in this round, the rule now and Obserwator now, Obserwator only; Polish or English words; with or without the tool's name)
 
-Status: approved; step 1 (Nogat) merged into `develop` on 2026-11-21 (`c7ae41f`); step 4 (Hydrograf) merged (`3a4ecf9`); steps 2, 3 and 5 are on each tool's `chore/round-integration` (2026-11-22).
+Status: steps 1 to 5 done and merged into `develop` with their full gates on 2026-11-22: Nogat `c7ae41f`, Obserwator `de06926`, Hydrolog `ede288a`, Hydrograf `3a4ecf9`, Archiwista `bfd42c8`.
 
 Requirements: DEV §19 (files a tool writes), DEV-15.5 (hand-off file), DEV-15.11 (statistics file), ECO-082 (identifiers by national acronyms). Raised by the author's test of Obserwator's station list on 2026-11-21.
 
