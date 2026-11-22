@@ -3,7 +3,8 @@
 Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`), updated 2026-11-16 by the
 candidate's lock, `verify-candidate`, the integration run, the members' releases, Nogat's
 release `v0.1.0` with standard 1.0 (`std-1.0`, 2026-11-17), the closed set `kaczawa`/`2026-1`
-and the `origin/develop` of the projects after `git fetch`; release-set pins by `set check`.
+and the `origin/develop` of the projects after `git fetch`, and on 2026-11-22 for Nogat
+`v0.2.0` with standard 1.1 (`std-1.1`); release-set pins by `set check`.
 History is the git log, the CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is
 called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the directory
 `IMGWTools`.
@@ -17,13 +18,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
   - BDOT10k counties and unpinned data also held
   - NAS usage: 66 GB of 300 GB
 - **Obserwator data** (processed, local, served fast) = ~/data/obserwator-target/data
-- **Released versions deployed 2026-11-16** (checkouts detached at the tags, venvs `uv sync --locked --all-extras --reinstall-package <pkg>`, then the unit restarted; each smoke-checked on 127.0.0.1 and its public host):
-  - Hydrolog `v0.8.0` (`hydrolog-gui.service`, worktree `~/workspace/Hydrolog-gui`, was `e5df06d`), with Obserwator 3.0.0 as its extra; Obserwator's analyses call this venv's `hydrolog`
-  - Obserwator `v3.0.0` (`obserwator-public.service`, `~/data/obserwator-public/app-target`, was `3816b3c`; code unchanged but the version), OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator; its stored analyses are those of 2026-11-15 (Hydrolog 0.8.0.dev0), not rebuilt (Next 6)
-  - Archiwista `v0.3.0` (`archiwista-public.service`, `~/data/archiwista-public/app`, was `7a11c76`) with Kartograf 0.8.0 and Obserwator 3.0.0; no index or state migration
-  - Hydrograf `v0.5.0` on :8080 (`~/workspace/Hydrograf` detached at the tag, was local `develop` `1577dbc`; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.0, Obserwator 3.0.0, Hydrolog 0.8.0; alembic `007`, no migration); Hydroni :8081 unchanged; admin-panel store re-processing deferred to after the first joint release, now a follow-up (Next 6)
-- **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut
-- **Backups** retained: `/data/nmt/deploy-backup-2026-11-16/` (before the deployment of the releases: `hydrograf-hydro_db.dump`, `hydrograf.env`, Archiwista state and index, Hydrolog's feedback, `~/.local/share/nogat` and `~/.local/state/nogat`, the user units, `deployed-before.txt`), image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
+- **Patch releases deployed 2026-11-18** (the author's approval; as on 2026-11-16: checkouts detached at the tags, venvs `uv sync --locked --all-extras --reinstall-package <pkg>`, then the unit restarted; each smoke-checked on 127.0.0.1 and its public host):
+  - Hydrolog `v0.8.1` (`hydrolog-gui.service`, worktree `~/workspace/Hydrolog-gui`, was `v0.8.0`), with Obserwator 3.0.1 as its extra; Obserwator's analyses call this venv's `hydrolog`; the SCS unit hydrograph of a daily step keeps its volume (0.998 mm)
+  - Obserwator `v3.0.1` (`obserwator-public.service`, `~/data/obserwator-public/app-target`, was `v3.0.0`), OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator; the series `cz.chmi.meteo_daily` built (`2026-09-04_0303d027`, 1,535 stations; the analyses of 2026-11-17 had used a 10-station version); `analyses build` of both providers with Hydrolog 0.8.1 runs as the unit `obserwator-analyses-2026-11-18` (IMGW-PIB 3,240 and ČHMÚ 2,321 stations, none carried forward)
+  - Archiwista `v0.3.1` (`archiwista-public.service`, `~/data/archiwista-public/app`, was `v0.3.0`) with Kartograf 0.8.1 and Obserwator 3.0.1 (`archiwista doctor`: 0 errors); no index or state migration
+  - Hydrograf `v0.5.1` on :8080 (`~/workspace/Hydrograf` detached at the tag; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.1, Obserwator 3.0.1, Hydrolog 0.8.1; no migration, no new variables); the hydrograph of a daily step gives the Polish notice `uh_substeps`; Hydroni :8081 unchanged. Production keeps the data of Archiwista's set `kaczawa/2026-2` it took on 2026-11-17 (backup in `/data/nmt/hydrograf-backup-2026-11-17/`); the staging instance `hgstaging` that cut it was removed on 2026-11-18 (the author's decision: containers, volume `hgstaging_postgres_data`, worktree `~/workspace/Hydrograf-staging`, `~/data/hydrograf-staging`), and its README, cut scripts and logs are kept in `/mnt/magazyn/agent-tmp/archiwum-2026-11-18/hydrograf-staging/`
+- **Obserwator `develop` deployed 2026-11-21** (the author's request in session; no release): `obserwator-public.service` from `~/data/obserwator-public/app-target` detached at `55dd035` (`3.1.0.dev0`, full gate passed; was `c3587ae`), the venv `uv sync --locked --all-extras --reinstall-package obserwator`, no new dependency, no `[obserwator.instance]` section; smoke-checked on 127.0.0.1:8060 and obserwator-test.debever.pl (`/`, `api/session`, `api/stations` 304-capable, `api/current`, `robots.txt`, `favicon.ico`, the new security headers, `/admin/` 302 to Access; a headless browser without console errors); RSS 272 MB after the start (the unit's peak before the restart was 3.3 GB with 2.4 GB of swap). Its analyses still come from Hydrolog `0.9.0.dev0` (`~/workspace/Hydrolog-obs`, `cec5d97`); ČHMÚ's snow and half-years show after the snow files are synced and the series and analyses rebuilt. Rollback: `~/data/obserwator-public/backup-2026-11-21/ROLLBACK.txt`.
+  - Data rebuild started 2026-11-21 14:30 (the author's go-ahead): `~/workspace/Hydrolog-obs` detached at Hydrolog `de3b606` (`0.9.0.dev5`, full gate passed), the GUI restarted on it; the user unit `obserwator-rebuild-2026-11-21` (`~/tmp/rebuild-2026-11-21/rebuild.py`, log `run.log`) checks `cz.chmi.meteo_daily` (2,546 missing files, all ČHMÚ snow `SCE`/`SNO` of 1,281 stations; 3,351 current), syncs them one station per call with a 2 s gap, builds the series `cz.chmi.meteo_daily` and `pl.imgw.meteo_precip_daily` (T24's accumulated totals) and then `analyses build --workers 3` of both providers (every station is computed again: new Hydrolog version and registry digest), resuming once if it stops. The GUI serves the current versions until each new one is published.
+- **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut. On 2026-11-18 `/` was full (0 B free, the meteo series build failed): the pytest temporary data of the gates, the venvs of `release-sets/*`, the checkouts of `set verify` and Docker's unused build cache were deleted, the scratch of 2026-11-01 to 2026-11-15 in `~/data/tmp`, the gates' logs, `~/tmp/nogat-run-2026-11-16`, `~/tmp/release-2026-11-16` and `~/workspace/archiwista-scratch` moved to `/mnt/magazyn/agent-tmp/archiwum-2026-11-18/` (the share keeps no symbolic links); 46 GB free after. Left in `~/data/tmp` because their copy is incomplete: `arch-tidy`, `h1-smoke`, `kclean`, `o1`, `o2` and two Firefox profiles (about 3 GB)
+- **Backups** retained: `/data/nmt/deploy-backup-2026-11-18/` (before the deployment of the patch releases, the same contents as `deploy-backup-2026-11-16/`), image `hydrograf-api:rollback-2026-11-18`; `/data/nmt/deploy-backup-2026-11-16/`, image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
 
 
 ## Status
@@ -32,32 +35,34 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 |---|---|---|
 | Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session |
 | Standard 1.0 | done 2026-11-17 | published to `main` with `v0.1.0`, its merge commit tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056); the root-owned legacy `standards/templates/` and `standards/configs/` reached `main` unchanged (ADOPTION_PLAN 0.1, a known deviation) |
+| Standard 1.1 | done, in 0.2.0 | published to `main` with `v0.2.0`, its merge commit tagged `std-1.1` (HUB-6.1): COMPUTATIONS.md (CMP, ECO-078), the operator's instance (ECO-079), the strip folded on a phone (ECO-080), kit 1.1.0 (ECO-081), providers by national acronyms (DEV-2.5, ECO-082) and one pattern of file names (DEV-19.21, ECO-083); the changelog of `standards/README.md` lists them |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; `routes` name the commands of every tool's integration branch (HUB-2.9) |
-| `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
+| `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, `nogat_formulas.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` (unit, integration, contract, browser) |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
-| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); the copies of the kit, the marks and the tokens in Hydrograf, Hydrolog, Obserwator and Archiwista match Nogat's at their `origin/develop` of 2026-11-15 (SHA-256, the tokens apart from their DEV-15.3 header) |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md` |
+| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081, in 0.2.0), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal Nogat's in their releases of `v0.2.0` |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
+| Formula reference module (CMP-8.1, standard 1.1) | done, in 0.2.0 | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; Hydrolog 0.9.0 copies it |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | done for the members | **candidate-6** (2026-11-16): Kartograf `7a1eb11`, Obserwator `11eedea`, Hydrolog `1be867d`, Hydrograf `1aa66f1`, Archiwista `95b0540`, the members after their release documentation; `set check`: every pin between the members matches; `set verify` on this machine: all pass except the known C2 and C3; released as `release-sets/v0.1.0/` with the members' tags. Retman and Hydraulik differ until they apply a later set |
-| Members' releases (REL-2.1, REL-6.6) | done 2026-11-16 | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”); merged locally without pull requests (`gh` is not installed), with the author's approval; verified locally only (REL-6.5 deviation: the workflow reached Nogat's `main` only with `v0.1.0`) |
-| `verify-candidate` (REL-6.5, ECO-077) | done 2026-11-17 | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` with `v0.1.0` and dispatchable from there; not run yet: candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
+| One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.2.0`: the round's candidate, verified by `verify-candidate`, at the tags Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0` and Archiwista `v0.3.3`. Before it candidate-6 became `v0.1.0` and candidate-10 `v0.1.1`. Retman and Hydraulik differ until they apply a later set |
+| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3` |
+| `verify-candidate` (REL-6.5, ECO-077) | done | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` since `v0.1.0`; it verified candidate-7 (after its releases), candidate-10 (`v0.1.1`) and the round's candidate (`v0.2.0`) on the three runners; candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
-| Nogat's version (ECO-076) | done 2026-11-17 | `v0.1.0`, the release set `release-sets/v0.1.0/` (REL-6.6, HUB-7.2); `pyproject.toml` and `uv.lock` carry `0.1.0`; merged into `main` locally without a pull request, with the author's approval; `1.0.0` only by the author's decision (HUB-7.4) |
-| `nogat` package (HUB §7) | planned | not in `v0.1.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
+| Nogat's version (ECO-076) | done, 0.2.0 | `v0.2.0` with `std-1.1`, the release set `release-sets/v0.2.0/` (REL-6.6); `v0.1.1` (`a973bf0`) 2026-11-20, the patch release set from `main` (REL-2.4), merged back into `develop`; `v0.1.0` 2026-11-17; `1.0.0` only by the author's decision (HUB-7.4) |
+| `nogat` package (HUB §7) | planned | not in `v0.2.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.2.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
 
 ## Next
 
 1. CP without detail (ECO-071): producers use the fixed line once and treat
    old parenthetical CP as CP on read (regulamin 1.0 corrected in place, no
-   new `terms_effective`); the four GUIs carry kit 1.0.0 on their `develop`
-   (2026-11-15).
+   new `terms_effective`); the four GUIs carry the kit, 1.1.0 in their
+   releases of `v0.2.0`.
 2. Info texts of a GUI (ECO-069, DEV-15.14, example in `design/README.md`):
    Hydrograf, Hydrolog, Obserwator and Archiwista revise their „(i)” texts,
    help popovers and „Objaśnienie metod” to it, method detail beyond about
@@ -76,33 +81,135 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    (question 4).
 6. Follow-ups of `v0.1.0`, owned by the members, each in its own session:
    - Hydrograf re-processes its production from Archiwista's project
-     `kaczawa`, set `2026-1` (H2 and S5 of 11; the admin-panel store
-     re-processing the author deferred on 2026-11-15 to after the first
-     joint release). A bootstrap from a set processes the whole mosaic of
-     194 sheets and does not clip to the area: without `--units` the area
-     serves only the coverage check and `instance.json`, and the set holds
-     no PGW units file. Production was built by hand (`process_dem`, then a
-     cut to the kept units, 792.009 km²). So the re-processing runs first
-     into a separate staging instance and is compared with production;
-     production switches only on the author's acceptance (the author's
-     decision of 2026-11-16).
-   - Obserwator rebuilds its stored analyses with Hydrolog 0.8.0 once the
-     series of the ČHMÚ stations are downloaded (a night job of
-     2026-11-16/17); the deployed ones are of 2026-11-15, Hydrolog
-     0.8.0.dev0. It also refreshes its copies in `schemas/nogat/` from
-     `std-1.0` (its D6, `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
+     `kaczawa` (H2 and S5 of 11; the admin-panel store re-processing the
+     author deferred on 2026-11-15 to after the first joint release). Its
+     set `2026-2` was built in the web interface by the plan's A5 and
+     closed by `piotr` on 2026-11-17 (an agent's session on the author's
+     request): four calls, 222 pins, the inputs of `2026-1` with the PGW
+     units of the area (`hydro/pl_pgw`, 2023-09-15). The bootstrap has no
+     cut to the area (`--units` is ADR-071's processing, the same results):
+     the staging instance `hgstaging` (127.0.0.1:8083, v0.5.0; its README
+     in `~/data/hydrograf-staging/`) gave 981.5 km² at 10 000 m² with 594
+     outlets. Cut on 2026-11-17 by the runbook's scripts as production was
+     (kaczawa2's K3–K12, adapted: the project's area as the boundary, and
+     the 10 km² outlet segment cut to it because it runs on past the
+     outlet), it equals production: the stream tables per threshold
+     (792.009 km², one outlet), the land cover, `bdot_streams`, the
+     depressions and every probe point. It differs in the soil groups
+     (B 90.98 / C 8.66 % against 90.78 / 8.86 %, the set's raster) and the
+     PMAXTP grid of the mosaic's box (depths up to about 0.75 % higher).
+     Production took these data on 2026-11-17 (Deployment and storage);
+     the cut belongs in Hydrograf (S5), so a later re-processing needs no
+     hand-run scripts.
+   - Obserwator: the user unit `chmi-night` (2026-11-16/17,
+     `~/tmp/chmi-night/`) downloaded the daily archives of the 2,474 ČHMÚ
+     stations into the raw root (41,271 files, none failed), built
+     `cz.chmi.hydro_daily` and rebuilt the analyses with Hydrolog 0.8.0;
+     the defects it found went into Obserwator `v3.0.1` and Hydrolog
+     `v0.8.1` (Next 7), and `cz.chmi.meteo_daily` was built on 2026-11-21
+     (Deployment and storage). Obserwator's copies in `schemas/nogat/` are
+     those of `std-1.1` (its D6,
+     `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
    author's decision of 2026-11-16); each member opens its next cycle
    (`X.Y.(Z+1).dev0`) with its next change. When a tool renames a command,
-   change its `routes` and run `agents` (CLAUDE.md).
-8. Nogat after `v0.1.0`: `develop` opens its next cycle (`0.y.z.dev0`,
+   change its `routes` and run `agents` (CLAUDE.md). The patch scope, defects
+   only, approved by the author on 2026-11-17, producers first:
+   - Obserwator 3.0.1: done on `fix/3.0.1` (Next 6); released with the
+     others (the author's decision of 2026-11-17), and the features planned
+     on 2026-11-14 as its 3.0.1 move to 3.1.0.
+   - Kartograf 0.8.1: done on `fix/0.8.1` (C1, its part of C5, E5a-01: a
+     repeated `--sheet` is refused); full gate passed (8,664 tests). GEO-02
+     stays (a convention; a fix would break callers), E2-04 is a feature and
+     moves to a minor.
+   - Hydrolog 0.8.1: its part of E5b-08, E5b-07 (at least a notice), the
+     per-period `OverflowError` of `hydrometrics rating-curve`, the rating
+     curve fit that does not converge (to be examined), the threshold of 0
+     or below 0 of `low_flow_sequences`, and its GUI report #1 (the
+     horizontal axis of „Obliczenia składowe” shows absurdly small values),
+     and a notice and an unreliable mark on a physically implausible
+     rating curve or period (e.g. IMGW 150170070 Głuchołazy: b 6.5 and
+     h0 −88 cm in 1981–1990, b 6.6 and h0 −179 cm in 2001–2010, periods
+     that mix the stage shifts of 1998–1999 and 2008; the author's decision
+     of 2026-11-17).
+     Done on `fix/0.8.1` (ADR-0041 for the implausible-curve mark); E5b-07
+     computes the SCS hydrograph in sub-steps, which changes the e2e
+     reference to 72.23 m³/s and 1,046,077 m³; full gate passed (8,891
+     tests).
+     The 50 reports of the GUIs (Hydrograf 30, Hydrolog 12, Obserwator 8)
+     were reviewed and marked read on 2026-11-17; no replies are prepared
+     (the author's decision).
+   - Hydrograf 0.5.1, after Hydrolog: E3-04, E5b-05, E5b-06, E5b-09,
+     E5b-01, E5b-08, E4-02, E4-03, HG-E2E-01 to 03, its PROGRESS Next 17,
+     the `dem_mosaic.vrt` a bootstrap leaves; from the external test report
+     of 2026-11-02 (author's copy in `~/tmp/feedback/`): A2 (Snyder's Lc
+     only in the advanced mode, the Tc method not disabled for Snyder), B2
+     (= G05-1) and B3 (Esc both hides and clears). Its M2 (touch has no
+     hover) and M3 (profile and sheets overlap on a phone), once confirmed,
+     go to 0.6.0; U3, the „Logowanie” link to `/admin/` in the rail, stays
+     (the author: accounts may come later).
+     Done on `fix/0.5.1`, E5b-06 by Hydrolog's catalog notices; full gate
+     passed (2,404 tests). Left: E3-04 (needs the author's amendment of
+     ADR-083) and Next 17 (a feature).
+   - Archiwista 0.3.1: done on `fix/0.3.1` (E7-01 with A-ADR-049 erratum 9,
+     E2-06, C2, C6; C3 marked as known under Playwright 1.65.2); full gate
+     passed (3,029 tests). E2-05 is left: it needs a geometry-countries API
+     of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
+     obszar projektu…” is no longer exercised.
+   - **Released 2026-11-18** with the author's approval, producers first
+     (REL-6.6), merged locally without pull requests, from candidate-7
+     (`set verify` on this machine; REL-6.5 deviation: `verify-candidate`
+     ran afterwards, run 44218266654): Kartograf `v0.8.1` (`9817ab7`),
+     Obserwator `v3.0.1` (`533c42a`), Hydrolog `v0.8.1` (`bf35db2`),
+     Hydrograf `v0.5.1` (`a86e8ce`), Archiwista `v0.3.1` (`0b66beb`);
+     deployed the same day (Deployment and storage). CI of `main`:
+     Kartograf's macOS job on Python 3.12 failed
+     `test_the_gate_of_agi_5_13_over_stdio` (cold start 5.06 s against
+     5 s), a slow-runner flake. Kartograf `v0.8.2` followed the same evening
+     as a hotfix outside the round.
+   - Each patch is made in a new worktree of its repository on a topic
+     branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
+     `fix/3.0.1`.
+   - **Nogat 0.1.1 released 2026-11-20** with the author's approval from
+     **candidate-10** (run 44775327473 passed on its second attempt):
+     Kartograf `v0.8.2` (hotfix of 2026-11-18, the USDA texture limits
+     clay 20 % and 27 %), Obserwator `v3.0.1` (the set verified `8edccf7`,
+     the same package), Hydrolog `v0.8.1`, Hydrograf `v0.5.2` (`2f6da1d`:
+     nginx 1.31.9 and pinned images, Kartograf `v0.8.2`; gate 2,404
+     passed) and Archiwista `v0.3.2` (`514162d`: the fixes of 0.3.2 and
+     Kartograf `v0.8.2`; gate 3,043 passed); Nogat `v0.1.1` from the
+     branch `hotfix/release-set-0.1.1` of `main`, so standard 1.1 stays on
+     `develop`. Deployment waits for the author. Flaky in the first attempt, passed on the
+     rerun: Hydrolog's `test_leaving_or_reloading_the_page_ends_its_session`
+     (macOS, Python 3.15) and Archiwista's
+     `test_verify_runs_offline_and_marks_each_pin_while_network_jobs_say_why[firefox]`
+     (Ubuntu, Python 3.12; „Stylesheet not loaded” of the map view while
+     the test ends, 1 in 55 local runs), both for their next releases.
+     Minor
+     releases with a plan: S5 (the cut to the area), large basins, E3-03,
+     E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
+     E7-02 (Archiwista), E3-02 and the features planned as Obserwator's
+     3.0.1 (3.1.0, the author's decision of 2026-11-17). From the check of
+     150170070 (the author, 2026-11-17):
+     Hydrolog's rating-curve periods from detected stage shifts at a
+     steady discharge instead of fixed decades, with gauge-zero changes the
+     user may give (Obserwator's report #3), since IMGW-PIB publishes no
+     history of gauge zeros (checked 2026-11-17: the daily, monthly and
+     half-year archives, `lista_zmian_hydro.txt`, `lista_stacji_hydro.csv`,
+     the API and hydro.imgw.pl give only the current zero, e.g. 279.88 m
+     EVRF2007 at 150170070; the hydrological yearbooks 2018–2025 give each
+     year's P.z. of their stations only, with no remark code for a change;
+     IMGW re-computes archived Q after a change of the stage–discharge
+     relation, so its H is raw and its Q is homogenised); Obserwator shows
+     or hides the unreliable periodic curves with a warning, and its station
+     card says that IMGW's daily Q are derived from IMGW's own rating
+     curves, not measured.
+8. Nogat after `v0.2.0`: `develop` opens its next cycle (`0.y.z.dev0`,
    REL-1.1) with its next change, and the standard's next version on
-   `develop` is 1.1 (HUB-6.1); the next candidate is the first that the
-   workflow `verify-candidate` verifies from `main` on the three runners
-   (REL-6.5); deleting the merged topic branches `feature/verify-candidate`
-   and `chore/candidate-6` is the author's (step 7 of
-   `docs/plans/2026-10-20-first-release-set.md`).
+   `develop` is 1.2 (HUB-6.1); deleting the merged topic branches
+   `feature/verify-candidate` and `chore/candidate-6` is the author's (step
+   7 of `docs/plans/2026-10-20-first-release-set.md`).
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's
@@ -138,6 +245,26 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     then D (user rainfall), R (ERA5/CERRA × published coefficients from
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
+15. Operator's instance (`2026-11-21-obserwator-instance.md`, approved):
+    steps 1–5 in Obserwator `3.1.0` and Nogat `0.2.0` (ECO-079, Obserwator
+    ADR-025; kit `1.1.0`); step 6 is Obserwator `v3.2.0`. A lawyer reviews
+    the draft regulamin first.
+16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12,
+    verified at `e6d10b0`, run 45048681845): Obserwator
+    `3.1.0`, Hydrolog `0.9.0`, Hydrograf `0.6.0` (the Hydrolog adaptation;
+    its other planned items move to `0.7.0`), Archiwista `0.3.3`, Kartograf
+    `0.8.2` unchanged, and Nogat `0.2.0` with standard 1.1 (`std-1.1`): kit
+    `1.1.0` (ECO-081), providers by national acronyms in identifiers
+    (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one pattern of
+    file names (DEV-19.21, ECO-083); plans `2026-11-18-computation-standard.md`,
+    `2026-11-19-hydrolog-0.9.0-consumers.md` and `2026-11-21-*`. The
+    production rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10
+    (several gates at once); production serves its old data root. Next: the
+    deployment of the released versions with the author's consent, Obserwator
+    3.1.0 on a new data root built from the raw root (step 7 of
+    `2026-11-21-national-provider-names.md`); then Obserwator `v3.2.0`
+    (Next 15), Hydrograf `0.7.0` and steps 7 and 10 of the computation
+    standard.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

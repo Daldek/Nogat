@@ -64,16 +64,16 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
-| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
+| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
-| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082 | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -87,6 +87,12 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-075](#eco-075-the-catalog-summary-is-its-own-document) | The catalog summary is its own document | accepted | 2026-11-15 |
 | [ECO-076](#eco-076-nogat-starts-at-010) | Nogat starts at 0.1.0 | accepted | 2026-11-16 |
 | [ECO-077](#eco-077-verify-candidate-runs-an-app-on-its-own-lock) | verify-candidate runs an app on its own lock | accepted | 2026-11-16 |
+| [ECO-078](#eco-078-formulas-are-declared-once-checked-at-their-limits-and-verified) | Formulas are declared once, checked at their limits and verified | accepted | 2026-11-18 |
+| [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
+| [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
+| [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
+| [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
+| [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
 
 ---
 
@@ -1039,6 +1045,10 @@ for Archiwista, which follows in its own session (REL-5.4).
 
 ## ECO-055 One visual identity for every GUI
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs may show the operator's logo and name beside the project's
+mark, which stays as the favicon and in the top bar.
+
 **Decision.** Every GUI of the ecosystem (Archiwista, Hydrograf, the web GUI
 of IMGWTools and any later one) uses the identity in Nogat `design/`: shared
 tokens in one plain CSS file, light and dark, with the brand of debever.pl
@@ -1204,6 +1214,10 @@ the terms it links.
 ČÚZK data carry G, SG or Z, after CP in the order of the lines, and a GUI
 view's strip shows them as GK, SK and ZK.
 
+**Amended by ECO-082 (2026-11-21):** a CSV carries the lines in its trailing
+columns `attribution` and `terms_notice` only; no column a project had
+before repeats them.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1246,6 +1260,10 @@ statistics, cookies and „Zgłoś uwagę”, and names its processor in two fie
 **Amended by ECO-070 (2026-11-14):** „Regulamin” is linked from the app
 menu, the foot of the left rail and the welcome window, not from a footer.
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs serves the operator's own regulamin, drafted from the kit's
+`nogat-terms-operator.md`, in place of regulamin 1.0.
+
 **Decision.** A GUI open to other people serves its terms at
 `regulamin.html`, filled from the kit's template `nogat-terms.md` and the
 `nogat-terms.html` generated from it, and links „Regulamin” from every view
@@ -1282,6 +1300,9 @@ access log keeps the class of the User-Agent, not the User-Agent.
 
 **Amended by ECO-070 (2026-11-14):** no footer or status bar shows the
 statement; it opens § 3 of the regulamin only.
+
+**Amended by ECO-079 (2026-11-21):** the statement of DEV-15.8 and regulamin
+1.0 belong to the instances the author runs.
 
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
@@ -1386,6 +1407,9 @@ short forms of G, SG and Z, and the dialog G, SG and Z.
 
 **Amended by ECO-070 (2026-11-14):** the welcome window's „Regulamin
 serwisu” is its only regulamin link, and no footer reaches the dialog.
+
+**Amended by ECO-080 (2026-11-21):** on a screen up to 860 px wide the strip
+folds to one line, unfolded in place by „więcej”.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -1887,3 +1911,228 @@ independent of them). A hand-edited README (the gate would call it stale).
 **Consequence.** REL-6.4, REL-6.5, HUB-4.9.
 `.github/workflows/verify-candidate.yml`; `release-sets/candidate-5/` holds
 `pyproject.toml` and `uv.lock`.
+
+## ECO-078 Formulas are declared once, checked at their limits and verified
+
+**Decision.** A project that computes (`computes: true`) declares each Tier A
+formula once, in code, by a `FormulaSpec` of Nogat's reference module
+`nogat_formulas.py`, copied byte for byte; the spec drives the run-time checks,
+the generated range, type and property tests, and the generated cards and
+`docs/FORMULAS.md`. Physically impossible input and a failed precondition are
+refused with `validation_error`; input outside the applicability range gives
+the result with the notice `outside_applicability`; a formula never returns a
+non-finite or impossible value. Evidence is at least two of reference cases,
+oracles and properties; R and other external tools are frozen oracles stored as
+data; tables are transcribed twice; mutation testing gates releases for
+Tier A. A gross defect (CMP-9.1) is released at once (CMP-9.2).
+
+**Why.** The author, 2026-11-18: correctness of the formulas is the
+ecosystem's foundation and academics will audit them; tests must cover
+typical, extreme, boundary and out-of-range inputs, declared types, numerical
+traps and impossible values. The author chose error for impossible input and
+a warning outside applicability, every project that computes as the scope, the
+definition of a gross defect, and open sources first. Fable reviewed the first
+draft: one declaration instead of a card beside the code (a range written
+twice will differ), tiers (auditors' time goes to Tier A), preconditions as a
+third class, generated tests (a hundred formulas times every input and kind of
+value cannot be written by hand consistently), frozen oracles (R in CI is
+fragile and hides versions), double transcription of tables (the riskiest
+artefacts), `formula_version` on stored results (a defect's results must be
+found), and verification kept apart from validation.
+
+**Rejected.** Hand-written TOML cards reconciled with the code by a test
+(checks only what it enumerates). A card per unit conversion (one units table
+instead). Running R in the tests. Withdrawing an `unreferenced` formula from
+the public interface (an `info` notice instead: Hydrolog's users rely on
+formulas that no open worked example covers yet). Propagating the
+uncertainty of empirical formulas and tables of sensitivity (research, not
+verification). A wrong equation or constant only in a document, with correct
+code, as a gross defect (it misleads no result; a wrong unit or range stays
+gross).
+
+**Consequence.** CMP §1 to CMP §9, HUB-2.1 (`computes`). Plan
+`docs/plans/2026-11-18-computation-standard.md`.
+
+## ECO-079 An operator's instance: its name and logo beside the mark, its own regulamin
+
+**Decision.** An instance of a GUI that an operator other than the author
+runs on its own infrastructure may show the operator's logo and name in the
+top bar beside the project's mark; the project's mark stays as the favicon
+and first in the top bar and is never replaced, and the logo is a file of
+the deployment served from the GUI's own origin (DEV-15.3). Such an instance
+serves the operator's own regulamin in place of regulamin 1.0, which names
+the author as a private, non-commercial operator and stays for the author's
+instances with the statement of DEV-15.8 (DEV-15.7). The kit carries a
+draft for operators, `nogat-terms-operator.md`, in the Markdown and with the
+fields and data-source blocks of regulamin 1.0, so a GUI builds and fills
+it the same way: the operator is the service provider and the controller of
+personal data; the software is provided as is under its licence, without
+warranty or liability for availability, data or results; keeping the data
+providers' terms (DEV §20) is the operator's; the author's part ends with
+the deployment; the operator handles contact and complaints. The draft is a
+template, not legal advice, and says so; a lawyer of the author's choice
+reviews it before an operator gets it. Plan:
+`docs/plans/2026-11-21-obserwator-instance.md` (I14, I15).
+
+**Why.** The author's answers of 2026-11-21: a client runs Obserwator on his
+own infrastructure with his name and logo; the payment is only for the
+deployment, operating the instance is the client's, and so is the
+regulamin, for which the author prepares only a draft that protects his
+interests. The project's mark names the software and keeps the family of
+tools recognisable (ECO-055); the operator's name tells a visitor who runs
+the service. A logo from the GUI's own origin needs no new origin in the
+CSP and keeps DEV-15.7's rule that a GUI loads nothing but maps from other
+servers. Regulamin 1.0 does not invoke the act on electronic services,
+since its operator acts outside any gainful activity (ECO-062); an operator
+in business is a service provider under that act, so the draft adds the
+technical requirements, the conclusion of the contract and complaints.
+
+**Rejected.** The operator's logo in place of the project's mark or as the
+favicon (the instance would pass for another product). A logo loaded from
+the operator's server (a remote resource and a new CSP origin). Regulamin
+1.0 filled with the operator's values (its § 2, § 3 and § 8 would state what
+is false for him). A regulamin the author writes and keeps for each client
+(the author does not operate the instance and gives no legal advice). A new
+kit version for the added draft (only the author changes it, REL-1.4).
+
+**Consequence.** DEV-15.3, DEV-15.7 and DEV-15.8 are amended. The kit adds
+`nogat-terms-operator.md` with its hash; its version stays `1.0.0` until the
+author decides (REL-1.4). Obserwator implements both for `v3.1.0` (plan
+steps 2 to 4); another GUI adopts them when an operator needs it
+(DEV-17.5).
+
+## ECO-080 The sources strip folds to one line on a phone
+
+**Decision.** On a screen up to 860 px wide, the kit's phone, the strip of
+`<nogat-sources>` takes one line (DEV-20.5): its on-screen lines start on it
+in the order of DEV-20.4 and are cut with an ellipsis where they no longer
+fit, then come the button „więcej” and „Źródła i warunki”. „więcej” shows
+only while the line cuts them; it unfolds the strip in place, wrapped as on
+a wider screen, and then reads „zwiń”. A wider screen is unchanged. The
+element keeps the state as its attribute `expanded` and marks a cut line
+with `clipped`. Plan: `docs/plans/2026-11-21-phone-sources-strip.md`.
+
+**Why.** The author's decision of 2026-11-21: Obserwator's view „Stacje” on
+an iPhone 13 (390 × 844 px) gave the wrapped strip 127 px, five lines over
+the map. Folded, the lines still begin on the product and one tap shows
+them whole where they stand, so the IMGW-PIB and PMAXTP sentences are never
+only in the dialog, which ECO-064 rejected. The remaining risk, named to the
+author: § 5 ust. 3 and 4 of the IMGW-PIB terms and ust. 1 and 2 of the
+PMAXTP terms want their sentences on the product, and the folded line shows
+their beginning only.
+
+**Rejected.** The strip as „Źródła i warunki” alone on a phone (the
+sentences behind the dialog, as ECO-064 rejected). The lines kept wrapped
+and the strip moved below the view's content (the author's choice). A fold
+wider than a phone (a desktop strip takes at most three lines, ECO-064).
+
+**Consequence.** DEV-20.5 is amended. The kit's `nogat-sources.js` and
+`nogat-sources.css` change with their hashes; its version stays `1.0.0`
+(REL-1.4, ECO-072). Obserwator and Hydrolog copy them for `v3.1.0` and
+`v0.9.0`, Hydrograf and Archiwista with their next change.
+
+## ECO-081 The kit becomes 1.1.0 with Nogat 0.2.0
+
+**Decision.** The GUI kit's version becomes `1.1.0` in
+`design/kit/nogat-kit.json`, confirmed by Nogat's `v0.2.0` on `main`
+(REL-1.4). Every GUI of the round copies the manifest with the kit's files.
+
+**Why.** The author's decision of 2026-11-21 („5 - zgodnie z propozycja”).
+Kit `1.0.0` was released with Nogat `v0.1.0` and `v0.1.1`; since then the
+kit gained a file, the draft regulamin for operators (ECO-079), and a
+behaviour, the strip folded on a phone (ECO-080), with no file removed and no
+attribute or event of an element changed, so the change is minor.
+
+**Rejected.** Keeping `1.0.0` (a released number would name two different
+sets of files).
+
+**Consequence.** ECO-072's rule stands: the version moves only with the
+author's consent and copies are compared by their hashes (DEV-15.6); the
+manifest's own hash changes, so `drift` names every GUI copy until it is
+refreshed. Obserwator, Hydrolog, Hydrograf and Archiwista copy it for the
+round's releases. The regulamin stays 1.0.
+
+## ECO-082 Providers named by their national acronyms; two attribution columns in a CSV
+
+**Decision.** An identifier naming a data provider uses its national
+acronym without diacritics and without its legal suffix (DEV-2.5): ČHMÚ is
+`CHMU` / `chmu` where the code said the English `CHMI` / `chmi`, in
+Obserwator's provider id, dataset keys `cz.chmu.*`, slugs `chmu_*` and the
+store directories named by them, in Nogat's registry ids `chmu` and
+`chmu-json/1` and in the regulamin's block `chmu`; IMGW-PIB is `IMGW` /
+`imgw` where the code said `IMGW-PIB` / `imgw-pib` (Obserwator's provider
+id, Nogat's registry id, file names), its `pl.imgw.*` keys unchanged (the
+author, later the same day: „IMGW-PIB moze byc skracane do IMGW”); every
+slug and store directory of one provider starts with its acronym, so
+IMGW-PIB's `hydro_daily` becomes `imgw_hydro_daily` and its catalog moves
+from `stations/versions` to `stations/versions/imgw_stations` beside
+`chmu_stations` (the author: „katalog serii tez do ujednolicenia”). Text for
+people keeps „IMGW-PIB” and „ČHMÚ”, and the provider's addresses
+(`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
+and `terms_notice` only (DEV-20.5): `attribution_source` and
+`attribution_processed` go. No old name is accepted as input beside the new
+one; files a tool stored under an old name are read under the new one, so
+they need no download again. Every schema and format stays `/1`. Plan:
+`docs/plans/2026-11-21-national-provider-names.md`.
+
+**Why.** The author's decision of 2026-11-21: the code mixed the Polish
+acronym of IMGW-PIB with the English one of ČHMÚ. The two dropped columns
+repeated the first two cells of `attribution` (the stations export of
+2026-11-21: S and P for IMGW-PIB, C and CP for ČHMÚ). The ecosystem is
+still in development, so the change is minor and keeps `/1`.
+
+**Rejected.** The English acronyms for both providers (IMGW-PIB has none in
+use). Aliases for the old names (a second way, ECO-056). The two columns kept
+beside `attribution` (the same lines twice). A new major version of the
+formats (the author's choice for a development stage).
+
+**Consequence.** DEV-2.5 is new; DEV-20.5 and DEV-20.6 are amended, and with
+them ECO-060. The kit's `nogat-terms.md`, `nogat-terms-operator.md` and
+`nogat-terms.html` change with their hashes; its version stays `1.1.0`
+(ECO-081). A GUI that lists the block `chmi` is refused until it lists
+`chmu`. Obserwator, Hydrolog, Archiwista and Hydrograf follow in their own
+branches (plan steps 2 to 5); Hydrolog still reads the two old columns in
+files written before, as lines, not data. Dated records keep the old names.
+
+## ECO-083 One pattern for the files a tool names for a user
+
+**Decision.** A file whose name a project chooses for a user (a GUI's
+download, a REST attachment, a file a command writes into `output_dir` under
+a name it picks) is named `<tool>_<content>_<qualifiers>.<extension>`
+(DEV-19.21): the registry name first, the content in English words joined by
+`-`, the qualifiers after `_` with identifiers unchanged, ISO dates and a
+person's text reduced to lower-case ASCII with `-`, only ASCII letters,
+digits, `.`, `-` and `_`. The kit's statistics file becomes
+`<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+project, as the shell does) and its hand-off file
+`<producer>_handoff_<subject>.json`, the producer being the envelope's
+`producer.tool`, which the schema requires; `nogat-handoff.js` exports the
+reduction of a person's text as `nameSlug`. Plan:
+`docs/plans/2026-11-21-download-file-names.md`.
+
+**Why.** The author's decision of 2026-11-21 („Cały ekosystem w tej
+rundzie”, „Angielskie”, „Tak, z nazwą narzędzia na początku”), after
+Obserwator's station list: each tool named its files its own way, with
+Polish and English words, `-` and `_`, the tool's name and the station's
+code each in a different place, and a downloads folder did not tell which
+tool wrote a file. The hand-off loses `.handoff.json`: no reader needs the
+suffix, since the kit's `readFile` reads any picked file and Hydrolog's
+pickers accept `.json,application/json`, and the content word `handoff`
+marks the file as the suffix did, so a second pattern for one kind of file
+is not kept. The subject, a person's text, was kept with spaces and
+diacritics, which the rule leaves out of names.
+
+**Rejected.** Polish content words (the code, the schemas and the
+identifiers are English, DEV-2.1). Names without the tool's name (the
+author's choice). `<subject>.handoff.json` kept as an exception (a reader
+would need it, none does). The tool's name last (the author's choice). `-`
+between the parts (content words, dates and a person's text hold `-`, so the
+parts could not be told apart).
+
+**Consequence.** DEV-19.21 is new and DEV-15.5 is amended. The kit's
+`nogat-admin.js` and `nogat-handoff.js` change with their hashes; its
+version stays `1.1.0` (ECO-081). Obserwator, Hydrolog, Hydrograf and
+Archiwista rename their downloads, attachments and default output names in
+their own branches and copy the kit (plan steps 2 to 5), with their
+manuals and labels that name `….handoff.json`; Kartograf keeps the names
+of plain mode (DEV-19.5). No old name is kept beside a new one.

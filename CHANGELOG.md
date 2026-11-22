@@ -6,6 +6,135 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-22
+
+### Added
+
+- Release set `v0.2.0` (`release-sets/v0.2.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-21: the candidate verified by the
+  workflow `verify-candidate` with each member's commit replaced by its
+  annotated release tag, Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog
+  `v0.9.0`, Hydrograf `v0.6.0` (an app on its own lock, not installed by the
+  set) and Archiwista `v0.3.3`. It carries Hydrolog 0.9.0, with the fixes
+  of the formula audit of 2026-11-18 and the computation standard, and its
+  consumers (plan `docs/plans/2026-11-19-hydrolog-0.9.0-consumers.md`), kit
+  `1.1.0` in every GUI, the providers named by their national acronyms
+  (ECO-082) and one pattern of file names (ECO-083). As before, the set is
+  installed as an environment, `uv sync --locked --no-dev --python 3.12` in
+  `release-sets/v0.2.0/`, not with `uv tool install` (a deviation from
+  HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.1 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.1` (HUB-6.1); its changes are listed in
+  `standards/README.md`.
+- The topic document `standards/COMPUTATIONS.md`, prefix `CMP` (ECO-078):
+  every formula of a project that computes is declared once by a spec,
+  refuses physically impossible input and failed preconditions, warns
+  outside its applicability range, never returns a non-finite or impossible
+  value, and is verified by reference cases, oracles and generated range,
+  type and property tests; gross defects are released at once. The
+  registry's optional `computes` (HUB-2.1, its schema) marks such a
+  project: Kartograf, Obserwator, Hydrolog, Hydrograf and Hydraulik. The
+  topic documents, `ecosystem.yaml` and `error_registry.json` carry
+  standard 1.1. Plan `docs/plans/2026-11-18-computation-standard.md`,
+  step 1.
+- ECO-079: an instance of a GUI that an operator other than the author runs
+  may show the operator's logo and name in the top bar beside the project's
+  mark, which stays as the favicon and in the top bar, the logo served from
+  the GUI's own origin (DEV-15.3); it serves the operator's own regulamin in
+  place of regulamin 1.0, whose statement of § 3 belongs to the author's
+  instances (DEV-15.7, DEV-15.8). Plan
+  `docs/plans/2026-11-21-obserwator-instance.md`, step 1.
+- The kit's draft regulamin for operators, `design/kit/nogat-terms-operator.md`,
+  in Polish, a template and not legal advice: the operator is the service
+  provider and the controller of personal data, the software is provided as
+  is under its licence, keeping the data providers' terms is the operator's
+  and the author's part ends with the deployment; the fields and source
+  blocks of regulamin 1.0, so a GUI builds and fills it the same way, plus
+  two fields the operator writes in (`BY_HAND` in `scripts/terms.py`). Its
+  hash is in `nogat-kit.json`, kit `1.1.0` (ECO-081).
+- The registry names Obserwator's GUI, `obserwator gui serve`, and its
+  service `obserwator-gui` with the instance section `[obserwator.instance]`
+  of `nogat.toml`.
+- The reference module of formulas, `standards/reference/nogat_formulas.py`
+  (CMP-8.1), which every project that computes copies byte for byte:
+  `FormulaSpec` and `TierBSpec` with sources, physical, applicability and
+  typical ranges, test bounds, constraints, constants, outputs, properties
+  and the trap checklist per family; `validate` and `check_outputs` (CMP §3,
+  CMP §4) raising the project's own exceptions through a small `Errors`
+  protocol and returning notices; the exact units table and `convert`; the
+  generated range and type cases, `run_case`, the Hypothesis profiles and
+  strategies and the property assertions (CMP-6.5, CMP-6.9); `assert_within`
+  with reasons, reference cases with the tolerance of CMP-6.1 and the
+  frozen-oracle reader (CMP-6.4); cards, `docs/FORMULAS.md` and the
+  docstring, tolerance and spec checks (CMP-2.6, CMP-2.7, CMP-6.8). Its tests
+  run it against a correct toy formula and wrong ones, each with one defect
+  that a generator or an assertion catches (CMP-8.2).
+- `schemas/formula/card-1.schema.json`, `nogat-formula-card/1`, the schema of
+  the generated cards; `drift` reports the projects' copies of it and of the
+  module.
+- Hypothesis, mutmut and NumPy in the development dependencies (CMP-8.3).
+
+### Changed
+
+- ECO-083, DEV-19.21, DEV-15.5 (the author, 2026-11-21): a file a tool names
+  for a user, a GUI's download, a REST attachment or a file a command writes
+  into `output_dir` under a name it picks, is
+  `<tool>_<content>_<qualifiers>.<extension>`. The kit's statistics file is
+  `<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+  project), was `<project>-stats-<first>-<last>.csv`; the hand-off file is
+  `<producer>_handoff_<subject>.json`, the subject in lower-case ASCII with
+  `-`, was `<subject>.handoff.json`; `nogat-handoff.js` exports that
+  reduction as `nameSlug`. Their hashes are in `nogat-kit.json`, whose
+  version stays `1.1.0`; `design/README.md`. Migration: a GUI copies the
+  kit again and names its own downloads by the rule; a manual or label that
+  names `….handoff.json` names the new file. Plan
+  `docs/plans/2026-11-21-download-file-names.md`, step 1.
+- ECO-082, DEV-2.5, DEV-20.5, DEV-20.6 (the author, 2026-11-21): an
+  identifier naming a data provider uses its national acronym without
+  diacritics and without its legal suffix, so ČHMÚ is `chmu` where it was
+  `chmi` and IMGW-PIB `imgw` where it was `imgw-pib`: the registry's data
+  sources `imgw` and `chmu` and exchange format `chmu-json/1`, the
+  regulamin's block `chmu` in `nogat-terms.md`, `nogat-terms-operator.md`
+  and `nogat-terms.html` (their hashes in `nogat-kit.json`, whose version
+  stays `1.1.0`), `BLOCKS` of `scripts/terms.py` and `design/README.md`;
+  texts for people keep „IMGW-PIB” and „ČHMÚ” and the address
+  `opendata.chmi.cz` stays. A CSV's
+  attribution columns are `attribution` and `terms_notice` only. Migration:
+  a GUI lists the block `chmu` in its regulamin filling (`chmi` is refused)
+  and copies the kit again; a project drops the CSV columns
+  `attribution_source` and `attribution_processed`. Plan
+  `docs/plans/2026-11-21-national-provider-names.md`, step 1.
+- ECO-081: the GUI kit's version becomes `1.1.0` (the author, 2026-11-21),
+  for the draft regulamin for operators (ECO-079) and the strip folded on a
+  phone (ECO-080); every GUI copies the manifest for the round's releases.
+  Plans `2026-11-18-computation-standard.md` and
+  `2026-11-19-hydrolog-0.9.0-consumers.md` approved.
+- ECO-080, DEV-20.5: on a screen up to 860 px wide the kit's
+  `<nogat-sources>` folds its strip to one line, the lines cut with an
+  ellipsis, then „więcej”, shown while the line cuts them, which unfolds the
+  strip in place („zwiń” folds it again), and „Źródła i warunki”; wider
+  screens are unchanged. The element's `expanded` property and attribute
+  hold the state, `clipped` marks a cut line. Kit `1.1.0` (ECO-081). Plan
+  `docs/plans/2026-11-21-phone-sources-strip.md`.
+- README installs the set `v0.2.0` and names standard 1.1.
+
+### Fixed
+
+- The first example of `nogat-handoff/1` records Hydrolog 0.9.0's result
+  (formula audit of 2026-11-18): 57.9 m³/s at 400 min and 1,046,737.6 m³,
+  was 57.8786 m³/s and 1,046,712.9 m³. The Beta hyetograph is built from
+  exact differences of its distribution function (audit item T35) and
+  Kirpich's time of concentration uses the source's constant 0.0078 for feet
+  with the exact foot (−0.136 %, item T8). The schema itself is unchanged;
+  Obserwator, Hydrolog, Hydrograf and Archiwista carry the new copy in their
+  releases of this set (SHA-256 `10de3e18…`).
+- `set verify` syncs the core dependencies of each member's own lock into a
+  throwaway environment before the member's suite, so the uv cache holds
+  them for its offline install tests, as in the member's own CI. On a fresh
+  cache (`verify-candidate` of candidate-7, every runner) Obserwator's
+  library-install tests could not install `pydantic-core` 2.50.1 of its own
+  lock offline, since the candidate's sync had cached only the set's 2.50.4.
+
 ## [0.1.1] - 2026-11-20
 
 ### Added
@@ -811,6 +940,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0

@@ -5,6 +5,10 @@
 `ecosystem.py standard` keeps fresh. Both carry `{{placeholder}}` fields and
 optional blocks between `<!-- block: <name> -->` and `<!-- /block -->` lines.
 `fill` is the reference of the filling every GUI does for its deployment.
+`design/kit/nogat-terms-operator.md` is the draft regulamin for an instance
+an operator other than the author runs (DEV-15.7, ECO-079): the operator's
+copy, without its opening comment and with the fields of `BY_HAND` written
+in, is built and filled the same way.
 
 The Markdown is a small subset: `#` to `###` headings, paragraphs, `-` and
 `1.` lists (a block marker inside a list keeps it open), `>` quotes with one
@@ -22,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 KIT = ROOT / "design" / "kit"
 SOURCE = KIT / "nogat-terms.md"
 PAGE = KIT / "nogat-terms.html"
+OPERATOR_SOURCE = KIT / "nogat-terms-operator.md"
 
 # Every placeholder of the template and where its value comes from (DEV-15.7).
 PLACEHOLDERS: dict[str, str] = {
@@ -55,13 +60,21 @@ PLACEHOLDERS: dict[str, str] = {
 # The only placeholders whose value may be empty (it must still be given).
 OPTIONAL = frozenset({"processor_transfer", "processor_cookie", "mail_transfer"})
 
+# Fields of the operator's draft that the operator writes into its copy; a
+# GUI fills only those of `PLACEHOLDERS`, so a copy that keeps one is refused.
+BY_HAND: dict[str, str] = {
+    "operator_address": "operator: the seat or address of the operator",
+    "operator_register": "operator: the register and number that identify the "
+    "operator, e.g. `KRS 0000000000, NIP 0000000000`",
+}
+
 # Blocks a project keeps for its data sources by listing them; the rest are
 # dropped (DEV-15.7).
 BLOCKS: dict[str, str] = {
     "imgw": "IMGW-PIB data of danepubliczne.imgw.pl",
     "imgw-hydro": "IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl",
     "pmaxtp": "PMAXTP of IMGW-PIB",
-    "chmi": "ČHMÚ open data",
+    "chmu": "ČHMÚ open data",
     "gugik": "GUGiK data (geoportal.gov.pl)",
     "cuzk": "ČÚZK data",
     "copernicus": "Copernicus data (CORINE and other CLMS layers)",

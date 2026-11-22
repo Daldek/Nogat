@@ -156,3 +156,78 @@ def test_the_processor_and_the_mail_service_are_always_named(name: str) -> None:
     values = dict.fromkeys(terms.PLACEHOLDERS, "x")
     with pytest.raises(ValueError, match=f"missing values: {name};"):
         terms.fill(PAGE, {**values, name: " "}, [])
+
+
+# The operator's draft (DEV-15.7, ECO-079): a template whose opening comment
+# the operator removes once a lawyer has reviewed the text.
+OPERATOR = terms.OPERATOR_SOURCE.read_text(encoding="utf-8")
+NOTICE = re.compile(r"\A<!--\n(?P<text>.*?)\n-->\n", re.DOTALL)
+
+
+def _operator_copy() -> str:
+    """The draft as an operator publishes it: no notice, its own fields written in."""
+    copy = NOTICE.sub("", OPERATOR, count=1)
+    for name in terms.BY_HAND:
+        copy = copy.replace(f"{{{{{name}}}}}", "x")
+    return copy
+
+
+def test_the_operator_draft_says_it_is_a_template_not_legal_advice() -> None:
+    notice = NOTICE.match(OPERATOR)
+    assert notice is not None
+    assert notice["text"].startswith("WZÓR REGULAMINU. NIE JEST PORADĄ PRAWNĄ.\n")
+    assert "prawnik" in notice["text"]
+
+
+def test_the_operator_draft_is_not_served_with_its_notice() -> None:
+    with pytest.raises(ValueError, match="must start with a `# ` title"):
+        terms.build(OPERATOR)
+
+
+def test_the_operator_draft_has_the_fields_of_1_0_and_its_own() -> None:
+    body = NOTICE.sub("", OPERATOR, count=1)
+    assert terms.placeholders(body) == (
+        set(terms.PLACEHOLDERS) - {"tokens_href", "kit_href"}
+    ) | set(terms.BY_HAND)
+    assert not set(terms.BY_HAND) & set(terms.PLACEHOLDERS)
+
+
+@pytest.mark.parametrize("name", list(terms.BY_HAND))
+def test_a_copy_keeping_a_field_of_the_operator_is_refused(name: str) -> None:
+    copy = NOTICE.sub("", OPERATOR, count=1)
+    for other in terms.BY_HAND:
+        if other != name:
+            copy = copy.replace(f"{{{{{other}}}}}", "x")
+    values = dict.fromkeys(terms.PLACEHOLDERS, "x")
+    with pytest.raises(ValueError, match=f"missing values: {name};"):
+        terms.fill(terms.build(copy), values, [])
+
+
+@pytest.mark.parametrize("name", list(terms.BY_HAND))
+def test_the_readme_documents_every_field_of_the_operator(name: str) -> None:
+    assert f"| `{name}` |" in README
+
+
+def test_the_operator_draft_keeps_the_source_blocks_of_1_0() -> None:
+    assert terms.blocks(OPERATOR) == terms.blocks(SOURCE)
+    for name in terms.BLOCKS:
+        pattern = rf"^<!-- block: {name} -->\n.*?^<!-- /block -->$"
+        flags = re.MULTILINE | re.DOTALL
+        mine = re.search(pattern, OPERATOR, flags)
+        theirs = re.search(pattern, SOURCE, flags)
+        assert mine is not None and theirs is not None
+        assert mine[0] == theirs[0]
+
+
+@pytest.mark.parametrize(
+    "listed",
+    [[], list(terms.BLOCKS)],
+    ids=["no-block", "every-block"],
+)
+def test_an_operator_copy_renders_and_fills_like_1_0(listed: list[str]) -> None:
+    values = dict.fromkeys(terms.PLACEHOLDERS, "x")
+    page = terms.fill(terms.build(_operator_copy()), values, listed)
+    assert "{{" not in page
+    assert "<!-- block" not in page
+    assert "WZÓR" not in page
+    assert re.findall(r"<h2>(\d+)\. ", page) == [str(n) for n in range(1, 13)]

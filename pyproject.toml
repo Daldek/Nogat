@@ -1,6 +1,6 @@
 [project]
 name = "nogat"
-version = "0.1.1"
+version = "0.2.0"
 description = "Hub of the Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista ecosystem: shared standard, project registry and registry tooling."
 requires-python = ">=3.12"
 license = "MIT"
@@ -13,7 +13,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "actionlint-py>=1.7.12",
+    "hypothesis>=6.170.15",
+    "mutmut>=3.8.1",
     "mypy>=1.19",
+    "numpy>=2.5.5",
     "playwright>=1.64,<2",
     "pytest>=8",
     "pytest-cov>=6",
@@ -56,6 +59,7 @@ markers = [
     "live: needs real network services",
     "db: needs a database",
     "slow: takes more than about 10 s",
+    "formula: a test of a formula, run by mutation testing (CMP-6.8, CMP-7.1)",
 ]
 
 [tool.coverage.run]

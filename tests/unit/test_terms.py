@@ -27,7 +27,7 @@ Druga linia akapitu <https://example.org> & <{{source_url}}>.
 ## 1. Lista
 
 1. Pierwszy.
-<!-- block: chmi -->
+<!-- block: chmu -->
 2. ČHMÚ.
 <!-- /block -->
 3. Trzeci: {{processor}}. {{processor_transfer}}
@@ -70,7 +70,7 @@ def test_build_renders_the_subset() -> None:
 def test_build_keeps_a_list_open_across_block_markers() -> None:
     page = terms.build(SOURCE)
     assert (
-        "<ol>\n<li>Pierwszy.</li>\n<!-- block: chmi -->\n<li>ČHMÚ.</li>\n"
+        "<ol>\n<li>Pierwszy.</li>\n<!-- block: chmu -->\n<li>ČHMÚ.</li>\n"
         "<!-- /block -->\n<li>Trzeci: {{processor}}. {{processor_transfer}}</li>\n</ol>"
     ) in page
 
@@ -92,7 +92,7 @@ def test_placeholders_and_blocks_of_a_template() -> None:
         "tokens_href",
         "kit_href",
     }
-    assert terms.blocks(page) == ["chmi", "imgw", "osm"]
+    assert terms.blocks(page) == ["chmu", "imgw", "osm"]
 
 
 @pytest.mark.parametrize(
@@ -100,7 +100,7 @@ def test_placeholders_and_blocks_of_a_template() -> None:
     [
         ([], set()),
         (["pmaxtp"], {"pmaxtp"}),
-        (["chmi", "osm"], {"chmi", "osm"}),
+        (["chmu", "osm"], {"chmu", "osm"}),
     ],
 )
 def test_kept_keeps_only_the_listed_blocks(listed: list[str], kept: set[str]) -> None:
@@ -108,8 +108,9 @@ def test_kept_keeps_only_the_listed_blocks(listed: list[str], kept: set[str]) ->
 
 
 # `feedback` was a block of kit 0.2.0, `imgw-terms` a derived one until kit
-# 0.6.0 and `esri` a block until kit 0.6.2: a GUI that still lists one is told so.
-@pytest.mark.parametrize("name", ["imgw-terms", "feedback", "esri", "ads"])
+# 0.6.0, `esri` a block until kit 0.6.2 and `chmi` the name of `chmu` until
+# ECO-082: a GUI that still lists one is told so.
+@pytest.mark.parametrize("name", ["imgw-terms", "feedback", "esri", "chmi", "ads"])
 def test_kept_refuses_unknown_blocks(name: str) -> None:
     with pytest.raises(ValueError, match=name):
         terms.kept([name])

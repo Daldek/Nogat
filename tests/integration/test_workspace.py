@@ -642,9 +642,14 @@ def test_set_verify_checks_out_each_member_and_reports_failed_suites(
     )
     _write(directory / "uv.lock", "")
     ran: list[tuple[str, Path]] = []
+    envs: dict[Path, dict[str, str]] = {}
 
-    def suite(command: list[str], cwd: Path) -> int:
+    def suite(
+        command: list[str], cwd: Path, extra_env: dict[str, str] | None = None
+    ) -> int:
         ran.append((" ".join(command), cwd))
+        if extra_env:
+            envs[cwd] = extra_env
         return 1 if cwd.name == "Producer" and "pytest" in command else 0
 
     monkeypatch.setattr(ecosystem, "_run_suite", suite)
@@ -657,6 +662,14 @@ def test_set_verify_checks_out_each_member_and_reports_failed_suites(
     assert {cwd.name for _, cwd in ran} == {"candidate-1", "Producer", "Library"}
     suites = [(c, cwd) for c, cwd in ran if " -m pytest " in c]
     assert [f"--cov={cwd.name.lower()}" in c for c, cwd in suites] == [True, True]
+    # Each package member's own lock is synced first, into an environment
+    # outside its checkout, so its offline install tests find its versions.
+    for name in ("Producer", "Library"):
+        commands = [c for c, cwd in ran if cwd.name == name]
+        assert commands[0].startswith("uv sync --locked --no-install-project")
+        assert " -m pytest " in commands[1]
+        own = Path(envs[workdir / name]["UV_PROJECT_ENVIRONMENT"])
+        assert workdir / name not in own.parents
     for name in ("Producer", "Library"):
         assert _git(workdir / name, "rev-parse", "HEAD") == commits[name]
 
@@ -718,7 +731,9 @@ HEADER = (
     "Do not edit here:\n   change Nogat, then copy again. */\n"
 )
 LOGGING = '"""Logs of a Nogat server."""\n'
+FORMULAS = '"""Formulas of a project that computes."""\n'
 RECORD = "schemas/log/record-1.schema.json"
+CARD = "schemas/formula/card-1.schema.json"
 
 
 def test_copies_of_nogat_files_are_current_behind_or_modified(
@@ -732,7 +747,9 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "schemas/agent/result-1.schema.json": '{"r": 1}\n',
             "design/tokens.css": TOKENS,
             "standards/reference/nogat_logging.py": LOGGING,
+            "standards/reference/nogat_formulas.py": FORMULAS,
             RECORD: '{"l": 1}\n',
+            CARD: '{"c": 1}\n',
             "design/README.md": "not copied\n",
         },
     )
@@ -745,6 +762,8 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "schemas/nogat/handoff-1.schema.json": '{"v": 1}\n',
             "web/tokens.css": HEADER + TOKENS,
             "docs/result-1.schema.json": '{"r": "edited"}\n',
+            "schemas/nogat/card-1.schema.json": '{"c": 1}\n',
+            "src/alpha/nogat_formulas.py": FORMULAS,
             "src/alpha/nogat_logging.py": LOGGING,
             "README.md": "Alpha\n",
         },
@@ -759,6 +778,7 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "tokens.css": "/* Our tokens. */\n" + TOKENS,
             "backend/core/nogat_logging.py": LOGGING + "# edited\n",
             "schemas/record-1.schema.json": '{"l": 1}\n',
+            "src/beta/nogat_formulas.py": FORMULAS + "# edited\n",
         },
     )
     (workspace / "Plain").mkdir()
@@ -780,9 +800,21 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
         ),
         (
             "Alpha",
+            "schemas/nogat/card-1.schema.json",
+            CARD,
+            "current",
+        ),
+        (
+            "Alpha",
             "schemas/nogat/handoff-1.schema.json",
             HANDOFF,
             f"behind {restored[:7]}",
+        ),
+        (
+            "Alpha",
+            "src/alpha/nogat_formulas.py",
+            "standards/reference/nogat_formulas.py",
+            "current",
         ),
         (
             "Alpha",
@@ -800,6 +832,12 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "modified",
         ),
         ("Beta", "schemas/record-1.schema.json", RECORD, "current"),
+        (
+            "Beta",
+            "src/beta/nogat_formulas.py",
+            "standards/reference/nogat_formulas.py",
+            "modified",
+        ),
         ("Beta", "tokens.css", "design/tokens.css", "modified"),
         ("Plain", "—", "—", "no checkout"),
         ("Absent", "—", "—", "no checkout"),

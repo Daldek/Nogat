@@ -1,6 +1,6 @@
 # Development standards
 
-Part of standard 1.0 · IDs `DEV-…`
+Part of standard 1.1 · IDs `DEV-…`
 
 Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 [AGENT_INTERFACE.md](AGENT_INTERFACE.md), [ERROR_REGISTRY.md](ERROR_REGISTRY.md),
@@ -62,6 +62,19 @@ inline in logic.
 used as identifiers when they are the official name of a dataset or system.
 Common words MUST be translated (`road_class`, not `klasa`).
 *Why:* official names are what users and agents search for.
+
+**DEV-2.5** An identifier naming a data provider (a provider id, a dataset
+key, a slug, a registry id, a block, a module or test name, a part of a file
+name) uses the provider's national acronym without diacritics and without
+its legal suffix, in the identifier's case: IMGW-PIB as `IMGW`, `pl.imgw.*`,
+`imgw`; ČHMÚ as `CHMU`, `cz.chmu.*`, `chmu`. A slug or a store directory of
+one provider's data starts with that acronym (`imgw_hydro_daily`,
+`chmu_hydro_daily`, `imgw_stations`). Text for people keeps the full
+name with diacritics („IMGW-PIB”, „ČHMÚ”), and the provider's own addresses
+stay as it publishes them (`opendata.chmi.cz`).
+*Why:* one naming for every provider; the English acronym of one beside the
+national one of the other, and `IMGW-PIB` beside `pl.imgw.*`, were second
+conventions (ECO-082).
 
 ---
 
@@ -502,8 +515,13 @@ No build step is required; vendored libraries keep their licence files.
 [design/](../design/README.md): a copy of `tokens.css` that names the Nogat
 commit it came from and no colour, font or size outside its tokens, the light
 and the dark theme, the project's mark as favicon and in the top bar, and the
-shell of the guidelines (top bar, navigation rail, resizable side panel).
-*Why:* the GUIs serve one user as one family of tools (ECO-055).
+shell of the guidelines (top bar, navigation rail, resizable side panel). An
+instance that an operator other than the author runs MAY show the operator's
+logo and name in the top bar beside the project's mark, never in its place or
+as the favicon; the logo is served from the GUI's own origin.
+*Why:* the GUIs serve one user as one family of tools (ECO-055); the
+operator's mark names who runs an instance, the project's names the software
+(ECO-079).
 
 **DEV-15.4** A GUI shows the kit's app menu, `<nogat-app-menu>` from Nogat
 `design/kit/`, in its top bar left of the theme switch, on every page but its
@@ -517,10 +535,11 @@ the menu is not drawn. An entry opens its GUI in the tab named
 **DEV-15.5** A GUI hands data to another as `nogat-handoff/1` (Nogat
 `schemas/exchange/handoff-1.schema.json`) through the kit's `nogat-handoff.js`.
 The producer offers „Kopiuj do <GUI in genitive>” and „Plik przekazania”; the
-file is `<subject>.handoff.json` in 2-space JSON with a final newline. The
-consumer offers „Wczytaj z <GUI in genitive>” with „Plik przekazania…” and
-„Wklej ze schowka”, checks the envelope against its copy of the schema and
-the payload against its owner's schema, and names each problem in Polish.
+file is `<producer>_handoff_<subject>.json` (DEV-19.21) in 2-space JSON with
+a final newline. The consumer offers „Wczytaj z <GUI in genitive>” with
+„Plik przekazania…” and „Wklej ze schowka”, checks the envelope against its
+copy of the schema and the payload against its owner's schema, and names each
+problem in Polish.
 Copying falls back to a selected text field where the Clipboard API is
 missing or refused.
 *Why:* three implementations differed in file name, text and clipboard
@@ -538,9 +557,12 @@ and copied again. `drift` reports each copy as current, behind or modified
 `regulamin.html` beside its start page: the kit's `nogat-terms.html`, filled
 as `design/README.md` says from `[nogat.operator]`, `[nogat.gui]` and the
 project's own values, with the blocks of its data sources kept, and refilled
-with each copy of the kit. It links „Regulamin” to it in exactly
-these places, each link opening a new tab (`target="_blank"`,
-`rel="noopener"`): the end of the app menu, through its `terms` attribute;
+with each copy of the kit; on an instance that an operator other than the
+author runs, the operator's own regulamin in its place, which the kit's draft
+`nogat-terms-operator.md` starts, built and filled the same way. It links
+„Regulamin” to it in exactly these places, each link opening a new tab
+(`target="_blank"`, `rel="noopener"`): the end of the app menu, through its
+`terms` attribute;
 the foot of the GUI's left navigation rail, or of its left navigation where
 it has no rail, as a small, quiet link in the rail's muted text, which on a
 phone, where the rail becomes a bottom bar or sheet, stays as its last small
@@ -553,15 +575,17 @@ admin page (DEV-15.13) has none. `<nogat-sources>` also passes it in its
 neither page nor link. A GUI loads no script, style or font from another
 server: only basemaps and map layers come from their providers' servers.
 *Why:* one text tells everyone who uses a public GUI its rules and what
-happens to their data (RODO art. 13; ECO-061, ECO-062); the rail is in every
-view and the menu is not drawn without another GUI, so the rail carries the
-link the menu cannot, while a footer took space the views need (ECO-070); a
+happens to their data (RODO art. 13; ECO-061, ECO-062), and regulamin 1.0
+names the author as the operator, which another operator is not (ECO-079);
+the rail is in every view and the menu is not drawn without another GUI, so
+the rail carries the link the menu cannot, while a footer took space the
+views need (ECO-070); a
 link that replaced the GUI's tab would end its session and lose the user's
 work; § 8 ust. 5 names only the providers of map layers as receiving the
 visitor's IP address (ECO-068).
 
-**DEV-15.8** The terms of a public GUI open § 3 with the statement
-„Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
+**DEV-15.8** The terms of a public GUI that the author runs open § 3 with the
+statement „Serwis jest niekomercyjny i bezpłatny, nie zawiera reklam i nie służy
 działalności gospodarczej operatora. Służy celom badawczym i edukacyjnym.
 Dane IMGW-PIB są w nim wykorzystywane do celów niezarobkowych, zgodnie z
 regulaminami IMGW-PIB.”; no view repeats it in a footer or status bar.
@@ -988,6 +1012,25 @@ streamed. `status` is `written` or `replaced` in plain mode and `new`,
 files and is no store). A tool adds no registry code for the convention
 (ERR-1).
 
+**DEV-19.21** (`tool`, `app`) A file whose name a project chooses for a user,
+a GUI's download, a REST attachment (`Content-Disposition`) or a file a command
+writes into `output_dir` under a name it picks, is named
+`<tool>_<content>_<qualifiers>.<extension>`:
+
+| Part | Value |
+|---|---|
+| `<tool>` | the project's name in the registry, `obserwator`, `hydrograf` |
+| `<content>` | what the file holds, in English, lower case, words joined by `-`: `stations`, `series`, `network-nodes`, `stats`, `handoff` |
+| `<qualifiers>` | what tells two such files apart, each after `_`: identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a method), a provider's id in lower case (`imgw`, `chmu`), dates `YYYY-MM-DD` (a moment adds `_HHMMSSZ` in UTC), and a text a person gave (a project's or a subject's name) in lower-case ASCII without diacritics, each run of other characters one `-` and none at either end, left out when nothing remains; none when `<content>` alone names the file |
+| `<extension>` | the format's own, lower case: `csv`, `json`, `geojson`, `zip` |
+
+The name holds only ASCII letters, digits, `.`, `-` and `_`. Not named so: a
+file that keeps the name of its unit in a store, often the provider's
+(DEV-19.5), a store's own files, `ATTRIBUTION.txt` (DEV-20.5) and a file the
+caller names (`output` or another option that gives the name).
+*Why:* the name tells which tool wrote a file and what it holds, the same way
+in every tool (ECO-083).
+
 ---
 
 ## 20. Provider attribution
@@ -1072,7 +1115,7 @@ every surface with the data or results derived from them:
 | Surface | Where the lines go |
 |---|---|
 | GUI | the strip of the view and the dialog behind it (below) |
-| CSV | trailing columns `attribution` and `terms_notice`, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline. Columns a project already has stay (DEV-20.6) |
+| CSV | trailing columns `attribution` and `terms_notice` only, one line per cell from the first data row down, empty below; a table with fewer rows than lines joins the rest into its last cell with a newline; no other column repeats the lines (ECO-082) |
 | JSON | the fields `attribution` and `terms_notice` (DEV-20.6, DEV-20.7) |
 | Parquet | the file metadata keys `attribution` and `terms_notice`, each a JSON array of the lines |
 | ZIP | `ATTRIBUTION.txt` at the root of the archive |
@@ -1090,9 +1133,11 @@ merges its lines in, each once and in order.
 A GUI view shows one strip for all its data, the kit's `<nogat-sources>`,
 not one per panel, card, chart or popup: 12 px in the muted text colour, at
 most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
-with the short forms, a third allowed when the view shows both, wrapping on
-phones. It holds the on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those
-the view's data need, each once in the order of DEV-20.4, a short form in
+with the short forms, a third allowed when the view shows both. On a screen
+up to 860 px wide it is one line: the lines start on it, cut with an
+ellipsis, and „więcej” unfolds them in place (ECO-080). It holds the
+on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those the view's data
+need, each once in the order of DEV-20.4, a short form in
 the place of its full line, and ends with „Źródła i warunki”, which opens a
 dialog with every line (S, P, PS, PP, M, C, CP, G, SG, Z) and the terms of
 DEV-20.7 (RD, RH, RK), and with „Regulamin” where the GUI serves one
@@ -1110,7 +1155,7 @@ are named the same way, their full lines one click away (ECO-068).
 `attribution`, an array of the lines as strings. A consumer shows the lines it
 receives with the data and carries them into its own products and further
 hand-offs, merged without duplicates; a field a project already has for them
-(a CSV column, `license.attribution` of a sidecar, DEV-19.16) stays.
+outside a CSV (`license.attribution` of a sidecar, DEV-19.16) stays.
 *Why:* the obligation follows the data through every tool (ECO-060).
 
 **DEV-20.7** Every GUI view and every exported product with IMGW-PIB data

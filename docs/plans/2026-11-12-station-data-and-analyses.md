@@ -240,9 +240,9 @@ The author's answers of [2026-11-13](#the-authors-answers-2026-11-13) to the ope
 4. **Reference periods** (question 5): the whole record by default, adjustable by the person, with a note that 30 years is the recommended minimum (D12).
 5. **XLSX** (question 1 of Obserwator's GUI plan): no; exports are CSV, JSON and Parquet (D13).
 
-## Open question for the author
+## Decided (2026-11-19)
 
-1. **IMGW-PIB's terms on the public instance** (question 4, „do sprawdzenia”): research done, confirmation pending. IMGW-PIB's notice reads „Do użytku prywatnego i badawczego; inne zastosowania wymagają sprawdzenia warunków IMGW-PIB, także wyjątków dla danych o wysokiej wartości.” (Obserwator `src/obserwator/messages/datasets.py:122-127`). Is serving IMGW-PIB series and analysis results to the Access audience within the terms?
+1. **IMGW-PIB's terms on the public instance** (question 4, „do sprawdzenia”): the GUI is public, without Cloudflare Access; the author does not ask IMGW-PIB for terms, since the data are public („GUI ma być publiczne. Dane są publiczne, więc nie będę się zwracać o warunki do IMGW”). Cloudflare Access stays on the admin panel (`/admin`, `/admin/*`, `/api/admin/*`); a test from outside on 2026-11-19 answered 302 to the Access login there and 200 on `/`, `/api/session` and `/api/current/<code>`. The instance stays non-commercial and without advertising, with both IMGW-PIB texts on every view and export (§5 ust. 3 and 4 below). The research note that led to the question:
 
    Research note (2026-11-13, IMGW-PIB's regulations, https://danepubliczne.imgw.pl/regulations, read that day):
 
@@ -251,7 +251,7 @@ The author's answers of [2026-11-13](#the-authors-answers-2026-11-13) to the ope
    - §5 ust. 3 and 4: every work or product carries „Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy” and, for processed data, „Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone”.
    - §1 ust. 2 names Regulation (EU) 2023/138 (high-value datasets) as a legal basis, but the regulations do not list which of IMGW-PIB's datasets are high-value.
 
-   Reading: a non-commercial instance without advertising, with both texts on every view and every export, fits the private, non-profit purpose. A fully public instance, or any commercial or planning use, depends on whether IMGW-PIB treats its daily hydrological and meteorological archives as high-value datasets, which needs IMGW-PIB's written confirmation (biznes@imgw.pl, the request procedure of §8). Until then the public instance stays behind Cloudflare Access.
+   Reading: a non-commercial instance without advertising, with both texts on every view and every export, fits the private, non-profit purpose. A fully public instance, or any commercial or planning use, depends on whether IMGW-PIB treats its daily hydrological and meteorological archives as high-value datasets, which would need IMGW-PIB's written confirmation (biznes@imgw.pl, the request procedure of §8).
 
 ## Not in this plan
 

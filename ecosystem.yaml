@@ -4,7 +4,7 @@
 # Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
 
 schema: nogat-ecosystem/1
-standard_version: "1.0"
+standard_version: "1.1"
 
 data_sources:
   - id: gugik
@@ -27,12 +27,12 @@ data_sources:
     country: global
     url: https://soilgrids.org
     licence: CC BY 4.0
-  - id: imgw-pib
+  - id: imgw
     name: IMGW-PIB (archives, live API, PMAXTP atlas)
     country: PL
     url: https://danepubliczne.imgw.pl
     licence: IMGW-PIB terms of reuse, attribution required
-  - id: chmi
+  - id: chmu
     name: ČHMÚ open data
     country: CZ
     url: https://opendata.chmi.cz
@@ -60,6 +60,7 @@ projects:
     summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Kartograf
     python_manifests: [pyproject.toml]
     visibility: public
@@ -125,6 +126,7 @@ projects:
     summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
     profiles: [tool, app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Obserwator
     python_manifests: [pyproject.toml]
     visibility: public
@@ -134,6 +136,7 @@ projects:
       mcp: obserwator mcp
       rest: obserwator server (/api/v1)
       python: obserwator
+      gui: obserwator gui serve
     routes:
       - task: Find IMGW-PIB or ČHMÚ stations by name, river or code
         command: obserwator stations find
@@ -149,7 +152,7 @@ projects:
         command: obserwator current hydro
       - task: Get PMAXTP design precipitation of a point in Poland
         command: obserwator pmaxtp fetch
-    data_sources: [imgw-pib, chmi]
+    data_sources: [imgw, chmu]
     provides:
       - id: obserwator-store/1
         kind: store
@@ -166,7 +169,7 @@ projects:
       - id: obserwator-observation/1
         kind: document
         summary: History of published HTTP signals per archive file.
-      - id: chmi-json/1
+      - id: chmu-json/1
         kind: document
         summary: Canonical JSON form of ČHMÚ files used for content-based pins.
       - id: obserwator-result/1
@@ -196,6 +199,9 @@ projects:
       - id: obserwator-analyses/1
         kind: dataset
         summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
+      - id: obserwator-gui
+        kind: service
+        summary: "Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079)."
     depends_on:
       - project: Kartograf
         kind: data
@@ -220,6 +226,7 @@ projects:
     summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrolog
     python_manifests: [pyproject.toml]
     visibility: public
@@ -306,6 +313,7 @@ projects:
     summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
     profiles: [app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrograf
     python_manifests: [backend/pyproject.toml]
     visibility: public
@@ -358,6 +366,7 @@ projects:
     summary: Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling.
     profiles: [tool]
     status: research
+    computes: true
     repo: https://github.com/Daldek/Hydraulik
     branch: feature/sfincs-swmm
     python_manifests: [pyproject.toml]
@@ -486,7 +495,7 @@ projects:
         kind: optional
         status: active
         via: [library, store]
-        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data/1]
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmu-json/1, obserwator-data/1]
         note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
       - project: Hydrolog
         kind: data

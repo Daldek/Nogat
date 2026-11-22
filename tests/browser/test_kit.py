@@ -24,7 +24,14 @@ from typing import Any
 import jsonschema
 import pytest
 import terms
-from playwright.sync_api import Browser, Locator, Page, Playwright, sync_playwright
+from playwright.sync_api import (
+    Browser,
+    Locator,
+    Page,
+    Playwright,
+    expect,
+    sync_playwright,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
@@ -454,9 +461,9 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ([*IMGW, *PMAXTP, *OTHERS, CP], 3),
     ],
     ids=[
-        "imgw-chmi",
-        "pmaxtp-chmi",
-        "both-families-chmi",
+        "imgw-chmu",
+        "pmaxtp-chmu",
+        "both-families-chmu",
         "imgw-short-forms",
         "pmaxtp-short-forms",
         "both-families-short-forms",
@@ -612,12 +619,50 @@ def test_strip_and_dialog_follow_both_themes(sources: tuple[Page, list[str]]) ->
     ]
 
 
-def test_strip_wraps_and_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+def test_strip_folds_to_one_line_on_a_phone_and_unfolds_in_place(
+    sources: tuple[Page, list[str]],
+) -> None:
     page, _ = sources
     page.set_viewport_size({"width": 390, "height": 800})
     _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.get_by_role("button", name="więcej")
+    assert _strip_lines(page) == 1
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    assert toggle.get_attribute("aria-expanded") == "false"
+    box = page.locator(".nogat-sources-line").first.bounding_box()
+    assert box is not None
+    assert 0 <= box["x"] < 390
+    assert page.get_by_role("button", name="Źródła i warunki").is_visible()
+    toggle.click()
+    unfold = page.get_by_role("button", name="zwiń")
+    assert unfold.get_attribute("aria-expanded") == "true"
     assert _strip_lines(page) > 3
     assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    unfold.click()
+    assert _strip_lines(page) == 1
+    assert page.get_by_role("button", name="więcej").is_visible()
+
+
+def test_strip_offers_to_unfold_only_a_phone_line_that_is_cut(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.locator(".nogat-sources-toggle")
+    assert _strip_lines(page) > 1
+    assert toggle.is_hidden()
+    page.set_viewport_size({"width": 390, "height": 800})
+    expect(toggle).to_be_visible()
+    assert _strip_lines(page) == 1
+    _lines(page, [LINES["C"]], NOTICE)
+    assert _strip_lines(page) == 1
+    assert toggle.is_hidden()
+
+
+def test_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
     page.get_by_role("button", name="Źródła i warunki").click()
     box = page.locator("dialog").bounding_box()
     assert box is not None
@@ -645,19 +690,22 @@ def test_strip_loads_nothing_but_the_kit(
     ]
 
 
-# The hand-off (DEV-15.5)
+# The hand-off (DEV-15.5) and its file name (DEV-19.21)
 
 
 @pytest.mark.parametrize(
     ("subject", "name"),
     [
-        ("Kamiennik — Świerzawa", "Kamiennik — Świerzawa.handoff.json"),
-        ('a/b\\c:d*e?f"g<h>i|j', "a-b-c-d-e-f-g-h-i-j.handoff.json"),
-        ("  dwa   słowa  ", "dwa słowa.handoff.json"),
-        ("tab\t\nnowa", "tab-nowa.handoff.json"),
-        ("x\u0000\u001fy", "x-y.handoff.json"),
-        ("", "hydrograf.handoff.json"),
-        (" /// ", "-.handoff.json"),
+        ("Kamiennik — Świerzawa", "hydrograf_handoff_kamiennik-swierzawa.json"),
+        ("Łódź, ŁĄKA żółć", "hydrograf_handoff_lodz-laka-zolc.json"),
+        ('a/b\\c:d*e?f"g<h>i|j', "hydrograf_handoff_a-b-c-d-e-f-g-h-i-j.json"),
+        ("  dwa   słowa  ", "hydrograf_handoff_dwa-slowa.json"),
+        ("tab\t\nnowa", "hydrograf_handoff_tab-nowa.json"),
+        ("x\u0000\u001fy", "hydrograf_handoff_x-y.json"),
+        ("Q_max 2026.11", "hydrograf_handoff_q-max-2026-11.json"),
+        ("", "hydrograf_handoff.json"),
+        (" /// ", "hydrograf_handoff.json"),
+        ("Москва", "hydrograf_handoff.json"),
     ],
 )
 def test_file_name_of_a_handoff(page: Page, subject: str, name: str) -> None:
@@ -669,7 +717,8 @@ def test_download_writes_two_space_json_with_a_final_newline(page: Page) -> None
     with page.expect_download() as info:
         name = _handoff(page, "(h, d) => h.downloadHandoff(d)", doc)
     download = info.value
-    assert download.suggested_filename == name == "Kamiennik — Świerzawa.handoff.json"
+    assert download.suggested_filename == name
+    assert name == "hydrolog_handoff_kamiennik-swierzawa.json"
     text = download.path().read_text(encoding="utf-8")
     assert json.loads(text) == doc
     assert text.startswith('{\n  "schema": "nogat-handoff/1",\n  "created_at"')
