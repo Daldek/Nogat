@@ -6,6 +6,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-22
+
 ### Added
 
 - Release set `v0.2.0` (`release-sets/v0.2.0/`, REL-6.6, HUB-7.2), the
@@ -938,6 +940,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0
