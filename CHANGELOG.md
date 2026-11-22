@@ -8,6 +8,33 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Release set `v0.2.0` (`release-sets/v0.2.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-21: the candidate verified by the
+  workflow `verify-candidate` with each member's commit replaced by its
+  annotated release tag, Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog
+  `v0.9.0`, Hydrograf `v0.6.0` (an app on its own lock, not installed by the
+  set) and Archiwista `v0.3.3`. It carries Hydrolog 0.9.0, with the fixes
+  of the formula audit of 2026-11-18 and the computation standard, and its
+  consumers (plan `docs/plans/2026-11-19-hydrolog-0.9.0-consumers.md`), kit
+  `1.1.0` in every GUI, the providers named by their national acronyms
+  (ECO-082) and one pattern of file names (ECO-083). As before, the set is
+  installed as an environment, `uv sync --locked --no-dev --python 3.12` in
+  `release-sets/v0.2.0/`, not with `uv tool install` (a deviation from
+  HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.1 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.1` (HUB-6.1); its changes are listed in
+  `standards/README.md`.
+- The topic document `standards/COMPUTATIONS.md`, prefix `CMP` (ECO-078):
+  every formula of a project that computes is declared once by a spec,
+  refuses physically impossible input and failed preconditions, warns
+  outside its applicability range, never returns a non-finite or impossible
+  value, and is verified by reference cases, oracles and generated range,
+  type and property tests; gross defects are released at once. The
+  registry's optional `computes` (HUB-2.1, its schema) marks such a
+  project: Kartograf, Obserwator, Hydrolog, Hydrograf and Hydraulik. The
+  topic documents, `ecosystem.yaml` and `error_registry.json` carry
+  standard 1.1. Plan `docs/plans/2026-11-18-computation-standard.md`,
+  step 1.
 - ECO-079: an instance of a GUI that an operator other than the author runs
   may show the operator's logo and name in the top bar beside the project's
   mark, which stays as the favicon and in the top bar, the logo served from
@@ -22,7 +49,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   and the author's part ends with the deployment; the fields and source
   blocks of regulamin 1.0, so a GUI builds and fills it the same way, plus
   two fields the operator writes in (`BY_HAND` in `scripts/terms.py`). Its
-  hash is in `nogat-kit.json`, whose version stays `1.0.0` (REL-1.4).
+  hash is in `nogat-kit.json`, kit `1.1.0` (ECO-081).
 - The registry names Obserwator's GUI, `obserwator gui serve`, and its
   service `obserwator-gui` with the instance section `[obserwator.instance]`
   of `nogat.toml`.
@@ -85,8 +112,9 @@ the standard are listed in [standards/README.md](standards/README.md).
   ellipsis, then „więcej”, shown while the line cuts them, which unfolds the
   strip in place („zwiń” folds it again), and „Źródła i warunki”; wider
   screens are unchanged. The element's `expanded` property and attribute
-  hold the state, `clipped` marks a cut line. The kit's version stays
-  `1.0.0`. Plan `docs/plans/2026-11-21-phone-sources-strip.md`.
+  hold the state, `clipped` marks a cut line. Kit `1.1.0` (ECO-081). Plan
+  `docs/plans/2026-11-21-phone-sources-strip.md`.
+- README installs the set `v0.2.0` and names standard 1.1.
 
 ### Fixed
 
@@ -96,8 +124,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   exact differences of its distribution function (audit item T35) and
   Kirpich's time of concentration uses the source's constant 0.0078 for feet
   with the exact foot (−0.136 %, item T8). The schema itself is unchanged;
-  Hydrolog, Hydrograf and Archiwista re-copy it with their next update
-  (SHA-256 `10de3e18…`).
+  Obserwator, Hydrolog, Hydrograf and Archiwista carry the new copy in their
+  releases of this set (SHA-256 `10de3e18…`).
 - `set verify` syncs the core dependencies of each member's own lock into a
   throwaway environment before the member's suite, so the uv cache holds
   them for its offline install tests, as in the member's own CI. On a fresh

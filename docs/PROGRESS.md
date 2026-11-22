@@ -3,7 +3,8 @@
 Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`), updated 2026-11-16 by the
 candidate's lock, `verify-candidate`, the integration run, the members' releases, Nogat's
 release `v0.1.0` with standard 1.0 (`std-1.0`, 2026-11-17), the closed set `kaczawa`/`2026-1`
-and the `origin/develop` of the projects after `git fetch`; release-set pins by `set check`.
+and the `origin/develop` of the projects after `git fetch`, and on 2026-11-22 for Nogat
+`v0.2.0` with standard 1.1 (`std-1.1`); release-set pins by `set check`.
 History is the git log, the CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is
 called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the directory
 `IMGWTools`.
@@ -34,6 +35,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 |---|---|---|
 | Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session |
 | Standard 1.0 | done 2026-11-17 | published to `main` with `v0.1.0`, its merge commit tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056); the root-owned legacy `standards/templates/` and `standards/configs/` reached `main` unchanged (ADOPTION_PLAN 0.1, a known deviation) |
+| Standard 1.1 | done, in 0.2.0 | published to `main` with `v0.2.0`, its merge commit tagged `std-1.1` (HUB-6.1): COMPUTATIONS.md (CMP, ECO-078), the operator's instance (ECO-079), the strip folded on a phone (ECO-080), kit 1.1.0 (ECO-081), providers by national acronyms (DEV-2.5, ECO-082) and one pattern of file names (DEV-19.21, ECO-083); the changelog of `standards/README.md` lists them |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; `routes` name the commands of every tool's integration branch (HUB-2.9) |
 | `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, `nogat_formulas.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` (unit, integration, contract, browser) |
@@ -41,26 +43,26 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
-| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.0.0 (app menu, sources strip, hand-off, regulamin, admin panel), which stays 1.0.0 until the author decides (REL-1.4); the copies of the kit, the marks and the tokens in Hydrograf, Hydrolog, Obserwator and Archiwista match Nogat's at their `origin/develop` of 2026-11-15 (SHA-256, the tokens apart from their DEV-15.3 header) |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone since 2026-11-21 (ECO-080; Obserwator and Hydrolog `develop`, Hydrograf and Archiwista with their next change); plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
+| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081, in 0.2.0), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal Nogat's in their releases of `v0.2.0` |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
-| Formula reference module (CMP-8.1, standard 1.1) | done on `test/computation-standard` | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; not merged into `develop` |
+| Formula reference module (CMP-8.1, standard 1.1) | done, in 0.2.0 | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; Hydrolog 0.9.0 copies it |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | done for the members | **candidate-6** (2026-11-16): Kartograf `7a1eb11`, Obserwator `11eedea`, Hydrolog `1be867d`, Hydrograf `1aa66f1`, Archiwista `95b0540`, the members after their release documentation; `set check`: every pin between the members matches; `set verify` on this machine: all pass except the known C2 and C3; released as `release-sets/v0.1.0/` with the members' tags. Retman and Hydraulik differ until they apply a later set |
-| Members' releases (REL-2.1, REL-6.6) | done 2026-11-16 | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”); merged locally without pull requests (`gh` is not installed), with the author's approval; verified locally only (REL-6.5 deviation: the workflow reached Nogat's `main` only with `v0.1.0`) |
-| `verify-candidate` (REL-6.5, ECO-077) | done 2026-11-17 | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` with `v0.1.0` and dispatchable from there; not run yet: candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
+| One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.2.0`: the round's candidate, verified by `verify-candidate`, at the tags Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0` and Archiwista `v0.3.3`. Before it candidate-6 became `v0.1.0` and candidate-10 `v0.1.1`. Retman and Hydraulik differ until they apply a later set |
+| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3` |
+| `verify-candidate` (REL-6.5, ECO-077) | done | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` since `v0.1.0`; it verified candidate-7 (after its releases), candidate-10 (`v0.1.1`) and the round's candidate (`v0.2.0`) on the three runners; candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
-| Nogat's version (ECO-076) | done 2026-11-20 | `v0.1.1` (`a973bf0`), the patch release set `release-sets/v0.1.1/` from `main` (REL-2.4, REL-6.6), merged back into `develop`; `v0.1.0` 2026-11-17; merged into `main` locally without a pull request, with the author's approval; `1.0.0` only by the author's decision (HUB-7.4) |
-| `nogat` package (HUB §7) | planned | not in `v0.1.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
+| Nogat's version (ECO-076) | done, 0.2.0 | `v0.2.0` with `std-1.1`, the release set `release-sets/v0.2.0/` (REL-6.6); `v0.1.1` (`a973bf0`) 2026-11-20, the patch release set from `main` (REL-2.4), merged back into `develop`; `v0.1.0` 2026-11-17; `1.0.0` only by the author's decision (HUB-7.4) |
+| `nogat` package (HUB §7) | planned | not in `v0.2.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.2.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
 
 ## Next
 
 1. CP without detail (ECO-071): producers use the fixed line once and treat
    old parenthetical CP as CP on read (regulamin 1.0 corrected in place, no
-   new `terms_effective`); the four GUIs carry kit 1.0.0 on their `develop`
-   (2026-11-15).
+   new `terms_effective`); the four GUIs carry the kit, 1.1.0 in their
+   releases of `v0.2.0`.
 2. Info texts of a GUI (ECO-069, DEV-15.14, example in `design/README.md`):
    Hydrograf, Hydrolog, Obserwator and Archiwista revise their „(i)” texts,
    help popovers and „Objaśnienie metod” to it, method detail beyond about
@@ -105,8 +107,8 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      `cz.chmi.hydro_daily` and rebuilt the analyses with Hydrolog 0.8.0;
      the defects it found went into Obserwator `v3.0.1` and Hydrolog
      `v0.8.1` (Next 7), and `cz.chmi.meteo_daily` was built on 2026-11-21
-     (Deployment and storage). Obserwator also refreshes its copies in
-     `schemas/nogat/` from `std-1.0` (its D6,
+     (Deployment and storage). Obserwator's copies in `schemas/nogat/` are
+     those of `std-1.1` (its D6,
      `docs/plans/2026-11-04-obserwator-agent-contracts.md`).
 7. The members' next releases fix the known failures C1 to C7 and the
    findings of the scenario test of 2026-11-15/16 (Barycz, Bóbr) (the
@@ -203,13 +205,11 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      or hides the unreliable periodic curves with a warning, and its station
      card says that IMGW's daily Q are derived from IMGW's own rating
      curves, not measured.
-8. Nogat after `v0.1.0`: `develop` opens its next cycle (`0.y.z.dev0`,
+8. Nogat after `v0.2.0`: `develop` opens its next cycle (`0.y.z.dev0`,
    REL-1.1) with its next change, and the standard's next version on
-   `develop` is 1.1 (HUB-6.1); the next candidate is the first that the
-   workflow `verify-candidate` verifies from `main` on the three runners
-   (REL-6.5); deleting the merged topic branches `feature/verify-candidate`
-   and `chore/candidate-6` is the author's (step 7 of
-   `docs/plans/2026-10-20-first-release-set.md`).
+   `develop` is 1.2 (HUB-6.1); deleting the merged topic branches
+   `feature/verify-candidate` and `chore/candidate-6` is the author's (step
+   7 of `docs/plans/2026-10-20-first-release-set.md`).
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's
@@ -246,20 +246,24 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     IMGW-PIB HVD gauges), A as its check, C only on demand; a written
     question to IMGW-PIB before any commercial start.
 15. Operator's instance (`2026-11-21-obserwator-instance.md`, approved):
-    steps 1–5 merged (ECO-079, Obserwator ADR-025; kit `1.0.0`); step 6 is
-    Obserwator `v3.2.0`. A lawyer reviews the draft regulamin first.
-16. Release round of 2026-11-21 (released only when the round ends, the
-    author's decision): approved on 2026-11-21 are both plans of the round,
-    Hydrograf `0.6.0` = the Hydrolog adaptation, kit `1.1.0` (ECO-081),
-    Nogat `0.2.0` with `std-1.1`, providers by national acronyms in
-    identifiers (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one
-    pattern of file names (DEV-19.21, ECO-083). Every member's `develop`
-    holds its part with its full gate (2026-11-22): Obserwator `4bf0ce3`,
-    Hydrolog `64f6e21`, Hydrograf `54eecec`, Archiwista `e96b164`. The production
-    rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10 (several
-    gates at once); production serves its old data root, and the 3.1.0
-    deploy builds a new one anyway. Candidate-11 verified at `48ae5eb`, run
-    45023647519. Next: releases.
+    steps 1–5 in Obserwator `3.1.0` and Nogat `0.2.0` (ECO-079, Obserwator
+    ADR-025; kit `1.1.0`); step 6 is Obserwator `v3.2.0`. A lawyer reviews
+    the draft regulamin first.
+16. Release round of 2026-11-21, released as the set `v0.2.0`: Obserwator
+    `3.1.0`, Hydrolog `0.9.0`, Hydrograf `0.6.0` (the Hydrolog adaptation;
+    its other planned items move to `0.7.0`), Archiwista `0.3.3`, Kartograf
+    `0.8.2` unchanged, and Nogat `0.2.0` with standard 1.1 (`std-1.1`): kit
+    `1.1.0` (ECO-081), providers by national acronyms in identifiers
+    (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one pattern of
+    file names (DEV-19.21, ECO-083); plans `2026-11-18-computation-standard.md`,
+    `2026-11-19-hydrolog-0.9.0-consumers.md` and `2026-11-21-*`. The
+    production rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10
+    (several gates at once); production serves its old data root. Next: the
+    deployment of the released versions with the author's consent, Obserwator
+    3.1.0 on a new data root built from the raw root (step 7 of
+    `2026-11-21-national-provider-names.md`); then Obserwator `v3.2.0`
+    (Next 15), Hydrograf `0.7.0` and steps 7 and 10 of the computation
+    standard.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

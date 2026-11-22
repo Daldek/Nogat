@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „7 - zgodnie z propozycja”, approving this plan and `2026-11-19-hydrolog-0.9.0-consumers.md`; requested on 2026-11-18: „zaplanuj cały standard dla takich testów, który będzie dostępny na poziomie Nogata i zaciągany do pozostałych projektów”)
 
-Status: steps 1 and 3 in progress.
+Status: steps 1 to 5 and 9 done, steps 6 and 8 in part, released with the release set `v0.2.0` (Nogat `0.2.0` with `std-1.1`, Hydrolog `0.9.0`, Obserwator `3.1.0`); steps 7 and 10 open (Results).
 
 Requirements: CMP §1 to CMP §9 (new, step 1), HUB-6.1, HUB-5.2, DEV-10.4, DEV-12.9 (the pattern of a reference module copied byte for byte), AGI notices, ERR-3.
 
@@ -50,4 +50,10 @@ Releases: without a gross defect, each project's work merges into `develop` and 
 
 ## Results
 
-(filled as steps finish)
+- Steps 1 and 2, Nogat: `standards/COMPUTATIONS.md` and standard 1.1, published as `std-1.1` with Nogat `v0.2.0`; the reference module `standards/reference/nogat_formulas.py` with its toy-formula tests, `drift` over its copies, and Hypothesis, mutmut and NumPy in the development dependencies. The card schema is `schemas/formula/card-1.schema.json` (`nogat-formula-card/1`), not the `schemas/nogat/formula-1.schema.json` step 2 names.
+- Steps 3 and 4: eleven studies, one per family, and `TRIAGE.md` in `~/workspace/wt/ct-research/`; the first fixes went out before anything else, in Hydrolog `0.9.0.dev0` (CMP-9.1, CMP-9.2) and Obserwator's `fix/presentation` (T24 to T26).
+- Step 5: Hydrolog 0.9.0 copies the module and carries the specs of its families, `docs/FORMULAS.md`, the notice `outside_applicability` and `formula_versions` on every result (plan `2026-11-19-hydrolog-0.9.0-consumers.md`, step 1).
+- Step 6, in part: Obserwator 3.1.0 stores `formula_versions` of Hydrolog's formulas with every analysis; its Tier B specs of the parsers and calendars are open.
+- Step 8, in part: Hydrolog 0.9.0's handbook, `docs/podrecznik/`, chapters 1 to 11 and appendices A, D and E; chapter 12 and appendices B and C are open.
+- Step 9: [sources-needed.md](2026-11-18-computation-standard/sources-needed.md).
+- Open: step 7 (Hydrograf, Kartograf and Hydraulik have no copy of the module or specs of their own formulas; Hydrograf 0.6.0 returns Hydrolog's `formula_versions` with its hydrographs) and step 10 (no nightly mutation testing in any project).
