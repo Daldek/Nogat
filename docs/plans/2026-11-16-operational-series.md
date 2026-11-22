@@ -134,6 +134,17 @@ The texts were read on 2026-11-16. They give no blocker, and none was contacted 
 | D10 | Backups of the store to the NAS: weekly incremental, monthly full. |
 | D11 | The plan lives in Nogat as a cross-project plan. |
 
+## Decisions (the author, 2026-11-22)
+
+Recorded in the providers plan `2026-11-20-hydromet-providers.md` as P14 to P16; they change this plan:
+
+| # | Decision |
+|---|---|
+| E1 | Everything Obserwator receives is kept as a capture in the raw root (P14), warnings and water-state classes and the GUI's live fetches included: D1's „warnings and water-state classes stay live only” and D2 are superseded. This plan's nightly harvest is the capture of hydro-back's hourly values, and its sub-daily series are built from the captures. |
+| E2 | Whether captured data are served (shown as stored data, downloaded from Obserwator or Archiwista) is the operator's decision per source (P15); the author's service is free, without advertising and earns nothing („To nadal nie jest działalność gospodarcza”). The terms flags of hydro.imgw.pl stay in Risks for an operator who earns. |
+| E3 | The polling rate follows the source (P16). |
+| E4 | The capture ships with Obserwator `v3.2.0`, in its provider adapters; Obserwator `v3.3.0` is dedicated to CAMELS-PL; the rest of this plan (sub-daily series, telemetry replacement, the chart, pruning, backups) goes into `v3.4.0` at the earliest. [proposed: the author has not yet placed it] |
+
 ## Design
 
 ### Tiers and datasets
