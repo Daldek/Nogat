@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „Jeszcze jedna rzecz do ujednolicenia - nazwy pobieranych plikow”, then the choices „Cały ekosystem w tej rundzie”, „Angielskie”, „Tak, z nazwą narzędzia na początku” out of: the whole ecosystem in this round, the rule now and Obserwator now, Obserwator only; Polish or English words; with or without the tool's name)
 
-Status: approved; step 1 (Nogat) done on 2026-11-21 on `feat/download-file-names` (DEV-19.21, ECO-083), not yet merged; steps 2 to 5 to do.
+Status: approved; step 1 (Nogat) merged into `develop` on 2026-11-21 (`c7ae41f`); step 4 (Hydrograf) merged (`3a4ecf9`); steps 2, 3 and 5 are on each tool's `chore/round-integration` (2026-11-22).
 
 Requirements: DEV §19 (files a tool writes), DEV-15.5 (hand-off file), DEV-15.11 (statistics file), ECO-082 (identifiers by national acronyms). Raised by the author's test of Obserwator's station list on 2026-11-21.
 
@@ -18,7 +18,7 @@ A file a tool names for a user (a GUI's download, a REST attachment, a file writ
 
 - `<tool>`: the tool's name in the registry, lower case (`obserwator`, `hydrolog`, `hydrograf`, `archiwista`, `kartograf`).
 - `<content>`: what the file holds, in English, lower case, words joined by `-` (`stations`, `series`, `analyses`, `pmaxtp`, `hyetograph`, `network-nodes`, `comparison`, `stats`).
-- `<qualifiers>`: what tells two such files apart, each part separated by `_`, identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a provider's id in lower case `imgw-pib` or `chmu`, a method), dates as ISO `2026-11-21`, a text a user gave (a project's or a subject's name) reduced to lower-case ASCII without diacritics with `-` for anything else; none when the content alone names the file.
+- `<qualifiers>`: what tells two such files apart, each part separated by `_`, identifiers as they are (a dataset key `pl.imgw.meteo_precip_daily`, a station code, a provider's id in lower case `imgw` or `chmu`, a method), dates as ISO `2026-11-21`, a text a user gave (a project's or a subject's name) reduced to lower-case ASCII without diacritics with `-` for anything else; none when the content alone names the file.
 - `<extension>`: lower case, the format's own (`csv`, `json`, `geojson`, `parquet`, `png`, `svg`, `zip`).
 - Only ASCII letters, digits, `.`, `-` and `_`; no spaces or diacritics.
 

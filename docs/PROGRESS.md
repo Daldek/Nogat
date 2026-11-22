@@ -249,21 +249,16 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     steps 1–5 merged (ECO-079, Obserwator ADR-025; kit `1.0.0`); step 6 is
     Obserwator `v3.2.0`. A lawyer reviews the draft regulamin first.
 16. Release round of 2026-11-21 (released only when the round ends, the
-    author's decision): `develop` heads Obserwator `64f6abb`, Hydrolog
-    `47d492f` (`0.9.0.dev6`), Hydrograf `d23cb02` (Hydrolog 0.9.0 adapted,
-    ADR-088 proposed), Archiwista `9e9e365`; Kartograf stays `v0.8.2`. CI
-    green except Archiwista (Firefox map teardown, `fix/map-teardown`); the
-    kit copies of Hydrograf and Archiwista on `feat/phone-sources-strip`.
-    The author decided on 2026-11-21: both plans approved, Hydrograf
-    `0.6.0` = the Hydrolog adaptation only, kit `1.1.0` (ECO-081, every GUI
-    copies it), Nogat `0.2.0` with `std-1.1`; ČHMÚ named `chmu` and the CSV
-    with two attribution columns first (ECO-082, plan
-    `2026-11-21-national-provider-names.md`). Files a tool names for a user
-    follow `<tool>_<content>_<qualifiers>.<extension>` (DEV-19.21, ECO-083,
-    plan `2026-11-21-download-file-names.md` with every tool's names): step
-    1 on `feat/download-file-names` (kit `nogat-admin.js`,
-    `nogat-handoff.js`), steps 2 to 5 in the tools. Next: candidate-11,
-    releases.
+    author's decision): approved on 2026-11-21 are both plans of the round,
+    Hydrograf `0.6.0` = the Hydrolog adaptation, kit `1.1.0` (ECO-081),
+    Nogat `0.2.0` with `std-1.1`, providers by national acronyms in
+    identifiers (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one
+    pattern of file names (DEV-19.21, ECO-083). `develop`: Hydrograf
+    `3a4ecf9` done; Obserwator, Hydrolog and Archiwista integrate their
+    branches on `chore/round-integration` (2026-11-22). The production
+    rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10 (several
+    gates at once); production serves its old data root, and the 3.1.0
+    deploy builds a new one anyway. Next: candidate-11, releases.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the

@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „Jest ok” on this plan with its decisions and risks; requested: „mylse, ze bedzie lepiej wszedzie korzystac z nazw narodowych, ale bez znakow diakrytycznych. Teraz mieszamy polska nazwe IMGW z angielska nazwe czeskiego CMHU. Problem musi zostac rozwiaany po stronie Archiwisty jako fix. Na razie zostajemy we wszystkich schematach przy `/1`, bo jest to wciaz wersja rozwojowa”; on the location source and the attribution columns: „B - inaczej. […] wejdzie jako minor juz teraz; C - jak w B”)
 
-Status: approved; step 1 (Nogat) done on 2026-11-21 on `feat/national-provider-names` (ECO-082, DEV-2.5), not yet merged; steps 2 to 5 in progress.
+Status: approved; step 1 (Nogat) merged into `develop` on 2026-11-21 (`9b12ec6`; decisions 1 for IMGW and 1a at `4d755ee`, `fbbe4d1`); step 5 (Hydrograf) merged (`3a4ecf9`); Obserwator's ČHMÚ part (`a4f98e0`) and Hydrolog's (`b08ae85`) merged; the IMGW id, the `imgw_` slugs and Archiwista's step 4 are on each tool's `chore/round-integration` (2026-11-22).
 
 Requirements: DEV-20.3, DEV-20.5, REL-1.3, REL-1.4, AGI-4.1, ECO-072; Obserwator ADR-001 Q10, ADR-003, ADR-012, ADR-021. Raised by the author's test of Obserwator's station list on 2026-11-21.
 
