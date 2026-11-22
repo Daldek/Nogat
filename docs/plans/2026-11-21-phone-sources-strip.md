@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „Pasek na telefonie do zwinięcia”, then the choice „Zwinąć do jednej linii” out of: fold behind „Źródła i warunki”, fold to one line, keep the lines and move the strip)
 
-Status: steps 1 to 4 done, each full gate passed and merged into `develop`: Nogat (`5f8cce0`), Obserwator (`64f6abb`; the foot of „Stacje” at 390 × 844 px is 76 px, 143 px unfolded, against 127 px wrapped), Hydrolog (`47d492f`), Hydrograf (`3a4ecf9`) and Archiwista (`bfd42c8`, 2026-11-22). Not deployed.
+Status: steps 1 to 4 done, each full gate passed and merged into `develop`: Nogat (`5f8cce0`), Obserwator (`64f6abb`; the foot of „Stacje” at 390 × 844 px is 76 px, 143 px unfolded, against 127 px wrapped), Hydrolog (`47d492f`), Hydrograf (`3a4ecf9`) and Archiwista (`bfd42c8`, 2026-11-22); released with the release set `v0.2.0` in kit `1.1.0` (ECO-081). Not deployed.
 
 Requirements: DEV-20.5, DEV-15.4 to DEV-15.6, REL-1.4, ECO-064, ECO-072. Raised by Obserwator's open question of its 3.1.0 quick fixes: on an iPhone 13 (390 × 844 px) its „Stacje” view gives the strip 127 px, five wrapped lines over the map.
 

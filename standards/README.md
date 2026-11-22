@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.1 · in preparation on `develop`; the published version is 1.0, tagged `std-1.0` (HUB-6.1)
+Standard 1.1 · published with Nogat `v0.2.0`, tagged `std-1.1` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -85,7 +85,7 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
-- 1.1 (in preparation on `develop`):
+- 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is
     `<tool>_<content>_<qualifiers>.<extension>`: the registry name, English
@@ -93,8 +93,10 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     lower-case ASCII with `-`; the hand-off file is
     `<producer>_handoff_<subject>.json` (DEV-19.21, DEV-15.5, ECO-083).
   - An identifier naming a data provider uses its national acronym without
-    diacritics (`CHMU`, `cz.chmu.*`, `chmu` for ČHMÚ, as `IMGW-PIB` and
-    `pl.imgw.*`), and a CSV carries the lines in `attribution` and
+    diacritics and without its legal suffix (`IMGW`, `pl.imgw.*`, `imgw` for
+    IMGW-PIB; `CHMU`, `cz.chmu.*`, `chmu` for ČHMÚ), a slug or a store
+    directory of one provider's data starts with it (`imgw_hydro_daily`,
+    `imgw_stations`), and a CSV carries the lines in `attribution` and
     `terms_notice` only (DEV-2.5, DEV-20.5, DEV-20.6, ECO-082).
   - On a screen up to 860 px wide the GUI sources strip folds to one line,
     the lines cut with an ellipsis and unfolded in place by „więcej”
