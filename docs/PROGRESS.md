@@ -249,7 +249,8 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     steps 1–5 in Obserwator `3.1.0` and Nogat `0.2.0` (ECO-079, Obserwator
     ADR-025; kit `1.1.0`); step 6 is Obserwator `v3.2.0`. A lawyer reviews
     the draft regulamin first.
-16. Release round of 2026-11-21, released as the set `v0.2.0`: Obserwator
+16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12,
+    verified at `e6d10b0`, run 45048681845): Obserwator
     `3.1.0`, Hydrolog `0.9.0`, Hydrograf `0.6.0` (the Hydrolog adaptation;
     its other planned items move to `0.7.0`), Archiwista `0.3.3`, Kartograf
     `0.8.2` unchanged, and Nogat `0.2.0` with standard 1.1 (`std-1.1`): kit
