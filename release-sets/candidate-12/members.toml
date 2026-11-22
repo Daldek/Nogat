@@ -3,6 +3,10 @@
 # generated from this file (`set readme`). `runs` lists the passing runs
 # of verify-candidate at these commits (REL-6.5); a bump drops them.
 
+runs = [
+    "https://github.com/Daldek/Nogat/actions/runs/45048681845",
+]
+
 [Kartograf]
 commit = "66197871f468869b437e8256e04bd00a0ea7c6aa"
 
