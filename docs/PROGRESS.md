@@ -254,11 +254,12 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     Nogat `0.2.0` with `std-1.1`, providers by national acronyms in
     identifiers (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one
     pattern of file names (DEV-19.21, ECO-083). Every member's `develop`
-    holds its part with its full gate (2026-11-22): Obserwator `de06926`,
-    Hydrolog `ede288a`, Hydrograf `3a4ecf9`, Archiwista `bfd42c8`. The production
+    holds its part with its full gate (2026-11-22): Obserwator `4bf0ce3`,
+    Hydrolog `64f6e21`, Hydrograf `54eecec`, Archiwista `e96b164`. The production
     rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10 (several
     gates at once); production serves its old data root, and the 3.1.0
-    deploy builds a new one anyway. Next: candidate-11, releases.
+    deploy builds a new one anyway. Candidate-11 verified at `48ae5eb`, run
+    45023647519. Next: releases.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
