@@ -14,7 +14,6 @@ import copy
 import functools
 import http.server
 import json
-import re
 import shutil
 import threading
 from collections.abc import Iterator
@@ -32,6 +31,7 @@ from playwright.sync_api import (
     expect,
     sync_playwright,
 )
+from provider_lines import LINES
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
@@ -71,15 +71,6 @@ SOURCES_PAGE = """<!doctype html>
 </html>
 """
 
-# The lines of the table of DEV §20, byte for byte.
-LINES = {
-    m["mark"]: m["line"]
-    for m in re.finditer(
-        r"^\| (?P<mark>[A-Z]{1,2}) \| (?P<line>.+) \|$",
-        (ROOT / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding="utf-8"),
-        re.MULTILINE,
-    )
-}
 CP = LINES["CP"]
 OTHER = "Źródło: Państwowe Gospodarstwo Wodne Wody Polskie"
 LICENCE = "https://creativecommons.org/licenses/by/4.0/"

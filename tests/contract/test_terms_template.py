@@ -17,15 +17,12 @@ from pathlib import Path
 
 import pytest
 import terms
+from provider_lines import LINES, STANDARD
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = terms.SOURCE.read_text(encoding="utf-8")
 PAGE = terms.PAGE.read_text(encoding="utf-8")
 README = (ROOT / "design" / "README.md").read_text(encoding="utf-8")
-STANDARD = (ROOT / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding="utf-8")
-# Rows of the table of DEV §20: | Mark | Line |
-LINE_ROW = re.compile(r"^\| (?P<mark>[A-Z]{1,2}) \| (?P<line>.+) \|$", re.MULTILINE)
-LINES = {m["mark"]: m["line"] for m in LINE_ROW.finditer(STANDARD)}
 # The statement that opens § 3, quoted by DEV-15.8.
 STATEMENT = re.search(
     r"^\*\*DEV-15\.8\*\*.*?„(?P<text>Serwis jest .+?)”",

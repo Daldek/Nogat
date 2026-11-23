@@ -105,6 +105,15 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - A data provider's credential missing or rejected is `forbidden` with
     `details.reason` `missing_credentials` or `invalid_credentials` (ERR-1,
     `error_registry.json`).
+  - DEV §20 gives the providers' lines in one table of provider lines
+    (codes, text, processed text, order) that DEV-20.4 orders, a new
+    provider a row of it, with the short forms and the terms lines in
+    tables of their own; every line keeps its code and its wording. The
+    line of a provider the table does not hold, declared by a deployment
+    (an operator's own network), follows the table's lines, and a GUI
+    view's strip shows, after the kit's own lines, the lines the GUI
+    declares for it (`screen-lines` of `<nogat-sources>`) (DEV §20,
+    DEV-20.4, DEV-20.5, ECO-087).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is

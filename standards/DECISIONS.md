@@ -69,11 +69,11 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-087 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -95,6 +95,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
 | [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
 | [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
+| [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 
 ---
 
@@ -1230,6 +1231,10 @@ before repeats them.
 of a labelled, unverified tier and served to the public only at the
 operator's decision per source (DEV-20.8).
 
+**Amended by ECO-087 (2026-11-23):** the lines are one table of provider
+lines that DEV-20.4 orders, a new provider a row of it; the line of a
+provider it does not hold, declared by a deployment, follows them.
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1422,6 +1427,10 @@ serwisu” is its only regulamin link, and no footer reaches the dialog.
 
 **Amended by ECO-080 (2026-11-21):** on a screen up to 860 px wide the strip
 folds to one line, unfolded in place by „więcej”.
+
+**Amended by ECO-087 (2026-11-23):** after the kit's own lines the strip
+shows the lines the GUI declares for it (`screen-lines`), such as the line
+of an operator's own network.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -2241,3 +2250,54 @@ ECO-085.” A consumer that reads a shared store treats an unknown value it
 cannot show as a skipped entry with a warning record, not as a failure
 (Archiwista does so from its A1). The second plan to merge takes the next
 free ECO number (as PROGRESS numbering, Q12).
+
+## ECO-087 Provider lines in one table; a GUI declares a line the kit does not know
+
+**Decision.** DEV §20 gives the providers' lines in one table of provider
+lines, a row per line a provider requires with its data: the code of its
+text and, after it, that of its processed text; the text; the processed
+text, which a product adds once the data were processed; and the order.
+DEV-20.4 orders a product's lines by that order, each text before its
+processed text, so a new provider is a row, not a rule; the short forms of
+the strip and the terms lines keep tables of their own, and every existing
+line keeps its code and its wording. The line of a provider the table does
+not hold, which a deployment declares for its own network (an operator's
+instance), follows every line of the table, in the order the deployment
+declares, its text before its processed text. The kit's `<nogat-sources>`
+shows such a line, or any other line of the view's data, on the strip when
+the GUI declares it: the attribute `screen-lines` (JSON) or the property
+`screenLines` holds `{text, short, links}` per line; a declared line is
+shown when the view's `attribution` carries its `text` byte for byte, after
+the kit's own lines, in the order declared, as `short` where given, its
+`links` (a word and an http or https address each) linking words of it,
+else with its addresses linked; a line the kit shows itself is not shown
+twice, and without the attribute every rendering stays as it was (DEV-20.5).
+Plans: `docs/plans/2026-11-20-hydromet-providers.md` (P9),
+`docs/plans/2026-11-21-obserwator-instance.md` (I13).
+
+**Why.** P9 of the plan of hydro-meteorological providers (approved
+2026-11-23, Fable for the author): offices, municipal companies and
+universities join as providers, and a rule each would grow DEV §20 by a
+rule per provider; the author's decision of 2026-11-23 that Nogat's
+`develop` takes the producer steps the other projects need moves the table
+ahead of the plan's step 5. Obserwator's provider fed by files (I13,
+`v3.3.0`) declares its line in a provider file beside `nogat.toml`, but the
+kit showed on the strip only the lines it knows (S, P, PS, PP and the short
+forms), so that line would reach only the dialog; the author kept the kit's
+order of the strip on an operator's instance and marks the featured
+provider on the map instead (I6, 2026-11-21). A declaration by the GUI
+keeps every operator's text out of the kit and keeps that order.
+
+**Rejected.** A rule per provider (P9). An operator's line before G, SG and
+Z, or first on the strip (its place would move as the table grows, and the
+author kept the kit's order). Child elements of `<nogat-sources>` (the
+element redraws its children from its attributes). The kit holding the
+lines of operators (its code would name a client). A short form a GUI
+invents for a line of the table (only the table's short forms shorten its
+lines).
+
+**Consequence.** DEV §20, DEV-20.4 and DEV-20.5 read as above; every code
+and every line stays, so no product changes. The kit's `nogat-sources.js`
+changes with its hash. Obserwator declares the line of its provider fed by
+files for `v3.3.0`; Gdańskie Wody gets its row once its terms give the
+wording (P9).
