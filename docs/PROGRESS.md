@@ -45,8 +45,8 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
-| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081, in 0.2.0), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal Nogat's in their releases of `v0.2.0` |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
+| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 in 0.2.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081) and 1.2.0 on `develop` (`screen-lines`, the blocks `camels-pl` and `e-obs`; ECO-086, ECO-087), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal 1.1.0 in their releases of `v0.2.0` |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080, ECO-086, ECO-087) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. DEV §20 is one table of provider lines that DEV-20.4 orders (ECO-087), with CAMELS-PL's, E-OBS's and G2DC-PL+'s lines (ECO-086) on `develop`. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
 | Formula reference module (CMP-8.1, standard 1.1) | done, in 0.2.0 | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; Hydrolog 0.9.0 copies it |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path set by the author on 2026-11-23; plan `2026-11-13-admin-panel.md` |
@@ -194,11 +194,11 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      or hides the unreliable periodic curves with a warning, and its station
      card says that IMGW's daily Q are derived from IMGW's own rating
      curves, not measured.
-8. Nogat after `v0.2.0`: `develop` opens its next cycle (`0.y.z.dev0`,
-   REL-1.1) with its next change, and the standard's next version on
-   `develop` is 1.2 (HUB-6.1); deleting the merged topic branches
-   `feature/verify-candidate` and `chore/candidate-6` is the author's (step
-   7 of `docs/plans/2026-10-20-first-release-set.md`).
+8. The round without a Nogat release (the author's decision of 2026-11-23): no Nogat release and no
+   `std-*` tag; standard 1.2 accumulates on `develop` (HUB-6.1): ECO-084, ECO-085, DEV-20.8, the `forbidden`
+   reasons, and from `feat/camels-pl-and-provider-lines` ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087
+   (P9's table of provider lines; `screen-lines` for Obserwator's provider fed by files, I13) and kit `1.2.0`,
+   which the GUIs copy in their own branches. Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's

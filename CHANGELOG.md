@@ -23,6 +23,25 @@ the standard are listed in [standards/README.md](standards/README.md).
   or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes
   the captures of `obserwator-store/1` and the hourly series of
   `obserwator-series/1`, both planned for Obserwator `v3.2.0`.
+- CAMELS-PL as a data source (ECO-086, step 1 of
+  `docs/plans/2026-11-22-camels-pl.md`): DEV §20 rows L and LP (the exact
+  release, its DOI, CC BY 4.0), E (the E-OBS acknowledgement) and D
+  (G2DC-PL+, CC0 1.0) and the terms line RE (the ECA&D/E-OBS data policy);
+  DEV-20.12 says what carries them, and a GUI or REST API serves the
+  E-OBS series only where the deployment turns them on; CMP-6.10 pins the
+  reference cases of a published data set, such as CAMELS-PL's signatures,
+  to its release. The regulamin's template and the operator's draft gain
+  the blocks `camels-pl` and `e-obs`. `ecosystem.yaml`: the data source
+  `camels-pl`, Kartograf's planned product `kartograf-camels-pl`,
+  Obserwator's planned provider CAMELS and the planned optional edge
+  Obserwator → Kartograf; `docs/ECOSYSTEM_MAP.md` regenerated.
+- The kit's `<nogat-sources>` shows the lines a GUI declares for its strip,
+  the attribute `screen-lines` or the property `screenLines`
+  (`{text, short, links}`), after its own lines while the view's data
+  carry them, such as the line of Obserwator's provider fed by files
+  (ECO-087, I13 of `2026-11-21-obserwator-instance.md`); without it every
+  rendering is unchanged. Documented in `design/README.md` and shown in
+  the specimen.
 
 ### Changed
 
@@ -41,6 +60,13 @@ the standard are listed in [standards/README.md](standards/README.md).
   does not know it can skip it, and every consumer that distinguishes by
   the field changes in the same plan and is deployed first; first uses are
   `time_unit` `hour` and the monthly slot of `obserwator-series/1`.
+- DEV §20 is one table of provider lines (codes, text, processed text,
+  order) that DEV-20.4 orders, with the short forms and the terms lines in
+  tables of their own; every line keeps its code and its wording, and the
+  line of a provider the table does not hold, declared by a deployment,
+  follows them (ECO-087, P9 of `2026-11-20-hydromet-providers.md`).
+- The GUI kit is `1.2.0` (`screen-lines`, the blocks `camels-pl` and
+  `e-obs`; REL-1.4, ECO-086); regulamin 1.0 stays.
 
 ## [0.2.0] - 2026-11-22
 

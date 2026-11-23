@@ -105,6 +105,28 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - A data provider's credential missing or rejected is `forbidden` with
     `details.reason` `missing_credentials` or `invalid_credentials` (ERR-1,
     `error_registry.json`).
+  - DEV §20 gives the providers' lines in one table of provider lines
+    (codes, text, processed text, order) that DEV-20.4 orders, a new
+    provider a row of it, with the short forms and the terms lines in
+    tables of their own; every line keeps its code and its wording. The
+    line of a provider the table does not hold, declared by a deployment
+    (an operator's own network), follows the table's lines, and a GUI
+    view's strip shows, after the kit's own lines, the lines the GUI
+    declares for it (`screen-lines` of `<nogat-sources>`) (DEV §20,
+    DEV-20.4, DEV-20.5, ECO-087).
+  - CAMELS-PL is a data source of the ecosystem: a product with its data
+    carries L, naming the exact release with its DOI and CC BY 4.0, and LP
+    once processed; what it took from IMGW-PIB carries S and P, what is
+    derived from E-OBS the acknowledgement E and the terms line RE (the
+    E-OBS data policy: non-commercial research and education), its E-OBS
+    series served by a GUI or a REST API only where the deployment turns
+    them on, and what is derived from G2DC-PL+ (CC0 1.0) its citation D;
+    the regulamin's template gains the blocks `camels-pl` and `e-obs`, in
+    place, and the reference cases of a published data set are pinned to
+    its release (DEV §20, DEV-20.7, DEV-20.12, CMP-6.10, ECO-086).
+  - The GUI kit becomes version 1.2.0: `screen-lines` of `<nogat-sources>`
+    and the blocks `camels-pl` and `e-obs` of the regulamin (ECO-086,
+    ECO-087).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is

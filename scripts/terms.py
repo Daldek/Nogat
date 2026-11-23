@@ -75,6 +75,8 @@ BLOCKS: dict[str, str] = {
     "imgw-hydro": "IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl",
     "pmaxtp": "PMAXTP of IMGW-PIB",
     "chmu": "ČHMÚ open data",
+    "camels-pl": "CAMELS-PL data (catchments, attributes, series)",
+    "e-obs": "E-OBS catchment means of CAMELS-PL, where a deployment serves them",
     "gugik": "GUGiK data (geoportal.gov.pl)",
     "cuzk": "ČÚZK data",
     "copernicus": "Copernicus data (CORINE and other CLMS layers)",

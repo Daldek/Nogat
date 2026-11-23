@@ -37,6 +37,11 @@ data_sources:
     country: CZ
     url: https://opendata.chmi.cz
     licence: CC BY 4.0
+  - id: camels-pl
+    name: CAMELS-PL (catchments, gauges, attributes, signatures, forcing and simulations of 869 IMGW-PIB gauges; Zenodo)
+    country: PL
+    url: https://doi.org/10.5281/zenodo.20133182
+    licence: CC BY 4.0, except the catchment series derived from E-OBS (ECA&D/E-OBS data policy, non-commercial research and education)
   - id: osm
     name: OpenStreetMap
     country: global
@@ -85,7 +90,7 @@ projects:
         command: kartograf commands list
       - task: Read what a Kartograf store already holds
         command: kartograf store overview
-    data_sources: [gugik, cuzk, clms, soilgrids]
+    data_sources: [gugik, cuzk, clms, soilgrids, camels-pl]
     provides:
       - id: kartograf-files
         kind: dataset
@@ -120,6 +125,9 @@ projects:
       - id: kartograf-testing
         kind: library
         summary: kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
+      - id: kartograf-camels-pl
+        kind: dataset
+        summary: Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes and the lines L, S and P (DEV-20.12).
     depends_on: []
 
   - name: Obserwator
@@ -152,7 +160,7 @@ projects:
         command: obserwator current hydro
       - task: Get PMAXTP design precipitation of a point in Poland
         command: obserwator pmaxtp fetch
-    data_sources: [imgw, chmu]
+    data_sources: [imgw, chmu, camels-pl]
     provides:
       - id: obserwator-store/1
         kind: store
@@ -195,7 +203,7 @@ projects:
         summary: obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
       - id: obserwator-data/1
         kind: store
-        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy.
+        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store.
       - id: obserwator-analyses/1
         kind: dataset
         summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
@@ -209,6 +217,12 @@ projects:
         via: [store]
         exchange: [kartograf-store/1]
         note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+      - project: Kartograf
+        kind: optional
+        status: planned
+        via: [library, store]
+        exchange: [kartograf-camels-pl, kartograf-store/1, kartograf-meta/1]
+        note: Planned for v3.4.0 (ECO-086, plan 2026-11-22-camels-pl step 3), an optional dependency; reads the catchments and gauges of CAMELS-PL from Kartograf's store and builds each gauge's catchment, its area and the gauges upstream of it in the data root.
       - project: Archiwista
         kind: data
         status: planned
