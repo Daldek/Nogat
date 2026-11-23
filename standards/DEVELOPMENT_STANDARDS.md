@@ -1,6 +1,6 @@
 # Development standards
 
-Part of standard 1.1 · IDs `DEV-…`
+Part of standard 1.2 · IDs `DEV-…`
 
 Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 [AGENT_INTERFACE.md](AGENT_INTERFACE.md), [ERROR_REGISTRY.md](ERROR_REGISTRY.md),
@@ -1173,12 +1173,25 @@ can mis-state them; products carry only what the providers require (the
 author's principle of 2026-11-13, ECO-065); a dialog one click from the data
 keeps the screen for the data (ECO-064).
 
-**DEV-20.8** Operational data of hydro.imgw.pl (water states and their
-classes, measurements, warnings) are shown as current with their time and
-never stored or presented as archive; station locations from it MAY be kept
-as reference data with their lines (DEV-20.1).
-*Why:* operational data are not the verified archive of danepubliczne.imgw.pl,
-and no project keeps them (ECO-060).
+**DEV-20.8** Operational data of hydro.imgw.pl and its backend (water states
+and their classes, measurements, warnings, forecasts), of IMGW-PIB's
+current-data API and telemetry (`Arch/Telemetria`) and of ČHMÚ's `now` and
+`recent` are shown as current with their time. What a tool receives of them
+is kept as it came, as a capture in its raw root (ECO-084), in a dataset
+whose `tier` is `operational` (or `telemetry`), never inferred from the
+values, and is stored, shown and exported only as that tier — with the words
+„dane operacyjne, niezweryfikowane” where it meets a person — never as or
+within the verified archive of danepubliczne.imgw.pl or ČHMÚ's `historical`
+sets, and never aggregated into a verified series. Whether a stored capture,
+or a series built from it, is served to the public is the operator's
+setting per source (Obserwator's `[obserwator.capture]`), whose default
+follows the source's terms; the code never serves it on its own. Station
+locations from these data MAY be kept as reference data with their lines
+(DEV-20.1).
+*Why:* the author's decisions of 2026-11-22 (ECO-084): a capture is the only
+copy of what a source forgets, and the operator, not the software, answers
+for serving it; operational data are not the verified archive, so the tier
+stays visible on every surface (ECO-060).
 
 **DEV-20.9** A product with GUGiK data (NMT, BDOT10k, PRG and the other data
 of geoportal.gov.pl) or results derived from them carries G; a basemap a GUI

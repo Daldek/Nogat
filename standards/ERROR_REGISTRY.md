@@ -1,6 +1,6 @@
 # Shared error registry
 
-Part of standard 1.1 · IDs `ERR-…`
+Part of standard 1.2 · IDs `ERR-…`
 
 [error_registry.json](error_registry.json) is the source of truth; this page
 explains it.
@@ -40,7 +40,7 @@ an error.
 | <a id="data_error"></a>`data_error` | 7 | 500 | Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format. |
 | <a id="store_unavailable"></a>`store_unavailable` | 8 | 503 | Data store or cache cannot be used: missing marker, locked, unreadable, network share disconnected. |
 | <a id="io_error"></a>`io_error` | 9 | 500 | Reading or writing files failed: permissions, no space, path missing. |
-| <a id="forbidden"></a>`forbidden` | 12 | 403 | Path outside allowed directories, write attempted in read-only mode, insufficient role. |
+| <a id="forbidden"></a>`forbidden` | 12 | 403 | Path outside allowed directories, write attempted in read-only mode, insufficient role, a data provider's credential missing or rejected (details.reason missing_credentials, invalid_credentials). |
 | <a id="calculation_error"></a>`calculation_error` | 13 | 422 | Input is valid but no result can be computed: no convergence, series too short, numerical failure, transformation failed. |
 | <a id="no_data"></a>`no_data` | 14 | 404 | Request is valid but the source has no data for the area, period or product requested. |
 | <a id="unsupported"></a>`unsupported` | 15 | 422 | Request is valid but this combination is not supported: no safe CRS transformation, product not offered for the country, operation outside the tool's scope. |

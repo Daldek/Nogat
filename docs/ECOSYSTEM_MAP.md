@@ -4,7 +4,7 @@
 
 Projects, dependencies and data exchanged between them. Source of truth:
 [`ecosystem.yaml`](../ecosystem.yaml) (standard
-1.1, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
+1.2, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
 
 ## Data flow
 
@@ -115,7 +115,7 @@ flowchart LR
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
-- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
+- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
 - **Archiwista → Hydrolog**: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
 
 ## What each project provides
@@ -140,9 +140,9 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. |
+| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Planned for v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture]. |
 | `obserwator-meta/1` | sidecar | Archiwista | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
-| `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). |
+| `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). Planned for v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional &lt;var&gt;_tier of a series built from several tiers, one slot per month series:&lt;key&gt;:&lt;YYYY-MM&gt;. |
 | `obserwator-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
 | `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
@@ -193,7 +193,7 @@ flowchart LR
 | `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
 | `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
-| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root. |
+| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer. |
 
 ## External data sources
 
@@ -206,6 +206,6 @@ data-flow diagram.
 | [ČÚZK (Český úřad zeměměřický a katastrální)](https://geoportal.cuzk.cz) | CZ | CC BY 4.0 | Kartograf |
 | [Copernicus Land Monitoring Service (CORINE Land Cover)](https://land.copernicus.eu) | EU | Copernicus data policy, attribution required | Kartograf |
 | [ISRIC SoilGrids](https://soilgrids.org) | global | CC BY 4.0 | Kartograf |
-| [IMGW-PIB (archives, live API, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
-| [ČHMÚ open data](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
+| [IMGW-PIB (archives, live API and telemetry, hydro.imgw.pl operational data, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
+| [ČHMÚ open data (historical, recent and now sets)](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
 | [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Archiwista |

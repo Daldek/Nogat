@@ -6,6 +6,42 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Added
+
+- Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
+  author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
+  of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
+  systemd timers, kept as an unverified tier, replaced by precedence with
+  IMGW-PIB's monthly telemetry and ČHMÚ's validated hourly year, hourly
+  series with a tier column within `obserwator-series/1`, a chart of the
+  current readings, `rsync` snapshots of the store on the NAS — and
+  `docs/plans/2026-11-20-hydromet-providers.md` — provider adapters,
+  captures of every answer (P14–P16), provider credentials, `time_unit`
+  `hour`, ČHMÚ's groundwater. Step N0 of the first plan is in this entry.
+- The reasons `missing_credentials` and `invalid_credentials` of `forbidden`
+  in the error registry, for a data provider's credential that is missing
+  or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes
+  the captures of `obserwator-store/1` and the hourly series of
+  `obserwator-series/1`, both planned for Obserwator `v3.2.0`.
+
+### Changed
+
+- Standard 1.2 opens on `develop` (HUB-6.1). DEV-20.8 is amended: the
+  operational data of hydro.imgw.pl and its backend, IMGW-PIB's
+  current-data API and telemetry, and ČHMÚ's `now` and `recent` are kept as
+  they came, as captures in the raw root, in a dataset of the tier
+  `operational` or `telemetry`; they are shown and exported only as that
+  tier („dane operacyjne, niezweryfikowane”), never as the verified
+  archive, and the operator sets per source whether they are served to the
+  public (ECO-084). ECO-059 is amended: the deployment's timers run
+  Obserwator's commands that write the raw root, and the backup of both
+  roots is the deployment's `rsync` timer, not an Archiwista job.
+- ECO-085, AGI-4.1: a new value of an existing field or a new form of an
+  identifier stays within `/N` of a released document when a reader that
+  does not know it can skip it, and every consumer that distinguishes by
+  the field changes in the same plan and is deployed first; first uses are
+  `time_unit` `hour` and the monthly slot of `obserwator-series/1`.
+
 ## [0.2.0] - 2026-11-22
 
 ### Added

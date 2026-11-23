@@ -49,7 +49,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
 | Formula reference module (CMP-8.1, standard 1.1) | done, in 0.2.0 | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; Hydrolog 0.9.0 copies it |
-| Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path is the author's step; plan `2026-11-13-admin-panel.md` |
+| Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path set by the author on 2026-11-23; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
 | One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.2.0`: the round's candidate, verified by `verify-candidate`, at the tags Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0` and Archiwista `v0.3.3`. Before it candidate-6 became `v0.1.0` and candidate-10 `v0.1.1`. Retman and Hydraulik differ until they apply a later set |
@@ -73,9 +73,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    mockup's 673 lines of client addresses, waits for the author's one root
    step (`docs/plans/2026-11-13-unified-logging.md`, „Journal entries
    written before the migration”).
-4. Admin panel, step 6: the author sets Cloudflare Access on `/admin`,
-   `/admin/*` and `/api/admin/*` of hydrograf-test, hydrolog-test and
-   obserwator-test (`docs/plans/2026-11-13-admin-panel.md`).
+4. Admin panel, step 6: done 2026-11-23 — the author set Cloudflare Access on
+   `/admin`, `/admin/*` and `/api/admin/*` of hydrograf-test, hydrolog-test
+   and obserwator-test (`docs/plans/2026-11-13-admin-panel.md`).
 5. Station data and analyses (ECO-059, plan
    `docs/plans/2026-11-12-station-data-and-analyses.md`, approved
    2026-11-13): N1 done; next Hydrolog's H1 to H4 under its own plan, then
@@ -159,37 +159,24 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      passed (3,029 tests). E2-05 is left: it needs a geometry-countries API
      of Kartograf (a minor). The e2e success path of the map's „Ustaw jako
      obszar projektu…” is no longer exercised.
-   - **Released 2026-11-18** with the author's approval, producers first
-     (REL-6.6), merged locally without pull requests, from candidate-7
-     (`set verify` on this machine; REL-6.5 deviation: `verify-candidate`
-     ran afterwards, run 44218266654): Kartograf `v0.8.1` (`9817ab7`),
-     Obserwator `v3.0.1` (`533c42a`), Hydrolog `v0.8.1` (`bf35db2`),
-     Hydrograf `v0.5.1` (`a86e8ce`), Archiwista `v0.3.1` (`0b66beb`);
-     deployed the same day (Deployment and storage). CI of `main`:
-     Kartograf's macOS job on Python 3.12 failed
-     `test_the_gate_of_agi_5_13_over_stdio` (cold start 5.06 s against
-     5 s), a slow-runner flake. Kartograf `v0.8.2` followed the same evening
-     as a hotfix outside the round.
+   - **Released 2026-11-18** with the author's approval from candidate-7
+     (REL-6.5 deviation: `verify-candidate` ran afterwards): Kartograf
+     `v0.8.1`, Obserwator `v3.0.1`, Hydrolog `v0.8.1`, Hydrograf `v0.5.1`,
+     Archiwista `v0.3.1`; deployed the same day (Deployment and storage);
+     Kartograf `v0.8.2` followed as a hotfix outside the round.
    - Each patch is made in a new worktree of its repository on a topic
      branch `fix/<topic>` from `origin/develop` (DEV-3.1), as Obserwator's
      `fix/3.0.1`.
-   - **Nogat 0.1.1 released 2026-11-20** with the author's approval from
-     **candidate-10** (run 44775327473 passed on its second attempt):
-     Kartograf `v0.8.2` (hotfix of 2026-11-18, the USDA texture limits
-     clay 20 % and 27 %), Obserwator `v3.0.1` (the set verified `8edccf7`,
-     the same package), Hydrolog `v0.8.1`, Hydrograf `v0.5.2` (`2f6da1d`:
-     nginx 1.31.9 and pinned images, Kartograf `v0.8.2`; gate 2,404
-     passed) and Archiwista `v0.3.2` (`514162d`: the fixes of 0.3.2 and
-     Kartograf `v0.8.2`; gate 3,043 passed); Nogat `v0.1.1` from the
-     branch `hotfix/release-set-0.1.1` of `main`, so standard 1.1 stays on
-     `develop`. Deployment waits for the author. Flaky in the first attempt, passed on the
+   - **Nogat 0.1.1 released 2026-11-20** from candidate-10 (run 44775327473):
+     Kartograf `v0.8.2`, Obserwator `v3.0.1`, Hydrolog `v0.8.1`, Hydrograf
+     `v0.5.2`, Archiwista `v0.3.2`; standard 1.1 stays on `develop`. Flaky
+     in the first attempt, passed on the
      rerun: Hydrolog's `test_leaving_or_reloading_the_page_ends_its_session`
      (macOS, Python 3.15) and Archiwista's
      `test_verify_runs_offline_and_marks_each_pin_while_network_jobs_say_why[firefox]`
      (Ubuntu, Python 3.12; „Stylesheet not loaded” of the map view while
      the test ends, 1 in 55 local runs), both for their next releases.
-     Minor
-     releases with a plan: S5 (the cut to the area), large basins, E3-03,
+     Minor releases with a plan: S5 (the cut to the area), large basins, E3-03,
      E5b-02, E5b-04 (Hydrograf 0.6.0), E2-09/KH (Kartograf), E2-10 and
      E7-02 (Archiwista), E3-02 and the features planned as Obserwator's
      3.0.1 (3.1.0, the author's decision of 2026-11-17). From the check of
@@ -249,8 +236,10 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     question to IMGW-PIB before any commercial start.
 15. Operator's instance (`2026-11-21-obserwator-instance.md`, approved):
     steps 1–5 in Obserwator `3.1.0` and Nogat `0.2.0` (ECO-079, Obserwator
-    ADR-025; kit `1.1.0`); step 6 is Obserwator `v3.2.0`. A lawyer reviews
-    the draft regulamin first.
+    ADR-025; kit `1.1.0`); step 6, the provider fed by files, is Obserwator
+    `v3.3.0` (the author, 2026-11-22). The lawyer's review of the operator's
+    draft regulamin waits for an actual deployment at a client (the author,
+    2026-11-23) and blocks no release.
 16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12,
     run 45048681845; CI of every `main` passed): Obserwator `3.1.0`, Hydrolog
     `0.9.0`, Hydrograf `0.6.0`, Archiwista `0.3.3`, Kartograf `0.8.2`
@@ -258,12 +247,24 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     (Deployment and storage). No member has a publish workflow (REL-2.1
     step 5), as in the earlier releases. Next: Archiwista `0.3.4` (the race
     of `test_worker_logs_warnings_and_errors_as_app_records_and_deletes_nothing`),
-    Obserwator `v3.2.0` (Next 15), Hydrograf `0.7.0`, steps 7 and 10 of the
-    computation standard. The plans `2026-11-20-hydromet-providers.md`
-    (branch `plan/hydromet-providers`) and `2026-11-16-operational-series.md`
-    (branch `plan/operational-series`, Q3 and Q10 answered; Q8 and Q12 open)
-    wait for the author's review before `Approved:`; CAMELS-PL
-    (`2026-11-22-camels-pl.md`) is approved, Obserwator `v3.4.0`.
+    Obserwator `v3.2.0` (Next 17), Hydrograf `0.7.0`, steps 7 and 10 of the
+    computation standard. The plans `2026-11-20-hydromet-providers.md` and
+    `2026-11-16-operational-series.md` were reviewed and approved by Fable for
+    the author on 2026-11-23 (Next 17); CAMELS-PL (`2026-11-22-camels-pl.md`)
+    is approved, Obserwator `v3.4.0`.
+17. Obserwator `v3.2.0` (two plans approved 2026-11-23 by Fable for the
+    author, review `~/workspace/wt/logs/fable-obserwator-3.2.0.md`; branch
+    `plan/obserwator-3.2.0`): `docs/plans/2026-11-16-operational-series.md`
+    (O1–O4, O6, A2, A4, `cz.chmu.hydro_hourly`) and
+    `docs/plans/2026-11-20-hydromet-providers.md` (steps 2, 2a, 3, 4, 5a), one
+    step table in the first; Archiwista's minor is A1. First N0: ECO-084 (the
+    captures and the operational tier; DEV-20.8 and ECO-059 amended) and
+    ECO-085 (additions within version 1); then Obserwator in the table's
+    order, producers first (HUB-5.2); Archiwista's minor deploys before the
+    first hourly series reaches the shared data root. Gdańskie Wody and the
+    file-fed provider are `v3.3.0`, CAMELS-PL `v3.4.0`, `store prune` and
+    Archiwista's pins `v3.5.0` at the earliest. `plan/large-basins` takes Next
+    18 when it merges.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
