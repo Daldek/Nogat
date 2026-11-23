@@ -69,7 +69,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-087 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
@@ -95,6 +95,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
 | [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
 | [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
+| [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 
 ---
@@ -1231,6 +1232,11 @@ before repeats them.
 of a labelled, unverified tier and served to the public only at the
 operator's decision per source (DEV-20.8).
 
+**Amended by ECO-086 (2026-11-23):** products with CAMELS-PL data carry L
+and LP, with S and P for what came from IMGW-PIB, E and the terms line RE
+for what is derived from E-OBS, and D for what is derived from G2DC-PL+
+(DEV-20.12).
+
 **Amended by ECO-087 (2026-11-23):** the lines are one table of provider
 lines that DEV-20.4 orders, a new provider a row of it; the line of a
 provider it does not hold, declared by a deployment, follows them.
@@ -2251,6 +2257,76 @@ cannot show as a skipped entry with a warning record, not as a failure
 (Archiwista does so from its A1). The second plan to merge takes the next
 free ECO number (as PROGRESS numbering, Q12).
 
+## ECO-086 CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator
+
+**Decision.** CAMELS-PL (Brzezińska, Marcinkowski, Dolich, Maharjan, Perz,
+Piniewski, Kardel, Loritz, Wrzesiński; release 2.1.0, Zenodo record
+23275336, DOI 10.5281/zenodo.23275336, 2026-10-11; concept DOI
+10.5281/zenodo.20133182) is a data source of the ecosystem, `camels-pl` in
+the registry, under CC BY 4.0 except its catchment time series derived from
+E-OBS, which follow the ECA&D/E-OBS data policy. The author's decisions of
+2026-11-22 stand: its catchment boundaries are those of IMGW-PIB's gauges,
+the source of truth; Kartograf fetches the geometry (the catchments and the
+gauges, a product of its group `hydro`) and Obserwator reads it from
+Kartograf's store, an optional dependency; all the rest is Obserwator's,
+under the provider `CAMELS` with keys `pl.camels.*`; a catchment carries
+CAMELS-PL's line and S and P of IMGW-PIB; the series derived from E-OBS are
+in the store, the CLI and Python but off by default in a GUI and a REST API,
+an operator's instance included, until the deployment turns them on; the
+forcing is Hydrolog's, for the author's simulations later; the signatures
+are reference cases. Each tool knows the releases it supports, takes the
+newest it knows and cites the exact one. DEV §20 gains the rows L and LP
+(CAMELS-PL: the release, its DOI, CC BY 4.0), E (the acknowledgement the
+E-OBS policy prescribes) and D (G2DC-PL+), and the terms line RE (the E-OBS
+policy); DEV-20.7 links RE and DEV-20.12 says which data carry them; CMP-6.10
+pins the reference cases of a published data set to its release; the
+regulamin's template gains the blocks `camels-pl` and `e-obs`; the kit
+becomes `1.2.0`. Plan: `docs/plans/2026-11-22-camels-pl.md` (step 1).
+
+**Why.** The author's decisions and answers of 2026-11-22 (the plan's
+„Decisions of the author”), with the sources checked on 2026-11-23. The
+record (`zenodo.org/api/records/23275336`) gives the licence `cc-by-4.0`,
+names IMGW-PIB as the source of the discharge, the water levels and the
+catchment boundaries, and states „Catchment-aggregated meteorological time
+series derived from E-OBS are excluded from CC BY 4.0 and are subject to the
+ECA&D/E-OBS Data Policy”; its data description (2.1.0) asks that the exact
+version be cited and lists under „1 License” both CC BY 4.0 and CC BY-NC 4.0
+without saying what each covers, so the record's licence and exclusion are
+taken. The ECA&D/E-OBS data policy (`www.ecad.eu`, updated 2019-09-16; the
+same terms as the Climate Data Store's „E-OBS product licence (rev. 1)”)
+allows the data „strictly for use in non-commercial research and education
+projects only” (1 b) and prescribes the acknowledgement quoted as E; it is
+not CC BY-NC. G2DC-PL+ (Piniewski, Szcześniak, Kardel, Berezowski;
+4TU.ResearchData, DOI 10.4121/uuid:a3bed3b8-e22a-4b68-8d75-7b87109c9feb,
+2020-09-02) is CC0 1.0 by its record (DataCite `cc0-1.0`, the 4TU API
+„CC0”), to which its paper (ESSD 13, 1273–1288, 2021) points; within
+CAMELS-PL its catchment means fall under CC BY 4.0. The record names nine
+creators, so L names the first with „i in.” and links the release's DOI,
+where the full citation stands (CC BY 4.0 §3(a)(2) allows a link to the
+information). Release 2.1.0 corrected the Hargreaves PET of 2.0.0, so
+reference cases are pinned to a release.
+
+**Rejected.** Obserwator fetching the geometry (the author: geodata are
+Kartograf's). The concept DOI in a line (it names no release, and the
+authors ask for the exact version). The record's whole citation of nine
+authors in every line (the DOI links it). A line saying the E-OBS series
+are for non-commercial use (no product restates terms, DEV-20.7; RE links
+them). One block of the regulamin for CAMELS-PL and E-OBS (a block holds one
+provider's terms, and the E-OBS series are outside CAMELS-PL's licence). A
+block for G2DC-PL+ (CC0 binds nothing, and its means reach a GUI only within
+CAMELS-PL). The E-OBS series served by default (the author's decision 8).
+
+**Consequence.** DEV §20, DEV-20.7, DEV-20.12 and CMP-6.10 read as above,
+and ECO-060 is amended. The registry gains the data source `camels-pl`,
+Kartograf's product `kartograf-camels-pl`, Obserwator's provider `CAMELS`
+and the planned optional edge Obserwator → Kartograf. The kit's
+`nogat-terms.md`, `nogat-terms-operator.md` and `nogat-terms.html` change
+with their hashes, and its version becomes `1.2.0` with `screen-lines` of
+ECO-087 (REL-1.4: the author's approval of the plan covers the kit's minor);
+the regulamin stays 1.0, since a GUI that keeps neither block fills the same
+page. Kartograf's next minor, Obserwator `v3.4.0`, Archiwista's next minor
+and Hydrolog's reference cases follow in the plan's order (steps 2 to 5).
+
 ## ECO-087 Provider lines in one table; a GUI declares a line the kit does not know
 
 **Decision.** DEV §20 gives the providers' lines in one table of provider
@@ -2298,6 +2374,6 @@ lines).
 
 **Consequence.** DEV §20, DEV-20.4 and DEV-20.5 read as above; every code
 and every line stays, so no product changes. The kit's `nogat-sources.js`
-changes with its hash. Obserwator declares the line of its provider fed by
-files for `v3.3.0`; Gdańskie Wody gets its row once its terms give the
-wording (P9).
+changes with its hash, within kit `1.2.0` (ECO-086). Obserwator declares
+the line of its provider fed by files for `v3.3.0`; Gdańskie Wody gets its
+row once its terms give the wording (P9).

@@ -269,7 +269,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
 `nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
-The version, `1.1.0` since ECO-081, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
+The version, `1.2.0` since ECO-086, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
@@ -372,6 +372,8 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Obserwator |
 | `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Obserwator |
 | `chmu` | ČHMÚ open data | Obserwator; Hydrolog with station series |
+| `camels-pl` | CAMELS-PL data: catchments, attributes and series of its Zenodo record (DEV-20.12) | Obserwator with CAMELS-PL, beside `imgw` |
+| `e-obs` | CAMELS-PL's catchment means derived from E-OBS, only where the deployment serves them (DEV-20.12) | none by default |
 | `gugik` | GUGiK data | Hydrograf, Obserwator |
 | `cuzk` | ČÚZK data | Obserwator |
 | `copernicus` | Copernicus data | none |

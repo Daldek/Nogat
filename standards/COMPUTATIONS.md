@@ -270,6 +270,16 @@ Formula tests carry the marker `formula`.
 and `nightly` (20,000 examples). Every counterexample found is pinned with
 `@example` beside its property.
 
+**CMP-6.10** *Published data sets.* A data set that publishes both the
+inputs of a formula and its authors' outputs (CAMELS-PL's daily discharge
+and its hydrological signatures) gives reference cases pinned to one
+release: its record, version, DOI and the SHA-256 of each file read are
+stored with the cases, each case names the authors' conventions (CMP-2.3),
+and a newer release changes the cases only by a deliberate change of the
+tests. Such outputs are computed, not measured, so a difference is checked
+against a second source before it counts against the formula (CMP-5.2).
+*Why:* a release may correct values of the one before it (ECO-086).
+
 ---
 
 ## 7. Strength of the tests

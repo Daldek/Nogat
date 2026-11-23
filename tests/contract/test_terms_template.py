@@ -58,13 +58,13 @@ def test_the_readme_documents_every_field_and_block(name: str) -> None:
     assert f"| `{name}` |" in README
 
 
-@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "M", "C"])
+@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "M", "C", "LP", "E"])
 def test_the_provider_lines_are_those_of_dev_20(mark: str) -> None:
     assert f"\n> {LINES[mark]}\n" in SOURCE
 
 
-@pytest.mark.parametrize("mark", ["RD", "RH", "RK"])
-def test_the_terms_of_imgw_pib_are_linked_as_dev_20_names_them(mark: str) -> None:
+@pytest.mark.parametrize("mark", ["RD", "RH", "RK", "RE"])
+def test_the_terms_are_linked_as_dev_20_names_them(mark: str) -> None:
     label, address = LINES[mark].split(": ", 1)
     assert f"\n{label}: <{address}>\n" in SOURCE
 
@@ -72,6 +72,12 @@ def test_the_terms_of_imgw_pib_are_linked_as_dev_20_names_them(mark: str) -> Non
 def test_the_gugik_block_names_gugik_as_g_does() -> None:
     name = LINES["G"].split(", `<products>`")[0]
     assert f"<!-- block: gugik -->\n### GUGiK\n\n> {name}\n" in SOURCE
+
+
+def test_the_camels_pl_block_names_camels_pl_as_l_does_then_lp() -> None:
+    name = LINES["L"].split(" `<version>`")[0]
+    block = f"<!-- block: camels-pl -->\n### CAMELS-PL\n\n> {name}\n> {LINES['LP']}\n"
+    assert block in SOURCE
 
 
 def test_no_block_offers_esri_imagery() -> None:

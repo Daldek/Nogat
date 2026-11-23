@@ -1053,9 +1053,12 @@ order (DEV-20.4). A new provider is a new row, not a new rule.
 | PS, PP | Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, dane pochodzą ze strony https://klimat.imgw.pl/opady-maksymalne | Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego pochodzące ze strony https://klimat.imgw.pl/opady-maksymalne zostały przetworzone | 2 |
 | M | „Modele probabilistyczne opadów maksymalnych o określonym czasie trwania i prawdopodobieństwie przewyższenia – Projekt PMAXTP”, red. Bogdan Ozga-Zieliński, Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy, Warszawa 2022 | — | 3 |
 | C, CP | Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) | Dane ČHMÚ zostały przetworzone | 4 |
-| G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone | — | 5 |
-| SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 6 |
-| Z | Źródło: Český úřad zeměměřický a katastrální (ČÚZK), `<products>` (pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 7 |
+| L, LP | Źródło danych: CAMELS-PL `<version>` (Brzezińska i in., `<year>`), https://doi.org/`<doi>`, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) | Dane CAMELS-PL zostały przetworzone | 5 |
+| E | We acknowledge the E-OBS dataset and the data providers in the ECA&D project (https://www.ecad.eu). Cornes, R., G. van der Schrier, E.J.M. van den Besselaar, and P.D. Jones. 2018: An Ensemble Version of the E-OBS Temperature and Precipitation Datasets, J. Geophys. Res. Atmos., 123. doi:10.1029/2017JD028200 | — | 6 |
+| D | Źródło danych: G2DC-PL+ (Piniewski i in., 2020), https://doi.org/10.4121/uuid:a3bed3b8-e22a-4b68-8d75-7b87109c9feb, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/) | — | 7 |
+| G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone | — | 8 |
+| SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 9 |
+| Z | Źródło: Český úřad zeměměřický a katastrální (ČÚZK), `<products>` (pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 10 |
 
 In G and Z, `<products>` names the products used, joined by „, ” (e.g.
 „NMT, BDOT10k” of GUGiK, „RÚIAN” of ČÚZK); `<period>` the year in which the
@@ -1063,6 +1066,14 @@ data used were created, or the first and the last joined by an en dash
 („2020–2025”); `<date>` the day they were downloaded, `YYYY-MM-DD`, or the
 first and the last joined by a spaced en dash („2026-03-24 – 2026-10-29”);
 both from the Kartograf metadata of the files.
+
+In L, `<version>` is the CAMELS-PL release the data come from (`2.1.0`),
+`<year>` the year of its record and `<doi>` that release's DOI
+(`10.5281/zenodo.23275336`), never the concept DOI, which names no release.
+E is the acknowledgement of E-OBS that the data policy RE links prescribes,
+quoted in its own English words. D cites G2DC-PL+, which its record
+dedicates to the public domain (CC0 1.0): no licence asks for the line, and
+it is kept as the citation of the data set.
 
 The short forms are for the strip of a GUI view only (DEV-20.5) and are
 never written into a product: CK with „ČHMÚ” linked to
@@ -1086,6 +1097,7 @@ a CSV column tells them from the attribution lines.
 | RD | Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations |
 | RH | Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin |
 | RK | Regulamin danych PMAXTP: https://klimat.imgw.pl/opady-maksymalne |
+| RE | Regulamin danych E-OBS: https://www.ecad.eu/documents/ECAD_datapolicy.pdf |
 
 **DEV-20.1** A product with IMGW-PIB data other than PMAXTP (archives and
 current data of danepubliczne.imgw.pl, operational data and station
@@ -1177,16 +1189,17 @@ hand-offs, merged without duplicates; a field a project already has for them
 outside a CSV (`license.attribution` of a sidecar, DEV-19.16) stays.
 *Why:* the obligation follows the data through every tool (ECO-060).
 
-**DEV-20.7** Every GUI view and every exported product with IMGW-PIB data
-also carries the links to the terms that apply, one line each in the order
-RD (danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK (PMAXTP), right after the
-attribution lines and on the surfaces of DEV-20.5, in a GUI view in the
-dialog behind its strip; a JSON document, result or hand-off has them in
-`terms_notice`, an array of strings carried on like `attribution`. No
-product restates, summarises or paraphrases a provider's terms: it carries
-the lines of the table and links the rest. ČHMÚ, ISRIC and ČÚZK data take
-no terms line, since C, SG and Z name the licence with its link, nor do
-GUGiK data, whose conditions of reuse a regulamin links in its § 5.
+**DEV-20.7** Every GUI view and every exported product with IMGW-PIB or
+E-OBS data also carries the links to the terms that apply, one line each in
+the order of their table, RD (danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK
+(PMAXTP), RE (E-OBS), right after the attribution lines and on the surfaces
+of DEV-20.5, in a GUI view in the dialog behind its strip; a JSON document,
+result or hand-off has them in `terms_notice`, an array of strings carried
+on like `attribution`. No product restates, summarises or paraphrases a
+provider's terms: it carries the lines of the table and links the rest.
+ČHMÚ, CAMELS-PL, G2DC-PL+, ISRIC and ČÚZK data take no terms line, since C,
+L, D, SG and Z name the licence with its link, nor do GUGiK data, whose
+conditions of reuse a regulamin links in its § 5.
 *Why:* the providers' own terms are the only binding text, and a summary
 can mis-state them; products carry only what the providers require (the
 author's principle of 2026-11-13, ECO-065); a dialog one click from the data
@@ -1227,3 +1240,15 @@ them carries SG.
 **DEV-20.11** A product with ČÚZK data (RÚIAN and the other data of ČÚZK) or
 results derived from them carries Z.
 *Why:* ČÚZK's open data are under CC BY 4.0, §3(a)(1) (ECO-068).
+
+**DEV-20.12** A product with CAMELS-PL data carries L for the release they
+come from, and LP once they were processed (DEV-20.1). What CAMELS-PL took
+from IMGW-PIB (discharge, water levels, catchment boundaries) and what is
+derived from it carry S and P as well; what is derived from E-OBS carries E
+and RE, and its catchment time series, which CAMELS-PL's licence leaves out,
+follow the E-OBS data policy instead of CC BY 4.0, so a GUI or a REST API
+serves them only where its deployment turns them on; what is derived from
+G2DC-PL+ carries D.
+*Why:* CC BY 4.0, §3(a)(1); the record names IMGW-PIB as the source of these
+data and leaves the E-OBS series to the E-OBS policy, which allows
+non-commercial research and education only (ECO-086).
