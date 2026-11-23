@@ -196,9 +196,13 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      curves, not measured.
 8. The round without a Nogat release (the author's decision of 2026-11-23): no Nogat release and no
    `std-*` tag; standard 1.2 accumulates on `develop` (HUB-6.1): ECO-084, ECO-085, DEV-20.8, the `forbidden`
-   reasons, and from `feat/camels-pl-and-provider-lines` ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087
-   (P9's table of provider lines; `screen-lines` for Obserwator's provider fed by files, I13) and kit `1.2.0`,
-   which the GUIs copy in their own branches. Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
+   reasons, ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087 (P9's table of provider lines; `screen-lines`
+   for Obserwator's provider fed by files, I13) and kit `1.2.0`. On the members' `develop` (not pushed, not
+   released), 2026-11-23: Kartograf `0.9.0.dev0` (CAMELS-PL step 2, its ADR-062), Hydrolog `0.10.0.dev0`
+   (step 5, its ADR-0073; CAMELS-PL's BFI uses another filter, recorded, not matched), Obserwator
+   `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`). Open for the author: whether the
+   terms line RD goes with what CAMELS-PL took from IMGW-PIB (DEV-20.7 vs DEV-20.12). Deleting
+   `feature/verify-candidate` and `chore/candidate-6` is the author's.
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's
