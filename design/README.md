@@ -293,10 +293,18 @@ Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sou
 | `attribution` (attribute, JSON) or `element.attribution` (array) | The full lines the view's data carry, the API's `attribution`: the union over the data shown |
 | `terms-notice` (attribute, JSON) or `element.termsNotice` (array) | The API's `terms_notice`, the links to the providers' terms (RD, RH, RK) |
 | `terms` | The address of the GUI's `regulamin.html` (DEV-15.7); omitted where the GUI serves none |
+| `screen-lines` (attribute, JSON) or `element.screenLines` (array) | The lines the GUI declares for the strip beyond the element's own (DEV-20.5, ECO-087): `[{"text": "…", "short": "…", "links": [["…", "https://…"]]}]`, `short` and `links` optional; below |
 
 The strip is 12 px in `--text-3`: of the full lines it shows S, P, PS and PP, recognised byte for byte, and the short forms of C, G, SG and Z (DEV §20), each once in the order of DEV-20.4, then the button „Źródła i warunki”.
 C is shown as CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC BY 4.0” linked; every G, recognised by its text around `<products>`, `<period>` and `<date>`, as one GK „Źródło: GUGiK (`<products>`)” naming the products of all of them, each once; SG as SK „Źródło: ISRIC SoilGrids, CC BY 4.0” and every Z as one ZK „Źródło: ČÚZK, CC BY 4.0”, „CC BY 4.0” linked in both.
-Any other line (M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged, never a short form; with both arrays empty the element is not drawn.
+Any other line (M, CP, another provider's) is shown only in the dialog unless the GUI declares it in `screen-lines`, so a GUI passes its arrays unchanged, never a short form; with both arrays empty the element is not drawn.
+A declared line is `{text, short, links}`: `text` a full line, byte for byte as `attribution` carries it; `short`, optional, the text the strip shows in its place, only for a provider the tables of DEV §20 do not hold and as its deployment gives it; `links`, optional, pairs of a word of the shown text and its http or https address, resolved like `terms`, each word linked at its next occurrence and a word not found or another address left plain; without `links` the shown text's addresses are linked, as in S.
+The strip shows a declared line only while `attribution` carries its `text`, after its own lines, in the order declared and each once; a line the element shows itself is not repeated, and the dialog keeps the full line. Without `screen-lines` the strip is unchanged. The line of an operator's own network, which the deployment declares (DEV-20.4), comes so:
+
+```html
+<nogat-sources attribution='["…", "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl"]' screen-lines='[{"text": "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl", "short": "Źródło: Wodociągi Przykładowe", "links": [["Wodociągi Przykładowe", "https://pomiary.example.pl"]]}]'></nogat-sources>
+```
+
 On a screen up to 860 px wide (ECO-080) the strip is one line: the lines start on it and are cut with an ellipsis, followed by „więcej” and „Źródła i warunki”; „więcej” shows only while the line cuts them and unfolds the strip in place, wrapped, as „zwiń”. `element.expanded` (the attribute `expanded`) is that state, and the element carries `clipped` while its folded line cuts the lines. A GUI that lays the strip out itself (e.g. inline with a basemap credit) keeps its own rules above 860 px only, so the fold applies on a phone.
 The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”, which opens in a new tab like the menu's „Regulamin”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
 `element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.

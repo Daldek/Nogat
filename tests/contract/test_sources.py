@@ -63,6 +63,6 @@ def test_the_readme_documents_every_observed_attribute() -> None:
     observed = re.search(r"static observedAttributes = \[(?P<names>[^\]]+)\]", SCRIPT)
     assert observed is not None
     names = re.findall(r'"([a-z-]+)"', observed["names"])
-    assert names == ["attribution", "terms-notice", "terms"]
+    assert names == ["attribution", "terms-notice", "terms", "screen-lines"]
     for name in names:
         assert f"| `{name}`" in README

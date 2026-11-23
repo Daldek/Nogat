@@ -681,6 +681,136 @@ def test_strip_loads_nothing_but_the_kit(
     ]
 
 
+# Lines a GUI declares for the strip (DEV-20.5, ECO-087): an operator's own network.
+
+OWN = "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl"
+OWN_PROCESSED = "Dane Wodociągów Przykładowych zostały przetworzone"
+OWN_SHORT = "Źródło: Wodociągi Przykładowe"
+OWN_DECLARED = {
+    "text": OWN,
+    "short": OWN_SHORT,
+    "links": [["Wodociągi Przykładowe", "https://pomiary.example.pl"]],
+}
+
+
+def _declare(page: Page, declared: list[Any]) -> None:
+    page.evaluate(
+        "d => { document.querySelector('nogat-sources').screenLines = d; }", declared
+    )
+
+
+def test_strip_shows_a_declared_line_after_its_own_while_the_data_carry_it(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    _declare(page, [OWN_DECLARED, {"text": OWN_PROCESSED}])
+    _lines(page, [OWN, OWN_PROCESSED, *IMGW, LINES["C"]], NOTICE)
+    shown = page.locator(".nogat-sources-line")
+    assert shown.all_text_contents() == [
+        *IMGW,
+        LINES["CK"],
+        OWN_SHORT,
+        OWN_PROCESSED,
+    ]
+    links = shown.nth(3).locator("a")
+    assert [(a.text_content(), a.get_attribute("href")) for a in links.all()] == [
+        ("Wodociągi Przykładowe", "https://pomiary.example.pl/")
+    ]
+    page.get_by_role("button", name="Źródła i warunki").click()
+    assert page.locator("dialog li").all_text_contents() == [
+        OWN,
+        OWN_PROCESSED,
+        *IMGW,
+        LINES["C"],
+        *NOTICE,
+    ]
+    page.keyboard.press("Escape")
+    _lines(page, [*IMGW, OWN_PROCESSED], NOTICE)
+    assert shown.all_text_contents() == [*IMGW, OWN_PROCESSED]
+
+
+def test_declared_lines_keep_their_order_once_each_and_repeat_no_own_line(
+    sources: tuple[Page, list[str]], site: str
+) -> None:
+    page, _ = sources
+    university = "Źródło danych: Uczelnia Przykładowa, https://dane.example.edu"
+    words = [
+        ["Nieznane", "https://example.org"],
+        ["Wodociągi", "javascript:alert(1)"],
+        ["Przykładowe", "/dane"],
+    ]
+    _declare(
+        page,
+        [
+            {"text": CP},
+            {"text": LINES["S"], "short": "skrót S"},
+            {"text": university, "links": "nie lista"},
+            {"text": OWN, "links": words},
+            {"text": OWN, "short": "drugi raz"},
+            {"short": "bez tekstu"},
+            "napis",
+            None,
+        ],
+    )
+    _lines(page, [OWN, university, CP, LINES["S"]], [])
+    assert page.locator(".nogat-sources-line").all_text_contents() == [
+        LINES["S"],
+        CP,
+        university,
+        OWN,
+    ]
+    links = page.locator(".nogat-sources-line a")
+    assert [(a.text_content(), a.get_attribute("href")) for a in links.all()] == [
+        ("https://dane.example.edu", "https://dane.example.edu"),
+        ("Przykładowe", f"http://{site}/dane"),
+    ]
+    texts = "e => e.screenLines.map(line => line.text)"
+    assert page.locator("nogat-sources").evaluate(texts) == [
+        CP,
+        LINES["S"],
+        university,
+        OWN,
+    ]
+
+
+def test_a_declaration_the_strip_cannot_use_leaves_it_as_it_was(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    element = page.locator("nogat-sources")
+    _lines(page, [*IMGW, *PMAXTP, *OTHERS, CP], NOTICE)
+    before = element.evaluate("e => e.innerHTML")
+    _declare(
+        page, [{"text": OWN}, {"text": LINES["S"]}, {"text": G_BDOT, "short": "x"}]
+    )
+    assert element.evaluate("e => e.innerHTML") == before
+
+
+def test_declared_line_comes_from_the_attribute_and_folds_on_a_phone(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    page.evaluate(
+        "([a, d]) => { const s = document.querySelector('nogat-sources');"
+        " s.setAttribute('screen-lines', JSON.stringify(d));"
+        " s.setAttribute('attribution', JSON.stringify(a)); }",
+        [[*IMGW, OWN], [OWN_DECLARED]],
+    )
+    shown = page.locator(".nogat-sources-line")
+    assert shown.all_text_contents() == [*IMGW, OWN_SHORT]
+    assert _strip_lines(page) == 1
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    page.get_by_role("button", name="więcej").click()
+    assert _strip_lines(page) > 1
+    box = shown.last.bounding_box()
+    assert box is not None
+    assert box["x"] >= 0
+    assert box["x"] + box["width"] <= 390
+    assert box["y"] + box["height"] <= 800
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+
+
 # The hand-off (DEV-15.5) and its file name (DEV-19.21)
 
 
