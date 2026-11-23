@@ -164,13 +164,13 @@ projects:
     provides:
       - id: obserwator-store/1
         kind: store
-        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Planned for v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture].
+        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Since v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture].
       - id: obserwator-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
       - id: obserwator-series/1
         kind: dataset
-        summary: Parquet series per station with series.json index (periods, year type, units, coverage). Planned for v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional <var>_tier of a series built from several tiers, one slot per month series:<key>:<YYYY-MM>.
+        summary: Parquet series per station with series.json index (periods, year type, units, coverage). Since v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional <var>_tier of a series built from several tiers, one slot per month series:<key>:<YYYY-MM>.
       - id: obserwator-plan/1
         kind: document
         summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
