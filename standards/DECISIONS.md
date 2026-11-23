@@ -68,8 +68,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
-| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082 | 2026-11-13 |
+| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
@@ -93,6 +93,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
 | [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
 | [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
+| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
+| [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
 
 ---
 
@@ -1160,6 +1162,12 @@ the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
 
 ## ECO-059 Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog
 
+**Amended by ECO-084 (2026-11-23):** Obserwator's commands run by the
+deployment's user systemd timers write the raw root beside the downloads
+Archiwista orders; operational data are archived as captures; the backup
+copy of the raw and data roots is the deployment's `rsync` timer, documented
+by Obserwator, not an Archiwista job.
+
 **Decision.** For the hydro-meteorological station data of IMGW-PIB and
 ČHMÚ each project has one role. Archiwista orders every download and keeps
 the raw data (the archives as published with their sidecars, the archived
@@ -1217,6 +1225,10 @@ view's strip shows them as GK, SK and ZK.
 **Amended by ECO-082 (2026-11-21):** a CSV carries the lines in its trailing
 columns `attribution` and `terms_notice` only; no column a project had
 before repeats them.
+
+**Amended by ECO-084 (2026-11-23):** operational data are kept as captures
+of a labelled, unverified tier and served to the public only at the
+operator's decision per source (DEV-20.8).
 
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
@@ -2136,3 +2148,96 @@ Archiwista rename their downloads, attachments and default output names in
 their own branches and copy the kit (plan steps 2 to 5), with their
 manuals and labels that name `….handoff.json`; Kartograf keeps the names
 of plain mode (DEV-19.5). No old name is kept beside a new one.
+
+## ECO-084 Operational data are kept as captures of an unverified tier; serving them is the operator's decision
+
+**Decision.** Every answer a provider adapter of Obserwator receives —
+archive and file downloads, files an operator feeds, API answers, the GUI's
+live fetches, warnings and water-state classes included — is written to the
+raw root as it came, with an `obserwator-meta/1` sidecar (the time, the
+address without any credential, the provider, the licence, the tier and the
+publication state). Polled answers are gathered per source and UTC day into
+one capture version of a dataset whose `tier` is `operational` (`telemetry`
+for IMGW-PIB's monthly telemetry; `verified` for the published archives and
+validated sets); a capture is an archive version of the raw root like any
+other (`archive:<key>:<YYYY-MM-DD>`), not a kind of its own. Operational
+tiers are stored, shown and exported only as such; in a derived series a
+higher tier replaces a lower one by precedence per point, and the captured
+answers stay. Per source the deployment's `nogat.toml` says `public` (shown
+and downloadable in Obserwator and Archiwista) or `private` (stored; read by
+the operator's CLI and library and by Archiwista's signed-in users only);
+the default of a source follows its terms and is shown in `config show`. The
+rate at which a source is polled is a ceiling its adapter declares; the
+deployment's timers may run slower, never faster. DEV-20.8 is amended
+accordingly. ECO-059 is amended in three points: Obserwator's commands run
+by the deployment's user systemd timers write the raw root beside the
+downloads Archiwista orders; operational data are archived as captures; the
+backup copy of the raw and data roots is the deployment's `rsync` timer,
+documented by Obserwator (DEV-18.5), not an Archiwista job. Nothing is
+deleted; superseded derived versions may be pruned on an explicit command
+only, by a later plan. Plans: `docs/plans/2026-11-16-operational-series.md`,
+`docs/plans/2026-11-20-hydromet-providers.md`.
+
+**Why.** The author's decisions of 2026-11-22: „potrzebne jest mi… archiwum
+na wszystko co przychodzi”; „To nadal nie jest działalność gospodarcza, bo
+mój serwis jest darmowy, nie ma reklam, nie zarabia […] jest to decyzja
+operatora, nie moja”; „częstotliwość powinna być dostosowana do źródła”;
+„timer systemd”. hydro.imgw.pl forgets its operational data after six weeks
+and IMGW-PIB publishes no sub-daily verified set, so a nightly capture is
+the only continuous record up to yesterday; a client's instance runs
+Obserwator and Hydrolog without Archiwista, so the schedule cannot live in
+Archiwista's queue.
+
+**Rejected.** Keeping only what a series needs (the author wants the whole).
+A capture beside the adapter (a provider could forget it). A raw-root kind
+of its own for captures (Archiwista 0.3.3 indexes archive versions already;
+a new kind would break its scan). A rule in the code that forbids serving a
+source (the operator's decision, not the software's). One polling rate for
+every source. The schedule in Archiwista's queue (an instance without
+Archiwista would lose it).
+
+**Consequence.** DEV-20.8 and ECO-059 read as above; `obserwator-store/1`
+and `obserwator-meta/1` stay `/1` (the optional sidecar fields `tier` and
+`publication`, ECO-085). Obserwator records the captures, the tiers and the
+GUI's spool in an ADR amending ADR-003 D4, ADR-013 D5 and ADR-015 D5;
+Archiwista shows the tier and the publication state of a version (its A1)
+and honours `private` in its downloads in a later minor. The pruning of
+superseded versions and Archiwista's pins wait for the plan of `store prune`
+(`v3.5.0` at the earliest).
+
+## ECO-085 Additions within version 1 of a released document
+
+**Decision.** A released document, store layout or identifier grammar stays
+at its `/N` when a change only adds an optional field (AGI-4.1), a new value
+of an existing field, or a new form of an identifier (a slot, a directory
+name, a time unit), provided that a reader of `/N` that does not know the
+addition can leave that entry out without failing, and that every consumer
+in the registry that distinguishes by the field is changed in the same plan,
+released in the same round, producers first (HUB-5.2), and deployed on a
+shared store before the producer writes the addition there. A change that
+alters the meaning of an existing field or value, or that an unknowing
+reader cannot skip, increments `/N` with the author's consent (REL-1.4).
+First uses: `time_unit` `hour` and the monthly slot `series:<key>:<YYYY-MM>`
+of `obserwator-series/1` and `obserwator-data/1` (Archiwista's adapter
+changed in the same plan); the fields `basins` and `parts` of Hydrograf's
+`instance.json` (plan `2026-11-16-large-basins.md`, topic 1).
+
+**Why.** AGI-4.1 settles fields, not values or forms, and two plans asked
+the same question (Q8 of the operational-series plan, topic 1 of
+large-basins). The author's position of 2026-11-21: „Na razie zostajemy we
+wszystkich schematach przy `/1`, bo jest to wciąż wersja rozwojowa”.
+Archiwista 0.3.3 shows the condition is not empty: its adapter refuses a
+series of an unknown `time_unit` (`source.obserwator_series_unit`) and its
+index's `CHECK (time_unit IN ('day', 'month', 'half_year'))` would reject
+the row, so a new value is additive only when the consumer is changed first.
+
+**Rejected.** A `/2` for every new value (every consumer would follow a
+number for a change it can skip). Any new value as additive without the
+consumer condition (the Archiwista case above).
+
+**Consequence.** AGI-4.1 gains one sentence: „A new value of an existing
+field or a new form of an identifier is additive under the conditions of
+ECO-085.” A consumer that reads a shared store treats an unknown value it
+cannot show as a skipped entry with a warning record, not as a failure
+(Archiwista does so from its A1). The second plan to merge takes the next
+free ECO number (as PROGRESS numbering, Q12).

@@ -1,6 +1,6 @@
 {
   "schema": "nogat-error-registry/1",
-  "standard_version": "1.1",
+  "standard_version": "1.2",
   "outcomes": [
     {"status": "ok", "exit_code": 0, "meaning": "Operation completed for every unit."},
     {"status": "partial", "exit_code": 10, "meaning": "Batch operation completed for some units; per-unit status in items[]."},
@@ -17,7 +17,7 @@
     {"code": "data_error", "exit_code": 7, "http_status": 500, "title_en": "Invalid data", "title_pl": "Niepoprawne dane", "meaning": "Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format."},
     {"code": "store_unavailable", "exit_code": 8, "http_status": 503, "title_en": "Store unavailable", "title_pl": "Magazyn niedostępny", "meaning": "Data store or cache cannot be used: missing marker, locked, unreadable, network share disconnected."},
     {"code": "io_error", "exit_code": 9, "http_status": 500, "title_en": "File system error", "title_pl": "Błąd systemu plików", "meaning": "Reading or writing files failed: permissions, no space, path missing."},
-    {"code": "forbidden", "exit_code": 12, "http_status": 403, "title_en": "Not allowed", "title_pl": "Operacja niedozwolona", "meaning": "Path outside allowed directories, write attempted in read-only mode, insufficient role."},
+    {"code": "forbidden", "exit_code": 12, "http_status": 403, "title_en": "Not allowed", "title_pl": "Operacja niedozwolona", "meaning": "Path outside allowed directories, write attempted in read-only mode, insufficient role, a data provider's credential missing or rejected (details.reason missing_credentials, invalid_credentials)."},
     {"code": "calculation_error", "exit_code": 13, "http_status": 422, "title_en": "Calculation error", "title_pl": "Błąd obliczeń", "meaning": "Input is valid but no result can be computed: no convergence, series too short, numerical failure, transformation failed."},
     {"code": "no_data", "exit_code": 14, "http_status": 404, "title_en": "No data", "title_pl": "Brak danych", "meaning": "Request is valid but the source has no data for the area, period or product requested."},
     {"code": "unsupported", "exit_code": 15, "http_status": 422, "title_en": "Not supported", "title_pl": "Nieobsługiwane", "meaning": "Request is valid but this combination is not supported: no safe CRS transformation, product not offered for the country, operation outside the tool's scope."},

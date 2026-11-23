@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.1 · published with Nogat `v0.2.0`, tagged `std-1.1` (HUB-6.1)
+Standard 1.2 · in preparation on `develop`; the published version is 1.1, tagged `std-1.1` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -85,6 +85,26 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
+- 1.2 (in preparation on `develop`):
+  - A released document, store layout or identifier grammar stays at its
+    `/N` when a change adds a new value of an existing field or a new form
+    of an identifier that a reader not knowing it can skip, and every
+    consumer that distinguishes by the field is changed in the same plan
+    and deployed on a shared store before the producer writes the addition
+    there (AGI-4.1, ECO-085).
+  - Operational data (hydro.imgw.pl and its backend, IMGW-PIB's
+    current-data API and telemetry, ČHMÚ's `now` and `recent`) are kept as
+    they came, as captures in the raw root, in a dataset of the tier
+    `operational` or `telemetry`, stored, shown and exported only as that
+    tier with „dane operacyjne, niezweryfikowane”, never as or within the
+    verified archive; whether they are served to the public is the
+    operator's setting per source. Obserwator's commands run by the
+    deployment's timers write the raw root, and the backup of the raw and
+    data roots is the deployment's `rsync` timer, not an Archiwista job
+    (DEV-20.8, ECO-084, ECO-059).
+  - A data provider's credential missing or rejected is `forbidden` with
+    `details.reason` `missing_credentials` or `invalid_credentials` (ERR-1,
+    `error_registry.json`).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is

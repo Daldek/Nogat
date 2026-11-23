@@ -1,10 +1,10 @@
-# Plan: operational hydro series of IMGW-PIB and ČHMÚ, harvested nightly through Archiwista
+# Plan: operational hydro series of IMGW-PIB and ČHMÚ, captured nightly by Obserwator's timers
 
-Approved: pending
+Approved: 2026-11-23, Fable for the author (delegated in session: „Oddeleguj przegląd planów do Fable i jeżeli będzie mieć uwagi - zaktualizuj plan. Fable daje approve.”; the review and its decisions 1–24: `~/workspace/wt/logs/fable-obserwator-3.2.0.md`)
 
-Status: a draft of 2026-11-16, revised the same day with the author's decisions on the first draft. It is not approved, so no code starts (DEV-17.4). The work begins after the first joint release (the author's priority) and after N0 amends DEV-20.8. The design marks its own proposals „[proposed]”.
+Status: approved 2026-11-23 (Fable for the author; the review and its decisions: `~/workspace/wt/logs/fable-obserwator-3.2.0.md`); the first joint release is done (`v0.1.0` of 2026-11-17, `v0.2.0` of 2026-11-22); code starts with N0 (HUB-5.2). The facts below were probed on 2026-11-16 against Obserwator `f4f6a8d`; where 3.1.0 changed them (ADR-024 to ADR-028: the names `IMGW`/`CHMU`, the slugs `imgw_*`/`chmu_*`, no `Referer`, the data root `~/data/obserwator-310/data`) and where the decisions of 2026-11-23 amend the design, those take precedence. The design marks its own proposals „[proposed]”.
 
-Requirements: DEV-17.4, DEV-17.5 and DEV-3.4 (each project in its own session and branch), DEV-17.2 (each project records its decisions as ADRs), DEV-3.3 (merges with the author's approval), DEV-17.6 and ECO-073 (long jobs outside the agent's session), DEV-18.5 (store backups), DEV-20.1, DEV-20.5, DEV-20.8 (amended by N0), ECO-059 (raw data in Archiwista, harmonized in Obserwator, a backup copy of the data root in Archiwista), ECO-060, ECO-072 (released formats change only with the author's consent).
+Requirements: DEV-17.4, DEV-17.5 and DEV-3.4 (each project in its own session and branch), DEV-17.2 (each project records its decisions as ADRs), DEV-3.3 (merges with the author's approval), DEV-17.6 and ECO-073 (long jobs outside the agent's session), DEV-18.5 (store backups), DEV-20.1, DEV-20.5, DEV-20.8 (amended by N0), ECO-059 (raw data in Archiwista, harmonized in Obserwator; as amended by ECO-084: the timers write the raw root, the backup is the deployment's), ECO-060, ECO-072 (released formats change only with the author's consent), ECO-084, ECO-085, AGI-3.4.
 
 ## Goal
 
@@ -21,7 +21,7 @@ Probe files are in `/data/nmt/e2e-2026-11-15/tmp/oper-check/`. The investigation
 
 | Source | Content | Step and span | Stations | Published |
 |---|---|---|---|---|
-| `hydro-back.imgw.pl/station/hydro/status/data?id=<code>&hoursInterval=<h>`; `…/discharge`; `…/water-temperature` (header `Referer: https://hydro.imgw.pl/`) | `operational`: H, Q, T (`B00100S`) | Hourly. 10-min points only for about the last 2 hours before the request (A4). Reached back to 2026-08-16 with `h=2200`; the terms promise „do 6 tygodni wstecz” | H about 878, Q about 659–682, T about 81–83 | live |
+| `hydro-back.imgw.pl/station/hydro/status/data?id=<code>&hoursInterval=<h>`; `…/discharge`; `…/water-temperature` (the probe of 2026-11-16 sent `Referer: https://hydro.imgw.pl/`; since 3.1.0 Obserwator sends none and `User-Agent: Obserwator/<version> (+https://github.com/Daldek/Obserwator)`, ADR-021 erratum of 2026-11-21 — O2 keeps that) | `operational`: H, Q, T (`B00100S`) | Hourly. 10-min points only for about the last 2 hours before the request (A4). Reached back to 2026-08-16 with `h=2200`; the terms promise „do 6 tygodni wstecz” | H about 878, Q about 659–682, T about 81–83 | live |
 | `danepubliczne.imgw.pl/datastore/getfiledown/Arch/Telemetria/Hydro/<YYYY>/Hydro_<YYYY-MM>.zip` | CSV `KodSH;Param;YYYY-MM-DD HH:MM;value` for `B00020S` (H), `B00050S` (Q), `B00100S` (T); `999` means missing | 10 min, UTC. One zip per month for all stations (October: 17.6 MB) | 878 / 682 / 83 | about 12 days after the month (October built 2026-11-12); November not yet |
 | `danepubliczne.imgw.pl/data/dane_pomiarowo_obserwacyjne/dane_hydrologiczne/` (Obserwator's `pl.imgw.hydro_*`) | verified daily, monthly and semi-annual data | daily; no sub-daily verified set | about 900 | about 10 months after the hydrological year (2025 on 2026-08-31) |
 | `opendata.chmi.cz/hydrology/now/data/<WIGOS>.json` | H, Q, `TH` (and the forecasts `H_F`, `Q_F` at some stations) | 10 min, the current UTC day | 548 | rewritten every 20 min |
@@ -115,7 +115,7 @@ The texts were read on 2026-11-16. They give no blocker, and none was contacted 
   - Archiwista has no backup feature; ECO-059's backup copy of the data root is not built. Only `archiwista state export` exists.
 - **Stores today:** Nogat `docs/PROGRESS.md`, „Deployment and storage”.
   - The raw root is on the NAS, `/mnt/magazyn/agent-tmp/obserwator` (CIFS, with hard links that Obserwator's writer needs).
-  - The data root is local, `~/data/obserwator-target/data`.
+  - The data root is local, `~/data/obserwator-310/data` (3.1.0's layout, since 2026-11-23).
   - There is no backup timer anywhere, and only `rsync` is installed (no `restic`, no `borg`).
 
 ## Decisions (the author, 2026-11-16)
@@ -143,7 +143,7 @@ Recorded in the providers plan `2026-11-20-hydromet-providers.md` as P14 to P16;
 | E1 | Everything Obserwator receives is kept as a capture in the raw root (P14), warnings and water-state classes and the GUI's live fetches included: D1's „warnings and water-state classes stay live only” and D2 are superseded. This plan's nightly harvest is the capture of hydro-back's hourly values, and its sub-daily series are built from the captures. |
 | E2 | Whether captured data are served (shown as stored data, downloaded from Obserwator or Archiwista) is the operator's decision per source (P15); the author's service is free, without advertising and earns nothing („To nadal nie jest działalność gospodarcza”). The terms flags of hydro.imgw.pl stay in Risks for an operator who earns. |
 | E3 | The polling rate follows the source (P16). |
-| E4 | Releases (the author, 2026-11-22: „CAMELS przesuwa się na 3.4.0, a Gdańskie Wody wchodzą jako v3.3.0”): this plan ships with Obserwator `v3.2.0` (the captures, sub-daily series, telemetry replacement and the chart; steps O1–O4, O6) and Archiwista's minor beside it (A1, A2, A4: indexing, the nightly schedule, backups, which must run from the first capture, since the captures are the only copy of what the API forgets after 6 weeks); Gdańskie Wody is `v3.3.0`, CAMELS-PL `v3.4.0`. |
+| E4 | Releases (the author, 2026-11-22: „CAMELS przesuwa się na 3.4.0, a Gdańskie Wody wchodzą jako v3.3.0”): this plan ships with Obserwator `v3.2.0` (the captures, sub-daily series, telemetry replacement and the chart; steps O1–O4, O6) and Archiwista's minor beside it (A1, A2, A4: indexing, the nightly schedule, backups, which must run from the first capture, since the captures are the only copy of what the API forgets after 6 weeks); Gdańskie Wody is `v3.3.0`, CAMELS-PL `v3.4.0`. (A2 and A4 are Obserwator's since E9; Archiwista's minor is A1 — Fable, 2026-11-23.) |
 | E5 | Replacement is precedence, not deletion (the author, 2026-11-22: „zamiast usuwać (tylko na żądanie), to podmieniamy źródło dla danego miesiąca, a to co zostało pobrane z API i tak zostaje w archiwum dla ewentualnego porównania”): when a month's telemetry (ČHMÚ: the validated year) arrives, the month's series is rebuilt from it (Precedence below), and the captured API answers stay in the raw root for comparison, never deleted. Only superseded versions of the derived series (rebuildable from the raw root) may be pruned, on demand only (D4); `store prune` (O5, A3) leaves `v3.2.0` and waits for a later release. |
 | E6 | Everything outside `v3.2.0`, `v3.3.0` and `v3.4.0` (including `store prune`) comes in `v3.5.0` at the earliest („2. tak”). |
 | E7 | Backups (Q9): the NAS copy for now; a copy outside the NAS waits for the author („na razie nie mam innego miejsca na kopie zapasowe, będę musiał to przemyśleć”). R5 stays open. |
@@ -158,11 +158,11 @@ Recorded in the providers plan `2026-11-20-hydromet-providers.md` as P14 to P16;
 
 | Tier | Raw dataset | Kept as | Step in the raw root |
 |---|---|---|---|
-| verified | `pl.imgw.hydro_daily` (exists), `cz.chmi.hydro_daily` (exists) | as published | day |
-| verified | `cz.chmi.hydro_hourly` (new) [proposed] | as published, `historical/data/hourly/H_<WIGOS>_HQ_<YYYY>.json` | 1 h |
+| verified | `pl.imgw.hydro_daily` (exists), `cz.chmu.hydro_daily` (exists) | as published | day |
+| verified | `cz.chmu.hydro_hourly` (new) | as published, `historical/data/hourly/H_<WIGOS>_HQ_<YYYY>.json` | 1 h |
 | telemetry | `pl.imgw.hydro_telemetry` (new) | the monthly zip as published | 10 min |
-| operational | `pl.imgw.hydro_operational` (new) | one derived file per UTC day: `operational` arrays only, full hours of that day (D9) | 1 h |
-| operational | `cz.chmi.hydro_recent` (new) | one file per UTC day gathering the 548 station files, without `H_F`/`Q_F` | 10 min |
+| operational | `pl.imgw.hydro_operational` (new) | the capture of the night: every hydro-back answer of the run as it came (P14, forecasts included), one version per UTC day of the request, gzip-compressed JSON Lines (time, address, status, body); the series takes the full hours of the closed UTC day only (D9) | 1 h in the series |
+| operational | `cz.chmu.hydro_recent` (new) | the capture of the night: the 548 station files of the day as they came (P14) | 10 min |
 
 A tier is a property of the dataset (`DatasetDescriptor.tier`). It is never inferred from values.
 
@@ -209,7 +209,7 @@ Growth per year, IMGW-PIB plus ČHMÚ, at 1 h in the series:
 
 ### Precedence
 
-- **Within the sub-daily series:** telemetry over operational (IMGW-PIB), and validated hourly over operational (ČHMÚ), per station, variable and hour.
+- **Within the sub-daily series:** telemetry over operational (IMGW-PIB), and validated hourly over operational (ČHMÚ), per station, variable and hour. A higher tier replaces a lower one even where the values differ (R4); the captured answer stays for comparison (E5).
   - A month is rebuilt when its telemetry zip arrives; a year is rebuilt when ČHMÚ's validated year arrives.
   - Operational points stay only where the higher tier has no record (`999` or a gap). Each point carries `<var>_tier`.
 - **Across resolutions:** the verified daily series stays the archive. The sub-daily series is never aggregated into it and never changes it. The analyses (Hydrolog) read only verified daily series.
@@ -217,27 +217,20 @@ Growth per year, IMGW-PIB plus ČHMÚ, at 1 h in the series:
 
 ### Data root
 
-- **New slugs:** `pl.imgw.hydro_subdaily` and `cz.chmi.hydro_subdaily`, with `time_unit` `hour`.
-- **Columns:** `time` (timestamp UTC), and per H, Q, T the columns `<var>_value`, `<var>_flag` and `<var>_tier` (dictionary `verified|telemetry|operational`).
-- **Contract:** a new `obserwator-subdaily/1`. `obserwator-series/1` and the daily series stay as they are (ECO-072).
-- **Slots per month:** `series:<key>:<YYYY-MM>`, a new form of the slot grammar (`reader.py:124`).
+- **New datasets:** `pl.imgw.hydro_subdaily` and `cz.chmu.hydro_subdaily` (slugs `imgw_hydro_subdaily` and `chmu_hydro_subdaily`, ADR-028), `time_unit` `hour` — P5 of `2026-11-20-hydromet-providers.md`, one hourly form for every provider — `year_type` `calendar`.
+- **Columns:** those of `obserwator-series/1` for an hourly unit: `time` (timestamp, UTC, the start of the hour) in place of `date`, `hydro_year`, and per H, Q, T the columns `<var>_value`, `<var>_flag` and the new optional `<var>_tier` (dictionary `verified|telemetry|operational`), which only a series built from several tiers carries.
+- **Contract:** `obserwator-series/1` stays `/1` (ECO-085): `hour` and `<var>_tier` are additions a reader can skip, and every daily series is byte-identical. There is no `obserwator-subdaily/1`.
+- **Slots per month:** `series:<key>:<YYYY-MM>`, a new form of the slot grammar (`store/reader.py`, spec §13.7), so a night rebuilds one month and `series read` joins the months; the directory form and how `current_version` lists the months are the ADR of O4.
 
-### Nightly job (D3, D8)
+### The timers (E9, D8, P16)
 
-- **One Archiwista `download` job per night** runs two calls through the adapter:
-  - `obserwator store sync --dataset pl.imgw.hydro_operational --day <D> --pace-until 06:30`
-  - `--dataset cz.chmi.hydro_recent --day <D>`
-  - then, in the same job [proposed], `series build` of the month of D.
-  - D is the UTC day that has just closed.
-- **Pacing in Obserwator, since Archiwista has none:** `--pace-until` spreads the requests evenly up to the deadline, one at a time, with gzip. On 429 or 5xx it backs off (60 s, 120 s, 240 s, then skips the station until the next night). Three connection failures in a row end the call `partial`.
-- **ČHMÚ is read from 05:00 local,** well after its files appear at about 00:20 UTC. In summer 02:30 local is only 10 min after that.
-- **Scheduling:** none exists in Archiwista. Two ways [proposed: (i)]:
-  - (i) `ScanScheduler` gains schedule entries: a call, a local start time, a window end, a catch-up rule; persisted in Archiwista's settings; run as the `scheduler` actor.
-  - (ii) A user systemd timer of Archiwista's deployment runs `archiwista jobs start download …` at 02:30 (`OnCalendar`, `Persistent=true`); the job still runs in the queue (Q3).
-- **Idempotent by UTC day:** a second run for the same D finds the same bytes and reports `unchanged`. So a DST night is harmless: on the March night 02:30 does not exist, and on the October night it occurs twice.
-- **Missed nights:** `--days N` with N ≤ 40 (inside „6 tygodni”) backfills from the newest stored day, one request per station and parameter with `hoursInterval` covering N days.
-- **Monthly telemetry:** the same schedule checks `Arch/Telemetria/Hydro/<YYYY>` once a day (one POST `datastore/getFilesList`). When a new month appears it downloads the zip (about 18 MB) and rebuilds that month's slot.
-- **ČHMÚ's validated year:** a daily listing check of `historical/data/hourly/`. A new year is downloaded (about 543 files of about 0.5 MB) over several nights.
+Three user systemd timers of Obserwator's deployment guide run Obserwator's commands (`Persistent=true`: a missed run happens at the next boot). Archiwista's queue runs none of them (D3 superseded by E9), so an instance without Archiwista loses nothing.
+
+- **`obserwator-night.timer`, 02:30 local:** `obserwator store sync --datasets pl.imgw.hydro_operational --pace-until 06:30` (the last closed UTC day by default), the sealing of every closed day of the spool, then `series build` of the months touched; `cz.chmu.hydro_recent` from 05:00 local, well after its files appear at about 00:20 UTC. `--start`/`--end` (UTC dates, AGI-3.4) name other days: `--start <D−39>` backfills 40 days (inside „6 tygodni”), one request per station and parameter with `hoursInterval` covering them. A `--pace-until` already passed means the minimum spacing of 5 s.
+- **`obserwator-telemetry.timer`, 06:45 local:** one `POST datastore/getFilesList` for `Arch/Telemetria/Hydro/<YYYY>` and one listing of `historical/data/hourly/`; a new month's zip (about 18 MB) or a new validated year (about 543 files of about 0.5 MB, spread over several runs) is downloaded and the months or years touched are rebuilt.
+- **`obserwator-current.timer`, hourly at :15:** the captures of the sources that answer for every station in one request — `api/data/hydro`, `api/data/meteo`, the hydro-back map of water states and their classes, `warningshydro` and `warningsmeteo` — about five requests an hour, written to the spool only. ČHMÚ `now` (548 files a poll) is not scheduled: its 10-min values arrive whole in `recent` the next day (A3), so it is captured on demand only (the live tail). The adapter's declared rate (P16) is a ceiling: the guide's timers run at or below it, never above.
+- **Pacing in Obserwator:** `--pace-until` spreads the requests evenly up to the deadline, one at a time, with gzip. On 429 or 5xx it backs off (60 s, 120 s, 240 s, then skips the station until the next night). Three connection failures in a row end the call `partial`.
+- **Idempotent by content:** a run for a day already stored writes a new capture only when the bytes differ (a correction, R4); the series are `unchanged` when their inputs are. A DST night is harmless: the capture is keyed by the UTC day.
 
 ### Load budget (per night, 02:30–06:30)
 
@@ -250,19 +243,19 @@ Growth per year, IMGW-PIB plus ČHMÚ, at 1 h in the series:
 | ČHMÚ `recent`, 548 files | 548 | about 9 MB (15 Nov: 9.04 MB) | one every 6.5 s, 05:00–06:00 |
 | Telemetry | 1 listing a day, 1 zip a month | 17.6 MB a month | — |
 
-A 4 h job takes one of Archiwista's two network places (`supervisor.py:161-162`) for the night.
+The hourly timer adds about 120 requests a day. Nothing runs in Archiwista's queue (E9).
 
-### On demand (D2)
+### The live tail (E1, E11; was „On demand (D2)”)
 
-- **When a station's card opens:** the GUI server reads the station's newest stored hour. If it is older than the current hour, the server asks hydro-back for that station only, with `hoursInterval = hours since then + 1` (at most 1,000), or ČHMÚ's `now/data/<WIGOS>.json`.
-- **The answer stays in memory:** a 10 min TTL per station, at most 500 stations, one request per station at a time and one live request for the whole server. It is never written.
-- **Same rules as today's snapshots** (`gui/_live.py`). The GUI stays a reader of the data root (ADR-013 D5).
+- **When a station's card opens:** the GUI server reads the station's newest stored hour. If it is older than the current hour, it asks hydro-back for that station only, with `hoursInterval = hours since then + 1` (at most 1,000), or ČHMÚ's `now/data/<WIGOS>.json`.
+- **The answer is written to the spool (P14) and stays in memory** for 10 min per station, at most 500 stations (ADR-027 D3 bounds the documents), one request per station at a time and one live request for the whole server, as today's snapshots (`gui/_live.py`).
+- **What is served:** the chart joins the stored series and the live tail only for sources set `public` (decision 15); otherwise the card shows the live tail as today.
 
 ### Locking
 
-- **Archiwista:** claims the positions of a download, so a second download of the same positions is skipped as `taken` (ADR-047).
-- **Manual `store sync`:** a manual CLI run outside Archiwista takes `flock` on `<state_dir>/obserwator/operational.lock`. While it is held, another run fails with the existing `conflict` (exit 4; `src/obserwator/exceptions.py:76`, `:232-239`).
-- **The GUI** never writes, so it never locks.
+- **Writers of the raw root:** `store sync`, run by the timers or by hand. It takes `flock` on `<state_dir>/obserwator/store-sync.lock`, waits up to 10 minutes for it, then fails with the existing `conflict` (exit 4, `src/obserwator/exceptions.py`). The timers are set apart (02:30 the night, 05:00 ČHMÚ, 06:45 the telemetry, the hourly poll at :15), so the wait covers a late run, not the rule.
+- **The spool** (`<state_dir>/obserwator/captures/<dataset>/<YYYY-MM-DD>/`, the day of the answer's time in UTC): one file per answer, created with `O_EXCL` and named by its time and the SHA-256 of its body, so the GUI, the hourly timer and a CLI run write it without a lock; the night's `store sync` seals every closed day into one version. The GUI writes nothing else and never a root (ADR-013 D5 holds for the roots; the spool is `state_dir`, where the GUI already writes its statistics). A spool write that fails is one warning record and a `config show` problem; the answer is still served.
+- **Archiwista** claims positions of its own downloads only (ADR-047); its jobs and the timers never download the same dataset.
 
 ### Chart
 
@@ -273,6 +266,7 @@ A 4 h job takes one of Archiwista's two network places (`supervisor.py:161-162`)
   - Each tier in its own style and legend entry, with the live tail apart. The caption reads „dane operacyjne, niezweryfikowane” (§ 6 ust. 3).
   - Daily T readings drawn as points, not joined.
 - **Data:** a private route `GET /api/station/{code}/subdaily?from=…` joins the stored series with the delta.
+- **Served only when public:** the route and the chart join the stored series with the live tail only when every capture source of the series is `public` (P15); otherwise the card shows the live tail as today, and the series routes answer `not_found`.
 - **Lines:** the provider's lines of each tier (RH, RD, C/CP) in the card's strip (DEV-20.5).
 
 ### Pruning superseded versions (D4)
@@ -300,14 +294,15 @@ A 4 h job takes one of Archiwista's two network places (`supervisor.py:161-162`)
 - **Where:** `/mnt/magazyn/agent-tmp/backup/obserwator/{weekly,monthly}/<YYYY-MM-DD>/{raw,data}/` [proposed].
   - The NAS accepts hard links: Obserwator's writer needs them (`writer.py:287-295`) and publishes there today [INFERENCE from the working deployment].
   - **The raw root's copy on the same NAS protects against deletion and software errors, not against loss of the NAS (Q9).**
-- **Retention:** 8 weekly and 12 monthly snapshots [proposed]. The sizes are measured in step A4 before the first full; the NAS has 234 GB free of 300 GB.
+- **Retention:** 8 weekly and 6 monthly snapshots. Before a full the script checks the share's free space (`df`) and refuses the full with an error record when it would leave less than 15 % free: the backup shares the NAS with the raw root and Archiwista's store, and a full NAS stops Obserwator's writer. The sizes are measured in A4 before the first full (234 GB of 300 GB were free on 2026-11-22).
+- **Deletion:** the only deletion the script does is of whole snapshot directories beyond the retention, under `backup/obserwator/{weekly,monthly}/` only, never following a link, never in a root.
 - **Restore test:** after each monthly full, copy its data root into a temporary directory and run:
   - `obserwator store scan --root <tmp>`, offline, which lists versions and problems: the same count of versions as the source at the snapshot's time, no problems.
   - A SHA-256 check of 50 random version files against their sidecars.
   - `obserwator series read` of one station.
 
-  The raw root's restore is tested the same way on a sample of 100 version directories. The result is logged as an Archiwista job.
-- **Who:** Archiwista, as a new job kind `backup` in its queue, on the schedule of (i) or (ii). Sunday 07:00 weekly, the first Sunday of the month full, after the night's job. ECO-059 already gives Archiwista the data root's backup copy.
+  The raw root's restore is tested the same way on a sample of 100 version directories. The result is `restore-test.log` beside the snapshot and one record in Obserwator's server log (DEV-12.4).
+- **Who:** Obserwator's deployment guide (A4): `obserwator-backup.timer`, Sunday 07:00 weekly, the first Sunday of the month full, after the night's run; the unit confined as the install contract's unit rule, `ReadWritePaths=` for the target only, the roots read; the first run before the first night (E4). Archiwista has no part in it (ECO-059 as amended by ECO-084).
 
 ## Steps
 
@@ -315,30 +310,33 @@ Each step runs in its own session and branch under the project's `CLAUDE.md` (DE
 
 | # | Project | Change | Depends on | Verified by |
 |---|---|---|---|---|
-| N0 | Nogat | DEV-20.8 amended (D1). An ECO decision on the operational tier and on pruning that honours Archiwista's pins. PROGRESS; the registry once a contract lands (`obserwator-subdaily/1`) | the author | Nogat's gate |
-| O1 | Obserwator | ADR-024 (amends ADR-015 D5 and ADR-003 D4: the operational tier, ČHMÚ `recent` and `historical/hourly` in scope) and ADR-025 (pruning; amends ADR-001 D1 and ADR-017 D1). Descriptors `pl.imgw.hydro_operational`, `pl.imgw.hydro_telemetry`, `cz.chmi.hydro_recent`, `cz.chmi.hydro_hourly` with `tier` and `time_unit` | N0 | the author's review |
-| O2 | Obserwator | Fetchers: hydro-back series beside `_hydro_details`, the telemetry listing and zip, ČHMÚ `recent`, `now` and `historical/hourly`. Pacing (`--pace-until`), backoff and gzip in one place (`fetch.py`) | O1 | recorded answers; one live night on the test instance |
-| O3 | Obserwator | `store sync --day/--days`, the derived day files trimmed to the UTC day at 1 h, `flock` | O2 | a backfill of 40 days equals the nights of the same days |
-| O4 | Obserwator | Sub-daily series at 1 h: builder, `obserwator-subdaily/1`, monthly slots, precedence, readers and exports | O3 | October of 151160060 and 150160180: the operational hours equal the telemetry's full hours (744 of 744), the gap stays operational |
-| O5 | Obserwator | `store prune` (off by default, `--check`, pins honoured) | O1, A3 | a prune plan on a fixture with pinned and superseded versions |
-| O6 | Obserwator | GUI: the delta in memory, the route, the chart in „teraz” | O4 | the GUI on the test instance |
-| A1 | Archiwista | Index and show `time_unit` `hour` and `obserwator-subdaily/1`, and the monthly slots | O4 | contract test with `obserwator.testing` |
-| A2 | Obserwator (was Archiwista; E9) | The `.service`/`.timer` templates and the `docker-compose` service for the night, the telemetry and validated-year checks and the captures' polling; the window end passed to the call; catch-up after a missed night (`Persistent=true`, `--days`) | O3 | a night run and a missed-night catch-up on the test instance |
-| A3 | Archiwista | Export of the versions its projects pin, for `store prune --keep` | — | a project's pins in the export |
-| A4 | Obserwator (was Archiwista; E9) | The backup script and its timer (rsync snapshots, retention, the monthly restore test) in the deployment guide | A2 | a restore test passes on the test instance |
-| D1 | Operator | Production: the timers, the first backfill `--days 40`, the backup target | O6, A2, A4 | the first week of nights and one weekly snapshot |
+| N0 | Nogat | ECO-084 (the captures and the operational tier; DEV-20.8 amended as decision 1 of Fable's review; ECO-059 amended: Obserwator's commands run by the deployment's timers write the raw root beside the downloads Archiwista orders, operational data are kept as captures, the backup copy of both roots is the deployment's `rsync` timer) and ECO-085 (additions within version 1, Q8), in `standards/DECISIONS.md`; DEV-20.8 in `standards/DEVELOPMENT_STANDARDS.md` and the sentence on values and forms in AGI-4.1; the reasons `missing_credentials` and `invalid_credentials` of `forbidden` in `standards/error_registry.json` (P4; the tables regenerate); `ecosystem.yaml`: the summaries of `obserwator-store/1` (captures), `obserwator-series/1` (hourly series) and of the sources `imgw` and `chmu`, no new contract; `standards/README.md` changelog 1.2; PROGRESS Next 17 and the CHANGELOG entry (Q12). This is also step 1 of `2026-11-20-hydromet-providers.md`. | the `Approved:` lines of both plans | Nogat's gate (its `CLAUDE.md`): no registry drift, the ECO ids unique, the error tables regenerated |
+| H2 | Obserwator | ADR „provider adapters” (P1, P2): `obserwator.providers` (`pl/imgw.py`, `cz/chmu.py`), the `Protocol`, `ProviderDescriptor.adapter`; the scattered branches dispatch through it; no Gdańskie Wody code | N0 | the full gate; the fixture stores, the sidecars and AGENTS.md byte-identical (P2) |
+| O1 | Obserwator | The ADR „captures and the operational tier” (amends ADR-003 D4, ADR-013 D5 and ADR-015 D5: the tiers; ČHMÚ `recent`, `now` and `historical/hourly` in scope; the captures as archive versions; the GUI's spool), numbered when it lands (3.1.0 took ADR-024 to ADR-028; no number is fixed here, for any ADR of this plan). Descriptors `pl.imgw.hydro_operational`, `pl.imgw.hydro_telemetry`, `cz.chmu.hydro_recent`, `cz.chmu.hydro_hourly` and one capture dataset per polled source of 2a, each with `tier`, `time_unit` and `archive_scope`. Errata of ADR-025 (step 6 is `v3.3.0`) and the re-cut of PROGRESS „Release 3.2.0” to the scope of 2026-11-22 | N0 | the author's review; the ADR index of `docs/DECISIONS.md` has no duplicate; `datasets()` lists the new descriptors with their tiers |
+| H2a | Obserwator | Captures (P14–P16): the capture writer in the adapter interface; the spool `<state_dir>/obserwator/captures/<dataset>/<YYYY-MM-DD>/` (one file per answer, create-only; the GUI and the hourly timer write it); `store sync` of a capture dataset seals every closed UTC day of the spool into one version per dataset and day (equal answers recorded once, as seen); `[obserwator.capture]` and `config show` (P15, the defaults of decision 15); the GUI's live fetches through the writer | H2, O1 | a GUI card opened and an hourly poll appear in the next sealed version; an equal answer is recorded once; no sidecar holds a credential (test); `config show` lists every source's state |
+| O2 | Obserwator | Fetchers: hydro-back series beside `_hydro_details` (3.1.0's `User-Agent`, no `Referer`), the telemetry listing and zip, ČHMÚ `recent`, `now` and `historical/hourly`; pacing (`--pace-until`), backoff and gzip in one place (`fetch.py`) | H2a | recorded answers; one live night on the test instance with no more than one request per 5 s |
+| O3 | Obserwator | `store sync --start/--end` (UTC dates, AGI-3.4; default the last closed UTC day) for the capture datasets and the night's harvest; the lock with a bounded wait (Locking) | O2 | a backfill of 40 days gives the same hours as the nights of the same days; a second `store sync` of the same dataset waits, then fails with `conflict` |
+| O4 | Obserwator | Hourly series (P5 and this plan; absorbs step 4 of the providers plan): `time_unit` `hour` in the registry, the series schema (`time`, the optional `<var>_tier`), the builder, the monthly slots, precedence, `series read`/`export` (CSV, JSON, Parquet), the GUI's charts of hourly data; D9's trim (the full hours of a closed UTC day, the 10-min tail dropped) is a rule of this builder; one ADR „hourly series” | O3 | October of 151160060 and 150160180: the operational hours equal the telemetry's full hours (744 of 744), the gap stays operational; the daily fixture series byte-identical; `series read` of one month and across months |
+| H3 | Obserwator | Credentials and errors (P3, P4): `OBSERWATOR_<PROVIDER>_API_KEY[_FILE]` in `CREDENTIAL_KEYS`, `config show`, `.env.example`, `CLAUDE.md`, messages pl/en; no provider of `v3.2.0` uses one | N0 | `config show` reports a test provider's key `present`/`missing`; a missing key is `forbidden`/`missing_credentials` with the hint naming the variable; the key appears in no log, envelope or sidecar (test) |
+| H5a | Obserwator | ČHMÚ groundwater (its own ADR): `cz.chmu.groundwater_*` (`historical` verified; `recent` and `now` operational captures; `characteristic`), `H_asl`, the yield and temperature variables, the station kind `groundwater` (bore, spring) with its symbol, filter and export line; a weekly unit, if the ADR needs one, follows ECO-085 and A1 covers it | H2, O1 | `store sync`, `series build`, `store catalog --provider CHMU` of one bore and one spring; the GUI shows them with their kind; the hydro and meteo fixtures byte-identical |
+| O6 | Obserwator | GUI: the chart in „teraz”, its route, the live tail through the spool, the publication state honoured (decision 15) | O4, H2a | the GUI on the test instance: the stored hours to the end of yesterday (UTC), today's hours from the live fetch, each tier labelled; a second opening within 10 min makes no request; a `private` source is not served |
+| A2 | Obserwator | The `.service`/`.timer` templates (`obserwator-night`, `obserwator-telemetry`, `obserwator-current`) and the `docker-compose` service in the deployment guide; `Persistent=true`; the window end as `--pace-until`; catch-up with `--start` after a missed night; the units confined as the install contract's unit rule (`NoNewPrivileges`, `ProtectHome=read-only`, `ReadWritePaths=` for the roots and `state_dir`) | O3, H2a | a night run and a missed-night catch-up on the test instance |
+| A1 | Archiwista | Its minor: `time_unit` `hour` and the monthly slots in the adapter and the index (a migration or `reindex`); an unknown unit skipped with a warning record instead of a failure; the tier and the publication state of a version shown; the station kind `groundwater` accepted | O4, H2a, H5a | contract test with `obserwator.testing` on a fixture holding an hourly series, a monthly slot, a capture version and a groundwater station; `archiwista doctor` 0 errors |
+| A4 | Obserwator | The backup script and its timer (decision 16) in the deployment guide and README (DEV-18.5) | A2 | a weekly snapshot and a monthly full on the test instance; the restore test passes |
+| D1 | Operator | Production, in this order: Archiwista's minor deployed; Obserwator `v3.2.0`; `[obserwator.capture]` set (the author decides `public` for hydro-back on his instance, E2); the first backup; the timers; the first backfill `--start <D−39>` | O6, A1, A2, A4 | the first week of nights, one weekly snapshot, Archiwista's scan without problems |
+
+Left for `v3.5.0` (E5, E6): O5 `store prune` and A3, Archiwista's export of the versions its projects pin.
 
 ## Acceptance
 
-1. After one night the raw root holds the IMGW-PIB day file of D (full UTC hours 00:00–23:00 only) and the ČHMÚ day file. The month's sub-daily slot has a new version. The job's summary gives the requests, failures and wall time, and the job ended before 06:30.
+1. After one night the raw root holds the capture version of `pl.imgw.hydro_operational` and of `cz.chmu.hydro_recent` for the UTC day of the run, every answer as it came, and the sealed captures of the polled sources for the closed UTC day; the month's slot of each sub-daily series has a new version whose hours of D are the full hours 00:00–23:00 UTC only. The run's summary gives the requests, failures and wall time, and the run ended before 06:30.
 2. `series read --dataset pl.imgw.hydro_subdaily --station 151160060` gives October's hours with tier `operational`. After `Hydro_2026-10.zip` is synced, the same read gives tier `telemetry` with the same values (744 of 744).
 3. A station opened in the GUI shows the stored hours to the end of yesterday (UTC) plus today's hours from the delta, each labelled with its tier. A second opening within 10 min makes no request.
-4. A second run for the same UTC day is `unchanged`. A manual `store sync` during the night's job fails with `conflict`.
+4. A second run for the same day stores a new capture only when the source's bytes differ and leaves the series `unchanged`; a second `store sync` of the same dataset during the night's run waits for the lock, then fails with `conflict`.
 5. No more than one request per 5 s to hydro-back in the window (the job's log).
-6. `obserwator-series/1` readers (Hydrolog, Archiwista's adapter) pass unchanged.
-7. `store prune --check` lists superseded sub-daily versions and leaves out every version Archiwista pins. Without the command nothing is deleted.
-8. A weekly snapshot holds only the week's new version directories as new files. The monthly restore test passes.
-9. The lines of each tier appear in the GUI's strip, the exports and the envelopes.
+6. Hydrolog's reader of `obserwator-series/1` passes unchanged; Archiwista passes with A1 (0.3.3 would refuse an hourly series, ECO-085), and its contract test covers an hourly series, a monthly slot and a capture version.
+7. A weekly snapshot holds only the week's new version directories as new files. The monthly restore test passes.
+8. The lines of each tier appear in the GUI's strip, the exports and the envelopes.
 
 ## Risks and open questions
 
@@ -354,21 +352,21 @@ Risks:
 - **R5. The NAS:** the raw root and its backup share one device (Q9).
 - **R6. ČHMÚ's validated hourly values:** whether they are full-hour samples or hourly means is unverified, so a step may appear at the boundary with the operational hours.
 - **R7. Temperature:** some stations give one reading a day at 06:00 UTC, others hourly.
-- **R8. Archiwista's queue:** a 4 h night job holds one of two network places.
+- **R8. Overlapping timers:** on a slow night two `store sync` runs meet on the lock (Locking); a run that reaches 06:30 ends `partial` and the next night fills the gap with `--start`.
 
 Topics to settle before implementation (the author, before this plan's `Approved:` line or at the latest before N0 starts; the plan ships after the first joint release):
 
 - **Q3.** Answered (E9): user systemd timers running Obserwator's commands.
-- **Q8.** Formats after the release: `obserwator-subdaily/1` is new. Do the new slot form `series:<key>:<YYYY-MM>` and the new `time_unit` value `hour` stay within version 1 of `obserwator-data/1` (ECO-072)? Coordinator's proposal: yes. A change stays within `/N` when it only adds optional fields or values an existing reader can ignore (AGI-4.1); here the one reader that tells series apart by `time_unit`, Archiwista, is changed in the same plan (A1). The rule is to be recorded once as an ECO decision, shared with the large-basins plan (its topic 1).
+- **Q8.** Decided (Fable, 2026-11-23; ECO-085): `time_unit` `hour`, the optional column `<var>_tier` and the slot form `series:<key>:<YYYY-MM>` stay within `obserwator-series/1` and `obserwator-data/1`. The one reader that tells series apart by `time_unit`, Archiwista, changes in A1 and its minor is deployed before the first hourly series reaches the shared data root (D1): Archiwista 0.3.3 refuses such a series (`adapter/obserwator/adapter.py:590-597`, `index/schema.py:471`), so the order is not optional.
 - **Q9.** Answered for now (E7): the NAS copy; a copy outside the NAS waits for the author.
 - **Q10.** Answered (E10): `cz.chmu.hydro_hourly` in `v3.2.0`.
 - **Q11.** Answered (E8): 1 h only.
-- **Q12.** PROGRESS numbering: this branch and `plan/large-basins` both add PROGRESS item 15; the second to merge renumbers.
+- **Q12.** Decided (Fable, 2026-11-23): the merge on `plan/obserwator-3.2.0` kept `develop`'s PROGRESS (items 15 and 16 of 2026-11-22) and CHANGELOG, so this plan and the providers plan are one new item 17 and one CHANGELOG entry; `plan/large-basins` takes 18 when it merges. The same rule for ECO numbers (ECO-085's consequence).
 
 ## Follow-ups (outside this plan's steps)
 
 - Meteorological telemetry (`Arch/Telemetria/Meteo`) and ČHMÚ's climate `now`/`recent`: a separate, later plan (D7).
-- Forecasts (`hdModelStateForecast`, `H_F`/`Q_F`), warnings and water-state classes stay live only.
+- Forecasts (`hdModelStateForecast`, `H_F`/`Q_F`) stay inside the captures as they came and are read into no series; warnings and water-state classes are captured (E1) and shown live.
 
 ## Results
 

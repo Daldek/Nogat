@@ -4,7 +4,7 @@
 # Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
 
 schema: nogat-ecosystem/1
-standard_version: "1.1"
+standard_version: "1.2"
 
 data_sources:
   - id: gugik
@@ -28,12 +28,12 @@ data_sources:
     url: https://soilgrids.org
     licence: CC BY 4.0
   - id: imgw
-    name: IMGW-PIB (archives, live API, PMAXTP atlas)
+    name: IMGW-PIB (archives, live API and telemetry, hydro.imgw.pl operational data, PMAXTP atlas)
     country: PL
     url: https://danepubliczne.imgw.pl
     licence: IMGW-PIB terms of reuse, attribution required
   - id: chmu
-    name: ČHMÚ open data
+    name: ČHMÚ open data (historical, recent and now sets)
     country: CZ
     url: https://opendata.chmi.cz
     licence: CC BY 4.0
@@ -156,13 +156,13 @@ projects:
     provides:
       - id: obserwator-store/1
         kind: store
-        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version.
+        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Planned for v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture].
       - id: obserwator-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
       - id: obserwator-series/1
         kind: dataset
-        summary: Parquet series per station with series.json index (periods, year type, units, coverage).
+        summary: Parquet series per station with series.json index (periods, year type, units, coverage). Planned for v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional <var>_tier of a series built from several tiers, one slot per month series:<key>:<YYYY-MM>.
       - id: obserwator-plan/1
         kind: document
         summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
@@ -482,7 +482,7 @@ projects:
         summary: archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054).
       - id: archiwista-raw-root
         kind: dataset
-        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root.
+        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer.
     depends_on:
       - project: Kartograf
         kind: runtime
@@ -496,7 +496,7 @@ projects:
         status: active
         via: [library, store]
         exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmu-json/1, obserwator-data/1]
-        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
+        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
       - project: Hydrolog
         kind: data
         status: active
