@@ -17,17 +17,19 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
   - project kaczawa = /mnt/magazyn/agent-tmp/hydroni/projekty/kaczawa (area 792 km², set 2026-1 closed 2026-11-15T00:00:04Z: 194 NMT sheets, 10 BDOT10k counties, 1 HSG raster, no PGW units file)
   - BDOT10k counties and unpinned data also held
   - NAS usage: 66 GB of 300 GB
-- **Obserwator data** (processed, local, served fast) = ~/data/obserwator-target/data
+- **Obserwator data** (processed, local, served fast) = ~/data/obserwator-310/data (Obserwator 3.1.0 layout, since 2026-11-23; the 3.0 root moved to `/data/nmt/deploy-backup-2026-11-22/obserwator-target-data`)
 - **Patch releases deployed 2026-11-18** (the author's approval; as on 2026-11-16: checkouts detached at the tags, venvs `uv sync --locked --all-extras --reinstall-package <pkg>`, then the unit restarted; each smoke-checked on 127.0.0.1 and its public host):
   - Hydrolog `v0.8.1` (`hydrolog-gui.service`, worktree `~/workspace/Hydrolog-gui`, was `v0.8.0`), with Obserwator 3.0.1 as its extra; Obserwator's analyses call this venv's `hydrolog`; the SCS unit hydrograph of a daily step keeps its volume (0.998 mm)
   - Obserwator `v3.0.1` (`obserwator-public.service`, `~/data/obserwator-public/app-target`, was `v3.0.0`), OBSERWATOR_RAW_ROOT=/mnt/magazyn/agent-tmp/obserwator; the series `cz.chmi.meteo_daily` built (`2026-09-04_0303d027`, 1,535 stations; the analyses of 2026-11-17 had used a 10-station version); `analyses build` of both providers with Hydrolog 0.8.1 runs as the unit `obserwator-analyses-2026-11-18` (IMGW-PIB 3,240 and ČHMÚ 2,321 stations, none carried forward)
   - Archiwista `v0.3.1` (`archiwista-public.service`, `~/data/archiwista-public/app`, was `v0.3.0`) with Kartograf 0.8.1 and Obserwator 3.0.1 (`archiwista doctor`: 0 errors); no index or state migration
   - Hydrograf `v0.5.1` on :8080 (`~/workspace/Hydrograf` detached at the tag; image `hydrograf-api:latest` rebuilt with Kartograf 0.8.1, Obserwator 3.0.1, Hydrolog 0.8.1; no migration, no new variables); the hydrograph of a daily step gives the Polish notice `uh_substeps`; Hydroni :8081 unchanged. Production keeps the data of Archiwista's set `kaczawa/2026-2` it took on 2026-11-17 (backup in `/data/nmt/hydrograf-backup-2026-11-17/`); the staging instance `hgstaging` that cut it was removed on 2026-11-18 (the author's decision: containers, volume `hgstaging_postgres_data`, worktree `~/workspace/Hydrograf-staging`, `~/data/hydrograf-staging`), and its README, cut scripts and logs are kept in `/mnt/magazyn/agent-tmp/archiwum-2026-11-18/hydrograf-staging/`
-- **Obserwator `develop` deployed 2026-11-21** (the author's request in session; no release): `obserwator-public.service` from `~/data/obserwator-public/app-target` detached at `55dd035` (`3.1.0.dev0`, full gate passed; was `c3587ae`), the venv `uv sync --locked --all-extras --reinstall-package obserwator`, no new dependency, no `[obserwator.instance]` section; smoke-checked on 127.0.0.1:8060 and obserwator-test.debever.pl (`/`, `api/session`, `api/stations` 304-capable, `api/current`, `robots.txt`, `favicon.ico`, the new security headers, `/admin/` 302 to Access; a headless browser without console errors); RSS 272 MB after the start (the unit's peak before the restart was 3.3 GB with 2.4 GB of swap). Its analyses still come from Hydrolog `0.9.0.dev0` (`~/workspace/Hydrolog-obs`, `cec5d97`); ČHMÚ's snow and half-years show after the snow files are synced and the series and analyses rebuilt. Rollback: `~/data/obserwator-public/backup-2026-11-21/ROLLBACK.txt`.
-  - Data rebuild started 2026-11-21 14:30 (the author's go-ahead): `~/workspace/Hydrolog-obs` detached at Hydrolog `de3b606` (`0.9.0.dev5`, full gate passed), the GUI restarted on it; the user unit `obserwator-rebuild-2026-11-21` (`~/tmp/rebuild-2026-11-21/rebuild.py`, log `run.log`) checks `cz.chmi.meteo_daily` (2,546 missing files, all ČHMÚ snow `SCE`/`SNO` of 1,281 stations; 3,351 current), syncs them one station per call with a 2 s gap, builds the series `cz.chmi.meteo_daily` and `pl.imgw.meteo_precip_daily` (T24's accumulated totals) and then `analyses build --workers 3` of both providers (every station is computed again: new Hydrolog version and registry digest), resuming once if it stops. The GUI serves the current versions until each new one is published.
+- **The round's releases deployed 2026-11-22/23** (the author's approval „Jeżeli wszystko przejdzie, to masz zgodę na wdrożenie na produkcję”; rollback commands in `~/data/deploy-2026-11-22/ROLLBACK.md`, backups in `/data/nmt/deploy-backup-2026-11-22/`):
+  - Hydrolog `v0.9.0` (`hydrolog-gui.service`, `~/workspace/Hydrolog-gui`, was `v0.8.1`); a GUI computation answers `formula_versions`
+  - Hydrograf `v0.6.0` (image rebuilt, was `v0.5.1`; image `hydrograf-api:rollback-2026-11-22`, `hydro_db` dump; no migration). Production's `hydro_api` runs `docker-compose.yml` + `docker-compose.override.yml` (`./backend` bind-mounted, `--reload`), not the prod overlay, which needs `secrets/db_password.txt` absent here: a checkout reloads the old image at once (about 10 min unhealthy on 2026-11-22), so check out and recreate together. A 137 km² hydrograph takes about 150 s, beyond nginx's 120 s (504 through the GUI), the same on `v0.5.1`: Hydrograf's backlog
+  - Obserwator `v3.1.0` in a parallel install: `obserwator-public.service` from `~/data/obserwator-public/app-310` with Hydrolog `v0.9.0` in `~/data/obserwator-public/hydrolog-090` (`OBSERWATOR_HYDROLOG_COMMAND`); the data root built from the raw root by `~/data/obserwator-310/build.sh` (7 series, catalogs IMGW 3,811 and CHMU 2,486 stations, analyses of 3,240 + 2,321 stations, 0 problems; 9.5 h, 4.2 GB). `app-target` and `~/workspace/Hydrolog-obs` are no longer used; only 3.1.0 runs `store sync` on the raw root
+  - Archiwista `v0.3.3` (`~/data/archiwista-public/app`, was `v0.3.1`) with Kartograf 0.8.2 and Obserwator 3.1.0; `obserwator_data` points at the new root; `reindex --store agent-tmp` 1,645 s, the 27 versions of the old root marked missing, none pinned (all 3,336 pins are Kartograf's)
 - **Deleted** in cleanup: test stores and e2e outputs; Hydrograf cache (12 GB old layout); data/nmt.pre-recut. On 2026-11-18 `/` was full (0 B free, the meteo series build failed): the pytest temporary data of the gates, the venvs of `release-sets/*`, the checkouts of `set verify` and Docker's unused build cache were deleted, the scratch of 2026-11-01 to 2026-11-15 in `~/data/tmp`, the gates' logs, `~/tmp/nogat-run-2026-11-16`, `~/tmp/release-2026-11-16` and `~/workspace/archiwista-scratch` moved to `/mnt/magazyn/agent-tmp/archiwum-2026-11-18/` (the share keeps no symbolic links); 46 GB free after. Left in `~/data/tmp` because their copy is incomplete: `arch-tidy`, `h1-smoke`, `kclean`, `o1`, `o2` and two Firefox profiles (about 3 GB)
-- **Backups** retained: `/data/nmt/deploy-backup-2026-11-18/` (before the deployment of the patch releases, the same contents as `deploy-backup-2026-11-16/`), image `hydrograf-api:rollback-2026-11-18`; `/data/nmt/deploy-backup-2026-11-16/`, image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
-
+- **Backups** retained: `/data/nmt/deploy-backup-2026-11-22/` (before the deployment of the round: `hydro_db`, Archiwista's index, state and settings, the old Obserwator data root), image `hydrograf-api:rollback-2026-11-22`; `/data/nmt/deploy-backup-2026-11-18/`, image `hydrograf-api:rollback-2026-11-18`; `/data/nmt/deploy-backup-2026-11-16/`, image `hydrograf-api:rollback-2026-11-16`; ~/data/archiwista-public/backup-2026-11-14-v1/ and earlier ROLLBACK.txt
 
 ## Status
 
@@ -250,21 +252,18 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     ADR-025; kit `1.1.0`); step 6 is Obserwator `v3.2.0`. A lawyer reviews
     the draft regulamin first.
 16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12,
-    verified at `e6d10b0`, run 45048681845): Obserwator
-    `3.1.0`, Hydrolog `0.9.0`, Hydrograf `0.6.0` (the Hydrolog adaptation;
-    its other planned items move to `0.7.0`), Archiwista `0.3.3`, Kartograf
-    `0.8.2` unchanged, and Nogat `0.2.0` with standard 1.1 (`std-1.1`): kit
-    `1.1.0` (ECO-081), providers by national acronyms in identifiers
-    (`IMGW`, `CHMU`, slugs `imgw_*`/`chmu_*`, ECO-082) and one pattern of
-    file names (DEV-19.21, ECO-083); plans `2026-11-18-computation-standard.md`,
-    `2026-11-19-hydrolog-0.9.0-consumers.md` and `2026-11-21-*`. The
-    production rebuild with Hydrolog dev5 was OOM-killed on 2026-11-22 00:10
-    (several gates at once); production serves its old data root. Next: the
-    deployment of the released versions with the author's consent, Obserwator
-    3.1.0 on a new data root built from the raw root (step 7 of
-    `2026-11-21-national-provider-names.md`); then Obserwator `v3.2.0`
-    (Next 15), Hydrograf `0.7.0` and steps 7 and 10 of the computation
-    standard.
+    run 45048681845; CI of every `main` passed): Obserwator `3.1.0`, Hydrolog
+    `0.9.0`, Hydrograf `0.6.0`, Archiwista `0.3.3`, Kartograf `0.8.2`
+    unchanged, Nogat `0.2.0` with `std-1.1`; deployed 2026-11-22/23
+    (Deployment and storage). No member has a publish workflow (REL-2.1
+    step 5), as in the earlier releases. Next: Archiwista `0.3.4` (the race
+    of `test_worker_logs_warnings_and_errors_as_app_records_and_deletes_nothing`),
+    Obserwator `v3.2.0` (Next 15), Hydrograf `0.7.0`, steps 7 and 10 of the
+    computation standard. The plans `2026-11-20-hydromet-providers.md`
+    (branch `plan/hydromet-providers`) and `2026-11-16-operational-series.md`
+    (branch `plan/operational-series`, Q3 and Q10 answered; Q8 and Q12 open)
+    wait for the author's review before `Approved:`; CAMELS-PL
+    (`2026-11-22-camels-pl.md`) is approved, Obserwator `v3.4.0`.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
