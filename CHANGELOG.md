@@ -18,6 +18,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   `docs/plans/2026-11-20-hydromet-providers.md` — provider adapters,
   captures of every answer (P14–P16), provider credentials, `time_unit`
   `hour`, ČHMÚ's groundwater. Step N0 of the first plan is in this entry.
+  Released 2026-11-23 as Obserwator `v3.2.0` with Archiwista `v0.4.0`
+  outside a release set (a REL-6.6 deviation; Nogat's release waits by the
+  author's decision); the plans' Results record them, and the registry
+  describes the captures and the hourly series as released.
 - The reasons `missing_credentials` and `invalid_credentials` of `forbidden`
   in the error registry, for a data provider's credential that is missing
   or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes

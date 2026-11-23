@@ -53,7 +53,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
 | One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.2.0`: the round's candidate, verified by `verify-candidate`, at the tags Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0` and Archiwista `v0.3.3`. Before it candidate-6 became `v0.1.0` and candidate-10 `v0.1.1`. Retman and Hydraulik differ until they apply a later set |
-| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3` |
+| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3`; 2026-11-23 (Next 17): Obserwator `v3.2.0` and Archiwista `v0.4.0` outside a release set (REL-6.6 deviation: the author's decision that Nogat's release waits; the next set carries them) |
 | `verify-candidate` (REL-6.5, ECO-077) | done | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` since `v0.1.0`; it verified candidate-7 (after its releases), candidate-10 (`v0.1.1`) and the round's candidate (`v0.2.0`) on the three runners; candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
 | Nogat's version (ECO-076) | done, 0.2.0 | `v0.2.0` with `std-1.1`, the release set `release-sets/v0.2.0/` (REL-6.6); `v0.1.1` (`a973bf0`) 2026-11-20, the patch release set from `main` (REL-2.4), merged back into `develop`; `v0.1.0` 2026-11-17; `1.0.0` only by the author's decision (HUB-7.4) |
@@ -252,19 +252,15 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     `2026-11-16-operational-series.md` were reviewed and approved by Fable for
     the author on 2026-11-23 (Next 17); CAMELS-PL (`2026-11-22-camels-pl.md`)
     is approved, Obserwator `v3.4.0`.
-17. Obserwator `v3.2.0` (two plans approved 2026-11-23 by Fable for the
-    author, review `~/workspace/wt/logs/fable-obserwator-3.2.0.md`; branch
-    `plan/obserwator-3.2.0`): `docs/plans/2026-11-16-operational-series.md`
-    (O1–O4, O6, A2, A4, `cz.chmu.hydro_hourly`) and
-    `docs/plans/2026-11-20-hydromet-providers.md` (steps 2, 2a, 3, 4, 5a), one
-    step table in the first; Archiwista's minor is A1. First N0: ECO-084 (the
-    captures and the operational tier; DEV-20.8 and ECO-059 amended) and
-    ECO-085 (additions within version 1); then Obserwator in the table's
-    order, producers first (HUB-5.2); Archiwista's minor deploys before the
-    first hourly series reaches the shared data root. Gdańskie Wody and the
-    file-fed provider are `v3.3.0`, CAMELS-PL `v3.4.0`, `store prune` and
-    Archiwista's pins `v3.5.0` at the earliest. `plan/large-basins` takes Next
-    18 when it merges.
+17. Obserwator `v3.2.0` and Archiwista `v0.4.0`, released 2026-11-23 outside a
+    release set (Members' releases): the plans `2026-11-16-operational-series.md`
+    and `2026-11-20-hydromet-providers.md` (approved by Fable for the author,
+    review `~/workspace/wt/logs/fable-obserwator-3.2.0.md`), their Results.
+    Production (D1) is the author's: Archiwista `0.4.0` first, then Obserwator
+    `3.2.0`, `[obserwator.capture]`, the first backup, the timers, the backfill.
+    Next in the members (Next 8): Obserwator `v3.3.0` (the provider fed by
+    files; Gdańskie Wody waits for its terms), Kartograf's CAMELS-PL product,
+    Hydrolog `0.10.0`; CAMELS-PL `v3.4.0`. `plan/large-basins` takes Next 18.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
