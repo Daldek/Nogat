@@ -19,6 +19,15 @@ the standard are listed in [standards/README.md](standards/README.md).
   Obserwator and selectable there as bands and „[dolna–górna]”; its step N1
   adds CMP-2.3's conventions of an interval and a rule of CMP §6 on the
   coverage of interval estimators.
+- Goniec, a QGIS plugin over Obserwator's server, a plan
+  (`docs/plans/2026-11-24-qgis-plugin.md`, approved by the author on
+  2026-11-24 with the answers to its five questions): a shell (connections,
+  attribution and regulamin, HTTP caching, CSV, clipboard and HEC exports)
+  with one module per kind of server, 0.1 with Obserwator's; OGC API –
+  Features and a public read-only `/api/v1` in Obserwator `v3.6.0` with
+  caching headers by resource class, HEC-RAS and HEC-HMS tables and HEC-DSS
+  files built on the server, every daily series PER-AVER at `2400`;
+  GPL-2.0-or-later.
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
