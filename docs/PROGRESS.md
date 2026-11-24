@@ -225,8 +225,8 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     re-processing of 6.
 12. Visual identity (`docs/plans/2026-11-01-visual-identity.md`): step 5,
     Archiwista's copy of `tokens.css`, is not on its `develop` (it ships the
-    kit). GUI platform stage 2, the GUI hub,
-    `docs/plans/2026-11-01-nogat-gui-platform.md` (`Approved: pending`).
+    kit). GUI platform stage 2, the GUI hub, is Latarnik (the author, 2026-11-24):
+    draft `docs/plans/2026-11-24-latarnik.md` on `plan/latarnik` (`Approved: pending`).
 13. Retman's evaluation rows of the operations added for Kartograf,
     Obserwator and Hydrolog are unmeasured: no model server on this machine.
 14. Hydrograf without IMGW-PIB, a to-do that the first joint release
