@@ -8,6 +8,17 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- PIG-PIB's groundwater levels in Obserwator, a draft plan
+  (`docs/plans/2026-11-24-pgi-groundwater.md`, `Approved: pending`; the
+  author's request of 2026-11-24): the points, the monthly readings and the
+  automatic hourly measurements of PIG-PIB's Monitoring Wód Podziemnych
+  (`hydrogeologia/mwp`, `mwp_auto`), each publication captured as it came
+  and versioned by content before the service replaces it (it holds one
+  month); the provider `PIG` (ECO-082), the readings `verified` and the
+  automatic values `operational`, a station catalog with the hydrogeological
+  description, PIG-PIB's lines W, WP, WK and RG under CC BY 4.0 by
+  dane.gov.pl; an interim capture before the release (S0); Obserwator
+  `v3.3.0` recommended.
 - Large basins in one Hydrograf instance, a plan
   (`docs/plans/2026-11-16-large-basins.md`), reviewed by Fable and approved
   by the author on 2026-11-24 with his answers to the review's three points:
