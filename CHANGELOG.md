@@ -9,8 +9,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 ### Added
 
 - PIG-PIB's groundwater monitoring in Obserwator `v3.3.0`, a plan
-  (`docs/plans/2026-11-24-pgi-groundwater.md`, `2026-11-24-pig-groundwater.md`
-  when it merges), reviewed and approved by Fable for the author on
+  (`docs/plans/2026-11-24-pig-groundwater.md`), reviewed and approved by
+  Fable for the author on
   2026-11-24: the points, the monthly verified readings captured before each
   swap, the hourly automatic measurements as an operational tier harvested
   by `OBJECTID` watermark, the provider `PIG` of class `other` under CC BY
