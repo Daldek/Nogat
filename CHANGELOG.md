@@ -36,6 +36,21 @@ the standard are listed in [standards/README.md](standards/README.md).
   server, `/<tool>/v1/…` passed through, limits, caching, CORS and logs at one
   door, jobs as `nogat-job/1`, flows over the registry's exchanges; a server
   for Hydrolog; every GUI a static client of its tool's `/api/v1`.
+- One set of base maps in the kit, shared by every GUI, a plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`; the author's direction for
+  Kartograf's GUI), reviewed by Fable and approved by the author on
+  2026-11-24 with the answers to its nine questions: Hydrograf's three base
+  maps as the catalogue `nogat-basemaps.json`, a kit module and the switcher
+  `<nogat-basemaps>` with adapters for MapLibre and Leaflet (Hydrograf's move
+  to MapLibre a plan of its own), the kit's grey OpenFreeMap style, Polish
+  credits in the map's attribution, the setting `basemaps` with a
+  deployment's copies in `basemap_mirrors`, the choice remembered in the
+  browser (`nogat-basemap`, named by § 8 ust. 7 of regulamin 1.1), never a
+  GUGiK entry as the default, a person's own base map kept and requested
+  only by the browser (`https:` in the CSP of a GUI that offers it,
+  Archiwista), and Obserwator `v3.5.0` replacing `gui_basemap_url` and
+  `gui_basemap_attribution` without a deprecation (a REL-1.1 deviation; the
+  author's instance is the only one).
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
