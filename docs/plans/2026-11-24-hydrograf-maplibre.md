@@ -2,7 +2,7 @@
 
 Approved: pending
 
-Status: proposed on 2026-11-24 (branch `plan/hydrograf-maplibre`); reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-hydrograf-maplibre.md`), its decisions applied; nothing done. The design's proposals are marked „[proposed]”. Open questions 1 to 8 carry their recommendations and await the author's answers.
+Status: proposed on 2026-11-24 (branch `plan/hydrograf-maplibre`); reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-hydrograf-maplibre.md`), its decisions applied; the author kept MapLibre (A of „Two ways weighed”) on 2026-11-24; nothing done. The design's proposals are marked „[proposed]”. Open questions 1 to 8 carry their recommendations and await the author's answers.
 
 Requirements: HUB-5.2, DEV-1.2, DEV-15.1, DEV-15.2, DEV-15.3, DEV-15.6, DEV-15.7, DEV-15.12, DEV-15.13, DEV-17.4, DEV-17.5, DEV-20.5, DEV-20.9, REL-1.1, REL-2.1, ECO-081. Related: the shared base maps plan (`2026-11-24-shared-base-maps.md`, approved by the author on 2026-11-24 and merged into `develop`), whose open question 1 keeps Hydrograf on Leaflet with a thin Leaflet adapter in the kit and leaves „MapLibre 6.14.0 in every GUI” to „the plan of its own”, this one, and whose step 4 now says Hydrograf uses that adapter until this plan lands; the chart module plan (`2026-11-24-unified-charts.md`, approved on 2026-11-24), whose step 5 takes Hydrograf off Chart.js; the GUI platform plan (`2026-11-01-nogat-gui-platform.md`, pending, deferred), which left „Hydrograf on MapLibre to share a map shell” outside itself (`:457`); Latarnik's HG1 (`2026-11-24-latarnik.md:202`), which moves Hydrograf's frontend to `/api/v1` in a minor after `0.6.0`.
 
@@ -90,6 +90,8 @@ MapLibre 6.14.0 as vendored by Obserwator (`maplibre-gl.mjs`, `maplibre-gl-worke
 | Cost | the rewrite above | small; the kit's Leaflet adapter stays |
 
 B only aligns MapLibre's version; the author asked for the move, which A is.
+
+The author, asked on 2026-11-24 whether the ecosystem should stay on Leaflet instead, chose A (in session: „ok, wszystkie 3 punkty wg rekomendacji.”) after these reasons: Obserwator and Archiwista already draw their maps with MapLibre 6.14.0, and Kartograf's planned map is on it (`plan/kartograf-gui`, `docs/plans/2026-11-24-kartograf-gui.md:186-189`); OpenFreeMap is vector-only, so Leaflet draws it only through a MapLibre bridge, as Hydrograf does today; Leaflet.VectorGrid's last release is 1.3.0 of 2017-08-28 (npm); and Leaflet 2.0 is in beta (`2.0.0-beta.4` of 2026-11-12 when weighed; npm's `beta` tag is `2.0.0-beta.5` of 2026-11-19), so staying on Leaflet would force a 1.x → 2.0 migration with its plugins. B stays the fallback if step 1's tests show more risk than this plan sees. The open questions below are still the author's.
 
 ## The kit's shared pieces
 
