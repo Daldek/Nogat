@@ -8,6 +8,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Interval estimation beside point estimation, a draft plan
+  (`docs/plans/2026-11-24-interval-estimation.md`, `Approved: pending`;
+  Obserwator feedback #13), reviewed by Fable on 2026-11-24: confidence
+  intervals of the flood, precipitation and low-flow quantiles computed by
+  Hydrolog — a parametric bootstrap of the L-moments fits from the refits
+  that already give the critical values of A², KZGW 2017's delta method for
+  the maximum-likelihood fits — and shown by Obserwator as bands and
+  „[dolna–górna]”; its step N1 adds CMP-2.3's conventions of an interval and a
+  rule of CMP §6 on the coverage of interval estimators.
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user

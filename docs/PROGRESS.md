@@ -73,9 +73,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    mockup's 673 lines of client addresses, waits for the author's one root
    step (`docs/plans/2026-11-13-unified-logging.md`, „Journal entries
    written before the migration”).
-4. Admin panel, step 6: done 2026-11-23 — the author set Cloudflare Access on
-   `/admin`, `/admin/*` and `/api/admin/*` of hydrograf-test, hydrolog-test
-   and obserwator-test (`docs/plans/2026-11-13-admin-panel.md`).
+4. Admin panel, step 6: done 2026-11-23 — the author set Cloudflare Access on `/admin`, `/admin/*` and `/api/admin/*` of hydrograf-test, hydrolog-test and obserwator-test (`docs/plans/2026-11-13-admin-panel.md`).
 5. Station data and analyses (ECO-059, plan
    `docs/plans/2026-11-12-station-data-and-analyses.md`, approved
    2026-11-13): N1 done; next Hydrolog's H1 to H4 under its own plan, then
@@ -265,6 +263,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     Next in the members (Next 8): Obserwator `v3.3.0` (the provider fed by
     files; Gdańskie Wody waits for its terms), Kartograf's CAMELS-PL product,
     Hydrolog `0.10.0`; CAMELS-PL `v3.4.0`. `plan/large-basins` takes Next 18.
+19. Interval estimation beside point estimation (Obserwator feedback #13): draft plan `docs/plans/2026-11-24-interval-estimation.md` (`Approved: pending`, branch `plan/interval-estimation`, not merged), reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-interval-estimation.md`): Hydrolog computes the intervals of the flood, precipitation and low-flow quantiles (a parametric bootstrap of the L-moments fits, KZGW 2017's delta method of the maximum-likelihood fits), Obserwator shows them as bands and „[dolna–górna]”; N1 first, then Hydrolog `0.10.0`, then Obserwator, one `analyses build` after both. Open for the author: the plan's questions 1 to 6, with Fable's recommended answers.
 
 Ports of the local GUIs: 8000 IMGWTools, 8060 Obserwator, 8070 Hydrolog
 (`hydrolog gui serve`), 8080 Hydrograf, 8090 Archiwista; the
