@@ -8,13 +8,18 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
-- Large basins in one Hydrograf instance, a draft plan
-  (`docs/plans/2026-11-16-large-basins.md`, `Approved: pending`): the
-  network's topology first, then parts as sets of whole JCWP of at most 90 M
-  grid cells, checked before any bootstrap (main-river outlet edges over
-  10 km², no cycle), on one grid per basin, joined at main-river inlets, side
-  channels cut, one database for several basins; gauges only a possible
-  extension.
+- Large basins in one Hydrograf instance, a plan
+  (`docs/plans/2026-11-16-large-basins.md`), reviewed by Fable and approved
+  by the author on 2026-11-24 with his answers to the review's three points:
+  the network's topology first, then parts as sets of whole JCWP of at most
+  90 M grid cells, checked before any bootstrap (every JCWP in one part,
+  main-river outlet edges over 10 km², no cycle, the budget), on one grid per
+  basin at the author's cell size (5 m for the Barycz and the Bóbr; 1 m only
+  where every JCWP's window fits the budget), joined at main-river inlets,
+  side channels cut, one database for several basins and the upgrade of
+  existing instances; H4's seam report on the Orla goes to the author before
+  H5; Hydrograf `0.9.0`, after the small steps of `0.7.0` and the move to
+  MapLibre in `0.8.0`; gauges only a possible extension.
 - Interval estimation beside point estimation, a plan
   (`docs/plans/2026-11-24-interval-estimation.md`; Obserwator feedback #13),
   reviewed by Fable and approved by the author on 2026-11-24 with the
