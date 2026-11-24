@@ -46,11 +46,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   credits in the map's attribution, the setting `basemaps` with a
   deployment's copies in `basemap_mirrors`, the choice remembered in the
   browser (`nogat-basemap`, named by § 8 ust. 7 of regulamin 1.1), never a
-  GUGiK entry as the default, a person's own base map kept and requested
-  only by the browser (`https:` in the CSP of a GUI that offers it,
-  Archiwista), and Obserwator `v3.5.0` replacing `gui_basemap_url` and
-  `gui_basemap_attribution` without a deprecation (a REL-1.1 deviation; the
-  author's instance is the only one).
+  GUGiK entry as the default, a deployment's own base maps in its server
+  settings (`basemap_extra`, Archiwista's `BasemapConfig` form) with their
+  credits and their exact origins in the CSP, and Obserwator `v3.5.0`
+  deprecating `gui_basemap_url` and `gui_basemap_attribution`, translated
+  at start into the new settings (amended 2026-11-24, below).
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
@@ -114,6 +114,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   follows them (ECO-087, P9 of `2026-11-20-hydromet-providers.md`).
 - The GUI kit is `1.2.0` (`screen-lines`, the blocks `camels-pl` and
   `e-obs`; REL-1.4, ECO-086); regulamin 1.0 stays.
+- Amended the shared base-maps plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`) with the author's decisions
+  of 2026-11-24: no base map a visitor adds in the browser, whose
+  `connect-src https:` would let an injected script send data to any HTTPS
+  server, but a deployment's own base maps in its server settings, each
+  origin named in the CSP; and no REL-1.1 deviation in Obserwator `v3.5.0`,
+  which keeps its two base-map settings deprecated and translates them at
+  start.
 
 ## [0.2.0] - 2026-11-22
 
