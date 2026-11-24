@@ -10,8 +10,9 @@ Hydrograf's store migration plan (`docs/plans/2026-11-02-store-migration.md`
 on Hydrograf's `feature/store-migration`, worktree `Hydrograf-store`).
 Decided: the author's answers of 2026-11-02 are in „Decisions of the
 author”; D6 was decided since (Archiwista deployed with `TMPDIR` on disk).
-Status on 2026-11-03: A1 to A3 and H1 done, A4 and A5 wait for the author,
-H2 and S5 postponed until after Hydrograf v0.5.0 (Results).
+Status on 2026-11-16: A1 to A5 and H1 done; H2 and S5, the re-processing
+of Hydrograf's production from the set, come next, first into a separate
+staging instance (Results).
 
 ## Goal
 
@@ -813,6 +814,6 @@ changed by Archiwista (A2).
 | A1 | Archiwista, `feature/archiwista-projects` | the area fix committed and gated; done |
 | A2 | Archiwista, `feature/archiwista-projects` | draft sets committed as `21eff04`..`6ece8ca` (PROGRESS `4027755`), A-ADR-049 erratum 6, index schema 17; full gate green on that tree (2026-11-02, 2749 passed) |
 | A3 | Archiwista, instance :8090 | `4027755` deployed 2026-11-03 ~00:00 with `TMPDIR` on disk; the index rebuild to schema 17 dropped sessions, job history and 18 drawn rectangles, kept in `/home/claude-agent/data/archiwista-public/backup-2026-11-02/index.sqlite`; `archiwista-state/2` back to `/1` deferred to the release preparation |
-| A4, A5 | Archiwista, data | wait for the author |
+| A4, A5 | Archiwista, data | the project `kaczawa` on the NAS store `agent-tmp` (`hydroni/projekty/kaczawa`), created 2026-11-14, area 792.009 km². Its set `2026-1`, closed by `local` 2026-11-15T00:00:04Z, holds 205 pins of local files with no calls (194 NMT sheets, ten BDOT10k counties, the HSG raster of D4's box). A5 by the steps above on 2026-11-17, in the web interface through an agent's session of the account `piotr` (the author's request): set `2026-2`, closed by `piotr` at 07:54:02Z, „Weryfikuj” 427 of 427 versions intact, four calls (`elevation download --product nmt --resolution 5m --country pl --vertical-crs EVRF2007 --sheet-system 1992` and `landcover download --product bdot10k` on the project's area, `soil hsg --depth-rule least-permeable` on D4's box, `hydro download --product pgw --country pl` on the area), 222 pins: 194 sheets, ten counties, the HSG raster and its 15 SoilGrids inputs, the PGW units of the area and the national PGW archive; nothing downloaded but the PGW GeoPackage cut from that archive. A stray set „kartograf · soil hsg” (16 pins) was closed into the project `h07` by mistake in the same session |
 | H1 | Hydrograf, `develop` | `--project`/`--set`, closed sets only, ADR-067; in the v0.5.0 candidate `1794f76` (production since 2026-11-02 22:18) |
-| H2, S5 | Hydrograf, staging | postponed until after Hydrograf v0.5.0 (its `develop` is frozen until the merge into `main` and the tag) |
+| H2, S5 | Hydrograf, staging | H2 done 2026-11-16/17: the instance `hgstaging` (127.0.0.1:8083, Hydrograf v0.5.0, its README in `~/data/hydrograf-staging/`). The bootstrap from `2026-1`, and from `2026-2` with `--units` (ADR-071's processing by units, the same results), processes the whole mosaic of 194 sheets with no cut to the area: 981.5 km² at 10 000 m² with 594 outlets against production's 792.009 km² and one. S5's cut is still to do: production was built by hand (`process_dem`, then a cut to the kept units), and it switches only after that cut, on the author's acceptance (the author's decision of 2026-11-16) |

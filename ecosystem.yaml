@@ -4,7 +4,7 @@
 # Validate and regenerate docs/ECOSYSTEM_MAP.md: `uv run scripts/ecosystem.py map`.
 
 schema: nogat-ecosystem/1
-standard_version: "1.0"
+standard_version: "1.2"
 
 data_sources:
   - id: gugik
@@ -27,16 +27,21 @@ data_sources:
     country: global
     url: https://soilgrids.org
     licence: CC BY 4.0
-  - id: imgw-pib
-    name: IMGW-PIB (archives, live API, PMAXTP atlas)
+  - id: imgw
+    name: IMGW-PIB (archives, live API and telemetry, hydro.imgw.pl operational data, PMAXTP atlas)
     country: PL
     url: https://danepubliczne.imgw.pl
     licence: IMGW-PIB terms of reuse, attribution required
-  - id: chmi
-    name: ČHMÚ open data
+  - id: chmu
+    name: ČHMÚ open data (historical, recent and now sets)
     country: CZ
     url: https://opendata.chmi.cz
     licence: CC BY 4.0
+  - id: camels-pl
+    name: CAMELS-PL (catchments, gauges, attributes, signatures, forcing and simulations of 869 IMGW-PIB gauges; Zenodo)
+    country: PL
+    url: https://doi.org/10.5281/zenodo.20133182
+    licence: CC BY 4.0, except the catchment series derived from E-OBS (ECA&D/E-OBS data policy, non-commercial research and education)
   - id: osm
     name: OpenStreetMap
     country: global
@@ -60,6 +65,7 @@ projects:
     summary: Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Kartograf
     python_manifests: [pyproject.toml]
     visibility: public
@@ -84,7 +90,7 @@ projects:
         command: kartograf commands list
       - task: Read what a Kartograf store already holds
         command: kartograf store overview
-    data_sources: [gugik, cuzk, clms, soilgrids]
+    data_sources: [gugik, cuzk, clms, soilgrids, camels-pl]
     provides:
       - id: kartograf-files
         kind: dataset
@@ -119,12 +125,16 @@ projects:
       - id: kartograf-testing
         kind: library
         summary: kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
+      - id: kartograf-camels-pl
+        kind: dataset
+        summary: Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088).
     depends_on: []
 
   - name: Obserwator
     summary: IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series.
     profiles: [tool, app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Obserwator
     python_manifests: [pyproject.toml]
     visibility: public
@@ -134,6 +144,7 @@ projects:
       mcp: obserwator mcp
       rest: obserwator server (/api/v1)
       python: obserwator
+      gui: obserwator gui serve
     routes:
       - task: Find IMGW-PIB or ČHMÚ stations by name, river or code
         command: obserwator stations find
@@ -149,24 +160,24 @@ projects:
         command: obserwator current hydro
       - task: Get PMAXTP design precipitation of a point in Poland
         command: obserwator pmaxtp fetch
-    data_sources: [imgw-pib, chmi]
+    data_sources: [imgw, chmu, camels-pl]
     provides:
       - id: obserwator-store/1
         kind: store
-        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version.
+        summary: Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root <data_dir>/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Since v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture].
       - id: obserwator-meta/1
         kind: sidecar
         summary: Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256.
       - id: obserwator-series/1
         kind: dataset
-        summary: Parquet series per station with series.json index (periods, year type, units, coverage).
+        summary: Parquet series per station with series.json index (periods, year type, units, coverage). Since v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional <var>_tier of a series built from several tiers, one slot per month series:<key>:<YYYY-MM>.
       - id: obserwator-plan/1
         kind: document
         summary: Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode.
       - id: obserwator-observation/1
         kind: document
         summary: History of published HTTP signals per archive file.
-      - id: chmi-json/1
+      - id: chmu-json/1
         kind: document
         summary: Canonical JSON form of ČHMÚ files used for content-based pins.
       - id: obserwator-result/1
@@ -192,10 +203,13 @@ projects:
         summary: obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6).
       - id: obserwator-data/1
         kind: store
-        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy.
+        summary: Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root <data_dir>/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store.
       - id: obserwator-analyses/1
         kind: dataset
         summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
+      - id: obserwator-gui
+        kind: service
+        summary: "Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079)."
     depends_on:
       - project: Kartograf
         kind: data
@@ -203,6 +217,12 @@ projects:
         via: [store]
         exchange: [kartograf-store/1]
         note: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+      - project: Kartograf
+        kind: optional
+        status: planned
+        via: [library, store]
+        exchange: [kartograf-camels-pl, kartograf-store/1, kartograf-meta/1]
+        note: Planned for v3.4.0 (ECO-086, plan 2026-11-22-camels-pl step 3), an optional dependency; reads the catchments and gauges of CAMELS-PL from Kartograf's store and builds each gauge's catchment, its area and the gauges upstream of it in the data root.
       - project: Archiwista
         kind: data
         status: planned
@@ -220,6 +240,7 @@ projects:
     summary: Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI.
     profiles: [tool]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrolog
     python_manifests: [pyproject.toml]
     visibility: public
@@ -306,6 +327,7 @@ projects:
     summary: Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs.
     profiles: [app]
     status: active
+    computes: true
     repo: https://github.com/Daldek/Hydrograf
     python_manifests: [backend/pyproject.toml]
     visibility: public
@@ -358,6 +380,7 @@ projects:
     summary: Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling.
     profiles: [tool]
     status: research
+    computes: true
     repo: https://github.com/Daldek/Hydraulik
     branch: feature/sfincs-swmm
     python_manifests: [pyproject.toml]
@@ -473,7 +496,7 @@ projects:
         summary: archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054).
       - id: archiwista-raw-root
         kind: dataset
-        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root.
+        summary: Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer.
     depends_on:
       - project: Kartograf
         kind: runtime
@@ -486,8 +509,8 @@ projects:
         kind: optional
         status: active
         via: [library, store]
-        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmi-json/1, obserwator-data/1]
-        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
+        exchange: [obserwator-store/1, obserwator-meta/1, obserwator-series/1, obserwator-observation/1, chmu-json/1, obserwator-data/1]
+        note: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
       - project: Hydrolog
         kind: data
         status: active

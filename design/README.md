@@ -13,7 +13,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu and sources strip, since modules do not load from `file://` |
 | [specimen-admin.html](specimen-admin.html) | The kit's admin panel on a fake API in the page ([specimen-admin.js](specimen-admin.js), key `nogat`); served over HTTP like the specimen |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the operator's draft terms `nogat-terms-operator.md`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -181,6 +181,7 @@ The app shell comes from Archiwista; use it for every tool with a map or a works
 
 - Shell: a grid of two columns (64 px rail, content) and two rows (`--header-height`, content).
 - Top bar spans both columns: `--surface`, bottom border `--line`. Left to right: mark at 24 px and the tool name in `--tool-<name>`, then the context (project, area, selection), then actions on the right.
+- Operator's mark (DEV-15.3, ECO-079): on an instance an operator other than the author runs, the top bar may show the operator's logo, at most 24 px high, and name right of the tool name, after a 1 px `--line` divider, the name in `--text-2` at `--weight-medium`. The project's mark and name stay first and the favicon stays the project's mark; the logo is a file of the deployment served from the GUI's own origin (no other server, no new CSP origin), as `<img>` with the operator's name as `alt`, never inlined.
 - Navigation rail: dark column of `.rail-item`s, 54 px wide, icon over a short label, `--radius-md`. Background `--rail-bg`, items `--rail-ink`, hover `--rail-hover`, active `--rail-active` with `--rail-ink-active`.
 - Regulamin (DEV-15.7, ECO-070): a public GUI ends its rail, or its left navigation where it has no rail, with a small, quiet link „Regulamin” to its `regulamin.html`, opened in a new tab (`target="_blank"`, `rel="noopener"`): `.rail-terms` at the foot, `--text-xs` in `--rail-ink`, no icon, hover `--rail-ink-active` and underlined. No footer or status bar carries the link or a statement (DEV-15.8).
 - Content: `.view-layout` grid of left panel, centre, right panel. Left panel 260-560 px (default 300), right panel 340-720 px (default 400), centre at least 480 px.
@@ -268,7 +269,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
 `nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
-The version stays `1.0.0` until the author decides otherwise (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
+The version, `1.2.0` since ECO-086, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
@@ -292,10 +293,19 @@ Sources (DEV-20.5, DEV-20.7, ECO-064): link `nogat-sources.css`, load `nogat-sou
 | `attribution` (attribute, JSON) or `element.attribution` (array) | The full lines the view's data carry, the API's `attribution`: the union over the data shown |
 | `terms-notice` (attribute, JSON) or `element.termsNotice` (array) | The API's `terms_notice`, the links to the providers' terms (RD, RH, RK) |
 | `terms` | The address of the GUI's `regulamin.html` (DEV-15.7); omitted where the GUI serves none |
+| `screen-lines` (attribute, JSON) or `element.screenLines` (array) | The lines the GUI declares for the strip beyond the element's own (DEV-20.5, ECO-087): `[{"text": "…", "short": "…", "links": [["…", "https://…"]]}]`, `short` and `links` optional; below |
 
 The strip is 12 px in `--text-3`: of the full lines it shows S, P, PS and PP, recognised byte for byte, and the short forms of C, G, SG and Z (DEV §20), each once in the order of DEV-20.4, then the button „Źródła i warunki”.
 C is shown as CK „Źródło: ČHMÚ, CC BY 4.0” with „ČHMÚ” and „CC BY 4.0” linked; every G, recognised by its text around `<products>`, `<period>` and `<date>`, as one GK „Źródło: GUGiK (`<products>`)” naming the products of all of them, each once; SG as SK „Źródło: ISRIC SoilGrids, CC BY 4.0” and every Z as one ZK „Źródło: ČÚZK, CC BY 4.0”, „CC BY 4.0” linked in both.
-Any other line (M, CP, another provider's) is shown only in the dialog, so a GUI passes its arrays unchanged, never a short form; with both arrays empty the element is not drawn.
+Any other line (M, CP, another provider's) is shown only in the dialog unless the GUI declares it in `screen-lines`, so a GUI passes its arrays unchanged, never a short form; with both arrays empty the element is not drawn.
+A declared line is `{text, short, links}`: `text` a full line, byte for byte as `attribution` carries it; `short`, optional, the text the strip shows in its place, only for a provider the tables of DEV §20 do not hold and as its deployment gives it; `links`, optional, pairs of a word of the shown text and its http or https address, resolved like `terms`, each word linked at its next occurrence and a word not found or another address left plain; without `links` the shown text's addresses are linked, as in S.
+The strip shows a declared line only while `attribution` carries its `text`, after its own lines, in the order declared and each once; a line the element shows itself is not repeated, and the dialog keeps the full line. Without `screen-lines` the strip is unchanged. The line of an operator's own network, which the deployment declares (DEV-20.4), comes so:
+
+```html
+<nogat-sources attribution='["…", "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl"]' screen-lines='[{"text": "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl", "short": "Źródło: Wodociągi Przykładowe", "links": [["Wodociągi Przykładowe", "https://pomiary.example.pl"]]}]'></nogat-sources>
+```
+
+On a screen up to 860 px wide (ECO-080) the strip is one line: the lines start on it and are cut with an ellipsis, followed by „więcej” and „Źródła i warunki”; „więcej” shows only while the line cuts them and unfolds the strip in place, wrapped, as „zwiń”. `element.expanded` (the attribute `expanded`) is that state, and the element carries `clipped` while its folded line cuts the lines. A GUI that lays the strip out itself (e.g. inline with a basemap credit) keeps its own rules above 860 px only, so the fold applies on a phone.
 The button opens a modal `<dialog>` with every line, the terms lines and „Regulamin serwisu”, which opens in a new tab like the menu's „Regulamin”: Tab stays inside it, Esc, „Zamknij” and a click on the backdrop close it, and focus returns to the button.
 `element.open()` and `element.close()` do the same from code; the element fires `nogat-sources-open` and `nogat-sources-close`, both bubbling.
 A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; given `terms`, its „Regulamin serwisu” is the welcome window's regulamin link (DEV-15.7), so the window carries no second one. The module also exports `LINES` (S, P, PS, PP, C, CK, CP, G, GK, SG, SK, Z, ZK, as DEV §20 writes them, a value as `` `<name>` ``), `SOURCES_TEXTS` and `screenMarks(attribution)`; an old CP line with parenthetical detail is displayed as the canonical CP once (DEV-20.4).
@@ -307,7 +317,8 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | --- | --- |
 | `TEXTS.copyTo(name)`, `TEXTS.file`, `TEXTS.loadFrom(name)`, `TEXTS.openFile`, `TEXTS.paste`, `TEXTS.open(name)` | The labels: „Kopiuj do Hydrologa”, „Plik przekazania”, „Wczytaj z Hydrografa”, „Plik przekazania…”, „Wklej ze schowka”, „Otwórz Archiwistę” |
 | `copyHandoff(doc, field)` | Clipboard in a secure context; otherwise the text goes selected into `field` and the result is `"field"` (show `TEXTS.copyByHand`) |
-| `downloadHandoff(doc)` | Saves `<subject>.handoff.json`, 2-space JSON with a final newline; returns the name |
+| `downloadHandoff(doc)` | Saves `<producer>_handoff_<subject>.json` (DEV-19.21), the producer `doc.producer.tool`, the subject through `nameSlug` (`hydrograf_handoff_kamiennik-swierzawa.json`, `hydrograf_handoff.json` when nothing of it remains), 2-space JSON with a final newline; returns the name |
+| `fileName(subject, producer)`, `nameSlug(text)` | That name; a person's text as a part of a file name: lower-case ASCII without diacritics, each run of other characters one `-`, none at either end (`Kamiennik — Świerzawa` → `kamiennik-swierzawa`), for a GUI's own downloads too |
 | `readFile(file)`, `readClipboard()` | The text of a picked file; the clipboard's, or `null` when refused (offer a field, `TEXTS.pasteByHand`) |
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
@@ -360,13 +371,23 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `imgw` | IMGW-PIB data of danepubliczne.imgw.pl | Obserwator; Hydrolog with station series |
 | `imgw-hydro` | IMGW-PIB data of hydro.imgw.pl and hydro-back.imgw.pl | Obserwator |
 | `pmaxtp` | PMAXTP | Hydrograf, Hydrolog, Obserwator |
-| `chmi` | ČHMÚ open data | Obserwator; Hydrolog with station series |
+| `chmu` | ČHMÚ open data | Obserwator; Hydrolog with station series |
+| `camels-pl` | CAMELS-PL data: catchments, attributes and series of its Zenodo record (DEV-20.12) | Obserwator with CAMELS-PL, beside `imgw` |
+| `e-obs` | CAMELS-PL's catchment means derived from E-OBS, only where the deployment serves them (DEV-20.12) | none by default |
 | `gugik` | GUGiK data | Hydrograf, Obserwator |
 | `cuzk` | ČÚZK data | Obserwator |
 | `copernicus` | Copernicus data | none |
 | `isric` | ISRIC SoilGrids | Hydrograf |
 | `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
 | `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf; Obserwator with a map |
+
+Operator's terms (DEV-15.7, ECO-079): [nogat-terms-operator.md](kit/nogat-terms-operator.md) is a draft regulamin in Polish for an instance an operator other than the author runs on its own infrastructure, where regulamin 1.0, which names the author as a private, non-commercial operator, does not apply. It keeps the twelve sections, the Markdown, the fields and the data-source blocks of `nogat-terms.md`, so a GUI renders it with the subset of `build` and fills it with `fill` of [scripts/terms.py](../scripts/terms.py) as above, from the same values; it states that the operator is the service provider and the controller of personal data, that the software is provided as is under its licence without warranty or liability for availability, data or results, that keeping the data providers' terms is the operator's, and that the author's part ends with the deployment, and it adds what the act on electronic services asks of a provider acting in business: the technical requirements, the conclusion of the contract and complaints within 14 days.
+It is a template, not legal advice, and opens with a comment saying so: a lawyer reviews it before an operator gets it and adapts it to the operator's deployment. The operator copies it into the deployment's own files, outside the GUI's checkout, writes in the fields below, checks § 3, § 4 and § 8 against the deployment and removes the comment; a GUI serves the operator's copy in place of the kit's page and refuses one that does not start with its `# ` title or keeps a field it does not fill. A GUI copies the draft with the rest of the kit, since its manifest lists it, but never serves it as its terms. The draft has no version of its own: the operator's copy is version 1.0 of the operator's regulamin, which the operator versions from then on.
+
+| Field | Value from |
+| --- | --- |
+| `operator_address` | the operator, in its copy: its seat or address |
+| `operator_register` | the operator, in its copy: the register and number that identify it, e.g. `KRS 0000000000, NIP 0000000000` |
 
 Admin panel (DEV-15.13, ECO-067): the admin page of a GUI, at `/admin/`, is the shell `<nogat-admin>` alone. Link `nogat-admin.css`, load `nogat-admin.js` as a module and put the app's own sections inside the element; the page adds only `<meta name="robots" content="noindex">` and its own scripts.
 
@@ -420,12 +441,12 @@ The views work in the shell and alone in an app's own view, as Archiwista's „Z
 | --- | --- |
 | `endpoint` | The route, resolved against the page; default `../api/admin/feedback`, `../api/admin/stats` or `../api/admin/status`; in the shell its `api` sets it |
 | `auth` | `session`: the view's requests go through `fetch` with the page's cookies and never a key, in the shell too |
-| `project` | `<nogat-admin-stats>` alone: names its CSV file, as the shell's `project` does |
+| `project` | `<nogat-admin-stats>` alone: names its CSV file, as the shell's `project` does; `nogat` without it |
 | `element.adminFetch` | The function every request of the view goes through, `(url, init) => Promise<Response>`: by default the nearest `<nogat-admin>`'s `adminFetch`; alone or with `auth="session"`, `fetch` with `credentials: "same-origin"` and `cache: "no-store"`; an app whose requests need more assigns its own |
 | `load()` | Asks the route again and redraws; the shell calls it when the view's section is shown |
 | `clear()` | Drops what the view shows; the shell calls it when it returns to the prompt |
 
-`<nogat-admin-stats>` asks `from` the day 6, 29 or 89 days before today (UTC) and `to` today, both days included; „Cały okres” asks `from=1970-01-01`. Its file is `<project>-stats-<first>-<last>.csv`: the keys of DEV-15.11 as the header, then one line per day, comma-separated, LF, without the totals.
+`<nogat-admin-stats>` asks `from` the day 6, 29 or 89 days before today (UTC) and `to` today, both days included; „Cały okres” asks `from=1970-01-01`. Its file is `<project>_stats_<first>_<last>.csv` (DEV-19.21), e.g. `hydrolog_stats_2026-08-01_2026-11-13.csv`: the keys of DEV-15.11 as the header, then one line per day, comma-separated, LF, without the totals.
 
 Every GUI answers the core API of DEV-15.13, each answer JSON with `Cache-Control: no-store` and each refusal the error document of `unauthorized` with `details.reason`:
 

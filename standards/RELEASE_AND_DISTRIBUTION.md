@@ -1,6 +1,6 @@
 # Release and distribution
 
-Part of standard 1.0 · IDs `REL-…`
+Part of standard 1.2 · IDs `REL-…`
 
 ---
 
@@ -161,24 +161,33 @@ ranges stay ranges (REL-5.2) and contain the set's version.
 **REL-6.4** A candidate is a set that is not yet released:
 `release-sets/candidate-<N>/` in Nogat holds `members.toml`, the commit of
 each member and of every project another one pins, the `README.md` generated
-from it, and its `pyproject.toml` and `uv.lock` (as in REL-6.1). Members'
-development heads may be pinned by commit (REL-5.3); every consumer pins
-each of them at the commit of the current candidate, the highest `<N>`, kept
-by `uv run scripts/ecosystem.py set check|apply|bump` (HUB-4.9).
+from it, and its `pyproject.toml` and `uv.lock` (as in REL-6.1). The
+`pyproject.toml` installs each member with a package, with the extras its
+gate installs, from `[tool.uv.sources]` at the `rev` of `members.toml`, and
+its `dev` group is the union of the members' `dev` groups; an app is not
+installed. Members' development heads may be pinned by commit (REL-5.3);
+every consumer pins each of them at the commit of the current candidate, the
+highest `<N>`, kept by `uv run scripts/ecosystem.py set
+check|apply|bump|readme|verify` (HUB-4.9).
 *Why:* nothing is released without a green run (ECO-025).
 
 **REL-6.5** A candidate is verified by the Nogat workflow `verify-candidate`
-(`workflow_dispatch`, defined on `main`). On the CI runners and Python
-versions of REL-7.1 it installs the candidate's lock and runs, from each
-member checked out at its recorded commit, the offline test suite and the
-contract tests, which use the producers' public `<package>.testing` modules
-(`kartograf.testing`, `obserwator.testing`; the registry lists each in the
-producer's `exchange` as `<tool>-testing`; DEV-10.6). The members are
-installed as wheels (REL-2.5). The run URL, recorded in the candidate's
-README, is the verification record. The author MAY also run on their own
+(`workflow_dispatch`, defined on `main`), which runs `set verify`. On the CI
+runners and Python versions of REL-7.1 it installs the candidate's lock and
+runs, from each member checked out at its recorded commit, the offline test
+suite and the contract tests with the member's own marker expression and
+coverage floor; the contract tests use the producers' public
+`<package>.testing` modules (`kartograf.testing`, `obserwator.testing`; the
+registry lists each in the producer's `exchange` as `<tool>-testing`;
+DEV-10.6). The members are installed as wheels (REL-2.5). An app among the
+members runs its suite on its own lock, which pins its producers at the
+set's commits (`set check`), and a member whose profiles hold no `tool` runs
+on Linux only (DEV-7.7). The URL of a passing run, recorded as `runs` in the
+candidate's `members.toml` and shown in its README, is the verification
+record; moving a member drops it. The author MAY also run on their own
 machines what CI cannot, such as network shares. A failure is fixed in the
 member and produces a new candidate.
-*Why:* ECO-037, ECO-053.
+*Why:* ECO-037, ECO-053, ECO-077.
 
 **REL-6.6** After verification each member is released by REL-2.1; its
 release pull request changes only what REL-2.1 lists, and any other change

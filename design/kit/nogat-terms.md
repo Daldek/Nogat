@@ -58,11 +58,28 @@ Regulamin serwisu hydrologicznego IMGW-PIB: <https://hydro.imgw.pl/#/regulamin>
 Regulamin danych PMAXTP: <https://klimat.imgw.pl/opady-maksymalne>
 <!-- /block -->
 
-<!-- block: chmi -->
+<!-- block: chmu -->
 ### ČHMÚ
 
 > Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 > Dane ČHMÚ zostały przetworzone
+<!-- /block -->
+
+<!-- block: camels-pl -->
+### CAMELS-PL
+
+> Źródło danych: CAMELS-PL
+> Dane CAMELS-PL zostały przetworzone
+
+Licencja CC BY 4.0: <https://creativecommons.org/licenses/by/4.0/>
+<!-- /block -->
+
+<!-- block: e-obs -->
+### E-OBS
+
+> We acknowledge the E-OBS dataset and the data providers in the ECA&D project (https://www.ecad.eu). Cornes, R., G. van der Schrier, E.J.M. van den Besselaar, and P.D. Jones. 2018: An Ensemble Version of the E-OBS Temperature and Precipitation Datasets, J. Geophys. Res. Atmos., 123. doi:10.1029/2017JD028200
+
+Regulamin danych E-OBS: <https://www.ecad.eu/documents/ECAD_datapolicy.pdf>
 <!-- /block -->
 
 <!-- block: gugik -->

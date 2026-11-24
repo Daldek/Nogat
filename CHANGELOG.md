@@ -15,6 +15,351 @@ the standard are listed in [standards/README.md](standards/README.md).
   10 km², no cycle), on one grid per basin, joined at main-river inlets, side
   channels cut, one database for several basins; gauges only a possible
   extension.
+- Interval estimation beside point estimation, a plan
+  (`docs/plans/2026-11-24-interval-estimation.md`; Obserwator feedback #13),
+  reviewed by Fable and approved by the author on 2026-11-24 with the
+  answers to its six questions: confidence intervals of the flood,
+  precipitation and low-flow quantiles computed by Hydrolog — a parametric
+  bootstrap of the L-moments fits from the refits that already give the
+  critical values of A², KZGW 2017's delta method for the maximum-likelihood
+  fits — at 95 % and 68 % (KZGW's upper bound at β = 84 %), both stored by
+  Obserwator and selectable there as bands and „[dolna–górna]”; its step N1
+  adds CMP-2.3's conventions of an interval and a rule of CMP §6 on the
+  coverage of interval estimators.
+- Goniec, a QGIS plugin over Obserwator's server, a plan
+  (`docs/plans/2026-11-24-qgis-plugin.md`, approved by the author on
+  2026-11-24 with the answers to its five questions): a shell (connections,
+  attribution and regulamin, HTTP caching, CSV, clipboard and HEC exports)
+  with one module per kind of server, 0.1 with Obserwator's; OGC API –
+  Features and a public read-only `/api/v1` in Obserwator `v3.6.0` with
+  caching headers by resource class, HEC-RAS and HEC-HMS tables and HEC-DSS
+  files built on the server, every daily series PER-AVER at `2400`;
+  GPL-2.0-or-later.
+- Latarnik, the access point and the GUI hub, a plan
+  (`docs/plans/2026-11-24-latarnik.md`, approved by the author on 2026-11-24
+  with the answers to its six questions) replacing stage 2
+  of the GUI platform: an optional project in front of the tools' servers,
+  each tool still alone; `nogat-server/1` at `GET /api/v1/server` on every
+  server, `/<tool>/v1/…` passed through, limits, caching, CORS and logs at one
+  door, jobs as `nogat-job/1`, flows over the registry's exchanges; a server
+  for Hydrolog; every GUI a static client of its tool's `/api/v1`.
+- One set of base maps in the kit, shared by every GUI, a plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`; the author's direction for
+  Kartograf's GUI), reviewed by Fable and approved by the author on
+  2026-11-24 with the answers to its nine questions: Hydrograf's three base
+  maps as the catalogue `nogat-basemaps.json`, a kit module and the switcher
+  `<nogat-basemaps>` with adapters for MapLibre and Leaflet (Hydrograf's move
+  to MapLibre a plan of its own), the kit's grey OpenFreeMap style, Polish
+  credits in the map's attribution, the setting `basemaps` with a
+  deployment's copies in `basemap_mirrors`, the choice remembered in the
+  browser (`nogat-basemap`, named by § 8 ust. 7 of regulamin 1.1), never a
+  GUGiK entry as the default, a deployment's own base maps in its server
+  settings (`basemap_extra`, Archiwista's `BasemapConfig` form) with their
+  credits and their exact origins in the CSP, and Obserwator `v3.5.0`
+  deprecating `gui_basemap_url` and `gui_basemap_attribution`, translated
+  at start into the new settings (amended 2026-11-24, below).
+- Hydrograf's map on MapLibre, a plan
+  (`docs/plans/2026-11-24-hydrograf-maplibre.md`; the author's direction of
+  2026-11-24), reviewed by Fable and approved by the author on 2026-11-24
+  with its eight questions answered as recommended: Hydrograf's whole map
+  off Leaflet and VectorGrid onto MapLibre GL JS 6.14.0 as Obserwator and
+  Archiwista vendor it, in a minor after the one with the shared base maps,
+  after browser tests of today's map that pass unchanged across the move;
+  every zoom number one less, the pre-generated vector tiles from level 7
+  and the sewer's from 9 so that each layer appears at today's scale, WebGL 2
+  required, `Hydrograf.map` the only owner of the library; then the kit's
+  Leaflet adapter retired (a kit minor, with the author's consent) and
+  MapLibre recorded as the ecosystem's map library.
+- Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
+  author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
+  of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
+  systemd timers, kept as an unverified tier, replaced by precedence with
+  IMGW-PIB's monthly telemetry and ČHMÚ's validated hourly year, hourly
+  series with a tier column within `obserwator-series/1`, a chart of the
+  current readings, `rsync` snapshots of the store on the NAS — and
+  `docs/plans/2026-11-20-hydromet-providers.md` — provider adapters,
+  captures of every answer (P14–P16), provider credentials, `time_unit`
+  `hour`, ČHMÚ's groundwater. Step N0 of the first plan is in this entry.
+  Released 2026-11-23 as Obserwator `v3.2.0` with Archiwista `v0.4.0`
+  outside a release set (a REL-6.6 deviation; Nogat's release waits by the
+  author's decision); the plans' Results record them, and the registry
+  describes the captures and the hourly series as released.
+- The reasons `missing_credentials` and `invalid_credentials` of `forbidden`
+  in the error registry, for a data provider's credential that is missing
+  or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes
+  the captures of `obserwator-store/1` and the hourly series of
+  `obserwator-series/1`, both planned for Obserwator `v3.2.0`.
+- CAMELS-PL as a data source (ECO-086, step 1 of
+  `docs/plans/2026-11-22-camels-pl.md`): DEV §20 rows L and LP (the exact
+  release, its DOI, CC BY 4.0), E (the E-OBS acknowledgement) and D
+  (G2DC-PL+, CC0 1.0) and the terms line RE (the ECA&D/E-OBS data policy);
+  DEV-20.12 says what carries them, and a GUI or REST API serves the
+  E-OBS series only where the deployment turns them on; CMP-6.10 pins the
+  reference cases of a published data set, such as CAMELS-PL's signatures,
+  to its release. The regulamin's template and the operator's draft gain
+  the blocks `camels-pl` and `e-obs`. `ecosystem.yaml`: the data source
+  `camels-pl`, Kartograf's planned product `kartograf-camels-pl`,
+  Obserwator's planned provider CAMELS and the planned optional edge
+  Obserwator → Kartograf; `docs/ECOSYSTEM_MAP.md` regenerated.
+- The kit's `<nogat-sources>` shows the lines a GUI declares for its strip,
+  the attribute `screen-lines` or the property `screenLines`
+  (`{text, short, links}`), after its own lines while the view's data
+  carry them, such as the line of Obserwator's provider fed by files
+  (ECO-087, I13 of `2026-11-21-obserwator-instance.md`); without it every
+  rendering is unchanged. Documented in `design/README.md` and shown in
+  the specimen.
+
+### Changed
+
+- Standard 1.2 opens on `develop` (HUB-6.1). DEV-20.8 is amended: the
+  operational data of hydro.imgw.pl and its backend, IMGW-PIB's
+  current-data API and telemetry, and ČHMÚ's `now` and `recent` are kept as
+  they came, as captures in the raw root, in a dataset of the tier
+  `operational` or `telemetry`; they are shown and exported only as that
+  tier („dane operacyjne, niezweryfikowane”), never as the verified
+  archive, and the operator sets per source whether they are served to the
+  public (ECO-084). ECO-059 is amended: the deployment's timers run
+  Obserwator's commands that write the raw root, and the backup of both
+  roots is the deployment's `rsync` timer, not an Archiwista job.
+- ECO-085, AGI-4.1: a new value of an existing field or a new form of an
+  identifier stays within `/N` of a released document when a reader that
+  does not know it can skip it, and every consumer that distinguishes by
+  the field changes in the same plan and is deployed first; first uses are
+  `time_unit` `hour` and the monthly slot of `obserwator-series/1`.
+- DEV §20 is one table of provider lines (codes, text, processed text,
+  order) that DEV-20.4 orders, with the short forms and the terms lines in
+  tables of their own; every line keeps its code and its wording, and the
+  line of a provider the table does not hold, declared by a deployment,
+  follows them (ECO-087, P9 of `2026-11-20-hydromet-providers.md`).
+- The GUI kit is `1.2.0` (`screen-lines`, the blocks `camels-pl` and
+  `e-obs`; REL-1.4, ECO-086); regulamin 1.0 stays.
+- ECO-088, the author's decisions of 2026-11-24 on CAMELS-PL: DEV-20.12
+  gives what CAMELS-PL took from IMGW-PIB (discharge, water levels,
+  catchment boundaries) and what is derived from it the terms line RD as
+  well as S and P, and DEV-20.7's sentence that CAMELS-PL's data take no
+  terms line now covers only its other data; CAMELS-PL's licence is that of
+  its release's Zenodo record (2.1.0: CC BY 4.0, the E-OBS catchment series
+  excluded), the data description's CC BY-NC 4.0 disregarded. ECO-060 and
+  ECO-086 are amended; `kartograf-camels-pl` in `ecosystem.yaml` names RD
+  and `docs/ECOSYSTEM_MAP.md` is regenerated; the CAMELS-PL plan records
+  the decisions, BFI's discrepancy not reported to CAMELS-PL's authors for
+  now.
+- Amended the shared base-maps plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`) with the author's decisions
+  of 2026-11-24: no base map a visitor adds in the browser, whose
+  `connect-src https:` would let an injected script send data to any HTTPS
+  server, but a deployment's own base maps in its server settings, each
+  origin named in the CSP; and no REL-1.1 deviation in Obserwator `v3.5.0`,
+  which keeps its two base-map settings deprecated and translates them at
+  start.
+
+## [0.2.0] - 2026-11-22
+
+### Added
+
+- Release set `v0.2.0` (`release-sets/v0.2.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-21: the candidate verified by the
+  workflow `verify-candidate` with each member's commit replaced by its
+  annotated release tag, Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog
+  `v0.9.0`, Hydrograf `v0.6.0` (an app on its own lock, not installed by the
+  set) and Archiwista `v0.3.3`. It carries Hydrolog 0.9.0, with the fixes
+  of the formula audit of 2026-11-18 and the computation standard, and its
+  consumers (plan `docs/plans/2026-11-19-hydrolog-0.9.0-consumers.md`), kit
+  `1.1.0` in every GUI, the providers named by their national acronyms
+  (ECO-082) and one pattern of file names (ECO-083). As before, the set is
+  installed as an environment, `uv sync --locked --no-dev --python 3.12` in
+  `release-sets/v0.2.0/`, not with `uv tool install` (a deviation from
+  HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.1 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.1` (HUB-6.1); its changes are listed in
+  `standards/README.md`.
+- The topic document `standards/COMPUTATIONS.md`, prefix `CMP` (ECO-078):
+  every formula of a project that computes is declared once by a spec,
+  refuses physically impossible input and failed preconditions, warns
+  outside its applicability range, never returns a non-finite or impossible
+  value, and is verified by reference cases, oracles and generated range,
+  type and property tests; gross defects are released at once. The
+  registry's optional `computes` (HUB-2.1, its schema) marks such a
+  project: Kartograf, Obserwator, Hydrolog, Hydrograf and Hydraulik. The
+  topic documents, `ecosystem.yaml` and `error_registry.json` carry
+  standard 1.1. Plan `docs/plans/2026-11-18-computation-standard.md`,
+  step 1.
+- ECO-079: an instance of a GUI that an operator other than the author runs
+  may show the operator's logo and name in the top bar beside the project's
+  mark, which stays as the favicon and in the top bar, the logo served from
+  the GUI's own origin (DEV-15.3); it serves the operator's own regulamin in
+  place of regulamin 1.0, whose statement of § 3 belongs to the author's
+  instances (DEV-15.7, DEV-15.8). Plan
+  `docs/plans/2026-11-21-obserwator-instance.md`, step 1.
+- The kit's draft regulamin for operators, `design/kit/nogat-terms-operator.md`,
+  in Polish, a template and not legal advice: the operator is the service
+  provider and the controller of personal data, the software is provided as
+  is under its licence, keeping the data providers' terms is the operator's
+  and the author's part ends with the deployment; the fields and source
+  blocks of regulamin 1.0, so a GUI builds and fills it the same way, plus
+  two fields the operator writes in (`BY_HAND` in `scripts/terms.py`). Its
+  hash is in `nogat-kit.json`, kit `1.1.0` (ECO-081).
+- The registry names Obserwator's GUI, `obserwator gui serve`, and its
+  service `obserwator-gui` with the instance section `[obserwator.instance]`
+  of `nogat.toml`.
+- The reference module of formulas, `standards/reference/nogat_formulas.py`
+  (CMP-8.1), which every project that computes copies byte for byte:
+  `FormulaSpec` and `TierBSpec` with sources, physical, applicability and
+  typical ranges, test bounds, constraints, constants, outputs, properties
+  and the trap checklist per family; `validate` and `check_outputs` (CMP §3,
+  CMP §4) raising the project's own exceptions through a small `Errors`
+  protocol and returning notices; the exact units table and `convert`; the
+  generated range and type cases, `run_case`, the Hypothesis profiles and
+  strategies and the property assertions (CMP-6.5, CMP-6.9); `assert_within`
+  with reasons, reference cases with the tolerance of CMP-6.1 and the
+  frozen-oracle reader (CMP-6.4); cards, `docs/FORMULAS.md` and the
+  docstring, tolerance and spec checks (CMP-2.6, CMP-2.7, CMP-6.8). Its tests
+  run it against a correct toy formula and wrong ones, each with one defect
+  that a generator or an assertion catches (CMP-8.2).
+- `schemas/formula/card-1.schema.json`, `nogat-formula-card/1`, the schema of
+  the generated cards; `drift` reports the projects' copies of it and of the
+  module.
+- Hypothesis, mutmut and NumPy in the development dependencies (CMP-8.3).
+
+### Changed
+
+- ECO-083, DEV-19.21, DEV-15.5 (the author, 2026-11-21): a file a tool names
+  for a user, a GUI's download, a REST attachment or a file a command writes
+  into `output_dir` under a name it picks, is
+  `<tool>_<content>_<qualifiers>.<extension>`. The kit's statistics file is
+  `<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+  project), was `<project>-stats-<first>-<last>.csv`; the hand-off file is
+  `<producer>_handoff_<subject>.json`, the subject in lower-case ASCII with
+  `-`, was `<subject>.handoff.json`; `nogat-handoff.js` exports that
+  reduction as `nameSlug`. Their hashes are in `nogat-kit.json`, whose
+  version stays `1.1.0`; `design/README.md`. Migration: a GUI copies the
+  kit again and names its own downloads by the rule; a manual or label that
+  names `….handoff.json` names the new file. Plan
+  `docs/plans/2026-11-21-download-file-names.md`, step 1.
+- ECO-082, DEV-2.5, DEV-20.5, DEV-20.6 (the author, 2026-11-21): an
+  identifier naming a data provider uses its national acronym without
+  diacritics and without its legal suffix, so ČHMÚ is `chmu` where it was
+  `chmi` and IMGW-PIB `imgw` where it was `imgw-pib`: the registry's data
+  sources `imgw` and `chmu` and exchange format `chmu-json/1`, the
+  regulamin's block `chmu` in `nogat-terms.md`, `nogat-terms-operator.md`
+  and `nogat-terms.html` (their hashes in `nogat-kit.json`, whose version
+  stays `1.1.0`), `BLOCKS` of `scripts/terms.py` and `design/README.md`;
+  texts for people keep „IMGW-PIB” and „ČHMÚ” and the address
+  `opendata.chmi.cz` stays. A CSV's
+  attribution columns are `attribution` and `terms_notice` only. Migration:
+  a GUI lists the block `chmu` in its regulamin filling (`chmi` is refused)
+  and copies the kit again; a project drops the CSV columns
+  `attribution_source` and `attribution_processed`. Plan
+  `docs/plans/2026-11-21-national-provider-names.md`, step 1.
+- ECO-081: the GUI kit's version becomes `1.1.0` (the author, 2026-11-21),
+  for the draft regulamin for operators (ECO-079) and the strip folded on a
+  phone (ECO-080); every GUI copies the manifest for the round's releases.
+  Plans `2026-11-18-computation-standard.md` and
+  `2026-11-19-hydrolog-0.9.0-consumers.md` approved.
+- ECO-080, DEV-20.5: on a screen up to 860 px wide the kit's
+  `<nogat-sources>` folds its strip to one line, the lines cut with an
+  ellipsis, then „więcej”, shown while the line cuts them, which unfolds the
+  strip in place („zwiń” folds it again), and „Źródła i warunki”; wider
+  screens are unchanged. The element's `expanded` property and attribute
+  hold the state, `clipped` marks a cut line. Kit `1.1.0` (ECO-081). Plan
+  `docs/plans/2026-11-21-phone-sources-strip.md`.
+- README installs the set `v0.2.0` and names standard 1.1.
+
+### Fixed
+
+- The first example of `nogat-handoff/1` records Hydrolog 0.9.0's result
+  (formula audit of 2026-11-18): 57.9 m³/s at 400 min and 1,046,737.6 m³,
+  was 57.8786 m³/s and 1,046,712.9 m³. The Beta hyetograph is built from
+  exact differences of its distribution function (audit item T35) and
+  Kirpich's time of concentration uses the source's constant 0.0078 for feet
+  with the exact foot (−0.136 %, item T8). The schema itself is unchanged;
+  Obserwator, Hydrolog, Hydrograf and Archiwista carry the new copy in their
+  releases of this set (SHA-256 `10de3e18…`).
+- `set verify` syncs the core dependencies of each member's own lock into a
+  throwaway environment before the member's suite, so the uv cache holds
+  them for its offline install tests, as in the member's own CI. On a fresh
+  cache (`verify-candidate` of candidate-7, every runner) Obserwator's
+  library-install tests could not install `pydantic-core` 2.50.1 of its own
+  lock offline, since the candidate's sync had cached only the set's 2.50.4.
+
+## [0.1.1] - 2026-11-20
+
+### Added
+
+- Release set `v0.1.1` (`release-sets/v0.1.1/`, REL-6.6, HUB-7.2), a patch
+  release set: candidate-10 (`release-sets/candidate-10/`, verified by run
+  44775327473 of verify-candidate) with each member's commit replaced by its
+  annotated release tag, Kartograf `v0.8.2`, Obserwator `v3.0.1`, Hydrolog
+  `v0.8.1`, Hydrograf `v0.5.2` (an app on its own lock, not installed by the
+  set) and Archiwista `v0.3.2`; the same 127 packages and third-party
+  versions as candidate-10's lock. It carries Hydrograf's pinned images with
+  nginx 1.31.9, a security fix between sets (REL-6.6), Kartograf's hotfix of
+  the USDA texture classes at clay = 20 % and 27 % (HSG B becomes C on those
+  cells) and the members' defect fixes of 2026-11-18. Released from a branch
+  of `main` (REL-2.4), so standard 1.1, in preparation on `develop`, is not
+  part of it; the published standard stays 1.0.
+
+### Changed
+
+- README installs the set `v0.1.1`.
+
+## [0.1.0] - 2026-11-17
+
+### Added
+
+- Release set `v0.1.0` (`release-sets/v0.1.0/`, REL-6.6, HUB-7.2), the first
+  release of the ecosystem: candidate-6 with each member's commit replaced
+  by its annotated release tag on the member's `main`, Kartograf `v0.8.0`,
+  Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0` (an app on its
+  own lock, not installed by the set) and Archiwista `v0.3.0`; the same 127
+  packages as candidate-6's lock. The `nogat` package (HUB §7, ADOPTION_PLAN
+  5.4) does not exist yet, so the set is installed as an environment,
+  `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.1.0/`, not with
+  `uv tool install` (a deviation from HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.0 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4). Known
+  deviations: the legacy `standards/templates/` and `standards/configs/`
+  are owned by root, so they reach `main` unchanged and replacing them
+  stays the author's step (ADOPTION_PLAN 0.1, DOC-11.1); candidate-6 was
+  verified only on the author's machine by `set verify`, not by the
+  workflow `verify-candidate`, which reaches `main` with this release
+  (REL-6.5); with the author's approval, `develop` and `main` are merged
+  locally without pull requests, as the members were, because `gh` is not
+  installed (DEV-3.6, REL-2.1).
+- `release-sets/candidate-5/pyproject.toml` and its `uv.lock`, universal for
+  Linux, macOS and Windows (REL-6.4): Kartograf `[mcp]`, Obserwator
+  `[full]`, Hydrolog `[all]` and Archiwista `[obserwator]` at the set's
+  commits, the union of their `dev` groups; 127 packages, one version each.
+  Hydrograf, an app, is not installed (REL-6.1).
+- `scripts/ecosystem.py set verify --workdir DIR [--member P]` and the
+  workflow `.github/workflows/verify-candidate.yml` (REL-6.5, ECO-077): each
+  member's offline suite at its commit, in the candidate's environment or,
+  for an app, on its own lock; members without the profile `tool` on Linux
+  only. `set bump` moves the member's `rev` in the candidate's
+  `pyproject.toml` and drops the recorded runs; `set readme --check` fails
+  when the `pyproject.toml` installs other commits; `members.toml` records
+  passing runs as `runs`, shown in the README.
+- ECO-076, the author's decision of 2026-11-16: the first `nogat` release is
+  `0.1.0` and `nogat` stays `0.y` until the author makes a release `1.0.0`
+  (HUB-7.4); `pyproject.toml` and `uv.lock` carry `0.1.0`.
+- The integration run of candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`),
+  the repeat the final integration run of 2026-10-25 left open: every
+  member's suite in the candidate's environment and on its own lock, and
+  eight flows offline. The known failures C1 to C6 (Kartograf does not treat
+  `obserwator-data.json` as a store; an Archiwista test that depends on the
+  umask; two Archiwista Firefox tests crashing with Playwright 1.65.2; three
+  hints and plan rows; an Archiwista test that depends on timing under load)
+  are left to the members' next releases.
+- Release set `candidate-6` (REL-6.4): the members after their release
+  documentation; `set verify` on the author's machine passes except the
+  known C2 and C3, and the gate of Obserwator's release commit adds C7, a
+  test that depends on the length of `TMPDIR`. The members are released
+  from it, producers first: Kartograf `v0.8.0`, Obserwator `v3.0.0`,
+  Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` (the plan of
+  the integration run of candidate-5, „candidate-6 and the releases”).
+  Documentation-only and pin-only commits ran reduced checks instead of the
+  whole gate (the author's decision of 2026-11-16, a deviation from
+  DEV-7.6).
 - Release set `candidate-5` (REL-6.4), the members of the first joint release
   (ECO-074): Kartograf `e14bc78`, Obserwator `f4f6a8d`, Hydrolog `3ce7ee8`,
   Hydrograf `939b55f` and Archiwista `800231c`; every pin between them
@@ -361,6 +706,20 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Changed
 
+- The documentation states the released `v0.1.0` and `std-1.0`: the README
+  installs the set from `release-sets/v0.1.0/`; `standards/README.md`,
+  `standards/ADOPTION_PLAN.md` (0.1, 0.3, 0.4, 5.2 to 5.4),
+  `docs/PROGRESS.md` (Status, Next, Open questions) and the plans of the
+  first release set, the integration run of candidate-5, numbers from
+  `main`, one set of pins, Archiwista's sets and the path away from
+  IMGW-PIB record the releases and their deviations; `CLAUDE.md` records
+  the deviation from HUB-7.1, HUB-7.2 and REL-6.1 until the `nogat` package
+  exists. PROGRESS and the plan of Archiwista's sets record A4 and A5 as
+  done (project `kaczawa`, set `2026-1`, closed 2026-11-15) and the next
+  steps: Hydrograf re-processes its production from that set into a
+  separate staging instance, compared with production, which switches only
+  on the author's acceptance; Obserwator rebuilds its analyses with
+  Hydrolog 0.8.0 after the series of the ČHMÚ stations are downloaded.
 - Documentation audited on 2026-11-15 before release-set candidate-5:
   `docs/PROGRESS.md` gains the separator row of its Status table and states
   the author's scope of the first joint release (Nogat, Hydrograf, Hydrolog,
@@ -561,10 +920,11 @@ the standard are listed in [standards/README.md](standards/README.md).
   standard exists from its tag on `main` and `develop` carries the next one
   (HUB-6.1); a document's `<n>` increments only past a number released on
   the producer's `main` (AGI-4.1). The drafts called 2.0 and 2.1 are 1.0 in
-  `standards/`, `ecosystem.yaml` and `error_registry.json`, to be tagged
-  `std-1.0`; `standards/legacy/v1.0/` is now `standards/legacy/shared-2026-01/`,
-  the shared standards of 2026-01-29 that preceded Nogat. Plan:
-  `docs/plans/2026-11-03-numbering-from-main.md`, step 1.
+  `standards/`, `ecosystem.yaml` and `error_registry.json`, tagged
+  `std-1.0` with this release; `standards/legacy/v1.0/` is now
+  `standards/legacy/shared-2026-01/`, the shared standards of 2026-01-29
+  that preceded Nogat. Plan: `docs/plans/2026-11-03-numbering-from-main.md`,
+  step 1.
 
 - `docs/PROGRESS.md`: the stack is merged into `develop` (`ed3b8a0`,
   2026-11-03) and its topic branches deleted except
@@ -584,10 +944,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   wrong call, 1 only for a defect; the last stderr line is the
   `nogat-error/1` document. Migration: scripts that tested for exit 1 test
   for a non-zero exit or read the document.
-- Standard 2.1, not yet published, settles the contradictions found in its
-  review (ECO-042 to ECO-049 and consistency fixes; list in
-  `standards/README.md`). The CI template and Nogat's CI check commits of
-  `hotfix/*` pull requests into `main` (DEV-4.5).
+- Standard 2.1, the draft published as 1.0 (ECO-056), settles the
+  contradictions found in its review (ECO-042 to ECO-049 and consistency
+  fixes; list in `standards/README.md`). The CI template and Nogat's CI
+  check commits of `hotfix/*` pull requests into `main` (DEV-4.5).
 - `ecosystem.yaml` and the map: `kartograf-store` and `imgw-store/1` name their
   root markers, and IMGWTools exchanges only `kartograf-store` with Kartograf
   because nested stores are refused by marker file name (DEV-19.12,
@@ -726,3 +1086,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   trailer name or the e-mail of the tool (Devin and GitHub bot addresses
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
+
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0

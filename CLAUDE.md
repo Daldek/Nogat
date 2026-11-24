@@ -39,6 +39,7 @@ uv run scripts/ecosystem.py set check    # consumers' pins against the release s
 uv run scripts/ecosystem.py set apply --project P [--path DIR]   # pin P to the set
 uv run scripts/ecosystem.py set bump P [--rev REF]   # move P, regenerate the README
 uv run scripts/ecosystem.py set readme [--check]     # release-sets/candidate-<N>/README.md
+uv run scripts/ecosystem.py set verify --workdir DIR [--member P]   # suites of REL-6.5
 ```
 
 Checkouts of the other projects are siblings of Nogat or under
@@ -56,14 +57,16 @@ scripts/gate.sh        quality gate (standards/ci/gate.sh plus hub steps)
 schemas/               JSON Schema of ecosystem.yaml
 schemas/agent/         result, error (generated) and catalog schemas (AGI-4.1)
 schemas/exchange/      nogat-handoff/1, the envelope of data handed between GUIs
+schemas/formula/       nogat-formula-card/1, the card of a formula (CMP-2.6)
 schemas/log/           nogat-log/1, one record of a server's logs (DEV-12.4)
 standards/             the standard; ci/ holds the templates projects copy
-standards/reference/   nogat_logging.py, the server logs Python servers copy (DEV-12.9)
+standards/reference/   modules projects copy: nogat_logging.py, server logs (DEV-12.9); nogat_formulas.py, formula specs, checks and generated tests (CMP-8.1)
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
 design/kit/            the GUI kit GUIs copy: app menu, sources strip, hand-off, regulamin, admin panel
+tests/formula_toys.py  toy formulas, a right one and wrong ones, for the tests of nogat_formulas (CMP-8.2)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
-tests/contract/        the agent, hand-off and log schemas, AGENTS.md, Nogat's own error documents, design/ and the kit
+tests/contract/        the agent, hand-off, log and formula-card schemas, AGENTS.md, Nogat's own error documents, design/ and the kit
 tests/browser/         the kit's elements in Playwright
 ```
 
@@ -95,3 +98,13 @@ Nogat's own entry and every project: [ecosystem.yaml](ecosystem.yaml).
 - DEV-13.6: no `pip-audit` job until the `nogat` package exists.
 - DOC-2.1, DOC-1.4: README describes the hub with relative links until the
   `nogat` package is published (HUB-7.1).
+- HUB-7.1, HUB-7.2, REL-6.1: until the `nogat` package exists a release set
+  is `release-sets/vX.Y.Z/` (`v0.1.0`), not Nogat's root `pyproject.toml`
+  and `uv.lock`, and is installed as an environment, `uv sync --locked
+  --no-dev` there, with no generated dependency list and no
+  `uv tool install`.
+- DEV-3.6, REL-2.1: no ruleset for `main` and `develop` yet (ADOPTION_PLAN
+  0.6) and no `gh` here, so merges into `main` are made locally without pull
+  requests, with the author's approval; v0.1.0's release changes are the
+  commits from `78e0149` (release set, version) to the merge into `main`,
+  not one release commit.

@@ -15,6 +15,7 @@ Usage:
     uv run scripts/ecosystem.py set apply --project P [--path DIR]  # pin P to the set
     uv run scripts/ecosystem.py set bump P [--rev REF]  # move P in the set
     uv run scripts/ecosystem.py set readme [--check]    # the set's README.md
+    uv run scripts/ecosystem.py set verify --workdir DIR [--member P]  # REL-6.5
 
 Checkouts are resolved as siblings of Nogat or under NOGAT_WORKSPACE (HUB §3).
 """
@@ -26,6 +27,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -53,6 +55,7 @@ AGENTS = ROOT / "AGENTS.md"
 RELEASE_SETS = ROOT / "release-sets"
 CANDIDATE = re.compile(r"^candidate-(\d+)$")
 FULL_COMMIT = re.compile(r"^[0-9a-f]{40}$")
+RUN_URL = re.compile(r"^https://github\.com/[^/\s]+/[^/\s]+/actions/runs/\d+$")
 
 LOCAL_PATH = re.compile(r"(^|\s)(/home/|/Users/|~/|[A-Za-z]:\\)")
 COMMIT = re.compile(r"^[0-9a-f]{7,40}$")
@@ -67,13 +70,16 @@ OPTION = re.compile(r"\s+--?[A-Za-z]")
 COPIED_PATHS = (
     "schemas/agent",
     "schemas/exchange",
+    "schemas/formula",
     "schemas/log",
     "standards/error_registry.json",
+    "standards/reference/nogat_formulas.py",
     "standards/reference/nogat_logging.py",
     "design/tokens.css",
     "design/marks",
     "design/kit",
 )
+COPIED_SCHEMAS = ("schemas/agent", "schemas/exchange", "schemas/formula", "schemas/log")
 COPY_HEADER = re.compile(rb"\A/\*.*?\*/(\r?\n)?", re.DOTALL)
 
 
@@ -797,9 +803,9 @@ def _declared_pins(
 def nogat_sources(root: Path) -> list[str]:
     """Nogat's files that projects copy, tracked at HEAD of `root` (DEV-15.6).
 
-    Agent, exchange and log schemas, the error registry, the reference logging
-    module (DEV-12.9), the tokens, the marks and every file of the kit; paths
-    relative to `root`, sorted.
+    Agent, exchange, formula-card and log schemas, the error registry, the
+    reference modules of logs and formulas (DEV-12.9, CMP-8.1), the tokens, the
+    marks and every file of the kit; paths relative to `root`, sorted.
     """
     listed = _git(
         root, "ls-tree", "-r", "-z", "--name-only", "HEAD", "--", *COPIED_PATHS
@@ -813,10 +819,7 @@ def nogat_sources(root: Path) -> list[str]:
         if (
             path in COPIED_PATHS
             or path.startswith("design/kit/")
-            or (
-                parent in ("schemas/agent", "schemas/exchange", "schemas/log")
-                and suffix == ".json"
-            )
+            or (parent in COPIED_SCHEMAS and suffix == ".json")
             or (parent == "design/marks" and suffix == ".svg")
         ):
             sources.append(path)
@@ -1004,10 +1007,12 @@ def members(registry: dict[str, Any], directory: Path) -> dict[str, str]:
     """Commit of each member in the candidate's members.toml, in registry order.
 
     Raises RegistryError when the file is missing, names a project the
-    registry lacks or gives anything but `commit = "<40 hex>"`.
+    registry lacks or gives anything but `commit = "<40 hex>"`. The top-level
+    `runs` belongs to `verification_runs`.
     """
     path = directory / "members.toml"
     data = _toml(path)
+    data.pop("runs", None)
     order = [p["name"] for p in registry["projects"]]
     problems = []
     for name, table in data.items():
@@ -1024,20 +1029,46 @@ def members(registry: dict[str, Any], directory: Path) -> dict[str, str]:
     return {name: data[name]["commit"] for name in order if name in data}
 
 
-def render_members(directory: Path, commits: dict[str, str]) -> str:
+def verification_runs(directory: Path) -> list[str]:
+    """URLs of the verify-candidate runs recorded in members.toml (REL-6.5).
+
+    The top-level `runs` is a list of GitHub Actions run URLs; [] when absent.
+    Raises RegistryError when it is anything else.
+    """
+    path = directory / "members.toml"
+    runs = _toml(path).get("runs", [])
+    if not isinstance(runs, list) or not all(
+        isinstance(url, str) and RUN_URL.match(url) for url in runs
+    ):
+        raise RegistryError(
+            f"{_shown(path)}: runs must list URLs "
+            "https://github.com/<owner>/<repo>/actions/runs/<id>"
+        )
+    return runs
+
+
+def render_members(
+    directory: Path, commits: dict[str, str], runs: Sequence[str] = ()
+) -> str:
     """Text of a candidate's members.toml."""
     out = [
         f"# Release set {directory.name} (REL-6.4): the commit of each member.",
         "# Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is",
-        "# generated from this file (`set readme`).",
+        "# generated from this file (`set readme`). `runs` lists the passing runs",
+        "# of verify-candidate at these commits (REL-6.5); a bump drops them.",
     ]
+    if runs:
+        out += ["", "runs = [", *(f'    "{url}",' for url in runs), "]"]
     for name, commit in commits.items():
         out += ["", f"[{name}]", f'commit = "{commit}"']
     return "\n".join(out) + "\n"
 
 
 def render_set_readme(
-    registry: dict[str, Any], directory: Path, commits: dict[str, str]
+    registry: dict[str, Any],
+    directory: Path,
+    commits: dict[str, str],
+    runs: Sequence[str] = (),
 ) -> str:
     """Text of a candidate's README.md, generated from members.toml."""
     repos = {p["name"]: p["repo"] for p in registry["projects"]}
@@ -1057,7 +1088,52 @@ def render_set_readme(
     ]
     for name, commit in commits.items():
         out.append(f"| {name} | [`{commit}`]({repos[name]}/commit/{commit}) |")
+    out += ["", "## Verification", ""]
+    if runs:
+        out.append("Passing runs of the workflow verify-candidate (REL-6.5):")
+        out += ["", *(f"- <{url}>" for url in runs)]
+    else:
+        out.append(
+            "Not verified at these commits: no run of the workflow verify-candidate "
+            "(REL-6.5)."
+        )
     return "\n".join(out) + "\n"
+
+
+def candidate_problems(
+    registry: dict[str, Any], directory: Path, commits: dict[str, str]
+) -> list[str]:
+    """Where the candidate's pyproject.toml and uv.lock disagree with members.toml.
+
+    Each member with a package (`distribution.import_name`) is a dependency
+    pinned at its commit by `[tool.uv.sources]`; an app is not installed
+    (REL-6.1). Lists a missing pyproject.toml or uv.lock (REL-6.4).
+    """
+    pyproject = directory / "pyproject.toml"
+    problems = [
+        f"{_shown(directory / name)}: missing (REL-6.4)"
+        for name in ("pyproject.toml", "uv.lock")
+        if not (directory / name).is_file()
+    ]
+    if not pyproject.is_file():
+        return problems
+    lines = _requirement_lines(pyproject)
+    sources = _uv_sources(pyproject)
+    for project in registry["projects"]:
+        name = project["name"]
+        if name not in commits:
+            continue
+        pins = _declared_pins(lines, sources, project)
+        if project["distribution"]["import_name"] is None:
+            if pins:
+                problems.append(f"{_shown(pyproject)}: installs {name}, an app")
+        elif pins != [("commit", commits[name], "tool.uv.sources")]:
+            shown = ", ".join(f"{kind} {value}" for kind, value, _ in pins) or "none"
+            problems.append(
+                f"{_shown(pyproject)}: {name} is pinned by {shown}, "
+                f"not by the rev {commits[name]} of [tool.uv.sources]"
+            )
+    return problems
 
 
 def integration_ref(project: dict[str, Any]) -> str:
@@ -1286,7 +1362,9 @@ def bump(registry: dict[str, Any], directory: Path, name: str, rev: str | None) 
     """Set a member's commit to `rev` resolved in its checkout, then the README (D4).
 
     The checkout is fetched first; `rev` defaults to the project's
-    integration ref. members.toml is created when the candidate has none.
+    integration ref. members.toml is created when the candidate has none. A
+    new commit moves the member's `rev` in the candidate's pyproject.toml and
+    drops the verification runs, which name the old commits.
     """
     project = _project(registry, name)
     repo = checkout(project)
@@ -1301,6 +1379,7 @@ def bump(registry: dict[str, Any], directory: Path, name: str, rev: str | None) 
     commit = _git(repo, "rev-parse", "--verify", f"{ref}^{{commit}}").strip()
     path = directory / "members.toml"
     commits = members(registry, directory) if path.exists() else {}
+    runs = verification_runs(directory) if path.exists() else []
     old = commits.get(name)
     commits[name] = commit
     commits = {
@@ -1308,10 +1387,190 @@ def bump(registry: dict[str, Any], directory: Path, name: str, rev: str | None) 
         for p in registry["projects"]
         if p["name"] in commits
     }
-    path.write_text(render_members(directory, commits), encoding="utf-8")
+    if old != commit:
+        if runs:
+            print(f"dropped {len(runs)} verification run(s) of the old commits")
+        runs = []
+    path.write_text(render_members(directory, commits, runs), encoding="utf-8")
     print(f"{name}: {old[:7] if old else '—'} -> {commit} ({ref})")
-    readme = render_set_readme(registry, directory, commits)
+    pyproject = directory / "pyproject.toml"
+    if pyproject.is_file() and project["distribution"]["import_name"]:
+        text = _read(pyproject)
+        pinned = _pinned_text(pyproject, text, [project], commits)
+        if pinned != text:
+            pyproject.write_text(pinned, encoding="utf-8")
+            print(
+                f"wrote {_shown(pyproject)}; then run: uv lock --project "
+                f"{_shown(directory)}"
+            )
+    readme = render_set_readme(registry, directory, commits, runs)
     return _generated(directory / "README.md", readme, False, "set readme")
+
+
+def _member_checkout(project: dict[str, Any], commit: str, workdir: Path) -> Path:
+    """Check out a member's repository at `commit` under `workdir`; its path.
+
+    Only that commit is fetched; an existing checkout at it is reused.
+    """
+    repo: Path = workdir / project["name"]
+    if (repo / ".git").exists():
+        if _git(repo, "rev-parse", "HEAD").strip() == commit:
+            return repo
+    else:
+        repo.mkdir(parents=True, exist_ok=True)
+        _git(repo, "init", "--quiet")
+    _git(
+        repo,
+        "fetch",
+        "--quiet",
+        "--depth",
+        "1",
+        project["repo"],
+        commit,
+        code="source_unavailable",
+    )
+    _git(repo, "checkout", "--quiet", "--force", "--detach", commit)
+    return repo
+
+
+def _run_suite(
+    command: list[str], cwd: Path, extra_env: dict[str, str] | None = None
+) -> int:
+    """Run a command with output to the terminal; its exit code.
+
+    `VIRTUAL_ENV` of Nogat's own environment is dropped, so uv uses the
+    environment of the project it is given.
+    """
+    env = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"}
+    env.update(extra_env or {})
+    print(f"$ {' '.join(command)}  (in {cwd})", flush=True)
+    try:
+        return subprocess.run(command, cwd=cwd, env=env, check=False).returncode
+    except OSError as e:
+        raise Failure("missing_dependency", f"{command[0]}: {e.strerror}") from e
+
+
+def verify(
+    registry: dict[str, Any],
+    directory: Path,
+    workdir: Path,
+    names: Sequence[str],
+    platform: str = sys.platform,
+) -> int:
+    """Run each member's offline suite at its commit of the candidate (REL-6.5).
+
+    A member with a package runs from its checkout in the candidate's
+    environment (`uv sync --locked`), where every member is a wheel; the
+    marker expression and coverage floor are the member's own pytest and
+    coverage settings. Before its suite, the core dependencies of its own
+    lock are synced into a throwaway environment, so the uv cache holds them
+    for its offline install tests, as in its own CI. An app, a member without
+    a package, runs on its own lock (`uv sync --locked --all-extras` in the
+    directory of its first manifest). A member whose profiles hold no `tool`
+    runs on Linux only (DEV-7.7). Failure `conflict` when a suite, the sync
+    of a member's own lock or the candidate's sync fails.
+    """
+    commits = members(registry, directory)
+    unknown = [n for n in names if n not in commits]
+    if unknown:
+        raise Failure(
+            "validation_error",
+            f"not members of {_shown(directory)}: {', '.join(unknown)}",
+            hint=f"use members of {directory.name}: {', '.join(commits)}",
+            details={"reason": "not_a_member", "projects": unknown},
+        )
+    problems = candidate_problems(registry, directory, commits)
+    if problems:
+        raise Failure(
+            "conflict",
+            "; ".join(problems),
+            hint="run: uv run scripts/ecosystem.py set bump <Project>, "
+            f"then uv lock --project {_shown(directory)}",
+            details={"reason": "stale_candidate"},
+        )
+    env = str(directory.resolve())
+    if _run_suite(["uv", "sync", "--locked", "--project", env], directory):
+        raise Failure(
+            "conflict",
+            f"uv sync --locked of {_shown(directory)} failed",
+            hint=f"run: uv lock --project {_shown(directory)} when the lock is stale",
+            details={"reason": "sync_failed"},
+        )
+    rows: list[tuple[str, str, str, str]] = []
+    failed = []
+    for name in names or list(commits):
+        project = _project(registry, name)
+        commit = commits[name]
+        package = project["distribution"]["import_name"]
+        where = "candidate" if package else "own lock"
+        if "tool" not in project["profiles"] and platform != "linux":
+            rows.append((name, commit[:7], where, "skipped: an app, Linux only"))
+            continue
+        repo = _member_checkout(project, commit, workdir)
+        print(f"\n== {name} {commit[:7]} ({where})", flush=True)
+        report = ["--cov-report=term-missing:skip-covered", "-q"]
+        if package:
+            # A member's tests may install its wheel offline with the core
+            # dependencies of its own lock (a library-install test), from the
+            # uv cache that syncing its checkout fills in its own CI; the
+            # candidate's sync fills it with the set's versions only.
+            own = workdir / f"{name}-own-lock"
+            code = _run_suite(
+                [
+                    "uv",
+                    "sync",
+                    "--locked",
+                    "--no-install-project",
+                    "--no-default-groups",
+                ],
+                repo,
+                {"UV_PROJECT_ENVIRONMENT": str(own)},
+            )
+            shutil.rmtree(own, ignore_errors=True)
+            if code:
+                rows.append((name, commit[:7], where, f"own lock failed (exit {code})"))
+                failed.append(name)
+                continue
+            code = _run_suite(
+                [
+                    "uv",
+                    "run",
+                    "--no-sync",
+                    "--project",
+                    env,
+                    "python",
+                    "-m",
+                    "pytest",
+                    "tests",
+                    f"--cov={package}",
+                    *report,
+                ],
+                repo,
+            )
+        else:
+            manifest = (project.get("python_manifests") or ["pyproject.toml"])[0]
+            cwd = (repo / manifest).parent
+            code = _run_suite(["uv", "sync", "--locked", "--all-extras"], cwd)
+            if not code:
+                code = _run_suite(
+                    ["uv", "run", "--no-sync", "pytest", "tests", "--cov", *report],
+                    cwd,
+                )
+        rows.append(
+            (name, commit[:7], where, f"failed (exit {code})" if code else "passed")
+        )
+        if code:
+            failed.append(name)
+    print()
+    _table(("member", "commit", "environment", "result"), rows)
+    if failed:
+        raise Failure(
+            "conflict",
+            f"suites of {_shown(directory)} failed: {', '.join(failed)}",
+            hint="fix each failure in its member, then bump it into a new candidate",
+            details={"reason": "suite_failed", "members": failed},
+        )
+    return 0
 
 
 def check_standard(registry: dict[str, Any], write: bool) -> int:
@@ -1457,10 +1716,29 @@ def _parser() -> argparse.ArgumentParser:
         "--rev", help="commit, tag or branch (default: its integration ref)"
     )
     readme_cmd = set_sub.add_parser(
-        "readme", help="generate the candidate's README.md from members.toml"
+        "readme",
+        help="generate the candidate's README.md from members.toml; --check also "
+        "checks the revs of its pyproject.toml",
     )
     readme_cmd.add_argument(
-        "--check", action="store_true", help="fail when README.md is stale"
+        "--check",
+        action="store_true",
+        help="fail when README.md is stale or pyproject.toml pins other commits",
+    )
+    verify_cmd = set_sub.add_parser(
+        "verify", help="run each member's offline suite at the set's commits (REL-6.5)"
+    )
+    verify_cmd.add_argument(
+        "--workdir",
+        type=Path,
+        required=True,
+        help="directory for the members' checkouts",
+    )
+    verify_cmd.add_argument(
+        "--member",
+        action="append",
+        default=[],
+        help="member to verify, repeatable (default: every member)",
     )
     return parser
 
@@ -1478,8 +1756,23 @@ def run_set(registry: dict[str, Any], args: argparse.Namespace) -> int:
         return 0
     if args.set_command == "check":
         return check_set(registry, directory)
-    readme = render_set_readme(registry, directory, members(registry, directory))
-    return _generated(directory / "README.md", readme, args.check, "set readme")
+    if args.set_command == "verify":
+        return verify(registry, directory, args.workdir.resolve(), args.member)
+    commits = members(registry, directory)
+    readme = render_set_readme(
+        registry, directory, commits, verification_runs(directory)
+    )
+    code = _generated(directory / "README.md", readme, args.check, "set readme")
+    problems = candidate_problems(registry, directory, commits) if args.check else []
+    if problems:
+        raise Failure(
+            "conflict",
+            "; ".join(problems),
+            hint="run: uv run scripts/ecosystem.py set bump <Project>, "
+            f"then uv lock --project {_shown(directory)}",
+            details={"reason": "stale_candidate"},
+        )
+    return code
 
 
 def run(args: argparse.Namespace) -> int:

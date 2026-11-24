@@ -4,7 +4,7 @@
 
 Projects, dependencies and data exchanged between them. Source of truth:
 [`ecosystem.yaml`](../ecosystem.yaml) (standard
-1.0, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
+1.2, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
 
 ## Data flow
 
@@ -27,21 +27,25 @@ flowchart LR
     src_cuzk(["cuzk"])
     src_clms(["clms"])
     src_soilgrids(["soilgrids"])
-    src_imgw_pib(["imgw-pib"])
-    src_chmi(["chmi"])
+    src_imgw(["imgw"])
+    src_chmu(["chmu"])
+    src_camels_pl(["camels-pl"])
     src_osm(["osm"])
   end
   src_gugik --> Kartograf
   src_cuzk --> Kartograf
   src_clms --> Kartograf
   src_soilgrids --> Kartograf
-  src_imgw_pib --> Obserwator
-  src_chmi --> Obserwator
+  src_camels_pl --> Kartograf
+  src_imgw --> Obserwator
+  src_chmu --> Obserwator
+  src_camels_pl --> Obserwator
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
   src_gugik --> Archiwista
   src_osm --> Archiwista
   Kartograf -. store, no package .-> Obserwator
+  Kartograf -. planned: library/store .-> Obserwator
   Archiwista -. planned: store .-> Obserwator
   Hydrolog -- cli/file --> Obserwator
   Obserwator -- library/file --> Hydrolog
@@ -80,6 +84,7 @@ flowchart LR
 | Consumer | Producer | Kind | Status | Via | Exchanged data |
 |---|---|---|---|---|---|
 | Obserwator | Kartograf | data | active | store | `kartograf-store/1` |
+| Obserwator | Kartograf | optional | planned | library, store | `kartograf-camels-pl`, `kartograf-store/1`, `kartograf-meta/1` |
 | Obserwator | Archiwista | data | planned | store | `archiwista-raw-root` |
 | Obserwator | Hydrolog | optional | active | cli, file | `hydrolog-result/1`, `hydrolog-series/1` |
 | Hydrolog | Obserwator | optional | active | library, file | `obserwator-pmaxtp`, `obserwator-series-csv` |
@@ -96,12 +101,13 @@ flowchart LR
 | Retman | Hydrolog | optional | active | library | `hydrolog-command-list/1`, `hydrolog-commands/1`, `hydrolog-result/1` |
 | Retman | Hydrograf | optional | planned | rest | `hydrograf-rest` |
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
-| Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmi-json/1`, `obserwator-data/1` |
+| Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmu-json/1`, `obserwator-data/1` |
 | Archiwista | Hydrolog | data | active | file | `hydrolog-series/1` |
 
 ### Details
 
 - **Obserwator → Kartograf**: No import; refuses a store nested in another, and a plain output directory inside one, by marker file name (DEV-19.11, DEV-19.12, DEV-19.14), as Kartograf does with obserwator-store.json. Hard-link publication model follows Kartograf ADR-036.
+- **Obserwator → Kartograf**: Planned for v3.4.0 (ECO-086, plan 2026-11-22-camels-pl step 3), an optional dependency; reads the catchments and gauges of CAMELS-PL from Kartograf's store and builds each gauge's catchment, its area and the gauges upstream of it in the data root.
 - **Obserwator → Archiwista**: No import (ECO-059); series build, the catalog build and analyses build read the raw root without writing it and write only the data root, once at the start and at each yearly refresh.
 - **Obserwator → Hydrolog**: No package dependency (ECO-059); analyses build runs a configured hydrolog program's batch over series export files and stores one hydrolog-result/1 per call; a person's subset is one CLI call computed on the fly and never stored; the GUI hands a series to Hydrolog as nogat-handoff/1 around hydrolog-series/1.
 - **Hydrolog → Obserwator**: uses `fetch_pmaxtp`; precip pmaxtp, and the PMAXTP source of the GUI's Hydrogram zlewni, take the PMAXTP depth of a point from fetch_pmaxtp (extra pmaxtp, Hydrolog ADR-0018; the only command that goes online); stats commands read series CSV exported by `obserwator series export --output FILE`, and `commands batch` runs the calls of Obserwator's analyses build over its series export files (ECO-059). „Wczytaj z Obserwatora” opening Obserwator's hand-off is planned.
@@ -115,7 +121,7 @@ flowchart LR
 - **Hydraulik → Hydrolog**: uses `BlockHietogram`, `TriangularHietogram`, `BetaHietogram`, `EulerIIHietogram`; rainfall build takes the hyetograph shape from the classes (extra rainfall) or from the document that hydrolog precip hietogram --json prints; swmm run --inflow and model couple --inflow read the tables <id>.csv of hydrolog route network --output-dir as the inflow of one node (ADR-0009); the contract tests read both formats as hydrolog.testing builds them (ADR-0010).
 - **Retman → Hydrograf**: Retman PRD roadmap.
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
-- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json); a backup copy of that root is planned (ECO-059).
+- **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
 - **Archiwista → Hydrolog**: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
 
 ## What each project provides
@@ -125,8 +131,8 @@ flowchart LR
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
 | `kartograf-files` | dataset | Hydrolog, Hydrograf, Hydraulik | Downloaded rasters and vectors (ASC/GeoTIFF DEM, GeoPackage BDOT10k, SoilGrids and HSG GeoTIFF, LAZ), as plain files under their store names (--output-dir, DEV-19.5) or as store versions. |
-| `kartograf-meta/1` | sidecar | Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
-| `kartograf-store/1` | store | Obserwator, Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root). |
+| `kartograf-meta/1` | sidecar | Obserwator (planned), Hydrograf, Retman, Archiwista | &lt;file&gt;.meta.json next to every stored file, none in plain mode: CRS, nodata, source, licence, request, parent_request, SHA-256, producer, producer_version. |
+| `kartograf-store/1` | store | Obserwator, Obserwator (planned), Archiwista | Versioned store (versions/&lt;label&gt;_&lt;sha8&gt;/, hard-linked current path) with root marker kartograf-store.json (schema kartograf-store/1, DEV-19.12), default root &lt;data_dir&gt;/kartograf, kartograf store init, and read API list_segments, iter_store, read_sidecar, file_footprint, command_for_file (keyword root). |
 | `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
@@ -135,17 +141,18 @@ flowchart LR
 | `kartograf-result/1` | document | Hydraulik, Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
+| `kartograf-camels-pl` | dataset | Obserwator (planned) | Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088). |
 
 ### Obserwator
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. |
+| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Since v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture]. |
 | `obserwator-meta/1` | sidecar | Archiwista | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
-| `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). |
+| `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). Since v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional &lt;var&gt;_tier of a series built from several tiers, one slot per month series:&lt;key&gt;:&lt;YYYY-MM&gt;. |
 | `obserwator-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
-| `chmi-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
+| `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
 | `obserwator-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
 | `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
@@ -153,8 +160,9 @@ flowchart LR
 | `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
 | `obserwator-pmaxtp` | document | Hydrolog, Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
-| `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. |
+| `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store. |
 | `obserwator-analyses/1` | dataset | — | Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export). |
+| `obserwator-gui` | service | — | Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079). |
 
 ### Hydrolog
 
@@ -192,7 +200,7 @@ flowchart LR
 | `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
 | `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
-| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library, beside a backup copy of Obserwator's data root. |
+| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer. |
 
 ## External data sources
 
@@ -205,6 +213,7 @@ data-flow diagram.
 | [ČÚZK (Český úřad zeměměřický a katastrální)](https://geoportal.cuzk.cz) | CZ | CC BY 4.0 | Kartograf |
 | [Copernicus Land Monitoring Service (CORINE Land Cover)](https://land.copernicus.eu) | EU | Copernicus data policy, attribution required | Kartograf |
 | [ISRIC SoilGrids](https://soilgrids.org) | global | CC BY 4.0 | Kartograf |
-| [IMGW-PIB (archives, live API, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
-| [ČHMÚ open data](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
+| [IMGW-PIB (archives, live API and telemetry, hydro.imgw.pl operational data, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
+| [ČHMÚ open data (historical, recent and now sets)](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
+| [CAMELS-PL (catchments, gauges, attributes, signatures, forcing and simulations of 869 IMGW-PIB gauges; Zenodo)](https://doi.org/10.5281/zenodo.20133182) | PL | CC BY 4.0, except the catchment series derived from E-OBS (ECA&D/E-OBS data policy, non-commercial research and education) | Kartograf, Obserwator |
 | [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Archiwista |

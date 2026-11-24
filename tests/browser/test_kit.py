@@ -14,7 +14,6 @@ import copy
 import functools
 import http.server
 import json
-import re
 import shutil
 import threading
 from collections.abc import Iterator
@@ -24,7 +23,15 @@ from typing import Any
 import jsonschema
 import pytest
 import terms
-from playwright.sync_api import Browser, Locator, Page, Playwright, sync_playwright
+from playwright.sync_api import (
+    Browser,
+    Locator,
+    Page,
+    Playwright,
+    expect,
+    sync_playwright,
+)
+from provider_lines import LINES
 
 ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE: dict[str, Any] = json.loads(
@@ -64,15 +71,6 @@ SOURCES_PAGE = """<!doctype html>
 </html>
 """
 
-# The lines of the table of DEV §20, byte for byte.
-LINES = {
-    m["mark"]: m["line"]
-    for m in re.finditer(
-        r"^\| (?P<mark>[A-Z]{1,2}) \| (?P<line>.+) \|$",
-        (ROOT / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding="utf-8"),
-        re.MULTILINE,
-    )
-}
 CP = LINES["CP"]
 OTHER = "Źródło: Państwowe Gospodarstwo Wodne Wody Polskie"
 LICENCE = "https://creativecommons.org/licenses/by/4.0/"
@@ -454,9 +452,9 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ([*IMGW, *PMAXTP, *OTHERS, CP], 3),
     ],
     ids=[
-        "imgw-chmi",
-        "pmaxtp-chmi",
-        "both-families-chmi",
+        "imgw-chmu",
+        "pmaxtp-chmu",
+        "both-families-chmu",
         "imgw-short-forms",
         "pmaxtp-short-forms",
         "both-families-short-forms",
@@ -612,12 +610,50 @@ def test_strip_and_dialog_follow_both_themes(sources: tuple[Page, list[str]]) ->
     ]
 
 
-def test_strip_wraps_and_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+def test_strip_folds_to_one_line_on_a_phone_and_unfolds_in_place(
+    sources: tuple[Page, list[str]],
+) -> None:
     page, _ = sources
     page.set_viewport_size({"width": 390, "height": 800})
     _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.get_by_role("button", name="więcej")
+    assert _strip_lines(page) == 1
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    assert toggle.get_attribute("aria-expanded") == "false"
+    box = page.locator(".nogat-sources-line").first.bounding_box()
+    assert box is not None
+    assert 0 <= box["x"] < 390
+    assert page.get_by_role("button", name="Źródła i warunki").is_visible()
+    toggle.click()
+    unfold = page.get_by_role("button", name="zwiń")
+    assert unfold.get_attribute("aria-expanded") == "true"
     assert _strip_lines(page) > 3
     assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    unfold.click()
+    assert _strip_lines(page) == 1
+    assert page.get_by_role("button", name="więcej").is_visible()
+
+
+def test_strip_offers_to_unfold_only_a_phone_line_that_is_cut(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
+    toggle = page.locator(".nogat-sources-toggle")
+    assert _strip_lines(page) > 1
+    assert toggle.is_hidden()
+    page.set_viewport_size({"width": 390, "height": 800})
+    expect(toggle).to_be_visible()
+    assert _strip_lines(page) == 1
+    _lines(page, [LINES["C"]], NOTICE)
+    assert _strip_lines(page) == 1
+    assert toggle.is_hidden()
+
+
+def test_dialog_fits_a_phone(sources: tuple[Page, list[str]]) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    _lines(page, [*IMGW, *PMAXTP, LINES["C"]], NOTICE)
     page.get_by_role("button", name="Źródła i warunki").click()
     box = page.locator("dialog").bounding_box()
     assert box is not None
@@ -645,19 +681,152 @@ def test_strip_loads_nothing_but_the_kit(
     ]
 
 
-# The hand-off (DEV-15.5)
+# Lines a GUI declares for the strip (DEV-20.5, ECO-087): an operator's own network.
+
+OWN = "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl"
+OWN_PROCESSED = "Dane Wodociągów Przykładowych zostały przetworzone"
+OWN_SHORT = "Źródło: Wodociągi Przykładowe"
+OWN_DECLARED = {
+    "text": OWN,
+    "short": OWN_SHORT,
+    "links": [["Wodociągi Przykładowe", "https://pomiary.example.pl"]],
+}
+
+
+def _declare(page: Page, declared: list[Any]) -> None:
+    page.evaluate(
+        "d => { document.querySelector('nogat-sources').screenLines = d; }", declared
+    )
+
+
+def test_strip_shows_a_declared_line_after_its_own_while_the_data_carry_it(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    _declare(page, [OWN_DECLARED, {"text": OWN_PROCESSED}])
+    _lines(page, [OWN, OWN_PROCESSED, *IMGW, LINES["C"]], NOTICE)
+    shown = page.locator(".nogat-sources-line")
+    assert shown.all_text_contents() == [
+        *IMGW,
+        LINES["CK"],
+        OWN_SHORT,
+        OWN_PROCESSED,
+    ]
+    links = shown.nth(3).locator("a")
+    assert [(a.text_content(), a.get_attribute("href")) for a in links.all()] == [
+        ("Wodociągi Przykładowe", "https://pomiary.example.pl/")
+    ]
+    page.get_by_role("button", name="Źródła i warunki").click()
+    assert page.locator("dialog li").all_text_contents() == [
+        OWN,
+        OWN_PROCESSED,
+        *IMGW,
+        LINES["C"],
+        *NOTICE,
+    ]
+    page.keyboard.press("Escape")
+    _lines(page, [*IMGW, OWN_PROCESSED], NOTICE)
+    assert shown.all_text_contents() == [*IMGW, OWN_PROCESSED]
+
+
+def test_declared_lines_keep_their_order_once_each_and_repeat_no_own_line(
+    sources: tuple[Page, list[str]], site: str
+) -> None:
+    page, _ = sources
+    university = "Źródło danych: Uczelnia Przykładowa, https://dane.example.edu"
+    words = [
+        ["Nieznane", "https://example.org"],
+        ["Wodociągi", "javascript:alert(1)"],
+        ["Przykładowe", "/dane"],
+    ]
+    _declare(
+        page,
+        [
+            {"text": CP},
+            {"text": LINES["S"], "short": "skrót S"},
+            {"text": university, "links": "nie lista"},
+            {"text": OWN, "links": words},
+            {"text": OWN, "short": "drugi raz"},
+            {"short": "bez tekstu"},
+            "napis",
+            None,
+        ],
+    )
+    _lines(page, [OWN, university, CP, LINES["S"]], [])
+    assert page.locator(".nogat-sources-line").all_text_contents() == [
+        LINES["S"],
+        CP,
+        university,
+        OWN,
+    ]
+    links = page.locator(".nogat-sources-line a")
+    assert [(a.text_content(), a.get_attribute("href")) for a in links.all()] == [
+        ("https://dane.example.edu", "https://dane.example.edu"),
+        ("Przykładowe", f"http://{site}/dane"),
+    ]
+    texts = "e => e.screenLines.map(line => line.text)"
+    assert page.locator("nogat-sources").evaluate(texts) == [
+        CP,
+        LINES["S"],
+        university,
+        OWN,
+    ]
+
+
+def test_a_declaration_the_strip_cannot_use_leaves_it_as_it_was(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    element = page.locator("nogat-sources")
+    _lines(page, [*IMGW, *PMAXTP, *OTHERS, CP], NOTICE)
+    before = element.evaluate("e => e.innerHTML")
+    _declare(
+        page, [{"text": OWN}, {"text": LINES["S"]}, {"text": G_BDOT, "short": "x"}]
+    )
+    assert element.evaluate("e => e.innerHTML") == before
+
+
+def test_declared_line_comes_from_the_attribute_and_folds_on_a_phone(
+    sources: tuple[Page, list[str]],
+) -> None:
+    page, _ = sources
+    page.set_viewport_size({"width": 390, "height": 800})
+    page.evaluate(
+        "([a, d]) => { const s = document.querySelector('nogat-sources');"
+        " s.setAttribute('screen-lines', JSON.stringify(d));"
+        " s.setAttribute('attribution', JSON.stringify(a)); }",
+        [[*IMGW, OWN], [OWN_DECLARED]],
+    )
+    shown = page.locator(".nogat-sources-line")
+    assert shown.all_text_contents() == [*IMGW, OWN_SHORT]
+    assert _strip_lines(page) == 1
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+    page.get_by_role("button", name="więcej").click()
+    assert _strip_lines(page) > 1
+    box = shown.last.bounding_box()
+    assert box is not None
+    assert box["x"] >= 0
+    assert box["x"] + box["width"] <= 390
+    assert box["y"] + box["height"] <= 800
+    assert page.evaluate("document.documentElement.scrollWidth") <= 390
+
+
+# The hand-off (DEV-15.5) and its file name (DEV-19.21)
 
 
 @pytest.mark.parametrize(
     ("subject", "name"),
     [
-        ("Kamiennik — Świerzawa", "Kamiennik — Świerzawa.handoff.json"),
-        ('a/b\\c:d*e?f"g<h>i|j', "a-b-c-d-e-f-g-h-i-j.handoff.json"),
-        ("  dwa   słowa  ", "dwa słowa.handoff.json"),
-        ("tab\t\nnowa", "tab-nowa.handoff.json"),
-        ("x\u0000\u001fy", "x-y.handoff.json"),
-        ("", "hydrograf.handoff.json"),
-        (" /// ", "-.handoff.json"),
+        ("Kamiennik — Świerzawa", "hydrograf_handoff_kamiennik-swierzawa.json"),
+        ("Łódź, ŁĄKA żółć", "hydrograf_handoff_lodz-laka-zolc.json"),
+        ('a/b\\c:d*e?f"g<h>i|j', "hydrograf_handoff_a-b-c-d-e-f-g-h-i-j.json"),
+        ("  dwa   słowa  ", "hydrograf_handoff_dwa-slowa.json"),
+        ("tab\t\nnowa", "hydrograf_handoff_tab-nowa.json"),
+        ("x\u0000\u001fy", "hydrograf_handoff_x-y.json"),
+        ("Q_max 2026.11", "hydrograf_handoff_q-max-2026-11.json"),
+        ("", "hydrograf_handoff.json"),
+        (" /// ", "hydrograf_handoff.json"),
+        ("Москва", "hydrograf_handoff.json"),
     ],
 )
 def test_file_name_of_a_handoff(page: Page, subject: str, name: str) -> None:
@@ -669,7 +838,8 @@ def test_download_writes_two_space_json_with_a_final_newline(page: Page) -> None
     with page.expect_download() as info:
         name = _handoff(page, "(h, d) => h.downloadHandoff(d)", doc)
     download = info.value
-    assert download.suggested_filename == name == "Kamiennik — Świerzawa.handoff.json"
+    assert download.suggested_filename == name
+    assert name == "hydrolog_handoff_kamiennik-swierzawa.json"
     text = download.path().read_text(encoding="utf-8")
     assert json.loads(text) == doc
     assert text.startswith('{\n  "schema": "nogat-handoff/1",\n  "created_at"')

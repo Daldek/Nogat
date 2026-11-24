@@ -1,6 +1,6 @@
 # Ecosystem hub (Nogat)
 
-Part of standard 1.0 · IDs `HUB-…`
+Part of standard 1.2 · IDs `HUB-…`
 
 Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 
@@ -32,7 +32,9 @@ fields are those of `schemas/ecosystem.schema.json`, shown below;
 `python_manifests`, `branch` (the branch holding a project's code when it is
 not `develop`, HUB-4.9), `routes`, `interfaces.gui` (the command that serves
 the project's browser GUI on the user's computer, given only by a project
-that has one) and, in a dependency, `uses` and `note` are optional.
+that has one), `computes` (true for a project whose formulas fall under
+CMP §1; absent means false) and, in a dependency, `uses` and `note` are
+optional.
 
 ```yaml
 schema: nogat-ecosystem/1
@@ -187,8 +189,12 @@ the set's commit; it runs before every merge that changes a pin, not in the
 gate. `set apply --project <P> [--path <dir>]` rewrites P's pins, the `rev`
 of `[tool.uv.sources]` and the ref of a `git+` URL, to the full commits and
 changes nothing else. `set bump <P> [--rev <ref>]` records the commit `ref`
-resolves to in P's fetched checkout (default `origin/<branch>`) and
-regenerates the README, which `set readme --check` checks in the gate.
+resolves to in P's fetched checkout (default `origin/<branch>`), moves P's
+`rev` in the candidate's `pyproject.toml`, drops the recorded runs and
+regenerates the README; then `uv lock --project <candidate>`. `set readme
+--check`, in the gate, fails when the README is stale or the `pyproject.toml`
+installs other commits than `members.toml` or an app. `set verify --workdir
+<dir> [--member <P>]` runs the suites of REL-6.5 on the machine it runs on.
 *Why:* consumers that pin one producer at different commits cannot be
 installed together (REL-6.1).
 
@@ -268,6 +274,8 @@ previous `nogat` release, where a minor bump of a `0.y` member and a removed
 member count as major and an added member as minor; raising the minimum
 Python is major; third-party and development-tool updates alone are minor,
 because the set is tested, except a security fix between sets, which is a
-patch (REL-6.6).
-*Why:* ECO-026; the number tells users whether an upgrade may break their
-scripts.
+patch (REL-6.6). The first release is `0.1.0`; while `nogat` is `0.y`, a
+major bump raises the minor number (REL-1.1). Only the author makes a release
+`1.0.0`, once every tool is in a set, stable and tested by users.
+*Why:* ECO-026, ECO-076; the number tells users whether an upgrade may break
+their scripts.

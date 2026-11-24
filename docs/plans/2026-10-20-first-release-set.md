@@ -1,7 +1,9 @@
 # Plan: first release set
 
-Status: proposed. Requirements: REL §6, REL-2.1, REL-5.3, HUB-5.2, ECO-025,
-ECO-037. Details phase 5 of the
+Approved: 2026-11-16 (the author: build the candidate's `pyproject.toml`, its
+`uv.lock` and `verify-candidate`, then run the integration run; the first
+`nogat` release is `0.1.0`, ECO-076). Requirements: REL §6, REL-2.1,
+REL-5.3, HUB-5.2, ECO-025, ECO-037. Details phase 5 of the
 [adoption plan](../../standards/ADOPTION_PLAN.md).
 
 ## Goal
@@ -68,7 +70,9 @@ Retman and Hydraulik join a later set.
    commit replaced by its tag and the dependency list regenerated from the
    lock; then `develop` → `main` and the author's tag. The candidate branch is
    deleted. Users install with
-   `uv tool install git+https://github.com/Daldek/Nogat@vX.Y.Z` (HUB-7.1).
+   `uv tool install git+https://github.com/Daldek/Nogat@vX.Y.Z` (HUB-7.1)
+   once the `nogat` package exists; `v0.1.0` is released without it
+   (Results).
 8. **Upgrade the consumers outside the set** in their own sessions (REL-5.4).
    Hydrograf pins the new tags. On 2026-10-20 Kartograf's development head no
    longer exports `LandCoverManager` and `HSGCalculator`; the Kartograf
@@ -97,4 +101,38 @@ without), so no third-party conflict blocks a candidate.
 | Hydrograf | pins release tags older than the heads of Kartograf, Hydrolog and IMGWTools; does not run on Kartograf `develop` |
 | Hydraulik | uncommitted proof of concept |
 
-Candidates: none yet.
+Candidates: candidate-1 to candidate-4 held members' commits only (the pins
+plan, `2026-11-03-one-pin-set.md`). candidate-5 (2026-11-16) is the first
+with step 3: its `pyproject.toml` installs Kartograf `[mcp]`, Obserwator
+`[full]`, Hydrolog `[all]` and Archiwista `[obserwator]` at the set's commits
+with the union of their `dev` groups, and its `uv.lock` resolves 127 packages
+for the three platforms, one version each. The pins between members equal
+the set's commits (`set check`), so none is overridden. Hydrograf, an app,
+is verified on its own lock (ECO-077). Step 4's workflow is
+`.github/workflows/verify-candidate.yml`, which runs `set verify`; it can
+be dispatched once it is on `main`. The local run of the same command, the
+members' own gates and the flows are in
+[the integration run of candidate-5](2026-11-16-candidate-5-integration.md).
+
+Members' releases (step 6, 2026-11-16), producers first, from candidate-6:
+Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf
+`v0.5.0` and Archiwista `v0.3.0`, each an annotated tag on the merge commit
+of its `main`; the release commits and gates are in
+[the integration run of candidate-5](2026-11-16-candidate-5-integration.md),
+„candidate-6 and the releases”. With the author's approval the merges ran
+locally without pull requests (`gh` is not installed), and candidate-6 was
+verified only on this machine by `set verify`, not by the workflow
+(REL-6.5 deviation).
+
+Nogat's release (step 7, 2026-11-17): `v0.1.0`. Its release commit
+`78e0149` sets `0.1.0` and adds `release-sets/v0.1.0/`, candidate-6 with
+each member's commit replaced by its tag (the same 127 packages);
+`develop` → `main` is merged locally without a pull request, with the
+author's approval, and the merge commit carries the tags `v0.1.0` and
+`std-1.0`. The `nogat` package (HUB §7, ADOPTION_PLAN 5.4) does not exist
+yet, so the set has no generated dependency list and no `uv tool install`:
+it is installed as an environment, `uv sync --locked --no-dev` in
+`release-sets/v0.1.0/`. The workflow `verify-candidate` is on `main` from
+this release and verifies the next candidate. The topic branches
+`chore/candidate-6` and `feature/verify-candidate` are merged into
+`develop`; deleting them is the author's.

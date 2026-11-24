@@ -64,16 +64,16 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
-| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | accepted | 2026-11-01 |
+| [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
-| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | accepted | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068 | 2026-11-13 |
-| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070 | 2026-11-13 |
-| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070 | 2026-11-13 |
+| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087 | 2026-11-13 |
+| [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
+| [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -85,6 +85,19 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-073](#eco-073-long-jobs-run-outside-the-agents-session) | Long jobs run outside the agent's session | accepted | 2026-11-15 |
 | [ECO-074](#eco-074-the-author-names-the-members-of-a-release-set) | The author names the members of a release set | accepted | 2026-11-15 |
 | [ECO-075](#eco-075-the-catalog-summary-is-its-own-document) | The catalog summary is its own document | accepted | 2026-11-15 |
+| [ECO-076](#eco-076-nogat-starts-at-010) | Nogat starts at 0.1.0 | accepted | 2026-11-16 |
+| [ECO-077](#eco-077-verify-candidate-runs-an-app-on-its-own-lock) | verify-candidate runs an app on its own lock | accepted | 2026-11-16 |
+| [ECO-078](#eco-078-formulas-are-declared-once-checked-at-their-limits-and-verified) | Formulas are declared once, checked at their limits and verified | accepted | 2026-11-18 |
+| [ECO-079](#eco-079-an-operators-instance-its-name-and-logo-beside-the-mark-its-own-regulamin) | An operator's instance: its name and logo beside the mark, its own regulamin | accepted | 2026-11-21 |
+| [ECO-080](#eco-080-the-sources-strip-folds-to-one-line-on-a-phone) | The sources strip folds to one line on a phone | accepted | 2026-11-21 |
+| [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
+| [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
+| [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
+| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
+| [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
+| [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
+| [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
+| [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
 
 ---
 
@@ -1037,6 +1050,10 @@ for Archiwista, which follows in its own session (REL-5.4).
 
 ## ECO-055 One visual identity for every GUI
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs may show the operator's logo and name beside the project's
+mark, which stays as the favicon and in the top bar.
+
 **Decision.** Every GUI of the ecosystem (Archiwista, Hydrograf, the web GUI
 of IMGWTools and any later one) uses the identity in Nogat `design/`: shared
 tokens in one plain CSS file, light and dark, with the brand of debever.pl
@@ -1148,6 +1165,12 @@ the stage 1 plan); until then the gap is a deviation in its `CLAUDE.md`
 
 ## ECO-059 Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog
 
+**Amended by ECO-084 (2026-11-23):** Obserwator's commands run by the
+deployment's user systemd timers write the raw root beside the downloads
+Archiwista orders; operational data are archived as captures; the backup
+copy of the raw and data roots is the deployment's `rsync` timer, documented
+by Obserwator, not an Archiwista job.
+
 **Decision.** For the hydro-meteorological station data of IMGW-PIB and
 ČHMÚ each project has one role. Archiwista orders every download and keeps
 the raw data (the archives as published with their sidecars, the archived
@@ -1202,6 +1225,27 @@ the terms it links.
 ČÚZK data carry G, SG or Z, after CP in the order of the lines, and a GUI
 view's strip shows them as GK, SK and ZK.
 
+**Amended by ECO-082 (2026-11-21):** a CSV carries the lines in its trailing
+columns `attribution` and `terms_notice` only; no column a project had
+before repeats them.
+
+**Amended by ECO-084 (2026-11-23):** operational data are kept as captures
+of a labelled, unverified tier and served to the public only at the
+operator's decision per source (DEV-20.8).
+
+**Amended by ECO-086 (2026-11-23):** products with CAMELS-PL data carry L
+and LP, with S and P for what came from IMGW-PIB, E and the terms line RE
+for what is derived from E-OBS, and D for what is derived from G2DC-PL+
+(DEV-20.12).
+
+**Amended by ECO-087 (2026-11-23):** the lines are one table of provider
+lines that DEV-20.4 orders, a new provider a row of it; the line of a
+provider it does not hold, declared by a deployment, follows them.
+
+**Amended by ECO-088 (2026-11-24):** what CAMELS-PL took from IMGW-PIB and
+what is derived from it carry the terms line RD with S and P (DEV-20.7,
+DEV-20.12).
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1244,6 +1288,10 @@ statistics, cookies and „Zgłoś uwagę”, and names its processor in two fie
 **Amended by ECO-070 (2026-11-14):** „Regulamin” is linked from the app
 menu, the foot of the left rail and the welcome window, not from a footer.
 
+**Amended by ECO-079 (2026-11-21):** an instance that an operator other than
+the author runs serves the operator's own regulamin, drafted from the kit's
+`nogat-terms-operator.md`, in place of regulamin 1.0.
+
 **Decision.** A GUI open to other people serves its terms at
 `regulamin.html`, filled from the kit's template `nogat-terms.md` and the
 `nogat-terms.html` generated from it, and links „Regulamin” from every view
@@ -1280,6 +1328,9 @@ access log keeps the class of the User-Agent, not the User-Agent.
 
 **Amended by ECO-070 (2026-11-14):** no footer or status bar shows the
 statement; it opens § 3 of the regulamin only.
+
+**Amended by ECO-079 (2026-11-21):** the statement of DEV-15.8 and regulamin
+1.0 belong to the instances the author runs.
 
 **Decision.** Hydrograf, Hydrolog and Obserwator are public GUIs: anyone
 uses them without signing in, and Cloudflare Access guards only the parts the
@@ -1384,6 +1435,13 @@ short forms of G, SG and Z, and the dialog G, SG and Z.
 
 **Amended by ECO-070 (2026-11-14):** the welcome window's „Regulamin
 serwisu” is its only regulamin link, and no footer reaches the dialog.
+
+**Amended by ECO-080 (2026-11-21):** on a screen up to 860 px wide the strip
+folds to one line, unfolded in place by „więcej”.
+
+**Amended by ECO-087 (2026-11-23):** after the kit's own lines the strip
+shows the lines the GUI declares for it (`screen-lines`), such as the line
+of an operator's own network.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -1830,3 +1888,542 @@ document nobody validates drifts, ECO-050).
 **Consequence.** AGI-2.4, AGI-4.1. The tools copy the new schema with the
 next copy of `schemas/agent/` and validate their list in contract tests;
 `drift` reports the copy. No document changes its number (REL-1.4).
+
+## ECO-076 Nogat starts at 0.1.0
+
+**Decision.** The first `nogat` release, the first release set, is tagged
+`v0.1.0`, and `develop` carries `0.1.0.dev0` until then (REL-1.1). `nogat`
+stays `0.y` until every tool of the ecosystem is in a set, the tools are
+stable and users have tested them; only then, and only by the author's
+decision, is a release `1.0.0`. Until then HUB-7.4 numbers each release
+within `0.y`. The standard's own version, 1.0 with its tag `std-1.0`
+(HUB-6.1, ECO-056), is a separate number and does not change.
+
+**Why.** The author's decision of 2026-11-16: Nogat is still in development,
+and a `1.0.0` would promise users a stability that neither the set nor
+its tools have yet. In `0.y` a minor release may break (REL-1.1), which
+matches a set whose members still change their interfaces.
+
+**Rejected.** `1.0.0` for the first set (it claims stability before users
+have tested anything). Keeping `0.0.0` until the release (REL-1.1 asks
+`develop` to carry the version of the next release).
+
+**Consequence.** HUB-7.4. Nogat's `pyproject.toml` and the candidate's carry
+`0.1.0.dev0`; the release pull request of the first set sets `0.1.0`
+(REL-2.1, REL-6.6).
+
+## ECO-077 verify-candidate runs an app on its own lock
+
+**Decision.** `verify-candidate` runs `uv run scripts/ecosystem.py set
+verify`. A member with a package runs its offline suite from its checkout in
+the candidate's environment, its marker expression and coverage floor being
+its own pytest and coverage settings. An app among the members (Hydrograf),
+which the candidate's lock does not install (REL-6.1), runs its suite on its
+own lock, whose pins of the producers `set check` holds at the set's
+commits. A member whose profiles hold no `tool` (Hydrograf, Archiwista) runs
+on Linux only, as its own CI does (DEV-7.7). The URL of a passing run is the
+top-level `runs` of `members.toml`, from which the README is generated; `set
+bump` drops it with the old commit. `set readme --check` fails when the
+candidate's `pyproject.toml` installs other commits than `members.toml`.
+
+**Why.** ECO-074 made an app a member after REL-6.5 was written, and
+Hydrograf cannot share the candidate's environment: it caps `affine<3`
+(its ADR-062, until pyflwdir 0.5.13) while Archiwista needs `affine>=3`.
+Hydrograf and Archiwista are Linux applications until their ports, so their
+suites on macOS and Windows would report the platform, not the set. The
+README is generated, so the record of a run needs a place in the file it is
+generated from.
+
+**Rejected.** One lock with conflicting groups (uv `conflicts`), which would
+hold two versions of `affine`, against REL-6.2. Leaving Hydrograf unverified
+(it is the GUI most users reach first, ECO-074). A matrix job per member
+(the members of a set change; one job per platform keeps the workflow
+independent of them). A hand-edited README (the gate would call it stale).
+
+**Consequence.** REL-6.4, REL-6.5, HUB-4.9.
+`.github/workflows/verify-candidate.yml`; `release-sets/candidate-5/` holds
+`pyproject.toml` and `uv.lock`.
+
+## ECO-078 Formulas are declared once, checked at their limits and verified
+
+**Decision.** A project that computes (`computes: true`) declares each Tier A
+formula once, in code, by a `FormulaSpec` of Nogat's reference module
+`nogat_formulas.py`, copied byte for byte; the spec drives the run-time checks,
+the generated range, type and property tests, and the generated cards and
+`docs/FORMULAS.md`. Physically impossible input and a failed precondition are
+refused with `validation_error`; input outside the applicability range gives
+the result with the notice `outside_applicability`; a formula never returns a
+non-finite or impossible value. Evidence is at least two of reference cases,
+oracles and properties; R and other external tools are frozen oracles stored as
+data; tables are transcribed twice; mutation testing gates releases for
+Tier A. A gross defect (CMP-9.1) is released at once (CMP-9.2).
+
+**Why.** The author, 2026-11-18: correctness of the formulas is the
+ecosystem's foundation and academics will audit them; tests must cover
+typical, extreme, boundary and out-of-range inputs, declared types, numerical
+traps and impossible values. The author chose error for impossible input and
+a warning outside applicability, every project that computes as the scope, the
+definition of a gross defect, and open sources first. Fable reviewed the first
+draft: one declaration instead of a card beside the code (a range written
+twice will differ), tiers (auditors' time goes to Tier A), preconditions as a
+third class, generated tests (a hundred formulas times every input and kind of
+value cannot be written by hand consistently), frozen oracles (R in CI is
+fragile and hides versions), double transcription of tables (the riskiest
+artefacts), `formula_version` on stored results (a defect's results must be
+found), and verification kept apart from validation.
+
+**Rejected.** Hand-written TOML cards reconciled with the code by a test
+(checks only what it enumerates). A card per unit conversion (one units table
+instead). Running R in the tests. Withdrawing an `unreferenced` formula from
+the public interface (an `info` notice instead: Hydrolog's users rely on
+formulas that no open worked example covers yet). Propagating the
+uncertainty of empirical formulas and tables of sensitivity (research, not
+verification). A wrong equation or constant only in a document, with correct
+code, as a gross defect (it misleads no result; a wrong unit or range stays
+gross).
+
+**Consequence.** CMP §1 to CMP §9, HUB-2.1 (`computes`). Plan
+`docs/plans/2026-11-18-computation-standard.md`.
+
+## ECO-079 An operator's instance: its name and logo beside the mark, its own regulamin
+
+**Decision.** An instance of a GUI that an operator other than the author
+runs on its own infrastructure may show the operator's logo and name in the
+top bar beside the project's mark; the project's mark stays as the favicon
+and first in the top bar and is never replaced, and the logo is a file of
+the deployment served from the GUI's own origin (DEV-15.3). Such an instance
+serves the operator's own regulamin in place of regulamin 1.0, which names
+the author as a private, non-commercial operator and stays for the author's
+instances with the statement of DEV-15.8 (DEV-15.7). The kit carries a
+draft for operators, `nogat-terms-operator.md`, in the Markdown and with the
+fields and data-source blocks of regulamin 1.0, so a GUI builds and fills
+it the same way: the operator is the service provider and the controller of
+personal data; the software is provided as is under its licence, without
+warranty or liability for availability, data or results; keeping the data
+providers' terms (DEV §20) is the operator's; the author's part ends with
+the deployment; the operator handles contact and complaints. The draft is a
+template, not legal advice, and says so; a lawyer of the author's choice
+reviews it before an operator gets it. Plan:
+`docs/plans/2026-11-21-obserwator-instance.md` (I14, I15).
+
+**Why.** The author's answers of 2026-11-21: a client runs Obserwator on his
+own infrastructure with his name and logo; the payment is only for the
+deployment, operating the instance is the client's, and so is the
+regulamin, for which the author prepares only a draft that protects his
+interests. The project's mark names the software and keeps the family of
+tools recognisable (ECO-055); the operator's name tells a visitor who runs
+the service. A logo from the GUI's own origin needs no new origin in the
+CSP and keeps DEV-15.7's rule that a GUI loads nothing but maps from other
+servers. Regulamin 1.0 does not invoke the act on electronic services,
+since its operator acts outside any gainful activity (ECO-062); an operator
+in business is a service provider under that act, so the draft adds the
+technical requirements, the conclusion of the contract and complaints.
+
+**Rejected.** The operator's logo in place of the project's mark or as the
+favicon (the instance would pass for another product). A logo loaded from
+the operator's server (a remote resource and a new CSP origin). Regulamin
+1.0 filled with the operator's values (its § 2, § 3 and § 8 would state what
+is false for him). A regulamin the author writes and keeps for each client
+(the author does not operate the instance and gives no legal advice). A new
+kit version for the added draft (only the author changes it, REL-1.4).
+
+**Consequence.** DEV-15.3, DEV-15.7 and DEV-15.8 are amended. The kit adds
+`nogat-terms-operator.md` with its hash; its version stays `1.0.0` until the
+author decides (REL-1.4). Obserwator implements both for `v3.1.0` (plan
+steps 2 to 4); another GUI adopts them when an operator needs it
+(DEV-17.5).
+
+## ECO-080 The sources strip folds to one line on a phone
+
+**Decision.** On a screen up to 860 px wide, the kit's phone, the strip of
+`<nogat-sources>` takes one line (DEV-20.5): its on-screen lines start on it
+in the order of DEV-20.4 and are cut with an ellipsis where they no longer
+fit, then come the button „więcej” and „Źródła i warunki”. „więcej” shows
+only while the line cuts them; it unfolds the strip in place, wrapped as on
+a wider screen, and then reads „zwiń”. A wider screen is unchanged. The
+element keeps the state as its attribute `expanded` and marks a cut line
+with `clipped`. Plan: `docs/plans/2026-11-21-phone-sources-strip.md`.
+
+**Why.** The author's decision of 2026-11-21: Obserwator's view „Stacje” on
+an iPhone 13 (390 × 844 px) gave the wrapped strip 127 px, five lines over
+the map. Folded, the lines still begin on the product and one tap shows
+them whole where they stand, so the IMGW-PIB and PMAXTP sentences are never
+only in the dialog, which ECO-064 rejected. The remaining risk, named to the
+author: § 5 ust. 3 and 4 of the IMGW-PIB terms and ust. 1 and 2 of the
+PMAXTP terms want their sentences on the product, and the folded line shows
+their beginning only.
+
+**Rejected.** The strip as „Źródła i warunki” alone on a phone (the
+sentences behind the dialog, as ECO-064 rejected). The lines kept wrapped
+and the strip moved below the view's content (the author's choice). A fold
+wider than a phone (a desktop strip takes at most three lines, ECO-064).
+
+**Consequence.** DEV-20.5 is amended. The kit's `nogat-sources.js` and
+`nogat-sources.css` change with their hashes; its version stays `1.0.0`
+(REL-1.4, ECO-072). Obserwator and Hydrolog copy them for `v3.1.0` and
+`v0.9.0`, Hydrograf and Archiwista with their next change.
+
+## ECO-081 The kit becomes 1.1.0 with Nogat 0.2.0
+
+**Decision.** The GUI kit's version becomes `1.1.0` in
+`design/kit/nogat-kit.json`, confirmed by Nogat's `v0.2.0` on `main`
+(REL-1.4). Every GUI of the round copies the manifest with the kit's files.
+
+**Why.** The author's decision of 2026-11-21 („5 - zgodnie z propozycja”).
+Kit `1.0.0` was released with Nogat `v0.1.0` and `v0.1.1`; since then the
+kit gained a file, the draft regulamin for operators (ECO-079), and a
+behaviour, the strip folded on a phone (ECO-080), with no file removed and no
+attribute or event of an element changed, so the change is minor.
+
+**Rejected.** Keeping `1.0.0` (a released number would name two different
+sets of files).
+
+**Consequence.** ECO-072's rule stands: the version moves only with the
+author's consent and copies are compared by their hashes (DEV-15.6); the
+manifest's own hash changes, so `drift` names every GUI copy until it is
+refreshed. Obserwator, Hydrolog, Hydrograf and Archiwista copy it for the
+round's releases. The regulamin stays 1.0.
+
+## ECO-082 Providers named by their national acronyms; two attribution columns in a CSV
+
+**Decision.** An identifier naming a data provider uses its national
+acronym without diacritics and without its legal suffix (DEV-2.5): ČHMÚ is
+`CHMU` / `chmu` where the code said the English `CHMI` / `chmi`, in
+Obserwator's provider id, dataset keys `cz.chmu.*`, slugs `chmu_*` and the
+store directories named by them, in Nogat's registry ids `chmu` and
+`chmu-json/1` and in the regulamin's block `chmu`; IMGW-PIB is `IMGW` /
+`imgw` where the code said `IMGW-PIB` / `imgw-pib` (Obserwator's provider
+id, Nogat's registry id, file names), its `pl.imgw.*` keys unchanged (the
+author, later the same day: „IMGW-PIB moze byc skracane do IMGW”); every
+slug and store directory of one provider starts with its acronym, so
+IMGW-PIB's `hydro_daily` becomes `imgw_hydro_daily` and its catalog moves
+from `stations/versions` to `stations/versions/imgw_stations` beside
+`chmu_stations` (the author: „katalog serii tez do ujednolicenia”). Text for
+people keeps „IMGW-PIB” and „ČHMÚ”, and the provider's addresses
+(`opendata.chmi.cz`) stay. A CSV's attribution columns are `attribution`
+and `terms_notice` only (DEV-20.5): `attribution_source` and
+`attribution_processed` go. No old name is accepted as input beside the new
+one; files a tool stored under an old name are read under the new one, so
+they need no download again. Every schema and format stays `/1`. Plan:
+`docs/plans/2026-11-21-national-provider-names.md`.
+
+**Why.** The author's decision of 2026-11-21: the code mixed the Polish
+acronym of IMGW-PIB with the English one of ČHMÚ. The two dropped columns
+repeated the first two cells of `attribution` (the stations export of
+2026-11-21: S and P for IMGW-PIB, C and CP for ČHMÚ). The ecosystem is
+still in development, so the change is minor and keeps `/1`.
+
+**Rejected.** The English acronyms for both providers (IMGW-PIB has none in
+use). Aliases for the old names (a second way, ECO-056). The two columns kept
+beside `attribution` (the same lines twice). A new major version of the
+formats (the author's choice for a development stage).
+
+**Consequence.** DEV-2.5 is new; DEV-20.5 and DEV-20.6 are amended, and with
+them ECO-060. The kit's `nogat-terms.md`, `nogat-terms-operator.md` and
+`nogat-terms.html` change with their hashes; its version stays `1.1.0`
+(ECO-081). A GUI that lists the block `chmi` is refused until it lists
+`chmu`. Obserwator, Hydrolog, Archiwista and Hydrograf follow in their own
+branches (plan steps 2 to 5); Hydrolog still reads the two old columns in
+files written before, as lines, not data. Dated records keep the old names.
+
+## ECO-083 One pattern for the files a tool names for a user
+
+**Decision.** A file whose name a project chooses for a user (a GUI's
+download, a REST attachment, a file a command writes into `output_dir` under
+a name it picks) is named `<tool>_<content>_<qualifiers>.<extension>`
+(DEV-19.21): the registry name first, the content in English words joined by
+`-`, the qualifiers after `_` with identifiers unchanged, ISO dates and a
+person's text reduced to lower-case ASCII with `-`, only ASCII letters,
+digits, `.`, `-` and `_`. The kit's statistics file becomes
+`<project>_stats_<first>_<last>.csv` (`nogat` when the element names no
+project, as the shell does) and its hand-off file
+`<producer>_handoff_<subject>.json`, the producer being the envelope's
+`producer.tool`, which the schema requires; `nogat-handoff.js` exports the
+reduction of a person's text as `nameSlug`. Plan:
+`docs/plans/2026-11-21-download-file-names.md`.
+
+**Why.** The author's decision of 2026-11-21 („Cały ekosystem w tej
+rundzie”, „Angielskie”, „Tak, z nazwą narzędzia na początku”), after
+Obserwator's station list: each tool named its files its own way, with
+Polish and English words, `-` and `_`, the tool's name and the station's
+code each in a different place, and a downloads folder did not tell which
+tool wrote a file. The hand-off loses `.handoff.json`: no reader needs the
+suffix, since the kit's `readFile` reads any picked file and Hydrolog's
+pickers accept `.json,application/json`, and the content word `handoff`
+marks the file as the suffix did, so a second pattern for one kind of file
+is not kept. The subject, a person's text, was kept with spaces and
+diacritics, which the rule leaves out of names.
+
+**Rejected.** Polish content words (the code, the schemas and the
+identifiers are English, DEV-2.1). Names without the tool's name (the
+author's choice). `<subject>.handoff.json` kept as an exception (a reader
+would need it, none does). The tool's name last (the author's choice). `-`
+between the parts (content words, dates and a person's text hold `-`, so the
+parts could not be told apart).
+
+**Consequence.** DEV-19.21 is new and DEV-15.5 is amended. The kit's
+`nogat-admin.js` and `nogat-handoff.js` change with their hashes; its
+version stays `1.1.0` (ECO-081). Obserwator, Hydrolog, Hydrograf and
+Archiwista rename their downloads, attachments and default output names in
+their own branches and copy the kit (plan steps 2 to 5), with their
+manuals and labels that name `….handoff.json`; Kartograf keeps the names
+of plain mode (DEV-19.5). No old name is kept beside a new one.
+
+## ECO-084 Operational data are kept as captures of an unverified tier; serving them is the operator's decision
+
+**Decision.** Every answer a provider adapter of Obserwator receives —
+archive and file downloads, files an operator feeds, API answers, the GUI's
+live fetches, warnings and water-state classes included — is written to the
+raw root as it came, with an `obserwator-meta/1` sidecar (the time, the
+address without any credential, the provider, the licence, the tier and the
+publication state). Polled answers are gathered per source and UTC day into
+one capture version of a dataset whose `tier` is `operational` (`telemetry`
+for IMGW-PIB's monthly telemetry; `verified` for the published archives and
+validated sets); a capture is an archive version of the raw root like any
+other (`archive:<key>:<YYYY-MM-DD>`), not a kind of its own. Operational
+tiers are stored, shown and exported only as such; in a derived series a
+higher tier replaces a lower one by precedence per point, and the captured
+answers stay. Per source the deployment's `nogat.toml` says `public` (shown
+and downloadable in Obserwator and Archiwista) or `private` (stored; read by
+the operator's CLI and library and by Archiwista's signed-in users only);
+the default of a source follows its terms and is shown in `config show`. The
+rate at which a source is polled is a ceiling its adapter declares; the
+deployment's timers may run slower, never faster. DEV-20.8 is amended
+accordingly. ECO-059 is amended in three points: Obserwator's commands run
+by the deployment's user systemd timers write the raw root beside the
+downloads Archiwista orders; operational data are archived as captures; the
+backup copy of the raw and data roots is the deployment's `rsync` timer,
+documented by Obserwator (DEV-18.5), not an Archiwista job. Nothing is
+deleted; superseded derived versions may be pruned on an explicit command
+only, by a later plan. Plans: `docs/plans/2026-11-16-operational-series.md`,
+`docs/plans/2026-11-20-hydromet-providers.md`.
+
+**Why.** The author's decisions of 2026-11-22: „potrzebne jest mi… archiwum
+na wszystko co przychodzi”; „To nadal nie jest działalność gospodarcza, bo
+mój serwis jest darmowy, nie ma reklam, nie zarabia […] jest to decyzja
+operatora, nie moja”; „częstotliwość powinna być dostosowana do źródła”;
+„timer systemd”. hydro.imgw.pl forgets its operational data after six weeks
+and IMGW-PIB publishes no sub-daily verified set, so a nightly capture is
+the only continuous record up to yesterday; a client's instance runs
+Obserwator and Hydrolog without Archiwista, so the schedule cannot live in
+Archiwista's queue.
+
+**Rejected.** Keeping only what a series needs (the author wants the whole).
+A capture beside the adapter (a provider could forget it). A raw-root kind
+of its own for captures (Archiwista 0.3.3 indexes archive versions already;
+a new kind would break its scan). A rule in the code that forbids serving a
+source (the operator's decision, not the software's). One polling rate for
+every source. The schedule in Archiwista's queue (an instance without
+Archiwista would lose it).
+
+**Consequence.** DEV-20.8 and ECO-059 read as above; `obserwator-store/1`
+and `obserwator-meta/1` stay `/1` (the optional sidecar fields `tier` and
+`publication`, ECO-085). Obserwator records the captures, the tiers and the
+GUI's spool in an ADR amending ADR-003 D4, ADR-013 D5 and ADR-015 D5;
+Archiwista shows the tier and the publication state of a version (its A1)
+and honours `private` in its downloads in a later minor. The pruning of
+superseded versions and Archiwista's pins wait for the plan of `store prune`
+(`v3.5.0` at the earliest).
+
+## ECO-085 Additions within version 1 of a released document
+
+**Decision.** A released document, store layout or identifier grammar stays
+at its `/N` when a change only adds an optional field (AGI-4.1), a new value
+of an existing field, or a new form of an identifier (a slot, a directory
+name, a time unit), provided that a reader of `/N` that does not know the
+addition can leave that entry out without failing, and that every consumer
+in the registry that distinguishes by the field is changed in the same plan,
+released in the same round, producers first (HUB-5.2), and deployed on a
+shared store before the producer writes the addition there. A change that
+alters the meaning of an existing field or value, or that an unknowing
+reader cannot skip, increments `/N` with the author's consent (REL-1.4).
+First uses: `time_unit` `hour` and the monthly slot `series:<key>:<YYYY-MM>`
+of `obserwator-series/1` and `obserwator-data/1` (Archiwista's adapter
+changed in the same plan); the fields `basins` and `parts` of Hydrograf's
+`instance.json` (plan `2026-11-16-large-basins.md`, topic 1).
+
+**Why.** AGI-4.1 settles fields, not values or forms, and two plans asked
+the same question (Q8 of the operational-series plan, topic 1 of
+large-basins). The author's position of 2026-11-21: „Na razie zostajemy we
+wszystkich schematach przy `/1`, bo jest to wciąż wersja rozwojowa”.
+Archiwista 0.3.3 shows the condition is not empty: its adapter refuses a
+series of an unknown `time_unit` (`source.obserwator_series_unit`) and its
+index's `CHECK (time_unit IN ('day', 'month', 'half_year'))` would reject
+the row, so a new value is additive only when the consumer is changed first.
+
+**Rejected.** A `/2` for every new value (every consumer would follow a
+number for a change it can skip). Any new value as additive without the
+consumer condition (the Archiwista case above).
+
+**Consequence.** AGI-4.1 gains one sentence: „A new value of an existing
+field or a new form of an identifier is additive under the conditions of
+ECO-085.” A consumer that reads a shared store treats an unknown value it
+cannot show as a skipped entry with a warning record, not as a failure
+(Archiwista does so from its A1). The second plan to merge takes the next
+free ECO number (as PROGRESS numbering, Q12).
+
+## ECO-086 CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator
+
+**Amended by ECO-088 (2026-11-24):** what CAMELS-PL took from IMGW-PIB and
+what is derived from it carry the terms line RD as well as S and P; the
+licence is that of the release's Zenodo record, and the data description's
+CC BY-NC 4.0 is disregarded.
+
+**Decision.** CAMELS-PL (Brzezińska, Marcinkowski, Dolich, Maharjan, Perz,
+Piniewski, Kardel, Loritz, Wrzesiński; release 2.1.0, Zenodo record
+23275336, DOI 10.5281/zenodo.23275336, 2026-10-11; concept DOI
+10.5281/zenodo.20133182) is a data source of the ecosystem, `camels-pl` in
+the registry, under CC BY 4.0 except its catchment time series derived from
+E-OBS, which follow the ECA&D/E-OBS data policy. The author's decisions of
+2026-11-22 stand: its catchment boundaries are those of IMGW-PIB's gauges,
+the source of truth; Kartograf fetches the geometry (the catchments and the
+gauges, a product of its group `hydro`) and Obserwator reads it from
+Kartograf's store, an optional dependency; all the rest is Obserwator's,
+under the provider `CAMELS` with keys `pl.camels.*`; a catchment carries
+CAMELS-PL's line and S and P of IMGW-PIB; the series derived from E-OBS are
+in the store, the CLI and Python but off by default in a GUI and a REST API,
+an operator's instance included, until the deployment turns them on; the
+forcing is Hydrolog's, for the author's simulations later; the signatures
+are reference cases. Each tool knows the releases it supports, takes the
+newest it knows and cites the exact one. DEV §20 gains the rows L and LP
+(CAMELS-PL: the release, its DOI, CC BY 4.0), E (the acknowledgement the
+E-OBS policy prescribes) and D (G2DC-PL+), and the terms line RE (the E-OBS
+policy); DEV-20.7 links RE and DEV-20.12 says which data carry them; CMP-6.10
+pins the reference cases of a published data set to its release; the
+regulamin's template gains the blocks `camels-pl` and `e-obs`; the kit
+becomes `1.2.0`. Plan: `docs/plans/2026-11-22-camels-pl.md` (step 1).
+
+**Why.** The author's decisions and answers of 2026-11-22 (the plan's
+„Decisions of the author”), with the sources checked on 2026-11-23. The
+record (`zenodo.org/api/records/23275336`) gives the licence `cc-by-4.0`,
+names IMGW-PIB as the source of the discharge, the water levels and the
+catchment boundaries, and states „Catchment-aggregated meteorological time
+series derived from E-OBS are excluded from CC BY 4.0 and are subject to the
+ECA&D/E-OBS Data Policy”; its data description (2.1.0) asks that the exact
+version be cited and lists under „1 License” both CC BY 4.0 and CC BY-NC 4.0
+without saying what each covers, so the record's licence and exclusion are
+taken. The ECA&D/E-OBS data policy (`www.ecad.eu`, updated 2019-09-16; the
+same terms as the Climate Data Store's „E-OBS product licence (rev. 1)”)
+allows the data „strictly for use in non-commercial research and education
+projects only” (1 b) and prescribes the acknowledgement quoted as E; it is
+not CC BY-NC. G2DC-PL+ (Piniewski, Szcześniak, Kardel, Berezowski;
+4TU.ResearchData, DOI 10.4121/uuid:a3bed3b8-e22a-4b68-8d75-7b87109c9feb,
+2020-09-02) is CC0 1.0 by its record (DataCite `cc0-1.0`, the 4TU API
+„CC0”), to which its paper (ESSD 13, 1273–1288, 2021) points; within
+CAMELS-PL its catchment means fall under CC BY 4.0. The record names nine
+creators, so L names the first with „i in.” and links the release's DOI,
+where the full citation stands (CC BY 4.0 §3(a)(2) allows a link to the
+information). Release 2.1.0 corrected the Hargreaves PET of 2.0.0, so
+reference cases are pinned to a release.
+
+**Rejected.** Obserwator fetching the geometry (the author: geodata are
+Kartograf's). The concept DOI in a line (it names no release, and the
+authors ask for the exact version). The record's whole citation of nine
+authors in every line (the DOI links it). A line saying the E-OBS series
+are for non-commercial use (no product restates terms, DEV-20.7; RE links
+them). One block of the regulamin for CAMELS-PL and E-OBS (a block holds one
+provider's terms, and the E-OBS series are outside CAMELS-PL's licence). A
+block for G2DC-PL+ (CC0 binds nothing, and its means reach a GUI only within
+CAMELS-PL). The E-OBS series served by default (the author's decision 8).
+
+**Consequence.** DEV §20, DEV-20.7, DEV-20.12 and CMP-6.10 read as above,
+and ECO-060 is amended. The registry gains the data source `camels-pl`,
+Kartograf's product `kartograf-camels-pl`, Obserwator's provider `CAMELS`
+and the planned optional edge Obserwator → Kartograf. The kit's
+`nogat-terms.md`, `nogat-terms-operator.md` and `nogat-terms.html` change
+with their hashes, and its version becomes `1.2.0` with `screen-lines` of
+ECO-087 (REL-1.4: the author's approval of the plan covers the kit's minor);
+the regulamin stays 1.0, since a GUI that keeps neither block fills the same
+page. Kartograf's next minor, Obserwator `v3.4.0`, Archiwista's next minor
+and Hydrolog's reference cases follow in the plan's order (steps 2 to 5).
+
+## ECO-087 Provider lines in one table; a GUI declares a line the kit does not know
+
+**Decision.** DEV §20 gives the providers' lines in one table of provider
+lines, a row per line a provider requires with its data: the code of its
+text and, after it, that of its processed text; the text; the processed
+text, which a product adds once the data were processed; and the order.
+DEV-20.4 orders a product's lines by that order, each text before its
+processed text, so a new provider is a row, not a rule; the short forms of
+the strip and the terms lines keep tables of their own, and every existing
+line keeps its code and its wording. The line of a provider the table does
+not hold, which a deployment declares for its own network (an operator's
+instance), follows every line of the table, in the order the deployment
+declares, its text before its processed text. The kit's `<nogat-sources>`
+shows such a line, or any other line of the view's data, on the strip when
+the GUI declares it: the attribute `screen-lines` (JSON) or the property
+`screenLines` holds `{text, short, links}` per line; a declared line is
+shown when the view's `attribution` carries its `text` byte for byte, after
+the kit's own lines, in the order declared, as `short` where given, its
+`links` (a word and an http or https address each) linking words of it,
+else with its addresses linked; a line the kit shows itself is not shown
+twice, and without the attribute every rendering stays as it was (DEV-20.5).
+Plans: `docs/plans/2026-11-20-hydromet-providers.md` (P9),
+`docs/plans/2026-11-21-obserwator-instance.md` (I13).
+
+**Why.** P9 of the plan of hydro-meteorological providers (approved
+2026-11-23, Fable for the author): offices, municipal companies and
+universities join as providers, and a rule each would grow DEV §20 by a
+rule per provider; the author's decision of 2026-11-23 that Nogat's
+`develop` takes the producer steps the other projects need moves the table
+ahead of the plan's step 5. Obserwator's provider fed by files (I13,
+`v3.3.0`) declares its line in a provider file beside `nogat.toml`, but the
+kit showed on the strip only the lines it knows (S, P, PS, PP and the short
+forms), so that line would reach only the dialog; the author kept the kit's
+order of the strip on an operator's instance and marks the featured
+provider on the map instead (I6, 2026-11-21). A declaration by the GUI
+keeps every operator's text out of the kit and keeps that order.
+
+**Rejected.** A rule per provider (P9). An operator's line before G, SG and
+Z, or first on the strip (its place would move as the table grows, and the
+author kept the kit's order). Child elements of `<nogat-sources>` (the
+element redraws its children from its attributes). The kit holding the
+lines of operators (its code would name a client). A short form a GUI
+invents for a line of the table (only the table's short forms shorten its
+lines).
+
+**Consequence.** DEV §20, DEV-20.4 and DEV-20.5 read as above; every code
+and every line stays, so no product changes. The kit's `nogat-sources.js`
+changes with its hash, within kit `1.2.0` (ECO-086). Obserwator declares
+the line of its provider fed by files for `v3.3.0`; Gdańskie Wody gets its
+row once its terms give the wording (P9).
+
+## ECO-088 CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's
+
+**Decision.** What CAMELS-PL took from IMGW-PIB (discharge, water levels,
+catchment boundaries) and what is derived from it carry, besides L (and
+LP), S and P, the terms line RD „Regulamin danych IMGW-PIB:
+https://danepubliczne.imgw.pl/regulations”, worded and placed as DEV-20.7
+says: after the attribution lines, in the order of the terms lines, in
+`terms_notice` of a JSON document. The rest of CAMELS-PL's data take no
+terms line, except RE on what is derived from E-OBS. CAMELS-PL's licence
+is that of the Zenodo record of its release, for 2.1.0 CC BY 4.0 with the
+catchment series derived from E-OBS excluded and under the ECA&D/E-OBS
+data policy; the data description's listing of CC BY-NC 4.0 under „1
+License” is disregarded. Plan: `docs/plans/2026-11-22-camels-pl.md`.
+
+**Why.** The author's decisions of 2026-11-24 on the points left open after
+steps 1, 2 and 5 of the plan (in session: „2. ok; 3. przyjmujemy wg tego
+jak jest na Zendoo dla 2.1.0”). DEV-20.7 required RD on every product with
+IMGW-PIB data yet said that CAMELS-PL's data take no terms line, and
+DEV-20.12 gave CAMELS-PL's IMGW-PIB data S and P only. CAMELS-PL's CC BY
+4.0 cannot lift the terms under which IMGW-PIB publishes the data it took,
+and the same series Obserwator holds straight from IMGW-PIB carry RD, so a
+gauge's data would otherwise carry other lines by the route they came.
+ECO-086 took the record's licence already; the author confirms it, and the
+data description's CC BY-NC 4.0, which does not say what it covers, binds
+no product.
+
+**Rejected.** S and P alone on CAMELS-PL's IMGW-PIB data (IMGW-PIB's terms
+bind them whoever redistributes them). The data description's CC BY-NC 4.0
+for any part of CAMELS-PL (the record names CC BY 4.0 and only the E-OBS
+exclusion, and the author takes the record).
+
+**Consequence.** DEV-20.7 and DEV-20.12 read as above, and ECO-060 and
+ECO-086 are amended. No line of DEV §20 changes, so the kit stays `1.2.0`
+and the regulamin 1.0: a GUI with CAMELS-PL's IMGW-PIB data keeps the block
+`imgw`, which links RD, beside `camels-pl`. The registry's
+`kartograf-camels-pl` names RD. Kartograf adds RD to its CAMELS-PL sidecar
+and to the `ATTRIBUTION.txt` of a plain write on its branch
+`fix/camels-terms-line` (a follow-up of step 2); Obserwator (step 3) and
+Archiwista (step 4) carry RD on these data from the start.

@@ -99,3 +99,18 @@ it for 0.8.0, cites the standard as 1.0 (CLAUDE.md, ADR-048 to ADR-058,
 PROGRESS, CHANGELOG); its copy of `error_registry.json` comes from
 `4bb6659`, so `kartograf._errors.STANDARD_VERSION` is `"1.0"`; gate green
 (8,577 passed). Branch names `chore/nogat-2.1` stay.
+
+Steps 3 to 5 (by 2026-11-16): the members of the first release set carry
+1.0 in the releases they merged into `main` on 2026-11-16, Obserwator
+`v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0` and Archiwista `v0.3.0`
+(Archiwista writes `archiwista-state/1` and reads a copy written as `/2`);
+their remaining "standard 2.1" lines are dated records (ADRs, plans).
+Retman's and Hydraulik's step 4 waits for their next merge into `main`;
+Hydraulik's `feature/sfincs-swmm` still copies `standard_version` 2.1.
+
+Step 6 (2026-11-17): standard 1.0 reaches `main` with Nogat's release
+`v0.1.0`; the merge commit, `develop` → `main` merged locally without a
+pull request with the author's approval, carries the tags `std-1.0` and
+`v0.1.0` (ADOPTION_PLAN 0.4). The root-owned legacy `standards/templates/`
+and `standards/configs/` reach `main` unchanged; replacing them stays the
+author's step (ADOPTION_PLAN 0.1).

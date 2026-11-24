@@ -6,7 +6,8 @@ Retman and Archiwista.
 
 Nogat holds:
 
-- the shared standard for all projects: [`standards/`](standards/README.md);
+- the shared standard for all projects, 1.1 (tag `std-1.1`):
+  [`standards/`](standards/README.md);
 - the project registry: [`ecosystem.yaml`](ecosystem.yaml), validated by
   [`schemas/ecosystem.schema.json`](schemas/ecosystem.schema.json);
 - the map of dependencies and exchanged data, generated from the registry:
@@ -17,11 +18,29 @@ Nogat holds:
 - the visual identity of every GUI (tokens, marks, guidelines) and the GUI
   kit every GUI copies: [`design/`](design/README.md);
 - the reference module of server logs every Python server copies:
-  [`standards/reference/`](standards/reference/nogat_logging.py).
+  [`standards/reference/`](standards/reference/nogat_logging.py);
+- the reference module of formulas every project that computes copies, with
+  the schema of its formula cards:
+  [`standards/reference/nogat_formulas.py`](standards/reference/nogat_formulas.py),
+  [`schemas/formula/`](schemas/formula/card-1.schema.json).
+
+The ecosystem's current release, `v0.2.0`, is the release set
+[`release-sets/v0.2.0/`](https://github.com/Daldek/Nogat/tree/v0.2.0/release-sets/v0.2.0):
+Kartograf 0.8.2, Obserwator 3.1.0, Hydrolog 0.9.0 and Archiwista 0.3.3 at
+their release tags, with every third-party package at one verified version;
+Hydrograf 0.6.0, an app, is released by its own tag at the same producers.
+It publishes standard 1.1. Install it as an environment:
+
+```bash
+git clone --branch v0.2.0 https://github.com/Daldek/Nogat
+cd Nogat/release-sets/v0.2.0
+uv sync --locked --no-dev --python 3.12
+```
+
+The members' commands are then in `.venv/bin/`.
 
 Nogat will also be the `nogat` package that installs every tool with one
-command (`uv tool install nogat`, [HUB §7](standards/ECOSYSTEM_HUB.md));
-it is not published yet.
+command ([HUB §7](standards/ECOSYSTEM_HUB.md)); it does not exist yet.
 
 Templates for every project's quality gate and CI are in
 [`standards/ci/`](standards/ci/README.md).

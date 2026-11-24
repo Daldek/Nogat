@@ -1,0 +1,66 @@
+# verify-candidate (REL-6.5): every member's offline suite at its commit of
+# the current release set candidate (release-sets/candidate-<N>, the highest
+# N), run by `scripts/ecosystem.py set verify`. A member with a package runs in
+# the candidate's environment, its uv.lock with every member installed as a
+# wheel; an app runs on its own lock, on Linux only. Linux, macOS and Windows on
+# Python 3.12 (required) and the newest stable Python (reported, not blocking),
+# as in standards/ci/ci.yml.
+# GitHub offers workflow_dispatch only for a workflow on the default branch:
+# the file is on `main`, and a run is dispatched against the branch holding
+# the candidate. The URL of a passing run goes into the candidate's
+# members.toml (`runs`), then `uv run scripts/ecosystem.py set readme`.
+# Actions are pinned by commit SHA; Dependabot updates them.
+name: verify-candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-candidate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    # Archiwista's suite alone takes about 40 minutes on a hosted runner.
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.12"]
+        experimental: [false]
+        include:
+          - {os: ubuntu-latest, python: "3.15", experimental: true}
+          - {os: macos-latest, python: "3.15", experimental: true}
+          - {os: windows-latest, python: "3.15", experimental: true}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Nogat's and the candidate's environments
+        shell: bash
+        run: |
+          uv sync --locked
+          candidate=$(printf '%s\n' release-sets/candidate-* | sort -V | tail -n 1)
+          echo "CANDIDATE=$candidate" >> "$GITHUB_ENV"
+          uv sync --locked --project "$candidate"
+      - name: Browsers for the GUI tests (Firefox for Archiwista, on Linux)
+        shell: bash
+        run: |
+          browsers=(chromium)
+          if [ "$RUNNER_OS" = Linux ]; then browsers+=(firefox); fi
+          uv run --no-sync --project "$CANDIDATE" playwright install --with-deps "${browsers[@]}"
+      - name: GDAL headers for Hydrograf's own lock
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgdal-dev
+      - name: Suites
+        shell: bash
+        run: uv run --no-sync python scripts/ecosystem.py set verify --workdir "$RUNNER_TEMP/members"

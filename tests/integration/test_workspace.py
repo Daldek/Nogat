@@ -501,12 +501,31 @@ def test_set_apply_rewrites_both_forms_and_nothing_else(tmp_path: Path) -> None:
     assert ecosystem.apply_set(registry, commits, "App", tmp_path) == []
 
 
-def test_set_bump_resolves_the_ref_and_regenerates_the_readme(
+APP = {"profiles": ["app"], "distribution": {"pypi": None, "import_name": None}}
+RUN = "https://github.com/Daldek/Nogat/actions/runs/1"
+
+
+def _source(name: str, url: str, commit: str) -> str:
+    return f'{name} = {{ git = "{url}", rev = "{commit}" }}\n'
+
+
+def _candidate_pyproject(commit: str) -> str:
+    return (
+        '[project]\nname = "nogat"\ndependencies = ["producer[extra]"]\n'
+        '[dependency-groups]\ndev = ["pytest>=8"]\n'
+        "[tool.uv.sources]\n"
+        + _source("producer", "https://github.com/Daldek/Producer", commit)
+    )
+
+
+def test_set_bump_moves_the_commit_and_the_rev_and_drops_the_runs(
     workspace: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     seed = _published(workspace, "Producer", {"a.txt": "1\n"})
     first = _git(seed, "rev-parse", "HEAD")
-    registry = {"projects": [_project("Consumer"), _project("Producer")]}
+    registry = {
+        "projects": [_project("Consumer"), _project("Producer"), _project("App", **APP)]
+    }
     directory = workspace / "release-sets" / "candidate-2"
     directory.mkdir(parents=True)
     (workspace / "release-sets" / "candidate-1").mkdir()
@@ -515,21 +534,154 @@ def test_set_bump_resolves_the_ref_and_regenerates_the_readme(
 
     assert ecosystem.bump(registry, directory, "Producer", None) == 0
     assert ecosystem.members(registry, directory) == {"Producer": first}
+    commits = {"Producer": first, "App": SET}
+    _write(
+        directory / "members.toml",
+        ecosystem.render_members(directory, commits, [RUN]),
+    )
+    _write(directory / "pyproject.toml", _candidate_pyproject(first))
+    _write(directory / "uv.lock", "")
+    ecosystem.bump(registry, directory, "Producer", None)
+    assert ecosystem.verification_runs(directory) == [RUN]
+    assert ecosystem.run_set(registry, readme) == 0
+    assert RUN in (directory / "README.md").read_text(encoding="utf-8")
+
     second = _commit(seed, {"a.txt": "2\n"}, "develop")
     ecosystem.bump(registry, directory, "Producer", None)
-    assert ecosystem.members(registry, directory) == {"Producer": second}
+    assert ecosystem.members(registry, directory) == {"Producer": second, "App": SET}
+    assert ecosystem.verification_runs(directory) == []
+    assert (directory / "pyproject.toml").read_text(
+        encoding="utf-8"
+    ) == _candidate_pyproject(second)
     assert ecosystem.run_set(registry, readme) == 0
     ecosystem.bump(registry, directory, "Producer", first[:7])
-    assert ecosystem.members(registry, directory) == {"Producer": first}
+    assert ecosystem.members(registry, directory)["Producer"] == first
     assert first in (directory / "README.md").read_text(encoding="utf-8")
 
     _write(
         directory / "members.toml",
-        ecosystem.render_members(directory, {"Producer": second}),
+        ecosystem.render_members(directory, {"Producer": second, "App": SET}),
     )
     with pytest.raises(ecosystem.Failure) as caught:
         ecosystem.run_set(registry, readme)
     assert caught.value.code == "conflict"
+
+
+@pytest.mark.parametrize(
+    ("pyproject", "lock", "problems"),
+    [
+        (_candidate_pyproject(OLD), True, ["Producer is pinned by commit " + OLD]),
+        (_pyproject("producer>=1")["pyproject.toml"], True, ["by range >=1"]),
+        (
+            _candidate_pyproject(SET).replace('"producer[extra]"', '"app"')
+            + _source("app", "https://github.com/Daldek/App", SET),
+            True,
+            ["Producer is pinned by none", "installs App, an app"],
+        ),
+        (_candidate_pyproject(SET), False, ["uv.lock: missing"]),
+        (None, False, ["pyproject.toml: missing", "uv.lock: missing"]),
+    ],
+)
+def test_set_readme_check_fails_when_the_candidate_installs_other_commits(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    pyproject: str | None,
+    lock: bool,
+    problems: list[str],
+) -> None:
+    registry = {"projects": [_project("Producer"), _project("App", **APP)]}
+    commits = {"Producer": SET, "App": OLD}
+    directory = _set(tmp_path, commits)
+    monkeypatch.setattr(ecosystem, "RELEASE_SETS", tmp_path / "release-sets")
+    _write(
+        directory / "README.md",
+        ecosystem.render_set_readme(registry, directory, commits),
+    )
+    if pyproject is not None:
+        _write(directory / "pyproject.toml", pyproject)
+    if lock:
+        _write(directory / "uv.lock", "")
+
+    found = ecosystem.candidate_problems(registry, directory, commits)
+
+    assert len(found) == len(problems)
+    assert all(any(p in f for f in found) for p in problems)
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.run_set(
+            registry, argparse.Namespace(set_command="readme", check=True)
+        )
+    assert caught.value.details["reason"] == "stale_candidate"
+
+
+def test_set_verify_checks_out_each_member_and_reports_failed_suites(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    origins = {}
+    (tmp_path / "origins").mkdir()
+    for name in ("Producer", "Library", "App"):
+        origins[name] = tmp_path / "origins" / name
+        _repository(
+            origins[name], {"backend/tests/t.py" if name == "App" else "tests/t.py": ""}
+        )
+        _repository(origins[name], {"later.txt": "1\n"})
+    commits = {n: _git(o, "rev-parse", "HEAD~1") for n, o in origins.items()}
+    registry = {
+        "projects": [
+            _project(n, repo=o.as_uri(), **(APP if n == "App" else {}))
+            | ({"python_manifests": ["backend/pyproject.toml"]} if n == "App" else {})
+            for n, o in origins.items()
+        ]
+    }
+    directory = _set(tmp_path, commits)
+    _write(
+        directory / "pyproject.toml",
+        '[project]\nname = "nogat"\ndependencies = ["producer", "library"]\n'
+        "[tool.uv.sources]\n"
+        + _source("producer", origins["Producer"].as_uri(), commits["Producer"])
+        + _source("library", origins["Library"].as_uri(), commits["Library"]),
+    )
+    _write(directory / "uv.lock", "")
+    ran: list[tuple[str, Path]] = []
+    envs: dict[Path, dict[str, str]] = {}
+
+    def suite(
+        command: list[str], cwd: Path, extra_env: dict[str, str] | None = None
+    ) -> int:
+        ran.append((" ".join(command), cwd))
+        if extra_env:
+            envs[cwd] = extra_env
+        return 1 if cwd.name == "Producer" and "pytest" in command else 0
+
+    monkeypatch.setattr(ecosystem, "_run_suite", suite)
+    workdir = tmp_path / "work"
+
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.verify(registry, directory, workdir, [], platform="darwin")
+    assert caught.value.code == "conflict"
+    assert caught.value.details["members"] == ["Producer"]
+    assert {cwd.name for _, cwd in ran} == {"candidate-1", "Producer", "Library"}
+    suites = [(c, cwd) for c, cwd in ran if " -m pytest " in c]
+    assert [f"--cov={cwd.name.lower()}" in c for c, cwd in suites] == [True, True]
+    # Each package member's own lock is synced first, into an environment
+    # outside its checkout, so its offline install tests find its versions.
+    for name in ("Producer", "Library"):
+        commands = [c for c, cwd in ran if cwd.name == name]
+        assert commands[0].startswith("uv sync --locked --no-install-project")
+        assert " -m pytest " in commands[1]
+        own = Path(envs[workdir / name]["UV_PROJECT_ENVIRONMENT"])
+        assert workdir / name not in own.parents
+    for name in ("Producer", "Library"):
+        assert _git(workdir / name, "rev-parse", "HEAD") == commits[name]
+
+    ran.clear()
+    ecosystem.verify(registry, directory, workdir, ["App"], platform="linux")
+    assert [(c.split()[:3], cwd) for c, cwd in ran][1:] == [
+        (["uv", "sync", "--locked"], workdir / "App" / "backend"),
+        (["uv", "run", "--no-sync"], workdir / "App" / "backend"),
+    ]
+    with pytest.raises(ecosystem.Failure) as caught:
+        ecosystem.verify(registry, directory, workdir, ["Retman"])
+    assert caught.value.code == "validation_error"
 
 
 @pytest.mark.parametrize(
@@ -547,6 +699,18 @@ def test_members_rejects_anything_but_full_commits_of_projects(
     with pytest.raises(ecosystem.RegistryError) as caught:
         ecosystem.members({"projects": [_project("Producer")]}, tmp_path)
     assert caught.value.code == "data_error"
+
+
+@pytest.mark.parametrize("runs", ['"https://example.org/1"', f'"{RUN}/jobs/2"', '"x"'])
+def test_verification_runs_rejects_anything_but_action_run_urls(
+    tmp_path: Path, runs: str
+) -> None:
+    _write(
+        tmp_path / "members.toml", f'runs = [{runs}]\n[Producer]\ncommit = "{SET}"\n'
+    )
+    assert ecosystem.members({"projects": [_project("Producer")]}, tmp_path)
+    with pytest.raises(ecosystem.RegistryError):
+        ecosystem.verification_runs(tmp_path)
 
 
 def _repository(directory: Path, files: dict[str, str]) -> str:
@@ -567,7 +731,9 @@ HEADER = (
     "Do not edit here:\n   change Nogat, then copy again. */\n"
 )
 LOGGING = '"""Logs of a Nogat server."""\n'
+FORMULAS = '"""Formulas of a project that computes."""\n'
 RECORD = "schemas/log/record-1.schema.json"
+CARD = "schemas/formula/card-1.schema.json"
 
 
 def test_copies_of_nogat_files_are_current_behind_or_modified(
@@ -581,7 +747,9 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "schemas/agent/result-1.schema.json": '{"r": 1}\n',
             "design/tokens.css": TOKENS,
             "standards/reference/nogat_logging.py": LOGGING,
+            "standards/reference/nogat_formulas.py": FORMULAS,
             RECORD: '{"l": 1}\n',
+            CARD: '{"c": 1}\n',
             "design/README.md": "not copied\n",
         },
     )
@@ -594,6 +762,8 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "schemas/nogat/handoff-1.schema.json": '{"v": 1}\n',
             "web/tokens.css": HEADER + TOKENS,
             "docs/result-1.schema.json": '{"r": "edited"}\n',
+            "schemas/nogat/card-1.schema.json": '{"c": 1}\n',
+            "src/alpha/nogat_formulas.py": FORMULAS,
             "src/alpha/nogat_logging.py": LOGGING,
             "README.md": "Alpha\n",
         },
@@ -608,6 +778,7 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "tokens.css": "/* Our tokens. */\n" + TOKENS,
             "backend/core/nogat_logging.py": LOGGING + "# edited\n",
             "schemas/record-1.schema.json": '{"l": 1}\n',
+            "src/beta/nogat_formulas.py": FORMULAS + "# edited\n",
         },
     )
     (workspace / "Plain").mkdir()
@@ -629,9 +800,21 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
         ),
         (
             "Alpha",
+            "schemas/nogat/card-1.schema.json",
+            CARD,
+            "current",
+        ),
+        (
+            "Alpha",
             "schemas/nogat/handoff-1.schema.json",
             HANDOFF,
             f"behind {restored[:7]}",
+        ),
+        (
+            "Alpha",
+            "src/alpha/nogat_formulas.py",
+            "standards/reference/nogat_formulas.py",
+            "current",
         ),
         (
             "Alpha",
@@ -649,6 +832,12 @@ def test_copies_of_nogat_files_are_current_behind_or_modified(
             "modified",
         ),
         ("Beta", "schemas/record-1.schema.json", RECORD, "current"),
+        (
+            "Beta",
+            "src/beta/nogat_formulas.py",
+            "standards/reference/nogat_formulas.py",
+            "modified",
+        ),
         ("Beta", "tokens.css", "design/tokens.css", "modified"),
         ("Plain", "—", "—", "no checkout"),
         ("Absent", "—", "—", "no checkout"),
