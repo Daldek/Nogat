@@ -8,6 +8,14 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- PIG-PIB's groundwater monitoring in Obserwator `v3.3.0`, a plan
+  (`docs/plans/2026-11-24-pig-groundwater.md`), reviewed and approved by
+  Fable for the author on
+  2026-11-24: the points, the monthly verified readings captured before each
+  swap, the hourly automatic measurements as an operational tier harvested
+  by `OBJECTID` watermark, the provider `PIG` of class `other` under CC BY
+  4.0, the lines W, WP, WK and the terms line RW; an interim capture by the
+  operator from 2026-11-24.
 - Large basins in one Hydrograf instance, a plan
   (`docs/plans/2026-11-16-large-basins.md`), reviewed by Fable and approved
   by the author on 2026-11-24 with his answers to the review's three points:
