@@ -51,6 +51,18 @@ the standard are listed in [standards/README.md](standards/README.md).
   Archiwista), and Obserwator `v3.5.0` replacing `gui_basemap_url` and
   `gui_basemap_attribution` without a deprecation (a REL-1.1 deviation; the
   author's instance is the only one).
+- Hydrograf's map on MapLibre, a plan
+  (`docs/plans/2026-11-24-hydrograf-maplibre.md`; the author's direction of
+  2026-11-24), reviewed by Fable on 2026-11-24 and pending the author's
+  answers to its eight questions: Hydrograf's whole map off Leaflet and
+  VectorGrid onto MapLibre GL JS 6.14.0 as Obserwator and Archiwista vendor
+  it, in a minor after the one with the shared base maps, after browser
+  tests of today's map that pass unchanged across the move; every zoom
+  number one less, the pre-generated vector tiles from level 7 and the
+  sewer's from 9 so that each layer appears at today's scale, WebGL 2
+  required, `Hydrograf.map` the only owner of the library; then the kit's
+  Leaflet adapter retired (kit `2.0.0` or a minor with the author's
+  consent) and MapLibre recorded as the ecosystem's map library.
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
