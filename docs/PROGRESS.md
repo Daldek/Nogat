@@ -195,11 +195,11 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 8. The round without a Nogat release (the author's decision of 2026-11-23): no Nogat release and no
    `std-*` tag; standard 1.2 accumulates on `develop` (HUB-6.1): ECO-084, ECO-085, DEV-20.8, the `forbidden`
    reasons, ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087 (P9's table of provider lines; `screen-lines`
-   for Obserwator's provider fed by files, I13) and kit `1.2.0`. On the members' `develop` (not pushed, not
-   released), 2026-11-23: Kartograf `0.9.0.dev0` (CAMELS-PL step 2, its ADR-062), Hydrolog `0.10.0.dev0`
+   for Obserwator's provider fed by files, I13) and kit `1.2.0`. On the members' `develop` (pushed 2026-11-24, not
+   released): Kartograf `0.9.0.dev0` (CAMELS-PL step 2, its ADR-062), Hydrolog `0.10.0.dev0`
    (step 5, its ADR-0073; CAMELS-PL's BFI uses another filter, recorded, not matched), Obserwator
    `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`). ECO-088 (2026-11-24): RD on what
-   CAMELS-PL took from IMGW-PIB (Kartograf `fix/camels-terms-line`), its licence by the Zenodo record, BFI
+   CAMELS-PL took from IMGW-PIB (Kartograf `630af02d`), its licence by the Zenodo record, BFI
    not reported for now. Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
@@ -262,7 +262,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     `3.2.0`, `[obserwator.capture]`, the first backup, the timers, the backfill.
     Next in the members (Next 8): Obserwator `v3.3.0` (the provider fed by
     files; Gdańskie Wody waits for its terms), Kartograf's CAMELS-PL product, Hydrolog `0.10.0`; CAMELS-PL `v3.4.0`.
-18. Large basins in one Hydrograf instance: plan `docs/plans/2026-11-16-large-basins.md` (`plan/large-basins`, not merged), approved by the author on 2026-11-24 with his answers to Fable's review (`~/workspace/wt/logs/fable-large-basins.md`): the network's topology, then parts of whole JCWP within 90 M grid cells checked before any bootstrap, several basins in one database, the cell size his per basin (5 m for the Barycz and the Bóbr). Hydrograf `0.9.0`, after `0.7.0`'s small steps and `0.8.0`'s MapLibre move.
+18. Large basins in one Hydrograf instance: plan `docs/plans/2026-11-16-large-basins.md` (merged into `develop` at `160db1d`), approved by the author on 2026-11-24 with his answers to Fable's review (`~/workspace/wt/logs/fable-large-basins.md`): the network's topology, then parts of whole JCWP within 90 M grid cells checked before any bootstrap, several basins in one database, the cell size his per basin (5 m for the Barycz and the Bóbr). Hydrograf `0.9.0`, after `0.7.0`'s small steps and `0.8.0`'s MapLibre move.
 19. Interval estimation beside point estimation (Obserwator feedback #13): plan `docs/plans/2026-11-24-interval-estimation.md`, approved by the author on 2026-11-24 with the answers to its questions 1 to 6, reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-interval-estimation.md`): Hydrolog computes the intervals of the flood, precipitation and low-flow quantiles (a parametric bootstrap of the L-moments fits, KZGW 2017's delta method of the maximum-likelihood fits) at 95 % and 68 %, Obserwator stores both and shows them, selectable, as bands and „[dolna–górna]”; N1 first, then Hydrolog `0.10.0`, then Obserwator (`v3.4.0` or `v3.5.0`, whichever first runs Hydrolog `0.10.0`), one `analyses build` after both.
 20. Approved by the author on 2026-11-24 after Fable's reviews (`~/workspace/wt/logs/fable-{unified-charts,qgis-plugin,latarnik,shared-base-maps,hydrograf-maplibre}.md`), merged into `develop`: `docs/plans/2026-11-24-unified-charts.md` (one chart module in the kit, Obserwator feedback #9), `2026-11-24-qgis-plugin.md` (Goniec, feedback #11; Obserwator `v3.6.0`), `2026-11-24-latarnik.md` (item 12), `2026-11-24-shared-base-maps.md` (answers 1–9, amended) and `2026-11-24-hydrograf-maplibre.md` (Hydrograf `0.8.0` at the earliest); Kartograf's GUI is its own plan (Kartograf `plan/kartograf-gui`).
 
