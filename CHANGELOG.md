@@ -28,6 +28,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   caching headers by resource class, HEC-RAS and HEC-HMS tables and HEC-DSS
   files built on the server, every daily series PER-AVER at `2400`;
   GPL-2.0-or-later.
+- Latarnik, the access point and the GUI hub, a plan
+  (`docs/plans/2026-11-24-latarnik.md`, approved by the author on 2026-11-24
+  with the answers to its six questions) replacing stage 2
+  of the GUI platform: an optional project in front of the tools' servers,
+  each tool still alone; `nogat-server/1` at `GET /api/v1/server` on every
+  server, `/<tool>/v1/…` passed through, limits, caching, CORS and logs at one
+  door, jobs as `nogat-job/1`, flows over the registry's exchanges; a server
+  for Hydrolog; every GUI a static client of its tool's `/api/v1`.
 - Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
   author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
   of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
