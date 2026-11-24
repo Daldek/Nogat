@@ -8,8 +8,9 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
-- Latarnik, the access point and the GUI hub, a draft plan
-  (`docs/plans/2026-11-24-latarnik.md`, `Approved: pending`) replacing stage 2
+- Latarnik, the access point and the GUI hub, a plan
+  (`docs/plans/2026-11-24-latarnik.md`, approved by the author on 2026-11-24
+  with the answers to its six questions) replacing stage 2
   of the GUI platform: an optional project in front of the tools' servers,
   each tool still alone; `nogat-server/1` at `GET /api/v1/server` on every
   server, `/<tool>/v1/…` passed through, limits, caching, CORS and logs at one
