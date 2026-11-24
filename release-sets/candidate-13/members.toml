@@ -1,0 +1,19 @@
+# Release set candidate-13 (REL-6.4): the commit of each member.
+# Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is
+# generated from this file (`set readme`). `runs` lists the passing runs
+# of verify-candidate at these commits (REL-6.5); a bump drops them.
+
+[Kartograf]
+commit = "630af02d1739e4979a817951490667c3fc2f9cdd"
+
+[Obserwator]
+commit = "472446d3d3ac29cc9b4f46b89e4fba83e555f1ba"
+
+[Hydrolog]
+commit = "a59753cc8bddc333a3c2d813a66514c1fadfdbb6"
+
+[Hydrograf]
+commit = "f2b33cee651dcc9f16d9ef26eacb14e7f9feb4c2"
+
+[Archiwista]
+commit = "df1a7096f1ad2d4f28d7e09c51dd44ceca54cdff"
