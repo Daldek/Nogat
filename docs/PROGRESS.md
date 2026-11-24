@@ -198,9 +198,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
    for Obserwator's provider fed by files, I13) and kit `1.2.0`. On the members' `develop` (not pushed, not
    released), 2026-11-23: Kartograf `0.9.0.dev0` (CAMELS-PL step 2, its ADR-062), Hydrolog `0.10.0.dev0`
    (step 5, its ADR-0073; CAMELS-PL's BFI uses another filter, recorded, not matched), Obserwator
-   `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`). Open for the author: whether the
-   terms line RD goes with what CAMELS-PL took from IMGW-PIB (DEV-20.7 vs DEV-20.12). Deleting
-   `feature/verify-candidate` and `chore/candidate-6` is the author's.
+   `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`). ECO-088 (2026-11-24): RD on what
+   CAMELS-PL took from IMGW-PIB (Kartograf `fix/camels-terms-line`), its licence by the Zenodo record, BFI
+   not reported for now. Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's

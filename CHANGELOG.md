@@ -126,6 +126,17 @@ the standard are listed in [standards/README.md](standards/README.md).
   follows them (ECO-087, P9 of `2026-11-20-hydromet-providers.md`).
 - The GUI kit is `1.2.0` (`screen-lines`, the blocks `camels-pl` and
   `e-obs`; REL-1.4, ECO-086); regulamin 1.0 stays.
+- ECO-088, the author's decisions of 2026-11-24 on CAMELS-PL: DEV-20.12
+  gives what CAMELS-PL took from IMGW-PIB (discharge, water levels,
+  catchment boundaries) and what is derived from it the terms line RD as
+  well as S and P, and DEV-20.7's sentence that CAMELS-PL's data take no
+  terms line now covers only its other data; CAMELS-PL's licence is that of
+  its release's Zenodo record (2.1.0: CC BY 4.0, the E-OBS catchment series
+  excluded), the data description's CC BY-NC 4.0 disregarded. ECO-060 and
+  ECO-086 are amended; `kartograf-camels-pl` in `ecosystem.yaml` names RD
+  and `docs/ECOSYSTEM_MAP.md` is regenerated; the CAMELS-PL plan records
+  the decisions, BFI's discrepancy not reported to CAMELS-PL's authors for
+  now.
 - Amended the shared base-maps plan
   (`docs/plans/2026-11-24-shared-base-maps.md`) with the author's decisions
   of 2026-11-24: no base map a visitor adds in the browser, whose
