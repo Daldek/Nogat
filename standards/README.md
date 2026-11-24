@@ -124,6 +124,11 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     the regulamin's template gains the blocks `camels-pl` and `e-obs`, in
     place, and the reference cases of a published data set are pinned to
     its release (DEV §20, DEV-20.7, DEV-20.12, CMP-6.10, ECO-086).
+  - What CAMELS-PL took from IMGW-PIB and what is derived from it carry the
+    terms line RD as well as S and P; its other data take no terms line,
+    except RE on what is derived from E-OBS. CAMELS-PL's licence is that of
+    its release's Zenodo record; the data description's CC BY-NC 4.0 is
+    disregarded (DEV-20.7, DEV-20.12, ECO-088).
   - The GUI kit becomes version 1.2.0: `screen-lines` of `<nogat-sources>`
     and the blocks `camels-pl` and `e-obs` of the regulamin (ECO-086,
     ECO-087).

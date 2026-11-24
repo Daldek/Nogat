@@ -1197,13 +1197,17 @@ of DEV-20.5, in a GUI view in the dialog behind its strip; a JSON document,
 result or hand-off has them in `terms_notice`, an array of strings carried
 on like `attribution`. No product restates, summarises or paraphrases a
 provider's terms: it carries the lines of the table and links the rest.
-ČHMÚ, CAMELS-PL, G2DC-PL+, ISRIC and ČÚZK data take no terms line, since C,
-L, D, SG and Z name the licence with its link, nor do GUGiK data, whose
-conditions of reuse a regulamin links in its § 5.
+ČHMÚ, G2DC-PL+, ISRIC and ČÚZK data take no terms line, since C, D, SG and
+Z name the licence with its link, nor does the rest of CAMELS-PL's data,
+whose licence L names (what it took from IMGW-PIB carries RD and what is
+derived from E-OBS RE, DEV-20.12), nor do GUGiK data, whose conditions of
+reuse a regulamin links in its § 5.
 *Why:* the providers' own terms are the only binding text, and a summary
 can mis-state them; products carry only what the providers require (the
-author's principle of 2026-11-13, ECO-065); a dialog one click from the data
-keeps the screen for the data (ECO-064).
+author's principle of 2026-11-13, ECO-065), and a provider's terms follow
+its data through a data set that redistributes them under its own licence
+(ECO-088); a dialog one click from the data keeps the screen for the data
+(ECO-064).
 
 **DEV-20.8** Operational data of hydro.imgw.pl and its backend (water states
 and their classes, measurements, warnings, forecasts), of IMGW-PIB's
@@ -1244,11 +1248,16 @@ results derived from them carries Z.
 **DEV-20.12** A product with CAMELS-PL data carries L for the release they
 come from, and LP once they were processed (DEV-20.1). What CAMELS-PL took
 from IMGW-PIB (discharge, water levels, catchment boundaries) and what is
-derived from it carry S and P as well; what is derived from E-OBS carries E
-and RE, and its catchment time series, which CAMELS-PL's licence leaves out,
-follow the E-OBS data policy instead of CC BY 4.0, so a GUI or a REST API
-serves them only where its deployment turns them on; what is derived from
-G2DC-PL+ carries D.
+derived from it carry S and P as well, and the terms line RD (DEV-20.7);
+what is derived from E-OBS carries E and RE, and its catchment time series,
+which CAMELS-PL's licence leaves out, follow the E-OBS data policy instead
+of CC BY 4.0, so a GUI or a REST API serves them only where its deployment
+turns them on; what is derived from G2DC-PL+ carries D. The licence is that
+of the release's Zenodo record.
 *Why:* CC BY 4.0, §3(a)(1); the record names IMGW-PIB as the source of these
 data and leaves the E-OBS series to the E-OBS policy, which allows
-non-commercial research and education only (ECO-086).
+non-commercial research and education only (ECO-086); the record governs,
+not the data description's „1 License”, which also lists CC BY-NC 4.0, and
+CAMELS-PL's CC BY 4.0 cannot lift IMGW-PIB's terms, which the same series
+taken straight from IMGW-PIB carry as RD (the author's decisions of
+2026-11-24, ECO-088).

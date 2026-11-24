@@ -141,7 +141,7 @@ flowchart LR
 | `kartograf-result/1` | document | Hydraulik, Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
-| `kartograf-camels-pl` | dataset | Obserwator (planned) | Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes and the lines L, S and P (DEV-20.12). |
+| `kartograf-camels-pl` | dataset | Obserwator (planned) | Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088). |
 
 ### Obserwator
 

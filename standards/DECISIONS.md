@@ -97,6 +97,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
 | [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
+| [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
 
 ---
 
@@ -1241,6 +1242,10 @@ for what is derived from E-OBS, and D for what is derived from G2DC-PL+
 lines that DEV-20.4 orders, a new provider a row of it; the line of a
 provider it does not hold, declared by a deployment, follows them.
 
+**Amended by ECO-088 (2026-11-24):** what CAMELS-PL took from IMGW-PIB and
+what is derived from it carry the terms line RD with S and P (DEV-20.7,
+DEV-20.12).
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -2259,6 +2264,11 @@ free ECO number (as PROGRESS numbering, Q12).
 
 ## ECO-086 CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator
 
+**Amended by ECO-088 (2026-11-24):** what CAMELS-PL took from IMGW-PIB and
+what is derived from it carry the terms line RD as well as S and P; the
+licence is that of the release's Zenodo record, and the data description's
+CC BY-NC 4.0 is disregarded.
+
 **Decision.** CAMELS-PL (Brzezińska, Marcinkowski, Dolich, Maharjan, Perz,
 Piniewski, Kardel, Loritz, Wrzesiński; release 2.1.0, Zenodo record
 23275336, DOI 10.5281/zenodo.23275336, 2026-10-11; concept DOI
@@ -2377,3 +2387,43 @@ and every line stays, so no product changes. The kit's `nogat-sources.js`
 changes with its hash, within kit `1.2.0` (ECO-086). Obserwator declares
 the line of its provider fed by files for `v3.3.0`; Gdańskie Wody gets its
 row once its terms give the wording (P9).
+
+## ECO-088 CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's
+
+**Decision.** What CAMELS-PL took from IMGW-PIB (discharge, water levels,
+catchment boundaries) and what is derived from it carry, besides L (and
+LP), S and P, the terms line RD „Regulamin danych IMGW-PIB:
+https://danepubliczne.imgw.pl/regulations”, worded and placed as DEV-20.7
+says: after the attribution lines, in the order of the terms lines, in
+`terms_notice` of a JSON document. The rest of CAMELS-PL's data take no
+terms line, except RE on what is derived from E-OBS. CAMELS-PL's licence
+is that of the Zenodo record of its release, for 2.1.0 CC BY 4.0 with the
+catchment series derived from E-OBS excluded and under the ECA&D/E-OBS
+data policy; the data description's listing of CC BY-NC 4.0 under „1
+License” is disregarded. Plan: `docs/plans/2026-11-22-camels-pl.md`.
+
+**Why.** The author's decisions of 2026-11-24 on the points left open after
+steps 1, 2 and 5 of the plan (in session: „2. ok; 3. przyjmujemy wg tego
+jak jest na Zendoo dla 2.1.0”). DEV-20.7 required RD on every product with
+IMGW-PIB data yet said that CAMELS-PL's data take no terms line, and
+DEV-20.12 gave CAMELS-PL's IMGW-PIB data S and P only. CAMELS-PL's CC BY
+4.0 cannot lift the terms under which IMGW-PIB publishes the data it took,
+and the same series Obserwator holds straight from IMGW-PIB carry RD, so a
+gauge's data would otherwise carry other lines by the route they came.
+ECO-086 took the record's licence already; the author confirms it, and the
+data description's CC BY-NC 4.0, which does not say what it covers, binds
+no product.
+
+**Rejected.** S and P alone on CAMELS-PL's IMGW-PIB data (IMGW-PIB's terms
+bind them whoever redistributes them). The data description's CC BY-NC 4.0
+for any part of CAMELS-PL (the record names CC BY 4.0 and only the E-OBS
+exclusion, and the author takes the record).
+
+**Consequence.** DEV-20.7 and DEV-20.12 read as above, and ECO-060 and
+ECO-086 are amended. No line of DEV §20 changes, so the kit stays `1.2.0`
+and the regulamin 1.0: a GUI with CAMELS-PL's IMGW-PIB data keeps the block
+`imgw`, which links RD, beside `camels-pl`. The registry's
+`kartograf-camels-pl` names RD. Kartograf adds RD to its CAMELS-PL sidecar
+and to the `ATTRIBUTION.txt` of a plain write on its branch
+`fix/camels-terms-line` (a follow-up of step 2); Obserwator (step 3) and
+Archiwista (step 4) carry RD on these data from the start.
