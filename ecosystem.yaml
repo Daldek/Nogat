@@ -127,7 +127,7 @@ projects:
         summary: kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6).
       - id: kartograf-camels-pl
         kind: dataset
-        summary: Planned for Kartograf's next minor (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro; the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088).
+        summary: Since v0.9.0 (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro (`hydro download --product camels`); the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088).
     depends_on: []
 
   - name: Obserwator
