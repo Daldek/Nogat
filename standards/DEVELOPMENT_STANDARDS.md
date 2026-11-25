@@ -16,7 +16,7 @@ Requirements apply to all projects unless marked with a profile.
 | Profile | Meaning | Projects |
 |---|---|---|
 | `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, Obserwator, Hydrolog, Retman, Hydraulik |
-| `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista |
+| `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista, Latarnik (access point and GUI hub) |
 | `hub` | Registry, standard and user package | Nogat |
 | `plugin` | QGIS plugin, a client of the tools' servers; distributed through plugins.qgis.org | Goniec |
 

@@ -59,6 +59,7 @@
   --tool-hydraulik: #5e4fa2;
   --tool-retman: #a4472f;
   --tool-goniec: #8e3b78;
+  --tool-latarnik: #76680a;
 
   /* Type */
   --font-sans: Lato, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "DejaVu Sans", sans-serif;
@@ -172,6 +173,7 @@
     --tool-hydraulik: #b0a3f0;
     --tool-retman: #f0907a;
     --tool-goniec: #e58fcf;
+    --tool-latarnik: #e8cf55;
 
     /* Navigation rail */
     --rail-bg: #010409;
@@ -236,6 +238,7 @@
   --tool-hydraulik: #b0a3f0;
   --tool-retman: #f0907a;
   --tool-goniec: #e58fcf;
+  --tool-latarnik: #e8cf55;
 
   /* Navigation rail */
   --rail-bg: #010409;

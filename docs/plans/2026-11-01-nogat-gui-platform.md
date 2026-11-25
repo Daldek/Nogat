@@ -9,9 +9,10 @@ Status: stage 2, deferred by the author on 2026-11-12 until stage 1,
 is done. The path of this file keeps its first name because other
 repositories and the description of `handoff-1` cite it. On 2026-11-24 the
 author made the access point and the GUI hub one project, Latarnik („punkt
-dostępu i GUI hub to osobny projekt – Latarnik”); the draft
-[Latarnik plan](2026-11-24-latarnik.md) replaces this stage and says what of
-it is kept.
+dostępu i GUI hub to osobny projekt – Latarnik”); the
+[Latarnik plan](2026-11-24-latarnik.md), approved the same day, replaces this
+stage and says what of it is kept, and ECO-095 records it (2026-11-25, step
+N1 of that plan); this plan closes with its Results at that plan's N2.
 
 Requirements: HUB-5.2, DEV-17.4, DEV-15.1, DEV-15.3, AGI-2.1, AGI-2.3,
 AGI-6.1, HUB-1.1, HUB-1.2, HUB §2, DEV §13, ECO-054, ECO-055. Continues the

@@ -119,6 +119,30 @@ the standard are listed in [standards/README.md](standards/README.md).
   `nogat-server/1` names Kartograf's capabilities `catalog`, `plan` and
   `script`. `ecosystem.yaml`: Kartograf's `interfaces.rest`, planned, and
   its planned service `kartograf-server`; map and `AGENTS.md` regenerated.
+- Latarnik, the access point of a deployment and its GUI hub, and every
+  tool's server by one set of rules (ECO-095, step N1 of
+  `docs/plans/2026-11-24-latarnik.md`). AGI-6.7 to AGI-6.10:
+  `nogat-server/1` at `GET /api/v1/server` and the command list at
+  `/api/v1/commands/list` on every server, access and caching by the
+  catalog (the tool's key `X-API-Key` on a run whose `rest.key` is true),
+  the client's address only from a trusted proxy's `X-Forwarded-For` with
+  relative links but OGC API's, and a long run as a job,
+  `schemas/exchange/job-1.schema.json`, `nogat-job/1` (its seven states,
+  the times each implies, the body of `POST /api/v1/jobs`), with contract
+  tests. commands-1 takes the optional `rest` (`{method, path, key}`, the
+  key following `effects.read_only` where absent, so Obserwator's present
+  `rest` validates) and `long`, and refuses the groups `server` and `jobs`;
+  command-list-1 takes `effects`, `check` and `rest`. The registry's
+  `conflict` names the reasons `job_running`, `run_as_job` and
+  `other_version`, `not_found` the reason `job_expired`
+  (`standards/ERROR_REGISTRY.md` regenerated). `nogat-server/1`'s Latarnik
+  example names the flow `point-design-hydrograph`, a service of another
+  version and the GUIs on their own hosts. `ecosystem.yaml`: Latarnik
+  (`research`, profile `app`, `interfaces.rest` `/api/v1`, the route `GET
+  /api/v1/server`) with planned runtime dependencies over REST on
+  Obserwator, Hydrolog, Hydrograf, Kartograf and Archiwista; map and
+  `AGENTS.md` regenerated. Latarnik's mark `design/marks/latarnik.svg`, a
+  lighthouse, and its accent `--tool-latarnik`.
 
 ### Changed
 
@@ -140,6 +164,17 @@ the standard are listed in [standards/README.md](standards/README.md).
   (ECO-089). The GUI platform plan's `basemaps.json` points to the
   base-maps plan, its `chart-theme.js` to the charts plan and its
   `command-form.js` to Kartograf's GUI plan (ECO-093).
+- AGI-6.1: `POST` also for a read-only command whose inputs a URL cannot
+  carry, each route the catalog's `rest`, a path option refused by a
+  server; AGI-6.2: OpenAPI at `/api/v1/openapi.json` with a relative
+  `servers` URL; AGI-6.5: authentication for a run that changes something
+  on the server; AGI-2.2 and AGI-2.4 name the new optional fields; ERR-1
+  points to the reasons in the registry's meanings; HUB-1.1 names
+  `nogat-job/1` and Latarnik; DEV §1 lists Latarnik under `app`; the lists
+  of the ecosystem's distributions in `standards/ci/` name `latarnik`.
+  ECO-003, ECO-058 (stage 2 is Latarnik, `nogat.gui` retires) and ECO-059
+  (Obserwator calls Hydrolog's program or server) are amended (ECO-095); the
+  GUI platform plan's status points to ECO-095.
 
 ## [0.3.0] - 2026-11-25
 

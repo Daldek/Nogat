@@ -88,7 +88,9 @@ copy of its parser.
 | `i18n` | Polish texts for human-readable fields |
 
 `summary`, `description` and `rules` together are the MCP tool description
-(AGI-5.3) and fit its budget (DOC-1.7).
+(AGI-5.3) and fit its budget (DOC-1.7). A command MAY declare `rest`, its
+route on the tool's server (AGI-6.1, AGI-6.8), and `long`, true when a run
+can outlast a request (AGI-6.10).
 *Why:* when-not and examples most improve agent tool choice
 (https://www.anthropic.com/engineering/writing-tools-for-agents,
 https://arxiv.org/abs/2602.14878); `effects` feeds the MCP annotations
@@ -116,7 +118,9 @@ already checks instead of a copy of them in each GUI (ECO-093).
 
 **AGI-2.4** The catalog is serialised in two documents (schemas in
 AGI-4.1): the summary `<tool>-command-list/1`, one entry per command with
-at least `name`, `operation_id`, `summary` and `read_only`, returned by
+at least `name`, `operation_id`, `summary` and `read_only`, and MAY carry
+`effects`, `check` and `rest` (the route as the server that answers the list
+serves it, AGI-6.8), returned by
 `<tool> commands list --json` and the MCP tool `<tool>_commands_list`; and
 the full catalog `<tool>-commands/1`, returned by `<tool> commands schema
 [--command "<group> <verb>"] --json` and the MCP tool
@@ -339,10 +343,22 @@ code, hint).
 ## 6. REST API (projects with a server)
 
 **AGI-6.1** Where the project has a command catalog, its operations are
-exposed at `/api/v1/<group>/<verb>`; `GET` for read-only, `POST` for writing;
-`?check=true` for plans; the response body is the result envelope.
+exposed at `/api/v1/<group>/<verb>`, each command's route being the `rest` of
+its catalog entry (`{method, path, key}`, `null` for a command the server
+does not serve); `GET` for read-only, `POST` for writing and for a read-only
+command whose inputs a URL cannot carry (an object such as a geometry or a
+network, a long array such as a series), which stays read-only and needs no
+key; a route released as `GET` keeps its method (REL-1.1), and such an input
+comes with a new command. `?check=true` for plans; the response body is the
+result envelope. `server` and `jobs` are reserved and never a catalog group.
+An option with `path_role` is local: a server refuses it with `forbidden` and
+takes the option's inline form.
+*Why:* a geometry or a series does not fit a query string; a proxy reads each
+route and its access from the catalog, not from a list of its own (ECO-095).
 
-**AGI-6.2** OpenAPI 3.1 at `/openapi.json`; where the project has a command
+**AGI-6.2** OpenAPI 3.1 at `/api/v1/openapi.json` (also at `/openapi.json`
+where a release served it there), its `servers` URL relative so that it
+reads right behind a prefix; where the project has a command
 catalog, `operationId` equals the catalog `operation_id`; every operation has
 `summary`, `description` (with when/when-not), parameter descriptions, examples
 and documented error responses. FastAPI uses `generate_unique_id_function` to
@@ -359,11 +375,86 @@ HTTP status from the registry.
 the header is absent, AGI-9.2); `Content-Language` in responses; machine
 fields unaffected.
 
-**AGI-6.5** Pagination by opaque cursor; write endpoints require
-authentication; rate limits return `rate_limited` (429).
+**AGI-6.5** Pagination by opaque cursor; a run that changes something on the
+server requires authentication (AGI-6.8); rate limits return `rate_limited`
+(429).
 
 **AGI-6.6** A contract test validates the OpenAPI 3.1 document and checks that
 it agrees with the catalog.
+
+**AGI-6.7** Every server answers `GET /api/v1/server` with `nogat-server/1`
+(`schemas/exchange/server-1.schema.json`), one entry for itself: its tool,
+version, API majors with their bases, capabilities in its own words and,
+where it has them, its OGC API, GUI, instance, regulamin and lines. A server
+with a command catalog serves its `commands list` at `/api/v1/commands/list`,
+each entry with its `rest` as served. Latarnik answers the same document with
+one entry per service it routes, its `api` mapped to `/<tool>/v<major>`, and
+one for itself.
+*Why:* one request at one address finds every service, whether the address
+is a tool's own server or Latarnik (ECO-094, ECO-095).
+
+**AGI-6.8** The catalog decides the access and caching of each command as
+the server serves it, in the tool's server and again in a proxy:
+
+| Command as served | Access | A proxy caches |
+|---|---|---|
+| read-only, no `network` | public | by the tool's `Cache-Control`, `ETag` and `Vary`, `public` answers only |
+| read-only, `network` | public only through the tool's own cache of the provider, a snapshot or a cache per key of bounded age; never one provider request per client request | at most for the cache's remaining life |
+| a plan, `POST …?check=true` of a command that is its own `check` | public where the tool serves plans, under its limits | no |
+| a run whose `rest.key` is true | the tool's key in `X-API-Key`, compared in constant time, `401 unauthorized` without it; a tool MAY refuse such a run whatever the key | no |
+| `destructive` | the key and the command's own `force` | no |
+
+`rest.key` is true when a run changes something on the server (its store,
+its files) or the tool keeps a read-only command for its operator (a heavy
+one); absent, it follows `effects.read_only`. A command whose only writes go
+to options with `path_role` is read-only on a server and answers inline or as
+an attachment (DEV-19.21). A proxy keeps no tool's key.
+*Why:* a public server must neither spend a provider's quota per visitor nor
+let a visitor write; the catalog already knows which command does which
+(ECO-095).
+
+**AGI-6.9** A server listens on 127.0.0.1, or on its compose network in a
+container, and takes the client's address and scheme only from
+`X-Forwarded-For` and `X-Forwarded-Proto` sent by a trusted proxy, set by one
+setting, `127.0.0.1` by default; of `X-Forwarded-For` it takes the right-most
+address that is no trusted proxy. It writes relative `Location` headers and
+links (a job's `Location: jobs/<id>`), so that its documents read right behind
+any prefix, but the links of OGC API, which are absolute, built from
+`X-Forwarded-Proto` and `X-Forwarded-Host`, `/ogcapi/` being served on the
+tool's own host. Behind a proxy it keeps its own limits (DEV-15.9) and logs
+(DEV §12) and an empty CORS.
+*Why:* a client's limit counts per client only when the address comes from
+the one proxy in front; a proxy that rewrites no body needs relative links,
+while QGIS follows an OGC API `href` as it comes (ECO-095).
+
+**AGI-6.10** A command whose run can outlast a request carries `long: true`
+in its catalog and is served as a job, `nogat-job/1`
+(`schemas/exchange/job-1.schema.json`):
+
+- `POST /api/v1/jobs` with `{"command": "<group> <verb>", "options": {…}}`,
+  access as AGI-6.8 gives that command, answers `202`, `Location:
+  jobs/<id>` and the job's document;
+- `GET /api/v1/jobs/<id>` answers it: `id`, `tool`, `command`, `state`
+  (`queued`, `running`, `succeeded`, `partial`, `failed`, `interrupted`,
+  `cancelled`), `progress` (`done`, `total`), `created_at`, `started_at`,
+  `finished_at`;
+- `GET /api/v1/jobs/<id>/result` answers, once the job has ended, what the
+  command's synchronous route would, and before that `409 conflict`, reason
+  `job_running`;
+- `POST /api/v1/jobs/<id>/cancel` answers `202`; `GET
+  /api/v1/jobs/<id>/events`, server-sent events resumed after
+  `Last-Event-ID`, MAY be served.
+
+The id holds 128 random bits and is the only way to a job; an ended job stays
+at least an hour, then answers `404 not_found`, reason `job_expired`; a
+result of a person's choices is held in memory only (ECO-059); a restart ends
+a running job `interrupted`; each client has at most 2 active jobs on a
+server. A route released with an answer within the request keeps it
+(REL-1.1); a route first released after ECO-095 MAY serve a command only as a
+job, its synchronous form answering `409 conflict`, reason `run_as_job`.
+*Why:* a run longer than a proxy waits ends in a `504` (Hydrograf's 150 s
+hydrograph behind nginx's 120 s); one contract on Archiwista's model lets
+every client and Latarnik follow a job alike (ECO-095).
 
 ---
 

@@ -10,7 +10,7 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | File | Content |
 | --- | --- |
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
-| [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg), [goniec](marks/goniec.svg) |
+| [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg), [goniec](marks/goniec.svg), [latarnik](marks/latarnik.svg) |
 | [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu, sources strip, base-map switcher and charts, since modules do not load from `file://` |
 | [specimen-admin.html](specimen-admin.html) | The kit's admin panel on a fake API in the page ([specimen-admin.js](specimen-admin.js), key `nogat`); served over HTTP like the specimen |
 | [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-15.15, DEV-15.16, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the base maps `nogat-basemaps.json`, `.js` and `.css`, the charts `nogat-chart.js` and `.css`, the terms `nogat-terms.md`, `.html` and `.css`, the operator's draft terms `nogat-terms-operator.md`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
@@ -278,6 +278,7 @@ Im wyższy CN, tym większa część opadu odpływa. Przy CN = 80 z opadu
   - Hydraulik: channel cross-section
   - Retman: boat with pennant
   - Goniec: envelope in flight
+  - Latarnik: lighthouse with its beams
 - Use as favicon (`<link rel="icon" type="image/svg+xml" href="...">`) and in the header at 24 px.
 - Never recolour, stretch or add effects. Minimum size 16 px.
 
@@ -294,6 +295,7 @@ Im wyższy CN, tym większa część opadu odpływa. Przy CN = 80 z opadu
 | Hydraulik | `--tool-hydraulik` | `#5e4fa2` | `#b0a3f0` | [hydraulik.svg](marks/hydraulik.svg) |
 | Retman | `--tool-retman` | `#a4472f` | `#f0907a` | [retman.svg](marks/retman.svg) |
 | Goniec | `--tool-goniec` | `#8e3b78` | `#e58fcf` | [goniec.svg](marks/goniec.svg) |
+| Latarnik | `--tool-latarnik` | `#76680a` | `#e8cf55` | [latarnik.svg](marks/latarnik.svg) |
 
 The tool accent appears only in the mark, the tool name and an optional 2-3 px header rule.
 The shared `--accent` stays the interactive colour everywhere.
