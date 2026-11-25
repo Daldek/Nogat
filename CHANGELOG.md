@@ -192,6 +192,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   no longer name the entry point group `nogat.gui` (G8, ECO-095). Map and
   `AGENTS.md` regenerated.
 
+### Fixed
+
+- The kit's `maplibreBasemap` and `removeMaplibreBasemap` empty the words of
+  MapLibre's attribution control once no source is credited (after a failed
+  base map or „bez podkładu”): MapLibre 6.14.0 only hides the empty control
+  and kept the last base map's credit in it. Within kit `1.3.0`, not yet
+  released.
+
 ## [0.3.0] - 2026-11-25
 
 ### Added

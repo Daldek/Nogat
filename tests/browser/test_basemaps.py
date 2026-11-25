@@ -634,6 +634,24 @@ def test_a_failing_provider_is_marked_and_the_map_stays_usable(
     _drawn_under_overlays(tab, entry)
 
 
+def test_maplibre_keeps_no_stale_credit_after_a_failure_or_none(
+    tabs: Callable[..., Tab],
+) -> None:
+    """MapLibre 6.14.0 hides an empty attribution, words kept; the kit empties them."""
+    tab = tabs("maplibre", answers={"ortho": "abort"})
+    _credited(tab, ENTRIES["openfreemap"])
+    tab.choose("gugik-ortho")
+    tab.wait("(t, id) => t.failures.includes(id)", "gugik-ortho")
+    tab.wait("t => !t.map.getSource('nogat-basemap')")
+    assert _credit(tab)["text"].strip() == ""
+    tab.answers.clear()
+    tab.choose("gugik-osm")
+    _credited(tab, ENTRIES["gugik-osm"])
+    tab.choose("none")
+    tab.wait("t => !t.map.getSource('nogat-basemap')")
+    assert _credit(tab)["text"].strip() == ""
+
+
 @pytest.mark.parametrize("adapter", ["maplibre", "leaflet"])
 def test_a_tilejson_whose_tiles_leave_the_origin_is_refused_before_any_tile(
     tabs: Callable[..., Tab], adapter: str
