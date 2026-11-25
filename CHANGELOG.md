@@ -6,6 +6,8 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-25
+
 ### Added
 
 - The kit's base maps (ECO-089, step 1 of
@@ -1319,7 +1321,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Daldek/Nogat/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Daldek/Nogat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1

@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.3 · in preparation on `develop`; the published version is 1.2, tagged `std-1.2` (HUB-6.1)
+Standard 1.3 · published with Nogat `v0.4.0`, tagged `std-1.3` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista, Goniec, Latarnik and Nogat. AI agents are their primary
@@ -88,7 +88,7 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
-- 1.3 (in preparation on `develop`):
+- 1.3 (published with Nogat `v0.4.0` on 2026-11-25, tag `std-1.3`):
   - A GUI with a map draws its base maps only from the kit's catalogue
     `nogat-basemaps.json`, through `nogat-basemaps.js`, and offers them in
     `<nogat-basemaps>`: the catalogue's entries in its order, the
