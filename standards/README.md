@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.2 · in preparation on `develop`; the published version is 1.1, tagged `std-1.1` (HUB-6.1)
+Standard 1.2 · published with Nogat `v0.3.0`, tagged `std-1.2` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -85,7 +85,7 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
-- 1.2 (in preparation on `develop`):
+- 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
   - A released document, store layout or identifier grammar stays at its
     `/N` when a change adds a new value of an existing field or a new form
     of an identifier that a reader not knowing it can skip, and every
