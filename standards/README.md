@@ -134,6 +134,20 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     verified ones; G, SG and Z take the orders 9 to 11, their order
     unchanged; the regulamin's template gains the block `pig`, in place
     (DEV §20, DEV-20.5, DEV-20.7, DEV-20.8, DEV-20.13, ECO-092).
+  - A GUI that lets a person build a call of a catalog command in a form
+    builds it with the kit's command builder `<nogat-command-form>`
+    (`nogat-command-form.js` and `.css`), generated from the command's
+    commands-1 entry: a field per option by its type, section and Polish
+    text, a choice per `one_of`, the fields its rules show, disable and
+    require, no path option where the app owns the paths, the line of the
+    tool's `format_command` with „Kopiuj”, a line read by its
+    `parse_command` and a message of the tool under the field
+    `details.option` names. commands-1 and AGI-2.3 gain the optional fields
+    the form reads: an option's `items`, `exclusive_minimum`,
+    `exclusive_maximum`, `format`, `section`, `requires`, `excludes`,
+    `applies_to`, `required_when` and `i18n.pl`, and a command's `one_of`,
+    alternatives of which exactly one is given; `nogat-server/1` names
+    Kartograf's capabilities (DEV-15.17, AGI-2.3, ECO-093).
   - Goniec, a QGIS plugin over the tools' servers under GPL-2.0-or-later,
     is a project of the ecosystem, of the new profile `plugin`: no PyPI
     package, CLI, MCP, REST interface, command catalog or routes, its code
@@ -146,12 +160,13 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     HUB-2.1, HUB-2.9, ECO-094).
   - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
     `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
-    the lines W, WP and WK of `<nogat-sources>`, and regulamin 1.1, whose
-    § 8 ust. 7 names the base map among the settings the browser keeps,
-    whose § 5 holds the block `pig` and whose § 4 ust. 2 and § 6 ust. 2 name
-    a service's API and the programs using it, Goniec among them, the API
-    within the limit of requests being the way for programs (ECO-089,
-    ECO-090, ECO-092, ECO-094).
+    the command builder `nogat-command-form.js` and `.css`, the lines W, WP
+    and WK of `<nogat-sources>`, and regulamin 1.1, whose § 8 ust. 7 names
+    the base map among the settings the browser keeps, whose § 5 holds the
+    block `pig` and whose § 4 ust. 2 and § 6 ust. 2 name a service's API and
+    the programs using it, Goniec among them, the API within the limit of
+    requests being the way for programs (ECO-089, ECO-090, ECO-092 to
+    ECO-094).
 - 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
   - A released document, store layout or identifier grammar stays at its
     `/N` when a change adds a new value of an existing field or a new form

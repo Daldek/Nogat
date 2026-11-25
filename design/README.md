@@ -477,6 +477,118 @@ The element fires `change` (bubbling) with `detail.id` when a person picks a bas
 The credit is the entry's, never its TileJSON's and never in `<nogat-sources>` (DEV-20.5, DEV-20.9): in the map's own attribution control in its corner, which `nogat-basemaps.css` draws at 12 px in `--text-3` under the class `nogat-basemap-map` the adapters set on the map's container. Up to 860 px it shows when the map opens and folds behind „i” at the first drag, a tap showing it again: a MapLibre GUI creates its map with `attributionControl: {compact: matchMedia("(max-width: 860px)").matches}` and `locale: {"AttributionControl.ToggleAttribution": BASEMAP_TEXTS.credit}`, and the Leaflet adapter adds „i” to the map's attribution control itself.
 The element and the adapters ask nothing but the base map's own requests and need no inline script or style, so they run under the GUI's CSP, as `tests/browser/test_basemaps.py` runs them on MapLibre 6.14.0 and on Leaflet 1.9.4 with maplibre-gl-leaflet 0.0.22 over MapLibre 4.7.1.
 
+Command builder (DEV-15.17, ECO-093): link `nogat-command-form.css`, load `nogat-command-form.js` as a module, put `<nogat-command-form>` where the form goes and give it the command's commands-1 entry, as `<tool> commands schema --command "<group> <verb>"` writes it: from the GUI's server, or from the catalog the GUI ships. The GUI binds the tool's `format_command` and `parse_command`, through its server or its own code, and the element shows the line and reads a pasted one with them.
+
+```js
+const form = document.querySelector("nogat-command-form");
+form.command = schema.result;                          // kartograf-commands/1 of `elevation download`
+form.format = (command, options) => server.format(command, options);   // a line, or its promise
+form.parse = (line) => server.parse(line);              // {command, options}
+form.addEventListener("change", (event) => (plan.disabled = !event.detail.valid));
+map.on("draw", (box) => form.setOption("bbox", box));   // with bbox_crs EPSG:4326
+plan.addEventListener("click", async () => {
+  if (!form.check()) return;
+  const answer = await server.check(form.command.name, form.options);
+  if (answer.code) form.showError(answer);              // <tool>-error/1: under details.option
+});
+```
+
+| What the entry declares (AGI-2.3) | What the form shows |
+| --- | --- |
+| `type`, `enum`, `items`, `unit` | a number or an integer with its unit, typed with a decimal comma or dot; radios for up to four values and a select above, the meaning of the value shown under it; a checkbox; a text; a list of numbers (spaces or semicolons between them, commas too where the text has a decimal dot) or of texts (commas); checkboxes for a list of up to eight allowed values; a JSON text for an object or a list of objects; a path (`path_role`) as a text the GUI never resolves |
+| `required`, `default` | „wymagane” or „domyślnie …” beside the name; the default is shown and not sent |
+| `min`, `max`, `exclusive_minimum`, `exclusive_maximum`, `pattern`, `format` | the checks of a value, `format` `date` or `date-time` with its placeholder |
+| `section`, `i18n.pl` | the option in its section, titled by `i18n.pl.section`; its `description` and the meaning of each value, in Polish where the catalog has them, else in English |
+| the command's `one_of` | one choice „Sposób podania”, exactly one alternative, its options in its pane |
+| an option's `one_of` outside it | a choice of at most one option of the group, „—” first |
+| `applies_to` | the field only where it holds; a field that applies only with an alternative's options stands in its pane |
+| `excludes` | the fields a given option excludes are disabled, „nie razem z …” beside them |
+| `requires`, `required_when` | „wymagane” on the options a given one requires and on one whose condition holds |
+| the command's `i18n.pl.rules` | „Zasady:” under the form |
+
+| Attribute or property of `<nogat-command-form>` | Value |
+| --- | --- |
+| `element.command` | A `<tool>-commands/1` document of one command, or its entry; a new one empties the form |
+| `element.options` | The call: the values in the catalog's types, of the fields active now, nothing for an empty field, so the tool's defaults apply, a boolean only where it differs from its default; setting it shows a call, as a pasted line gives it, and fires no event |
+| `paths` | `hidden`: every option with `path_role` is left out, where the app owns the paths (Archiwista's store); by default a path is a field |
+| `element.hide` | The options the GUI supplies itself: not shown, checked or sent |
+| `element.labels` | Polish labels by option name, shown before the name, and by `#<group>` the title of a choice |
+| `element.texts` | The words, `COMMAND_FORM_TEXTS` by default; a GUI in another language passes its own |
+| `element.format` | `(command, options) =>` the line or its promise, the GUI's binding of the tool's `format_command`; with it the line stands under the form with „Kopiuj”, asked again 150 ms after the last change and shown from the latest answer only, „Uzupełnij albo popraw: …” while a field fails its check; a refusal stands under the field its `details.option` names |
+| `element.parse` | `(line) =>` `{command, options}` or its promise, the binding of `parse_command`; with it „Wklej polecenie” stands above the form |
+| `element.errors` | Messages by option name, a text or `{text, reason}`, `#form` for one of no field; each stays until the person edits its field |
+| `element.valid`, `element.line` | Whether the values pass the catalog's checks; the line `format` wrote for them, `null` while there is none |
+
+| Method | Use |
+| --- | --- |
+| `check()` | Checks every field and shows each message under it, as before a plan or a run; returns whether they pass. Before it a field's message shows once the person leaves it |
+| `showError(doc)` | Places a `<tool>-error/1` document, or a problem document with its fields (AGI-6.3): its message and `details.reason` under the field `details.option` names, else above the form under „Popraw polecenie” |
+| `setOption(name, value)` | One option's value in the catalog's type, `undefined` to empty it, as the GUI's map gives an area; its choice moves to it; no event |
+
+The element fires `change` (bubbling) with `detail: {options, valid}` after each edit of a person, the controls' own `change` and `input` staying inside, and `nogat-command-paste` (bubbling, cancelable) with `detail: {line, command, options}` once `parse` has read a pasted line. It loads a line of its own command; a GUI that takes a line of another command calls `preventDefault()` and sets `command` and `options`, and otherwise the element says „To polecenie …, nie …”. A field drawn again keeps the focus and the caret of the person typing in it.
+
+| Export | Use |
+| --- | --- |
+| `formModel(command, {hide, paths, labels, texts})` | The fields, choices and sections of an entry, as the element draws them |
+| `formState(model, values)`, `checkValues(model, values, texts)` | The chosen alternatives and each field's state (active, shown, required, disabled by), and the messages of the checks, by option name |
+| `toOptions(model, values)`, `toValues(model, options)` | A form's values as a call and back |
+| `errorMessages(doc)` | An error document's message by the option it names, `FORM_ERROR` (`#form`) for none |
+| `commandEntry(doc)`, `parseNumber(text)`, `parseNumbers(text)` | The entry of a document; a typed number and list of numbers |
+| `COMMAND_FORM_TEXTS`, `FORM_ERROR` | The words; the key of a message above the form |
+
+The element's own words are `COMMAND_FORM_TEXTS`, in Polish; a GUI in another language passes its own as `texts`, the placeholders kept:
+
+| Key | Polish | Where |
+| --- | --- | --- |
+| `required` | wymagane | beside the name of an option required now |
+| `defaultIs` | domyślnie {value} | beside the name of an option with a default |
+| `excludedBy` | nie razem z {name} | beside the name of a field another option disables |
+| `more` | Opcje dodatkowe | the optional options without a default |
+| `choice` | Sposób podania | the title of the command's `one_of` |
+| `exactlyOne` | jedna z {count} | after the title of the command's `one_of` |
+| `atMostOne` | najwyżej jedna z {count} | after the name of a group of options |
+| `none` | — | the choice of no value |
+| `noneTitle` | bez wartości: domyślne zachowanie polecenia | its tooltip |
+| `yes` | tak | a default `true` |
+| `no` | nie | a default `false` |
+| `example` | np. {value} | the placeholder of a field with an example |
+| `rules` | Zasady | before the command's rules |
+| `pathInput` | ścieżka do odczytu | the placeholder of an input path |
+| `pathOutput` | ścieżka zapisu | the placeholder of an output path |
+| `pathRoot` | katalog magazynu | the placeholder of a store's root |
+| `numbersHint` | Wartości oddziel spacją albo średnikiem. | the placeholder of a list of numbers |
+| `textsHint` | Wartości oddziel przecinkiem. | the placeholder of a list of texts |
+| `aboveForm` | Popraw polecenie | the title of the messages of no field shown |
+| `missing` | Podaj wartość: opcja wymagana | a required option without a value |
+| `notNumber` | Podaj liczbę | a number that is none |
+| `notInteger` | Podaj liczbę całkowitą | an integer that is none |
+| `notNumberItem` | Wartość {index} („{text}”) nie jest liczbą | a value of a list of numbers |
+| `minimum` | Najmniej {limit} (podano {value}) | below `min` |
+| `maximum` | Najwyżej {limit} (podano {value}) | above `max` |
+| `exclusiveMinimum` | Musi być większa od {limit} (podano {value}) | not above `exclusive_minimum` |
+| `exclusiveMaximum` | Musi być mniejsza od {limit} (podano {value}) | not below `exclusive_maximum` |
+| `notAllowed` | Dozwolone wartości: {allowed} | a value outside `enum` |
+| `pattern` | Nie pasuje do wzorca {pattern} | a text outside `pattern` |
+| `date` | Podaj datę w formacie RRRR-MM-DD | `format` `date` |
+| `dateTime` | Podaj datę i godzinę w formacie RRRR-MM-DDTgg:mm | `format` `date-time` |
+| `json` | Nieprawidłowy JSON: {message} | a JSON text that does not parse |
+| `jsonObject` | Podaj obiekt JSON: {…} | a JSON value that is no object |
+| `jsonList` | Podaj listę JSON: [ … ] | a JSON value that is no list |
+| `requires` | Podaj też: {names} | a given option without those it requires |
+| `excludes` | Nie łącz z: {names} | a given option with one it excludes |
+| `line` | Polecenie | the title of the line |
+| `incomplete` | Uzupełnij albo popraw: {names} | the line while fields fail their checks |
+| `lineFailed` | Nie udało się zapisać polecenia: {message} | the line `format` refused |
+| `copy` | Kopiuj | the button that copies the line |
+| `copied` | Skopiowano do schowka | after it |
+| `copyFailed` | Nie udało się skopiować: zaznacz polecenie i skopiuj je ręcznie | where the browser refuses the clipboard, the line selected |
+| `paste` | Wklej polecenie | the field of a pasted line |
+| `read` | Wczytaj | its button |
+| `pasteFailed` | Nie udało się odczytać polecenia: {message} | a line `parse` refused |
+| `otherCommand` | To polecenie {command}, nie {current} | a line of another command the GUI did not take |
+
+`nogat-command-form.css` scopes every rule by the element or by a class of its prefix, `nogat-command-form-`, and every token has its light value as fallback; its fields are the inputs and selects of Components, 16 px on a coarse pointer, and its buttons are the GUI's `.btn.sm`, at least 24 × 24 px. The element loads nothing, writes no style attribute and needs no inline script, so it runs under CSP `'self'`, as `tests/browser/test_command_form.py` runs it on the catalogs of Kartograf, Hydrolog and Obserwator at 1440 and 390 px in both themes.
+
 Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065, ECO-066, ECO-068, ECO-070, ECO-071): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`. It links the page in exactly three places: the app menu's `terms`, the rail's `.rail-terms` (Layout) and, where it has one, the welcome window through `fillSources()`; the dialog of `<nogat-sources>` links it too.
 The regulamin carries its own version („Wersja 1.1”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13 and republished on 2026-11-14; its corrections (ECO-068, ECO-071) are made in place. Version 1.1 names the base map among the settings the browser keeps (§ 8 ust. 7, ECO-089), with the author's consent of 2026-11-24. Only the author raises the version; an agent never does. A GUI publishes a corrected text with the kit that carries it, and the operator sets a new `terms_effective` only when the author asks for it.
 Its § 3 opens with the author's statement of what the services are (DEV-15.8), which no view repeats in a footer or status bar; the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, the logs as DEV-12.4 to DEV-12.9 keep them (§ 8 ust. 3), so a GUI serves the page only once it follows them.

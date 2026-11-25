@@ -97,10 +97,22 @@ https://arxiv.org/abs/2602.14878); `effects` feeds the MCP annotations
 **AGI-2.3** Each option declares: `name` (snake_case), `type`, `unit` (when
 physical), `required`, `default`, `enum` with a one-line meaning per value,
 `min`/`max`, `pattern`, `examples`, `description`, mutual exclusion groups
-(`one_of`), and whether it is a path (`path_role`: `input`, `output`, `root`;
-the write targets of DEV-19.1 have `output` and `root`).
+(`one_of`, at most one of a group given), and whether it is a path
+(`path_role`: `input`, `output`, `root`; the write targets of DEV-19.1 have
+`output` and `root`). An option MAY declare what a form of the command
+reads (DEV-15.17): `items`, the type of an array's items or their JSON
+Schema; `exclusive_minimum`, `exclusive_maximum`; `format` (`date`,
+`date-time`); `section`, the English title of its group in a form and in
+the help; the options a call that gives it also gives (`requires`) or does
+not give (`excludes`); where it applies (`applies_to`) and where it is
+required (`required_when`), each `{option: true | [values]}`, `true` for an
+option given; and `i18n.pl` with its `description`, `section` and the
+meaning of each `enum` value by the value. A command MAY declare `one_of`,
+alternatives, each a list of option names, of which exactly one is given
+in full.
 *Why:* enums and bounds let agents fill parameters without reading prose;
-`path_role` drives the sandbox (AGI-5.8).
+`path_role` drives the sandbox (AGI-5.8); a form reads the rules a tool
+already checks instead of a copy of them in each GUI (ECO-093).
 
 **AGI-2.4** The catalog is serialised in two documents (schemas in
 AGI-4.1): the summary `<tool>-command-list/1`, one entry per command with

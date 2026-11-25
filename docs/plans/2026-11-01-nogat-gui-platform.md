@@ -308,7 +308,7 @@ research and waits for the author's approval.
    | `shell.css`, `shell.js` | top bar, rail, view layout, resizers with keys, phone sheets, a layout event for maps, the embedded switch; an API for rail items and panels |
    | `theme.js` | pre-paint init and the three-way switch, one storage key |
    | `info.js`, `form.js` | `<nogat-info>` tooltip with MathML, the texts the app's; number with unit and bounds, choice with meanings, series table with paste and CSV |
-   | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
+   | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8) — made by step N1 of Kartograf's `docs/plans/2026-11-24-kartograf-gui.md`: the kit's `nogat-command-form.js` and `.css` (DEV-15.17, ECO-093); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
    | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes — for charts replaced by `2026-11-24-unified-charts.md`: the kit's `nogat-chart.js` and `.css` (DEV-15.16, ECO-090); shared basemaps, attribution and the origins a CSP must allow — for base maps replaced by `2026-11-24-shared-base-maps.md`: the kit's `nogat-basemaps.json`, `.js` and `.css` (DEV-15.15, ECO-089) |
    | `embed.js` | both sides of the handshake (item 5); `nogat-handoff.js` of stage 1 gains `nogat:handoff` |
    | `nogat-app-menu.*`, `nogat-handoff.js`, `nogat-kit.json` | from stage 1 |
@@ -410,6 +410,9 @@ research and waits for the author's approval.
    polecenia” beside the paste field, feeding the same plan window; the hub
    shows every installed catalog. AGI-2.3 and commands-1 gain optional option
    fields `i18n.pl`, `requires`, `excludes`, `applies_to`, `section`, `format`.
+   Made by step N1 of Kartograf's GUI plan (ECO-093, DEV-15.17), with
+   `items`, `exclusive_minimum`, `exclusive_maximum`, `required_when` and a
+   command's `one_of` as well; Archiwista's „Kreator polecenia” is its step A1.
 9. **Obserwator** (B6): the module covers stations, series read from a local
    store, PMAXTP (a depth handed to Hydrolog's rainfall) and current data; the
    Jinja, HTMX and Pico pages go; store sync stays in Archiwista.

@@ -57,7 +57,7 @@
           "additionalProperties": {"$ref": "#/$defs/reference"}
         },
         "capabilities": {
-          "description": "What the service serves, in the tool's own words (Obserwator: `stations`, `current`, `series`, `hec-table`, `hec-dss`, `analyses`), each only when served; a client hides what is absent",
+          "description": "What the service serves, in the tool's own words (Obserwator: `stations`, `current`, `series`, `hec-table`, `hec-dss`, `analyses`; Kartograf: `catalog`, its command catalog and the queries without paths, `plan`, the plans of its data commands, `script`, `script generate`), each only when served; a client hides what is absent",
           "type": "array",
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}
@@ -144,6 +144,13 @@
           "capabilities": ["stations", "current", "series"],
           "ogcapi": "/obserwator/ogcapi/",
           "gui": "/obserwator/",
+          "state": "ok"
+        },
+        {
+          "tool": "kartograf",
+          "version": "0.10.0",
+          "api": {"1": "/kartograf/v1"},
+          "capabilities": ["catalog", "plan", "script"],
           "state": "ok"
         },
         {

@@ -771,6 +771,22 @@ chart as shown with the lines of DEV-20.5; a CSV holds the whole series.
 *Why:* one person moves between the GUIs, and four implementations had three
 sets of gestures (ECO-090).
 
+**DEV-15.17** A GUI that lets a person build a call of a tool's catalog
+command in a form, to run it, to plan it or to copy its line, builds the
+form with the kit's command builder (`nogat-command-form.js` and
+`nogat-command-form.css`, DEV-15.6): the element `<nogat-command-form>`
+generated from the command's commands-1 entry (AGI-2.3), never a form of
+the GUI's own per command. It shows a field per option by its type, in the
+option's section and in Polish where the catalog is, the optional ones
+without a default under „Opcje dodatkowe”; a choice per `one_of`; the
+fields the rules show, disable and require; no path option where the app
+owns the paths. Its line is the tool's `format_command` with „Kopiuj”, a
+line pasted under „Wklej polecenie” is read by the tool's `parse_command`,
+each through the GUI's server or the GUI's own binding, and a message of
+the tool stands under the field its `details.option` names.
+*Why:* a new option of a command reaches every GUI without GUI work, and a
+person meets one editor in every GUI that builds commands (ECO-093).
+
 ---
 
 ## 16. Licence and contributions

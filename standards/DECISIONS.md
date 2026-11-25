@@ -102,6 +102,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
 | [ECO-091](#eco-091-intervals-beside-point-estimates-computed-by-hydrolog-shown-by-obserwator) | Intervals beside point estimates: computed by Hydrolog, shown by Obserwator | accepted | 2026-11-25 |
 | [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
+| [ECO-093](#eco-093-one-command-builder-in-the-kit-generated-from-the-commands-1-entry) | One command builder in the kit, generated from the commands-1 entry | accepted | 2026-11-25 |
 | [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
 
 ---
@@ -2725,6 +2726,72 @@ summaries of Obserwator's stores and Archiwista's raw root. Obserwator
 takes the provider in steps O1 to O6 of the plan, for `v3.3.0`; data
 received later by request carry the request form's sentence as a line of
 their own, added to the table when they enter.
+
+## ECO-093 One command builder in the kit, generated from the commands-1 entry
+
+**Decision.** The kit gains the command builder, `nogat-command-form.js`
+and `nogat-command-form.css`: the custom element `<nogat-command-form>`,
+the editor of producer commands of the GUI platform's item 8, built from
+Hydrolog's catalog form (`gui/web/src/forms/model.js` and
+`command-form.js` at `ffe8538`) as a plain ES module that imports nothing,
+its words in Polish in `COMMAND_FORM_TEXTS`. It is generated from a
+command's commands-1 entry: a field per option by its type, in the
+option's section, in Polish where the catalog is, the optional options
+without a default under „Opcje dodatkowe”; a choice per `one_of`; the
+fields the rules show, disable and require; the path options left out with
+`paths="hidden"` where the app owns the paths; the line written by the
+GUI's binding of the tool's `format_command` with „Kopiuj”, a pasted line
+read by its binding of `parse_command`, and a message of the tool under
+the field `details.option` names. `options` is the call in the catalog's
+types and `setOption` takes one value from the GUI's map. The fields it
+reads become optional fields of commands-1 and of AGI-2.3, each as a
+producer already declares it: an option's `items` (a type name, Kartograf's
+and Hydrolog's, or a JSON Schema, Obserwator's), `exclusive_minimum` and
+`exclusive_maximum` and `i18n.pl` with `description` and `enum`
+(Hydrolog's), `format` (Hydrolog's and Obserwator's), `section` and the
+rules `requires`, `excludes`, `applies_to` and `required_when`, the last
+two `{option: true | [values]}` (Kartograf's constraints), and a command's
+`one_of`, alternatives of which exactly one is given in full (Hydrolog's),
+beside an option's `one_of`, a group of which at most one is given.
+`nogat-server/1` (ECO-094) names Kartograf's capabilities `catalog`,
+`plan` and `script`. The rule is DEV-15.17; AGI-2.3 is amended. Plan:
+Kartograf's `docs/plans/2026-11-24-kartograf-gui.md` (step N1).
+
+**Why.** The author's request of 2026-11-24 for a Kartograf GUI that
+writes a command or a script for the user's own machine, whose plan he
+approved the same day („Ok, podoba mi się ten plan. Zapisz to.”): its form
+is generated from the command catalog so that a new option of a command
+appears without GUI work (its D1), and the shared part is a kit component
+that Archiwista's „Kreator polecenia” takes too (its D6; the GUI platform
+plan's option E2, which the Latarnik plan kept). Kartograf, Hydrolog and
+Obserwator declared the same rules three ways (constraints of a spec, a
+command's `one_of`, a command's `exclusive`, `alternatives` and `requires`)
+and exported most of them only in prose: one optional form in the shared
+schema lets one element read every catalog. The tool's `format_command` and
+`parse_command` stay the only writer and reader of its lines (AGI-2.1).
+
+**Rejected.** The editor in Archiwista only (option E1). Hydrolog's Preact
+component as it is (the GUIs share no framework; a custom element runs in
+each). Each tool's own names of its rules in the schema (three readers in
+one element). A line written by the element from the options' flags (a
+second writer of a tool's lines drifts from its `format_command`; a GUI
+without a server binds its own code). An `i18n.pl.label` per option (the
+GUI's `labels` give one where it wants a label).
+
+**Consequence.** The kit gains two files within `1.3.0`, which no member
+has released yet (ECO-089). commands-1 and AGI-2.3 grow within `/1`
+(AGI-4.1, ECO-085): the catalogs of Kartograf, Hydrolog, Obserwator,
+Hydraulik and Retman on `develop` validate unchanged. Kartograf exports
+its sections, Polish texts and constraints in these fields and builds its
+GUI on the element (steps K2 to K5 of its plan, in the minor after
+`0.9.0`); Archiwista's „Kreator polecenia” follows in a plan of its own
+(its step A1); Hydrolog, whose form the element comes from, moves to it in
+a minor of its own and records its form as a deviation in its `CLAUDE.md`
+until then (DEV-1.2); a new feature of a command form goes into the kit
+first. The registry gives Kartograf `interfaces.rest`, marked planned
+until the release that brings `kartograf server`, and the planned service
+`kartograf-server`, which Latarnik routes at `/kartograf/v1/…` (its L1).
+The GUI platform plan's `command-form.js` points to Kartograf's plan.
 
 ## ECO-094 Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin`
 

@@ -237,6 +237,95 @@ def test_catalog_invalid(document: dict[str, Any]) -> None:
     assert _errors("commands", document) != []
 
 
+def _option(**changes: Any) -> dict[str, Any]:
+    return _command(options=[_with(COMMAND["options"][0], **changes)])
+
+
+# The optional fields a command builder reads (AGI-2.3, DEV-15.17, ECO-093).
+FORM = _command(
+    one_of=[["sheet"], ["bbox", "bbox_crs"]],
+    options=[
+        {
+            "name": "sheet",
+            "type": "string",
+            "required": False,
+            "description": "sheet code",
+            "one_of": "area",
+            "section": "Product and area",
+            "i18n": {"pl": {"description": "Godło", "section": "Produkt i obszar"}},
+        },
+        {
+            "name": "bbox",
+            "type": "array",
+            "items": "number",
+            "required": False,
+            "description": "area",
+            "one_of": "area",
+            "requires": ["bbox_crs"],
+        },
+        {
+            "name": "bbox_crs",
+            "type": "string",
+            "required": False,
+            "description": "CRS of bbox",
+            "applies_to": {"bbox": True},
+            "enum": [{"value": "EPSG:2180", "meaning": "PL-1992"}],
+            "i18n": {"pl": {"enum": {"EPSG:2180": "PL-1992, metry"}}},
+        },
+        {
+            "name": "years",
+            "type": "array",
+            "items": {"type": "integer", "minimum": 1},
+            "required": False,
+            "description": "years",
+        },
+        {
+            "name": "depth",
+            "type": "number",
+            "required": False,
+            "description": "depth",
+            "exclusive_minimum": 0,
+            "exclusive_maximum": 500,
+            "required_when": {"product": ["nmt", "nmpt"], "cutout": True},
+            "excludes": ["years"],
+        },
+        {
+            "name": "start",
+            "type": "string",
+            "format": "date",
+            "required": False,
+            "description": "first day",
+        },
+    ],
+)
+
+
+def test_catalog_with_the_fields_of_a_form_valid() -> None:
+    assert _errors("commands", FORM) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(one_of=[["bbox"]]),
+        _command(one_of=[["bbox"], []]),
+        _command(one_of=[["bbox"], ["Sheet"]]),
+        _option(items="tuple"),
+        _option(requires="output_dir"),
+        _option(excludes=["Output"]),
+        _option(applies_to={}),
+        _option(applies_to={"cutout": False}),
+        _option(required_when={"product": []}),
+        _option(exclusive_minimum="0"),
+        _option(section=""),
+        _option(format=""),
+        _option(i18n={"pl": {"enum": {"1": 1}}}),
+    ],
+)
+def test_catalog_with_wrong_fields_of_a_form_invalid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) != []
+
+
 ENTRY: dict[str, Any] = {
     "name": "dem download",
     "operation_id": "kartograf_dem_download",

@@ -68,7 +68,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 
 | Tool | Status | Interfaces | What it is |
 |---|---|---|---|
-| Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
+| Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, REST `kartograf server (/api/v1), planned`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | Obserwator | active | CLI `obserwator`, MCP `obserwator mcp`, REST `obserwator server (/api/v1)`, Python `obserwator`, GUI `obserwator gui serve` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
 | Hydrograf | active | REST `/api` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
