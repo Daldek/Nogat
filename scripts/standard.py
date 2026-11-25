@@ -326,6 +326,12 @@ def project_list_problems(root: Path, registry: dict[str, Any]) -> list[str]:
     projects = registry["projects"]
     members = {p["name"] for p in projects if "hub" not in p["profiles"]}
     lower = {n.lower() for n in members}
+    # A plugin is no Python distribution: no lock or audit lists it (DEV §1).
+    packaged = {
+        p["name"].lower()
+        for p in projects
+        if "hub" not in p["profiles"] and p["profiles"] != ["plugin"]
+    }
     clis = {p["interfaces"]["cli"] for p in projects if p["interfaces"]["cli"]}
     checks: list[tuple[str, str, set[str]]] = [
         (
@@ -351,12 +357,12 @@ def project_list_problems(root: Path, registry: dict[str, Any]) -> list[str]:
         (
             "standards/ci/ci.yml",
             r"for p in (?P<names>[a-z ]+); do",
-            lower,
+            packaged,
         ),
         (
             "standards/ci/README.md",
             r"distributions \((?P<names>[`a-z,\s]+?) and their",
-            lower,
+            packaged,
         ),
     ]
     problems = []
@@ -374,7 +380,7 @@ def project_list_problems(root: Path, registry: dict[str, Any]) -> list[str]:
             )
 
     dev = (root / "standards" / "DEVELOPMENT_STANDARDS.md").read_text(encoding="utf-8")
-    for profile in ("tool", "app", "hub"):
+    for profile in ("tool", "app", "hub", "plugin"):
         m = re.search(rf"^\| `{profile}` \| [^|]+\| (?P<names>[^|]+)\|", dev, re.M)
         expected = {p["name"] for p in projects if profile in p["profiles"]}
         found = _names(re.sub(r"\([^)]*\)", "", m["names"])) if m else set()

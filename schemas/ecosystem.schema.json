@@ -43,7 +43,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"enum": ["tool", "app", "hub"]}
+          "items": {"enum": ["tool", "app", "hub", "plugin"]}
         },
         "status": {"enum": ["active", "research", "paused", "archived"]},
         "repo": {"type": "string", "pattern": "^https://"},
@@ -69,7 +69,12 @@
           "required": ["pypi", "import_name"],
           "properties": {
             "pypi": {"$ref": "#/$defs/nullable_string"},
-            "import_name": {"$ref": "#/$defs/nullable_string"}
+            "import_name": {"$ref": "#/$defs/nullable_string"},
+            "qgis": {
+              "description": "A plugin only (DEV §1): the plugin's folder in QGIS, `<folder>` of DEV-5.1, also its name in the plugin repository plugins.qgis.org.",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
           }
         },
         "interfaces": {

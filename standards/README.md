@@ -1,10 +1,11 @@
 # Ecosystem standard
 
-Standard 1.2 · published with Nogat `v0.3.0`, tagged `std-1.2` (HUB-6.1)
+Standard 1.3 · published with Nogat `v0.4.0`, tagged `std-1.3` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
-Retman, Archiwista and Nogat. AI agents are their primary operators, so the
-tools must be easy to discover, judge and call correctly, and safe to develop.
+Retman, Archiwista, Goniec, Latarnik and Nogat. AI agents are their primary
+operators, so the tools must be easy to discover, judge and call correctly,
+and safe to develop.
 
 ## Zen of Nogat
 
@@ -41,27 +42,29 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
   disappears and the changelog lists it. Cite IDs in ADRs, plans and commit
   bodies.
 - Profiles are `tool` (installable Python package; CLI, MCP and REST
-  optional), `app` (deployed service) and `hub` (Nogat), defined in DEV §1. A
-  requirement or section that names a profile applies only to projects that
-  have it.
+  optional), `app` (deployed service), `hub` (Nogat) and `plugin` (QGIS
+  plugin), defined in DEV §1. A requirement or section that names a profile
+  applies only to projects that have it.
 - Placeholders, defined here once:
   - `<project>`: the project name in lower case as in `nogat-<project>`:
-    kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista;
+    kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista,
+    goniec, latarnik;
   - `<Project>`: the project name as in the registry (Kartograf, Obserwator, …);
   - `<tool>`: the CLI name, `interfaces.cli` in `ecosystem.yaml`: kartograf,
     obserwator, hydrolog, retman, archiwista, hydraulik; `<TOOL>` is its upper
     case;
-  - `<package>`: the Python import name (`distribution.import_name`).
+  - `<package>`: the Python import name (`distribution.import_name`);
+  - `<folder>`: a plugin's folder in QGIS (`distribution.qgis`).
 
 ## Documents
 
 | Document | Covers |
 |---|---|
 | [DECISIONS.md](DECISIONS.md) | Decisions behind the standard, with reasons and rejected options (ECO-…) |
-| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
+| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts, base maps, charts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
-| [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, mutation testing, gross defects (CMP-…) |
+| [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, the coverage of intervals, mutation testing, gross defects (CMP-…) |
 | [ERROR_REGISTRY.md](ERROR_REGISTRY.md) + [error_registry.json](error_registry.json) | Shared error codes, exit codes, HTTP statuses (ERR-…) |
 | [RELEASE_AND_DISTRIBUTION.md](RELEASE_AND_DISTRIBUTION.md) | Versioning, release procedure, channels (PyPI, GitHub Releases, MCP Registry), MCP Registry entry, dependencies between projects, release sets, support (REL-…) |
 | [ECOSYSTEM_HUB.md](ECOSYSTEM_HUB.md) | Nogat role, `ecosystem.yaml`, local workspace, generated outputs, cross-project plans and requests, standard versioning, the `nogat` package (HUB-…) |
@@ -85,6 +88,106 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
+- 1.3 (published with Nogat `v0.4.0` on 2026-11-25, tag `std-1.3`):
+  - A GUI with a map draws its base maps only from the kit's catalogue
+    `nogat-basemaps.json`, through `nogat-basemaps.js`, and offers them in
+    `<nogat-basemaps>`: the catalogue's entries in its order, the
+    deployment's own base maps after them, „bez podkładu” last, the choice
+    kept in the browser and never a GUGiK entry as the default; each base
+    map carries its credit in the map's own attribution; the shared keys
+    `basemaps`, `basemap_mirrors` and `basemap_extra` set which entries a
+    deployment allows, its copies of them and its own base maps; the CSP
+    names each origin and no scheme source, and an admin page's map adds
+    only its one base map's origin (DEV-15.15, DEV-15.13, DEV-18.1,
+    DEV-20.9, ECO-089).
+  - A GUI draws its charts over axes with the kit's chart module
+    `nogat-chart.js` and `nogat-chart.css`, never with a chart library or a
+    drawing of its own, a circular chart or warming stripes excepted; a
+    chart whose x is a time or a value, not one of a year's months or days,
+    of named bars or of probabilities, zooms and pans alike in every GUI: a
+    drag selects the range (of x and y on a chart of points), Ctrl with the
+    wheel zooms around the cursor while the wheel alone scrolls the page,
+    Shift with a drag or the middle button pans, a double click, the key 0
+    and „Cały zakres” show the whole, two fingers pinch and pan; „+” under
+    a chart not yet zoomed, „−”, „+”, „Cały zakres” and the range under a
+    zoomed one, whose y axis fits the values shown; a PNG is the chart as
+    shown with the providers' lines, a CSV the whole series (DEV-15.16,
+    ECO-090).
+  - A spec lists the side and confidence level of an interval and its
+    method among its conventions; an interval estimator's coverage is
+    simulated, seeded, from the distributions the formula fits at 30 and 60
+    values with at least 1,000 samples, nightly and before each release,
+    reported in `docs/FORMULAS.md` and asserted per level and element within
+    three Monte Carlo standard errors for an exact method, as its source
+    reports it or above a stated bound for an approximate one, with lower ≤
+    upper and the intervals of the levels nested; the reference module
+    gains `assert_coverage` and `assert_interval_properties`. Intervals
+    beside point estimates are computed by Hydrolog and shown by
+    Obserwator, which stores the levels 0.95 and 0.68 (CMP-2.3, CMP-6.11,
+    ECO-091).
+  - PIG-PIB's Monitoring Wód Podziemnych is a data source of the
+    ecosystem: a product with its points, readings or automatic
+    measurements carries W (PIG-PIB, the times of creation and acquisition,
+    CC BY 4.0 by dane.gov.pl's dataset 170), WP once processed and the
+    terms line RW, which links PIG-PIB's terms of reuse; a GUI view's strip
+    shows W as WK; the automatic measurements without validation
+    (`mwp_auto`) are operational data and the readings of the MWP database
+    verified ones; G, SG and Z take the orders 9 to 11, their order
+    unchanged; the regulamin's template gains the block `pig`, in place
+    (DEV §20, DEV-20.5, DEV-20.7, DEV-20.8, DEV-20.13, ECO-092).
+  - A GUI that lets a person build a call of a catalog command in a form
+    builds it with the kit's command builder `<nogat-command-form>`
+    (`nogat-command-form.js` and `.css`), generated from the command's
+    commands-1 entry: a field per option by its type, section and Polish
+    text, a choice per `one_of`, the fields its rules show, disable and
+    require, no path option where the app owns the paths, the line of the
+    tool's `format_command` with „Kopiuj”, a line read by its
+    `parse_command` and a message of the tool under the field
+    `details.option` names. commands-1 and AGI-2.3 gain the optional fields
+    the form reads: an option's `items`, `exclusive_minimum`,
+    `exclusive_maximum`, `format`, `section`, `requires`, `excludes`,
+    `applies_to`, `required_when` and `i18n.pl`, and a command's `one_of`,
+    alternatives of which exactly one is given; `nogat-server/1` names
+    Kartograf's capabilities (DEV-15.17, AGI-2.3, ECO-093).
+  - Goniec, a QGIS plugin over the tools' servers under GPL-2.0-or-later,
+    is a project of the ecosystem, of the new profile `plugin`: no PyPI
+    package, CLI, MCP, REST interface, command catalog or routes, its code
+    in `<folder>/` at the root, released as a ZIP of it through
+    plugins.qgis.org, the folder `distribution.qgis` in the registry; a
+    server says what it serves in `nogat-server/1` at `GET /api/v1/server`,
+    on a tool's own server and on Latarnik alike; a clipboard copy holds the
+    values only, the lines beside its button, and a desktop GIS layer
+    carries them in its metadata (DEV §1, DEV-5.1, DEV-20.5, HUB-1.1,
+    HUB-2.1, HUB-2.9, ECO-094).
+  - Latarnik, an optional `app`, is the access point of a deployment and its
+    GUI hub: in front of the tools' servers on 127.0.0.1, it reaches them
+    over HTTP, routes each tool's `/api/v1/…` at `/<tool>/v1/…`, limits,
+    caches, logs and chains their calls and computes nothing; stage 2 of the
+    GUI platform and the entry point group `nogat.gui` retire, and
+    Obserwator calls Hydrolog's program or server. A server's REST API:
+    `POST` also for a read-only command whose inputs a URL cannot carry,
+    `server` and `jobs` reserved groups, OpenAPI at `/api/v1/openapi.json`
+    with a relative `servers` URL, `nogat-server/1` at `GET /api/v1/server`
+    and the command list at `/api/v1/commands/list`, access and caching by
+    the catalog (the tool's key `X-API-Key` on a run whose `rest.key` is
+    true), the client's address only from a trusted proxy's
+    `X-Forwarded-For`, relative links but OGC API's, and a long run as a job,
+    `nogat-job/1` (`schemas/exchange/job-1.schema.json`); commands-1 gains
+    the optional `rest` (`{method, path, key}`) and `long`, a command list
+    `effects`, `check` and `rest`; a catalog group is never `server` or
+    `jobs`; the registry's `conflict` names the reasons `job_running`,
+    `run_as_job` and `other_version`, and `not_found` `job_expired`
+    (AGI-2.2, AGI-2.4, AGI-6.1, AGI-6.2, AGI-6.5, AGI-6.7 to AGI-6.10, ERR-1,
+    HUB-1.1, DEV §1, ECO-095).
+  - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
+    `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
+    the command builder `nogat-command-form.js` and `.css`, the lines W, WP
+    and WK of `<nogat-sources>`, and regulamin 1.1, whose § 8 ust. 7 names
+    the base map among the settings the browser keeps, whose § 5 holds the
+    block `pig` and whose § 4 ust. 2 and § 6 ust. 2 name a service's API and
+    the programs using it, Goniec among them, the API within the limit of
+    requests being the way for programs (ECO-089, ECO-090, ECO-092 to
+    ECO-094).
 - 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
   - A released document, store layout or identifier grammar stays at its
     `/N` when a change adds a new value of an existing field or a new form

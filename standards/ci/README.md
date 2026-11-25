@@ -73,10 +73,11 @@ newest version when a new Python is released.
 
 The `audit` job exports the locked dependencies with hashes, leaves out the
 ecosystem's own distributions (`kartograf`, `obserwator`, `hydrolog`, `retman`,
-`archiwista`, `hydraulik`, `hydrograf` and their `nogat-<project>` names: they
-come from git tags until they are on PyPI and carry no hashes) and runs
-`pip-audit` on push, on pull requests and weekly. It informs and is not a
-required check. An accepted finding gets `--ignore-vuln <ID>` and a comment.
+`archiwista`, `hydraulik`, `hydrograf`, `latarnik` and their
+`nogat-<project>` names: they come from git tags until they are on PyPI and
+carry no hashes) and runs `pip-audit` on push, on pull requests and weekly.
+It informs and is not a required check. An accepted finding gets
+`--ignore-vuln <ID>` and a comment.
 
 Actions are pinned by commit SHA with the version in a comment; Dependabot
 updates them weekly. Python vulnerabilities come from GitHub's "Dependabot

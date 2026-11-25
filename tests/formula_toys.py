@@ -2,8 +2,9 @@
 
 A project that computes is imitated here: its own exceptions with a registry
 code, a correct Kirpich-like formula, wrong copies of it with one defect each, an
-array formula with gaps and an integer formula with a choice. The constants,
-ranges and sources are made up for these tests and stand for no published value.
+array formula with gaps, an integer formula with a choice, and an interval of a
+mean with wrong copies of it. The constants, ranges and sources are made up for
+these tests and stand for no published value.
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ from __future__ import annotations
 import math
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from statistics import NormalDist
 
 import numpy as np
 from nogat_formulas import (
@@ -449,3 +451,136 @@ def toy_plotting_position(rank: int, count: int, method: str) -> dict[str, objec
         POSITION, {"probability": (m - shift) / (n + 1 - 2 * shift)}, errors=ERRORS
     )
     return {"probability": out.real("probability"), "notices": notices}
+
+
+MEAN_INTERVAL = FormulaSpec(
+    name="toy_mean_interval",
+    title="Interval of the mean of normal values of a known spread (toy)",
+    function="formula_toys.toy_mean_interval",
+    family="statistic",
+    equation="mean(x) -+ z((1 + c) / 2) * sigma / sqrt(n)",
+    latex=r"\bar{x} \mp z_{(1 + c)/2} \, \sigma / \sqrt{n}",
+    variables=(
+        Variable(
+            name="values_m",
+            symbol="x",
+            unit="m",
+            kind="real_array",
+            max_length=1000,
+            physical=Range(low=-100.0, high=100.0),
+            applicability="unstated",
+            typical=Range(low=0.0, high=20.0, source=DATA),
+        ),
+        Variable(
+            name="sigma_m",
+            symbol=r"\sigma",
+            unit="m",
+            physical=Range(
+                low=0.0, low_inclusive=False, test_high=100.0, test_reason="as x"
+            ),
+            applicability="unstated",
+            typical=Range(low=0.5, high=5.0, source=DATA),
+        ),
+        Variable(
+            name="confidence_level",
+            symbol="c",
+            unit="-",
+            physical=Range(
+                low=0.0, high=1.0, low_inclusive=False, high_inclusive=False
+            ),
+            applicability="unstated",
+            typical=Range(low=0.5, high=0.99, source=DATA),
+        ),
+    ),
+    outputs=(
+        Output(name="lower_m", unit="m", physical=Range(low=-1e4, high=1e4)),
+        Output(name="upper_m", unit="m", physical=Range(low=-1e4, high=1e4)),
+    ),
+    sources=(TOY,),
+    properties=Properties(
+        units="homogeneous",
+        scalings=(
+            Scaling(
+                name="length",
+                inputs={"values_m": 1.0, "sigma_m": 1.0},
+                outputs={"lower_m": 1.0, "upper_m": 1.0},
+                tolerance=Tolerance(abs=0.0, reason="a power of two scales exactly"),
+            ),
+        ),
+    ),
+    no_traps_reason="sigma_m > 0 and n >= 1 keep every term finite",
+    oracles=(
+        Oracle(
+            kind="exact",
+            description="the coverage c of the normal mean with sigma known",
+            test="tests/unit/test_nogat_formulas_toys.py",
+        ),
+    ),
+    conventions=("two-sided and central at c, z of the standard normal",),
+    validation="none",
+    formula_version=1,
+    status="oracle only",
+)
+
+
+def _mean_interval(
+    values_m: NDArray[np.float64],
+    sigma_m: float,
+    confidence_level: float,
+    spread: Callable[[float, int], float],
+    level: Callable[[float], float] = lambda c: c,
+) -> dict[str, object]:
+    inputs = {
+        "values_m": values_m,
+        "sigma_m": sigma_m,
+        "confidence_level": confidence_level,
+    }
+    x, notices = validate(MEAN_INTERVAL, inputs, errors=ERRORS)
+    values = x.array("values_m")
+    z = NormalDist().inv_cdf((1 + level(x.real("confidence_level"))) / 2)
+    mean, half = float(np.mean(values)), z * spread(x.real("sigma_m"), values.size)
+    out = check_outputs(
+        MEAN_INTERVAL, {"lower_m": mean - half, "upper_m": mean + half}, errors=ERRORS
+    )
+    return {
+        "lower_m": out.real("lower_m"),
+        "upper_m": out.real("upper_m"),
+        "notices": notices,
+    }
+
+
+def toy_mean_interval(
+    values_m: NDArray[np.float64], sigma_m: float, confidence_level: float
+) -> dict[str, object]:
+    """Interval of a normal mean, spec ``toy_mean_interval``."""
+    return _mean_interval(
+        values_m, sigma_m, confidence_level, lambda s, n: s / math.sqrt(n)
+    )
+
+
+def too_narrow(
+    values_m: NDArray[np.float64], sigma_m: float, confidence_level: float
+) -> dict[str, object]:
+    """Interval of a normal mean divided by n, spec ``toy_mean_interval``."""
+    return _mean_interval(values_m, sigma_m, confidence_level, lambda s, n: s / n)
+
+
+def levels_crossed(
+    values_m: NDArray[np.float64], sigma_m: float, confidence_level: float
+) -> dict[str, object]:
+    """Interval of a normal mean at one less the level, spec ``toy_mean_interval``."""
+    return _mean_interval(
+        values_m,
+        sigma_m,
+        confidence_level,
+        lambda s, n: s / math.sqrt(n),
+        lambda c: 1 - c,
+    )
+
+
+def bounds_swapped(
+    values_m: NDArray[np.float64], sigma_m: float, confidence_level: float
+) -> dict[str, object]:
+    """Interval of a normal mean, its bounds swapped, spec ``toy_mean_interval``."""
+    result = toy_mean_interval(values_m, sigma_m, confidence_level)
+    return {**result, "lower_m": result["upper_m"], "upper_m": result["lower_m"]}

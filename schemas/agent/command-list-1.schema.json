@@ -24,7 +24,16 @@
           "maxLength": 48
         },
         "summary": {"type": "string", "minLength": 1},
-        "read_only": {"type": "boolean"}
+        "read_only": {"type": "boolean"},
+        "effects": {
+          "$ref": "commands-1.schema.json#/$defs/effects",
+          "description": "The command's effects as in <tool>-commands/1, its `read_only` equal to the entry's"
+        },
+        "check": {"$ref": "commands-1.schema.json#/$defs/check"},
+        "rest": {
+          "$ref": "commands-1.schema.json#/$defs/rest",
+          "description": "How the server that answers this list serves the command (AGI-6.8): its route and whether a run needs the tool's key, read by a proxy such as Latarnik at `/api/v1/commands/list`"
+        }
       }
     }
   }

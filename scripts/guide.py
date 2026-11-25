@@ -57,8 +57,9 @@ def guide_url(project: dict[str, Any]) -> str:
 def route_problems(registry: dict[str, Any]) -> list[str]:
     """Check the routes against the interfaces of their projects (HUB-2.9).
 
-    Every project but the hub needs a route, so that the table reaches its
-    guide; a route starts with the project's CLI or is an HTTP request to a
+    Every project but the hub and a plugin needs a route, so that the table
+    reaches its guide; a plugin has no CLI or REST interface to route to (DEV
+    §1); a route starts with the project's CLI or is an HTTP request to a
     project with a REST interface; a task is routed once; the repositories
     are on GitHub, where the guides are linked.
     """
@@ -71,7 +72,8 @@ def route_problems(registry: dict[str, Any]) -> list[str]:
     for project in projects:
         name = project["name"]
         routes = project.get("routes", [])
-        if "hub" not in project["profiles"] and not routes:
+        unrouted = {"hub", "plugin"} & set(project["profiles"])
+        if not unrouted and not routes:
             problems.append(f"{name}: no routes, so the routing table skips it")
         if _github_path(project["repo"]) is None:
             problems.append(f"{name}: repo is not a github.com/<owner>/<name> URL")
@@ -122,6 +124,8 @@ def _interfaces(project: dict[str, Any]) -> str:
         for key, label in INTERFACES
         if project["interfaces"].get(key)
     ]
+    if "qgis" in project["distribution"]:
+        found.append(f"QGIS plugin `{project['distribution']['qgis']}`")
     return ", ".join(found) or "none"
 
 

@@ -4,8 +4,8 @@ Every GUI fills the template with the fields and blocks the kit's README
 lists; these tests pin that the template, the reference filling and the
 README name the same fields and blocks, that the provider lines are those
 of DEV §20 and the statement of § 3 that of DEV-15.8 byte for byte, that a
-data-source block holds only its provider's lines and the link to its terms
-(DEV-20.7), that the version the regulamin names is the newest entry of its
+data-source block holds only its provider's lines and the links to its terms
+and licence (DEV-20.7), that the version the regulamin names is the newest entry of its
 history, which links the published text on `develop`, and which fields a
 deployment may leave empty.
 """
@@ -58,12 +58,12 @@ def test_the_readme_documents_every_field_and_block(name: str) -> None:
     assert f"| `{name}` |" in README
 
 
-@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "M", "C", "LP", "E"])
+@pytest.mark.parametrize("mark", ["S", "P", "PS", "PP", "M", "C", "LP", "E", "WP"])
 def test_the_provider_lines_are_those_of_dev_20(mark: str) -> None:
     assert f"\n> {LINES[mark]}\n" in SOURCE
 
 
-@pytest.mark.parametrize("mark", ["RD", "RH", "RK", "RE"])
+@pytest.mark.parametrize("mark", ["RD", "RH", "RK", "RE", "RW"])
 def test_the_terms_are_linked_as_dev_20_names_them(mark: str) -> None:
     label, address = LINES[mark].split(": ", 1)
     assert f"\n{label}: <{address}>\n" in SOURCE
@@ -80,14 +80,27 @@ def test_the_camels_pl_block_names_camels_pl_as_l_does_then_lp() -> None:
     assert block in SOURCE
 
 
+def test_the_pig_block_names_pig_pib_as_w_begins_then_wp() -> None:
+    block = re.search(
+        r"^<!-- block: pig -->\n### [^\n]+\n\n> (?P<name>[^\n]+)\n> (?P<wp>[^\n]+)\n",
+        SOURCE,
+        re.MULTILINE,
+    )
+    assert block is not None
+    assert LINES["W"].startswith(f"{block['name']} ")
+    assert block["wp"] == LINES["WP"]
+
+
 def test_no_block_offers_esri_imagery() -> None:
     # Esri's basemaps need Esri software or an ArcGIS subscription (ECO-068).
     assert "esri" not in terms.blocks(SOURCE)
 
 
-# A provider's name, its required lines, then at most one link to its terms.
+# A provider's name, its required lines, then at most one link to its terms or
+# licence, and its licence after its terms where both bind (PIG-PIB).
 SOURCE_BLOCK = re.compile(
     r"### [^\n]+\n\n(?:> [^\n]+\n)+(?:\n[^<>:\n]+: <https://[^>\n]+>\n)?"
+    r"(?:\nLicencja [^<>:\n]+: <https://[^>\n]+>\n)?"
 )
 
 

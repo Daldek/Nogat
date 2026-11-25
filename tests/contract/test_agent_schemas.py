@@ -237,6 +237,153 @@ def test_catalog_invalid(document: dict[str, Any]) -> None:
     assert _errors("commands", document) != []
 
 
+def _option(**changes: Any) -> dict[str, Any]:
+    return _command(options=[_with(COMMAND["options"][0], **changes)])
+
+
+# The optional fields a command builder reads (AGI-2.3, DEV-15.17, ECO-093).
+FORM = _command(
+    one_of=[["sheet"], ["bbox", "bbox_crs"]],
+    options=[
+        {
+            "name": "sheet",
+            "type": "string",
+            "required": False,
+            "description": "sheet code",
+            "one_of": "area",
+            "section": "Product and area",
+            "i18n": {"pl": {"description": "Godło", "section": "Produkt i obszar"}},
+        },
+        {
+            "name": "bbox",
+            "type": "array",
+            "items": "number",
+            "required": False,
+            "description": "area",
+            "one_of": "area",
+            "requires": ["bbox_crs"],
+        },
+        {
+            "name": "bbox_crs",
+            "type": "string",
+            "required": False,
+            "description": "CRS of bbox",
+            "applies_to": {"bbox": True},
+            "enum": [{"value": "EPSG:2180", "meaning": "PL-1992"}],
+            "i18n": {"pl": {"enum": {"EPSG:2180": "PL-1992, metry"}}},
+        },
+        {
+            "name": "years",
+            "type": "array",
+            "items": {"type": "integer", "minimum": 1},
+            "required": False,
+            "description": "years",
+        },
+        {
+            "name": "depth",
+            "type": "number",
+            "required": False,
+            "description": "depth",
+            "exclusive_minimum": 0,
+            "exclusive_maximum": 500,
+            "required_when": {"product": ["nmt", "nmpt"], "cutout": True},
+            "excludes": ["years"],
+        },
+        {
+            "name": "start",
+            "type": "string",
+            "format": "date",
+            "required": False,
+            "description": "first day",
+        },
+    ],
+)
+
+
+def test_catalog_with_the_fields_of_a_form_valid() -> None:
+    assert _errors("commands", FORM) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(one_of=[["bbox"]]),
+        _command(one_of=[["bbox"], []]),
+        _command(one_of=[["bbox"], ["Sheet"]]),
+        _option(items="tuple"),
+        _option(requires="output_dir"),
+        _option(excludes=["Output"]),
+        _option(applies_to={}),
+        _option(applies_to={"cutout": False}),
+        _option(required_when={"product": []}),
+        _option(exclusive_minimum="0"),
+        _option(section=""),
+        _option(format=""),
+        _option(i18n={"pl": {"enum": {"1": 1}}}),
+    ],
+)
+def test_catalog_with_wrong_fields_of_a_form_invalid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) != []
+
+
+# A command's route on its tool's server and its run as a job (AGI-6.1,
+# AGI-6.8, AGI-6.10, ECO-095).
+ROUTE = {"method": "POST", "path": "/api/v1/dem/download", "key": True}
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(rest=ROUTE, long=True),
+        _command(rest=None),
+        # Obserwator's form before `key`: its options' roles, no key; the
+        # key then follows `effects.read_only`.
+        _command(
+            rest={
+                "method": "GET",
+                "path": "/api/v1/series/read",
+                "server_options": ["root"],
+                "local_options": ["output"],
+            }
+        ),
+    ],
+    ids=["route-and-long", "not-served", "without-key"],
+)
+def test_catalog_with_a_route_valid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(rest={**ROUTE, "method": "PUT"}),
+        _command(rest={**ROUTE, "path": "/api/dem/download"}),
+        _command(rest={**ROUTE, "path": "/api/v1/download"}),
+        _command(rest={**ROUTE, "path": "/api/v1/jobs/start"}),
+        _command(rest={**ROUTE, "path": "/api/v1/server/info"}),
+        _command(rest={**ROUTE, "key": "yes"}),
+        _command(rest={"method": "GET"}),
+        _command(long="yes"),
+        _command(name="jobs list"),
+        _command(name="server info"),
+    ],
+    ids=[
+        "method-not-get-or-post",
+        "path-unversioned",
+        "path-without-verb",
+        "path-in-reserved-jobs",
+        "path-in-reserved-server",
+        "key-not-boolean",
+        "route-without-path",
+        "long-not-boolean",
+        "group-jobs-reserved",
+        "group-server-reserved",
+    ],
+)
+def test_catalog_with_a_wrong_route_invalid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) != []
+
+
 ENTRY: dict[str, Any] = {
     "name": "dem download",
     "operation_id": "kartograf_dem_download",
@@ -274,6 +421,32 @@ def test_command_list_valid() -> None:
     ],
 )
 def test_command_list_invalid(document: dict[str, Any]) -> None:
+    assert _errors("command-list", document) != []
+
+
+def test_command_list_as_a_server_serves_it_valid() -> None:
+    document = _entry(effects=COMMAND["effects"], check="dem check", rest=ROUTE)
+    assert _errors("command-list", document) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _entry(effects={"read_only": False}),
+        _entry(effects={**COMMAND["effects"], "read_only": True}),
+        _entry(check="check"),
+        _entry(rest={**ROUTE, "method": "DELETE"}),
+    ],
+    ids=[
+        "effects-incomplete",
+        "read-only-but-writes",
+        "check-not-a-command",
+        "rest-method",
+    ],
+)
+def test_command_list_with_wrong_served_fields_invalid(
+    document: dict[str, Any],
+) -> None:
     assert _errors("command-list", document) != []
 
 

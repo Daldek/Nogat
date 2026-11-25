@@ -1,6 +1,6 @@
 # Shared error registry
 
-Part of standard 1.2 · IDs `ERR-…`
+Part of standard 1.3 · IDs `ERR-…`
 
 [error_registry.json](error_registry.json) is the source of truth; this page
 explains it.
@@ -33,8 +33,8 @@ an error.
 |---|---|---|---|
 | <a id="internal_error"></a>`internal_error` | 1 | 500 | Defect in the tool or an unexpected exception. |
 | <a id="validation_error"></a>`validation_error` | 2 | 400 | Unknown command or option, wrong type, value out of range or not allowed, missing required option, violated exclusion rule. |
-| <a id="not_found"></a>`not_found` | 3 | 404 | Referenced file, resource, station, project or identifier does not exist. |
-| <a id="conflict"></a>`conflict` | 4 | 409 | Operation conflicts with current state: version collision, lock held, identifier taken. |
+| <a id="not_found"></a>`not_found` | 3 | 404 | Referenced file, resource, station, project or identifier does not exist; an ended job a server no longer keeps (details.reason job_expired). |
+| <a id="conflict"></a>`conflict` | 4 | 409 | Operation conflicts with current state: version collision, lock held, identifier taken; a job's result asked before the job ended (details.reason job_running), a command a server runs only as a job (run_as_job), a flow over a service of another version (other_version). |
 | <a id="source_unavailable"></a>`source_unavailable` | 5 | 502 | Remote service failed: timeout, connection error, HTTP error, download failure. |
 | <a id="missing_dependency"></a>`missing_dependency` | 6 | 503 | Feature needs an extra or an external program that is not installed; hint names the install command. |
 | <a id="data_error"></a>`data_error` | 7 | 500 | Data read by the tool (input file, archive, sidecar, stored series) is malformed or violates its format. |
@@ -63,7 +63,7 @@ records the collisions this resolves.
 NOT invent codes. Finer distinctions go to `details.reason` as snake_case
 English (`no_coverage`, `invalid_sheet_code`, `year_out_of_range`); the
 reasons that every tool or GUI shares are defined with their rule (DEV §19,
-DEV-15.13).
+DEV-15.13, AGI-6.10) or in the registry's meaning of their code.
 *Why:* consumers branch on `code`; `reason` keeps project precision without
 fragmenting the registry.
 

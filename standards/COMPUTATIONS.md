@@ -1,6 +1,6 @@
 # Computations: formulas, their limits and their verification
 
-Part of standard 1.2 · IDs `CMP-…`
+Part of standard 1.3 · IDs `CMP-…`
 
 The tools compute hydrological, meteorological and geographical quantities
 that engineers and researchers rely on, and academics audit the formulas. A
@@ -92,7 +92,11 @@ convention it implements.
 wherever a choice exists: system of units, exceedance or non-exceedance
 probability, the sign of the GEV shape, plotting position, the estimator of
 moments or L-moments, `λ` of SCS-CN, the hydrological year and half-years, the
-measurement day and time zone, the treatment of gaps, ties and zero values.
+measurement day and time zone, the treatment of gaps, ties and zero values,
+and the side and confidence level of an interval and its method: the delta
+method with its information (observed or expected), its scale and the
+parameters it holds at their estimates; a bootstrap with its kind, sample
+count, seed and empirical-quantile rule; order statistics.
 
 **CMP-2.4** A source confirms a constant, exponent or table entry only as the
 primary source or as two independent secondary sources, cited with equation,
@@ -279,6 +283,27 @@ and a newer release changes the cases only by a deliberate change of the
 tests. Such outputs are computed, not measured, so a difference is checked
 against a second source before it counts against the formula (CMP-5.2).
 *Why:* a release may correct values of the one before it (ECO-086).
+
+**CMP-6.11** *Interval estimators.* Besides its reference cases and oracles,
+an interval's coverage, the share of intervals that hold the true value, is
+simulated, seeded, from the distributions the formula fits, at the sample
+sizes of the ecosystem's use (30 and 60 values for annual series) with at
+least 1,000 samples per setting, nightly and before each release, never in
+the gate (as CMP-7.1), and reported per setting in `docs/FORMULAS.md`. A test
+asserts, per level and per element, an exact method's coverage c (order
+statistics, Student's t on normal samples; for order statistics their
+binomial coverage) within the Monte Carlo error 3√(c(1 − c)/m) of its m
+samples, and an approximate method's as its source reports it for the
+setting, or above a stated bound with its reason (CMP-6.8); its seed is fixed
+once in the test and recorded, never chosen to pass. The generated properties
+are lower ≤ upper and the interval of a smaller c inside that of a larger one
+on the same sample. The reference module's `assert_coverage` and
+`assert_interval_properties` make these checks.
+*Why:* an interval can be right digit by digit and still not cover what it
+says; an approximate method's coverage at 30 values is the method's, not the
+code's, so it is reported, not forced to c. Two standard errors would fail a
+right interval in about one assertion of 22, whatever m, and a formula asserts
+one per return period and level (ECO-091).
 
 ---
 

@@ -50,7 +50,10 @@ def test_every_link_of_agents_md_is_an_absolute_url() -> None:
 
 def test_agents_md_links_the_guide_of_every_tool(registry: dict[str, Any]) -> None:
     text = AGENTS.read_text(encoding="utf-8")
-    tools = [p for p in registry["projects"] if "hub" not in p["profiles"]]
+    # A plugin has no routes (HUB-2.9): an agent reaches it through QGIS, not a task.
+    tools = [
+        p for p in registry["projects"] if not {"hub", "plugin"} & set(p["profiles"])
+    ]
     assert tools
     for project in tools:
         assert guide.guide_url(project) in text, project["name"]

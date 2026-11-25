@@ -1,0 +1,1963 @@
+{
+  "_note": "Catalog entries of the command builder's browser tests (tests/browser/test_command_form.py): Kartograf 0.9.0 (3ee57795) elevation download, Hydrolog 0.10.0.dev0 (ffe8538) cn weighted, Obserwator 3.3.0.dev0 (2df8c18) series export and datasets download, as their `commands schema` gave them on 2026-11-25, with the rules and sections each tool declares in its own form written in the optional fields of commands-1 (AGI-2.3, ECO-093): Kartograf's sections, Polish texts and constraints, Obserwator's alternatives and requires; toy run is made up.",
+  "kartograf": {
+    "schema": "kartograf-commands/1",
+    "tool": "kartograf",
+    "version": "0.9.0",
+    "commands": [
+      {
+        "name": "elevation download",
+        "operation_id": "kartograf_elevation_download",
+        "function": "download_data",
+        "summary": "Download NMT, NMPT, LAZ or contours as sheets, tiles or one WCS cutout",
+        "description": "Fetches the DTM (NMT), DSM (NMPT), LAZ point clouds or CZ contours of GUGiK (PL) and CUZK (CZ) into the versioned store; `cutout` gives one WCS raster instead of sheets. Never overwrites: new content is a new version. `output_dir` writes plain files, not the store. Not for imagery (`imagery download`).",
+        "options": [
+          {
+            "name": "product",
+            "type": "string",
+            "required": true,
+            "enum": [
+              {
+                "value": "nmt",
+                "meaning": "Digital terrain model (bare earth); PL and CZ."
+              },
+              {
+                "value": "nmpt",
+                "meaning": "Digital surface model (with the objects on the ground); PL and CZ."
+              },
+              {
+                "value": "laz",
+                "meaning": "LIDAR point cloud; PL and CZ."
+              },
+              {
+                "value": "contours",
+                "meaning": "ZABAGED contours, 2D vector, SM5 sheets, SHP or DGN; CZ."
+              }
+            ],
+            "description": "Product.",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar",
+                "description": "Produkt (wymagany).",
+                "enum": {
+                  "nmt": "Numeryczny Model Terenu; PL i CZ.",
+                  "nmpt": "Numeryczny Model Pokrycia Terenu; PL i CZ.",
+                  "laz": "Chmura punktow LIDAR; PL i CZ.",
+                  "contours": "Warstwice ZABAGED: wektor 2D, arkusze SM5, SHP albo DGN; CZ."
+                }
+              }
+            }
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "pl",
+                "meaning": "Poland (GUGiK sources)."
+              },
+              {
+                "value": "cz",
+                "meaning": "Czechia (CUZK sources)."
+              },
+              {
+                "value": "auto",
+                "meaning": "Both: the area is split by the bounding boxes of PL and CZ, one file per country."
+              }
+            ],
+            "description": "Country of the source; required with `bbox` or `geometry`, implied by a sheet code (a given value must agree). `auto` splits the area between PL and CZ.",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar"
+              }
+            }
+          },
+          {
+            "name": "sheet",
+            "type": "string",
+            "required": false,
+            "description": "Sheet code: PL-1992 (`N-34-130-D-d-2-4`), PL-2000 (`6.129.30.25.3`), CZ SM5 (`CTES96`) or CZ TM33 (`302_5550`). A coarser PL code expands to the source sheets; contours take SM5 sheets only. Give exactly one of `sheet`, `bbox`, `geometry`.",
+            "one_of": "area",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar",
+                "description": "Godlo arkusza: PL-1992 (np. `N-34-130-D-d-2-4`), PL-2000 (np. `6.129.30.25.3`), CZ SM5 (np. `CTES96`) albo CZ TM33 (np. `302_5550`)."
+              }
+            }
+          },
+          {
+            "name": "bbox",
+            "type": "array",
+            "items": "number",
+            "unit": "m, or degrees for EPSG:4326",
+            "required": false,
+            "examples": [
+              [
+                565000,
+                242000,
+                566000,
+                243000
+              ]
+            ],
+            "description": "Area rectangle [min_x, min_y, max_x, max_y] in the CRS of bbox_crs, as numbers (metres, or degrees for EPSG:4326). Give exactly one of `sheet`, `bbox`, `geometry`.",
+            "one_of": "area",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar",
+                "description": "Prostokat obszaru: min_x, min_y, max_x, max_y w ukladzie `bbox_crs`."
+              }
+            }
+          },
+          {
+            "name": "bbox_crs",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "EPSG:2180",
+                "meaning": "PL-1992 (ETRS89 / Poland CS92)."
+              },
+              {
+                "value": "EPSG:4326",
+                "meaning": "WGS 84 geographic coordinates, in degrees."
+              },
+              {
+                "value": "EPSG:2176",
+                "meaning": "PL-2000 zone 5."
+              },
+              {
+                "value": "EPSG:2177",
+                "meaning": "PL-2000 zone 6."
+              },
+              {
+                "value": "EPSG:2178",
+                "meaning": "PL-2000 zone 7."
+              },
+              {
+                "value": "EPSG:2179",
+                "meaning": "PL-2000 zone 8."
+              },
+              {
+                "value": "EPSG:5514",
+                "meaning": "S-JTSK / Krovak East North (CZ)."
+              },
+              {
+                "value": "EPSG:3045",
+                "meaning": "ETRS89 / UTM zone 33N."
+              }
+            ],
+            "description": "CRS of bbox, required with it (the CLI defaults to EPSG:2180).",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar",
+                "description": "Uklad wspolrzednych `bbox` (domyslnie EPSG:2180)."
+              }
+            }
+          },
+          {
+            "name": "geometry",
+            "type": "string",
+            "required": false,
+            "description": "Vector file (SHP, GPKG or GeoJSON): PL sheets that intersect its features (a polygon, not its extent); LAZ tiles, CZ LAZ and contours: those that intersect its extent; cutout: its extent. Give exactly one of `sheet`, `bbox`, `geometry`.",
+            "one_of": "area",
+            "path_role": "input",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar"
+              }
+            }
+          },
+          {
+            "name": "layer",
+            "type": "string",
+            "required": false,
+            "description": "GPKG layer of geometry (default: the first one).",
+            "section": "Product and area",
+            "i18n": {
+              "pl": {
+                "section": "Produkt i obszar"
+              }
+            }
+          },
+          {
+            "name": "resolution",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "0.15m",
+                "meaning": "Cell or pixel size 0.15m (metres)."
+              },
+              {
+                "value": "0.5m",
+                "meaning": "Cell or pixel size 0.5m (metres)."
+              },
+              {
+                "value": "0.6m",
+                "meaning": "Cell or pixel size 0.6m (metres)."
+              },
+              {
+                "value": "1m",
+                "meaning": "Cell or pixel size 1m (metres)."
+              },
+              {
+                "value": "2m",
+                "meaning": "Cell or pixel size 2m (metres)."
+              },
+              {
+                "value": "5m",
+                "meaning": "Cell or pixel size 5m (metres)."
+              },
+              {
+                "value": "10m",
+                "meaning": "Cell or pixel size 10m (metres)."
+              },
+              {
+                "value": "15m",
+                "meaning": "Cell or pixel size 15m (metres)."
+              },
+              {
+                "value": "20m",
+                "meaning": "Cell or pixel size 20m (metres)."
+              },
+              {
+                "value": "25m",
+                "meaning": "Cell or pixel size 25m (metres)."
+              },
+              {
+                "value": "30m",
+                "meaning": "Cell or pixel size 30m (metres)."
+              },
+              {
+                "value": "40m",
+                "meaning": "Cell or pixel size 40m (metres)."
+              },
+              {
+                "value": "50m",
+                "meaning": "Cell or pixel size 50m (metres)."
+              },
+              {
+                "value": "100m",
+                "meaning": "Cell or pixel size 100m (metres)."
+              }
+            ],
+            "description": "Grid resolution label such as `1m`; required where the product offers a choice. One value applies to every country of the task, or give {\"pl\": \"1m\", \"cz\": \"2m\"}. Choices per source: `elevation list-sources`. Not used for LAZ and contours.",
+            "section": "Product parameters",
+            "i18n": {
+              "pl": {
+                "section": "Parametry produktu"
+              }
+            }
+          },
+          {
+            "name": "model",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "dmr5g",
+                "meaning": "Terrain model DMR 5G."
+              },
+              {
+                "value": "dmr4g",
+                "meaning": "Terrain model on a 5 m grid (DMR 4G)."
+              },
+              {
+                "value": "dmp1g",
+                "meaning": "Surface model DMP 1G."
+              },
+              {
+                "value": "dmpok",
+                "meaning": "Surface model from image correlation (DMP OK)."
+              }
+            ],
+            "description": "CZ LAZ point-cloud model; required with `product=laz` when the task reaches CZ. Not for other products.",
+            "section": "Product parameters",
+            "i18n": {
+              "pl": {
+                "section": "Parametry produktu"
+              }
+            },
+            "applies_to": {
+              "product": [
+                "laz"
+              ]
+            }
+          },
+          {
+            "name": "vertical_crs",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "EVRF2007",
+                "meaning": "European Vertical Reference Frame 2007: the current PL height system (PL-EVRF2007-NH) and the native one of CZ TM33 files."
+              },
+              {
+                "value": "KRON86",
+                "meaning": "Kronstadt 86: the historical PL height system (PL-KRON86-NH)."
+              },
+              {
+                "value": "Bpv",
+                "meaning": "Baltic after adjustment: native for CZ S-JTSK, SM5 and ImageServer data."
+              }
+            ],
+            "description": "Height system; required (omit for NMT 100 m: GUGiK declares none). One value must exist in every country of the task, or give {\"pl\": \"EVRF2007\", \"cz\": \"Bpv\"}. CZ LAZ: Bpv is SM5 files, EVRF2007 TM33 files (clouds are not transformed); CZ contours: Bpv, may be omitted.",
+            "section": "Product parameters",
+            "i18n": {
+              "pl": {
+                "section": "Parametry produktu",
+                "description": "Uklad wysokosci (wymagany). PL: EVRF2007 (uklad obowiazujacy), KRON86 (uklad historyczny)."
+              }
+            }
+          },
+          {
+            "name": "format",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "ASC",
+                "meaning": "ESRI ASCII grid."
+              },
+              {
+                "value": "XYZ",
+                "meaning": "ASCII XYZ grid, ZIP."
+              },
+              {
+                "value": "ASCII-NMT",
+                "meaning": "ASCII NMT points X Y Z, ZIP."
+              },
+              {
+                "value": "TBD",
+                "meaning": "ASCII TBD structure points and lines, ZIP."
+              },
+              {
+                "value": "TIN",
+                "meaning": "ESRI TIN, ZIP."
+              },
+              {
+                "value": "TTN",
+                "meaning": "Intergraph TTN."
+              },
+              {
+                "value": "GRD",
+                "meaning": "Intergraph GRD."
+              },
+              {
+                "value": "DXF",
+                "meaning": "DXF (contours; CZ cadastral map)."
+              },
+              {
+                "value": "DGN",
+                "meaning": "DGN (contours, cadastral map, topographic map)."
+              },
+              {
+                "value": "SHP",
+                "meaning": "Shapefile."
+              }
+            ],
+            "description": "File format. Without it NMT/NMPT PL are ASC grids. Source archives (XYZ, TIN, ...) are fetched as published, without conversion, and not with `cutout`; contours (required): SHP or DGN, the ZIP of an SM5 sheet. Variants: `elevation list-sources`.",
+            "section": "Product parameters",
+            "i18n": {
+              "pl": {
+                "section": "Parametry produktu"
+              }
+            }
+          },
+          {
+            "name": "sheet_system",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "1992",
+                "meaning": "PL-1992 sheets (1:10000 and coarser)."
+              },
+              {
+                "value": "2000",
+                "meaning": "PL-2000 sheets (zones EPSG:2176-2179)."
+              }
+            ],
+            "description": "Sheet system of PL sheets: `1992` (1:10000 sheets) or `2000` (zones EPSG:2176-2179, needs `scale`). Required with `bbox` or `geometry` for PL (not with `cutout` or LAZ); implied by a sheet code.",
+            "section": "Sheets of the area",
+            "i18n": {
+              "pl": {
+                "section": "Arkusze obszaru"
+              }
+            }
+          },
+          {
+            "name": "scale",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "1:5000",
+                "meaning": "Sheets or maps at the scale 1:5000."
+              },
+              {
+                "value": "1:2000",
+                "meaning": "Sheets or maps at the scale 1:2000."
+              },
+              {
+                "value": "1:1000",
+                "meaning": "Sheets or maps at the scale 1:1000."
+              },
+              {
+                "value": "1:500",
+                "meaning": "Sheets or maps at the scale 1:500."
+              }
+            ],
+            "description": "Scale of PL-2000 sheets: required with `bbox` or `geometry` and `sheet_system=2000`, and with a PL-2000 1:10000 code; optional with a finer code (expands it to its descendants). Not for PL-1992 (always 1:10000), CZ, LAZ and `cutout`.",
+            "section": "Sheets of the area",
+            "i18n": {
+              "pl": {
+                "section": "Arkusze obszaru"
+              }
+            }
+          },
+          {
+            "name": "cutout",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Fetch one WCS cutout instead of sheets (with `bbox` or `geometry`; needs `horizontal_crs`). PL: 1 m NMT/NMPT on the sheet grid, masked to the PL land, as the server composes its flights (for the newest flight fetch sheets). CZ: an exportImage cutout, required for CZ raster areas. Not for LAZ.",
+            "section": "Cutout instead of sheets",
+            "i18n": {
+              "pl": {
+                "section": "Wycinek zamiast arkuszy",
+                "description": "Tryb JEDNEGO wycinka zamiast arkuszy (tylko `bbox` albo `geometry`; wymaga `horizontal_crs`)."
+              }
+            },
+            "requires": [
+              "horizontal_crs"
+            ],
+            "excludes": [
+              "sheet"
+            ]
+          },
+          {
+            "name": "horizontal_crs",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "EPSG:2180",
+                "meaning": "PL-1992 (ETRS89 / Poland CS92)."
+              },
+              {
+                "value": "EPSG:5514",
+                "meaning": "S-JTSK / Krovak East North (CZ)."
+              },
+              {
+                "value": "EPSG:3045",
+                "meaning": "ETRS89 / UTM zone 33N."
+              }
+            ],
+            "description": "CRS of the cutout; required with `cutout`, refused without it. Reprojected locally; the CZ native CRS is EPSG:5514.",
+            "section": "Cutout instead of sheets",
+            "i18n": {
+              "pl": {
+                "section": "Wycinek zamiast arkuszy",
+                "description": "Uklad poziomy wycinka: wymagany z `cutout`."
+              }
+            },
+            "applies_to": {
+              "cutout": true
+            }
+          },
+          {
+            "name": "year",
+            "type": "integer",
+            "required": false,
+            "description": "Only this data year (acquisition year; `akt_rok` for LAZ): the newest flight of that year. A sheet or tile without it stops the run before any download. Excludes `min_year` and `max_year`; not with `cutout`.",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)",
+                "description": "Tylko ten rok danych; nie dziala z `cutout`."
+              }
+            },
+            "excludes": [
+              "min_year",
+              "max_year"
+            ]
+          },
+          {
+            "name": "min_year",
+            "type": "integer",
+            "required": false,
+            "description": "Lower bound of the data year (inclusive): the newest flight in the range, or all of them with `all_campaigns`. Not with `cutout`.",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)"
+              }
+            }
+          },
+          {
+            "name": "max_year",
+            "type": "integer",
+            "required": false,
+            "description": "Upper bound of the data year (inclusive): the newest flight in the range, or all of them with `all_campaigns`; the standard path never moves to an older flight. Not with `cutout`.",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)"
+              }
+            }
+          },
+          {
+            "name": "all_campaigns",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Fetch every flight of the year range into `versions/` instead of the newest one per sheet. LAZ: coverage is not deduplicated. Not with `cutout`.",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)"
+              }
+            }
+          },
+          {
+            "name": "full_sheet",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "NMT/NMPT: when the newest flight of a sheet is not full (`calyArkuszWypelnionyTrescia`), also fetch the newest full flight of the range (one more per sheet at most) and link it under `full_sheet/`. Not with `cutout` and LAZ.",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)"
+              }
+            }
+          },
+          {
+            "name": "min_density",
+            "type": "integer",
+            "unit": "points/m2",
+            "required": false,
+            "description": "LAZ PL only: keep the tiles with at least this point density (points per m2).",
+            "section": "Data year, flights and tiles (PL only)",
+            "i18n": {
+              "pl": {
+                "section": "Rok danych, loty i kafle (tylko PL)"
+              }
+            },
+            "applies_to": {
+              "product": [
+                "laz"
+              ]
+            }
+          },
+          {
+            "name": "output_dir",
+            "type": "string",
+            "required": false,
+            "description": "Directory for plain files named as in the store (no sidecar, no versions). A repeated name, a store or an existing file (without `update` force) is a `conflict` and nothing is written. Store only: `update` upgrade and `plan`. PL sheets: the newest FULL flight, not the newest one; a sheet with none is skipped (warning `skipped_incomplete`), all skipped is `no_data`. Give at most one of `output_dir`, `root`.",
+            "one_of": "target",
+            "path_role": "output",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja",
+                "description": "Katalog na zwykle pliki (nazwy jak w magazynie, bez sidecara i wersji)."
+              }
+            },
+            "excludes": [
+              "plan",
+              "all_campaigns"
+            ]
+          },
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Store root: versions are written below it, one directory per product, never over existing ones. Default: the store of the user data directory (`KARTOGRAF_ROOT`, `[kartograf] root` of `nogat.toml`, else `<data_dir>/kartograf`). Give at most one of `output_dir`, `root`.",
+            "one_of": "target",
+            "path_role": "root",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja",
+                "description": "Katalog magazynu (domyslnie magazyn uzytkownika)."
+              }
+            }
+          },
+          {
+            "name": "check",
+            "type": "boolean",
+            "required": false,
+            "description": "Plan without effects: compare the local versions with the source and return the plan (kartograf-plan/1: current, newer, to download, or cannot be checked without downloading); nothing is fetched or written. With `output_dir`: write, replace or conflict per target. Cheap signal: the ETag of SM5 sheets, TM33 DMR 4G and DMP OK EVRF2007 tiles and CZ LAZ; cutouts and ImageServer tiles have none.",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja"
+              }
+            }
+          },
+          {
+            "name": "update",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "upgrade",
+                "meaning": "Fetch newer content when the source signals it."
+              },
+              {
+                "value": "force",
+                "meaning": "Fetch every file again; nothing is overwritten."
+              }
+            ],
+            "description": "Update mode. Omitted: keep the local versions and fetch the missing ones. upgrade: fetch newer content when the source signals it (store only). force: fetch every file again (store: the same content is unchanged, other content is a new version; `output_dir`: it replaces the files). CLI: --upgrade, --force.",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja"
+              }
+            }
+          },
+          {
+            "name": "plan",
+            "type": "object",
+            "required": false,
+            "description": "Update plan (the result of a check) to run with update=upgrade; a position that changed since the plan stops the run. Store only. CLI: the file of --plan.",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja"
+              }
+            }
+          },
+          {
+            "name": "workers",
+            "type": "integer",
+            "required": false,
+            "default": 4,
+            "min": 1,
+            "description": "Parallel transfers (default 4; 1 = one by one).",
+            "section": "Output and update",
+            "i18n": {
+              "pl": {
+                "section": "Wynik i aktualizacja"
+              }
+            }
+          }
+        ],
+        "result": {
+          "schema": "kartograf-download/1",
+          "cardinality": "single"
+        },
+        "effects": {
+          "read_only": false,
+          "writes": "add",
+          "idempotent": true,
+          "network": true,
+          "destructive": false
+        },
+        "check": "elevation download",
+        "families": [
+          "data",
+          "core"
+        ],
+        "rules": [
+          "Run `elevation availability` first if you do not know which years, grids and CRSs exist.",
+          "Set `vertical_crs` and `resolution` yourself: nothing is guessed."
+        ],
+        "examples": [
+          {
+            "call": "kartograf elevation download --product nmt --sheet N-34-130-D-d-2-4 --resolution 1m --vertical-crs EVRF2007 --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "PL sheet: NMT 1 m in EVRF2007"
+          },
+          {
+            "call": "kartograf elevation download --product laz --country pl --bbox 530000,382000,533000,386000 --vertical-crs KRON86 --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "PL LAZ point cloud for a rectangle"
+          },
+          {
+            "call": "kartograf elevation download --product nmt --country pl --bbox 565000,242000,565500,242500 --resolution 5m --vertical-crs EVRF2007 --sheet-system 1992 --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "PL area: NMT 5 m sheets in the 1992 system"
+          },
+          {
+            "call": "kartograf elevation download --product nmt --country pl --bbox 566000,243000,566500,243500 --vertical-crs EVRF2007 --cutout --horizontal-crs EPSG:2180 --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "PL cutout: NMT 1 m from WCS"
+          },
+          {
+            "call": "kartograf elevation download --product nmt --sheet CTES96 --resolution 5m --vertical-crs Bpv --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "CZ SM5 sheet: NMT 5 m in Bpv"
+          },
+          {
+            "call": "kartograf elevation download --product nmt --country cz --bbox -447000,-1114000,-446000,-1113000 --bbox-crs EPSG:5514 --resolution 5m --vertical-crs Bpv --cutout --horizontal-crs EPSG:5514 --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "CZ cutout in S-JTSK"
+          },
+          {
+            "call": "kartograf elevation download --product laz --country cz --bbox -447000,-1114000,-446000,-1113000 --bbox-crs EPSG:5514 --model dmr5g --vertical-crs Bpv --root ./data",
+            "result": {
+              "schema": "kartograf-download/1",
+              "mode": "store",
+              "root": "/data",
+              "files": [
+                {
+                  "unit": "N-34-130-D-d-2-4",
+                  "country": "PL",
+                  "path": "/data/nmt/pl_1992_1m_evrf2007/N-34/130/D/d/2/4/N-34-130-D-d-2-4.asc",
+                  "size_bytes": 4096,
+                  "sha256": "10be475e6b5c43d5...",
+                  "status": "new",
+                  "label": "2022-05-10_83233"
+                }
+              ],
+              "failed": [],
+              "ok": true
+            },
+            "title": "CZ LAZ point cloud: DMR 5G model for a rectangle"
+          }
+        ],
+        "errors": [
+          "validation_error",
+          "source_unavailable",
+          "no_data",
+          "unsupported",
+          "calculation_error",
+          "store_unavailable",
+          "io_error",
+          "forbidden"
+        ],
+        "i18n": {
+          "pl": {
+            "summary": "Pobierz NMT, NMPT, LAZ albo warstwice (arkusze, kafle albo wycinek)",
+            "description": "Pobierz NMT, NMPT i chmury punktow LAZ z GUGiK (PL) albo CUZK (CZ) do magazynu wersji. PL: --bbox/--geometry wybiera arkusze/kafle LAZ, --cutout --horizontal-crs daje wycinek 1 m z WCS GUGiK; NMT 100 m (--resolution 100m) to pliki XYZ wojewodztw obszaru. CZ: rastry SM5/TM33 z plikow CUZK albo ImageServer (kafle TM33 DMR 4G i DMP OK z plikow ETRS89/EVRF2007); dla obszaru rastra --cutout wymagane. LAZ CZ: --model i arkusz SM5/TM33 albo obszar (arkusze z indeksu), bez --cutout i bez transformacji chmur. Warstwice CZ (--product contours --format SHP|DGN): ZIP arkusza SM5 1:1, obszar = arkusze SM5 z indeksu, bez --cutout. --output-dir zapisuje zwykle pliki, nie magazyn.",
+            "rules": [
+              "Najpierw `elevation availability`, gdy nie wiesz, jakie lata, siatki i uklady sa dostepne.",
+              "Podaj `vertical_crs` i `resolution` jawnie: nic nie jest zgadywane."
+            ]
+          }
+        },
+        "one_of": [
+          [
+            "sheet"
+          ],
+          [
+            "bbox"
+          ],
+          [
+            "geometry"
+          ]
+        ]
+      }
+    ]
+  },
+  "hydrolog": {
+    "schema": "hydrolog-commands/1",
+    "tool": "hydrolog",
+    "version": "0.10.0.dev0",
+    "commands": [
+      {
+        "name": "cn weighted",
+        "operation_id": "hydrolog_cn_weighted",
+        "function": "hydrolog.operations.cn_weighted",
+        "summary": "Compute the area-weighted CN of a watershed made of several parts.",
+        "description": "Area-weighted CN of a watershed from parts with a known CN and area or share: `parts`, or parallel `cn_values` with `areas` or `fractions` (shares sum to 1). Use after `cn lookup` for each part; the result is fractional and fits `scs effective`.",
+        "options": [
+          {
+            "name": "parts",
+            "type": "array",
+            "items": "object",
+            "required": false,
+            "examples": [
+              [
+                {
+                  "cn": 55,
+                  "area": 27.2
+                },
+                {
+                  "cn": 69,
+                  "area": 13.6
+                },
+                {
+                  "cn": 65,
+                  "area": 4.5
+                }
+              ]
+            ],
+            "description": "Watershed parts as objects `{\"cn\": number 1-100, \"area\": area >= 0}` or `{\"cn\": ..., \"fraction\": share 0-1}`; all parts of one list use the same kind of weight (`area` or `fraction`).",
+            "one_of": "alternatives",
+            "i18n": {
+              "pl": {
+                "description": "Części zlewni jako obiekty `{\"cn\": liczba 1–100, \"area\": powierzchnia ≥ 0}` albo `{\"cn\": ..., \"fraction\": udział 0–1}`; w jednej liście wszystkie części mają ten sam rodzaj wagi (`area` albo `fraction`)."
+              }
+            }
+          },
+          {
+            "name": "cn_values",
+            "type": "array",
+            "items": "number",
+            "required": false,
+            "min": 1,
+            "max": 100,
+            "examples": [
+              [
+                55,
+                79,
+                98
+              ],
+              [
+                58,
+                71,
+                78
+              ]
+            ],
+            "description": "CN values of the watershed parts (1-100); parallel to `areas` or `fractions`.",
+            "one_of": "alternatives",
+            "i18n": {
+              "pl": {
+                "description": "Wartości CN części zlewni (1–100); równolegle do `areas` albo `fractions`."
+              }
+            }
+          },
+          {
+            "name": "areas",
+            "type": "array",
+            "items": "number",
+            "required": false,
+            "min": 0,
+            "examples": [
+              [
+                12.4,
+                25.1,
+                7.8
+              ]
+            ],
+            "description": "Areas of the parts (>= 0, any consistent unit); as many items as `cn_values`.",
+            "one_of": "alternatives",
+            "i18n": {
+              "pl": {
+                "description": "Powierzchnie części (≥ 0, jednolita jednostka dowolna); tyle elementów, ile `cn_values`."
+              }
+            }
+          },
+          {
+            "name": "fractions",
+            "type": "array",
+            "items": "number",
+            "required": false,
+            "min": 0,
+            "max": 1,
+            "examples": [
+              [
+                0.6,
+                0.3,
+                0.1
+              ]
+            ],
+            "description": "Shares of the parts in the watershed (0-1) summing to 1; as many items as `cn_values`.",
+            "one_of": "alternatives",
+            "i18n": {
+              "pl": {
+                "description": "Udziały części w zlewni (0–1), sumujące się do 1; tyle elementów, ile `cn_values`."
+              }
+            }
+          }
+        ],
+        "result": {
+          "schema": "hydrolog-cn-weighted/1",
+          "cardinality": "single"
+        },
+        "effects": {
+          "read_only": true,
+          "writes": "none",
+          "idempotent": true,
+          "network": false,
+          "destructive": false
+        },
+        "check": null,
+        "families": [
+          "cn",
+          "core"
+        ],
+        "rules": [
+          "Use one weight kind per call; fractions must sum to 1.",
+          "Use one area unit for all parts.",
+          "Pass the fractional CN on without rounding."
+        ],
+        "examples": [
+          {
+            "call": "hydrolog cn weighted --parts '[{\"cn\":55,\"area\":27.2},{\"cn\":69,\"area\":13.6},{\"cn\":65,\"area\":4.5}]'",
+            "result": {
+              "cn": 60.1965,
+              "n_parts": 3,
+              "total_area": 45.3,
+              "shares": [
+                0.600442,
+                0.300221,
+                0.0993377
+              ]
+            }
+          },
+          {
+            "call": "hydrolog cn weighted --cn-values 55,79,98 --fractions 0.6,0.3,0.1",
+            "result": {
+              "cn": 66.5,
+              "n_parts": 3,
+              "total_area": null,
+              "shares": [
+                0.6,
+                0.3,
+                0.1
+              ]
+            }
+          },
+          {
+            "call": "hydrolog cn weighted --cn-values 58,71,78 --areas 12.4,25.1,7.8",
+            "result": {
+              "cn": 68.6468,
+              "n_parts": 3,
+              "total_area": 45.3,
+              "shares": [
+                0.273731,
+                0.554084,
+                0.172185
+              ]
+            }
+          }
+        ],
+        "errors": [
+          "validation_error"
+        ],
+        "i18n": {
+          "pl": {
+            "summary": "Oblicz średnią ważoną CN zlewni złożonej z kilku pokryć lub gleb.",
+            "description": "Średnia ważona CN zlewni z części o znanym CN i powierzchni lub udziale: `parts`, albo równoległe `cn_values` z `areas` lub `fractions` (suma udziałów = 1). Użyj po `cn lookup` dla każdej części; wynik jest ułamkowy i nadaje się do `scs effective`.",
+            "rules": [
+              "Użyj jednego rodzaju wag; udziały muszą sumować się do 1.",
+              "Użyj jednej jednostki powierzchni dla wszystkich części.",
+              "Przekaż dalej ułamkowe CN bez zaokrąglania."
+            ]
+          }
+        },
+        "one_of": [
+          [
+            "parts"
+          ],
+          [
+            "cn_values",
+            "areas"
+          ],
+          [
+            "cn_values",
+            "fractions"
+          ]
+        ]
+      }
+    ]
+  },
+  "obserwator": {
+    "schema": "obserwator-commands/1",
+    "tool": "obserwator",
+    "version": "3.3.0.dev0",
+    "commands": [
+      {
+        "name": "series export",
+        "operation_id": "obserwator_series_export",
+        "function": "export_series",
+        "summary": "Export one station's series as CSV, JSON or Parquet.",
+        "description": "Export one station's series as CSV, JSON or Parquet. The provider's attribution goes with it.",
+        "options": [
+          {
+            "name": "version",
+            "type": "string",
+            "required": false,
+            "description": "Series version: version directory, series.json or sidecar; absolute or relative to root (instead of dataset)",
+            "path_role": "input",
+            "flags": [
+              "--version"
+            ]
+          },
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Data root: base of a relative version or root of the current version of the dataset (with dataset)",
+            "path_role": "root",
+            "flags": [
+              "--root",
+              "-r"
+            ]
+          },
+          {
+            "name": "dataset",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "pl.imgw.hydro_daily",
+                "meaning": "Daily hydrological data"
+              },
+              {
+                "value": "pl.imgw.hydro_monthly",
+                "meaning": "Monthly hydrological data"
+              },
+              {
+                "value": "pl.imgw.hydro_semiannual",
+                "meaning": "Semi-annual and annual hydrological data"
+              },
+              {
+                "value": "pl.imgw.meteo_climate_daily",
+                "meaning": "Daily meteorological data from climate stations"
+              },
+              {
+                "value": "pl.imgw.meteo_precip_daily",
+                "meaning": "Daily meteorological data from precipitation stations"
+              },
+              {
+                "value": "pl.imgw.meteo_synop_daily",
+                "meaning": "Daily meteorological data from synoptic stations"
+              },
+              {
+                "value": "pl.imgw.hydro_subdaily",
+                "meaning": "Hourly hydrological series (H, Q, T) of the telemetry and of hydro.imgw.pl: operational data, unverified, each hour with its tier"
+              },
+              {
+                "value": "cz.chmu.hydro_daily",
+                "meaning": "ČHMÚ — daily hydrological data (H, Q, T)"
+              },
+              {
+                "value": "cz.chmu.meteo_daily",
+                "meaning": "ČHMÚ — daily meteorological data (precipitation, air temperature, snow)"
+              },
+              {
+                "value": "cz.chmu.groundwater_daily",
+                "meaning": "ČHMÚ — daily groundwater data (level, spring yield, water temperature)"
+              },
+              {
+                "value": "cz.chmu.groundwater_weekly",
+                "meaning": "ČHMÚ — weekly groundwater data (level, spring yield, water temperature)"
+              },
+              {
+                "value": "cz.chmu.hydro_subdaily",
+                "meaning": "ČHMÚ — hourly hydrological series (H, Q, T) of the validated hours and of the recent days: operational data where unverified, each hour with its tier"
+              }
+            ],
+            "description": "Series dataset: key, slug or legacy alias, e.g. pl.imgw.hydro_daily",
+            "flags": [
+              "--dataset",
+              "-d"
+            ]
+          },
+          {
+            "name": "station",
+            "type": "string",
+            "required": true,
+            "pattern": "^([0-9]{9}|0-[0-9]{1,5}-[0-9]{1,5}-[0-9A-Z]{1,16}|[A-Z][A-Z0-9]{1,15}-[A-Za-z0-9][A-Za-z0-9_-]{0,31})$",
+            "description": "Station code (9 digits of IMGW-PIB or a WIGOS identifier)",
+            "flags": [
+              "--station",
+              "-s"
+            ]
+          },
+          {
+            "name": "variables",
+            "type": "array",
+            "required": false,
+            "description": "Comma-separated dataset variables, e.g. H,Q (default: all)",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "flags": [
+              "--variables"
+            ]
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "required": false,
+            "description": "First day of the record range (ISO YYYY-MM-DD, inclusive)",
+            "format": "date",
+            "flags": [
+              "--start"
+            ]
+          },
+          {
+            "name": "end",
+            "type": "string",
+            "required": false,
+            "description": "Last day of the record range (ISO YYYY-MM-DD, inclusive)",
+            "format": "date",
+            "flags": [
+              "--end"
+            ]
+          },
+          {
+            "name": "year_type",
+            "type": "string",
+            "required": false,
+            "enum": [
+              {
+                "value": "hydrological",
+                "meaning": "Hydrological year: November to October"
+              },
+              {
+                "value": "calendar",
+                "meaning": "Calendar year: January to December"
+              }
+            ],
+            "description": "Year type: hydrological (November–October) or calendar; default from series.json",
+            "flags": [
+              "--year-type"
+            ]
+          },
+          {
+            "name": "format",
+            "type": "string",
+            "required": false,
+            "default": "csv",
+            "enum": [
+              {
+                "value": "csv",
+                "meaning": "Comma-separated values with a header row"
+              },
+              {
+                "value": "json",
+                "meaning": "One JSON document"
+              },
+              {
+                "value": "parquet",
+                "meaning": "A typed Parquet file (needs output)"
+              }
+            ],
+            "description": "Export format: csv, json or parquet (parquet needs output)",
+            "flags": [
+              "--format",
+              "-f"
+            ]
+          },
+          {
+            "name": "output",
+            "type": "string",
+            "required": false,
+            "description": "The one file to write the result to, no metadata (its directory is created when missing; default: standard output)",
+            "path_role": "output",
+            "writes": "add",
+            "flags": [
+              "--output"
+            ]
+          },
+          {
+            "name": "force",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Replace the output file when it exists (without it an existing file is a conflict); needs output",
+            "writes": "replace",
+            "flags": [
+              "--force"
+            ],
+            "requires": [
+              "output"
+            ]
+          }
+        ],
+        "result": {
+          "schema": "obserwator-result/1",
+          "cardinality": "unbounded"
+        },
+        "effects": {
+          "read_only": false,
+          "writes": "replace",
+          "idempotent": true,
+          "network": false,
+          "destructive": true
+        },
+        "check": "series export",
+        "rules": [
+          "exactly one of: version or root+dataset (the current series version of the dataset)",
+          "variables only from the variables of the dataset",
+          "start not later than end",
+          "a semi-annual series only with year_type=hydrological",
+          "output is one file: an existing file needs force and a file in a store is a conflict",
+          "format=parquet needs output; REST answers every format as an attachment"
+        ],
+        "examples": [
+          {
+            "call": "obserwator series export --root /data/obserwator --dataset pl.imgw.hydro_daily --station 149190310 --format csv --output /data/raba.csv --json",
+            "result": {
+              "output": "/data/raba.csv",
+              "files": [
+                {
+                  "path": "/data/raba.csv",
+                  "status": "written"
+                }
+              ]
+            }
+          },
+          {
+            "call": "obserwator series export --root /data/obserwator --dataset pl.imgw.hydro_daily --station 149190310 --format json",
+            "result": "{\"schema\":\"obserwator-series-export/1\",\"dataset\":\"pl.imgw.hydro_daily\","
+          },
+          {
+            "call": "obserwator series export --root /data/obserwator --dataset pl.imgw.hydro_daily --station 149190310 --format parquet --output /data/raba.parquet --json",
+            "result": {
+              "output": "/data/raba.parquet",
+              "files": [
+                {
+                  "path": "/data/raba.parquet",
+                  "status": "written"
+                }
+              ]
+            }
+          }
+        ],
+        "errors": [
+          "validation_error",
+          "not_found",
+          "missing_dependency",
+          "data_error",
+          "store_unavailable",
+          "io_error",
+          "cancelled",
+          "forbidden",
+          "internal_error"
+        ],
+        "i18n": {
+          "pl": {
+            "summary": "Wyeksportuj szereg stacji jako CSV, JSON albo Parquet.",
+            "description": "Wyeksportuj szereg stacji jako CSV, JSON albo Parquet. Atrybucja dostawcy idzie razem z nim.",
+            "rules": [
+              "dokładnie jedno z: version albo root+dataset (bieżąca wersja szeregu zbioru)",
+              "variables wyłącznie ze zmiennych zbioru",
+              "start nie później niż end",
+              "szereg półroczny wyłącznie z year_type=hydrological",
+              "output to jeden plik: istniejący plik wymaga force, a plik w magazynie to konflikt",
+              "format=parquet wymaga output; REST zwraca każdy format jako załącznik"
+            ]
+          }
+        },
+        "group": "series",
+        "result_type": "str",
+        "requires": {
+          "force": [
+            "output"
+          ]
+        },
+        "alternatives": [
+          [
+            "version"
+          ],
+          [
+            "dataset",
+            "root"
+          ]
+        ],
+        "rest": {
+          "method": "GET",
+          "path": "/api/v1/series/export",
+          "server_options": [
+            "root"
+          ],
+          "local_options": [
+            "output",
+            "force"
+          ]
+        },
+        "one_of": [
+          [
+            "version"
+          ],
+          [
+            "dataset",
+            "root"
+          ]
+        ]
+      }
+    ]
+  },
+  "obserwator_download": {
+    "schema": "obserwator-commands/1",
+    "tool": "obserwator",
+    "version": "3.3.0.dev0",
+    "commands": [
+      {
+        "name": "datasets download",
+        "operation_id": "obserwator_datasets_download",
+        "function": "download_archives",
+        "summary": "Download the source files of a dataset as plain files or into the raw root.",
+        "description": "Download the source files of a dataset as plain files or into the raw root. Plain files (--output-dir) are named like the provider's server paths, an existing one needs --force; --root stores versions.",
+        "options": [
+          {
+            "name": "dataset",
+            "type": "string",
+            "required": true,
+            "enum": [
+              {
+                "value": "pl.imgw.hydro_daily",
+                "meaning": "Daily hydrological data"
+              },
+              {
+                "value": "pl.imgw.hydro_monthly",
+                "meaning": "Monthly hydrological data"
+              },
+              {
+                "value": "pl.imgw.hydro_semiannual",
+                "meaning": "Semi-annual and annual hydrological data"
+              },
+              {
+                "value": "pl.imgw.meteo_climate_daily",
+                "meaning": "Daily meteorological data from climate stations"
+              },
+              {
+                "value": "pl.imgw.meteo_precip_daily",
+                "meaning": "Daily meteorological data from precipitation stations"
+              },
+              {
+                "value": "pl.imgw.meteo_synop_daily",
+                "meaning": "Daily meteorological data from synoptic stations"
+              },
+              {
+                "value": "pl.imgw.hydro_telemetry",
+                "meaning": "Hydrological telemetry, monthly files of 10-minute H, Q, T: operational data, unverified"
+              },
+              {
+                "value": "pl.imgw.hydro_phenomena",
+                "meaning": "Daily hydrological phenomena"
+              },
+              {
+                "value": "pl.imgw.meteo_climate_monthly",
+                "meaning": "Monthly meteorological data from climate stations"
+              },
+              {
+                "value": "pl.imgw.meteo_precip_monthly",
+                "meaning": "Monthly meteorological data from precipitation stations"
+              },
+              {
+                "value": "pl.imgw.meteo_synop_monthly",
+                "meaning": "Monthly meteorological data from synoptic stations"
+              },
+              {
+                "value": "pl.imgw.meteo_climate_terms",
+                "meaning": "Meteorological data at observation times from climate stations"
+              },
+              {
+                "value": "pl.imgw.meteo_synop_terms",
+                "meaning": "Meteorological data at observation times from synoptic stations"
+              },
+              {
+                "value": "pl.imgw.warnings_hydro_archive",
+                "meaning": "Archive of hydrological warnings (monthly files)"
+              },
+              {
+                "value": "pl.imgw.warnings_meteo_archive",
+                "meaning": "Archive of meteorological warnings (monthly files)"
+              },
+              {
+                "value": "pl.imgw.actinometric",
+                "meaning": "Actinometric data (solar radiation) of the actinometric stations"
+              },
+              {
+                "value": "cz.chmu.hydro_daily",
+                "meaning": "ČHMÚ — daily hydrological data (H, Q, T)"
+              },
+              {
+                "value": "cz.chmu.meteo_daily",
+                "meaning": "ČHMÚ — daily meteorological data (precipitation, air temperature, snow)"
+              },
+              {
+                "value": "cz.chmu.groundwater_daily",
+                "meaning": "ČHMÚ — daily groundwater data (level, spring yield, water temperature)"
+              },
+              {
+                "value": "cz.chmu.groundwater_weekly",
+                "meaning": "ČHMÚ — weekly groundwater data (level, spring yield, water temperature)"
+              },
+              {
+                "value": "cz.chmu.groundwater_recent",
+                "meaning": "ČHMÚ — daily groundwater data of the last months (level, spring yield): operational data, unverified"
+              },
+              {
+                "value": "cz.chmu.groundwater_characteristic",
+                "meaning": "ČHMÚ — characteristics of groundwater objects (quantiles of the level or the yield per week or month of the year)"
+              },
+              {
+                "value": "cz.chmu.hydro_hourly",
+                "meaning": "ČHMÚ — hourly hydrological data (H, Q)"
+              }
+            ],
+            "description": "Archive dataset: key, slug or legacy alias, e.g. pl.imgw.hydro_daily, hydro/dobowe or cz.chmu.hydro_daily",
+            "flags": [
+              "--dataset",
+              "-d"
+            ]
+          },
+          {
+            "name": "years",
+            "type": "array",
+            "required": false,
+            "min": 1,
+            "max": 9999,
+            "description": "Years: numbers or ranges, e.g. 2023-2025 or 2020,2022; required except for cz.chmu.meteo_daily and cz.chmu.groundwater_characteristic (not allowed there)",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9999
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[0-9]{1,4}-[0-9]{1,4}$"
+                }
+              ]
+            },
+            "flags": [
+              "--years",
+              "-y"
+            ]
+          },
+          {
+            "name": "months",
+            "type": "array",
+            "required": false,
+            "min": 1,
+            "max": 12,
+            "description": "Comma-separated months 1–12 (default: all); pl.imgw.* datasets only",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "flags": [
+              "--months",
+              "-m"
+            ]
+          },
+          {
+            "name": "params",
+            "type": "array",
+            "required": false,
+            "enum": [
+              {
+                "value": "H",
+                "meaning": "Water level [cm]"
+              },
+              {
+                "value": "Q",
+                "meaning": "Flow [m3/s]"
+              },
+              {
+                "value": "T",
+                "meaning": "Water temperature [°C]"
+              }
+            ],
+            "description": "Semi-annual parameters H, Q, T (pl.imgw.hydro_semiannual only; default: all)",
+            "items": {
+              "enum": [
+                "H",
+                "Q",
+                "T"
+              ]
+            },
+            "flags": [
+              "--params"
+            ]
+          },
+          {
+            "name": "stations",
+            "type": "array",
+            "required": false,
+            "pattern": "^([0-9]{9}|0-[0-9]{1,5}-[0-9]{1,5}-[0-9A-Z]{1,16}|[A-Z][A-Z0-9]{1,15}-[A-Za-z0-9][A-Za-z0-9_-]{0,31})$",
+            "description": "Comma-separated station codes: ČHMÚ WIGOS identifiers (e.g. 0-203-1-001000), required for cz.chmu.* datasets; 9-digit IMGW-PIB codes for the per-station synop archives of IMGW-PIB; not allowed for other pl.imgw.* datasets",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^([0-9]{9}|0-[0-9]{1,5}-[0-9]{1,5}-[0-9A-Z]{1,16}|[A-Z][A-Z0-9]{1,15}-[A-Za-z0-9][A-Za-z0-9_-]{0,31})$"
+            },
+            "flags": [
+              "--stations",
+              "-s"
+            ]
+          },
+          {
+            "name": "output_dir",
+            "type": "string",
+            "required": false,
+            "description": "Directory of plain files, no metadata, named like the files in the store (created when missing; excludes root)",
+            "one_of": "output_dir_or_root",
+            "path_role": "output",
+            "writes": "add",
+            "flags": [
+              "--output-dir",
+              "-o"
+            ]
+          },
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Raw root (downloaded archives, station sources, PMAXTP cells); default: $OBSERWATOR_RAW_ROOT, then raw_root in nogat.toml (section obserwator), else <data_dir>/obserwator-raw",
+            "one_of": "output_dir_or_root",
+            "path_role": "root",
+            "flags": [
+              "--root",
+              "-r"
+            ]
+          },
+          {
+            "name": "force",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Replace existing files of the output directory; a store version is never overwritten",
+            "writes": "replace",
+            "flags": [
+              "--force"
+            ]
+          }
+        ],
+        "result": {
+          "schema": "obserwator-result/1",
+          "cardinality": "single"
+        },
+        "effects": {
+          "read_only": false,
+          "writes": "replace",
+          "idempotent": true,
+          "network": true,
+          "destructive": true
+        },
+        "check": "datasets download",
+        "rules": [
+          "years not earlier than the first year of the dataset (first_year)",
+          "years required except for cz.chmu.meteo_daily and cz.chmu.groundwater_characteristic, whose files cover the whole history of a station (years not allowed there)",
+          "stations required for cz.chmu.* datasets; for the per-station synop archives of IMGW-PIB 9-digit codes, optional in store check and store sync (none = every station of the folder index), datasets files and datasets download need them or months; not allowed for the other pl.imgw.* datasets; codes in the grammar of the dataset's provider",
+          "months only for pl.imgw.* datasets",
+          "params only for pl.imgw.hydro_semiannual"
+        ],
+        "examples": [
+          {
+            "call": "obserwator datasets download --dataset pl.imgw.hydro_daily --years 2024 --root /data/obserwator-raw --json",
+            "result": {
+              "mode": "store",
+              "root": "/data/obserwator-raw",
+              "items": [
+                {
+                  "slot": "archive:pl.imgw.hydro_daily:2024/codz_2024.zip",
+                  "status": "new",
+                  "path": "archives/versions/dane_hydrologiczne/dobowe/2024/codz_2024/2026-10-19_b6a19f65/codz_2024.zip"
+                }
+              ],
+              "cancelled": false
+            }
+          },
+          {
+            "call": "obserwator datasets download --dataset pl.imgw.hydro_daily --years 2024 --root /data/obserwator-raw --check --json",
+            "result": {
+              "schema": "obserwator-plan/1",
+              "root": "/data/obserwator-raw",
+              "items": [
+                {
+                  "dataset": "pl.imgw.hydro_daily",
+                  "server_path": "dane_hydrologiczne/dobowe/2024/codz_2024.zip",
+                  "status": "unchanged",
+                  "local_path": "archives/versions/dane_hydrologiczne/dobowe/2024/codz_2024/2026-10-19_b6a19f65/codz_2024.zip"
+                }
+              ]
+            }
+          },
+          {
+            "call": "obserwator datasets download --dataset pl.imgw.meteo_synop_monthly --years 2023 --output-dir /data/pobrane --json",
+            "result": {
+              "mode": "plain",
+              "output_dir": "/data/pobrane",
+              "files": [
+                {
+                  "path": "/data/pobrane/dane_meteorologiczne/miesieczne/synop/2023/2023_m_s.zip",
+                  "status": "written"
+                }
+              ]
+            }
+          }
+        ],
+        "errors": [
+          "validation_error",
+          "not_found",
+          "conflict",
+          "source_unavailable",
+          "missing_dependency",
+          "data_error",
+          "store_unavailable",
+          "io_error",
+          "cancelled",
+          "forbidden",
+          "internal_error"
+        ],
+        "i18n": {
+          "pl": {
+            "summary": "Pobierz pliki źródłowe zbioru: zwykłe albo do katalogu surowego.",
+            "description": "Pobierz pliki źródłowe zbioru: zwykłe albo do katalogu surowego. Zwykłe pliki (--output-dir) mają nazwy jak ścieżki serwera dostawcy, istniejący plik wymaga --force; --root zapisuje wersje.",
+            "rules": [
+              "roczniki nie wcześniejsze niż pierwszy rocznik zbioru (first_year)",
+              "years wymagane poza cz.chmu.meteo_daily i cz.chmu.groundwater_characteristic, których pliki obejmują całą historię stacji (tam years niedozwolone)",
+              "stations wymagane dla zbiorów cz.chmu.*; dla archiwów synop IMGW-PIB publikowanych osobno dla każdej stacji 9-cyfrowe kody, opcjonalne w store check i store sync (brak = każda stacja z indeksu folderu), datasets files i datasets download wymagają ich albo months; niedozwolone dla innych zbiorów pl.imgw.*; kody według gramatyki dostawcy zbioru",
+              "months wyłącznie dla zbiorów pl.imgw.*",
+              "params wyłącznie dla pl.imgw.hydro_semiannual"
+            ]
+          }
+        },
+        "group": "datasets",
+        "result_type": "DownloadReport",
+        "exclusive": [
+          [
+            "output_dir",
+            "root"
+          ]
+        ],
+        "rest": null
+      }
+    ]
+  },
+  "toy": {
+    "schema": "toy-commands/1",
+    "tool": "toy",
+    "version": "1.0.0",
+    "commands": [
+      {
+        "name": "toy run",
+        "operation_id": "toy_toy_run",
+        "function": "toy.run",
+        "summary": "Run the toy for a point, a station or every station.",
+        "description": "A made-up command of the kit's tests: every kind of field and every rule the command builder reads. When not to use: anywhere else.",
+        "options": [
+          {
+            "name": "point",
+            "type": "array",
+            "items": "number",
+            "unit": "°",
+            "required": false,
+            "one_of": "place",
+            "examples": [
+              [
+                16.5,
+                51.1
+              ]
+            ],
+            "description": "Point: longitude and latitude.",
+            "i18n": {
+              "pl": {
+                "description": "Punkt: długość i szerokość geograficzna."
+              }
+            }
+          },
+          {
+            "name": "point_crs",
+            "type": "string",
+            "required": false,
+            "applies_to": {
+              "point": true
+            },
+            "enum": [
+              {
+                "value": "EPSG:4326",
+                "meaning": "WGS 84, degrees."
+              },
+              {
+                "value": "EPSG:2180",
+                "meaning": "PL-1992, metres."
+              }
+            ],
+            "description": "CRS of the point."
+          },
+          {
+            "name": "station",
+            "type": "string",
+            "required": false,
+            "one_of": "place",
+            "pattern": "^[0-9]{9}$",
+            "examples": [
+              "150160180"
+            ],
+            "description": "Station code, nine digits."
+          },
+          {
+            "name": "everywhere",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "one_of": "place",
+            "description": "Every station of the country."
+          },
+          {
+            "name": "level",
+            "type": "integer",
+            "required": true,
+            "enum": [
+              {
+                "value": 1,
+                "meaning": "Coarse."
+              },
+              {
+                "value": 2,
+                "meaning": "Medium."
+              },
+              {
+                "value": 3,
+                "meaning": "Fine."
+              }
+            ],
+            "description": "Level of detail.",
+            "i18n": {
+              "pl": {
+                "description": "Poziom szczegółowości.",
+                "enum": {
+                  "1": "Zgrubny.",
+                  "2": "Średni.",
+                  "3": "Dokładny."
+                }
+              }
+            }
+          },
+          {
+            "name": "depth",
+            "type": "number",
+            "unit": "mm",
+            "required": false,
+            "exclusive_minimum": 0,
+            "max": 500,
+            "required_when": {
+              "level": [
+                3
+              ]
+            },
+            "description": "Depth of the rain."
+          },
+          {
+            "name": "fast",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "excludes": [
+              "depth"
+            ],
+            "description": "Skip the depth."
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "format": "date-time",
+            "required": false,
+            "description": "Start of the run."
+          },
+          {
+            "name": "strict",
+            "type": "boolean",
+            "required": false,
+            "description": "Stop at the first doubtful value."
+          },
+          {
+            "name": "report",
+            "type": "string",
+            "required": false,
+            "path_role": "output",
+            "required_when": {
+              "strict": true
+            },
+            "description": "The file of the doubtful values."
+          },
+          {
+            "name": "tags",
+            "type": "array",
+            "items": "string",
+            "required": false,
+            "description": "Tags of the run."
+          },
+          {
+            "name": "tag_colour",
+            "type": "string",
+            "required": false,
+            "applies_to": {
+              "tags": true
+            },
+            "enum": [
+              {
+                "value": "red",
+                "meaning": "Red."
+              },
+              {
+                "value": "blue",
+                "meaning": "Blue."
+              }
+            ],
+            "description": "Colour of the tags."
+          },
+          {
+            "name": "settings",
+            "type": "object",
+            "required": false,
+            "description": "Settings as a JSON object."
+          }
+        ],
+        "one_of": [
+          [
+            "point"
+          ],
+          [
+            "station"
+          ],
+          [
+            "everywhere"
+          ]
+        ],
+        "result": {
+          "schema": "toy-run/1",
+          "cardinality": "single"
+        },
+        "effects": {
+          "read_only": true,
+          "writes": "none",
+          "idempotent": true,
+          "network": false,
+          "destructive": false
+        },
+        "check": null,
+        "rules": [
+          "Give the point in degrees unless point_crs says otherwise."
+        ],
+        "examples": [
+          {
+            "call": "toy toy run --station 150160180 --level 2",
+            "result": {
+              "schema": "toy-run/1"
+            }
+          }
+        ],
+        "errors": [
+          "validation_error"
+        ],
+        "i18n": {
+          "pl": {
+            "summary": "Uruchom zabawkę dla punktu, stacji albo wszystkich stacji.",
+            "rules": [
+              "Podaj punkt w stopniach, chyba że `point_crs` mówi inaczej."
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

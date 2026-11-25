@@ -9,18 +9,23 @@ the defect does not show.
 from __future__ import annotations
 
 import itertools
+import math
 from collections.abc import Callable
 from dataclasses import replace
 from fractions import Fraction
 from pathlib import Path
+from typing import Any, cast
 
 import formula_toys as toys
 import numpy as np
 import pytest
 from hypothesis import given, settings
 from nogat_formulas import (
+    Bounds,
     Case,
+    Coverage,
     FormulaSpec,
+    IntervalFunction,
     Output,
     Properties,
     Range,
@@ -32,6 +37,8 @@ from nogat_formulas import (
     Values,
     Variable,
     assert_case,
+    assert_coverage,
+    assert_interval_properties,
     assert_limits,
     assert_monotonic,
     assert_properties,
@@ -56,6 +63,7 @@ TOYS: list[tuple[FormulaSpec, Callable[..., object]]] = [
     (toys.KIRPICH, toys.toy_kirpich),
     (toys.CUMULATIVE, toys.toy_cumulative_depth),
     (toys.POSITION, toys.toy_plotting_position),
+    (toys.MEAN_INTERVAL, toys.toy_mean_interval),
 ]
 NAMES = [spec.name for spec, _ in TOYS]
 
@@ -397,3 +405,155 @@ def test_the_generated_cases_name_the_failing_input() -> None:
 def test_values_of_the_toys_reach_the_formula_as_float64() -> None:
     values: Values = validate(toys.KIRPICH, {"length_km": 1, "slope_m_per_m": 1})[0]
     assert values == {"length_km": 1.0, "slope_m_per_m": 1.0}
+
+
+# --- intervals and their coverage (CMP-6.11) ------------------------------------
+
+SIGMA = 2.0
+MU = 10.0
+LEVELS = (0.95, 0.68)
+
+
+def _normal(generator: np.random.Generator, size: int) -> np.ndarray:
+    return generator.normal(MU, SIGMA, size)
+
+
+def _interval(function: Callable[..., dict[str, object]]) -> IntervalFunction:
+    """The toy's interval at every level asked, as assert_coverage calls it."""
+
+    def interval(sample: np.ndarray, levels: tuple[float, ...]) -> list[Bounds]:
+        results = [function(sample, SIGMA, c) for c in levels]
+        return [(cast(float, r["lower_m"]), cast(float, r["upper_m"])) for r in results]
+
+    return interval
+
+
+def _coverage(
+    function: Callable[..., dict[str, object]], **kwargs: Any
+) -> list[Coverage]:
+    arguments: dict[str, Any] = {
+        "setting": f"normal, mean {MU}, sigma {SIGMA}",
+        "size": 30,
+        "confidence_level": LEVELS,
+        "seed": 20261125,  # fixed once, the day written, never chosen to pass
+        "reason": "the interval of a normal mean with sigma known is exact",
+        **kwargs,
+    }
+    return assert_coverage(
+        toys.MEAN_INTERVAL, _interval(function), _normal, MU, **arguments
+    )
+
+
+@pytest.mark.formula
+@pytest.mark.parametrize("size", [30, 60])
+def test_an_exact_interval_covers_at_its_levels(size: int) -> None:
+    records = _coverage(toys.toy_mean_interval, size=size)
+    assert [(r.confidence_level, r.check, r.size) for r in records] == [
+        (0.95, "exact", size),
+        (0.68, "exact", size),
+    ]
+    assert all(r.undefined == (0,) and r.samples == 1000 for r in records)
+
+
+def test_a_too_narrow_interval_is_caught_by_its_coverage() -> None:
+    with pytest.raises(
+        AssertionError, match=r"c = 0\.95: coverage 0\.\d+, not 0\.95 ±"
+    ):
+        _coverage(toys.too_narrow)
+
+
+def test_a_bound_takes_a_lower_coverage_and_catches_one_below_it() -> None:
+    [record] = _coverage(
+        toys.too_narrow,
+        confidence_level=0.95,
+        at_least={0.95: 0.2},
+        reason="a bound the narrow toy keeps",
+    )
+    assert record.check == "bound" and 0.2 < record.coverage[0] < 0.5
+    with pytest.raises(AssertionError, match=r"not at least 0\.5 - 0\.0474 \(bound"):
+        _coverage(toys.too_narrow, confidence_level=0.95, at_least={0.95: 0.5})
+
+
+def test_an_expected_coverage_is_asserted_instead_of_the_level() -> None:
+    [record] = _coverage(
+        toys.toy_mean_interval, confidence_level=0.95, expected={0.95: 0.95}
+    )
+    assert record.check == "expected" and record.target == (0.95,)
+    with pytest.raises(AssertionError, match=r"not 0\.9 ± 0\.0285 \(expected"):
+        _coverage(toys.toy_mean_interval, confidence_level=0.95, expected={0.95: 0.9})
+
+
+def test_swapped_bounds_are_caught_on_the_first_sample() -> None:
+    with pytest.raises(
+        AssertionError, match=r"sample 0 of seed 20261125: at c = 0\.95 the lower bound"
+    ):
+        _coverage(toys.bounds_swapped)
+
+
+def test_crossed_levels_are_caught_by_the_nesting_of_intervals() -> None:
+    sample = _normal(np.random.default_rng(1), 30)
+    assert_interval_properties(_interval(toys.toy_mean_interval), sample, LEVELS)
+    assert_interval_properties(_interval(toys.levels_crossed), sample, 0.95)
+    with pytest.raises(
+        AssertionError, match=r"at c = 0\.68, \[.*\], is not inside that at c = 0\.95"
+    ):
+        assert_interval_properties(_interval(toys.levels_crossed), sample, LEVELS)
+
+
+def test_a_bound_not_computed_holds_nothing_and_breaks_no_property() -> None:
+    def lower_missing(sample: np.ndarray, levels: tuple[float, ...]) -> list[Bounds]:
+        return [
+            (math.nan, upper)
+            for _, upper in _interval(toys.toy_mean_interval)(sample, levels)
+        ]
+
+    records = assert_coverage(
+        toys.MEAN_INTERVAL,
+        lower_missing,
+        _normal,
+        MU,
+        setting="normal",
+        size=30,
+        confidence_level=LEVELS,
+        seed=1,
+        at_least={0.95: 0.0, 0.68: 0.0},
+        reason="no lower bound is computed",
+    )
+    assert [(r.coverage, r.undefined) for r in records] == [((0.0,), (1000,))] * 2
+
+
+def test_the_coverage_of_each_element_is_asserted() -> None:
+    truth = np.array([MU, 2 * MU])
+
+    def draw(generator: np.random.Generator, size: int) -> np.ndarray:
+        return generator.normal(truth, SIGMA, (size, 2))
+
+    def interval(sample: np.ndarray, levels: tuple[float, ...]) -> list[Bounds]:
+        right = _interval(toys.toy_mean_interval)
+        narrow = _interval(toys.too_narrow)
+        pairs = zip(
+            right(sample[:, 0], levels), narrow(sample[:, 1], levels), strict=True
+        )
+        return [
+            (np.array([lo0, lo1]), np.array([hi0, hi1]))
+            for (lo0, hi0), (lo1, hi1) in pairs
+        ]
+
+    arguments: dict[str, Any] = {
+        "setting": "two normal means",
+        "size": 30,
+        "confidence_level": 0.95,
+        "seed": 7,
+        "reason": "exact on the first, a bound on the second",
+    }
+    [record] = assert_coverage(
+        toys.MEAN_INTERVAL,
+        interval,
+        draw,
+        truth,
+        at_least={0.95: [0.95, 0.2]},
+        **arguments,
+    )
+    assert record.target == (0.95, 0.2) and len(record.coverage) == 2
+    with pytest.raises(AssertionError, match=r"coverage 0\.\d+ at \[1\], not 0\.95 ±"):
+        assert_coverage(toys.MEAN_INTERVAL, interval, draw, truth, **arguments)

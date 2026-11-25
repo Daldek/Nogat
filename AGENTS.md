@@ -4,7 +4,7 @@
 
 ## Purpose and scope
 
-Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
+Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman, Archiwista, Goniec and Latarnik. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
 
 Use it to find the tool for a task and the command to start with, then read that tool's guide, linked in the table; and to plan a change that spans projects: a plan in `docs/plans/` comes first, producers before consumers.
 
@@ -39,11 +39,12 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Compute flood quantiles from annual maxima, for example of an Obserwator export | [Hydrolog][hydrolog] | `hydrolog stats flood-frequency` |
 | Classify hydrologic soil groups (HSG) from clay, sand and silt rasters you already have | [Hydrolog][hydrolog] | `hydrolog soil hsg` |
 | Open Hydrolog's GUI in the browser | [Hydrolog][hydrolog] | `hydrolog gui serve` |
-| Delineate the watershed of a point in Poland and read its parameters | [Hydrograf][hydrograf] | `POST /api/delineate-watershed` |
-| Generate a design hydrograph for a point in Poland from PMAXTP rainfall | [Hydrograf][hydrograf] | `POST /api/generate-hydrograph` |
-| Delineate a network of subcatchments at control points (closing section, tributaries, gauges) | [Hydrograf][hydrograf] | `POST /api/delineate-network` |
-| Preview a network of subcatchments while placing control points (areas, reach lengths, outlines) | [Hydrograf][hydrograf] | `POST /api/delineate-network/preview` |
-| Cut a terrain profile along a line | [Hydrograf][hydrograf] | `POST /api/terrain-profile` |
+| Delineate the watershed of a point in Poland and read its parameters | [Hydrograf][hydrograf] | `GET /api/v1/watershed/delineate` |
+| Generate a design hydrograph for a point in Poland from PMAXTP rainfall | [Hydrograf][hydrograf] | `POST /api/v1/jobs {"command": "hydrograph generate", "options": …}` |
+| Delineate a network of subcatchments at control points (closing section, tributaries, gauges) | [Hydrograf][hydrograf] | `POST /api/v1/jobs {"command": "network delineate", "options": …}` |
+| Preview a network of subcatchments while placing control points (areas, reach lengths, outlines) | [Hydrograf][hydrograf] | `POST /api/v1/network/preview` |
+| Cut a terrain profile along a line | [Hydrograf][hydrograf] | `POST /api/v1/terrain/profile` |
+| Compute the PMAXTP design depth of a catchment for a duration and a probability | [Hydrograf][hydrograf] | `POST /api/v1/precipitation/depth` |
 | Check which engines (SFINCS, SWMM) this machine can run | [Hydraulik][hydraulik] (research) | `hydraulik engines check` |
 | Fetch terrain, land cover and soil groups of a model area through Kartograf | [Hydraulik][hydraulik] (research) | `hydraulik terrain download` |
 | Write a design rain table from a Hydrolog shape and a PMAXTP depth | [Hydraulik][hydraulik] (research) | `hydraulik rainfall build` |
@@ -55,6 +56,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Browse a Kartograf store on a map in the browser | [Archiwista][archiwista] | `archiwista serve` |
 | Search the file catalog of a Kartograf store from a script | [Archiwista][archiwista] | `archiwista search` |
 | Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
+| List the services of a deployment with each one's API base, version, GUI and regulamin | [Latarnik][latarnik] (research) | `GET /api/v1/server` |
 
 [kartograf]: https://raw.githubusercontent.com/Daldek/Kartograf/main/AGENTS.md
 [obserwator]: https://raw.githubusercontent.com/Daldek/Obserwator/main/AGENTS.md
@@ -63,18 +65,21 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 [hydraulik]: https://raw.githubusercontent.com/Daldek/Hydraulik/main/AGENTS.md
 [retman]: https://raw.githubusercontent.com/Daldek/Retman/main/AGENTS.md
 [archiwista]: https://raw.githubusercontent.com/Daldek/Archiwista/main/README.md
+[latarnik]: https://raw.githubusercontent.com/Daldek/Latarnik/main/README.md
 
 ## Tools
 
 | Tool | Status | Interfaces | What it is |
 |---|---|---|---|
-| Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
+| Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, REST `kartograf server (/api/v1), planned`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | Obserwator | active | CLI `obserwator`, MCP `obserwator mcp`, REST `obserwator server (/api/v1)`, Python `obserwator`, GUI `obserwator gui serve` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
-| Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
-| Hydrograf | active | REST `/api` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
+| Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, REST `hydrolog server (/api/v1), planned`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
+| Hydrograf | active | REST `/api/v1` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
+| Goniec | research | QGIS plugin `goniec` | QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series. |
+| Latarnik | research | REST `/api/v1` | Optional access point and GUI hub of a deployment; routes, limits and caches the tools' servers. |
 
 ## Calling a tool
 

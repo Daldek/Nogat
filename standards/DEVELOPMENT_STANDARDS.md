@@ -1,6 +1,6 @@
 # Development standards
 
-Part of standard 1.2 · IDs `DEV-…`
+Part of standard 1.3 · IDs `DEV-…`
 
 Related: [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md),
 [AGENT_INTERFACE.md](AGENT_INTERFACE.md), [ERROR_REGISTRY.md](ERROR_REGISTRY.md),
@@ -16,10 +16,14 @@ Requirements apply to all projects unless marked with a profile.
 | Profile | Meaning | Projects |
 |---|---|---|
 | `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, Obserwator, Hydrolog, Retman, Hydraulik |
-| `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista |
+| `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista, Latarnik (access point and GUI hub) |
 | `hub` | Registry, standard and user package | Nogat |
+| `plugin` | QGIS plugin, a client of the tools' servers; distributed through plugins.qgis.org | Goniec |
 
-A project may have several profiles; `ecosystem.yaml` is authoritative.
+A project may have several profiles; `ecosystem.yaml` is authoritative. A
+plugin has no package on PyPI, CLI, MCP, REST interface or command catalog,
+so no requirement about them applies to it, and uv runs its development
+tools only (ECO-094).
 
 **DEV-1.1** Each project MUST declare its profiles in `ecosystem.yaml` and in
 the first section of `CLAUDE.md`.
@@ -154,8 +158,11 @@ checked again.
 ## 5. Repository layout
 
 **DEV-5.1** (`tool`, `hub`) Package code MUST be in `src/<package>/`. (`app`)
-Another layout MAY be used and is described in `CLAUDE.md`.
-*Why:* ECO-011.
+Another layout MAY be used and is described in `CLAUDE.md`. (`plugin`) Its
+code MUST be in `<folder>/` at the root, the folder QGIS loads, released as a
+ZIP of that folder.
+*Why:* ECO-011; QGIS loads a plugin from its folder, and plugins.qgis.org
+takes a ZIP of it (ECO-094).
 
 **DEV-5.2** Standard top level:
 
@@ -693,10 +700,14 @@ the key in `sessionStorage` under `<project>/admin-key/1`, which „Wyloguj”
 forgets. It is the operator's, not a public view: no regulamin link, app
 menu or stats count (DEV-15.4, DEV-15.7 and DEV-15.11 do not apply to it);
 `<meta name="robots" content="noindex">`;
-every admin answer `Cache-Control: no-store`; CSP `'self'`; its requests stay
-under the rate limit (DEV-15.9).
+every admin answer `Cache-Control: no-store`; CSP `'self'`, whose `img-src`
+and `connect-src` add only the origin of the one base map an admin page's
+map draws without the switcher, the first allowed raster entry of
+DEV-15.15 (none without one); its requests stay under the rate limit
+(DEV-15.9).
 *Why:* the operator handles every GUI in one place and one way, and a
-deployment protects three paths (ECO-067).
+deployment protects three paths (ECO-067); an admin map, such as a box
+drawn over the base map, asks one provider only (ECO-089).
 
 **DEV-15.14** An info text, behind „(i)”, in a help popover or in a
 section's „Objaśnienie metod”, explains to the GUI's user what a value or
@@ -719,6 +730,62 @@ GUI's guide (instrukcja), which the info text links; an example is in
 [design/](../design/README.md#info-texts).
 *Why:* every GUI explains its values one way, short enough to read beside
 them (ECO-069).
+
+**DEV-15.15** A GUI with a map draws its base map only from the entries of
+the kit's catalogue `nogat-basemaps.json` (DEV-15.6) that the setting
+`basemaps` (DEV-18.1) allows, every entry by default, each from its provider
+or from the deployment's copy of it in `basemap_mirrors`, and from the
+deployment's own base maps in its setting `basemap_extra`, through the kit's
+`nogat-basemaps.js`, and offers them in the kit's `<nogat-basemaps>`, the
+catalogue's in its order, then the deployment's, with „bez podkładu” last,
+remembering the choice in the browser and opening by default on the first
+allowed entry the catalogue marks as a default; it has no other base map,
+list or switcher, and takes no base map from a visitor. Each base map
+carries its credit in the map's own attribution, shown when the map opens:
+the catalogue's, or the one the deployment gives its own (DEV-20.9). Its CSP
+names in `img-src` and `connect-src` no remote origin but those of the
+allowed entries or their copies, of the deployment's own base maps and of
+its own map layers, and no scheme source, and its regulamin keeps the blocks
+the allowed entries name (DEV-15.7). A new base map for the GUIs to share
+enters the catalogue first.
+*Why:* the author's direction of 2026-11-24: one set, one switcher and one
+credit wherever a map is shown; the catalogue is the shared default set,
+which a deployment's own base maps extend without changing it, and a CSP
+that names each origin keeps an injected script from sending data to any
+server (ECO-089).
+
+**DEV-15.16** A GUI draws its charts over axes with the kit's chart module
+(`nogat-chart.js` and `nogat-chart.css`, DEV-15.6), never with a chart
+library or a drawing of its own; a figure the module does not draw (a
+circular chart, warming stripes) MAY be the GUI's own. A chart whose x is a
+time or a value shows a range of it, not a chart of a year's months or days,
+of named bars or of probabilities: a drag over the plot selects the range of
+x, of x and y on a chart of points; Ctrl with the wheel zooms around the
+cursor and the wheel alone scrolls the page; Shift with a drag, or a drag
+with the middle button, pans; a double click, the key 0 and „Cały zakres”
+show the whole. On a touch screen two fingers pinch and pan, one finger
+scrolls the page and reads the values. A chart not yet zoomed shows „+”
+under it; a zoomed chart shows under it „−”, „+”, „Cały zakres” and the
+range shown, and its y axis fits the values shown. A PNG of a chart is the
+chart as shown with the lines of DEV-20.5; a CSV holds the whole series.
+*Why:* one person moves between the GUIs, and four implementations had three
+sets of gestures (ECO-090).
+
+**DEV-15.17** A GUI that lets a person build a call of a tool's catalog
+command in a form, to run it, to plan it or to copy its line, builds the
+form with the kit's command builder (`nogat-command-form.js` and
+`nogat-command-form.css`, DEV-15.6): the element `<nogat-command-form>`
+generated from the command's commands-1 entry (AGI-2.3), never a form of
+the GUI's own per command. It shows a field per option by its type, in the
+option's section and in Polish where the catalog is, the optional ones
+without a default under „Opcje dodatkowe”; a choice per `one_of`; the
+fields the rules show, disable and require; no path option where the app
+owns the paths. Its line is the tool's `format_command` with „Kopiuj”, a
+line pasted under „Wklej polecenie” is read by the tool's `parse_command`,
+each through the GUI's server or the GUI's own binding, and a message of
+the tool stands under the field its `details.option` names.
+*Why:* a new option of a command reaches every GUI without GUI work, and a
+person meets one editor in every GUI that builds commands (ECO-093).
 
 ---
 
@@ -799,7 +866,14 @@ on that processor's transfers outside the EEA, empty without them,
 `processor_cookie`, the sentence on its cookie against bots, empty without
 one, `mail_provider`, the service holding the operator's mailbox, and
 `mail_transfer`, the sentence on its processing outside the EEA, empty
-without it);
+without it; and the base maps of a GUI with a map, DEV-15.15: `basemaps`,
+the ids of the kit's entries it allows, every entry by default and `[]`
+none, joined by `,` in an environment variable, `basemap_mirrors`, a table
+of an allowed entry's id and the address of the deployment's copy of it,
+and `basemap_extra`, the deployment's own base maps, a list of tables with
+`id`, `name`, `kind` (`xyz`, `wms` or `vector`), `url`, `attribution` and
+`grayscale`; an unknown id or a bad table stops the server at start with an
+error document naming the key and the value);
 section `[<tool>]` holds the tool's own keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
@@ -1056,9 +1130,10 @@ order (DEV-20.4). A new provider is a new row, not a new rule.
 | L, LP | Źródło danych: CAMELS-PL `<version>` (Brzezińska i in., `<year>`), https://doi.org/`<doi>`, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) | Dane CAMELS-PL zostały przetworzone | 5 |
 | E | We acknowledge the E-OBS dataset and the data providers in the ECA&D project (https://www.ecad.eu). Cornes, R., G. van der Schrier, E.J.M. van den Besselaar, and P.D. Jones. 2018: An Ensemble Version of the E-OBS Temperature and Precipitation Datasets, J. Geophys. Res. Atmos., 123. doi:10.1029/2017JD028200 | — | 6 |
 | D | Źródło danych: G2DC-PL+ (Piniewski i in., 2020), https://doi.org/10.4121/uuid:a3bed3b8-e22a-4b68-8d75-7b87109c9feb, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/) | — | 7 |
-| G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone | — | 8 |
-| SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 9 |
-| Z | Źródło: Český úřad zeměměřický a katastrální (ČÚZK), `<products>` (pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 10 |
+| W, WP | Źródło danych: Państwowy Instytut Geologiczny – Państwowy Instytut Badawczy (PIG-PIB), Monitoring Wód Podziemnych państwowej służby geologicznej (wytworzono `<period>`, pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) | Dane PIG-PIB zostały przetworzone | 8 |
+| G | Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, `<products>` (wytworzono `<period>`, pozyskano `<date>`); dane przetworzone | — | 9 |
+| SG | Źródło: ISRIC – World Soil Information, SoilGrids, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 10 |
+| Z | Źródło: Český úřad zeměměřický a katastrální (ČÚZK), `<products>` (pozyskano `<date>`), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone | — | 11 |
 
 In G and Z, `<products>` names the products used, joined by „, ” (e.g.
 „NMT, BDOT10k” of GUGiK, „RÚIAN” of ČÚZK); `<period>` the year in which the
@@ -1066,6 +1141,13 @@ data used were created, or the first and the last joined by an en dash
 („2020–2025”); `<date>` the day they were downloaded, `YYYY-MM-DD`, or the
 first and the last joined by a spaced en dash („2026-03-24 – 2026-10-29”);
 both from the Kartograf metadata of the files.
+
+In W, `<period>` and `<date>` take G's forms: `<period>` the year of the
+readings or hours in the product, or the first and the last joined by an
+en dash („2026”, „2025–2026”; for the points alone, the year of their
+capture); `<date>` the day of the capture the product's data come from,
+`YYYY-MM-DD`, or the first and the last joined by a spaced en dash; both
+from the captures the product read.
 
 In L, `<version>` is the CAMELS-PL release the data come from (`2.1.0`),
 `<year>` the year of its record and `<doi>` that release's DOI
@@ -1077,13 +1159,15 @@ it is kept as the citation of the data set.
 
 The short forms are for the strip of a GUI view only (DEV-20.5) and are
 never written into a product: CK with „ČHMÚ” linked to
-https://opendata.chmi.cz and „CC BY 4.0” to the licence, SK and ZK with
-„CC BY 4.0” linked to the licence, and one GK naming the products of every G
-of the view, each once.
+https://opendata.chmi.cz and „CC BY 4.0” to the licence, WK with „PIG-PIB”
+linked to https://www.pgi.gov.pl/psh and „CC BY 4.0” to the licence, SK and
+ZK with „CC BY 4.0” linked to the licence, and one GK naming the products
+of every G of the view, each once.
 
 | Code | Short form | Of |
 |---|---|---|
 | CK | Źródło: ČHMÚ, CC BY 4.0 | C |
+| WK | Źródło: PIG-PIB, CC BY 4.0 | W |
 | GK | Źródło: GUGiK (`<products>`) | G |
 | SK | Źródło: ISRIC SoilGrids, CC BY 4.0 | SG |
 | ZK | Źródło: ČÚZK, CC BY 4.0 | Z |
@@ -1098,6 +1182,7 @@ a CSV column tells them from the attribution lines.
 | RH | Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin |
 | RK | Regulamin danych PMAXTP: https://klimat.imgw.pl/opady-maksymalne |
 | RE | Regulamin danych E-OBS: https://www.ecad.eu/documents/ECAD_datapolicy.pdf |
+| RW | Regulamin danych PIG-PIB: https://www.pgi.gov.pl/rejestry-i-bazy-danych-geologicznych/zasady-korzystania-z-isp.html |
 
 **DEV-20.1** A product with IMGW-PIB data other than PMAXTP (archives and
 current data of danepubliczne.imgw.pl, operational data and station
@@ -1150,6 +1235,8 @@ every surface with the data or results derived from them:
 | API, REST, MCP | the fields `attribution` and `terms_notice` of the response (DEV-20.6, DEV-20.7) |
 | CLI | the human-readable output that prints data or results |
 | model inputs | a header comment of the file, or `ATTRIBUTION.txt` beside it where the format has no comments |
+| clipboard copy | none in the clipboard, which holds the values only; the lines stay visible beside the copy button, and every file saved of the same data carries them |
+| desktop GIS layer | the layer's metadata: the abstract and licences that its service gives (an OGC API collection's `description` and `rel="license"` links), the rights and attribution that the client adding it sets; the client's panel with the data shows the lines as a GUI's strip does |
 
 `ATTRIBUTION.txt` is UTF-8 with one line per line, the attribution lines and
 then the terms lines of DEV-20.7, in order; a later write to the same place
@@ -1161,7 +1248,7 @@ most two lines at 1440 px for one IMGW-PIB family (S and P, or PS and PP)
 with the short forms, a third allowed when the view shows both. On a screen
 up to 860 px wide it is one line: the lines start on it, cut with an
 ellipsis, and „więcej” unfolds them in place (ECO-080). It holds the
-on-screen lines S, P, PS, PP, CK, GK, SK and ZK, those the view's data
+on-screen lines S, P, PS, PP, CK, WK, GK, SK and ZK, those the view's data
 need, each once in the order of DEV-20.4, a short form in the place of its
 full line; then the lines the GUI declares for it (the kit's
 `screen-lines`), each once in the order declared: another line of the
@@ -1177,10 +1264,11 @@ PNG and SVG images, print views, hand-offs and the fields `attribution` and
 
 *Why:* the terms bind every product made with the data (ECO-060); the
 IMGW-PIB and PMAXTP terms require their sentences on the product, while CC
-BY 4.0 lets a link carry ČHMÚ's details (ECO-064); GUGiK, ISRIC and ČÚZK
-are named the same way, their full lines one click away (ECO-068); a line
-the kit does not know reaches the strip only as the GUI declares it
-(ECO-087).
+BY 4.0 lets a link carry ČHMÚ's details (ECO-064) and PIG-PIB's (ECO-092);
+GUGiK, ISRIC and ČÚZK are named the same way, their full lines one click
+away (ECO-068); a line the kit does not know reaches the strip only as the
+GUI declares it (ECO-087); a paste target such as HEC-RAS's table takes
+values only, so the lines of a copy stay beside its button (ECO-094).
 
 **DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
 `attribution`, an array of the lines as strings. A consumer shows the lines it
@@ -1189,53 +1277,59 @@ hand-offs, merged without duplicates; a field a project already has for them
 outside a CSV (`license.attribution` of a sidecar, DEV-19.16) stays.
 *Why:* the obligation follows the data through every tool (ECO-060).
 
-**DEV-20.7** Every GUI view and every exported product with IMGW-PIB or
-E-OBS data also carries the links to the terms that apply, one line each in
-the order of their table, RD (danepubliczne.imgw.pl), RH (hydro.imgw.pl), RK
-(PMAXTP), RE (E-OBS), right after the attribution lines and on the surfaces
-of DEV-20.5, in a GUI view in the dialog behind its strip; a JSON document,
-result or hand-off has them in `terms_notice`, an array of strings carried
-on like `attribution`. No product restates, summarises or paraphrases a
-provider's terms: it carries the lines of the table and links the rest.
-ČHMÚ, G2DC-PL+, ISRIC and ČÚZK data take no terms line, since C, D, SG and
-Z name the licence with its link, nor does the rest of CAMELS-PL's data,
-whose licence L names (what it took from IMGW-PIB carries RD and what is
-derived from E-OBS RE, DEV-20.12), nor do GUGiK data, whose conditions of
-reuse a regulamin links in its § 5.
+**DEV-20.7** Every GUI view and every exported product with IMGW-PIB,
+E-OBS or PIG-PIB data also carries the links to the terms that apply, one
+line each in the order of their table, RD (danepubliczne.imgw.pl), RH
+(hydro.imgw.pl), RK (PMAXTP), RE (E-OBS), RW (PIG-PIB), right after the
+attribution lines and on the surfaces of DEV-20.5, in a GUI view in the
+dialog behind its strip; a JSON document, result or hand-off has them in
+`terms_notice`, an array of strings carried on like `attribution`. No
+product restates, summarises or paraphrases a provider's terms: it carries
+the lines of the table and links the rest. ČHMÚ, G2DC-PL+, ISRIC and ČÚZK
+data take no terms line, since C, D, SG and Z name the licence with its
+link, nor does the rest of CAMELS-PL's data, whose licence L names (what it
+took from IMGW-PIB carries RD and what is derived from E-OBS RE,
+DEV-20.12), nor do GUGiK data, whose conditions of reuse a regulamin links
+in its § 5; PIG-PIB's data carry RW beside the licence W names (DEV-20.13).
 *Why:* the providers' own terms are the only binding text, and a summary
 can mis-state them; products carry only what the providers require (the
 author's principle of 2026-11-13, ECO-065), and a provider's terms follow
 its data through a data set that redistributes them under its own licence
-(ECO-088); a dialog one click from the data keeps the screen for the data
-(ECO-064).
+(ECO-088); PIG-PIB's terms of reuse ask that the recipients be told their
+full text (ECO-092); a dialog one click from the data keeps the screen for
+the data (ECO-064).
 
 **DEV-20.8** Operational data of hydro.imgw.pl and its backend (water states
 and their classes, measurements, warnings, forecasts), of IMGW-PIB's
-current-data API and telemetry (`Arch/Telemetria`) and of ČHMÚ's `now` and
-`recent` are shown as current with their time. What a tool receives of them
-is kept as it came, as a capture in its raw root (ECO-084), in a dataset
-whose `tier` is `operational` (or `telemetry`), never inferred from the
-values, and is stored, shown and exported only as that tier — with the words
-„dane operacyjne, niezweryfikowane” where it meets a person — never as or
-within the verified archive of danepubliczne.imgw.pl or ČHMÚ's `historical`
-sets, and never aggregated into a verified series. Whether a stored capture,
-or a series built from it, is served to the public is the operator's
-setting per source (Obserwator's `[obserwator.capture]`), whose default
-follows the source's terms; the code never serves it on its own. Station
-locations from these data MAY be kept as reference data with their lines
-(DEV-20.1).
+current-data API and telemetry (`Arch/Telemetria`), of ČHMÚ's `now` and
+`recent` and PIG-PIB's automatic measurements without validation
+(`mwp_auto`) are shown as current with their time. What a tool receives of
+them is kept as it came, as a capture in its raw root (ECO-084), in a
+dataset whose `tier` is `operational` (or `telemetry`), never inferred from
+the values, and is stored, shown and exported only as that tier — with the
+words „dane operacyjne, niezweryfikowane” where it meets a person — never
+as or within the verified archive of danepubliczne.imgw.pl, ČHMÚ's
+`historical` sets or PIG-PIB's MWP database, and never aggregated into a
+verified series. Whether a stored capture, or a series built from it, is
+served to the public is the operator's setting per source (Obserwator's
+`[obserwator.capture]`), whose default follows the source's terms; the
+code never serves it on its own. Station locations from these data MAY be
+kept as reference data with their lines (DEV-20.1).
 *Why:* the author's decisions of 2026-11-22 (ECO-084): a capture is the only
 copy of what a source forgets, and the operator, not the software, answers
 for serving it; operational data are not the verified archive, so the tier
-stays visible on every surface (ECO-060).
+stays visible on every surface (ECO-060); PIG-PIB calls `mwp_auto` „bez
+walidacji” and checks the readings of its MWP database before they enter
+it (ECO-092).
 
 **DEV-20.9** A product with GUGiK data (NMT, BDOT10k, PRG and the other data
 of geoportal.gov.pl) or results derived from them carries G; a basemap a GUI
-loads live from GUGiK's services is credited in the map's own attribution
-instead, the orthophoto as „Ortofotomapa © GUGiK”.
+loads live from GUGiK's services is credited instead in the map's own
+attribution with the credit of its entry in the kit's catalogue
+(DEV-15.15), the orthophoto as „Ortofotomapa © GUGiK”.
 *Why:* pkt 1 and 2 of GUGiK's conditions of reuse: its full name, the time
 the data were created and acquired, and a note that they were processed
-(ECO-068).
+(ECO-068); one credit per base map in every GUI (ECO-089).
 
 **DEV-20.10** A product with ISRIC SoilGrids data or results derived from
 them carries SG.
@@ -1261,3 +1355,14 @@ not the data description's „1 License”, which also lists CC BY-NC 4.0, and
 CAMELS-PL's CC BY 4.0 cannot lift IMGW-PIB's terms, which the same series
 taken straight from IMGW-PIB carry as RD (the author's decisions of
 2026-11-24, ECO-088).
+
+**DEV-20.13** A product with PIG-PIB data (the points, readings and
+automatic measurements of its Monitoring Wód Podziemnych) or results
+derived from them carries W, and WP once they were processed, and the terms
+line RW (DEV-20.7).
+*Why:* the CC BY 4.0 of dane.gov.pl's dataset 170, which lists the service,
+governs, §3(a)(1); PIG-PIB's terms of reuse ask for the source with the
+times of creation and acquisition, the fact of processing and their own
+text passed on, which W, WP and RW carry, while the extent of processing
+is told where formulas are (DEV-15.14), never in a line (ECO-071,
+ECO-092).

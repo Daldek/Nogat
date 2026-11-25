@@ -1,0 +1,36 @@
+/* The test pages: the switcher in a side panel, the map beside it; on a phone above it. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+}
+
+.page {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  height: 100%;
+}
+
+.panel {
+  padding: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.panel h3 {
+  margin: 0 0 8px;
+  font: 700 12px var(--font-sans);
+}
+
+.map {
+  position: relative;
+  min-height: 0;
+}
+
+@media (max-width: 860px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+}

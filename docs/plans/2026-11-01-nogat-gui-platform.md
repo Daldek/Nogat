@@ -9,9 +9,10 @@ Status: stage 2, deferred by the author on 2026-11-12 until stage 1,
 is done. The path of this file keeps its first name because other
 repositories and the description of `handoff-1` cite it. On 2026-11-24 the
 author made the access point and the GUI hub one project, Latarnik („punkt
-dostępu i GUI hub to osobny projekt – Latarnik”); the draft
-[Latarnik plan](2026-11-24-latarnik.md) replaces this stage and says what of
-it is kept.
+dostępu i GUI hub to osobny projekt – Latarnik”); the
+[Latarnik plan](2026-11-24-latarnik.md), approved the same day, replaces this
+stage and says what of it is kept, and ECO-095 records it (2026-11-25, step
+N1 of that plan); this plan closes with its Results at that plan's N2.
 
 Requirements: HUB-5.2, DEV-17.4, DEV-15.1, DEV-15.3, AGI-2.1, AGI-2.3,
 AGI-6.1, HUB-1.1, HUB-1.2, HUB §2, DEV §13, ECO-054, ECO-055. Continues the
@@ -308,8 +309,8 @@ research and waits for the author's approval.
    | `shell.css`, `shell.js` | top bar, rail, view layout, resizers with keys, phone sheets, a layout event for maps, the embedded switch; an API for rail items and panels |
    | `theme.js` | pre-paint init and the three-way switch, one storage key |
    | `info.js`, `form.js` | `<nogat-info>` tooltip with MathML, the texts the app's; number with unit and bounds, choice with meanings, series table with paste and CSV |
-   | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
-   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes; shared basemaps, attribution and the origins a CSP must allow |
+   | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8) — made by step N1 of Kartograf's `docs/plans/2026-11-24-kartograf-gui.md`: the kit's `nogat-command-form.js` and `.css` (DEV-15.17, ECO-093); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
+   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes — for charts replaced by `2026-11-24-unified-charts.md`: the kit's `nogat-chart.js` and `.css` (DEV-15.16, ECO-090); shared basemaps, attribution and the origins a CSP must allow — for base maps replaced by `2026-11-24-shared-base-maps.md`: the kit's `nogat-basemaps.json`, `.js` and `.css` (DEV-15.15, ECO-089) |
    | `embed.js` | both sides of the handshake (item 5); `nogat-handoff.js` of stage 1 gains `nogat:handoff` |
    | `nogat-app-menu.*`, `nogat-handoff.js`, `nogat-kit.json` | from stage 1 |
 
@@ -410,6 +411,9 @@ research and waits for the author's approval.
    polecenia” beside the paste field, feeding the same plan window; the hub
    shows every installed catalog. AGI-2.3 and commands-1 gain optional option
    fields `i18n.pl`, `requires`, `excludes`, `applies_to`, `section`, `format`.
+   Made by step N1 of Kartograf's GUI plan (ECO-093, DEV-15.17), with
+   `items`, `exclusive_minimum`, `exclusive_maximum`, `required_when` and a
+   command's `one_of` as well; Archiwista's „Kreator polecenia” is its step A1.
 9. **Obserwator** (B6): the module covers stations, series read from a local
    store, PMAXTP (a depth handed to Hydrolog's rainfall) and current data; the
    Jinja, HTMX and Pico pages go; store sync stays in Archiwista.
@@ -429,7 +433,7 @@ gate, ADR, CHANGELOG and PROGRESS. Sizes are estimates in sessions.
 |---|---|---|---|---|
 | 1 | Nogat | The ECO decision; HUB-1.1, DEV-15.3 and the new rule of DEV §15; AGI-2.3 and the option fields of commands-1; the schema of the handshake messages (`handoff-1` done ahead, N1 of Hydrolog's GUI); the identity headers and the role vocabulary; the registry's `gui` field | 1 | gate: `validate`, `standard`, schema tests |
 | 2 | Nogat | Kit, chrome: `tokens.css`, `base.css`, `shell.*` with the embedded switch, `theme.js`; the specimen rebuilt on it; browser tests | 1.5 | specimen in both themes, alone and in a frame |
-| 3 | Nogat | Kit, parts: `info.js`, `form.js`, `chart-theme.js`, `embed.js`, `nogat:handoff` in `nogat-handoff.js`, `basemaps.json` | 1.5 | handshake tests across two origins |
+| 3 | Nogat | Kit, parts: `info.js`, `form.js`, `chart-theme.js`, `embed.js`, `nogat:handoff` in `nogat-handoff.js`, `basemaps.json` (made by `2026-11-24-shared-base-maps.md`, step 1) | 1.5 | handshake tests across two origins |
 | 4 | Kartograf | Export option `i18n.pl`, its constraints, `section` and `format` in `kartograf-commands/1` | 1-2 | commands-1 contract test; Archiwista's adapter tests unchanged |
 | 5 | Obserwator | `commands list` and `commands schema` with `--json` in commands-1 shape, with option texts and dependencies; the JSON Schema stays the REST and MCP input schema | 1.5-2 | commands-1 contract test |
 | 6 | Hydrolog | Public `parse_command` and `format_command` where still missing; the schematic document without an output file (its routing branches are merged since) | 0.5-1 | gate; every catalog example read back into the same call |

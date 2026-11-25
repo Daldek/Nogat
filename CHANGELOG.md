@@ -6,6 +6,226 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-25
+
+### Added
+
+- Release set `v0.4.0` (`release-sets/v0.4.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-25: candidate-16, verified by the
+  workflow `verify-candidate` (run 45652499176, Python 3.12 on Linux, macOS
+  and Windows; the experimental Python 3.15 job on macOS failed one
+  Obserwator e2e test, which is not blocking, REL-6.5), with each member's
+  commit replaced by its annotated release tag, Kartograf `v0.9.0`,
+  Obserwator `v3.3.0`, Hydrolog `v0.10.0`, Hydrograf `v0.7.0` (an app on its
+  own lock, not installed by the set) and Archiwista `v0.4.2`. It carries
+  Obserwator 3.3.0 with the providers fed by files, Gdańskie Wody and
+  PIG-PIB's groundwater monitoring; Hydrolog 0.10.0 with the interval
+  estimates and five hydrological signatures checked against CAMELS-PL;
+  Hydrograf 0.7.0 with its API at `/api/v1` and the kit's base maps and
+  charts; and Archiwista 0.4.2, which reads Obserwator 3.3.0. Kartograf
+  0.9.0 is unchanged. The first run of candidate-16, 45626852114 at
+  Obserwator `0f8fd31`, failed on Windows (no `tzdata` for PIG-PIB's
+  `Europe/Warsaw` and three tests of paths and line endings) and on Linux
+  (a race of the welcome window), each fixed in Obserwator's release
+  branch. As before, the set is installed as an environment, `uv sync
+  --locked --no-dev --python 3.12` in `release-sets/v0.4.0/`, not with `uv
+  tool install` (a deviation from HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.3 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.3` (HUB-6.1); its changes (ECO-089 to
+  ECO-095, kit `1.3.0`) are listed in `standards/README.md`.
+- The kit's base maps (ECO-089, step 1 of
+  `docs/plans/2026-11-24-shared-base-maps.md`): the catalogue
+  `design/kit/nogat-basemaps.json` with Hydrograf's three base maps
+  (`openfreemap` in the kit's grey style, the default; `gugik-osm` and
+  `gugik-ortho`, bounded by Poland's box and never the default);
+  `nogat-basemaps.js` with the switcher `<nogat-basemaps>`, the choice kept
+  in the browser as `nogat-basemap`, and the adapters `maplibreBasemap`,
+  `removeMaplibreBasemap`, `repaintMaplibreBasemap` for MapLibre GL JS and
+  `leafletBasemap` for Leaflet, which check that a TileJSON's tiles stay on
+  the entry's origin, draw a deployment's own base maps handed in the
+  catalogue's shape and report a failing provider; `nogat-basemaps.css`
+  with the credit in the map's attribution at 12 px, folded behind „i” at
+  the first drag on a phone, and the grey style's colours in both themes.
+  The rule DEV-15.15, the switcher in the specimen and `design/README.md`'s
+  „Basemaps”; browser tests on MapLibre 6.14.0 and on Leaflet 1.9.4 with
+  maplibre-gl-leaflet 0.0.22 over MapLibre 4.7.1, vendored as fixtures with
+  their licences, every provider answered from tiles recorded by
+  `tests/browser/basemaps/record.py`.
+- The kit's charts (ECO-090, step 1 of
+  `docs/plans/2026-11-24-unified-charts.md`): `design/kit/nogat-chart.js`,
+  Obserwator's SVG engine with Hydrolog's short time axis in minutes and its
+  PNG footer as one plain ES module, and `nogat-chart.css`, scoped by
+  `.nogat-chart` with the tokens' light fallbacks. `drawChart` zooms a
+  chart of a time or a value alike in every GUI: a drag selects the range
+  (a rectangle of x and y with `zoom: "xy"`), Ctrl with the wheel or a
+  trackpad's pinch zooms around the cursor while the wheel alone scrolls the
+  page, Shift or the middle button pans, a double click, `0` and „Cały
+  zakres” show the whole, two fingers pinch and pan on a phone, where a
+  zoomable chart is drawn at the page's width; a lone „+” before a zoom,
+  then the bar „−”, „+”, „Cały zakres” and the range shown, the y axis
+  fitted to it; every zoom in stops at four points of the readout's series.
+  For Archiwista and Hydrograf a second unit on a right-hand axis, gap
+  spans, hollow and diamond points, an x axis without labels, `onReadout`,
+  `onRange` with `plotWidth()` and `zoom.set`; for every GUI `CHART_TEXTS`
+  and `spec.texts`, `spec.locale` and `spec.dateFormat`, and `toPng` with
+  the providers' lines. The rule DEV-15.16, two charts in the specimen and
+  `design/README.md`'s „Chart” and „Charts”; browser tests in Chromium under
+  the GUIs' CSP at 1440 and 390 px in both themes, fingers by DevTools'
+  touch events.
+- The coverage of interval estimators (CMP-6.11, ECO-091, step N1 of
+  `docs/plans/2026-11-24-interval-estimation.md`): the reference module's
+  `assert_coverage` simulates an interval, seeded, at one setting with at
+  least 1,000 samples and asserts its coverage per level and element within
+  three Monte Carlo standard errors of the level, of a known or reported
+  coverage (`expected`) or above a bound (`at_least`), a bound not computed
+  holding nothing; `assert_interval_properties` asserts lower ≤ upper and the
+  intervals of the levels nested on one sample; the record `Coverage`, which
+  round-trips through JSON, and `formulas_markdown(coverage=…)`, which lists
+  it under its formula in `docs/FORMULAS.md`. Tested against the toy
+  `toy_mean_interval` and three wrong copies of it (CMP-8.2). The copies of
+  `nogat_formulas.py` in Kartograf, Obserwator, Hydrolog, Hydrograf and
+  Hydraulik are behind until their next releases (CMP-8.1).
+- PIG-PIB's groundwater monitoring as a data source (ECO-092, step N1 of
+  `docs/plans/2026-11-24-pig-groundwater.md`): DEV §20 rows W and WP at
+  order 8 (PIG-PIB, its Monitoring Wód Podziemnych, the times of creation
+  and acquisition, CC BY 4.0; G, SG and Z become 9 to 11), the short form
+  WK and the terms line RW (PIG-PIB's terms of reuse); DEV-20.13 says what
+  carries them, DEV-20.7 links RW and DEV-20.8 names `mwp_auto` among the
+  operational data. The kit's `<nogat-sources>` knows W, WP and WK and
+  shows WK between CK and GK, „PIG-PIB” and „CC BY 4.0” linked; the
+  regulamin's template and the operator's draft gain the block `pig` in
+  place, `nogat-terms.html` regenerated, within kit `1.3.0` and regulamin
+  1.1. `ecosystem.yaml`: the data source `pig`, `pig` in Obserwator's
+  sources, its planned `pig-json/1` and PIG-PIB in the summaries of
+  `obserwator-store/1`, `obserwator-archives`, `obserwator-data/1` and
+  `archiwista-raw-root`; `docs/ECOSYSTEM_MAP.md` regenerated.
+- Goniec, a QGIS plugin over the tools' servers (ECO-094, step N1 of
+  `docs/plans/2026-11-24-qgis-plugin.md`): the profile `plugin` in DEV §1,
+  its code in `<folder>/` at the root (DEV-5.1) and no routes (HUB-2.9);
+  `schemas/ecosystem.schema.json` takes the profile and `distribution.qgis`,
+  `validate` refuses that folder outside a plugin and takes a plugin
+  without routes, AGENTS.md lists it as „QGIS plugin `<folder>`”, and the
+  lists of Python distributions in `standards/ci/` leave it out.
+  `schemas/exchange/server-1.schema.json`, `nogat-server/1`, what a server
+  serves at `GET /api/v1/server` (services with their tool, version, API
+  majors, capabilities, OGC API, GUI, instance, regulamin and lines;
+  Latarnik's `state`, `release_set` and `flows`), with contract tests.
+  DEV-20.5 rows for a clipboard copy and a desktop GIS layer. Regulamin 1.1
+  and the operator's draft name a service's API and the programs using it,
+  Goniec among them (§ 4 ust. 2), and the API within the limit of requests
+  as the way for programs (§ 6 ust. 2), `nogat-terms.html` regenerated,
+  within kit `1.3.0`. `ecosystem.yaml`: Goniec (`research`) with its
+  planned runtime dependency on Obserwator over REST, and Obserwator's
+  planned `obserwator-ogcapi` and `obserwator-hec`; `docs/ECOSYSTEM_MAP.md`
+  and `AGENTS.md` regenerated. Goniec's mark `design/marks/goniec.svg` and
+  its accent `--tool-goniec`.
+- The kit's command builder (ECO-093, step N1 of Kartograf's
+  `docs/plans/2026-11-24-kartograf-gui.md`): `design/kit/nogat-command-form.js`,
+  `<nogat-command-form>` built from Hydrolog's catalog form as a plain
+  custom element, and `nogat-command-form.css`. Generated from a command's
+  commands-1 entry: a field per option by its type, section and Polish
+  text, a choice per `one_of` (exactly one alternative of the command's,
+  at most one option of a group), the fields `applies_to` shows, `excludes`
+  disables and `requires` and `required_when` mark required, the path
+  options left out with `paths="hidden"`, the line of the GUI's binding of
+  the tool's `format_command` with „Kopiuj”, „Wklej polecenie” read by its
+  `parse_command`, the tool's messages under the field `details.option`
+  names; `options`, `setOption`, `check()`, `showError()` and the event
+  `change`. The rule DEV-15.17, the builder in the specimen and
+  `design/README.md`'s „Command builder”; browser tests in Chromium under
+  CSP `'self'` on the catalog entries of Kartograf, Hydrolog and
+  Obserwator (`tests/browser/command_form/catalogs.json`) at 1440 and
+  390 px in both themes, and contract tests of its words and fixtures.
+  commands-1 and AGI-2.3 gain the optional fields the form reads (an
+  option's `items`, `exclusive_minimum`, `exclusive_maximum`, `format`,
+  `section`, `requires`, `excludes`, `applies_to`, `required_when`,
+  `i18n.pl`; a command's `one_of`), with which the catalogs of Kartograf,
+  Hydrolog, Obserwator, Hydraulik and Retman validate unchanged.
+  `nogat-server/1` names Kartograf's capabilities `catalog`, `plan` and
+  `script`. `ecosystem.yaml`: Kartograf's `interfaces.rest`, planned, and
+  its planned service `kartograf-server`; map and `AGENTS.md` regenerated.
+- Latarnik, the access point of a deployment and its GUI hub, and every
+  tool's server by one set of rules (ECO-095, step N1 of
+  `docs/plans/2026-11-24-latarnik.md`). AGI-6.7 to AGI-6.10:
+  `nogat-server/1` at `GET /api/v1/server` and the command list at
+  `/api/v1/commands/list` on every server, access and caching by the
+  catalog (the tool's key `X-API-Key` on a run whose `rest.key` is true),
+  the client's address only from a trusted proxy's `X-Forwarded-For` with
+  relative links but OGC API's, and a long run as a job,
+  `schemas/exchange/job-1.schema.json`, `nogat-job/1` (its seven states,
+  the times each implies, the body of `POST /api/v1/jobs`), with contract
+  tests. commands-1 takes the optional `rest` (`{method, path, key}`, the
+  key following `effects.read_only` where absent, so Obserwator's present
+  `rest` validates) and `long`, and refuses the groups `server` and `jobs`;
+  command-list-1 takes `effects`, `check` and `rest`. The registry's
+  `conflict` names the reasons `job_running`, `run_as_job` and
+  `other_version`, `not_found` the reason `job_expired`
+  (`standards/ERROR_REGISTRY.md` regenerated). `nogat-server/1`'s Latarnik
+  example names the flow `point-design-hydrograph`, a service of another
+  version and the GUIs on their own hosts. `ecosystem.yaml`: Latarnik
+  (`research`, profile `app`, `interfaces.rest` `/api/v1`, the route `GET
+  /api/v1/server`) with planned runtime dependencies over REST on
+  Obserwator, Hydrolog, Hydrograf, Kartograf and Archiwista; map and
+  `AGENTS.md` regenerated. Latarnik's mark `design/marks/latarnik.svg`, a
+  lighthouse, and its accent `--tool-latarnik`.
+
+### Changed
+
+- Standard 1.3 opens on `develop` (HUB-6.1) with the kit's base maps and
+  charts (DEV-15.15, DEV-15.16, ECO-089, ECO-090) and interval estimators
+  (CMP-2.3, CMP-6.11, ECO-091).
+- CMP-2.3: a spec lists the side and confidence level of an interval and its
+  method among its conventions (ECO-091). The interval-estimation plan
+  asserts an exact coverage within three Monte Carlo standard errors, not
+  two, with the seed fixed once (amended 2026-11-25).
+- The GUI kit is `1.3.0` (its base maps and its charts; REL-1.4, by the
+  author's answers to question 7 of the base-maps plan and question 2 of the
+  charts plan, since the members of Nogat `v0.3.0`'s round carry `1.2.0`),
+  with regulamin 1.1: § 8 ust. 7 of the template and of the operator's
+  draft names the base map among the settings the browser keeps, and `nogat-terms.html` is regenerated. DEV-15.13 lets an
+  admin page's map add its one base map's origin to the admin CSP, DEV-18.1
+  lists the shared keys `basemaps`, `basemap_mirrors` and `basemap_extra`,
+  and DEV-20.9 credits a GUGiK base map with its catalogue entry's credit
+  (ECO-089). The GUI platform plan's `basemaps.json` points to the
+  base-maps plan, its `chart-theme.js` to the charts plan and its
+  `command-form.js` to Kartograf's GUI plan (ECO-093).
+- AGI-6.1: `POST` also for a read-only command whose inputs a URL cannot
+  carry, each route the catalog's `rest`, a path option refused by a
+  server; AGI-6.2: OpenAPI at `/api/v1/openapi.json` with a relative
+  `servers` URL; AGI-6.5: authentication for a run that changes something
+  on the server; AGI-2.2 and AGI-2.4 name the new optional fields; ERR-1
+  points to the reasons in the registry's meanings; HUB-1.1 names
+  `nogat-job/1` and Latarnik; DEV §1 lists Latarnik under `app`; the lists
+  of the ecosystem's distributions in `standards/ci/` name `latarnik`.
+  ECO-003, ECO-058 (stage 2 is Latarnik, `nogat.gui` retires) and ECO-059
+  (Obserwator calls Hydrolog's program or server) are amended (ECO-095); the
+  GUI platform plan's status points to ECO-095.
+- `ecosystem.yaml` with Hydrograf's `/api/v1` (step N2 of
+  `docs/plans/2026-11-24-latarnik.md` after Hydrograf's HG1, its ADR-091 on
+  its `develop` `cd9288a`, released in Hydrograf v0.7.0): its
+  `interfaces.rest` `/api/v1`; its routes `GET
+  /api/v1/watershed/delineate`, the hydrograph and the network as `POST
+  /api/v1/jobs` with the commands `hydrograph generate` and `network
+  delineate`, `POST /api/v1/network/preview`, `POST
+  /api/v1/terrain/profile` and the new `POST /api/v1/precipitation/depth`
+  (a catchment's PMAXTP design depth); its new provides
+  `hydrograf-command-list/1`, `hydrograf-commands/1` and
+  `hydrograf-result/1`, which replace `hydrograf-rest` on Latarnik's edge;
+  `hydrograf-rest`, Retman's planned use and the note of its edge to
+  Hydrolog on `/api/v1`. Hydrolog's `interfaces.rest` is `hydrolog server
+  (/api/v1), planned` (H1), and the GUI services of Hydrolog and Obserwator
+  no longer name the entry point group `nogat.gui` (G8, ECO-095). Map and
+  `AGENTS.md` regenerated.
+- README installs the set `v0.4.0` and names standard 1.3.
+
+### Fixed
+
+- The kit's `maplibreBasemap` and `removeMaplibreBasemap` empty the words of
+  MapLibre's attribution control once no source is credited (after a failed
+  base map or „bez podkładu”): MapLibre 6.14.0 only hides the empty control
+  and kept the last base map's credit in it. Within kit `1.3.0`, before its
+  release.
+
 ## [0.3.0] - 2026-11-25
 
 ### Added
@@ -1125,7 +1345,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Daldek/Nogat/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Daldek/Nogat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1

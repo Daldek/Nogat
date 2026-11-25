@@ -1,6 +1,6 @@
 # Ecosystem hub (Nogat)
 
-Part of standard 1.2 · IDs `HUB-…`
+Part of standard 1.3 · IDs `HUB-…`
 
 Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 
@@ -11,9 +11,12 @@ Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 **HUB-1.1** Nogat holds:
 1. this standard (`standards/`), the schemas of the shared agent
    documents (`schemas/agent/`, AGI-4.1) and of the documents exchanged
-   between GUIs (`schemas/exchange/`), and the visual identity and GUI kit
-   that GUIs copy (`design/`, DEV-15.3 to DEV-15.6); Nogat itself runs no
-   GUI (ECO-058);
+   between GUIs or between a server and its clients (`schemas/exchange/`:
+   the hand-off `nogat-handoff/1`, the description of a server
+   `nogat-server/1`, a server's job `nogat-job/1`), and the visual identity
+   and GUI kit that GUIs copy (`design/`, DEV-15.3 to DEV-15.6); Nogat
+   itself runs no GUI (ECO-058), and Latarnik, optional, is a deployment's
+   access point to the GUIs and servers (ECO-095);
 2. the project registry (`ecosystem.yaml`);
 3. tooling that reads the registry (drift report, workspace sync, MCP
    configuration, routing table for agents, checks of this standard);
@@ -33,7 +36,8 @@ fields are those of `schemas/ecosystem.schema.json`, shown below;
 not `develop`, HUB-4.9), `routes`, `interfaces.gui` (the command that serves
 the project's browser GUI on the user's computer, given only by a project
 that has one), `computes` (true for a project whose formulas fall under
-CMP §1; absent means false) and, in a dependency, `uses` and `note` are
+CMP §1; absent means false), `distribution.qgis` (a plugin's folder, DEV §1,
+DEV-5.1, given by a plugin only) and, in a dependency, `uses` and `note` are
 optional.
 
 ```yaml
@@ -44,7 +48,7 @@ data_sources:                 # HUB-2.7
 projects:
   - name: Retman
     summary: Polish natural-language command layer over the ecosystem tools.   # budget DOC-1.7
-    profiles: [tool]          # tool | app | hub
+    profiles: [tool]          # tool | app | hub | plugin
     status: active            # active | research | paused | archived
     repo: https://github.com/Daldek/Retman
     python_manifests: [pyproject.toml]   # HUB-2.8
@@ -102,14 +106,15 @@ in `python_manifests` (repository-relative, for example `pyproject.toml`,
 `backend/requirements.txt`); the drift and dependency reports read them
 (HUB-4.1, HUB-4.6).
 
-**HUB-2.9** Each project except the hub lists its `routes`, the rows of the
-routing table (HUB-4.3): a `task` of at most 100 characters and the `command`
-that starts it, beginning with the project's CLI or, for a REST interface,
-with an HTTP method. A task is routed once in the whole registry, and `repo`
-is a github.com URL, where the guides are linked. `validate` checks these
-rules.
+**HUB-2.9** Each project except the hub and a plugin, which has no CLI or
+REST interface (DEV §1), lists its `routes`, the rows of the routing table
+(HUB-4.3): a `task` of at most 100 characters and the `command` that starts
+it, beginning with the project's CLI or, for a REST interface, with an HTTP
+method. A task is routed once in the whole registry, and `repo` is a
+github.com URL, where the guides are linked. `validate` checks these rules.
 *Why:* an agent chooses a tool by task; a task that two tools claim sends it
-to the wrong one, and a command of another tool cannot start the task (ECO-052).
+to the wrong one, and a command of another tool cannot start the task (ECO-052);
+a plugin is reached through QGIS, not by a command (ECO-094).
 
 ## 3. Local workspace
 

@@ -12,7 +12,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 |---|---|---|---|
 | [ECO-001](#eco-001-nogat-is-the-ecosystem-hub) | Nogat is the ecosystem hub | amended by ECO-036 | 2026-10-19 |
 | [ECO-002](#eco-002-machine-readable-registry-ecosystemyaml) | Machine-readable registry `ecosystem.yaml` | amended by ECO-034 | 2026-10-19 |
-| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | accepted | 2026-10-19 |
+| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | amended by ECO-094, ECO-095 | 2026-10-19 |
 | [ECO-004](#eco-004-standard-v20-is-rewritten-from-practice) | Standard v2.0 is rewritten from practice | amended by ECO-056 | 2026-10-19 |
 | [ECO-005](#eco-005-english-everywhere-polish-only-in-the-end-user-interface) | English everywhere, Polish only in the end-user interface | accepted | 2026-10-19 |
 | [ECO-006](#eco-006-single-author-identity-no-ai-attribution) | Single author identity, no AI attribution | amended by ECO-038 | 2026-10-19 |
@@ -20,7 +20,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-008](#eco-008-main-and-develop-in-every-repository) | `main` and `develop` in every repository | accepted | 2026-10-19 |
 | [ECO-009](#eco-009-ruff-for-formatting-and-linting) | Ruff for formatting and linting | accepted | 2026-10-19 |
 | [ECO-010](#eco-010-mypy-as-the-only-type-checker) | mypy as the only type checker | amended by ECO-033 | 2026-10-19 |
-| [ECO-011](#eco-011-src-layout) | `src` layout | amended by ECO-036 | 2026-10-19 |
+| [ECO-011](#eco-011-src-layout) | `src` layout | amended by ECO-036, ECO-094 | 2026-10-19 |
 | [ECO-012](#eco-012-uv-and-lock-files) | uv and lock files | amended by ECO-037 | 2026-10-19 |
 | [ECO-013](#eco-013-progress-holds-current-state-history-is-archived) | PROGRESS holds current state, history is archived | amended by ECO-039 | 2026-10-19 |
 | [ECO-014](#eco-014-claudemd-for-developers-agentsmd-for-users) | CLAUDE.md for developers, AGENTS.md for users | accepted | 2026-10-19 |
@@ -61,19 +61,19 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
 | [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | amended by ECO-058, ECO-075 | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
-| [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
+| [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | amended by ECO-094 | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
-| [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
-| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087 | 2026-11-13 |
+| [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | amended by ECO-095 | 2026-11-12 |
+| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084, ECO-095 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087, ECO-092, ECO-094 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087, ECO-092 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -93,11 +93,18 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
 | [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
 | [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
-| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
+| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | amended by ECO-092 | 2026-11-23 |
 | [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
 | [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 | [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
+| [ECO-089](#eco-089-one-set-of-base-maps-in-the-kit-shared-by-every-gui) | One set of base maps in the kit, shared by every GUI | accepted | 2026-11-24 |
+| [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
+| [ECO-091](#eco-091-intervals-beside-point-estimates-computed-by-hydrolog-shown-by-obserwator) | Intervals beside point estimates: computed by Hydrolog, shown by Obserwator | accepted | 2026-11-25 |
+| [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
+| [ECO-093](#eco-093-one-command-builder-in-the-kit-generated-from-the-commands-1-entry) | One command builder in the kit, generated from the commands-1 entry | accepted | 2026-11-25 |
+| [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
+| [ECO-095](#eco-095-latarnik-the-access-point-and-gui-hub-every-tools-server-by-one-set-of-rules) | Latarnik, the access point and GUI hub; every tool's server by one set of rules | accepted | 2026-11-25 |
 
 ---
 
@@ -135,6 +142,12 @@ pins are data. YAML is readable by people and agents alike.
 **Rejected.** Markdown-only registry (no automatic drift checks).
 
 ## ECO-003 Scope: eight projects, BasicHydraulic excluded
+
+**Amended by ECO-094 (2026-11-25):** Goniec, a QGIS plugin, is the ninth
+project.
+
+**Amended by ECO-095 (2026-11-25):** Latarnik, the access point of a
+deployment and its GUI hub, is the tenth project.
 
 **Decision.** The standard covers Kartograf, Hydrolog, IMGWTools, Hydrograf,
 Hydraulik, Retman, Archiwista and Nogat. BasicHydraulic is out of scope at
@@ -259,6 +272,9 @@ today ranges from `strict = true` (Archiwista) to a baseline without strict
 
 **Amended by ECO-036 (2026-10-20):** Nogat uses `src/nogat/` once it ships the `nogat`
 package; Hydrograf `backend/` stays exempt.
+
+**Amended by ECO-094 (2026-11-25):** a QGIS plugin keeps its code in its
+folder at the root, `<folder>/`, which QGIS loads (DEV-5.1).
 
 **Decision.** Every distributable Python package uses `src/<package>/`.
 Kartograf, Hydrolog, Retman and Archiwista migrate. Exempt: Hydrograf
@@ -944,6 +960,9 @@ or `-o` (plan `docs/plans/2026-10-24-data-output.md`).
 
 ## ECO-052 The routing table is registry data
 
+**Amended by ECO-094 (2026-11-25):** a plugin, like the hub, has no routes:
+it has no CLI or REST interface (HUB-2.9).
+
 **Decision.** The rows of Nogat's AGENTS.md routing table (ECO-048) are the
 `routes` of `ecosystem.yaml`: for each project a `task` and the `command` that
 starts it (HUB-2.9). `uv run scripts/ecosystem.py agents` writes the file,
@@ -1137,6 +1156,12 @@ Archiwista, Retman, Hydraulik and Hydrolog, then the frozen Kartograf
 
 ## ECO-058 GUIs link to each other and hand off one way
 
+**Amended by ECO-095 (2026-11-25):** stage 2 is Latarnik, an optional
+project of its own in front of the tools' servers, which it reaches over
+HTTP; nothing runs in its process, so hosting the GUIs as modules and the
+entry point group `nogat.gui` retire, and its levels 1 and 2 have no
+sign-in and no frames.
+
 **Decision.** The GUI platform comes in two stages. Stage 1: every GUI of the
 ecosystem shows the kit's app menu, which leads to the other GUIs the
 deployment configures in `[nogat.gui]` of `nogat.toml`, and hands data off by
@@ -1170,6 +1195,11 @@ deployment's user systemd timers write the raw root beside the downloads
 Archiwista orders; operational data are archived as captures; the backup
 copy of the raw and data roots is the deployment's `rsync` timer, documented
 by Obserwator, not an Archiwista job.
+
+**Amended by ECO-095 (2026-11-25):** Obserwator calls Hydrolog's program or
+server and does not import it: the analyses a person asks for run as jobs of
+`hydrolog server` where the deployment sets its URL, the program otherwise,
+and `analyses build` always runs the program.
 
 **Decision.** For the hydro-meteorological station data of IMGW-PIB and
 ČHMÚ each project has one role. Archiwista orders every download and keeps
@@ -1245,6 +1275,13 @@ provider it does not hold, declared by a deployment, follows them.
 **Amended by ECO-088 (2026-11-24):** what CAMELS-PL took from IMGW-PIB and
 what is derived from it carry the terms line RD with S and P (DEV-20.7,
 DEV-20.12).
+
+**Amended by ECO-092 (2026-11-24):** products with PIG-PIB data carry W,
+WP once processed, and the terms line RW (DEV-20.7, DEV-20.13).
+
+**Amended by ECO-094 (2026-11-25):** a clipboard copy holds the values only,
+the lines beside its button, and a desktop GIS layer carries them in its
+metadata (DEV-20.5).
 
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
@@ -1442,6 +1479,9 @@ folds to one line, unfolded in place by „więcej”.
 **Amended by ECO-087 (2026-11-23):** after the kit's own lines the strip
 shows the lines the GUI declares for it (`screen-lines`), such as the line
 of an operator's own network.
+
+**Amended by ECO-092 (2026-11-24):** the strip also holds WK, the short
+form of W, between CK and GK.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -2171,6 +2211,10 @@ of plain mode (DEV-19.5). No old name is kept beside a new one.
 
 ## ECO-084 Operational data are kept as captures of an unverified tier; serving them is the operator's decision
 
+**Amended by ECO-092 (2026-11-24):** PIG-PIB's automatic measurements
+without validation (`mwp_auto`) are operational data, and the readings of
+its MWP database verified ones (DEV-20.8).
+
 **Decision.** Every answer a provider adapter of Obserwator receives —
 archive and file downloads, files an operator feeds, API answers, the GUI's
 live fetches, warnings and water-state classes included — is written to the
@@ -2427,3 +2471,486 @@ and the regulamin 1.0: a GUI with CAMELS-PL's IMGW-PIB data keeps the block
 and to the `ATTRIBUTION.txt` of a plain write on its branch
 `fix/camels-terms-line` (a follow-up of step 2); Obserwator (step 3) and
 Archiwista (step 4) carry RD on these data from the start.
+
+## ECO-089 One set of base maps in the kit, shared by every GUI
+
+**Decision.** Every GUI with a map takes its base maps from the kit: the
+catalogue `nogat-basemaps.json`, library-neutral data a GUI's server reads
+for its setting, its CSP and its regulamin's blocks, holds Hydrograf's
+three, in its order and with its labels: „OpenFreeMap szary” (`openfreemap`,
+OpenFreeMap's TileJSON drawn in the kit's grey style, the default),
+„OSM GUGiK szary (tylko Polska)” (`gugik-osm`) and „Ortofotomapa GUGiK”
+(`gugik-ortho`), both bounded by Poland's box and never the default, with
+„bez podkładu” the switcher's last choice; no entry needs a key, none is
+Esri's and there is no topographic map. The kit's `nogat-basemaps.js` and
+`nogat-basemaps.css` draw an entry through the GUI's own library, passed in,
+with two adapters, `maplibreBasemap` for MapLibre GL JS and `leafletBasemap`
+for Leaflet (a vector entry through maplibre-gl-leaflet), which check a
+TileJSON's tiles to stay on the entry's origin before any tile is asked and
+call `onFailure` when it or the first tiles fail, the map staying usable and
+nothing switching by itself; the switcher `<nogat-basemaps>` is Hydrograf's
+radio list and keeps the person's choice in the browser (`nogat-basemap`,
+no server, no cookie), opening on it while it is allowed, else on the
+default. Each base map's credit is the catalogue's, in Polish, in the map's
+own attribution at 12 px and never in `<nogat-sources>`; up to 860 px it
+folds behind „i” at the first drag. A deployment allows entries with
+`basemaps`, serves one from its own copy with `basemap_mirrors` and adds
+base maps of its own, each with its credit and its exact origin in the CSP,
+with `basemap_extra` (DEV-18.1); no visitor adds one in the browser. No
+`img-src` or `connect-src` holds a scheme source. The rule is DEV-15.15;
+DEV-15.13, DEV-18.1 and DEV-20.9 are amended. Plan:
+`docs/plans/2026-11-24-shared-base-maps.md`.
+
+**Why.** The author's direction of 2026-11-24 for Kartograf's GUI
+(„wszystkie podkłady mapowe powinny być wspólne między projektami … Jako
+wzór: Hydrograf”) and his answers to the plan's nine questions of the same
+day. Three GUIs with a map had three sets, three switchers and three places
+of the credit. Two adapters make the base maps one set in every GUI's next
+minor without first rewriting Hydrograf's map; the kit's grey style writes
+Polish names and follows both themes, where OpenFreeMap's Positron writes
+English ones; the choice is remembered at the author's request; GUGiK's
+services are often unstable, so they never open by default. The catalogue is
+the shared default set, which a deployment's own base maps extend without
+changing it („ona definiuje podstawowe domyślne podkłady”), and a CSP that
+names each origin keeps a script injected into the page from sending what
+the page holds to any server.
+
+**Rejected.** One written list kept in each GUI by hand (it drifted
+already). MapLibre in every GUI before the base maps are shared (Hydrograf's
+move to MapLibre is a plan of its own, after which the Leaflet adapter is
+retired). OpenFreeMap's own Positron style. The providers' English credits.
+A choice the browser forgets at a reload. GUGiK's topographic map. A base
+map a visitor adds in the browser, whose `connect-src https:` would let an
+injected script send data to any HTTPS server (the author's amendment of
+2026-11-24). A REL-1.1 deviation for Obserwator's two settings, which
+`v3.5.0` deprecates and translates at start instead.
+
+**Consequence.** The kit becomes `1.3.0` (REL-1.4): by the author's answer
+to the plan's question 7, a kit change takes the version `develop` carries
+while no member is released with a copy of it, else the next minor, and the
+members of Nogat `v0.3.0`'s round carry copies of `1.2.0`. The regulamin
+becomes 1.1, its § 8 ust. 7 naming the base map among the settings the
+browser keeps, with the author's consent of 2026-11-24 (its blocks `osm` and
+`gugik` already name the catalogue's providers, so no block changes); the
+operator's draft takes the same words. Obserwator (`v3.5.0`), Archiwista and
+Hydrograf (their next minors) and Kartograf (its first map) move to the kit
+in steps 2 to 5 of the plan; until its step a GUI that shows other base maps
+records the gap as a deviation in its `CLAUDE.md` (DEV-1.2), and a new base
+map or switcher feature goes into the kit first.
+
+## ECO-090 One chart module in the kit: zoom, pan and reset alike in every GUI
+
+**Decision.** Every GUI draws its charts over axes with the kit's chart
+module, `nogat-chart.js` and `nogat-chart.css`, built from Obserwator's SVG
+engine (its `src/charts/` at `b5a1c1a`) with Hydrolog's short time axis in
+minutes and its PNG footer of the providers' lines: one plain ES module
+that imports nothing, its words in Polish in `CHART_TEXTS` and a GUI's
+other language through `spec.texts`, its numbers and dates in the language
+of `spec.locale` (`pl-PL` by default) and in a GUI's own date format
+through `spec.dateFormat` (Archiwista's `RRRR.MM.DD`), every token with its
+light fallback and every class under `.nogat-chart`. It gains what
+Archiwista and Hydrograf need: a second unit on a right-hand axis, spans
+over gaps, hollow and diamond points, an x axis without labels,
+`onReadout`, `onRange` and `plotWidth()`. A chart whose x is a date, a time
+or a value zooms, never a probability axis, a band y or a chart its GUI
+sets `zoom: false` (a year's months or days): a drag over the plot selects
+x, at least 6 units of the viewBox, else it is a click, and a rectangle on
+a chart of points (`zoom: "xy"`: the rating curve, PMAXTP), whose y is then
+the person's; Ctrl with the wheel zooms around the cursor, 1.25 a notch and
+a trackpad's pinch in proportion, while the wheel alone scrolls the page;
+Shift with a drag, or a drag with the middle button, pans within the whole;
+a double click, `0` and „Cały zakres” show the whole; on a touch screen
+(`touch-action: pan-y`) one finger scrolls the page or reads the values and
+two pinch and pan; `+`, `−` and the arrows past the range's edge do it by
+keys. Every zoom in stops at four points of the readout's series, else at
+a thousandth of the whole, and a burst of events draws once an animation
+frame. Under a zoomable chart a lone „+” before a zoom, then „−”, „+”,
+„Cały zakres” and the range shown, one line at 390 px with buttons of at
+least 24 px; the y axis fits the values shown, and up to 860 px a zoomable
+chart is drawn at its container's width. A range outlives a redraw of the
+same data, and `toPng` writes the chart as shown with the providers' lines
+under it. The rule is DEV-15.16. Plan:
+`docs/plans/2026-11-24-unified-charts.md`.
+
+**Why.** Obserwator's feedback #9 of 2026-11-23 („Fajnie byłoby dodać zoom
+i przesuwanie do wykresów w tych wszystkich apkach. No i reset widoku po
+zoomie.”) and the author's direction of 2026-11-24 („musimy ujednolicać
+pomiędzy projektami zachowanie i technologię”), with his answers to the
+plan's seven questions the same day. Four implementations had three sets of
+gestures and three words for the reset; two copies of one engine drifted
+apart (Hydrolog's), Archiwista's plain wheel took the page's scroll and
+Hydrograf drew with a library of its own. The lone „+” lets a person who
+can neither drag nor pinch zoom (WCAG 2.2 SC 2.5.1, 2.5.7); a probability
+axis holds tens of annual values on fixed ticks, each read by the readout.
+
+**Rejected.** Four implementations kept to one written gesture
+specification (they drifted already: Hydrolog's copy). Chart.js with its
+zoom plugin everywhere, Hydrograf's option B (a canvas without the keys and
+the readout the SVG engine has, and a second migration of three GUIs). The
+wheel alone zooming (Archiwista's: it takes the page's scroll). No bar
+before a zoom (the first zoom would need a path or two fingers). Zooming
+the Gumbel plots. One date format for every GUI (a rule of its own, over
+tables as well as charts).
+
+**Consequence.** The kit becomes `1.3.0` (REL-1.4): by the author's answer
+to the plan's question 2 a kit change takes the version `develop` carries
+while no member is released with a copy of it, else the next minor, and the
+members of Nogat `v0.3.0`'s round carry copies of `1.2.0`. Obserwator
+(`v3.5.0`), Hydrolog, Archiwista and Hydrograf (off Chart.js, option A)
+move to the module in steps 2 to 5 of the plan, each in its next minor;
+until its step a GUI that draws its charts otherwise records the gap as a
+deviation in its `CLAUDE.md` (DEV-1.2), as ECO-055 and ECO-058 did, and its
+chart code takes fixes only: a new chart feature goes into the kit first
+(DEV-17.5). The GUI platform plan's `chart-theme.js` gives way to the
+module.
+
+## ECO-091 Intervals beside point estimates: computed by Hydrolog, shown by Obserwator
+
+**Decision.** The flood, precipitation and low-flow quantiles and the median
+annual flow-duration curve get interval estimates, computed by Hydrolog and
+shown by Obserwator (ECO-059): two-sided and central at each
+`confidence_level` asked, one number in (0, 1) or a list of distinct ones,
+0.95 by default; Obserwator stores 0.95 and 0.68, whose upper bound is KZGW
+2017's one-sided bound at β = 84 %. A result carries the list `intervals`,
+one entry per level in the order asked, named as `stats monthly`'s fields:
+`confidence_level`, `ci_method` (`parametric_bootstrap`, `delta` or
+`order_statistics`), `ci_lower` and `ci_upper` aligned with the quantiles or
+the curve's percentages, an element `null` where undefined, and `ci_samples`,
+the bootstrap samples kept of 999. An interval not computed has its method,
+bounds and samples `null` and the notice `interval_not_computed` (level
+`warning`) with `details.reason` `fit_method`, `too_few_values`,
+`bootstrap_failures`, `nonregular_fit` or `too_few_complete_years` and
+`details.confidence_levels`; a bound of a discharge or a precipitation below
+0 is `null` with the reason `below_physical_range`. These are optional
+fields within each document's `/1` (ECO-085). The methods: an L-moments fit
+by the percentile interval of the 999 parametric bootstrap refits that
+already give `ad_critical_values`; a maximum-likelihood fit by KZGW's delta
+method, the bound of Pearson III and Weibull held at its estimate and the
+expected information of the two other parameters in closed form, the
+log-normal on ln Q, the GEV by its observed information and only where
+ξ > −0.5; moments and least squares none; the median annual flow-duration
+curve by order statistics of the annual curves (Vogel and Fennessey 1994).
+CMP-2.3 lists an interval's side, level and method among a spec's
+conventions; CMP-6.11 has its coverage simulated, reported in
+`docs/FORMULAS.md` and asserted within three Monte Carlo standard errors,
+3√(c(1 − c)/m), per element, its seed fixed once in the test and recorded;
+the reference module gains `assert_coverage`, `assert_interval_properties`
+and the coverage in `formulas_markdown`. Plan:
+`docs/plans/2026-11-24-interval-estimation.md` (step N1).
+
+**Why.** The author's feedback #13 to Obserwator („Rozważyć wprowadzenie
+estymacji przedziałowej, obok punktowej.”) and his answers of 2026-11-24 to
+the plan's six questions („Przedziały ufności: 1. liczymy oba; 2, 3, 4, 5, 6
+– ok.”). A design value at T of 100 to 1000 years from 30 to 60 maxima is an
+extrapolation, and the regulation (Dz.U. 2026 poz. 692) and KZGW ask for its
+upper limit; both levels of a fit come from one computation, so storing both
+adds no run. The plan's first wording asserted coverage within two standard
+errors, 2√(c(1 − c)/m); amended on 2026-11-25 (step N1): a right exact
+interval fails that in about 4.6 % of assertions whatever m, and Hydrolog
+asserts one per return period, level, sample size and distribution, so only
+a seed chosen to pass would pass; three standard errors fail one assertion
+in about 370.
+
+**Rejected.** Storing 0.95 only and computing 0.68 on request (Fable's
+recommendation; the author's answer 1). A bootstrap for every fit method
+(minutes per request, Hydrolog's ADR-0048). The profile likelihood (one
+constrained search per return period). A nonparametric bootstrap of the
+annual maxima (too narrow for 30 to 60 values, Kyselý 2008). KZGW's tables
+A.3 and A.4 in code. The observed information of all three parameters of
+Pearson III and Weibull (not regular below a shape of 2, Smith 1985).
+`stats monthly`'s flat fields instead of a list (one fit gives every level
+from one computation). Intervals of SSQ, SWQ and SNQ (characteristic values
+of the record by IMGW-PIB's definitions; answer 4) and of the rating curve
+(a separate plan; answer 6). Coverage within two standard errors (above).
+
+**Consequence.** CMP-2.3 and CMP-6.11 read as above, in standard 1.3. The
+copies of `nogat_formulas.py` in Kartograf, Obserwator, Hydrolog, Hydrograf
+and Hydraulik are behind until each project's next release copies it
+(CMP-8.1, `drift`). Hydrolog `0.10.0` declares the three interval specs with
+their coverage tests and gives `intervals` in `stats flood-frequency`,
+`stats low-flow` and `stats duration-curve` (step H1); Obserwator, in the
+release that first runs Hydrolog `0.10.0` (`v3.4.0` or `v3.5.0`), stores
+`[0.95, 0.68]` and shows both levels, selectable (step O1); one
+`analyses build` follows both (step D1). Archiwista and Hydrograf read none
+of these results, so ECO-085's condition holds; `stats monthly` keeps its
+fields.
+## ECO-092 PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked
+
+**Decision.** PIG-PIB's Monitoring Wód Podziemnych (MWP) of the state
+geological service is a data source of the ecosystem, `pig` in the
+registry: the points, the groundwater readings and the spring yields of the
+service `hydrogeologia/mwp` and the automatic hourly measurements of
+`hydrogeologia/mwp_auto` at cbdgmapa.pgi.gov.pl. Its licence is the CC BY
+4.0 of dane.gov.pl's dataset 170, which lists the service, and that
+record's `license_description` „Other (Public Domain)” is disregarded, as
+ECO-088 disregarded a contradictory field; PIG-PIB's terms of reuse are
+linked, never restated. DEV §20 gains the row W and WP at order 8, after D,
+so G, SG and Z become 9 to 11 in their order: W names PIG-PIB, the MWP of
+the state geological service, the times of creation and acquisition in G's
+forms and the licence with its link; WP „Dane PIG-PIB zostały przetworzone”
+is fixed and never names the processing (ECO-071), whose extent the info
+texts and the guide (DEV-15.14) and Obserwator's intake note and ADR state.
+The strip shows W as WK „Źródło: PIG-PIB, CC BY 4.0”, „PIG-PIB” linked to
+https://www.pgi.gov.pl/psh and „CC BY 4.0” to the licence, between CK and
+GK; the terms line RW links PIG-PIB's terms of reuse, after RE. The rule is
+DEV-20.13, and DEV-20.5, DEV-20.7 and DEV-20.8 are amended: the readings of
+the MWP database are verified data, and `mwp_auto`, which PIG-PIB calls
+„bez walidacji”, is operational data. Obserwator takes PIG-PIB in as the
+provider `PIG` (keys `pl.pig.*`, the national acronym of ECO-082) of the
+source class `other`, in `v3.3.0`. Plan:
+`docs/plans/2026-11-24-pig-groundwater.md` (step N1).
+
+**Why.** The author's request of 2026-11-24 („Te dane też muszą być
+wersjonowane”) and the plan's open questions 3, 4, 5 and 9, decided by
+Fable for the author the same day. The service holds one month of readings
+and no history of its own, so every month not captured is lost. The
+sources were read on 2026-11-24: dataset 170 gives CC BY 4.0 with no
+condition of its own (`license_condition_default_cc40` true,
+`current_condition_descriptions` empty) and lists the service's WMS;
+PIG-PIB's terms of reuse, linked as that WMS's `AccessConstraints`, ask for
+the source with the times of creation and acquisition, the fact and the
+extent of processing, and that recipients be told the terms' full text;
+the open-data act (art. 15 ust. 1) allows conditions on no more, and
+Prawo wodne (art. 386 ust. 3) gives PIG-PIB's information for reuse free
+under that act. W, WP and RW carry what a line can; the extent of
+processing is a formula's matter, not a line's. PIG-PIB checks the readings
+before they enter the MWP database („poddawane są weryfikacji na każdym
+etapie”), and its yearbook holds aggregates only, so no later verified
+source replaces them; PSG is a state service but no hydro-meteorological
+service of a WMO member. RW is R with the provider's letter, as RE is
+E-OBS's.
+
+**Rejected.** PIG-PIB's own terms as the governing licence (the record that
+lists the service names CC BY 4.0, and the terms add nothing W, WP and RW
+leave out but the extent of processing). The extent of processing in WP
+(ECO-071). The tier `operational` for the MWP readings (it would label
+PSG's checked database „niezweryfikowane” on every surface). The source
+class `nmhs` (P11 of the providers plan defines it by WMO membership).
+`PGI` and `pl.pgi.*` (ECO-082 rejected English acronyms). RG as the terms
+line (left for GUGiK's conditions, which a regulamin links today).
+
+**Consequence.** DEV §20, DEV-20.5, DEV-20.7 and DEV-20.8 read as above
+with DEV-20.13, and ECO-060, ECO-064 and ECO-084 are amended. The kit's
+`nogat-sources.js` knows W, WP and WK, and the regulamin's template and the
+operator's draft gain the block `pig` in place, `nogat-terms.html`
+regenerated: all within kit `1.3.0` and regulamin 1.1, which no member has
+released yet (ECO-089, ECO-090), and a GUI that keeps no block `pig` fills
+the same page. The registry gains the data source `pig`, Obserwator's
+`pig` and its planned content form `pig-json/1`, and PIG-PIB in the
+summaries of Obserwator's stores and Archiwista's raw root. Obserwator
+takes the provider in steps O1 to O6 of the plan, for `v3.3.0`; data
+received later by request carry the request form's sentence as a line of
+their own, added to the table when they enter.
+
+## ECO-093 One command builder in the kit, generated from the commands-1 entry
+
+**Decision.** The kit gains the command builder, `nogat-command-form.js`
+and `nogat-command-form.css`: the custom element `<nogat-command-form>`,
+the editor of producer commands of the GUI platform's item 8, built from
+Hydrolog's catalog form (`gui/web/src/forms/model.js` and
+`command-form.js` at `ffe8538`) as a plain ES module that imports nothing,
+its words in Polish in `COMMAND_FORM_TEXTS`. It is generated from a
+command's commands-1 entry: a field per option by its type, in the
+option's section, in Polish where the catalog is, the optional options
+without a default under „Opcje dodatkowe”; a choice per `one_of`; the
+fields the rules show, disable and require; the path options left out with
+`paths="hidden"` where the app owns the paths; the line written by the
+GUI's binding of the tool's `format_command` with „Kopiuj”, a pasted line
+read by its binding of `parse_command`, and a message of the tool under
+the field `details.option` names. `options` is the call in the catalog's
+types and `setOption` takes one value from the GUI's map. The fields it
+reads become optional fields of commands-1 and of AGI-2.3, each as a
+producer already declares it: an option's `items` (a type name, Kartograf's
+and Hydrolog's, or a JSON Schema, Obserwator's), `exclusive_minimum` and
+`exclusive_maximum` and `i18n.pl` with `description` and `enum`
+(Hydrolog's), `format` (Hydrolog's and Obserwator's), `section` and the
+rules `requires`, `excludes`, `applies_to` and `required_when`, the last
+two `{option: true | [values]}` (Kartograf's constraints), and a command's
+`one_of`, alternatives of which exactly one is given in full (Hydrolog's),
+beside an option's `one_of`, a group of which at most one is given.
+`nogat-server/1` (ECO-094) names Kartograf's capabilities `catalog`,
+`plan` and `script`. The rule is DEV-15.17; AGI-2.3 is amended. Plan:
+Kartograf's `docs/plans/2026-11-24-kartograf-gui.md` (step N1).
+
+**Why.** The author's request of 2026-11-24 for a Kartograf GUI that
+writes a command or a script for the user's own machine, whose plan he
+approved the same day („Ok, podoba mi się ten plan. Zapisz to.”): its form
+is generated from the command catalog so that a new option of a command
+appears without GUI work (its D1), and the shared part is a kit component
+that Archiwista's „Kreator polecenia” takes too (its D6; the GUI platform
+plan's option E2, which the Latarnik plan kept). Kartograf, Hydrolog and
+Obserwator declared the same rules three ways (constraints of a spec, a
+command's `one_of`, a command's `exclusive`, `alternatives` and `requires`)
+and exported most of them only in prose: one optional form in the shared
+schema lets one element read every catalog. The tool's `format_command` and
+`parse_command` stay the only writer and reader of its lines (AGI-2.1).
+
+**Rejected.** The editor in Archiwista only (option E1). Hydrolog's Preact
+component as it is (the GUIs share no framework; a custom element runs in
+each). Each tool's own names of its rules in the schema (three readers in
+one element). A line written by the element from the options' flags (a
+second writer of a tool's lines drifts from its `format_command`; a GUI
+without a server binds its own code). An `i18n.pl.label` per option (the
+GUI's `labels` give one where it wants a label).
+
+**Consequence.** The kit gains two files within `1.3.0`, which no member
+has released yet (ECO-089). commands-1 and AGI-2.3 grow within `/1`
+(AGI-4.1, ECO-085): the catalogs of Kartograf, Hydrolog, Obserwator,
+Hydraulik and Retman on `develop` validate unchanged. Kartograf exports
+its sections, Polish texts and constraints in these fields and builds its
+GUI on the element (steps K2 to K5 of its plan, in the minor after
+`0.9.0`); Archiwista's „Kreator polecenia” follows in a plan of its own
+(its step A1); Hydrolog, whose form the element comes from, moves to it in
+a minor of its own and records its form as a deviation in its `CLAUDE.md`
+until then (DEV-1.2); a new feature of a command form goes into the kit
+first. The registry gives Kartograf `interfaces.rest`, marked planned
+until the release that brings `kartograf server`, and the planned service
+`kartograf-server`, which Latarnik routes at `/kartograf/v1/…` (its L1).
+The GUI platform plan's `command-form.js` points to Kartograf's plan.
+
+## ECO-094 Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin`
+
+**Decision.** Goniec is a project of the ecosystem: a QGIS plugin,
+repository `Goniec`, QGIS folder `goniec`, a client of the tools' servers
+that computes nothing and downloads nothing for its own use; any server's
+address may be chosen, a person's own `obserwator server` on 127.0.0.1
+among them. It is a shell — connections and their authentication through
+QGIS's auth manager, attribution and regulamin, HTTP caching, settings, the
+CSV, clipboard and HEC exports, the panel framework — and one module per
+kind of server, shown only when the connected server lists it; 0.1 has
+Obserwator's module: stations, current data and series, copied or saved as
+the server answers them, in forms HEC-RAS and HEC-HMS take. Its licence is
+GPL-2.0-or-later, stated in Goniec's first ADR as DEV-16.1 allows;
+Obserwator stays MIT. DEV §1 gains the profile `plugin`: a QGIS plugin with
+no PyPI package, CLI, MCP, REST interface or command catalog, uv for its
+development tools only, distributed through plugins.qgis.org; DEV-5.1 gives
+its code `<folder>/` at the root, HUB-2.9 exempts it from routes, and the
+registry takes the profile and `distribution.qgis`, the folder. A server
+says what it serves in `nogat-server/1` at `GET /api/v1/server`, on a tool's
+own server and on Latarnik alike: each service's tool, version, API majors
+with their bases, capabilities in the tool's own words, OGC API landing
+page, GUI, instance, regulamin and lines, and Latarnik's `state`,
+`release_set` and `flows` (`schemas/exchange/server-1.schema.json`, S4 of
+both plans). DEV-20.5 gains the rows of a clipboard copy, the values only
+with the lines beside its button, and of a desktop GIS layer, the lines in
+its metadata. The kit's regulamin 1.1 and the operator's draft name the
+API and the programs that use it, Goniec among them, as a way to use a
+service, and the API within its limit of requests as the way for programs.
+Plan: `docs/plans/2026-11-24-qgis-plugin.md` (step N1).
+
+**Why.** Obserwator's feedback #11 (2026-11-23) asked for Obserwator in
+QGIS, and the author decided on 2026-11-24 that the plugin only connects to
+a server, the source of all data, through OGC API – Features with WFS left
+possible, a public read-only `/api/v1` with limits and the latest QGIS 3.x
+LTR and 4.x; the name Goniec and GPL-2.0-or-later were his answers the same
+day. plugins.qgis.org approves only plugins under a licence compatible with
+GPLv2 or later, the QGIS project asks it of plugins distributed elsewhere
+too (blog of 2016-05-29), and a plugin runs on QGIS and PyQt, both GPL.
+QGIS loads a plugin from its folder and plugins.qgis.org takes a ZIP of
+that folder and refuses binaries, which leaves a plugin no `src/` layout,
+wheel or command catalog and no command to route, as the hub has none. One
+document at one address lets a client find each service, its API majors
+and capabilities whether the address is a tool's own server or Latarnik,
+so a service moved behind Latarnik needs no change of the client; written
+once, it serves the Goniec and Latarnik plans alike. A paste target such
+as HEC-RAS's flow table or HEC-HMS's time-series table takes values only,
+so the lines cannot travel in the clipboard and stay beside the button and
+in every saved file. The regulamin asked programs not to download in bulk
+and named no API, which programs such as Goniec now use.
+
+**Rejected.** WFS first (QGIS reads OGC API – Features with paging and
+CRS84; a WFS endpoint can serve the same collections later). MIT for
+Goniec (plugins.qgis.org's requirement). The name „Pegaz” (the author chose
+Goniec). A plugin as a `tool` with an empty package (it would owe a wheel,
+a CLI and a catalog it cannot have). HEC-DSS files written by the plugin
+(HEC's native library is a binary plugins.qgis.org refuses; the server
+writes them). The lines in the clipboard (a paste target would take them
+for values). A discovery document of each plan's own (two schemas for one
+request would drift).
+
+**Consequence.** ECO-003, ECO-011, ECO-052 and ECO-060 are amended.
+`validate` takes a plugin without routes and refuses `distribution.qgis`
+outside a plugin; Nogat's AGENTS.md lists the plugin's folder among the
+tools' interfaces; the lists of the ecosystem's Python distributions in
+`standards/ci/` leave a plugin out. Goniec enters the registry with status
+`research` and a planned runtime dependency on Obserwator over REST, which
+provides the planned `obserwator-ogcapi` and `obserwator-hec`;
+`nogat-server/1` is named in the dependency's note, as `nogat-handoff/1`
+is. Goniec's mark and accent pair join `design/`. The regulamin's change
+stays within regulamin 1.1 and kit `1.3.0`, which no member has released
+yet (ECO-089). Obserwator serves the API, its caching and `series hec` in
+`v3.6.0` (step O1), Goniec 0.1 follows (G1), and its status becomes
+`active` then (N2).
+
+## ECO-095 Latarnik, the access point and GUI hub; every tool's server by one set of rules
+
+**Decision.** Latarnik is a project of the ecosystem, profile `app`,
+repository `Latarnik`, optional in every deployment: its main access point
+and GUI hub. Every tool keeps its CLI, MCP, library, server and GUI and
+works alone, `<tool> gui serve` one command on 127.0.0.1; Latarnik imports no
+tool, reaches each tool's server over HTTP and computes nothing: it routes,
+checks, limits, caches, logs and chains calls, and a step that needs logic is
+a tool's command. It listens on 127.0.0.1 behind the host's one edge, which
+keeps TLS; each GUI keeps its own host, which Latarnik passes whole to the
+tool's server; its own host serves the hub at `/`, `nogat-server/1` of every
+service at `GET /api/v1/server`, each tool's `/api/v1/…` at `/<tool>/v1/…`
+(an admin path there answers `404 not_found`) and, at its level 2, its jobs
+and flows at `/api/v1/jobs` and `/api/v1/flows`, a flow being a fixed list of
+catalog commands whose options are literals, inputs or JSON Pointers into an
+earlier answer. A deployment runs the services of one release set, and a
+service of another version stays routed and is named `other_version`. Every
+GUI becomes files over its tool's `/api/v1`, and every number comes from a
+tool's server: Hydrolog gets `hydrolog server`, Obserwator's GUI moves from
+its private API to `/api/v1`, and Hydrograf's API moves from `/api` to
+`/api/v1`, its catalog, envelopes and jobs, `/api` then removed. A server
+follows AGI §6: a read-only command whose inputs a URL cannot carry is a
+`POST`, `server` and `jobs` are reserved groups, OpenAPI is at
+`/api/v1/openapi.json`, each command's route and key are the catalog's
+optional `rest` (`{method, path, key}`; a command list MAY carry `effects`,
+`check` and `rest`, and commands-1 `long`), the catalog decides access and
+caching (AGI-6.8), the client's address comes only from a trusted proxy's
+`X-Forwarded-For` and links are relative but OGC API's (AGI-6.9), and a long
+run is a job, `nogat-job/1` (`schemas/exchange/job-1.schema.json`,
+AGI-6.10), whose reasons `job_running`, `run_as_job` and `other_version` of
+`conflict` and `job_expired` of `not_found` the registry's meanings name.
+Stage 2 of the GUI platform (ECO-058) is replaced: no GUI hosted as a module,
+the entry point group `nogat.gui` retired. Plan:
+`docs/plans/2026-11-24-latarnik.md` (step N1).
+
+**Why.** The author's decisions of 2026-11-24: the access point and the GUI
+hub are one project of their own, Latarnik; Hydrolog gets its server;
+Kartograf's GUI is static over a read-only `kartograf server` that Latarnik
+routes; his answers to the plan's six questions followed Fable's
+recommendations. Two GUIs computed in their own GUI servers behind private
+APIs (Obserwator, Hydrolog), while Hydrograf's and Archiwista's were files
+over their APIs; a 137 km² hydrograph took about 150 s behind Hydrograf's
+nginx, which waits 120 s, so the GUI got a `504`; every public GUI repeated
+its limit, cache and logs; a tunnel rule forwards the full path and strips
+no prefix. Routing over HTTP keeps each tool alone and in its own
+environment, and Hydrograf in Docker has no package to host.
+
+**Rejected.** Stage 2's one process hosting Hydrolog's and Obserwator's GUI
+modules through `nogat.gui` (Latarnik would share the tools' environment).
+Caddy or nginx with a generated configuration (the catalog's access rules,
+the problem documents of a `429` and the logs of DEV-12.4 would need plugins
+or a second program). Stage 2's catalog bridge `/api/<tool>/<group>/<verb>`
+(each tool's own `/api/v1` already is one). Flows with conditions,
+arithmetic or geometry (logic is a tool's command). The PMAXTP depth at a
+catchment's centroid (one point would get two design depths; Hydrograf's
+catchment mean is a command of its catalog). Obserwator's `analyses build`
+through `hydrolog server` (thousands of calls over hours would hold the
+workers persons share). TLS, sign-in or frames in levels 1 and 2.
+
+**Consequence.** ECO-003, ECO-058 and ECO-059 are amended; AGI-6.1, AGI-6.2,
+AGI-6.5, AGI-2.2 and AGI-2.4 change and AGI-6.7 to AGI-6.10 are new, within
+version 1 of commands-1 and command-list-1 (AGI-4.1). Latarnik enters the
+registry with status `research`, profile `app`, `interfaces.rest`
+`/api/v1`, the route `GET /api/v1/server` and planned runtime dependencies
+over REST on Obserwator, Hydrolog, Hydrograf, Kartograf and Archiwista;
+`nogat-server/1` is named in their notes, as `nogat-handoff/1` is. Its mark
+and accent pair join `design/`, and the lists of the ecosystem's Python
+distributions in `standards/ci/` name it. Each tool changes in its own
+session, producers first: Hydrolog's server (H1), Obserwator on it (O1),
+Hydrograf's `/api/v1` (HG1), Kartograf's server (K4), then Latarnik's levels
+(L1, L2); the registry follows each step (N2), Latarnik becoming `active` at
+the end. Its repository is the author's to create.

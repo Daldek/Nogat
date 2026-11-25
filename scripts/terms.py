@@ -77,6 +77,7 @@ BLOCKS: dict[str, str] = {
     "chmu": "ČHMÚ open data",
     "camels-pl": "CAMELS-PL data (catchments, attributes, series)",
     "e-obs": "E-OBS catchment means of CAMELS-PL, where a deployment serves them",
+    "pig": "PIG-PIB groundwater monitoring (points, readings, hourly measurements)",
     "gugik": "GUGiK data (geoportal.gov.pl)",
     "cuzk": "ČÚZK data",
     "copernicus": "Copernicus data (CORINE and other CLMS layers)",
