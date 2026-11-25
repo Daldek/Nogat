@@ -4,7 +4,7 @@
 
 ## Purpose and scope
 
-Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman and Archiwista. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
+Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman, Archiwista and Goniec. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
 
 Use it to find the tool for a task and the command to start with, then read that tool's guide, linked in the table; and to plan a change that spans projects: a plan in `docs/plans/` comes first, producers before consumers.
 
@@ -75,6 +75,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
+| Goniec | research | QGIS plugin `goniec` | QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series. |
 
 ## Calling a tool
 

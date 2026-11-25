@@ -18,8 +18,12 @@ Requirements apply to all projects unless marked with a profile.
 | `tool` | Installable Python package; CLI, MCP and REST optional | Kartograf, Obserwator, Hydrolog, Retman, Hydraulik |
 | `app` | Deployed service (web UI, server) | Obserwator (web GUI), Hydrograf, Archiwista |
 | `hub` | Registry, standard and user package | Nogat |
+| `plugin` | QGIS plugin, a client of the tools' servers; distributed through plugins.qgis.org | Goniec |
 
-A project may have several profiles; `ecosystem.yaml` is authoritative.
+A project may have several profiles; `ecosystem.yaml` is authoritative. A
+plugin has no package on PyPI, CLI, MCP, REST interface or command catalog,
+so no requirement about them applies to it, and uv runs its development
+tools only (ECO-094).
 
 **DEV-1.1** Each project MUST declare its profiles in `ecosystem.yaml` and in
 the first section of `CLAUDE.md`.
@@ -154,8 +158,11 @@ checked again.
 ## 5. Repository layout
 
 **DEV-5.1** (`tool`, `hub`) Package code MUST be in `src/<package>/`. (`app`)
-Another layout MAY be used and is described in `CLAUDE.md`.
-*Why:* ECO-011.
+Another layout MAY be used and is described in `CLAUDE.md`. (`plugin`) Its
+code MUST be in `<folder>/` at the root, the folder QGIS loads, released as a
+ZIP of that folder.
+*Why:* ECO-011; QGIS loads a plugin from its folder, and plugins.qgis.org
+takes a ZIP of it (ECO-094).
 
 **DEV-5.2** Standard top level:
 
@@ -1212,6 +1219,8 @@ every surface with the data or results derived from them:
 | API, REST, MCP | the fields `attribution` and `terms_notice` of the response (DEV-20.6, DEV-20.7) |
 | CLI | the human-readable output that prints data or results |
 | model inputs | a header comment of the file, or `ATTRIBUTION.txt` beside it where the format has no comments |
+| clipboard copy | none in the clipboard, which holds the values only; the lines stay visible beside the copy button, and every file saved of the same data carries them |
+| desktop GIS layer | the layer's metadata: the abstract and licences that its service gives (an OGC API collection's `description` and `rel="license"` links), the rights and attribution that the client adding it sets; the client's panel with the data shows the lines as a GUI's strip does |
 
 `ATTRIBUTION.txt` is UTF-8 with one line per line, the attribution lines and
 then the terms lines of DEV-20.7, in order; a later write to the same place
@@ -1242,7 +1251,8 @@ IMGW-PIB and PMAXTP terms require their sentences on the product, while CC
 BY 4.0 lets a link carry ČHMÚ's details (ECO-064) and PIG-PIB's (ECO-092);
 GUGiK, ISRIC and ČÚZK are named the same way, their full lines one click
 away (ECO-068); a line the kit does not know reaches the strip only as the
-GUI declares it (ECO-087).
+GUI declares it (ECO-087); a paste target such as HEC-RAS's table takes
+values only, so the lines of a copy stay beside its button (ECO-094).
 
 **DEV-20.6** A JSON document, result or hand-off (DEV-15.5) with such data has
 `attribution`, an array of the lines as strings. A consumer shows the lines it

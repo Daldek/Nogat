@@ -3,7 +3,7 @@
 Standard 1.3 · in preparation on `develop`; the published version is 1.2, tagged `std-1.2` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
-Retman, Archiwista and Nogat. AI agents are their primary operators, so the
+Retman, Archiwista, Goniec and Nogat. AI agents are their primary operators, so the
 tools must be easy to discover, judge and call correctly, and safe to develop.
 
 ## Zen of Nogat
@@ -41,17 +41,19 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
   disappears and the changelog lists it. Cite IDs in ADRs, plans and commit
   bodies.
 - Profiles are `tool` (installable Python package; CLI, MCP and REST
-  optional), `app` (deployed service) and `hub` (Nogat), defined in DEV §1. A
-  requirement or section that names a profile applies only to projects that
-  have it.
+  optional), `app` (deployed service), `hub` (Nogat) and `plugin` (QGIS
+  plugin), defined in DEV §1. A requirement or section that names a profile
+  applies only to projects that have it.
 - Placeholders, defined here once:
   - `<project>`: the project name in lower case as in `nogat-<project>`:
-    kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista;
+    kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista,
+    goniec;
   - `<Project>`: the project name as in the registry (Kartograf, Obserwator, …);
   - `<tool>`: the CLI name, `interfaces.cli` in `ecosystem.yaml`: kartograf,
     obserwator, hydrolog, retman, archiwista, hydraulik; `<TOOL>` is its upper
     case;
-  - `<package>`: the Python import name (`distribution.import_name`).
+  - `<package>`: the Python import name (`distribution.import_name`);
+  - `<folder>`: a plugin's folder in QGIS (`distribution.qgis`).
 
 ## Documents
 
@@ -132,11 +134,24 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     verified ones; G, SG and Z take the orders 9 to 11, their order
     unchanged; the regulamin's template gains the block `pig`, in place
     (DEV §20, DEV-20.5, DEV-20.7, DEV-20.8, DEV-20.13, ECO-092).
+  - Goniec, a QGIS plugin over the tools' servers under GPL-2.0-or-later,
+    is a project of the ecosystem, of the new profile `plugin`: no PyPI
+    package, CLI, MCP, REST interface, command catalog or routes, its code
+    in `<folder>/` at the root, released as a ZIP of it through
+    plugins.qgis.org, the folder `distribution.qgis` in the registry; a
+    server says what it serves in `nogat-server/1` at `GET /api/v1/server`,
+    on a tool's own server and on Latarnik alike; a clipboard copy holds the
+    values only, the lines beside its button, and a desktop GIS layer
+    carries them in its metadata (DEV §1, DEV-5.1, DEV-20.5, HUB-1.1,
+    HUB-2.1, HUB-2.9, ECO-094).
   - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
     `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
     the lines W, WP and WK of `<nogat-sources>`, and regulamin 1.1, whose
-    § 8 ust. 7 names the base map among the settings the browser keeps and
-    whose § 5 holds the block `pig` (ECO-089, ECO-090, ECO-092).
+    § 8 ust. 7 names the base map among the settings the browser keeps,
+    whose § 5 holds the block `pig` and whose § 4 ust. 2 and § 6 ust. 2 name
+    a service's API and the programs using it, Goniec among them, the API
+    within the limit of requests being the way for programs (ECO-089,
+    ECO-090, ECO-092, ECO-094).
 - 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
   - A released document, store layout or identifier grammar stays at its
     `/N` when a change adds a new value of an existing field or a new form

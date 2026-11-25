@@ -74,6 +74,26 @@ the standard are listed in [standards/README.md](standards/README.md).
   sources, its planned `pig-json/1` and PIG-PIB in the summaries of
   `obserwator-store/1`, `obserwator-archives`, `obserwator-data/1` and
   `archiwista-raw-root`; `docs/ECOSYSTEM_MAP.md` regenerated.
+- Goniec, a QGIS plugin over the tools' servers (ECO-094, step N1 of
+  `docs/plans/2026-11-24-qgis-plugin.md`): the profile `plugin` in DEV §1,
+  its code in `<folder>/` at the root (DEV-5.1) and no routes (HUB-2.9);
+  `schemas/ecosystem.schema.json` takes the profile and `distribution.qgis`,
+  `validate` refuses that folder outside a plugin and takes a plugin
+  without routes, AGENTS.md lists it as „QGIS plugin `<folder>`”, and the
+  lists of Python distributions in `standards/ci/` leave it out.
+  `schemas/exchange/server-1.schema.json`, `nogat-server/1`, what a server
+  serves at `GET /api/v1/server` (services with their tool, version, API
+  majors, capabilities, OGC API, GUI, instance, regulamin and lines;
+  Latarnik's `state`, `release_set` and `flows`), with contract tests.
+  DEV-20.5 rows for a clipboard copy and a desktop GIS layer. Regulamin 1.1
+  and the operator's draft name a service's API and the programs using it,
+  Goniec among them (§ 4 ust. 2), and the API within the limit of requests
+  as the way for programs (§ 6 ust. 2), `nogat-terms.html` regenerated,
+  within kit `1.3.0`. `ecosystem.yaml`: Goniec (`research`) with its
+  planned runtime dependency on Obserwator over REST, and Obserwator's
+  planned `obserwator-ogcapi` and `obserwator-hec`; `docs/ECOSYSTEM_MAP.md`
+  and `AGENTS.md` regenerated. Goniec's mark `design/marks/goniec.svg` and
+  its accent `--tool-goniec`.
 
 ### Changed
 
