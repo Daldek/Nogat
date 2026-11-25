@@ -3,8 +3,8 @@
 Audited on 2026-11-15 against Nogat's `develop` (`c9a0516`), updated 2026-11-16 by the
 candidate's lock, `verify-candidate`, the integration run, the members' releases, Nogat's
 release `v0.1.0` with standard 1.0 (`std-1.0`, 2026-11-17), the closed set `kaczawa`/`2026-1`
-and the `origin/develop` of the projects after `git fetch`, and on 2026-11-22 for Nogat
-`v0.2.0` with standard 1.1 (`std-1.1`); release-set pins by `set check`.
+and the `origin/develop` of the projects after `git fetch`, on 2026-11-22 for Nogat `v0.2.0`
+(`std-1.1`) and on 2026-11-25 for `v0.3.0` (`std-1.2`); release-set pins by `set check`.
 History is the git log, the CHANGELOG and each plan's Results (DOC-6.1). IMGWTools is
 called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the directory
 `IMGWTools`.
@@ -38,6 +38,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Long jobs (DEV-17.6, ECO-073) | done | merged 2026-11-15 (`c0a9f36`); long-running tasks run as user systemd units outside the agent's session |
 | Standard 1.0 | done 2026-11-17 | published to `main` with `v0.1.0`, its merge commit tagged `std-1.0` (HUB-6.1, ADOPTION_PLAN 0.4); the drafts called 2.0 and 2.1 on `develop` are 1.0 (ECO-056); the root-owned legacy `standards/templates/` and `standards/configs/` reached `main` unchanged (ADOPTION_PLAN 0.1, a known deviation) |
 | Standard 1.1 | done, in 0.2.0 | published to `main` with `v0.2.0`, its merge commit tagged `std-1.1` (HUB-6.1): COMPUTATIONS.md (CMP, ECO-078), the operator's instance (ECO-079), the strip folded on a phone (ECO-080), kit 1.1.0 (ECO-081), providers by national acronyms (DEV-2.5, ECO-082) and one pattern of file names (DEV-19.21, ECO-083); the changelog of `standards/README.md` lists them |
+| Standard 1.2 | done, in 0.3.0 | published to `main` with `v0.3.0` on 2026-11-25, its merge commit tagged `std-1.2` (HUB-6.1): operational data kept as captures and shown only as their tier (DEV-20.8, ECO-084), new values within `/N` (ECO-085, AGI-4.1), the `forbidden` reasons of credentials, CAMELS-PL as a source (ECO-086) with RD and its licence (ECO-088), one table of provider lines (ECO-087) and kit 1.2.0; the changelog of `standards/README.md` lists them |
 | Registry and schema | done | `ecosystem.yaml`, `schemas/ecosystem.schema.json`; `routes` name the commands of every tool's integration branch (HUB-2.9) |
 | `validate`, `map`, `agents`, `deps`, `drift`, `standard`, `set` | done | `scripts/ecosystem.py`, errors by the registry (HUB-4.8); `drift` also reports the projects' copies of the schemas, the error registry, `nogat_logging.py`, `nogat_formulas.py`, the tokens, the marks and the kit (HUB-4.1, DEV-15.6) |
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` (unit, integration, contract, browser) |
@@ -45,19 +46,19 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
-| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 in 0.2.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081) and 1.2.0 on `develop` (`screen-lines`, the blocks `camels-pl` and `e-obs`; ECO-086, ECO-087), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal 1.1.0 in their releases of `v0.2.0` |
-| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080, ECO-086, ECO-087) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. DEV §20 is one table of provider lines that DEV-20.4 orders (ECO-087), with CAMELS-PL's, E-OBS's and G2DC-PL+'s lines (ECO-086) on `develop`. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
+| Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 in 0.2.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081) and 1.2.0 in 0.3.0 (`screen-lines`, the blocks `camels-pl` and `e-obs`; ECO-086, ECO-087), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal 1.1.0 in their releases of `v0.2.0` |
+| Provider attribution and regulamin (DEV §20, ECO-060 to ECO-065, ECO-068, ECO-071, ECO-080, ECO-086, ECO-087) | done in Nogat | CP is exactly „Dane ČHMÚ zostały przetworzone”; old CP lines with details count as CP. DEV §20 is one table of provider lines that DEV-20.4 orders (ECO-087), with CAMELS-PL's, E-OBS's and G2DC-PL+'s lines (ECO-086) in standard 1.2. Regulamin 1.0, corrected in place (ECO-068, ECO-071; kit 1.0.0) and republished 2026-11-14 (`terms_effective` 2026-11-14) by Hydrograf, Hydrolog and Obserwator; only the author raises its version. One `<nogat-sources>` strip per view in the four GUIs, folded to one line on a phone (ECO-080) in their releases of `v0.2.0`; plans `2026-11-13-provider-attribution.md`, `2026-11-13-gui-terms.md`, `2026-11-13-compact-attribution.md`, `2026-11-13-terms-fix.md`, `2026-11-21-phone-sources-strip.md` |
 | Unified logging (DEV-12.4 to DEV-12.9, ECO-066) | done | Nogat, Hydrograf, Hydrolog, Obserwator (GUI, REST server) and Archiwista (step 6, its A-ADR-057, `8573a93`) merged; deleting the journal entries written before the migration waits for the author's root step; plan `2026-11-13-unified-logging.md` |
 | Formula reference module (CMP-8.1, standard 1.1) | done, in 0.2.0 | `standards/reference/nogat_formulas.py` and `schemas/formula/card-1.schema.json`, tested against right and wrong toy formulas (CMP-8.2); step 2 of plan `2026-11-18-computation-standard.md`; Hydrolog 0.9.0 copies it |
 | Admin panel (DEV-15.13, ECO-067) | done | at `/admin/` in Hydrograf, Hydrolog and Obserwator, deployed 2026-11-14; Archiwista has no `/admin/` page: its view „Zgłoszenia” uses `/api/v1/admin/feedback` with its sign-in and `feedback.manage` (step 5 of the plan; a deviation in its CLAUDE.md since `5aced6c`, released in `v0.3.0`); Cloudflare Access per path set by the author on 2026-11-23; plan `2026-11-13-admin-panel.md` |
 | Info texts (DEV-15.14, ECO-069) | done in Nogat | merged 2026-11-14 (`6e4e71b`); the GUIs revise their texts (Next 2) |
 | Regulamin link without a footer (DEV-15.7, DEV-15.8, ECO-070) | done | merged 2026-11-14 (`3a161ca`); Hydrograf, Hydrolog and Obserwator merged and deployed the same day; plan `2026-11-14-no-footer.md` |
-| One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.2.0`: the round's candidate, verified by `verify-candidate`, at the tags Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0` and Archiwista `v0.3.3`. Before it candidate-6 became `v0.1.0` and candidate-10 `v0.1.1`. Retman and Hydraulik differ until they apply a later set |
-| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3`; 2026-11-23 (Next 17): Obserwator `v3.2.0` and Archiwista `v0.4.0` outside a release set (REL-6.6 deviation: the author's decision that Nogat's release waits; the next set carries them) |
-| `verify-candidate` (REL-6.5, ECO-077) | done | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` since `v0.1.0`; it verified candidate-7 (after its releases), candidate-10 (`v0.1.1`) and the round's candidate (`v0.2.0`) on the three runners; candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
+| One set of pins (HUB-4.9, REL-6.4) | done for the members | `v0.3.0`: candidate-15, verified by `verify-candidate` (run 45515449114), at the tags Kartograf `v0.9.0`, Obserwator `v3.2.1`, Hydrolog `v0.9.1`, Hydrograf `v0.6.1` and Archiwista `v0.4.1`. Before it candidate-6 became `v0.1.0`, candidate-10 `v0.1.1` and candidate-12 `v0.2.0` (Kartograf `v0.8.2`, Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3`). Retman and Hydraulik differ until they apply a later set |
+| Members' releases (REL-2.1, REL-6.6) | done | tags on `main`: Kartograf `v0.8.0`, Obserwator `v3.0.0`, Hydrolog `v0.8.0`, Hydrograf `v0.5.0`, Archiwista `v0.3.0` on 2026-11-16 (`docs/plans/2026-11-16-candidate-5-integration.md`, „candidate-6 and the releases”; merged locally without pull requests, `gh` is not installed, with the author's approval); the patches of Next 7; the round of 2026-11-21 (Next 16): Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3`; 2026-11-23 (Next 17): Obserwator `v3.2.0` and Archiwista `v0.4.0` outside a release set (REL-6.6 deviation: the author's decision that Nogat's release waits; `v0.3.0` carries them); 2026-11-25 (Next 8): Kartograf `v0.9.0` (CAMELS-PL, RD), Obserwator `v3.2.1` (the fix of its feedback #10), Hydrolog `v0.9.1`, Hydrograf `v0.6.1` and Archiwista `v0.4.1` (pins only) |
+| `verify-candidate` (REL-6.5, ECO-077) | done | `set verify` and `.github/workflows/verify-candidate.yml`, on `main` since `v0.1.0`; it verified candidate-7 (after its releases), candidate-10 (`v0.1.1`), candidate-12 (`v0.2.0`) and candidate-15 (`v0.3.0`, run 45515449114: green on Python 3.12 on all three OSes; the experimental 3.15 job's one Obserwator e2e failure does not block) on the three runners. candidate-13 failed on Windows (CRLF in Kartograf's `ATTRIBUTION.txt`) and macOS (a race in Obserwator's groundwater e2e test), candidate-14 on Linux (`systemd-analyze` warning about the runner's own units in Obserwator's test), each fixed in the member; candidate-6 was verified only on this machine by `set verify` (REL-6.5 deviation) |
 | Final integration run | done 2026-11-16 | at candidate-5 (`docs/plans/2026-11-16-candidate-5-integration.md`): every member passes in the candidate's environment and on its own lock except the known failures C1 to C6, and C7 came up in the gate of Obserwator's release commit; all are left to the next releases by the author's decision (Kartograf: `obserwator-data.json` not a store; Archiwista: a umask-dependent test and two Firefox 159 crashes with the set's Playwright 1.65.2; Obserwator: a test that depends on the length of `TMPDIR`) |
-| Nogat's version (ECO-076) | done, 0.2.0 | `v0.2.0` with `std-1.1`, the release set `release-sets/v0.2.0/` (REL-6.6); `v0.1.1` (`a973bf0`) 2026-11-20, the patch release set from `main` (REL-2.4), merged back into `develop`; `v0.1.0` 2026-11-17; `1.0.0` only by the author's decision (HUB-7.4) |
-| `nogat` package (HUB §7) | planned | not in `v0.2.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.2.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
+| Nogat's version (ECO-076) | done, 0.3.0 | `v0.3.0` 2026-11-25 with `std-1.2`, the release set `release-sets/v0.3.0/` (REL-6.6); `v0.2.0` 2026-11-22 with `std-1.1`; `v0.1.1` (`a973bf0`) 2026-11-20, the patch release set from `main` (REL-2.4), merged back into `develop`; `v0.1.0` 2026-11-17; `1.0.0` only by the author's decision (HUB-7.4) |
+| `nogat` package (HUB §7) | planned | not in `v0.3.0`: the set installs as an environment, `uv sync --locked --no-dev --python 3.12` in `release-sets/v0.3.0/`, not with `uv tool install` (ADOPTION_PLAN 5.4; a deviation from HUB-7.1, HUB-7.2 and REL-6.1, CLAUDE.md) |
 
 ## Next
 
@@ -192,15 +193,17 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
      or hides the unreliable periodic curves with a warning, and its station
      card says that IMGW's daily Q are derived from IMGW's own rating
      curves, not measured.
-8. The round without a Nogat release (the author's decision of 2026-11-23): no Nogat release and no
-   `std-*` tag; standard 1.2 accumulates on `develop` (HUB-6.1): ECO-084, ECO-085, DEV-20.8, the `forbidden`
-   reasons, ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087 (P9's table of provider lines; `screen-lines`
-   for Obserwator's provider fed by files, I13) and kit `1.2.0`. On the members' `develop` (pushed 2026-11-24, not
-   released): Kartograf `0.9.0.dev0` (CAMELS-PL step 2, its ADR-062), Hydrolog `0.10.0.dev0`
-   (step 5, its ADR-0073; CAMELS-PL's BFI uses another filter, recorded, not matched), Obserwator
-   `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`). ECO-088 (2026-11-24): RD on what
-   CAMELS-PL took from IMGW-PIB (Kartograf `630af02d`), its licence by the Zenodo record, BFI
-   not reported for now. Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
+8. The round of 2026-11-24, released 2026-11-25 as the set `v0.3.0` (candidate-15, run 45515449114) with Nogat
+   `0.3.0` and standard 1.2 (`std-1.2`); the author's „Tak, wydajemy w proponowanym zakresie” (2026-11-24, pin-only
+   patches of the consumers) replaced his decision of 2026-11-23 of a round without a Nogat release. Standard 1.2:
+   ECO-084, ECO-085, DEV-20.8, the `forbidden` reasons, ECO-086 (CAMELS-PL, step 1 of its plan), ECO-087 (P9's
+   table of provider lines; `screen-lines` for Obserwator's provider fed by files, I13), ECO-088 (2026-11-24: RD on
+   what CAMELS-PL took from IMGW-PIB, Kartograf `630af02d`; its licence by the Zenodo record; BFI not reported for
+   now) and kit `1.2.0`. Members (Members' releases): Kartograf `v0.9.0` (CAMELS-PL step 2, its ADR-062, with RD),
+   Obserwator `v3.2.1`, Hydrolog `v0.9.1`, Hydrograf `v0.6.1`, Archiwista `v0.4.1`. On the members' `develop`
+   (pushed 2026-11-24, not released): Hydrolog `0.10.0.dev0` (step 5, its ADR-0073; CAMELS-PL's BFI uses another
+   filter, recorded, not matched), Obserwator `3.3.0.dev0` (the provider fed by files, its ADR-033, kit `1.2.0`).
+   Deleting `feature/verify-candidate` and `chore/candidate-6` is the author's.
 9. Retman and Hydraulik join a later set (ECO-074): each applies its pins
    and does step 4 of `docs/plans/2026-11-03-numbering-from-main.md`
    (references and the emitted `standard_version`; Hydraulik's
@@ -242,26 +245,19 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
     `v3.3.0` (the author, 2026-11-22). The lawyer's review of the operator's
     draft regulamin waits for an actual deployment at a client (the author,
     2026-11-23) and blocks no release.
-16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12,
-    run 45048681845; CI of every `main` passed): Obserwator `3.1.0`, Hydrolog
-    `0.9.0`, Hydrograf `0.6.0`, Archiwista `0.3.3`, Kartograf `0.8.2`
-    unchanged, Nogat `0.2.0` with `std-1.1`; deployed 2026-11-22/23
-    (Deployment and storage). No member has a publish workflow (REL-2.1
-    step 5), as in the earlier releases. Next: Archiwista `0.3.4` (the race
-    of `test_worker_logs_warnings_and_errors_as_app_records_and_deletes_nothing`),
-    Obserwator `v3.2.0` (Next 17), Hydrograf `0.7.0`, steps 7 and 10 of the
-    computation standard. The plans `2026-11-20-hydromet-providers.md` and
-    `2026-11-16-operational-series.md` were reviewed and approved by Fable for
-    the author on 2026-11-23 (Next 17); CAMELS-PL (`2026-11-22-camels-pl.md`)
-    is approved, Obserwator `v3.4.0`.
-17. Obserwator `v3.2.0` and Archiwista `v0.4.0`, released 2026-11-23 outside a
-    release set (Members' releases): the plans `2026-11-16-operational-series.md`
-    and `2026-11-20-hydromet-providers.md` (approved by Fable for the author,
-    review `~/workspace/wt/logs/fable-obserwator-3.2.0.md`), their Results.
-    Production (D1) is the author's: Archiwista `0.4.0` first, then Obserwator
-    `3.2.0`, `[obserwator.capture]`, the first backup, the timers, the backfill.
-    Next in the members (Next 8): Obserwator `v3.3.0` (the provider fed by
-    files; Gdańskie Wody waits for its terms), Kartograf's CAMELS-PL product, Hydrolog `0.10.0`; CAMELS-PL `v3.4.0`. PIG-PIB's groundwater monitoring in Obserwator `v3.3.0` (plan `docs/plans/2026-11-24-pig-groundwater.md`; approved 2026-11-24 by Fable for the author, review `~/workspace/wt/logs/fable-pgi-groundwater.md`): the points, the monthly readings (verified; each publication captured before the service replaces it) and the hourly automatic measurements (operational, by `OBJECTID` watermark) of `cbdgmapa.pgi.gov.pl`'s `hydrogeologia/mwp` and `mwp_auto`; provider `PIG`, class `other`, CC BY 4.0 by dane.gov.pl's record 170; the lines W, WP, WK and the terms line RW (an ECO decision and a new rule of DEV §20 when they land). S0, the operator's interim capture, runs from 2026-11-24 outside every store; the release's O4 imports it.
+16. Release round of 2026-11-21, released as the set `v0.2.0` (candidate-12, run 45048681845; CI of every `main`
+    passed): Obserwator `3.1.0`, Hydrolog `0.9.0`, Hydrograf `0.6.0`, Archiwista `0.3.3`, Kartograf `0.8.2`
+    unchanged, Nogat `0.2.0` with `std-1.1`; deployed 2026-11-22/23 (Deployment and storage). No member has a
+    publish workflow (REL-2.1 step 5), as in the earlier releases. Next: Archiwista `0.3.4` (the race of
+    `test_worker_logs_warnings_and_errors_as_app_records_and_deletes_nothing`), Hydrograf `0.7.0`, steps 7 and 10
+    of the computation standard; Obserwator `v3.2.0` followed (Next 17). CAMELS-PL (`2026-11-22-camels-pl.md`) is
+    approved, Obserwator `v3.4.0`.
+17. Obserwator `v3.2.0` and Archiwista `v0.4.0`, released 2026-11-23 outside a release set, carried by `v0.3.0`:
+    the plans `2026-11-16-operational-series.md` and `2026-11-20-hydromet-providers.md` (approved 2026-11-23 by
+    Fable for the author, review `~/workspace/wt/logs/fable-obserwator-3.2.0.md`), their Results. Production (D1)
+    is the author's: Archiwista `0.4.0` first, then Obserwator `3.2.0`, `[obserwator.capture]`, the first backup,
+    the timers, the backfill. Next in the members: Obserwator `v3.3.0` (the provider fed by files; Gdańskie Wody
+    waits for its terms), Hydrolog `0.10.0`; CAMELS-PL `v3.4.0` (Kartograf's product is in `v0.9.0`). PIG-PIB's groundwater monitoring in Obserwator `v3.3.0` (plan `docs/plans/2026-11-24-pig-groundwater.md`; approved 2026-11-24 by Fable for the author, review `~/workspace/wt/logs/fable-pgi-groundwater.md`): the points, the monthly readings (verified; each publication captured before the service replaces it) and the hourly automatic measurements (operational, by `OBJECTID` watermark) of `cbdgmapa.pgi.gov.pl`'s `hydrogeologia/mwp` and `mwp_auto`; provider `PIG`, class `other`, CC BY 4.0 by dane.gov.pl's record 170; the lines W, WP, WK and the terms line RW (an ECO decision and a new rule of DEV §20 when they land). S0, the operator's interim capture, runs since 2026-11-24 outside every store into the staging `/mnt/magazyn/agent-tmp/obserwator-staging/pig/`: the user timers `pig-capture.timer` (daily 07:15), `pig-capture-backfill.timer` (the backfill of `mwp_auto`, nightly) and `pig-capture-backup.timer` (the weekly copy, Sunday 07:30); the release's O4 imports it.
 18. Large basins in one Hydrograf instance: plan `docs/plans/2026-11-16-large-basins.md` (merged into `develop` at `160db1d`), approved by the author on 2026-11-24 with his answers to Fable's review (`~/workspace/wt/logs/fable-large-basins.md`): the network's topology, then parts of whole JCWP within 90 M grid cells checked before any bootstrap, several basins in one database, the cell size his per basin (5 m for the Barycz and the Bóbr). Hydrograf `0.9.0`, after `0.7.0`'s small steps and `0.8.0`'s MapLibre move.
 19. Interval estimation beside point estimation (Obserwator feedback #13): plan `docs/plans/2026-11-24-interval-estimation.md`, approved by the author on 2026-11-24 with the answers to its questions 1 to 6, reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-interval-estimation.md`): Hydrolog computes the intervals of the flood, precipitation and low-flow quantiles (a parametric bootstrap of the L-moments fits, KZGW 2017's delta method of the maximum-likelihood fits) at 95 % and 68 %, Obserwator stores both and shows them, selectable, as bands and „[dolna–górna]”; N1 first, then Hydrolog `0.10.0`, then Obserwator (`v3.4.0` or `v3.5.0`, whichever first runs Hydrolog `0.10.0`), one `analyses build` after both.
 20. Approved by the author on 2026-11-24 after Fable's reviews (`~/workspace/wt/logs/fable-{unified-charts,qgis-plugin,latarnik,shared-base-maps,hydrograf-maplibre}.md`), merged into `develop`: `docs/plans/2026-11-24-unified-charts.md` (one chart module in the kit, Obserwator feedback #9), `2026-11-24-qgis-plugin.md` (Goniec, feedback #11; Obserwator `v3.6.0`), `2026-11-24-latarnik.md` (item 12), `2026-11-24-shared-base-maps.md` (answers 1–9, amended) and `2026-11-24-hydrograf-maplibre.md` (Hydrograf `0.8.0` at the earliest); Kartograf's GUI is its own plan (Kartograf `plan/kartograf-gui`).

@@ -10,6 +10,27 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- Release set `v0.3.0` (`release-sets/v0.3.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-24: candidate-15, verified by the
+  workflow `verify-candidate` (run 45515449114, Python 3.12 on Linux, macOS
+  and Windows), with each member's commit replaced by its annotated release
+  tag, Kartograf `v0.9.0`, Obserwator `v3.2.1`, Hydrolog `v0.9.1`,
+  Hydrograf `v0.6.1` (an app on its own lock, not installed by the set) and
+  Archiwista `v0.4.1`. It carries Kartograf 0.9.0 with the catchments and
+  gauging stations of CAMELS-PL and their terms line RD (ECO-086, ECO-088),
+  Obserwator 3.2.0 and Archiwista 0.4.0, released on 2026-11-23 outside a
+  release set, and Obserwator 3.2.1's fix of its feedback #10; Hydrolog
+  0.9.1, Hydrograf 0.6.1 and Archiwista 0.4.1 change only their pins.
+  candidate-13 failed on Windows (Kartograf's `ATTRIBUTION.txt` with CRLF
+  endings) and macOS (a race in Obserwator's e2e test of groundwater) and
+  candidate-14 on Linux (`systemd-analyze` warning about the runner's own
+  units in Obserwator's test), each fixed in the member. As before, the set
+  is installed as an environment, `uv sync --locked --no-dev --python 3.12`
+  in `release-sets/v0.3.0/`, not with `uv tool install` (a deviation from
+  HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.2 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.2` (HUB-6.1); its changes (ECO-084 to
+  ECO-088, kit `1.2.0`) are listed in `standards/README.md`.
 - PIG-PIB's groundwater monitoring in Obserwator `v3.3.0`, a plan
   (`docs/plans/2026-11-24-pig-groundwater.md`), reviewed and approved by
   Fable for the author on
@@ -96,9 +117,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   captures of every answer (P14–P16), provider credentials, `time_unit`
   `hour`, ČHMÚ's groundwater. Step N0 of the first plan is in this entry.
   Released 2026-11-23 as Obserwator `v3.2.0` with Archiwista `v0.4.0`
-  outside a release set (a REL-6.6 deviation; Nogat's release waits by the
-  author's decision); the plans' Results record them, and the registry
-  describes the captures and the hourly series as released.
+  outside a release set (a REL-6.6 deviation; Nogat's release waited by the
+  author's decision, and the set `v0.3.0` carries them); the plans' Results
+  record them, and the registry describes the captures and the hourly
+  series as released.
 - The reasons `missing_credentials` and `invalid_credentials` of `forbidden`
   in the error registry, for a data provider's credential that is missing
   or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes
@@ -167,6 +189,7 @@ the standard are listed in [standards/README.md](standards/README.md).
   origin named in the CSP; and no REL-1.1 deviation in Obserwator `v3.5.0`,
   which keeps its two base-map settings deprecated and translates them at
   start.
+- README installs the set `v0.3.0` and names standard 1.2.
 
 ## [0.2.0] - 2026-11-22
 

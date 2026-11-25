@@ -6,7 +6,7 @@ Retman and Archiwista.
 
 Nogat holds:
 
-- the shared standard for all projects, 1.1 (tag `std-1.1`):
+- the shared standard for all projects, 1.2 (tag `std-1.2`):
   [`standards/`](standards/README.md);
 - the project registry: [`ecosystem.yaml`](ecosystem.yaml), validated by
   [`schemas/ecosystem.schema.json`](schemas/ecosystem.schema.json);
@@ -24,16 +24,16 @@ Nogat holds:
   [`standards/reference/nogat_formulas.py`](standards/reference/nogat_formulas.py),
   [`schemas/formula/`](schemas/formula/card-1.schema.json).
 
-The ecosystem's current release, `v0.2.0`, is the release set
-[`release-sets/v0.2.0/`](https://github.com/Daldek/Nogat/tree/v0.2.0/release-sets/v0.2.0):
-Kartograf 0.8.2, Obserwator 3.1.0, Hydrolog 0.9.0 and Archiwista 0.3.3 at
+The ecosystem's current release, `v0.3.0`, is the release set
+[`release-sets/v0.3.0/`](https://github.com/Daldek/Nogat/tree/v0.3.0/release-sets/v0.3.0):
+Kartograf 0.9.0, Obserwator 3.2.1, Hydrolog 0.9.1 and Archiwista 0.4.1 at
 their release tags, with every third-party package at one verified version;
-Hydrograf 0.6.0, an app, is released by its own tag at the same producers.
-It publishes standard 1.1. Install it as an environment:
+Hydrograf 0.6.1, an app, is released by its own tag at the same producers.
+It publishes standard 1.2. Install it as an environment:
 
 ```bash
-git clone --branch v0.2.0 https://github.com/Daldek/Nogat
-cd Nogat/release-sets/v0.2.0
+git clone --branch v0.3.0 https://github.com/Daldek/Nogat
+cd Nogat/release-sets/v0.3.0
 uv sync --locked --no-dev --python 3.12
 ```
 
