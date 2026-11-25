@@ -747,8 +747,16 @@ def test_english_words_replace_the_texts_and_the_names(
 
 def test_names_are_polish_by_default(tabs: Callable[..., Tab]) -> None:
     tab = tabs("maplibre")
+    city = "{layers: ['nogat-basemap-city']}"
+    # Tiles loaded is not labels placed: under load the symbols come frames later,
+    # so wait for a repaint to end idle and for the layer's labels to be drawn.
+    tab.page.evaluate(
+        "() => new Promise(done => { const m = window.basemapTest.map;"
+        " m.once('idle', done); m.triggerRepaint(); })"
+    )
+    tab.wait(f"t => t.map.queryRenderedFeatures({city}).length > 0")
     names = tab.run(
-        "t => t.map.queryRenderedFeatures({layers: ['nogat-basemap-city']})"
+        f"t => t.map.queryRenderedFeatures({city})"
         ".map(f => f.layer.layout['text-field'].sections.map(s => s.text).join(''))"
     )
     assert "Warszawa" in names and "Warsaw" not in names
