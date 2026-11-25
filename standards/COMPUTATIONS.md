@@ -1,6 +1,6 @@
 # Computations: formulas, their limits and their verification
 
-Part of standard 1.1 · IDs `CMP-…`
+Part of standard 1.2 · IDs `CMP-…`
 
 The tools compute hydrological, meteorological and geographical quantities
 that engineers and researchers rely on, and academics audit the formulas. A
@@ -269,6 +269,16 @@ Formula tests carry the marker `formula`.
 `gate` (deterministic, 50 examples), `ci` (1,000 examples, cached database)
 and `nightly` (20,000 examples). Every counterexample found is pinned with
 `@example` beside its property.
+
+**CMP-6.10** *Published data sets.* A data set that publishes both the
+inputs of a formula and its authors' outputs (CAMELS-PL's daily discharge
+and its hydrological signatures) gives reference cases pinned to one
+release: its record, version, DOI and the SHA-256 of each file read are
+stored with the cases, each case names the authors' conventions (CMP-2.3),
+and a newer release changes the cases only by a deliberate change of the
+tests. Such outputs are computed, not measured, so a difference is checked
+against a second source before it counts against the formula (CMP-5.2).
+*Why:* a release may correct values of the one before it (ECO-086).
 
 ---
 

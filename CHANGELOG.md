@@ -6,6 +6,191 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-25
+
+### Added
+
+- Release set `v0.3.0` (`release-sets/v0.3.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-24: candidate-15, verified by the
+  workflow `verify-candidate` (run 45515449114, Python 3.12 on Linux, macOS
+  and Windows), with each member's commit replaced by its annotated release
+  tag, Kartograf `v0.9.0`, Obserwator `v3.2.1`, Hydrolog `v0.9.1`,
+  Hydrograf `v0.6.1` (an app on its own lock, not installed by the set) and
+  Archiwista `v0.4.1`. It carries Kartograf 0.9.0 with the catchments and
+  gauging stations of CAMELS-PL and their terms line RD (ECO-086, ECO-088),
+  Obserwator 3.2.0 and Archiwista 0.4.0, released on 2026-11-23 outside a
+  release set, and Obserwator 3.2.1's fix of its feedback #10; Hydrolog
+  0.9.1, Hydrograf 0.6.1 and Archiwista 0.4.1 change only their pins.
+  candidate-13 failed on Windows (Kartograf's `ATTRIBUTION.txt` with CRLF
+  endings) and macOS (a race in Obserwator's e2e test of groundwater) and
+  candidate-14 on Linux (`systemd-analyze` warning about the runner's own
+  units in Obserwator's test), each fixed in the member. As before, the set
+  is installed as an environment, `uv sync --locked --no-dev --python 3.12`
+  in `release-sets/v0.3.0/`, not with `uv tool install` (a deviation from
+  HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.2 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.2` (HUB-6.1); its changes (ECO-084 to
+  ECO-088, kit `1.2.0`) are listed in `standards/README.md`.
+- PIG-PIB's groundwater monitoring in Obserwator `v3.3.0`, a plan
+  (`docs/plans/2026-11-24-pig-groundwater.md`), reviewed and approved by
+  Fable for the author on
+  2026-11-24: the points, the monthly verified readings captured before each
+  swap, the hourly automatic measurements as an operational tier harvested
+  by `OBJECTID` watermark, the provider `PIG` of class `other` under CC BY
+  4.0, the lines W, WP, WK and the terms line RW; an interim capture by the
+  operator from 2026-11-24.
+- Large basins in one Hydrograf instance, a plan
+  (`docs/plans/2026-11-16-large-basins.md`), reviewed by Fable and approved
+  by the author on 2026-11-24 with his answers to the review's three points:
+  the network's topology first, then parts as sets of whole JCWP of at most
+  90 M grid cells, checked before any bootstrap (every JCWP in one part,
+  main-river outlet edges over 10 km², no cycle, the budget), on one grid per
+  basin at the author's cell size (5 m for the Barycz and the Bóbr; 1 m only
+  where every JCWP's window fits the budget), joined at main-river inlets,
+  side channels cut, one database for several basins and the upgrade of
+  existing instances; H4's seam report on the Orla goes to the author before
+  H5; Hydrograf `0.9.0`, after the small steps of `0.7.0` and the move to
+  MapLibre in `0.8.0`; gauges only a possible extension.
+- Interval estimation beside point estimation, a plan
+  (`docs/plans/2026-11-24-interval-estimation.md`; Obserwator feedback #13),
+  reviewed by Fable and approved by the author on 2026-11-24 with the
+  answers to its six questions: confidence intervals of the flood,
+  precipitation and low-flow quantiles computed by Hydrolog — a parametric
+  bootstrap of the L-moments fits from the refits that already give the
+  critical values of A², KZGW 2017's delta method for the maximum-likelihood
+  fits — at 95 % and 68 % (KZGW's upper bound at β = 84 %), both stored by
+  Obserwator and selectable there as bands and „[dolna–górna]”; its step N1
+  adds CMP-2.3's conventions of an interval and a rule of CMP §6 on the
+  coverage of interval estimators.
+- Goniec, a QGIS plugin over Obserwator's server, a plan
+  (`docs/plans/2026-11-24-qgis-plugin.md`, approved by the author on
+  2026-11-24 with the answers to its five questions): a shell (connections,
+  attribution and regulamin, HTTP caching, CSV, clipboard and HEC exports)
+  with one module per kind of server, 0.1 with Obserwator's; OGC API –
+  Features and a public read-only `/api/v1` in Obserwator `v3.6.0` with
+  caching headers by resource class, HEC-RAS and HEC-HMS tables and HEC-DSS
+  files built on the server, every daily series PER-AVER at `2400`;
+  GPL-2.0-or-later.
+- Latarnik, the access point and the GUI hub, a plan
+  (`docs/plans/2026-11-24-latarnik.md`, approved by the author on 2026-11-24
+  with the answers to its six questions) replacing stage 2
+  of the GUI platform: an optional project in front of the tools' servers,
+  each tool still alone; `nogat-server/1` at `GET /api/v1/server` on every
+  server, `/<tool>/v1/…` passed through, limits, caching, CORS and logs at one
+  door, jobs as `nogat-job/1`, flows over the registry's exchanges; a server
+  for Hydrolog; every GUI a static client of its tool's `/api/v1`.
+- One set of base maps in the kit, shared by every GUI, a plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`; the author's direction for
+  Kartograf's GUI), reviewed by Fable and approved by the author on
+  2026-11-24 with the answers to its nine questions: Hydrograf's three base
+  maps as the catalogue `nogat-basemaps.json`, a kit module and the switcher
+  `<nogat-basemaps>` with adapters for MapLibre and Leaflet (Hydrograf's move
+  to MapLibre a plan of its own), the kit's grey OpenFreeMap style, Polish
+  credits in the map's attribution, the setting `basemaps` with a
+  deployment's copies in `basemap_mirrors`, the choice remembered in the
+  browser (`nogat-basemap`, named by § 8 ust. 7 of regulamin 1.1), never a
+  GUGiK entry as the default, a deployment's own base maps in its server
+  settings (`basemap_extra`, Archiwista's `BasemapConfig` form) with their
+  credits and their exact origins in the CSP, and Obserwator `v3.5.0`
+  deprecating `gui_basemap_url` and `gui_basemap_attribution`, translated
+  at start into the new settings (amended 2026-11-24, below).
+- Hydrograf's map on MapLibre, a plan
+  (`docs/plans/2026-11-24-hydrograf-maplibre.md`; the author's direction of
+  2026-11-24), reviewed by Fable and approved by the author on 2026-11-24
+  with its eight questions answered as recommended: Hydrograf's whole map
+  off Leaflet and VectorGrid onto MapLibre GL JS 6.14.0 as Obserwator and
+  Archiwista vendor it, in a minor after the one with the shared base maps,
+  after browser tests of today's map that pass unchanged across the move;
+  every zoom number one less, the pre-generated vector tiles from level 7
+  and the sewer's from 9 so that each layer appears at today's scale, WebGL 2
+  required, `Hydrograf.map` the only owner of the library; then the kit's
+  Leaflet adapter retired (a kit minor, with the author's consent) and
+  MapLibre recorded as the ecosystem's map library.
+- Obserwator `v3.2.0`, two plans approved on 2026-11-23 (Fable for the
+  author): `docs/plans/2026-11-16-operational-series.md` — nightly captures
+  of hydro-back's hourly operational data and ČHMÚ's `recent` day by user
+  systemd timers, kept as an unverified tier, replaced by precedence with
+  IMGW-PIB's monthly telemetry and ČHMÚ's validated hourly year, hourly
+  series with a tier column within `obserwator-series/1`, a chart of the
+  current readings, `rsync` snapshots of the store on the NAS — and
+  `docs/plans/2026-11-20-hydromet-providers.md` — provider adapters,
+  captures of every answer (P14–P16), provider credentials, `time_unit`
+  `hour`, ČHMÚ's groundwater. Step N0 of the first plan is in this entry.
+  Released 2026-11-23 as Obserwator `v3.2.0` with Archiwista `v0.4.0`
+  outside a release set (a REL-6.6 deviation; Nogat's release waited by the
+  author's decision, and the set `v0.3.0` carries them); the plans' Results
+  record them, and the registry describes the captures and the hourly
+  series as released.
+- The reasons `missing_credentials` and `invalid_credentials` of `forbidden`
+  in the error registry, for a data provider's credential that is missing
+  or rejected (ERR-1); its tables regenerated. `ecosystem.yaml` describes
+  the captures of `obserwator-store/1` and the hourly series of
+  `obserwator-series/1`, both planned for Obserwator `v3.2.0`.
+- CAMELS-PL as a data source (ECO-086, step 1 of
+  `docs/plans/2026-11-22-camels-pl.md`): DEV §20 rows L and LP (the exact
+  release, its DOI, CC BY 4.0), E (the E-OBS acknowledgement) and D
+  (G2DC-PL+, CC0 1.0) and the terms line RE (the ECA&D/E-OBS data policy);
+  DEV-20.12 says what carries them, and a GUI or REST API serves the
+  E-OBS series only where the deployment turns them on; CMP-6.10 pins the
+  reference cases of a published data set, such as CAMELS-PL's signatures,
+  to its release. The regulamin's template and the operator's draft gain
+  the blocks `camels-pl` and `e-obs`. `ecosystem.yaml`: the data source
+  `camels-pl`, Kartograf's planned product `kartograf-camels-pl`,
+  Obserwator's planned provider CAMELS and the planned optional edge
+  Obserwator → Kartograf; `docs/ECOSYSTEM_MAP.md` regenerated.
+- The kit's `<nogat-sources>` shows the lines a GUI declares for its strip,
+  the attribute `screen-lines` or the property `screenLines`
+  (`{text, short, links}`), after its own lines while the view's data
+  carry them, such as the line of Obserwator's provider fed by files
+  (ECO-087, I13 of `2026-11-21-obserwator-instance.md`); without it every
+  rendering is unchanged. Documented in `design/README.md` and shown in
+  the specimen.
+
+### Changed
+
+- Standard 1.2 opens on `develop` (HUB-6.1). DEV-20.8 is amended: the
+  operational data of hydro.imgw.pl and its backend, IMGW-PIB's
+  current-data API and telemetry, and ČHMÚ's `now` and `recent` are kept as
+  they came, as captures in the raw root, in a dataset of the tier
+  `operational` or `telemetry`; they are shown and exported only as that
+  tier („dane operacyjne, niezweryfikowane”), never as the verified
+  archive, and the operator sets per source whether they are served to the
+  public (ECO-084). ECO-059 is amended: the deployment's timers run
+  Obserwator's commands that write the raw root, and the backup of both
+  roots is the deployment's `rsync` timer, not an Archiwista job.
+- ECO-085, AGI-4.1: a new value of an existing field or a new form of an
+  identifier stays within `/N` of a released document when a reader that
+  does not know it can skip it, and every consumer that distinguishes by
+  the field changes in the same plan and is deployed first; first uses are
+  `time_unit` `hour` and the monthly slot of `obserwator-series/1`.
+- DEV §20 is one table of provider lines (codes, text, processed text,
+  order) that DEV-20.4 orders, with the short forms and the terms lines in
+  tables of their own; every line keeps its code and its wording, and the
+  line of a provider the table does not hold, declared by a deployment,
+  follows them (ECO-087, P9 of `2026-11-20-hydromet-providers.md`).
+- The GUI kit is `1.2.0` (`screen-lines`, the blocks `camels-pl` and
+  `e-obs`; REL-1.4, ECO-086); regulamin 1.0 stays.
+- ECO-088, the author's decisions of 2026-11-24 on CAMELS-PL: DEV-20.12
+  gives what CAMELS-PL took from IMGW-PIB (discharge, water levels,
+  catchment boundaries) and what is derived from it the terms line RD as
+  well as S and P, and DEV-20.7's sentence that CAMELS-PL's data take no
+  terms line now covers only its other data; CAMELS-PL's licence is that of
+  its release's Zenodo record (2.1.0: CC BY 4.0, the E-OBS catchment series
+  excluded), the data description's CC BY-NC 4.0 disregarded. ECO-060 and
+  ECO-086 are amended; `kartograf-camels-pl` in `ecosystem.yaml` names RD
+  and `docs/ECOSYSTEM_MAP.md` is regenerated; the CAMELS-PL plan records
+  the decisions, BFI's discrepancy not reported to CAMELS-PL's authors for
+  now.
+- Amended the shared base-maps plan
+  (`docs/plans/2026-11-24-shared-base-maps.md`) with the author's decisions
+  of 2026-11-24: no base map a visitor adds in the browser, whose
+  `connect-src https:` would let an injected script send data to any HTTPS
+  server, but a deployment's own base maps in its server settings, each
+  origin named in the CSP; and no REL-1.1 deviation in Obserwator `v3.5.0`,
+  which keeps its two base-map settings deprecated and translates them at
+  start.
+- README installs the set `v0.3.0` and names standard 1.2.
+
 ## [0.2.0] - 2026-11-22
 
 ### Added
@@ -940,7 +1125,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Daldek/Nogat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Daldek/Nogat/releases/tag/v0.1.0

@@ -35,3 +35,8 @@ Requirements: DEV-20.3, DEV-20.5, REL-1.3, REL-1.4, AGI-4.1, ECO-072; Obserwator
 | 7 | Production, with the author's consent | Obserwator 3.1.0 deploy: a new data root built from the raw root (`series build`, catalogs, `analyses build`), checked on :8060, then switched; Archiwista's index rebuilt |
 
 Steps 2 to 5 are part of the round's releases (Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Archiwista `v0.3.3`, Hydrograf `v0.6.0`); nothing is tagged before the round ends.
+
+## Results
+
+- Steps 1 to 5: released 2026-11-22 in the set `v0.2.0` with `std-1.1` (Obserwator `v3.1.0`, Hydrolog `v0.9.0`, Hydrograf `v0.6.0`, Archiwista `v0.3.3`). Step 6 waits for Retman's next pin.
+- Step 7, 2026-11-22/23: the new data root `~/data/obserwator-310/data` built from the unchanged raw root with Obserwator 3.1.0 and Hydrolog 0.9.0 (7 series, catalogs IMGW 3,811 and CHMU 2,486 stations, analyses of 3,240 IMGW and 2,321 CHMU stations, 0 problems, 4.2 GB in 9.5 h), checked on a free port (directories `imgw_*`/`chmu_*`, file names `obserwator_series_…`, ČHMÚ snow, half-years), then switched on :8060; Archiwista `v0.3.3` reads it after `reindex` (the 27 versions of the old root missing, none pinned). The old root is kept for rollback in `/data/nmt/deploy-backup-2026-11-22/obserwator-target-data`.

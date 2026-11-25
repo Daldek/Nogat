@@ -1,6 +1,6 @@
 # Ecosystem standard
 
-Standard 1.1 · published with Nogat `v0.2.0`, tagged `std-1.1` (HUB-6.1)
+Standard 1.2 · published with Nogat `v0.3.0`, tagged `std-1.2` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
 Retman, Archiwista and Nogat. AI agents are their primary operators, so the
@@ -85,6 +85,53 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
+- 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
+  - A released document, store layout or identifier grammar stays at its
+    `/N` when a change adds a new value of an existing field or a new form
+    of an identifier that a reader not knowing it can skip, and every
+    consumer that distinguishes by the field is changed in the same plan
+    and deployed on a shared store before the producer writes the addition
+    there (AGI-4.1, ECO-085).
+  - Operational data (hydro.imgw.pl and its backend, IMGW-PIB's
+    current-data API and telemetry, ČHMÚ's `now` and `recent`) are kept as
+    they came, as captures in the raw root, in a dataset of the tier
+    `operational` or `telemetry`, stored, shown and exported only as that
+    tier with „dane operacyjne, niezweryfikowane”, never as or within the
+    verified archive; whether they are served to the public is the
+    operator's setting per source. Obserwator's commands run by the
+    deployment's timers write the raw root, and the backup of the raw and
+    data roots is the deployment's `rsync` timer, not an Archiwista job
+    (DEV-20.8, ECO-084, ECO-059).
+  - A data provider's credential missing or rejected is `forbidden` with
+    `details.reason` `missing_credentials` or `invalid_credentials` (ERR-1,
+    `error_registry.json`).
+  - DEV §20 gives the providers' lines in one table of provider lines
+    (codes, text, processed text, order) that DEV-20.4 orders, a new
+    provider a row of it, with the short forms and the terms lines in
+    tables of their own; every line keeps its code and its wording. The
+    line of a provider the table does not hold, declared by a deployment
+    (an operator's own network), follows the table's lines, and a GUI
+    view's strip shows, after the kit's own lines, the lines the GUI
+    declares for it (`screen-lines` of `<nogat-sources>`) (DEV §20,
+    DEV-20.4, DEV-20.5, ECO-087).
+  - CAMELS-PL is a data source of the ecosystem: a product with its data
+    carries L, naming the exact release with its DOI and CC BY 4.0, and LP
+    once processed; what it took from IMGW-PIB carries S and P, what is
+    derived from E-OBS the acknowledgement E and the terms line RE (the
+    E-OBS data policy: non-commercial research and education), its E-OBS
+    series served by a GUI or a REST API only where the deployment turns
+    them on, and what is derived from G2DC-PL+ (CC0 1.0) its citation D;
+    the regulamin's template gains the blocks `camels-pl` and `e-obs`, in
+    place, and the reference cases of a published data set are pinned to
+    its release (DEV §20, DEV-20.7, DEV-20.12, CMP-6.10, ECO-086).
+  - What CAMELS-PL took from IMGW-PIB and what is derived from it carry the
+    terms line RD as well as S and P; its other data take no terms line,
+    except RE on what is derived from E-OBS. CAMELS-PL's licence is that of
+    its release's Zenodo record; the data description's CC BY-NC 4.0 is
+    disregarded (DEV-20.7, DEV-20.12, ECO-088).
+  - The GUI kit becomes version 1.2.0: `screen-lines` of `<nogat-sources>`
+    and the blocks `camels-pl` and `e-obs` of the regulamin (ECO-086,
+    ECO-087).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is

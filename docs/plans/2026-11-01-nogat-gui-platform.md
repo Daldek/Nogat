@@ -7,7 +7,11 @@ Approved: pending; item 6, the hand-off schema (step N1 of
 Status: stage 2, deferred by the author on 2026-11-12 until stage 1,
 [links between the GUIs and one hand-off](2026-11-12-gui-links-and-handoff.md),
 is done. The path of this file keeps its first name because other
-repositories and the description of `handoff-1` cite it.
+repositories and the description of `handoff-1` cite it. On 2026-11-24 the
+author made the access point and the GUI hub one project, Latarnik („punkt
+dostępu i GUI hub to osobny projekt – Latarnik”); the draft
+[Latarnik plan](2026-11-24-latarnik.md) replaces this stage and says what of
+it is kept.
 
 Requirements: HUB-5.2, DEV-17.4, DEV-15.1, DEV-15.3, AGI-2.1, AGI-2.3,
 AGI-6.1, HUB-1.1, HUB-1.2, HUB §2, DEV §13, ECO-054, ECO-055. Continues the
@@ -488,6 +492,7 @@ taking `route network` tables, Hydrograf on MapLibre to share a map shell.
    (D2, D3).
 10. Do steps 2, 3, 11, 13 and 14 replace steps 5 to 7 of the visual identity?
 11. The hub's name, before step 8 creates its repository.
+   Answered 2026-11-24: Latarnik.
 12. Does `nogat` install the hub, or does the hub install the tools it hosts?
 
 ## Results

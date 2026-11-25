@@ -1,6 +1,6 @@
 # Agent interface standard
 
-Part of standard 1.1 · IDs `AGI-…`
+Part of standard 1.2 · IDs `AGI-…`
 
 How a project exposes its functionality to programs and AI agents: Python
 library, CLI, MCP server, REST API, `llms.txt` and `AGENTS.md`. It applies to
@@ -185,7 +185,9 @@ starts the MCP server (AGI §5).
 unknown fields; removing or changing meaning increments it, with the
 author's consent (REL-1.4), but only past a number released on the
 producer's `main`: a breaking change to an unreleased
-document keeps its number. The schemas of the result envelope, the error
+document keeps its number. A new value of an existing field or a new form of
+an identifier is additive under the conditions of ECO-085. The schemas of the
+result envelope, the error
 document and the catalog are Nogat's `schemas/agent/` (`result-1`,
 `error-1`, `command-list-1`, `commands-1`); each project copies them with
 `error_registry.json` (ERR-3), and its contract tests validate its documents
