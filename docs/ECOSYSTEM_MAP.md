@@ -4,7 +4,7 @@
 
 Projects, dependencies and data exchanged between them. Source of truth:
 [`ecosystem.yaml`](../ecosystem.yaml) (standard
-1.2, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
+1.3, [ECOSYSTEM_HUB](../standards/ECOSYSTEM_HUB.md)).
 
 ## Data flow
 

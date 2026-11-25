@@ -1,6 +1,6 @@
 # Agent interface standard
 
-Part of standard 1.2 · IDs `AGI-…`
+Part of standard 1.3 · IDs `AGI-…`
 
 How a project exposes its functionality to programs and AI agents: Python
 library, CLI, MCP server, REST API, `llms.txt` and `AGENTS.md`. It applies to

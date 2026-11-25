@@ -1,0 +1,146 @@
+{
+  "description": "Fixtures of the kit's base-map browser tests (tests/browser/test_basemaps.py, DEV-15.15): the map libraries of the GUIs, vendored with their licences (DEV-15.1), each file byte-identical to its source, and the providers' answers the tests replay, recorded by record.py. Nothing here is served by a GUI.",
+  "libraries": [
+    {
+      "name": "maplibre-gl",
+      "version": "6.14.0",
+      "license": "BSD-3-Clause",
+      "license_file": "vendor/maplibre-gl-6.14.0/LICENSE.txt",
+      "used_by": "Obserwator, Archiwista",
+      "source": "https://registry.npmjs.org/maplibre-gl/-/maplibre-gl-6.14.0.tgz",
+      "integrity": "sha512-L7U9y9TyPJ3P/JJbW+eH+A3FzdPq+3fnZFqqeCwf/S6cRGganHwVI5b/C8/zOYzreUzsloDPZVVaMQA94wOt4A==",
+      "files": {
+        "vendor/maplibre-gl-6.14.0/maplibre-gl.mjs": {
+          "from": "package/dist/maplibre-gl.mjs",
+          "sha256": "244d36122c1398da3a8259817cc6d71e04321afe6404f32606b4b6c6cc4f26fb"
+        },
+        "vendor/maplibre-gl-6.14.0/maplibre-gl-worker.mjs": {
+          "from": "package/dist/maplibre-gl-worker.mjs",
+          "sha256": "5f1e2f0e1624082b7e88a06e4c86085992b0f8c02929801e552f3f7a119856a9"
+        },
+        "vendor/maplibre-gl-6.14.0/maplibre-gl.css": {
+          "from": "package/dist/maplibre-gl.css",
+          "sha256": "bacba6a85a867fcf602f2ff88331b8acf7edf3fbd063a519888cfbff39970193"
+        },
+        "vendor/maplibre-gl-6.14.0/LICENSE.txt": {
+          "from": "package/LICENSE.txt",
+          "sha256": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2"
+        }
+      }
+    },
+    {
+      "name": "maplibre-gl",
+      "version": "4.7.1",
+      "license": "BSD-3-Clause",
+      "license_file": "vendor/maplibre-gl-4.7.1/LICENSE.txt",
+      "used_by": "Hydrograf, under maplibre-gl-leaflet",
+      "source": "https://registry.npmjs.org/maplibre-gl/-/maplibre-gl-4.7.1.tgz",
+      "integrity": "sha512-lgL7XpIwsgICiL82ITplfS7IGwrB1OJIw/pCvprDp2dhmSSEBgmPzYRvwYYYvJGJD7fxUv1Tvpih4nZ6VrLuaA==",
+      "files": {
+        "vendor/maplibre-gl-4.7.1/maplibre-gl.js": {
+          "from": "package/dist/maplibre-gl.js",
+          "sha256": "be9633c4d870e26fb37f1cfe5c5a77181667114003ea16207ac7850d8da8add1"
+        },
+        "vendor/maplibre-gl-4.7.1/maplibre-gl.css": {
+          "from": "package/dist/maplibre-gl.css",
+          "sha256": "576b085fdd9487a65a19215328c1e086c07ce5bf6da09b666b3806d3d008dae9"
+        },
+        "vendor/maplibre-gl-4.7.1/LICENSE.txt": {
+          "from": "package/LICENSE.txt",
+          "sha256": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2"
+        }
+      }
+    },
+    {
+      "name": "leaflet",
+      "version": "1.9.4",
+      "license": "BSD-2-Clause",
+      "license_file": "vendor/leaflet-1.9.4/LICENSE",
+      "used_by": "Hydrograf",
+      "source": "https://registry.npmjs.org/leaflet/-/leaflet-1.9.4.tgz",
+      "integrity": "sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==",
+      "files": {
+        "vendor/leaflet-1.9.4/leaflet.js": {
+          "from": "package/dist/leaflet.js",
+          "sha256": "db49d009c841f5ca34a888c96511ae936fd9f5533e90d8b2c4d57596f4e5641a"
+        },
+        "vendor/leaflet-1.9.4/leaflet.css": {
+          "from": "package/dist/leaflet.css",
+          "sha256": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6"
+        },
+        "vendor/leaflet-1.9.4/LICENSE": {
+          "from": "package/LICENSE",
+          "sha256": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb"
+        }
+      }
+    },
+    {
+      "name": "@maplibre/maplibre-gl-leaflet",
+      "version": "0.0.22",
+      "license": "ISC",
+      "license_file": "vendor/maplibre-gl-leaflet-0.0.22/LICENSE",
+      "used_by": "Hydrograf",
+      "source": "https://registry.npmjs.org/@maplibre/maplibre-gl-leaflet/-/maplibre-gl-leaflet-0.0.22.tgz",
+      "integrity": "sha512-9p4DSPLUE5t0StXH/IcZw37/UL7Ekea4jcVdkSsb2jWI+sM3K7mYHLOnti/2wn+HqxG4jMVUHah7Xun3bs00AQ==",
+      "files": {
+        "vendor/maplibre-gl-leaflet-0.0.22/leaflet-maplibre-gl.js": {
+          "from": "package/leaflet-maplibre-gl.js",
+          "sha256": "59ecd8d2b32779d24f1bd26b87c8890f27e4a6e7858d993bd17e4d878e6d2677"
+        },
+        "vendor/maplibre-gl-leaflet-0.0.22/LICENSE": {
+          "from": "package/LICENSE",
+          "sha256": "eaa721ba158cbeff47ad53b1035dfc26ff744df66662c93ff715c9885197ebf3"
+        }
+      }
+    },
+    {
+      "name": "openmaptiles/fonts (Noto Sans Regular glyphs)",
+      "version": "2.0",
+      "license": "OFL-1.1",
+      "license_file": "vendor/glyphs/noto-sans-regular/LICENSE",
+      "used_by": "Obserwator, Archiwista: the glyphs a GUI passes as `glyphs`",
+      "source": "https://github.com/openmaptiles/fonts/releases/download/v2.0/noto-sans.zip",
+      "sha256": "d117316544b43a5dde7ee761b36e17701e9f85574e181d76a74814240fdbaf34",
+      "files": {
+        "vendor/glyphs/noto-sans-regular/0-255.pbf": {
+          "from": "Noto Sans Regular/0-255.pbf",
+          "sha256": "ef1f38a3f1978591e846e9eaddf8a54f7047f546fc6aaed7872cc53151a5de78"
+        },
+        "vendor/glyphs/noto-sans-regular/256-511.pbf": {
+          "from": "Noto Sans Regular/256-511.pbf",
+          "sha256": "992557f9e2574cfb9a75e16c7b52832578849772b7c9a6e480d6213fb008fe5d"
+        },
+        "vendor/glyphs/noto-sans-regular/LICENSE": {
+          "from": "https://raw.githubusercontent.com/openmaptiles/fonts/v2.0/noto-sans/LICENSE",
+          "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2"
+        }
+      },
+      "note": "Only the ranges of the recorded tile's names: Latin with Latin Extended-A and -B (U+0000-U+01FF)."
+    }
+  ],
+  "tiles": {
+    "recorded": "2026-11-25",
+    "files": {
+      "tiles/openfreemap-planet.json": {
+        "from": "https://tiles.openfreemap.org/planet",
+        "sha256": "d60d9c01175e10d95173a3cd379aa57e580daf95f089afe84014979d63233788",
+        "note": "as it came: OpenMapTiles 3.16.0, the planet of 2026-11-22"
+      },
+      "tiles/openfreemap.pbf": {
+        "from": "https://tiles.openfreemap.org/planet/20261122_124456_pt/8/142/84.pbf",
+        "sha256": "7464130d063be150561ccd96d18dab030dcc6edf03db83e7683ef207fa39cc74",
+        "note": "Warsaw; only the layers the kit's grey style reads (record.py)"
+      },
+      "tiles/gugik-osm.png": {
+        "from": "https://mapy.geoportal.gov.pl/wss/ext/OSM/BaseMap/wmts/osm_3857/GLOBAL_WEBMERCATOR/8/142/84.png",
+        "sha256": "a5863d6d749df53c221f970fc54d2548908ed6a851f58eaa5f4fb88815ea2537",
+        "note": "Warsaw, as it came"
+      },
+      "tiles/gugik-ortho.jpg": {
+        "from": "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMTS/StandardResolution?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTOFOTOMAPA&STYLE=default&FORMAT=image/jpeg&TILEMATRIXSET=EPSG:3857&TILEMATRIX=EPSG:3857:8&TILEROW=84&TILECOL=142",
+        "sha256": "be1adf114990c4b83356ee19c2913d89370b5be5cee4d1eb85386dce239a1e59",
+        "note": "Warsaw, as it came"
+      }
+    }
+  }
+}

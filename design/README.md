@@ -11,9 +11,9 @@ Background and decisions: [the plan](../docs/plans/2026-11-01-visual-identity.md
 | --- | --- |
 | [tokens.css](tokens.css) | CSS custom properties, light and dark theme |
 | [marks/](marks/) | One 32x32 SVG mark per project: [nogat](marks/nogat.svg), [archiwista](marks/archiwista.svg), [hydrograf](marks/hydrograf.svg), [kartograf](marks/kartograf.svg), [obserwator](marks/obserwator.svg), [hydrolog](marks/hydrolog.svg), [hydraulik](marks/hydraulik.svg), [retman](marks/retman.svg) |
-| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu and sources strip, since modules do not load from `file://` |
+| [specimen.html](specimen.html) | Preview of tokens, components and marks in both themes; serve `design/` over HTTP (`python -m http.server`) to see the kit's app menu, sources strip, base-map switcher and charts, since modules do not load from `file://` |
 | [specimen-admin.html](specimen-admin.html) | The kit's admin panel on a fake API in the page ([specimen-admin.js](specimen-admin.js), key `nogat`); served over HTTP like the specimen |
-| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the terms `nogat-terms.md`, `.html` and `.css`, the operator's draft terms `nogat-terms-operator.md`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
+| [kit/](kit/) | The GUI kit every GUI copies (DEV-15.4 to DEV-15.7, DEV-15.13, DEV-15.15, DEV-15.16, DEV-20.5): the app menu `nogat-app-menu.js` and `.css`, the sources strip `nogat-sources.js` and `.css`, the hand-off `nogat-handoff.js`, the base maps `nogat-basemaps.json`, `.js` and `.css`, the charts `nogat-chart.js` and `.css`, the terms `nogat-terms.md`, `.html` and `.css`, the operator's draft terms `nogat-terms-operator.md`, the admin panel `nogat-admin.js` and `.css`, the manifest `nogat-kit.json` |
 | [mockups/hydrograf/](mockups/hydrograf/index.html) | Hydrograf redrawn in the identity and Archiwista's shell (mockup) |
 | [mockups/hydrolog/](mockups/hydrolog/index.html) | Hydrolog's GUI: five sections; the hydrograph workbench in full, its results following every change; the river network drawn vertically, each node's settings on click; alone and inside Nogat's shell (mockup) |
 
@@ -115,7 +115,7 @@ if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
 
 ## Components
 
-Patterns from Archiwista; use tokens only.
+Patterns from Archiwista; use tokens only. The kit's elements, the base-map switcher among them, are under Kit.
 
 Button (default, primary, ghost, small):
 
@@ -174,6 +174,38 @@ App header: height `--header-height`, mark at 24 px plus the tool name in `--too
 .app-header img { width: 24px; height: 24px; }
 .app-header .name { color: var(--tool-hydrograf); font-weight: var(--weight-bold); }
 ```
+
+Chart (DEV-15.16, ECO-090): every chart over axes is drawn by the kit's chart module (Kit, Charts): the grid in `--line`, ticks and axis labels in `--text-3`, the series `s1` to `s6` in colours mixed from `--info`, `--warn`, `--accent-green` and `--bad`, the readout's box in `--surface` with a `--line-2` border, the selection in `--focus`.
+A chart whose x is `date`, `datetime`, `time`, `linear` or `log` shows a range of it; one of probabilities (`gumbel`), of named bars (a `band` y) or that its GUI draws with `zoom: false` (a year's months or days) does not.
+
+| To | Mouse and trackpad | Touch | Keys and buttons |
+| --- | --- | --- | --- |
+| Show a range of x | a drag over the plot of at least 6 units of the viewBox, else a click; on a chart of points (`zoom: "xy"`) a rectangle of x and y | | |
+| Zoom in or out | Ctrl with the wheel around the cursor, 1.25 a notch, and a trackpad's pinch in proportion | two fingers pinch around their middle | `+` and `−` around the readout, else the middle; „+” and „−” under the chart |
+| Pan | Shift with a drag, or a drag with the middle button, within the whole | two fingers | an arrow past the edge of the range moves it a quarter on |
+| Show the whole | a double click | | `0`; „Cały zakres” |
+| Read the values | the pointer | one finger along the plot | arrows, Shift or Page Up and Page Down ten steps, Home, End; Esc hides the readout |
+| Scroll the page | the wheel alone | one finger up or down | |
+
+The y axis fits the values in the range shown; on a chart of points it is the person's. Every zoom in stops at four points of the readout's series in the range, on a chart without a readout at a thousandth of the whole, and a burst of wheel, pinch or pan events draws once an animation frame.
+Under a zoomable chart the bar: a lone „+” before a zoom; then „−”, „+”, „Cały zakres” and the range shown in the axis's format, `x` and `y` both on a chart of points, which a reset folds back to „+”. It is one line at 390 px, the range cut with an ellipsis and whole in its tooltip; its buttons are the GUI's `.btn.sm`, at least 24 × 24 px (WCAG 2.2 SC 2.5.8).
+A zoomable chart keeps one finger's vertical move for the page's scroll (`touch-action: pan-y`) and up to 860 px is drawn at its container's width; a chart that does not zoom leaves the touch to the browser and keeps its 560 px minimum, scrolling sideways.
+The live region says the readout and, after each zoom, the range shown; the SVG has `role="img"`, the chart's title and an `aria-description` of its keys and gestures.
+
+The module's own words are `CHART_TEXTS`, in Polish; a GUI in another language passes its own as `spec.texts`, every key, the placeholders kept:
+
+| Key | Polish | Where |
+| --- | --- | --- |
+| `zoomIn` | Przybliż | the name of „+” |
+| `zoomOut` | Oddal | the name of „−” |
+| `reset` | Cały zakres | the button that shows the whole; the live region after it |
+| `range` | {from} – {to} | the range shown |
+| `rangeXY` | {x}: {xFrom} – {xTo}, {y}: {yFrom} – {yTo} | the range shown on a chart of points, `x` and `y` the axes' `short` |
+| `returnPeriod` | T [lata] | the second row of a probability axis, under „p [%]” |
+| `probabilityReadout` | p = {p} % · T = {years} lat | the readout's heading on a probability axis |
+| `keysReadout` | Strzałki w lewo i w prawo: odczyt wartości; Shift albo Page Up i Page Down: dziesięć kroków; Home, End: początek i koniec; Esc: ukryj odczyt. | the `aria-description` of a chart with a readout |
+| `keysZoom` | Plus i minus: przybliż i oddal; strzałki za brzegiem zakresu: przesuń go; 0, podwójne kliknięcie albo „Cały zakres”: cały zakres; przeciągnij po wykresie, aby pokazać jego część; Ctrl z kółkiem myszy: przybliż w miejscu kursora; Shift z przeciąganiem albo przeciąganie środkowym przyciskiem myszy: przesuń; na ekranie dotykowym dwa palce: przybliż i przesuń. | the `aria-description` of a zoomable chart, after `keysReadout` |
+| `imageFailed` | Przeglądarka nie zdołała zapisać wykresu jako obrazu. | the error of `toPng` |
 
 ## Layout
 
@@ -269,7 +301,7 @@ A new project gets a mark and a `--tool-<name>` pair in both themes; the contrac
 
 Plain files in [kit/](kit/), copied byte for byte into each GUI and never edited there (DEV-15.6); `uv run scripts/ecosystem.py drift` names every copy that is behind or modified.
 `nogat-kit.json` holds the kit version and the SHA-256 of each file; `tests/contract/test_kit_manifest.py` fails when they disagree.
-The version, `1.2.0` since ECO-086, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
+The version, `1.3.0` since ECO-089 and ECO-090, moves only with the author's consent (REL-1.4, ECO-072): a change to a kit file updates its hash, never the version, and a copy is compared with Nogat's by the hashes.
 
 App menu (DEV-15.4): link `nogat-app-menu.css`, load `nogat-app-menu.js` as a module, and put the element in the top bar left of the theme switch.
 
@@ -311,6 +343,57 @@ The button opens a modal `<dialog>` with every line, the terms lines and „Regu
 A GUI with its own welcome window fills it with `fillSources(container, {attribution, termsNotice, terms})` from the same module, which writes the dialog's content into `container`; given `terms`, its „Regulamin serwisu” is the welcome window's regulamin link (DEV-15.7), so the window carries no second one. The module also exports `LINES` (S, P, PS, PP, C, CK, CP, G, GK, SG, SK, Z, ZK, as DEV §20 writes them, a value as `` `<name>` ``), `SOURCES_TEXTS` and `screenMarks(attribution)`; an old CP line with parenthetical detail is displayed as the canonical CP once (DEV-20.4).
 The element loads nothing and needs no inline script or style, so it runs under CSP `'self'`.
 
+Charts (DEV-15.16, ECO-090): link `nogat-chart.css`, import `drawChart` from `nogat-chart.js` and draw each chart into an element of its own. A GUI keeps a wrapper of its own of some 20 lines, a Preact component or a function of its scripts, that draws on mount, calls `update` when its spec changes and `destroy` when it goes.
+
+```js
+import { drawChart } from "./nogat/nogat-chart.js";
+const chart = drawChart(element, {
+  title: "Przepływ dobowy",
+  x: { scale: "date" },
+  y: { label: "Q [m³/s]", unit: "m³/s", zero: false, digits: 1 },
+  series: [{ id: "q", label: "Q", data: days.map((day) => [day.number, day.flow]) }],
+  readout: true,
+  fit: { ratio: 0.42, minHeight: 210 },
+  onRange: (range) => writeAddress(range),   // Archiwista's from and to
+});
+```
+
+| Field of the spec | Value |
+| --- | --- |
+| `x` | `{label, scale, min, max, domain, digits, short, tickList, tickLabels}`; `scale`: `linear` (the default), `log`, `time` (minutes: ticks in minutes on a short axis, else in hours, the `{unit}` of `label` written `min` or `h`), `date` (day numbers, days since 1970-01-01: years, months or days), `datetime` (fractional day numbers of UTC instants: the reader's hours and days) or `gumbel` (the exceedance probability [%], ticks of p and T = 100 / p, `domain: [99, 0.1]` its ends); `tickList: [{value, label, sub}]` in place of the computed ticks; `tickLabels: false` draws the axis without its labels, so panels one above another share one time axis under the last |
+| `y` | `{label, unit, scale, min, max, zero, pad, ticks, digits, short, width}`; `scale`: `linear`, `log` or `band`, one horizontal bar per point `{x: value, y: name, sub, cls, text}`; `zero: false` for an axis that need not hold 0; `width` the space left of the plot, so charts one above another align |
+| `y2` | the same for a second axis: a panel above the main one sharing x, its bars hanging from its top (`share` its part of the height: a hyetograph over a hydrograph), or with `side: "right"` a second unit right of the main panel (`width` the space right of the plot) |
+| `series` | `[{id, kind, data, axis, cls, label, unit, digits, width, align, shape, readout, legend}]`; `kind`: `line` (the default), `step`, `area`, `band` (`[x, lo, hi]`, a min–max envelope), `bars`, `points` or `rug` (x values); `data`: `[x, y]` pairs or `{x, y, cls, shape}`, a point without a value breaking a line, each `data` a new array when its values change; `shape` of points: `dot`, `hollow` or `diamond`; `cls`: `s1` to `s6`, `bar-p`, `bar-pe` or a GUI's own class |
+| `marks` | `{kind: "peak", x, y, label, cls, guides}`, `{kind: "hline", y, label}`, `{kind: "vline", x, from, to, extend, label}`, `{kind: "note", x, y, label, dx, dy, anchor}`, `{kind: "span", from, to, cls}` (a grey band over a range of x: a gap); `axis: "y2"` on the second axis |
+| `legend` | `true`, the labelled series, or items `{label, kind, cls, shape}` (`kind: "text"` a note, `"stroke"` a line drawn as the curves are, `"break"` a new line) |
+| `readout` | `true` or `{series, x: (x) => text, value: (value, series) => text}` |
+| `zoom` | by the x's scale as above; `false` none; `"xy"` x and y alike, by a rectangle, Ctrl with the wheel, a pinch and the keys (Obserwator's rating curve, PMAXTP) |
+| `size`, `fit` | `"wide"` (760 × 432, the default), `"small"` (360 × 178) or `{width, height}`; `fit: {ratio, minHeight}` draws the chart at its container's width, again when it changes |
+| `title`, `labelledBy` | the chart's name, or the id of the element naming it |
+| `texts`, `locale`, `dateFormat` | words over `CHART_TEXTS`; the language of the numbers and dates of the ticks, the readout and the bar, `pl-PL` by default (`en-GB`: a decimal point, `01/11/1950`, `Jan 2020`); a day as the GUI writes it where it differs from its language's, a pattern of `YYYY`, `MM` and `DD` (Archiwista's `YYYY.MM.DD`: the readout `2020.03.02`, ticks `2020.03.02`, `03.05` and months `2020.01`) |
+| `onReadout(index)` | the readout moved to that index of its series' `data`, `null` when it hid (Hydrograf's profile moves its map marker) |
+| `onRange(range)` | a person settled a range: at the end of a drag, a pinch or a key, the wheel idle 200 ms; `{min, max, width}` with `y` on a chart of points, `width` the plot's width in CSS px (Archiwista's `max_points`), `null` the whole |
+
+| Member of the handle | Use |
+| --- | --- |
+| `update(spec)` | Redraws in place, the GUI's language switch too (new `texts`, `locale`); the range shown outlives a spec of the same data (every series' `data` the same array, the same x) and is reset by new data |
+| `zoom.set(min, max, y)`, `zoom.reset()`, `zoom.range()` | Shows a range, as an address's `from` and `to` give it back, or the whole, never calling `onRange`; the range shown, `null` the whole |
+| `readout.show(index)`, `readout.hide()`, `readout.index()` | The readout at an index of its series' `data` |
+| `plotWidth()` | The plot's width in CSS px |
+| `svg`, `destroy()` | The chart's SVG, for `toPng`; empties the element |
+
+| Export | Use |
+| --- | --- |
+| `drawChart(element, spec)` | The chart and its handle |
+| `toPng(svg, {footer, scale, background, texts})` | Resolves to a PNG of a drawn SVG, a chart as shown (its range, its y fitted, without the readout and the selection) or another (Hydrolog's network schematic), on `--surface`, `scale` (2) times its drawn size, with `footer`, the providers' lines of its data (DEV-20.5), under it; while the module reads its styles the SVG has the class `nogat-chart-exporting`, under which a GUI hides what a picture leaves out; the file's name is the GUI's (DEV-19.21) |
+| `svgText(svg)` | The SVG with its styles, as `toPng` draws it |
+| `CHART_TEXTS` | The words (Components, Chart) |
+| `chartFormat({locale, dateFormat})` | The chart's numbers (`number(value, digits)`), times and days, for a table beside it |
+| `extent`, `niceStep`, `stepDigits`, `niceDomain`, `linearTicks`, `logDomain`, `logTicks`, `timeDomain`, `timeTicks`, `dateDomain`, `dateTicks`, `datetimeDomain`, `datetimeTicks`, `gumbelDomain`, `gumbelTicks`, `linearScale`, `logScale`, `gumbelScale`, `reducedVariate`, `exceedanceFromVariate`, `thinPoints` | The scales, ticks and decimation the module draws with, pure functions; a tick function takes a `chartFormat` last |
+
+`nogat-chart.css` scopes every rule by `.nogat-chart`, which the module sets on the element, and prefixes the classes outside the SVG (`nogat-chart-legend`, `nogat-chart-zoom`), so it meets none of a GUI's own classes; the series' colours `--series-1` to `--series-6`, `--rain` and `--rain-eff` are set on `.nogat-chart`, and every token has its light value as fallback, so a GUI without `tokens.css` draws its charts in the light theme. A class of one view's series (PMAXTP's ramp, a fit's line) stays in the GUI's CSS.
+The module loads nothing and writes no style attribute, so it runs under CSP `'self'`, `toPng` with `img-src 'self' data: blob:`, as `tests/browser/test_chart.py` runs it.
+
 Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 
 | Export | Use |
@@ -323,8 +406,77 @@ Hand-off (DEV-15.5): `import * as handoff from "./nogat/nogat-handoff.js"`.
 | `readHandoff(text, envelope)` | Parses and checks the envelope against the GUI's copy of `handoff-1.schema.json`: `{doc, problems}` with Polish messages |
 | `validate(value, schema)` | The same check for a payload against its owner's schema (draft 2020-12, local `$ref`s) |
 
+Basemaps (DEV-15.15, ECO-089): [nogat-basemaps.json](kit/nogat-basemaps.json) is the catalogue of the base maps every GUI with a map offers, in its order: `openfreemap`, „OpenFreeMap szary”, OpenFreeMap's TileJSON drawn in the kit's grey style and the default; `gugik-osm`, „OSM GUGiK szary (tylko Polska)”, and `gugik-ortho`, „Ortofotomapa GUGiK”, both in Poland's box and never the default, since GUGiK's services are often unstable. The GUI's server reads it for its setting, its CSP and its regulamin's blocks, and hands its page the entries the deployment allows, then the deployment's own base maps in the same shape.
+
+| Field of an entry | Value |
+| --- | --- |
+| `id`, `label` | The id the settings and the browser keep; the switcher's Polish label |
+| `kind` | `vector`: `url` is a TileJSON of the OpenMapTiles schema, drawn in the kit's grey style; `raster`: `url` is a tile template with `{z}`, `{x}` and `{y}`, or a WMS with `{bbox-epsg-3857}` |
+| `url`, `origin` | The address and its origin, the only one the GUI's CSP names for the entry; a TileJSON's tiles must stay on it |
+| `minzoom`, `maxzoom`, `bounds` | The zooms of the tiles and the box `[west, south, east, north]` no request leaves |
+| `grey` | A raster drawn grey: MapLibre's `raster-saturation: -1`, Leaflet's class `nogat-basemap-grey` |
+| `default` | Whether a GUI may open on it: the first allowed entry with `true`, else „bez podkładu” |
+| `credit` | `{text, links}`: the words the map's attribution shows, in Polish on every page, and `[word, address]` pairs linking them |
+| `blocks` | The regulamin's blocks the entry needs: `osm` with `openfreemap` or `gugik-osm`, `gugik` with `gugik-osm` or `gugik-ortho` |
+
+The settings are shared keys of `[nogat]` (DEV-18.1), which `[<tool>]` and the environment override (`NOGAT_BASEMAPS` or `<TOOL>_BASEMAPS`, the ids joined by `,`):
+
+```toml
+[nogat]
+basemaps = ["openfreemap", "gugik-osm", "gugik-ortho"]   # the default, every entry; [] none
+basemap_mirrors = { openfreemap = "https://kafle.example.org/planet" }   # a copy in its provider's place
+
+[[nogat.basemap_extra]]   # a base map of the deployment's own
+id = "gmina"
+name = "Mapa gminy"
+kind = "xyz"              # xyz, wms, or vector: a TileJSON of the OpenMapTiles schema
+url = "https://kafle.example.org/gmina/{z}/{x}/{y}.png"
+attribution = "© Gmina Przykładowa"
+grayscale = false
+```
+
+An unknown id, or an own base map without its credit or with an id of the catalogue, stops the server at start with an error document naming the key (`details.option`, `details.value`). A copy in `basemap_mirrors` keeps its entry's label, style and credit, its origin taking the provider's place. An own base map reaches the page in the catalogue's shape: `label` its `name`, `kind` `raster` (a WMS made a tile template with `{bbox-epsg-3857}`) or `vector`, `origin`, `default` false, `credit` its `attribution` as given and no `blocks`; the browser asks its origin directly, never through the server, and no visitor adds a base map.
+The CSP's `img-src` and `connect-src` name the origins of the allowed entries (a copy's in its entry's place), of the own base maps and of the GUI's own map layers, and no scheme source: with every entry `https://tiles.openfreemap.org` and `https://mapy.geoportal.gov.pl`. `worker-src` stays the library's: `'self'` for MapLibre 6, `blob:` for MapLibre 4 under maplibre-gl-leaflet. A public GUI keeps the regulamin's blocks its allowed entries name.
+
+The switcher: link `nogat-basemaps.css`, load `nogat-basemaps.js` as a module, put `<nogat-basemaps></nogat-basemaps>` where the GUI's layers are, under its heading `BASEMAP_TEXTS.group` („Podkłady kartograficzne”), give it the entries, draw its `value` and draw again on its `change`:
+
+```js
+import { maplibreBasemap, removeMaplibreBasemap } from "./nogat/nogat-basemaps.js";
+const switcher = document.querySelector("nogat-basemaps");
+switcher.entries = session.basemaps;   // what the server allows, then its own
+const show = (id) => {
+  const entry = switcher.entries.find((candidate) => candidate.id === id);
+  if (!entry) return removeMaplibreBasemap(map);
+  const onFailure = (failed) => switcher.fail(failed);
+  maplibreBasemap(entry, { map, glyphs: GLYPHS, before: "stations", onFailure }).catch(() => {});
+};
+show(switcher.value);
+switcher.addEventListener("change", (event) => show(event.detail.id));
+```
+
+| Attribute or property of `<nogat-basemaps>` | Value |
+| --- | --- |
+| `element.entries` | The entries in the catalogue's shape: the catalogue's (those with `blocks`) first in their order, then the deployment's own, then „bez podkładu”; with none the element is not drawn |
+| `element.value` | The id shown, `"none"` for „bez podkładu”: the person's choice while it is offered, else the first entry whose `default` is true, else `"none"`; setting it fires no event |
+| `element.texts` | The words, `BASEMAP_TEXTS` by default: `group`, `name` (the radio group's „Podkład kartograficzny”), `none`, `failed` („Podkład nie odpowiada”), `credit` (the name of the credit's „i”) and `labels` by id in place of the entries' own; a GUI in another language passes its own |
+| `element.fail(id)`, `element.failed` | Marks an entry „Podkład nie odpowiada” until the person chooses it again; the ids marked |
+| `remember` | `browser`, the default: a person's choice is kept in `localStorage` under `nogat-basemap`, no server and no cookie, as § 8 ust. 7 of the regulamin says; `none`: nothing is kept and the GUI sets `value`, as Archiwista's account preference in its team mode |
+
+The element fires `change` (bubbling) with `detail.id` when a person picks a base map, the radios' own `change` staying inside; arrow keys move between the radios.
+
+| Export | Use |
+| --- | --- |
+| `maplibreBasemap(entry, {map, glyphs, locale, colors, before, onFailure})` | MapLibre GL JS: draws the entry on `map` under the layer `before`, the GUI's lowest overlay, in place of the kit's base map drawn before, and resolves to `{sources, layers}`; without `map` it only builds them. A vector entry asks its TileJSON first and checks that its tiles stay on the entry's origin; a failure calls `onFailure(id)` and rejects before any tile is asked. First tiles that fail take the base map off and call `onFailure(id)`; the overlays stay and nothing switches by itself. A call that a later one or a removal overtakes rejects with an `AbortError` and draws nothing |
+| `removeMaplibreBasemap(map)` | „bez podkładu” |
+| `repaintMaplibreBasemap(map, colors)` | Repaints the vector base map after the GUI switches its theme |
+| `leafletBasemap(L, entry, {glyphs, locale, colors, onFailure, texts})` | Leaflet: resolves to a layer the GUI adds and removes, `L.tileLayer` under the other tile layers or, for a vector entry, `L.maplibreGL` of maplibre-gl-leaflet in the kit's grey style; it fails as above and takes itself off the map, and a vector layer's theme is repainted through `repaintMaplibreBasemap(layer.getMaplibreMap())` |
+
+`glyphs` is the GUI's vendored glyph template, `…/{fontstack}/{range}.pbf`, holding the font `noto-sans-regular` (Obserwator's and Archiwista's Noto Sans 2.0); `locale` the page's language, the names in `name:<locale>`, else Latin, else local (`pl` by default); `colors` the grey style's colours by name over those of `nogat-basemaps.css`, which gives them in both themes as `--nogat-basemap-bg`, `-landuse`, `-water`, `-road`, `-state`, `-country`, `-water-text`, `-halo` and `-place-1` to `-place-4`. A MapLibre map keeps an `error` listener of the GUI's own, since a tile that fails once its base map is drawn is no fault of the page.
+The credit is the entry's, never its TileJSON's and never in `<nogat-sources>` (DEV-20.5, DEV-20.9): in the map's own attribution control in its corner, which `nogat-basemaps.css` draws at 12 px in `--text-3` under the class `nogat-basemap-map` the adapters set on the map's container. Up to 860 px it shows when the map opens and folds behind „i” at the first drag, a tap showing it again: a MapLibre GUI creates its map with `attributionControl: {compact: matchMedia("(max-width: 860px)").matches}` and `locale: {"AttributionControl.ToggleAttribution": BASEMAP_TEXTS.credit}`, and the Leaflet adapter adds „i” to the map's attribution control itself.
+The element and the adapters ask nothing but the base map's own requests and need no inline script or style, so they run under the GUI's CSP, as `tests/browser/test_basemaps.py` runs them on MapLibre 6.14.0 and on Leaflet 1.9.4 with maplibre-gl-leaflet 0.0.22 over MapLibre 4.7.1.
+
 Terms (DEV-15.7, ECO-061 to ECO-063, ECO-065, ECO-066, ECO-068, ECO-070, ECO-071): [nogat-terms.md](kit/nogat-terms.md) is the regulamin in Polish, the source; `nogat-terms.html` is generated from it by `uv run scripts/ecosystem.py standard --write` and is never edited. A GUI copies both with `nogat-terms.css` into its kit directory, fills the HTML for its deployment and serves the result at `regulamin.html` beside its start page; no script, no remote resource, one stylesheet of the kit plus `tokens.css`. It links the page in exactly three places: the app menu's `terms`, the rail's `.rail-terms` (Layout) and, where it has one, the welcome window through `fillSources()`; the dialog of `<nogat-sources>` links it too.
-The regulamin carries its own version („Wersja 1.0”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13 and republished on 2026-11-14; its corrections (ECO-068, ECO-071) are made in place. Only the author raises the version; an agent never does. A GUI publishes a corrected text with the kit that carries it, and the operator sets a new `terms_effective` only when the author asks for it.
+The regulamin carries its own version („Wersja 1.1”, one for every GUI) and ends with „Historia zmian”, linked to the history of `nogat-terms.md` on Nogat's `develop`, where the published text lives; `main` is released only on the author's word. Version 1.0 was published on 2026-11-13 and republished on 2026-11-14; its corrections (ECO-068, ECO-071) are made in place. Version 1.1 names the base map among the settings the browser keeps (§ 8 ust. 7, ECO-089), with the author's consent of 2026-11-24. Only the author raises the version; an agent never does. A GUI publishes a corrected text with the kit that carries it, and the operator sets a new `terms_effective` only when the author asks for it.
 Its § 3 opens with the author's statement of what the services are (DEV-15.8), which no view repeats in a footer or status bar; the template's fixed text describes the rate limit, the logs, the statistics and „Zgłoś uwagę” of DEV-15.9 to DEV-15.12, the logs as DEV-12.4 to DEV-12.9 keep them (§ 8 ust. 3), so a GUI serves the page only once it follows them.
 Its § 5 says once that use of data taken from the service is governed by the providers' terms, and each data-source block holds only the provider's name, the lines it requires and the link to its terms or licence, never a summary of them (DEV-20.7, ECO-065). Its § 8 ust. 5 names the basemap and the map layers of the providers in § 5 as the only resources the visitor's browser fetches from other servers, which holds only while the GUI loads no script, style or font from elsewhere (DEV-15.7).
 
@@ -374,14 +526,14 @@ A move to a host that keeps the data in the EEA changes `processor` and sets `pr
 | `chmu` | ČHMÚ open data | Obserwator; Hydrolog with station series |
 | `camels-pl` | CAMELS-PL data: catchments, attributes and series of its Zenodo record (DEV-20.12) | Obserwator with CAMELS-PL, beside `imgw` |
 | `e-obs` | CAMELS-PL's catchment means derived from E-OBS, only where the deployment serves them (DEV-20.12) | none by default |
-| `gugik` | GUGiK data | Hydrograf, Obserwator |
+| `gugik` | GUGiK data; the base maps `gugik-osm` and `gugik-ortho` of the kit's catalogue | Hydrograf, Obserwator; a GUI that allows either base map |
 | `cuzk` | ČÚZK data | Obserwator |
 | `copernicus` | Copernicus data | none |
 | `isric` | ISRIC SoilGrids | Hydrograf |
 | `wody-polskie` | flood hazard maps of Wody Polskie | Hydrograf |
-| `osm` | OpenStreetMap basemaps (OpenFreeMap, the OSM basemap of geoportal) | Hydrograf; Obserwator with a map |
+| `osm` | OpenStreetMap base maps: the kit's `openfreemap` (OpenFreeMap's tiles) and `gugik-osm` (the OSM base map of geoportal) | a GUI that allows either base map: Hydrograf; Obserwator with a map |
 
-Operator's terms (DEV-15.7, ECO-079): [nogat-terms-operator.md](kit/nogat-terms-operator.md) is a draft regulamin in Polish for an instance an operator other than the author runs on its own infrastructure, where regulamin 1.0, which names the author as a private, non-commercial operator, does not apply. It keeps the twelve sections, the Markdown, the fields and the data-source blocks of `nogat-terms.md`, so a GUI renders it with the subset of `build` and fills it with `fill` of [scripts/terms.py](../scripts/terms.py) as above, from the same values; it states that the operator is the service provider and the controller of personal data, that the software is provided as is under its licence without warranty or liability for availability, data or results, that keeping the data providers' terms is the operator's, and that the author's part ends with the deployment, and it adds what the act on electronic services asks of a provider acting in business: the technical requirements, the conclusion of the contract and complaints within 14 days.
+Operator's terms (DEV-15.7, ECO-079): [nogat-terms-operator.md](kit/nogat-terms-operator.md) is a draft regulamin in Polish for an instance an operator other than the author runs on its own infrastructure, where the kit's regulamin, which names the author as a private, non-commercial operator, does not apply. It keeps the twelve sections, the Markdown, the fields and the data-source blocks of `nogat-terms.md`, so a GUI renders it with the subset of `build` and fills it with `fill` of [scripts/terms.py](../scripts/terms.py) as above, from the same values; it states that the operator is the service provider and the controller of personal data, that the software is provided as is under its licence without warranty or liability for availability, data or results, that keeping the data providers' terms is the operator's, and that the author's part ends with the deployment, and it adds what the act on electronic services asks of a provider acting in business: the technical requirements, the conclusion of the contract and complaints within 14 days.
 It is a template, not legal advice, and opens with a comment saying so: a lawyer reviews it before an operator gets it and adapts it to the operator's deployment. The operator copies it into the deployment's own files, outside the GUI's checkout, writes in the fields below, checks § 3, § 4 and § 8 against the deployment and removes the comment; a GUI serves the operator's copy in place of the kit's page and refuses one that does not start with its `# ` title or keeps a field it does not fill. A GUI copies the draft with the rest of the kit, since its manifest lists it, but never serves it as its terms. The draft has no version of its own: the operator's copy is version 1.0 of the operator's regulamin, which the operator versions from then on.
 
 | Field | Value from |

@@ -309,7 +309,7 @@ research and waits for the author's approval.
    | `theme.js` | pre-paint init and the three-way switch, one storage key |
    | `info.js`, `form.js` | `<nogat-info>` tooltip with MathML, the texts the app's; number with unit and bounds, choice with meanings, series table with paste and CSV |
    | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
-   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes; shared basemaps, attribution and the origins a CSP must allow |
+   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes — for charts replaced by `2026-11-24-unified-charts.md`: the kit's `nogat-chart.js` and `.css` (DEV-15.16, ECO-090); shared basemaps, attribution and the origins a CSP must allow — for base maps replaced by `2026-11-24-shared-base-maps.md`: the kit's `nogat-basemaps.json`, `.js` and `.css` (DEV-15.15, ECO-089) |
    | `embed.js` | both sides of the handshake (item 5); `nogat-handoff.js` of stage 1 gains `nogat:handoff` |
    | `nogat-app-menu.*`, `nogat-handoff.js`, `nogat-kit.json` | from stage 1 |
 
@@ -429,7 +429,7 @@ gate, ADR, CHANGELOG and PROGRESS. Sizes are estimates in sessions.
 |---|---|---|---|---|
 | 1 | Nogat | The ECO decision; HUB-1.1, DEV-15.3 and the new rule of DEV §15; AGI-2.3 and the option fields of commands-1; the schema of the handshake messages (`handoff-1` done ahead, N1 of Hydrolog's GUI); the identity headers and the role vocabulary; the registry's `gui` field | 1 | gate: `validate`, `standard`, schema tests |
 | 2 | Nogat | Kit, chrome: `tokens.css`, `base.css`, `shell.*` with the embedded switch, `theme.js`; the specimen rebuilt on it; browser tests | 1.5 | specimen in both themes, alone and in a frame |
-| 3 | Nogat | Kit, parts: `info.js`, `form.js`, `chart-theme.js`, `embed.js`, `nogat:handoff` in `nogat-handoff.js`, `basemaps.json` | 1.5 | handshake tests across two origins |
+| 3 | Nogat | Kit, parts: `info.js`, `form.js`, `chart-theme.js`, `embed.js`, `nogat:handoff` in `nogat-handoff.js`, `basemaps.json` (made by `2026-11-24-shared-base-maps.md`, step 1) | 1.5 | handshake tests across two origins |
 | 4 | Kartograf | Export option `i18n.pl`, its constraints, `section` and `format` in `kartograf-commands/1` | 1-2 | commands-1 contract test; Archiwista's adapter tests unchanged |
 | 5 | Obserwator | `commands list` and `commands schema` with `--json` in commands-1 shape, with option texts and dependencies; the JSON Schema stays the REST and MCP input schema | 1.5-2 | commands-1 contract test |
 | 6 | Hydrolog | Public `parse_command` and `format_command` where still missing; the schematic document without an output file (its routing branches are merged since) | 0.5-1 | gate; every catalog example read back into the same call |

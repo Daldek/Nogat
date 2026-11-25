@@ -1,6 +1,6 @@
 # Computations: formulas, their limits and their verification
 
-Part of standard 1.2 · IDs `CMP-…`
+Part of standard 1.3 · IDs `CMP-…`
 
 The tools compute hydrological, meteorological and geographical quantities
 that engineers and researchers rely on, and academics audit the formulas. A

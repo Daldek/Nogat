@@ -1,6 +1,6 @@
 # Shared error registry
 
-Part of standard 1.2 · IDs `ERR-…`
+Part of standard 1.3 · IDs `ERR-…`
 
 [error_registry.json](error_registry.json) is the source of truth; this page
 explains it.

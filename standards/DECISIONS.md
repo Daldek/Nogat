@@ -98,6 +98,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 | [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
+| [ECO-089](#eco-089-one-set-of-base-maps-in-the-kit-shared-by-every-gui) | One set of base maps in the kit, shared by every GUI | accepted | 2026-11-24 |
+| [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
 
 ---
 
@@ -2427,3 +2429,135 @@ and the regulamin 1.0: a GUI with CAMELS-PL's IMGW-PIB data keeps the block
 and to the `ATTRIBUTION.txt` of a plain write on its branch
 `fix/camels-terms-line` (a follow-up of step 2); Obserwator (step 3) and
 Archiwista (step 4) carry RD on these data from the start.
+
+## ECO-089 One set of base maps in the kit, shared by every GUI
+
+**Decision.** Every GUI with a map takes its base maps from the kit: the
+catalogue `nogat-basemaps.json`, library-neutral data a GUI's server reads
+for its setting, its CSP and its regulamin's blocks, holds Hydrograf's
+three, in its order and with its labels: „OpenFreeMap szary” (`openfreemap`,
+OpenFreeMap's TileJSON drawn in the kit's grey style, the default),
+„OSM GUGiK szary (tylko Polska)” (`gugik-osm`) and „Ortofotomapa GUGiK”
+(`gugik-ortho`), both bounded by Poland's box and never the default, with
+„bez podkładu” the switcher's last choice; no entry needs a key, none is
+Esri's and there is no topographic map. The kit's `nogat-basemaps.js` and
+`nogat-basemaps.css` draw an entry through the GUI's own library, passed in,
+with two adapters, `maplibreBasemap` for MapLibre GL JS and `leafletBasemap`
+for Leaflet (a vector entry through maplibre-gl-leaflet), which check a
+TileJSON's tiles to stay on the entry's origin before any tile is asked and
+call `onFailure` when it or the first tiles fail, the map staying usable and
+nothing switching by itself; the switcher `<nogat-basemaps>` is Hydrograf's
+radio list and keeps the person's choice in the browser (`nogat-basemap`,
+no server, no cookie), opening on it while it is allowed, else on the
+default. Each base map's credit is the catalogue's, in Polish, in the map's
+own attribution at 12 px and never in `<nogat-sources>`; up to 860 px it
+folds behind „i” at the first drag. A deployment allows entries with
+`basemaps`, serves one from its own copy with `basemap_mirrors` and adds
+base maps of its own, each with its credit and its exact origin in the CSP,
+with `basemap_extra` (DEV-18.1); no visitor adds one in the browser. No
+`img-src` or `connect-src` holds a scheme source. The rule is DEV-15.15;
+DEV-15.13, DEV-18.1 and DEV-20.9 are amended. Plan:
+`docs/plans/2026-11-24-shared-base-maps.md`.
+
+**Why.** The author's direction of 2026-11-24 for Kartograf's GUI
+(„wszystkie podkłady mapowe powinny być wspólne między projektami … Jako
+wzór: Hydrograf”) and his answers to the plan's nine questions of the same
+day. Three GUIs with a map had three sets, three switchers and three places
+of the credit. Two adapters make the base maps one set in every GUI's next
+minor without first rewriting Hydrograf's map; the kit's grey style writes
+Polish names and follows both themes, where OpenFreeMap's Positron writes
+English ones; the choice is remembered at the author's request; GUGiK's
+services are often unstable, so they never open by default. The catalogue is
+the shared default set, which a deployment's own base maps extend without
+changing it („ona definiuje podstawowe domyślne podkłady”), and a CSP that
+names each origin keeps a script injected into the page from sending what
+the page holds to any server.
+
+**Rejected.** One written list kept in each GUI by hand (it drifted
+already). MapLibre in every GUI before the base maps are shared (Hydrograf's
+move to MapLibre is a plan of its own, after which the Leaflet adapter is
+retired). OpenFreeMap's own Positron style. The providers' English credits.
+A choice the browser forgets at a reload. GUGiK's topographic map. A base
+map a visitor adds in the browser, whose `connect-src https:` would let an
+injected script send data to any HTTPS server (the author's amendment of
+2026-11-24). A REL-1.1 deviation for Obserwator's two settings, which
+`v3.5.0` deprecates and translates at start instead.
+
+**Consequence.** The kit becomes `1.3.0` (REL-1.4): by the author's answer
+to the plan's question 7, a kit change takes the version `develop` carries
+while no member is released with a copy of it, else the next minor, and the
+members of Nogat `v0.3.0`'s round carry copies of `1.2.0`. The regulamin
+becomes 1.1, its § 8 ust. 7 naming the base map among the settings the
+browser keeps, with the author's consent of 2026-11-24 (its blocks `osm` and
+`gugik` already name the catalogue's providers, so no block changes); the
+operator's draft takes the same words. Obserwator (`v3.5.0`), Archiwista and
+Hydrograf (their next minors) and Kartograf (its first map) move to the kit
+in steps 2 to 5 of the plan; until its step a GUI that shows other base maps
+records the gap as a deviation in its `CLAUDE.md` (DEV-1.2), and a new base
+map or switcher feature goes into the kit first.
+
+## ECO-090 One chart module in the kit: zoom, pan and reset alike in every GUI
+
+**Decision.** Every GUI draws its charts over axes with the kit's chart
+module, `nogat-chart.js` and `nogat-chart.css`, built from Obserwator's SVG
+engine (its `src/charts/` at `b5a1c1a`) with Hydrolog's short time axis in
+minutes and its PNG footer of the providers' lines: one plain ES module
+that imports nothing, its words in Polish in `CHART_TEXTS` and a GUI's
+other language through `spec.texts`, its numbers and dates in the language
+of `spec.locale` (`pl-PL` by default) and in a GUI's own date format
+through `spec.dateFormat` (Archiwista's `RRRR.MM.DD`), every token with its
+light fallback and every class under `.nogat-chart`. It gains what
+Archiwista and Hydrograf need: a second unit on a right-hand axis, spans
+over gaps, hollow and diamond points, an x axis without labels,
+`onReadout`, `onRange` and `plotWidth()`. A chart whose x is a date, a time
+or a value zooms, never a probability axis, a band y or a chart its GUI
+sets `zoom: false` (a year's months or days): a drag over the plot selects
+x, at least 6 units of the viewBox, else it is a click, and a rectangle on
+a chart of points (`zoom: "xy"`: the rating curve, PMAXTP), whose y is then
+the person's; Ctrl with the wheel zooms around the cursor, 1.25 a notch and
+a trackpad's pinch in proportion, while the wheel alone scrolls the page;
+Shift with a drag, or a drag with the middle button, pans within the whole;
+a double click, `0` and „Cały zakres” show the whole; on a touch screen
+(`touch-action: pan-y`) one finger scrolls the page or reads the values and
+two pinch and pan; `+`, `−` and the arrows past the range's edge do it by
+keys. Every zoom in stops at four points of the readout's series, else at
+a thousandth of the whole, and a burst of events draws once an animation
+frame. Under a zoomable chart a lone „+” before a zoom, then „−”, „+”,
+„Cały zakres” and the range shown, one line at 390 px with buttons of at
+least 24 px; the y axis fits the values shown, and up to 860 px a zoomable
+chart is drawn at its container's width. A range outlives a redraw of the
+same data, and `toPng` writes the chart as shown with the providers' lines
+under it. The rule is DEV-15.16. Plan:
+`docs/plans/2026-11-24-unified-charts.md`.
+
+**Why.** Obserwator's feedback #9 of 2026-11-23 („Fajnie byłoby dodać zoom
+i przesuwanie do wykresów w tych wszystkich apkach. No i reset widoku po
+zoomie.”) and the author's direction of 2026-11-24 („musimy ujednolicać
+pomiędzy projektami zachowanie i technologię”), with his answers to the
+plan's seven questions the same day. Four implementations had three sets of
+gestures and three words for the reset; two copies of one engine drifted
+apart (Hydrolog's), Archiwista's plain wheel took the page's scroll and
+Hydrograf drew with a library of its own. The lone „+” lets a person who
+can neither drag nor pinch zoom (WCAG 2.2 SC 2.5.1, 2.5.7); a probability
+axis holds tens of annual values on fixed ticks, each read by the readout.
+
+**Rejected.** Four implementations kept to one written gesture
+specification (they drifted already: Hydrolog's copy). Chart.js with its
+zoom plugin everywhere, Hydrograf's option B (a canvas without the keys and
+the readout the SVG engine has, and a second migration of three GUIs). The
+wheel alone zooming (Archiwista's: it takes the page's scroll). No bar
+before a zoom (the first zoom would need a path or two fingers). Zooming
+the Gumbel plots. One date format for every GUI (a rule of its own, over
+tables as well as charts).
+
+**Consequence.** The kit becomes `1.3.0` (REL-1.4): by the author's answer
+to the plan's question 2 a kit change takes the version `develop` carries
+while no member is released with a copy of it, else the next minor, and the
+members of Nogat `v0.3.0`'s round carry copies of `1.2.0`. Obserwator
+(`v3.5.0`), Hydrolog, Archiwista and Hydrograf (off Chart.js, option A)
+move to the module in steps 2 to 5 of the plan, each in its next minor;
+until its step a GUI that draws its charts otherwise records the gap as a
+deviation in its `CLAUDE.md` (DEV-1.2), as ECO-055 and ECO-058 did, and its
+chart code takes fixes only: a new chart feature goes into the kit first
+(DEV-17.5). The GUI platform plan's `chart-theme.js` gives way to the
+module.

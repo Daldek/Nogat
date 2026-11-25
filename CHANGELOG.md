@@ -6,6 +6,63 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Added
+
+- The kit's base maps (ECO-089, step 1 of
+  `docs/plans/2026-11-24-shared-base-maps.md`): the catalogue
+  `design/kit/nogat-basemaps.json` with Hydrograf's three base maps
+  (`openfreemap` in the kit's grey style, the default; `gugik-osm` and
+  `gugik-ortho`, bounded by Poland's box and never the default);
+  `nogat-basemaps.js` with the switcher `<nogat-basemaps>`, the choice kept
+  in the browser as `nogat-basemap`, and the adapters `maplibreBasemap`,
+  `removeMaplibreBasemap`, `repaintMaplibreBasemap` for MapLibre GL JS and
+  `leafletBasemap` for Leaflet, which check that a TileJSON's tiles stay on
+  the entry's origin, draw a deployment's own base maps handed in the
+  catalogue's shape and report a failing provider; `nogat-basemaps.css`
+  with the credit in the map's attribution at 12 px, folded behind „i” at
+  the first drag on a phone, and the grey style's colours in both themes.
+  The rule DEV-15.15, the switcher in the specimen and `design/README.md`'s
+  „Basemaps”; browser tests on MapLibre 6.14.0 and on Leaflet 1.9.4 with
+  maplibre-gl-leaflet 0.0.22 over MapLibre 4.7.1, vendored as fixtures with
+  their licences, every provider answered from tiles recorded by
+  `tests/browser/basemaps/record.py`.
+- The kit's charts (ECO-090, step 1 of
+  `docs/plans/2026-11-24-unified-charts.md`): `design/kit/nogat-chart.js`,
+  Obserwator's SVG engine with Hydrolog's short time axis in minutes and its
+  PNG footer as one plain ES module, and `nogat-chart.css`, scoped by
+  `.nogat-chart` with the tokens' light fallbacks. `drawChart` zooms a
+  chart of a time or a value alike in every GUI: a drag selects the range
+  (a rectangle of x and y with `zoom: "xy"`), Ctrl with the wheel or a
+  trackpad's pinch zooms around the cursor while the wheel alone scrolls the
+  page, Shift or the middle button pans, a double click, `0` and „Cały
+  zakres” show the whole, two fingers pinch and pan on a phone, where a
+  zoomable chart is drawn at the page's width; a lone „+” before a zoom,
+  then the bar „−”, „+”, „Cały zakres” and the range shown, the y axis
+  fitted to it; every zoom in stops at four points of the readout's series.
+  For Archiwista and Hydrograf a second unit on a right-hand axis, gap
+  spans, hollow and diamond points, an x axis without labels, `onReadout`,
+  `onRange` with `plotWidth()` and `zoom.set`; for every GUI `CHART_TEXTS`
+  and `spec.texts`, `spec.locale` and `spec.dateFormat`, and `toPng` with
+  the providers' lines. The rule DEV-15.16, two charts in the specimen and
+  `design/README.md`'s „Chart” and „Charts”; browser tests in Chromium under
+  the GUIs' CSP at 1440 and 390 px in both themes, fingers by DevTools'
+  touch events.
+
+### Changed
+
+- Standard 1.3 opens on `develop` (HUB-6.1) with the kit's base maps and
+  charts (DEV-15.15, DEV-15.16, ECO-089, ECO-090).
+- The GUI kit is `1.3.0` (its base maps and its charts; REL-1.4, by the
+  author's answers to question 7 of the base-maps plan and question 2 of the
+  charts plan, since the members of Nogat `v0.3.0`'s round carry `1.2.0`),
+  with regulamin 1.1: § 8 ust. 7 of the template and of the operator's
+  draft names the base map among the settings the browser keeps, and `nogat-terms.html` is regenerated. DEV-15.13 lets an
+  admin page's map add its one base map's origin to the admin CSP, DEV-18.1
+  lists the shared keys `basemaps`, `basemap_mirrors` and `basemap_extra`,
+  and DEV-20.9 credits a GUGiK base map with its catalogue entry's credit
+  (ECO-089). The GUI platform plan's `basemaps.json` points to the
+  base-maps plan and its `chart-theme.js` to the charts plan.
+
 ## [0.3.0] - 2026-11-25
 
 ### Added

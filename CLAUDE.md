@@ -62,7 +62,7 @@ schemas/log/           nogat-log/1, one record of a server's logs (DEV-12.4)
 standards/             the standard; ci/ holds the templates projects copy
 standards/reference/   modules projects copy: nogat_logging.py, server logs (DEV-12.9); nogat_formulas.py, formula specs, checks and generated tests (CMP-8.1)
 design/                visual identity of every GUI: tokens.css, marks/, guidelines, mockups (DEV-15.3)
-design/kit/            the GUI kit GUIs copy: app menu, sources strip, hand-off, regulamin, admin panel
+design/kit/            the GUI kit GUIs copy: app menu, sources strip, hand-off, base maps, charts, regulamin, admin panel
 tests/formula_toys.py  toy formulas, a right one and wrong ones, for the tests of nogat_formulas (CMP-8.2)
 tests/unit/            offline, single functions
 tests/integration/     throwaway workspaces and git repositories
