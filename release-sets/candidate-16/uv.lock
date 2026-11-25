@@ -24,7 +24,7 @@ supported-markers = [
 [manifest]
 overrides = [
     { name = "kartograf", extras = ["mcp"], git = "https://github.com/Daldek/Kartograf?rev=4cd96785b926ed199b9878a9d3b691b2dc403cc5" },
-    { name = "obserwator", extras = ["full"], git = "https://github.com/Daldek/Obserwator?rev=0f8fd3144657a76c785b6bc6156690196c73d01b" },
+    { name = "obserwator", extras = ["full"], git = "https://github.com/Daldek/Obserwator?rev=2637350d009896d4554b3b252a725c7613897f5d" },
 ]
 
 [[package]]
@@ -73,7 +73,7 @@ wheels = [
 [[package]]
 name = "archiwista"
 version = "0.4.2"
-source = { git = "https://github.com/Daldek/Archiwista?rev=e8cca3cf58afeeb011318d95099eaf35e35516fa#e8cca3cf58afeeb011318d95099eaf35e35516fa" }
+source = { git = "https://github.com/Daldek/Archiwista?rev=2a602ec64ca7500bacd2d23f82bef5c8957413de#2a602ec64ca7500bacd2d23f82bef5c8957413de" }
 dependencies = [
     { name = "affine" },
     { name = "argon2-cffi" },
@@ -1014,7 +1014,7 @@ wheels = [
 [[package]]
 name = "hydrolog"
 version = "0.10.0"
-source = { git = "https://github.com/Daldek/Hydrolog?rev=39e8fcca5d92e0f771dd4532e21b2b64d84fff84#39e8fcca5d92e0f771dd4532e21b2b64d84fff84" }
+source = { git = "https://github.com/Daldek/Hydrolog?rev=d65472b5cdb54e0e9810728a5ef4f3350e67fd35#d65472b5cdb54e0e9810728a5ef4f3350e67fd35" }
 dependencies = [
     { name = "numpy" },
     { name = "platformdirs" },
@@ -1759,10 +1759,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "archiwista", extras = ["obserwator"], git = "https://github.com/Daldek/Archiwista?rev=e8cca3cf58afeeb011318d95099eaf35e35516fa" },
-    { name = "hydrolog", extras = ["all"], git = "https://github.com/Daldek/Hydrolog?rev=39e8fcca5d92e0f771dd4532e21b2b64d84fff84" },
+    { name = "archiwista", extras = ["obserwator"], git = "https://github.com/Daldek/Archiwista?rev=2a602ec64ca7500bacd2d23f82bef5c8957413de" },
+    { name = "hydrolog", extras = ["all"], git = "https://github.com/Daldek/Hydrolog?rev=d65472b5cdb54e0e9810728a5ef4f3350e67fd35" },
     { name = "kartograf", extras = ["mcp"], git = "https://github.com/Daldek/Kartograf?rev=4cd96785b926ed199b9878a9d3b691b2dc403cc5" },
-    { name = "obserwator", extras = ["full"], git = "https://github.com/Daldek/Obserwator?rev=0f8fd3144657a76c785b6bc6156690196c73d01b" },
+    { name = "obserwator", extras = ["full"], git = "https://github.com/Daldek/Obserwator?rev=2637350d009896d4554b3b252a725c7613897f5d" },
 ]
 
 [package.metadata.requires-dev]
@@ -1916,12 +1916,13 @@ wheels = [
 [[package]]
 name = "obserwator"
 version = "3.3.0"
-source = { git = "https://github.com/Daldek/Obserwator?rev=0f8fd3144657a76c785b6bc6156690196c73d01b#0f8fd3144657a76c785b6bc6156690196c73d01b" }
+source = { git = "https://github.com/Daldek/Obserwator?rev=2637350d009896d4554b3b252a725c7613897f5d#2637350d009896d4554b3b252a725c7613897f5d" }
 dependencies = [
     { name = "httpx" },
     { name = "platformdirs" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
 
 [package.optional-dependencies]
