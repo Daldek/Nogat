@@ -82,6 +82,17 @@ Licencja CC BY 4.0: <https://creativecommons.org/licenses/by/4.0/>
 Regulamin danych E-OBS: <https://www.ecad.eu/documents/ECAD_datapolicy.pdf>
 <!-- /block -->
 
+<!-- block: pig -->
+### PIG-PIB: monitoring wód podziemnych
+
+> Źródło danych: Państwowy Instytut Geologiczny – Państwowy Instytut Badawczy (PIG-PIB), Monitoring Wód Podziemnych
+> Dane PIG-PIB zostały przetworzone
+
+Regulamin danych PIG-PIB: <https://www.pgi.gov.pl/rejestry-i-bazy-danych-geologicznych/zasady-korzystania-z-isp.html>
+
+Licencja CC BY 4.0: <https://creativecommons.org/licenses/by/4.0/>
+<!-- /block -->
+
 <!-- block: gugik -->
 ### GUGiK
 
