@@ -61,7 +61,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts, base maps, charts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
-| [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, mutation testing, gross defects (CMP-…) |
+| [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, the coverage of intervals, mutation testing, gross defects (CMP-…) |
 | [ERROR_REGISTRY.md](ERROR_REGISTRY.md) + [error_registry.json](error_registry.json) | Shared error codes, exit codes, HTTP statuses (ERR-…) |
 | [RELEASE_AND_DISTRIBUTION.md](RELEASE_AND_DISTRIBUTION.md) | Versioning, release procedure, channels (PyPI, GitHub Releases, MCP Registry), MCP Registry entry, dependencies between projects, release sets, support (REL-…) |
 | [ECOSYSTEM_HUB.md](ECOSYSTEM_HUB.md) | Nogat role, `ecosystem.yaml`, local workspace, generated outputs, cross-project plans and requests, standard versioning, the `nogat` package (HUB-…) |
@@ -110,6 +110,18 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     zoomed one, whose y axis fits the values shown; a PNG is the chart as
     shown with the providers' lines, a CSV the whole series (DEV-15.16,
     ECO-090).
+  - A spec lists the side and confidence level of an interval and its
+    method among its conventions; an interval estimator's coverage is
+    simulated, seeded, from the distributions the formula fits at 30 and 60
+    values with at least 1,000 samples, nightly and before each release,
+    reported in `docs/FORMULAS.md` and asserted per level and element within
+    three Monte Carlo standard errors for an exact method, as its source
+    reports it or above a stated bound for an approximate one, with lower ≤
+    upper and the intervals of the levels nested; the reference module
+    gains `assert_coverage` and `assert_interval_properties`. Intervals
+    beside point estimates are computed by Hydrolog and shown by
+    Obserwator, which stores the levels 0.95 and 0.68 (CMP-2.3, CMP-6.11,
+    ECO-091).
   - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
     `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
     and regulamin 1.1, whose § 8 ust. 7 names the base map among the
