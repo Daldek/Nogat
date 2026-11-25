@@ -69,11 +69,11 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087, ECO-092 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
-| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087 | 2026-11-13 |
+| [ECO-064](#eco-064-one-compact-strip-of-provider-lines-per-gui-view) | One compact strip of provider lines per GUI view | amended by ECO-065, ECO-068, ECO-070, ECO-080, ECO-087, ECO-092 | 2026-11-13 |
 | [ECO-065](#eco-065-products-link-the-providers-terms-and-never-restate-them) | Products link the providers' terms and never restate them | accepted | 2026-11-13 |
 | [ECO-066](#eco-066-one-logging-convention-for-every-server-without-root) | One logging convention for every server, without root | accepted | 2026-11-13 |
 | [ECO-067](#eco-067-one-admin-panel-for-every-gui) | One admin panel for every GUI | accepted | 2026-11-13 |
@@ -93,13 +93,14 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-081](#eco-081-the-kit-becomes-110-with-nogat-020) | The kit becomes 1.1.0 with Nogat 0.2.0 | accepted | 2026-11-21 |
 | [ECO-082](#eco-082-providers-named-by-their-national-acronyms-two-attribution-columns-in-a-csv) | Providers named by their national acronyms; two attribution columns in a CSV | accepted | 2026-11-21 |
 | [ECO-083](#eco-083-one-pattern-for-the-files-a-tool-names-for-a-user) | One pattern for the files a tool names for a user | accepted | 2026-11-21 |
-| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | accepted | 2026-11-23 |
+| [ECO-084](#eco-084-operational-data-are-kept-as-captures-of-an-unverified-tier-serving-them-is-the-operators-decision) | Operational data are kept as captures of an unverified tier; serving them is the operator's decision | amended by ECO-092 | 2026-11-23 |
 | [ECO-085](#eco-085-additions-within-version-1-of-a-released-document) | Additions within version 1 of a released document | accepted | 2026-11-23 |
 | [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 | [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
 | [ECO-089](#eco-089-one-set-of-base-maps-in-the-kit-shared-by-every-gui) | One set of base maps in the kit, shared by every GUI | accepted | 2026-11-24 |
 | [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
+| [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
 
 ---
 
@@ -1248,6 +1249,9 @@ provider it does not hold, declared by a deployment, follows them.
 what is derived from it carry the terms line RD with S and P (DEV-20.7,
 DEV-20.12).
 
+**Amended by ECO-092 (2026-11-24):** products with PIG-PIB data carry W,
+WP once processed, and the terms line RW (DEV-20.7, DEV-20.13).
+
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
 for data of danepubliczne.imgw.pl and hydro.imgw.pl, with H naming the
@@ -1444,6 +1448,9 @@ folds to one line, unfolded in place by „więcej”.
 **Amended by ECO-087 (2026-11-23):** after the kit's own lines the strip
 shows the lines the GUI declares for it (`screen-lines`), such as the line
 of an operator's own network.
+
+**Amended by ECO-092 (2026-11-24):** the strip also holds WK, the short
+form of W, between CK and GK.
 
 **Decision.** A GUI view shows the providers' lines once, in one compact
 strip of 12 px muted text, not under every panel, card, chart or popup
@@ -2173,6 +2180,10 @@ of plain mode (DEV-19.5). No old name is kept beside a new one.
 
 ## ECO-084 Operational data are kept as captures of an unverified tier; serving them is the operator's decision
 
+**Amended by ECO-092 (2026-11-24):** PIG-PIB's automatic measurements
+without validation (`mwp_auto`) are operational data, and the readings of
+its MWP database verified ones (DEV-20.8).
+
 **Decision.** Every answer a provider adapter of Obserwator receives —
 archive and file downloads, files an operator feeds, API answers, the GUI's
 live fetches, warnings and water-state classes included — is written to the
@@ -2561,3 +2572,71 @@ deviation in its `CLAUDE.md` (DEV-1.2), as ECO-055 and ECO-058 did, and its
 chart code takes fixes only: a new chart feature goes into the kit first
 (DEV-17.5). The GUI platform plan's `chart-theme.js` gives way to the
 module.
+
+## ECO-092 PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked
+
+**Decision.** PIG-PIB's Monitoring Wód Podziemnych (MWP) of the state
+geological service is a data source of the ecosystem, `pig` in the
+registry: the points, the groundwater readings and the spring yields of the
+service `hydrogeologia/mwp` and the automatic hourly measurements of
+`hydrogeologia/mwp_auto` at cbdgmapa.pgi.gov.pl. Its licence is the CC BY
+4.0 of dane.gov.pl's dataset 170, which lists the service, and that
+record's `license_description` „Other (Public Domain)” is disregarded, as
+ECO-088 disregarded a contradictory field; PIG-PIB's terms of reuse are
+linked, never restated. DEV §20 gains the row W and WP at order 8, after D,
+so G, SG and Z become 9 to 11 in their order: W names PIG-PIB, the MWP of
+the state geological service, the times of creation and acquisition in G's
+forms and the licence with its link; WP „Dane PIG-PIB zostały przetworzone”
+is fixed and never names the processing (ECO-071), whose extent the info
+texts and the guide (DEV-15.14) and Obserwator's intake note and ADR state.
+The strip shows W as WK „Źródło: PIG-PIB, CC BY 4.0”, „PIG-PIB” linked to
+https://www.pgi.gov.pl/psh and „CC BY 4.0” to the licence, between CK and
+GK; the terms line RW links PIG-PIB's terms of reuse, after RE. The rule is
+DEV-20.13, and DEV-20.5, DEV-20.7 and DEV-20.8 are amended: the readings of
+the MWP database are verified data, and `mwp_auto`, which PIG-PIB calls
+„bez walidacji”, is operational data. Obserwator takes PIG-PIB in as the
+provider `PIG` (keys `pl.pig.*`, the national acronym of ECO-082) of the
+source class `other`, in `v3.3.0`. Plan:
+`docs/plans/2026-11-24-pig-groundwater.md` (step N1).
+
+**Why.** The author's request of 2026-11-24 („Te dane też muszą być
+wersjonowane”) and the plan's open questions 3, 4, 5 and 9, decided by
+Fable for the author the same day. The service holds one month of readings
+and no history of its own, so every month not captured is lost. The
+sources were read on 2026-11-24: dataset 170 gives CC BY 4.0 with no
+condition of its own (`license_condition_default_cc40` true,
+`current_condition_descriptions` empty) and lists the service's WMS;
+PIG-PIB's terms of reuse, linked as that WMS's `AccessConstraints`, ask for
+the source with the times of creation and acquisition, the fact and the
+extent of processing, and that recipients be told the terms' full text;
+the open-data act (art. 15 ust. 1) allows conditions on no more, and
+Prawo wodne (art. 386 ust. 3) gives PIG-PIB's information for reuse free
+under that act. W, WP and RW carry what a line can; the extent of
+processing is a formula's matter, not a line's. PIG-PIB checks the readings
+before they enter the MWP database („poddawane są weryfikacji na każdym
+etapie”), and its yearbook holds aggregates only, so no later verified
+source replaces them; PSG is a state service but no hydro-meteorological
+service of a WMO member. RW is R with the provider's letter, as RE is
+E-OBS's.
+
+**Rejected.** PIG-PIB's own terms as the governing licence (the record that
+lists the service names CC BY 4.0, and the terms add nothing W, WP and RW
+leave out but the extent of processing). The extent of processing in WP
+(ECO-071). The tier `operational` for the MWP readings (it would label
+PSG's checked database „niezweryfikowane” on every surface). The source
+class `nmhs` (P11 of the providers plan defines it by WMO membership).
+`PGI` and `pl.pgi.*` (ECO-082 rejected English acronyms). RG as the terms
+line (left for GUGiK's conditions, which a regulamin links today).
+
+**Consequence.** DEV §20, DEV-20.5, DEV-20.7 and DEV-20.8 read as above
+with DEV-20.13, and ECO-060, ECO-064 and ECO-084 are amended. The kit's
+`nogat-sources.js` knows W, WP and WK, and the regulamin's template and the
+operator's draft gain the block `pig` in place, `nogat-terms.html`
+regenerated: all within kit `1.3.0` and regulamin 1.1, which no member has
+released yet (ECO-089, ECO-090), and a GUI that keeps no block `pig` fills
+the same page. The registry gains the data source `pig`, Obserwator's
+`pig` and its planned content form `pig-json/1`, and PIG-PIB in the
+summaries of Obserwator's stores and Archiwista's raw root. Obserwator
+takes the provider in steps O1 to O6 of the plan, for `v3.3.0`; data
+received later by request carry the request form's sentence as a line of
+their own, added to the table when they enter.

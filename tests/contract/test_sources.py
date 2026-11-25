@@ -29,8 +29,12 @@ RULE = re.search(
 )
 
 
-# The lines shown, the full lines whose short forms are shown, and CP in the dialog.
-KNOWN = ["S", "P", "PS", "PP", "C", "CK", "CP", "G", "GK", "SG", "SK", "Z", "ZK"]
+# The lines shown, the full lines whose short forms are shown, and CP and WP in the
+# dialog.
+KNOWN = [
+    *("S", "P", "PS", "PP", "C", "CK", "CP", "W", "WK", "WP"),
+    *("G", "GK", "SG", "SK", "Z", "ZK"),
+]
 
 
 def test_the_element_knows_exactly_the_provider_lines_it_recognises() -> None:

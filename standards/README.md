@@ -110,10 +110,21 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     zoomed one, whose y axis fits the values shown; a PNG is the chart as
     shown with the providers' lines, a CSV the whole series (DEV-15.16,
     ECO-090).
+  - PIG-PIB's Monitoring Wód Podziemnych is a data source of the
+    ecosystem: a product with its points, readings or automatic
+    measurements carries W (PIG-PIB, the times of creation and acquisition,
+    CC BY 4.0 by dane.gov.pl's dataset 170), WP once processed and the
+    terms line RW, which links PIG-PIB's terms of reuse; a GUI view's strip
+    shows W as WK; the automatic measurements without validation
+    (`mwp_auto`) are operational data and the readings of the MWP database
+    verified ones; G, SG and Z take the orders 9 to 11, their order
+    unchanged; the regulamin's template gains the block `pig`, in place
+    (DEV §20, DEV-20.5, DEV-20.7, DEV-20.8, DEV-20.13, ECO-092).
   - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
     `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
-    and regulamin 1.1, whose § 8 ust. 7 names the base map among the
-    settings the browser keeps (ECO-089, ECO-090).
+    the lines W, WP and WK of `<nogat-sources>`, and regulamin 1.1, whose
+    § 8 ust. 7 names the base map among the settings the browser keeps and
+    whose § 5 holds the block `pig` (ECO-089, ECO-090, ECO-092).
 - 1.2 (published with Nogat `v0.3.0` on 2026-11-25, tag `std-1.2`):
   - A released document, store layout or identifier grammar stays at its
     `/N` when a change adds a new value of an existing field or a new form

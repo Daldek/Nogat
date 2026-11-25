@@ -89,6 +89,8 @@ G_BDOT = _filled(
     "G", products="NMT, BDOT10k", period="2020–2026", date="2026-03-24 – 2026-10-29"
 )
 Z = _filled("Z", products="RÚIAN", date="2026-11-13")
+W = _filled("W", period="2026", date="2026-11-24")
+W_SPAN = _filled("W", period="2025–2026", date="2026-11-24 – 2026-11-25")
 
 
 TERMS_VALUES = {
@@ -412,18 +414,19 @@ def _strip_lines(page: Page) -> int:
 IMGW = [LINES[m] for m in ("S", "P")]
 PMAXTP = [LINES[m] for m in ("PS", "PP", "M")]
 NOTICE = [LINES[m] for m in ("RD", "RH", "RK")]
-OTHERS = [LINES["C"], G_BDOT, LINES["SG"], Z]
+OTHERS = [LINES["C"], W, G_BDOT, LINES["SG"], Z]
 
 
 def test_strip_shows_the_on_screen_lines_once_in_order(
     sources: tuple[Page, list[str]],
 ) -> None:
     page, _ = sources
-    full = [OTHER, Z, LINES["SG"], G_NMT, LINES["C"], CP, G_BDOT, *reversed(PMAXTP)]
+    full = [OTHER, Z, LINES["SG"], G_NMT, W_SPAN, LINES["WP"], LINES["C"], CP, W]
+    full += [G_BDOT, *reversed(PMAXTP)]
     _lines(page, [*full, *IMGW, LINES["S"]], NOTICE)
     strip = page.locator(".nogat-sources-strip")
     assert page.locator(".nogat-sources-line").all_text_contents() == [
-        *(LINES[m] for m in ("S", "P", "PS", "PP", "CK")),
+        *(LINES[m] for m in ("S", "P", "PS", "PP", "CK", "WK")),
         _filled("GK", products="NMT, BDOT10k"),
         LINES["SK"],
         LINES["ZK"],
@@ -435,6 +438,8 @@ def test_strip_shows_the_on_screen_lines_once_in_order(
         ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
         ("https://klimat.imgw.pl/opady-maksymalne",) * 2,
         ("ČHMÚ", "https://opendata.chmi.cz"),
+        ("CC BY 4.0", LICENCE),
+        ("PIG-PIB", "https://www.pgi.gov.pl/psh"),
         ("CC BY 4.0", LICENCE),
         ("CC BY 4.0", LICENCE),
         ("CC BY 4.0", LICENCE),

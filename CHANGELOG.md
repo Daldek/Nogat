@@ -47,6 +47,20 @@ the standard are listed in [standards/README.md](standards/README.md).
   `design/README.md`'s „Chart” and „Charts”; browser tests in Chromium under
   the GUIs' CSP at 1440 and 390 px in both themes, fingers by DevTools'
   touch events.
+- PIG-PIB's groundwater monitoring as a data source (ECO-092, step N1 of
+  `docs/plans/2026-11-24-pig-groundwater.md`): DEV §20 rows W and WP at
+  order 8 (PIG-PIB, its Monitoring Wód Podziemnych, the times of creation
+  and acquisition, CC BY 4.0; G, SG and Z become 9 to 11), the short form
+  WK and the terms line RW (PIG-PIB's terms of reuse); DEV-20.13 says what
+  carries them, DEV-20.7 links RW and DEV-20.8 names `mwp_auto` among the
+  operational data. The kit's `<nogat-sources>` knows W, WP and WK and
+  shows WK between CK and GK, „PIG-PIB” and „CC BY 4.0” linked; the
+  regulamin's template and the operator's draft gain the block `pig` in
+  place, `nogat-terms.html` regenerated, within kit `1.3.0` and regulamin
+  1.1. `ecosystem.yaml`: the data source `pig`, `pig` in Obserwator's
+  sources, its planned `pig-json/1` and PIG-PIB in the summaries of
+  `obserwator-store/1`, `obserwator-archives`, `obserwator-data/1` and
+  `archiwista-raw-root`; `docs/ECOSYSTEM_MAP.md` regenerated.
 
 ### Changed
 

@@ -30,6 +30,7 @@ flowchart LR
     src_imgw(["imgw"])
     src_chmu(["chmu"])
     src_camels_pl(["camels-pl"])
+    src_pig(["pig"])
     src_osm(["osm"])
   end
   src_gugik --> Kartograf
@@ -40,6 +41,7 @@ flowchart LR
   src_imgw --> Obserwator
   src_chmu --> Obserwator
   src_camels_pl --> Obserwator
+  src_pig --> Obserwator
   src_gugik --> Hydrograf
   src_osm --> Hydrograf
   src_gugik --> Archiwista
@@ -147,20 +149,21 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Since v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture]. |
+| `obserwator-store/1` | store | Retman, Archiwista | Versioned raw root (archives with sidecars, station sources, PMAXTP cells; ADR-017) with root marker obserwator-store.json (tool, created_at, producer_version, DEV-19.12), default root &lt;data_dir&gt;/obserwator-raw (OBSERWATOR_RAW_ROOT), obserwator store init --kind raw, and read API store_info, iter_store, read_meta, read_series, command_for_version. Since v3.2.0 (ECO-084), the captures — every answer a provider adapter receives, kept as it came, per source and UTC day as an archive version of a dataset of the tier operational or telemetry, public or private by the operator's [obserwator.capture]. Planned for v3.3.0 (ECO-092), the provider PIG's pl.pig.* captures of PIG-PIB's Monitoring Wód Podziemnych, every answer as it came — the points, the month of readings the service holds (verified) and the nightly harvest of the automatic hourly measurements (operational). |
 | `obserwator-meta/1` | sidecar | Archiwista | Archive sidecar with dataset, provider, licence, HTTP signals, SHA-256 and content_sha256. |
 | `obserwator-series/1` | dataset | Archiwista | Parquet series per station with series.json index (periods, year type, units, coverage). Since v3.2.0 (ECO-085), hourly series — time_unit hour, a UTC time column, the optional &lt;var&gt;_tier of a series built from several tiers, one slot per month series:&lt;key&gt;:&lt;YYYY-MM&gt;. |
 | `obserwator-plan/1` | document | Retman | Plan without effects (--check) for archives, series and catalog in the store, and write, replace or conflict per file in plain mode. |
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
 | `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
+| `pig-json/1` | document | — | Planned for v3.3.0 (ECO-092), the canonical JSON form of PIG-PIB's ArcGIS answers (rows sorted by their key, without OBJECTID and paging) used for content-based pins, as chmu-json/1. |
 | `obserwator-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
 | `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
-| `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions. |
+| `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions; planned for v3.3.0 (ECO-092), PIG-PIB's pages of its Monitoring Wód Podziemnych as published. |
 | `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
 | `obserwator-pmaxtp` | document | Hydrolog, Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
-| `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store. |
+| `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store. Planned for v3.3.0 (ECO-092), the provider PIG — PIG-PIB's station catalog pig_stations, its groundwater readings as a weekly series and the automatic points' hourly series of the tier operational. |
 | `obserwator-analyses/1` | dataset | — | Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export). |
 | `obserwator-gui` | service | — | Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079). |
 
@@ -200,7 +203,7 @@ flowchart LR
 | `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
 | `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
-| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer. |
+| `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, and PIG-PIB's from Obserwator v3.3.0 (ECO-092), an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer. |
 
 ## External data sources
 
@@ -216,4 +219,5 @@ data-flow diagram.
 | [IMGW-PIB (archives, live API and telemetry, hydro.imgw.pl operational data, PMAXTP atlas)](https://danepubliczne.imgw.pl) | PL | IMGW-PIB terms of reuse, attribution required | Obserwator |
 | [ČHMÚ open data (historical, recent and now sets)](https://opendata.chmi.cz) | CZ | CC BY 4.0 | Obserwator |
 | [CAMELS-PL (catchments, gauges, attributes, signatures, forcing and simulations of 869 IMGW-PIB gauges; Zenodo)](https://doi.org/10.5281/zenodo.20133182) | PL | CC BY 4.0, except the catchment series derived from E-OBS (ECA&D/E-OBS data policy, non-commercial research and education) | Kartograf, Obserwator |
+| [PIG-PIB (Monitoring Wód Podziemnych of the state geological service: points, groundwater readings, automatic measurements)](https://cbdgmapa.pgi.gov.pl/arcgis/rest/services/hydrogeologia/mwp/MapServer) | PL | CC BY 4.0 (dane.gov.pl dataset 170); PIG-PIB's terms of reuse | Obserwator |
 | [OpenStreetMap](https://www.openstreetmap.org) | global | ODbL | Hydrograf, Archiwista |
