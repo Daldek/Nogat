@@ -175,6 +175,22 @@ the standard are listed in [standards/README.md](standards/README.md).
   ECO-003, ECO-058 (stage 2 is Latarnik, `nogat.gui` retires) and ECO-059
   (Obserwator calls Hydrolog's program or server) are amended (ECO-095); the
   GUI platform plan's status points to ECO-095.
+- `ecosystem.yaml` with Hydrograf's `/api/v1` (step N2 of
+  `docs/plans/2026-11-24-latarnik.md` after Hydrograf's HG1, its ADR-091 on
+  its `develop` `cd9288a`, unreleased until 0.7.0): its `interfaces.rest`
+  `/api/v1, unreleased until 0.7.0`; its routes `GET
+  /api/v1/watershed/delineate`, the hydrograph and the network as `POST
+  /api/v1/jobs` with the commands `hydrograph generate` and `network
+  delineate`, `POST /api/v1/network/preview`, `POST
+  /api/v1/terrain/profile` and the new `POST /api/v1/precipitation/depth`
+  (a catchment's PMAXTP design depth); its new provides
+  `hydrograf-command-list/1`, `hydrograf-commands/1` and
+  `hydrograf-result/1`, which replace `hydrograf-rest` on Latarnik's edge;
+  `hydrograf-rest`, Retman's planned use and the note of its edge to
+  Hydrolog on `/api/v1`. Hydrolog's `interfaces.rest` is `hydrolog server
+  (/api/v1), planned` (H1), and the GUI services of Hydrolog and Obserwator
+  no longer name the entry point group `nogat.gui` (G8, ECO-095). Map and
+  `AGENTS.md` regenerated.
 
 ## [0.3.0] - 2026-11-25
 

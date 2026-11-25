@@ -220,7 +220,7 @@ projects:
         summary: Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export).
       - id: obserwator-gui
         kind: service
-        summary: "Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079)."
+        summary: "Browser GUI (extra gui), served by obserwator gui serve, 127.0.0.1:8060 by default. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079)."
       - id: obserwator-ogcapi
         kind: service
         summary: Planned for v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin step O1), OGC API – Features at /ogcapi/ of obserwator server, Part 1 Core in CRS84 — the collections stations-<provider> and latest-<provider>-<kind> of the providers the instance serves, each collection's description with its providers' lines and its terms linked, each items answer with attribution and terms_notice; flat properties and stable ids, ready for WFS.
@@ -265,7 +265,7 @@ projects:
     interfaces:
       cli: hydrolog
       mcp: hydrolog mcp
-      rest: null
+      rest: hydrolog server (/api/v1), planned
       python: hydrolog
       gui: hydrolog gui serve
     routes:
@@ -318,7 +318,7 @@ projects:
         summary: Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork).
       - id: hydrolog-gui
         kind: service
-        summary: Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host.
+        summary: Browser GUI over the catalog (extra gui), served by hydrolog gui serve, 127.0.0.1:8070 by default.
       - id: hydrolog-series/1
         kind: document
         summary: A station's series for the statistics (daily values with dates, or an annual extreme of each year), the payload of a nogat-handoff/1 that the GUI's Statystyka przepływów opens (Hydrolog ADR-0020).
@@ -349,23 +349,34 @@ projects:
     python_manifests: [backend/pyproject.toml]
     visibility: public
     distribution: {pypi: null, import_name: null}
-    interfaces: {cli: null, mcp: null, rest: /api, python: null}
+    interfaces: {cli: null, mcp: null, rest: "/api/v1, unreleased until 0.7.0", python: null}
     routes:
       - task: Delineate the watershed of a point in Poland and read its parameters
-        command: POST /api/delineate-watershed
+        command: GET /api/v1/watershed/delineate
       - task: Generate a design hydrograph for a point in Poland from PMAXTP rainfall
-        command: POST /api/generate-hydrograph
+        command: 'POST /api/v1/jobs {"command": "hydrograph generate", "options": …}'
       - task: Delineate a network of subcatchments at control points (closing section, tributaries, gauges)
-        command: POST /api/delineate-network
+        command: 'POST /api/v1/jobs {"command": "network delineate", "options": …}'
       - task: Preview a network of subcatchments while placing control points (areas, reach lengths, outlines)
-        command: POST /api/delineate-network/preview
+        command: POST /api/v1/network/preview
       - task: Cut a terrain profile along a line
-        command: POST /api/terrain-profile
+        command: POST /api/v1/terrain/profile
+      - task: Compute the PMAXTP design depth of a catchment for a duration and a probability
+        command: POST /api/v1/precipitation/depth
     data_sources: [gugik, osm]
     provides:
       - id: hydrograf-rest
         kind: service
-        summary: REST API with watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t) and CSV exports; MVT tiles.
+        summary: "REST API at /api/v1 from its catalog, unreleased until 0.7.0 (Hydrograf ADR-091; 0.6.1 serves /api): watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t), the catchment's design depth and CSV exports; the hydrograph and the network as nogat-job/1 jobs; nogat-server/1 at GET /api/v1/server; client address from X-Forwarded-For through its nginx; MVT tiles at /api/tiles/."
+      - id: hydrograf-command-list/1
+        kind: catalog
+        summary: Unreleased until 0.7.0 (ADR-091), the summary of its 14 commands with each one's rest (method, path, key) at GET /api/v1/commands/list; the first step of discovery.
+      - id: hydrograf-commands/1
+        kind: catalog
+        summary: Unreleased until 0.7.0 (ADR-091), one command with options, rules, errors and examples at GET /api/v1/commands/schema; hydrograph generate and network delineate carry long and run as jobs.
+      - id: hydrograf-result/1
+        kind: document
+        summary: Unreleased until 0.7.0 (ADR-091), the result envelope of every command (status, result with its schema, notices), also a job's result.
     depends_on:
       - project: Kartograf
         kind: runtime
@@ -379,7 +390,7 @@ projects:
         via: [library, file]
         exchange: [watershed-parameters, hydrolog-python-api, hydrolog-network/1]
         uses: [WatershedParameters, SCSCN, HydrographGenerator, NashIUH, SCSUnitHydrograph, BetaHietogram, BlockHietogram, EulerIIHietogram, calculate_weighted_cn, thiessen_polygons, inverse_distance_weighting]
-        note: POST /api/delineate-watershed and /api/generate-hydrograph hand a watershed (ADR-068), POST /api/delineate-network a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1; the network's carries the origin of each node in node_provenance.
+        note: watershed delineate and hydrograph generate hand a watershed (ADR-068), network delineate a network (ADR-080), to Hydrolog's GUI as nogat-handoff/1 around hydrolog-network/1, at /api/v1 unreleased until 0.7.0 (ADR-091); the network's carries the origin of each node in node_provenance.
       - project: Obserwator
         kind: runtime
         status: active
@@ -482,7 +493,7 @@ projects:
         status: planned
         via: [rest]
         exchange: [hydrograf-rest]
-        note: Retman PRD roadmap.
+        note: Retman PRD roadmap; Hydrograf's /api/v1 and its catalog, unreleased until 0.7.0 (ADR-091, ECO-095).
 
   - name: Archiwista
     summary: Web browser and manager of Kartograf and Obserwator stores.
@@ -583,8 +594,8 @@ projects:
         kind: runtime
         status: planned
         via: [rest]
-        exchange: [hydrograf-rest]
-        note: Planned with Hydrograf's /api/v1 (ECO-095, plan 2026-11-24-latarnik step HG1), its catalog's command list and envelope replacing hydrograf-rest then; no package dependency. Passes /hydrograf/v1/… and its GUI's host whole once its nginx forwards X-Forwarded-For; point-design-hydrograph takes the delineation and the catchment's design depth from it.
+        exchange: [hydrograf-command-list/1, hydrograf-result/1]
+        note: Planned with Hydrograf's /api/v1, unreleased until 0.7.0 (ECO-095, plan 2026-11-24-latarnik step HG1, Hydrograf ADR-091); no package dependency. Passes /hydrograf/v1/… and its GUI's host whole, its nginx forwarding X-Forwarded-For; point-design-hydrograph takes watershed delineate and precipitation depth from it.
       - project: Kartograf
         kind: runtime
         status: planned

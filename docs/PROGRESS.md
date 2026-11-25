@@ -45,7 +45,7 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 | Hub gate and CI | done | `scripts/gate.sh` on `uv.lock`, tests in `tests/` (unit, integration, contract, browser) |
 | Canonical agent-interface schemas | done | `schemas/agent/`, contract tests (ECO-050) |
 | Hand-off schema `nogat-handoff/1` | done | `schemas/exchange/handoff-1.schema.json`, with `node_provenance` (2026-11-10) and the optional `attribution` and `terms_notice` (ECO-060) |
-| Server description `nogat-server/1`, job `nogat-job/1` | done in Nogat; `job-1` on branch `feat/latarnik-nogat`, not merged | `schemas/exchange/server-1.schema.json` (ECO-094, AGI-6.7) and `job-1.schema.json` (AGI-6.10, ECO-095); served by Obserwator from `v3.6.0` (O1), Hydrolog's server (H1), Hydrograf's `/api/v1` (HG1), Kartograf's server (K4) and Latarnik (L1) |
+| Server description `nogat-server/1`, job `nogat-job/1` | done in Nogat | `schemas/exchange/server-1.schema.json` (ECO-094, AGI-6.7) and `job-1.schema.json` (AGI-6.10, ECO-095, merged at `f5f6e67`); served by Hydrograf's `/api/v1` (HG1, its `develop` `cd9288a`, unreleased until 0.7.0), then by Obserwator from `v3.6.0` (O1), Hydrolog's server (H1), Kartograf's server (K4) and Latarnik (L1) |
 | Data-output convention (ECO-051) | done in Nogat | DEV §19, AGI-3.4; plan `docs/plans/2026-10-24-data-output.md` |
 | Generated `AGENTS.md` (HUB-4.3) | done | from the `routes` of the registry, `agents --check` in the gate; the guide links name `main`: they resolve for Nogat and the members of `v0.1.0`, and for Retman and Hydraulik once each is merged there |
 | Visual identity and GUI kit (DEV §15) | done | `design/`: tokens, marks, specimen, mockups; kit 1.1.0 in 0.2.0 (app menu, sources strip, hand-off, regulamin and its draft for operators, admin panel; ECO-081) and 1.2.0 in 0.3.0 (`screen-lines`, the blocks `camels-pl` and `e-obs`; ECO-086, ECO-087), 1.3.0 on `develop` (base maps, charts, command builder, regulamin 1.1; ECO-089, ECO-090, ECO-093), whose version moves only with the author's consent (REL-1.4); the kit manifests of Hydrograf, Hydrolog, Obserwator and Archiwista equal 1.1.0 in their releases of `v0.2.0` |
@@ -229,8 +229,9 @@ called Obserwator from v3.0.0 (ECO-057); its local checkout may still be the dir
 12. Visual identity (`docs/plans/2026-11-01-visual-identity.md`): step 5,
     Archiwista's copy of `tokens.css`, is not on its `develop` (it ships the
     kit). GUI platform stage 2 is Latarnik: plan `docs/plans/2026-11-24-latarnik.md`,
-    approved 2026-11-24; N1 done 2026-11-25 (`feat/latarnik-nogat`, not merged,
-    ECO-095); next H1 and HG1; its repository is the author's to create.
+    approved 2026-11-24; N1 merged (`f5f6e67`, ECO-095); HG1 on Hydrograf's `develop` (`cd9288a`, ADR-091,
+    unreleased until 0.7.0) and N2's part for it on `feat/latarnik-n2`, not merged: the registry's Hydrograf on
+    `/api/v1`, Hydrolog's REST planned, no `nogat.gui`; next H1; its repository is the author's to create.
 13. Retman's evaluation rows of the operations added for Kartograf,
     Obserwator and Hydrolog are unmeasured: no model server on this machine.
 14. Hydrograf without IMGW-PIB, a to-do that the first joint release
