@@ -74,7 +74,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Kartograf | active | CLI `kartograf`, MCP `kartograf-mcp`, REST `kartograf server (/api/v1), planned`, Python `kartograf` | Downloads Polish and Czech geodata (DEM, imagery, land cover, soil) as plain files or a store. |
 | Obserwator | active | CLI `obserwator`, MCP `obserwator mcp`, REST `obserwator server (/api/v1)`, Python `obserwator`, GUI `obserwator gui serve` | IMGW-PIB and ČHMÚ hydro-meteo data, PMAXTP; plain files or a versioned store with Parquet series. |
 | Hydrolog | active | CLI `hydrolog`, MCP `hydrolog mcp`, REST `hydrolog server (/api/v1), planned`, Python `hydrolog`, GUI `hydrolog gui serve` | Hydrologic calculations (tc, SCS-CN, hydrographs, routing, statistics, HSG); library, CLI, MCP, GUI. |
-| Hydrograf | active | REST `/api/v1, unreleased until 0.7.0` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
+| Hydrograf | active | REST `/api/v1` | Web app (FastAPI + PostGIS) for watershed delineation and design hydrographs. |
 | Hydraulik | research | CLI `hydraulik`, Python `hydraulik` | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
