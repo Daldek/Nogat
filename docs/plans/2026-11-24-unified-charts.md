@@ -2,7 +2,7 @@
 
 Approved: 2026-11-24, the author (in session: „Wspólne wykresy: wszystko ok”)
 
-Status: approved on 2026-11-24 with the author's answers to open questions 1 to 7, each as recommended (branch `plan/unified-charts`, not merged); nothing done. Reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-unified-charts.md`): its decisions are applied below. The design's proposals, marked „[proposed]” in the draft, were approved with it.
+Status: approved on 2026-11-24 with the author's answers to open questions 1 to 7, each as recommended (branch `plan/unified-charts`, not merged); step 1 done (Results) and released in kit `1.3.0` with standard 1.3 and Nogat `v0.4.0`, step 5 released in Hydrograf `v0.7.0` (its ADR-090; 2026-11-25), steps 2 to 4 not released. Reviewed by Fable on 2026-11-24 (`~/workspace/wt/logs/fable-unified-charts.md`): its decisions are applied below. The design's proposals, marked „[proposed]” in the draft, were approved with it.
 
 Requirements: HUB-5.2, DEV-1.2, DEV-15.1, DEV-15.2, DEV-15.3, DEV-15.6, DEV-17.5, DEV-19.21, DEV-20.5, REL-1.4, ECO-055, ECO-058, ECO-072. Source: Obserwator's feedback #9 (2026-11-23): „Fajnie byłoby dodać zoom i przesuwanie do wykresów w tych wszystkich apkach. No i reset widoku po zoomie.” Related: the GUI platform plan `2026-11-01-nogat-gui-platform.md` (pending, deferred on 2026-11-12), whose stage 2 proposed a `chart-theme.js` that kept Chart.js beside the hand-drawn SVG; this plan replaces that row for charts.
 
