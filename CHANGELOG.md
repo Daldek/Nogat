@@ -94,6 +94,31 @@ the standard are listed in [standards/README.md](standards/README.md).
   planned `obserwator-ogcapi` and `obserwator-hec`; `docs/ECOSYSTEM_MAP.md`
   and `AGENTS.md` regenerated. Goniec's mark `design/marks/goniec.svg` and
   its accent `--tool-goniec`.
+- The kit's command builder (ECO-093, step N1 of Kartograf's
+  `docs/plans/2026-11-24-kartograf-gui.md`): `design/kit/nogat-command-form.js`,
+  `<nogat-command-form>` built from Hydrolog's catalog form as a plain
+  custom element, and `nogat-command-form.css`. Generated from a command's
+  commands-1 entry: a field per option by its type, section and Polish
+  text, a choice per `one_of` (exactly one alternative of the command's,
+  at most one option of a group), the fields `applies_to` shows, `excludes`
+  disables and `requires` and `required_when` mark required, the path
+  options left out with `paths="hidden"`, the line of the GUI's binding of
+  the tool's `format_command` with „Kopiuj”, „Wklej polecenie” read by its
+  `parse_command`, the tool's messages under the field `details.option`
+  names; `options`, `setOption`, `check()`, `showError()` and the event
+  `change`. The rule DEV-15.17, the builder in the specimen and
+  `design/README.md`'s „Command builder”; browser tests in Chromium under
+  CSP `'self'` on the catalog entries of Kartograf, Hydrolog and
+  Obserwator (`tests/browser/command_form/catalogs.json`) at 1440 and
+  390 px in both themes, and contract tests of its words and fixtures.
+  commands-1 and AGI-2.3 gain the optional fields the form reads (an
+  option's `items`, `exclusive_minimum`, `exclusive_maximum`, `format`,
+  `section`, `requires`, `excludes`, `applies_to`, `required_when`,
+  `i18n.pl`; a command's `one_of`), with which the catalogs of Kartograf,
+  Hydrolog, Obserwator, Hydraulik and Retman validate unchanged.
+  `nogat-server/1` names Kartograf's capabilities `catalog`, `plan` and
+  `script`. `ecosystem.yaml`: Kartograf's `interfaces.rest`, planned, and
+  its planned service `kartograf-server`; map and `AGENTS.md` regenerated.
 
 ### Changed
 
@@ -113,7 +138,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   lists the shared keys `basemaps`, `basemap_mirrors` and `basemap_extra`,
   and DEV-20.9 credits a GUGiK base map with its catalogue entry's credit
   (ECO-089). The GUI platform plan's `basemaps.json` points to the
-  base-maps plan and its `chart-theme.js` to the charts plan.
+  base-maps plan, its `chart-theme.js` to the charts plan and its
+  `command-form.js` to Kartograf's GUI plan (ECO-093).
 
 ## [0.3.0] - 2026-11-25
 

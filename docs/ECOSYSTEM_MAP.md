@@ -149,6 +149,7 @@ flowchart LR
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 | `kartograf-camels-pl` | dataset | Obserwator (planned) | Since v0.9.0 (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro (`hydro download --product camels`); the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088). |
+| `kartograf-server` | service | — | Planned for the minor after v0.9.0 (ECO-093, plan 2026-11-24-kartograf-gui steps K4 and K5): kartograf server (extra server), read only — the catalog, the queries without paths, the plans of the data commands (POST /api/v1/&lt;group&gt;/download?check=true) and script generate, a run or a path from a client refused as forbidden — with nogat-server/1 at GET /api/v1/server (capabilities catalog, plan and script), plans limited per client, no key taken and no data byte passing through it; kartograf gui serve starts it with the GUI on 127.0.0.1, and behind Latarnik its /api/v1/… is /kartograf/v1/…. |
 
 ### Obserwator
 

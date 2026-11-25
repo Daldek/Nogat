@@ -70,6 +70,55 @@
 <script type="module" src="kit/nogat-sources.js"></script>
 <link rel="stylesheet" href="kit/nogat-basemaps.css">
 <script type="module" src="kit/nogat-basemaps.js"></script>
+<link rel="stylesheet" href="kit/nogat-command-form.css">
+<script type="module">
+  // A made-up entry in the shape of Kartograf's `elevation download`, and a line written here
+  // where a GUI binds its tool's format_command.
+  import "./kit/nogat-command-form.js";
+  const option = (name, type, description, more = {}) =>
+    ({ name, type, required: false, description, ...more });
+  const entry = {
+    name: "elevation download",
+    one_of: [["sheet"], ["bbox"]],
+    options: [
+      option("product", "string", "Product.", {
+        required: true,
+        enum: [
+          { value: "nmt", meaning: "Digital terrain model." },
+          { value: "nmpt", meaning: "Digital surface model." },
+          { value: "laz", meaning: "LIDAR point cloud." },
+        ],
+        i18n: { pl: { description: "Produkt.", enum: {
+          nmt: "Numeryczny Model Terenu.", nmpt: "Numeryczny Model Pokrycia Terenu.",
+          laz: "Chmura punktów LIDAR." } } },
+      }),
+      option("sheet", "string", "Sheet code.", { one_of: "area",
+        i18n: { pl: { description: "Godło arkusza, np. `N-34-130-D-d-2-4`." } } }),
+      option("bbox", "array", "Area rectangle.", { items: "number", one_of: "area",
+        i18n: { pl: { description: "Prostokąt obszaru: min_x, min_y, max_x, max_y." } } }),
+      option("vertical_crs", "string", "Height system.", {
+        enum: [{ value: "EVRF2007", meaning: "Current." }, { value: "KRON86", meaning: "Old." }],
+        i18n: { pl: { description: "Układ wysokości." } } }),
+      option("min_density", "integer", "Points per m².", { unit: "points/m2", min: 1,
+        applies_to: { product: ["laz"] }, i18n: { pl: { description: "Tylko LAZ: najmniejsza gęstość punktów." } } }),
+      option("year", "integer", "Data year.", { excludes: ["min_year"],
+        i18n: { pl: { description: "Tylko ten rok danych." } } }),
+      option("min_year", "integer", "Lower bound of the data year.",
+        { i18n: { pl: { description: "Dolna granica roku danych." } } }),
+      option("output_dir", "string", "Plain files.", { one_of: "target", path_role: "output",
+        i18n: { pl: { description: "Katalog na zwykłe pliki." } } }),
+      option("root", "string", "Store root.", { one_of: "target", path_role: "root",
+        i18n: { pl: { description: "Katalog magazynu." } } }),
+    ],
+    i18n: { pl: { rules: ["Podaj `vertical_crs` jawnie: nic nie jest zgadywane."] } },
+  };
+  const form = document.getElementById("command-form");
+  form.command = entry;
+  form.format = (command, options) => ["kartograf", command, ...Object.entries(options).flatMap(
+    ([name, value]) => [`--${name.replace(/_/g, "-")}`, Array.isArray(value) ? value.join(",") : value],
+  )].join(" ");
+  form.options = { product: "nmt", sheet: "N-34-130-D-d-2-4", vertical_crs: "EVRF2007" };
+</script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -273,6 +322,11 @@
     <div class="row">
       <div class="panel"><h4>Podkłady kartograficzne</h4><nogat-basemaps id="basemaps"></nogat-basemaps></div>
       <span class="note">kit/nogat-basemaps.js: the catalogue's entries in its order, then „bez podkładu”, the choice kept in the browser under <code>nogat-basemap</code>, „Podkład nie odpowiada” beside an entry whose provider fails (the orthophoto here); the GUI draws the chosen one with <code>maplibreBasemap</code> or <code>leafletBasemap</code>, its credit in the map's attribution (DEV-15.15, ECO-089)</span>
+    </div>
+    <h3>Command builder</h3>
+    <div class="row">
+      <div class="panel"><nogat-command-form id="command-form"></nogat-command-form></div>
+      <span class="note">kit/nogat-command-form.js: the form of one catalog command generated from its commands-1 entry: a field per option, a choice per <code>one_of</code>, the rules that show, disable and require fields, the line of the tool's <code>format_command</code> with „Kopiuj” (DEV-15.17, ECO-093)</span>
     </div>
     <h3>Admin panel</h3>
     <p class="note">kit/nogat-admin.js: the admin page of a GUI with „Zgłoszenia”, „Statystyki” and „Stan” on a fake API, <a href="specimen-admin.html">specimen-admin.html</a>, key <code>nogat</code> (DEV-15.13)</p>

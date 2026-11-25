@@ -78,7 +78,7 @@ projects:
     interfaces:
       cli: kartograf
       mcp: kartograf-mcp
-      rest: null
+      rest: kartograf server (/api/v1), planned
       python: kartograf
     routes:
       - task: Download elevation models (NMT, NMPT), LAZ point clouds or contours of an area
@@ -133,6 +133,9 @@ projects:
       - id: kartograf-camels-pl
         kind: dataset
         summary: Since v0.9.0 (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro (`hydro download --product camels`); the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088).
+      - id: kartograf-server
+        kind: service
+        summary: "Planned for the minor after v0.9.0 (ECO-093, plan 2026-11-24-kartograf-gui steps K4 and K5): kartograf server (extra server), read only — the catalog, the queries without paths, the plans of the data commands (POST /api/v1/<group>/download?check=true) and script generate, a run or a path from a client refused as forbidden — with nogat-server/1 at GET /api/v1/server (capabilities catalog, plan and script), plans limited per client, no key taken and no data byte passing through it; kartograf gui serve starts it with the GUI on 127.0.0.1, and behind Latarnik its /api/v1/… is /kartograf/v1/…."
     depends_on: []
 
   - name: Obserwator
