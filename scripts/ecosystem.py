@@ -228,6 +228,11 @@ def validate(registry: dict[str, Any]) -> list[str]:
         for source in p["data_sources"]:
             if source not in sources:
                 problems.append(f"{name}: unknown data source {source!r}")
+        if ("plugin" in p["profiles"]) != ("qgis" in p["distribution"]):
+            problems.append(
+                f"{name}: distribution.qgis is given by a plugin "
+                "and only by one (DEV §1)"
+            )
         for dep in p["depends_on"]:
             producer = dep["project"]
             if producer == name:

@@ -58,6 +58,7 @@
   --tool-hydrolog: #3f7a3a;
   --tool-hydraulik: #5e4fa2;
   --tool-retman: #a4472f;
+  --tool-goniec: #8e3b78;
 
   /* Type */
   --font-sans: Lato, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "DejaVu Sans", sans-serif;
@@ -170,6 +171,7 @@
     --tool-hydrolog: #7cc474;
     --tool-hydraulik: #b0a3f0;
     --tool-retman: #f0907a;
+    --tool-goniec: #e58fcf;
 
     /* Navigation rail */
     --rail-bg: #010409;
@@ -233,6 +235,7 @@
   --tool-hydrolog: #7cc474;
   --tool-hydraulik: #b0a3f0;
   --tool-retman: #f0907a;
+  --tool-goniec: #e58fcf;
 
   /* Navigation rail */
   --rail-bg: #010409;

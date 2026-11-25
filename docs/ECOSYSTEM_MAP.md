@@ -22,6 +22,7 @@ flowchart LR
   Hydraulik["Hydraulik<br/>research"]
   Retman["Retman<br/>active"]
   Archiwista["Archiwista<br/>active"]
+  Goniec["Goniec<br/>research"]
   subgraph external[External data sources]
     src_gugik(["gugik"])
     src_cuzk(["cuzk"])
@@ -66,6 +67,7 @@ flowchart LR
   Kartograf -- library/store --> Archiwista
   Obserwator -- library/store --> Archiwista
   Hydrolog -. file, no package .-> Archiwista
+  Obserwator -. planned: rest .-> Goniec
 ```
 
 ## Projects
@@ -80,6 +82,7 @@ flowchart LR
 | [Hydraulik](https://github.com/Daldek/Hydraulik) | tool | research | Builds and runs SFINCS flood models from terrain and design rain; optional EPA SWMM sewer coupling. |
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and Obserwator stores. |
+| [Goniec](https://github.com/Daldek/Goniec) | plugin | research | QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series. |
 
 ## Dependencies and exchanged data
 
@@ -105,6 +108,7 @@ flowchart LR
 | Archiwista | Kartograf | runtime | active | library, store | `kartograf-store/1`, `kartograf-meta/1`, `kartograf-plan/1` |
 | Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmu-json/1`, `obserwator-data/1` |
 | Archiwista | Hydrolog | data | active | file | `hydrolog-series/1` |
+| Goniec | Obserwator | runtime | planned | rest | `obserwator-ogcapi`, `obserwator-result/1`, `obserwator-series-csv`, `obserwator-hec` |
 
 ### Details
 
@@ -125,6 +129,7 @@ flowchart LR
 - **Archiwista → Kartograf**: uses `list_segments`, `list_partitions`, `iter_store`, `read_sidecar`, `describe_segment`, `file_footprint`, `link_target`, `pinned_transform`, `command_for_file`; Contract KA-1..KA-8 (Archiwista SPEC §12); KB..KG planned.
 - **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
 - **Archiwista → Hydrolog**: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
+- **Goniec → Obserwator**: Planned for Goniec 0.1 with Obserwator v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin); no package dependency. Reads nogat-server/1 at GET /api/v1/server of the address a person chooses, adds the collections of /ogcapi/ as QGIS's own OAPIF layers, reads stations, current data and series through /api/v1 and copies or saves the server's CSV, HEC tables and DSS files as served; computes nothing.
 
 ## What each project provides
 
@@ -156,16 +161,18 @@ flowchart LR
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
 | `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
 | `pig-json/1` | document | — | Planned for v3.3.0 (ECO-092), the canonical JSON form of PIG-PIB's ArcGIS answers (rows sorted by their key, without OBJECTID and paging) used for content-based pins, as chmu-json/1. |
-| `obserwator-result/1` | document | Hydraulik, Retman | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
+| `obserwator-result/1` | document | Hydraulik, Retman, Goniec (planned) | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
 | `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
 | `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions; planned for v3.3.0 (ECO-092), PIG-PIB's pages of its Monitoring Wód Podziemnych as published. |
-| `obserwator-series-csv` | dataset | Hydrolog, Retman | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
+| `obserwator-series-csv` | dataset | Hydrolog, Retman, Goniec (planned) | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
 | `obserwator-pmaxtp` | document | Hydrolog, Hydrograf, Hydraulik | PMAXTP design precipitation quantiles per grid cell (fetch_pmaxtp, PMaXTPResult). |
 | `obserwator-testing` | library | Retman | obserwator.testing builds an offline store (archives, series, catalog) with the real writers and the marker, for the contract tests and probes of consumers (DEV-10.6). |
 | `obserwator-data/1` | store | Archiwista | Data root (ADR-017, ECO-059) of the Parquet series, the station catalogs and Hydrolog's stored analyses under the marker obserwator-data.json, default root &lt;data_dir&gt;/obserwator (OBSERWATOR_ROOT), built by series build, store catalog and analyses build from a raw root they only read; Obserwator holds the production copy. Planned for v3.4.0 (ECO-086), the provider CAMELS — the pl.camels.* datasets of CAMELS-PL (its E-OBS and G2DC-PL+ forcing, simulations and attributes) built from its ZIP in the raw root, and each gauge's catchment with the gauges upstream of it, read from Kartograf's store. Planned for v3.3.0 (ECO-092), the provider PIG — PIG-PIB's station catalog pig_stations, its groundwater readings as a weekly series and the automatic points' hourly series of the tier operational. |
 | `obserwator-analyses/1` | dataset | — | Results of the station analyses computed by Hydrolog (ADR-016), one version per provider under analyses/versions/ of the data root, each result Hydrolog's answer with the series and Hydrolog versions it came from (analyses build, list, read, export). |
 | `obserwator-gui` | service | — | Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079). |
+| `obserwator-ogcapi` | service | Goniec (planned) | Planned for v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin step O1), OGC API – Features at /ogcapi/ of obserwator server, Part 1 Core in CRS84 — the collections stations-&lt;provider&gt; and latest-&lt;provider&gt;-&lt;kind&gt; of the providers the instance serves, each collection's description with its providers' lines and its terms linked, each items answer with attribution and terms_notice; flat properties and stable ids, ready for WFS. |
+| `obserwator-hec` | document | Goniec (planned) | Planned for v3.6.0 (ECO-094), series hec — a station's series in a form HEC-RAS or HEC-HMS takes, a tab-separated table with its envelope (start, interval, units, HEC type, tiers, stage form, time zone) or one DSS 7 file in a ZIP with ATTRIBUTION.txt (extra hec); every daily series PER-AVER 1DAY at 2400. |
 
 ### Hydrolog
 

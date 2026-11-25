@@ -35,8 +35,9 @@ Wersja 1.0, obowiązuje od {{terms_effective}}
 ## 4. Dostęp
 
 1. Serwis jest dostępny publicznie, bez rejestracji i logowania.
-2. Do korzystania z serwisu potrzebne są urządzenie z dostępem do internetu i aktualna przeglądarka internetowa z włączoną obsługą JavaScriptu.
-3. Operator może w każdej chwili ograniczyć, zawiesić lub zakończyć udostępnianie serwisu albo jego części, w szczególności przy przeciążeniu, pracach technicznych, naruszeniu regulaminu lub zmianie warunków dostawców danych.
+2. Z serwisu korzystasz przez przeglądarkę albo, gdy serwis udostępnia interfejs programistyczny (API), przez program, który z niego korzysta, np. wtyczkę QGIS Goniec ekosystemu Nogat. Regulamin dotyczy obu sposobów.
+3. Do korzystania z serwisu potrzebne są urządzenie z dostępem do internetu i aktualna przeglądarka internetowa z włączoną obsługą JavaScriptu albo program korzystający z API serwisu.
+4. Operator może w każdej chwili ograniczyć, zawiesić lub zakończyć udostępnianie serwisu albo jego części, w szczególności przy przeciążeniu, pracach technicznych, naruszeniu regulaminu lub zmianie warunków dostawców danych.
 
 ## 5. Źródła danych i ich warunki
 
@@ -159,7 +160,7 @@ Licencja ODbL: <https://www.openstreetmap.org/copyright>
 ## 6. Twoje obowiązki
 
 1. Korzystasz z serwisu zgodnie z prawem i regulaminem.
-2. Nie pobierasz danych automatycznie (scraping, masowe zapytania) w sposób, który obciąża serwis lub utrudnia korzystanie z niego innym, nie obchodzisz jego zabezpieczeń, w tym limitu żądań, i nie próbujesz dostać się do jego części administracyjnych. Do pobierania wielu danych służą narzędzia ekosystemu Nogat i serwisy dostawców.
+2. Nie pobierasz danych automatycznie (scraping, masowe zapytania) w sposób, który obciąża serwis lub utrudnia korzystanie z niego innym, nie obchodzisz jego zabezpieczeń, w tym limitu żądań, i nie próbujesz dostać się do jego części administracyjnych. Programy korzystają z serwisu przez jego API, gdy je udostępnia, w granicach limitu żądań. Do pobierania wielu danych służą narzędzia ekosystemu Nogat i serwisy dostawców.
 3. W zgłoszeniach nie przekazujesz treści bezprawnych ani danych osobowych (§ 8).
 
 ## 7. Odpowiedzialność

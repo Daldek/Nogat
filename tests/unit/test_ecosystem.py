@@ -272,6 +272,29 @@ def test_validate_rejects_a_gui_interface_that_names_no_command(gui: object) -> 
     assert all(p.startswith(f"projects/{position}/interfaces/gui") for p in problems)
 
 
+def _registry_with(name: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    registry = copy.deepcopy(ecosystem.load())
+    return registry, next(p for p in registry["projects"] if p["name"] == name)
+
+
+def test_validate_refuses_a_qgis_folder_outside_a_plugin() -> None:
+    registry, kartograf = _registry_with("Kartograf")
+    kartograf["distribution"]["qgis"] = "kartograf"
+    problems = ecosystem.validate(registry)
+    assert problems == [
+        "Kartograf: distribution.qgis is given by a plugin and only by one (DEV §1)"
+    ]
+
+
+def test_validate_refuses_a_plugin_without_its_qgis_folder() -> None:
+    registry, goniec = _registry_with("Goniec")
+    del goniec["distribution"]["qgis"]
+    problems = ecosystem.validate(registry)
+    assert problems == [
+        "Goniec: distribution.qgis is given by a plugin and only by one (DEV §1)"
+    ]
+
+
 @pytest.mark.parametrize(
     ("data", "kept"),
     [

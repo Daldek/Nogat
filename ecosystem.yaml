@@ -218,6 +218,12 @@ projects:
       - id: obserwator-gui
         kind: service
         summary: "Browser GUI (extra gui); alone by obserwator gui serve, 127.0.0.1:8060 by default, or as the module obserwator.gui:gui_module of the entry point group nogat.gui. With obserwator server (/api/v1) it serves one instance described by [obserwator.instance] of nogat.toml: the providers served (visible, hidden or off, filtered on the server), a featured provider, an area (focus or clip), the start view, the operator's title, logo and regulamin and the PMAXTP switch; an invalid section stops the start (plan 2026-11-21-obserwator-instance, ECO-079)."
+      - id: obserwator-ogcapi
+        kind: service
+        summary: Planned for v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin step O1), OGC API – Features at /ogcapi/ of obserwator server, Part 1 Core in CRS84 — the collections stations-<provider> and latest-<provider>-<kind> of the providers the instance serves, each collection's description with its providers' lines and its terms linked, each items answer with attribution and terms_notice; flat properties and stable ids, ready for WFS.
+      - id: obserwator-hec
+        kind: document
+        summary: Planned for v3.6.0 (ECO-094), series hec — a station's series in a form HEC-RAS or HEC-HMS takes, a tab-separated table with its envelope (start, interval, units, HEC type, tiers, stage form, time zone) or one DSS 7 file in a ZIP with ATTRIBUTION.txt (extra hec); every daily series PER-AVER 1DAY at 2400.
     depends_on:
       - project: Kartograf
         kind: data
@@ -525,3 +531,21 @@ projects:
         via: [file]
         exchange: [hydrolog-series/1]
         note: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
+
+  - name: Goniec
+    summary: QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series.
+    profiles: [plugin]
+    status: research
+    repo: https://github.com/Daldek/Goniec
+    visibility: public
+    distribution: {pypi: null, import_name: null, qgis: goniec}
+    interfaces: {cli: null, mcp: null, rest: null, python: null}
+    data_sources: []
+    provides: []
+    depends_on:
+      - project: Obserwator
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [obserwator-ogcapi, obserwator-result/1, obserwator-series-csv, obserwator-hec]
+        note: Planned for Goniec 0.1 with Obserwator v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin); no package dependency. Reads nogat-server/1 at GET /api/v1/server of the address a person chooses, adds the collections of /ogcapi/ as QGIS's own OAPIF layers, reads stations, current data and series through /api/v1 and copies or saves the server's CSV, HEC tables and DSS files as served; computes nothing.

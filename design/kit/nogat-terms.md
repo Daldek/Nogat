@@ -22,7 +22,8 @@ Serwis prowadzi {{operator_name}} (dalej: operator) jako osoba prywatna, poza dz
 ## 4. Dostęp
 
 1. Serwis jest dostępny publicznie, bez rejestracji i logowania.
-2. Operator może w każdej chwili ograniczyć, zawiesić lub zakończyć udostępnianie serwisu albo jego części, w szczególności przy przeciążeniu, naruszeniu regulaminu lub zmianie warunków dostawców danych.
+2. Z serwisu korzystasz przez przeglądarkę albo, gdy serwis udostępnia interfejs programistyczny (API), przez program, który z niego korzysta, np. wtyczkę QGIS Goniec ekosystemu Nogat. Regulamin dotyczy obu sposobów.
+3. Operator może w każdej chwili ograniczyć, zawiesić lub zakończyć udostępnianie serwisu albo jego części, w szczególności przy przeciążeniu, naruszeniu regulaminu lub zmianie warunków dostawców danych.
 
 ## 5. Źródła danych i ich warunki
 
@@ -144,7 +145,7 @@ Licencja ODbL: <https://www.openstreetmap.org/copyright>
 ## 6. Twoje obowiązki
 
 1. Korzystasz z serwisu zgodnie z prawem i regulaminem.
-2. Nie pobierasz danych automatycznie (scraping, masowe zapytania) w sposób, który obciąża serwis lub utrudnia korzystanie z niego innym, nie obchodzisz jego zabezpieczeń, w tym limitu żądań, i nie próbujesz dostać się do jego części administracyjnych. Do pobierania wielu danych służą narzędzia ekosystemu Nogat i serwisy dostawców.
+2. Nie pobierasz danych automatycznie (scraping, masowe zapytania) w sposób, który obciąża serwis lub utrudnia korzystanie z niego innym, nie obchodzisz jego zabezpieczeń, w tym limitu żądań, i nie próbujesz dostać się do jego części administracyjnych. Programy korzystają z serwisu przez jego API, gdy je udostępnia, w granicach limitu żądań. Do pobierania wielu danych służą narzędzia ekosystemu Nogat i serwisy dostawców.
 3. W zgłoszeniach nie przekazujesz treści bezprawnych ani danych osobowych (§ 8).
 
 ## 7. Odpowiedzialność
@@ -184,7 +185,7 @@ Uwagi, pytania i błędy zgłaszaj na adres [{{operator_email}}](mailto:{{operat
 
 ## Historia zmian
 
-- **1.1**: podkład mapy wśród ustawień, które serwis zapamiętuje w pamięci przeglądarki (§ 8 ust. 7).
+- **1.1**: podkład mapy wśród ustawień, które serwis zapamiętuje w pamięci przeglądarki (§ 8 ust. 7); API serwisu i korzystające z niego programy, w tym wtyczka QGIS Goniec, wśród sposobów korzystania z serwisu (§ 4 ust. 2), a API w granicach limitu żądań drogą dla programów (§ 6 ust. 2).
 - **1.0**: pierwsza wersja.
 
 Poprzednie wersje regulaminu są w historii jego wzoru w repozytorium Nogat: <https://github.com/Daldek/Nogat/commits/develop/design/kit/nogat-terms.md>

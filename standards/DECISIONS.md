@@ -12,7 +12,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 |---|---|---|---|
 | [ECO-001](#eco-001-nogat-is-the-ecosystem-hub) | Nogat is the ecosystem hub | amended by ECO-036 | 2026-10-19 |
 | [ECO-002](#eco-002-machine-readable-registry-ecosystemyaml) | Machine-readable registry `ecosystem.yaml` | amended by ECO-034 | 2026-10-19 |
-| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | accepted | 2026-10-19 |
+| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | amended by ECO-094 | 2026-10-19 |
 | [ECO-004](#eco-004-standard-v20-is-rewritten-from-practice) | Standard v2.0 is rewritten from practice | amended by ECO-056 | 2026-10-19 |
 | [ECO-005](#eco-005-english-everywhere-polish-only-in-the-end-user-interface) | English everywhere, Polish only in the end-user interface | accepted | 2026-10-19 |
 | [ECO-006](#eco-006-single-author-identity-no-ai-attribution) | Single author identity, no AI attribution | amended by ECO-038 | 2026-10-19 |
@@ -20,7 +20,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-008](#eco-008-main-and-develop-in-every-repository) | `main` and `develop` in every repository | accepted | 2026-10-19 |
 | [ECO-009](#eco-009-ruff-for-formatting-and-linting) | Ruff for formatting and linting | accepted | 2026-10-19 |
 | [ECO-010](#eco-010-mypy-as-the-only-type-checker) | mypy as the only type checker | amended by ECO-033 | 2026-10-19 |
-| [ECO-011](#eco-011-src-layout) | `src` layout | amended by ECO-036 | 2026-10-19 |
+| [ECO-011](#eco-011-src-layout) | `src` layout | amended by ECO-036, ECO-094 | 2026-10-19 |
 | [ECO-012](#eco-012-uv-and-lock-files) | uv and lock files | amended by ECO-037 | 2026-10-19 |
 | [ECO-013](#eco-013-progress-holds-current-state-history-is-archived) | PROGRESS holds current state, history is archived | amended by ECO-039 | 2026-10-19 |
 | [ECO-014](#eco-014-claudemd-for-developers-agentsmd-for-users) | CLAUDE.md for developers, AGENTS.md for users | accepted | 2026-10-19 |
@@ -61,7 +61,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-049](#eco-049-hotfix-commits-are-checked-on-entry-to-main) | Hotfix commits are checked on entry to main | accepted | 2026-10-21 |
 | [ECO-050](#eco-050-agent-documents-have-canonical-schemas-in-nogat) | Agent documents have canonical schemas in Nogat | amended by ECO-058, ECO-075 | 2026-10-21 |
 | [ECO-051](#eco-051-one-data-output-convention) | One data-output convention | accepted | 2026-10-24 |
-| [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | accepted | 2026-10-25 |
+| [ECO-052](#eco-052-the-routing-table-is-registry-data) | The routing table is registry data | amended by ECO-094 | 2026-10-25 |
 | [ECO-053](#eco-053-development-versions-of-a-pinned-producer-and-tests-in-a-wheel) | Development versions of a pinned producer, and tests in a wheel | accepted | 2026-10-25 |
 | [ECO-054](#eco-054-projects-belong-to-archiwista) | Projects belong to Archiwista | amended by ECO-059, ECO-074 | 2026-10-31 |
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
@@ -69,7 +69,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
 | [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
 | [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
-| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087, ECO-092 | 2026-11-13 |
+| [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087, ECO-092, ECO-094 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-063](#eco-063-regulamin-10-after-its-review-no-ip-address-in-any-log) | Regulamin 1.0 after its review: no IP address in any log | amended by ECO-066 | 2026-11-13 |
@@ -102,6 +102,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
 | [ECO-091](#eco-091-intervals-beside-point-estimates-computed-by-hydrolog-shown-by-obserwator) | Intervals beside point estimates: computed by Hydrolog, shown by Obserwator | accepted | 2026-11-25 |
 | [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
+| [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
 
 ---
 
@@ -139,6 +140,9 @@ pins are data. YAML is readable by people and agents alike.
 **Rejected.** Markdown-only registry (no automatic drift checks).
 
 ## ECO-003 Scope: eight projects, BasicHydraulic excluded
+
+**Amended by ECO-094 (2026-11-25):** Goniec, a QGIS plugin, is the ninth
+project.
 
 **Decision.** The standard covers Kartograf, Hydrolog, IMGWTools, Hydrograf,
 Hydraulik, Retman, Archiwista and Nogat. BasicHydraulic is out of scope at
@@ -263,6 +267,9 @@ today ranges from `strict = true` (Archiwista) to a baseline without strict
 
 **Amended by ECO-036 (2026-10-20):** Nogat uses `src/nogat/` once it ships the `nogat`
 package; Hydrograf `backend/` stays exempt.
+
+**Amended by ECO-094 (2026-11-25):** a QGIS plugin keeps its code in its
+folder at the root, `<folder>/`, which QGIS loads (DEV-5.1).
 
 **Decision.** Every distributable Python package uses `src/<package>/`.
 Kartograf, Hydrolog, Retman and Archiwista migrate. Exempt: Hydrograf
@@ -948,6 +955,9 @@ or `-o` (plan `docs/plans/2026-10-24-data-output.md`).
 
 ## ECO-052 The routing table is registry data
 
+**Amended by ECO-094 (2026-11-25):** a plugin, like the hub, has no routes:
+it has no CLI or REST interface (HUB-2.9).
+
 **Decision.** The rows of Nogat's AGENTS.md routing table (ECO-048) are the
 `routes` of `ecosystem.yaml`: for each project a `task` and the `command` that
 starts it (HUB-2.9). `uv run scripts/ecosystem.py agents` writes the file,
@@ -1252,6 +1262,10 @@ DEV-20.12).
 
 **Amended by ECO-092 (2026-11-24):** products with PIG-PIB data carry W,
 WP once processed, and the terms line RW (DEV-20.7, DEV-20.13).
+
+**Amended by ECO-094 (2026-11-25):** a clipboard copy holds the values only,
+the lines beside its button, and a desktop GIS layer carries them in its
+metadata (DEV-20.5).
 
 **Decision.** Every product made with data of IMGW-PIB or ČHMÚ carries the
 lines their terms prescribe, verbatim, on every surface (DEV §20): S and P
@@ -2711,3 +2725,77 @@ summaries of Obserwator's stores and Archiwista's raw root. Obserwator
 takes the provider in steps O1 to O6 of the plan, for `v3.3.0`; data
 received later by request carry the request form's sentence as a line of
 their own, added to the table when they enter.
+
+## ECO-094 Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin`
+
+**Decision.** Goniec is a project of the ecosystem: a QGIS plugin,
+repository `Goniec`, QGIS folder `goniec`, a client of the tools' servers
+that computes nothing and downloads nothing for its own use; any server's
+address may be chosen, a person's own `obserwator server` on 127.0.0.1
+among them. It is a shell — connections and their authentication through
+QGIS's auth manager, attribution and regulamin, HTTP caching, settings, the
+CSV, clipboard and HEC exports, the panel framework — and one module per
+kind of server, shown only when the connected server lists it; 0.1 has
+Obserwator's module: stations, current data and series, copied or saved as
+the server answers them, in forms HEC-RAS and HEC-HMS take. Its licence is
+GPL-2.0-or-later, stated in Goniec's first ADR as DEV-16.1 allows;
+Obserwator stays MIT. DEV §1 gains the profile `plugin`: a QGIS plugin with
+no PyPI package, CLI, MCP, REST interface or command catalog, uv for its
+development tools only, distributed through plugins.qgis.org; DEV-5.1 gives
+its code `<folder>/` at the root, HUB-2.9 exempts it from routes, and the
+registry takes the profile and `distribution.qgis`, the folder. A server
+says what it serves in `nogat-server/1` at `GET /api/v1/server`, on a tool's
+own server and on Latarnik alike: each service's tool, version, API majors
+with their bases, capabilities in the tool's own words, OGC API landing
+page, GUI, instance, regulamin and lines, and Latarnik's `state`,
+`release_set` and `flows` (`schemas/exchange/server-1.schema.json`, S4 of
+both plans). DEV-20.5 gains the rows of a clipboard copy, the values only
+with the lines beside its button, and of a desktop GIS layer, the lines in
+its metadata. The kit's regulamin 1.1 and the operator's draft name the
+API and the programs that use it, Goniec among them, as a way to use a
+service, and the API within its limit of requests as the way for programs.
+Plan: `docs/plans/2026-11-24-qgis-plugin.md` (step N1).
+
+**Why.** Obserwator's feedback #11 (2026-11-23) asked for Obserwator in
+QGIS, and the author decided on 2026-11-24 that the plugin only connects to
+a server, the source of all data, through OGC API – Features with WFS left
+possible, a public read-only `/api/v1` with limits and the latest QGIS 3.x
+LTR and 4.x; the name Goniec and GPL-2.0-or-later were his answers the same
+day. plugins.qgis.org approves only plugins under a licence compatible with
+GPLv2 or later, the QGIS project asks it of plugins distributed elsewhere
+too (blog of 2016-05-29), and a plugin runs on QGIS and PyQt, both GPL.
+QGIS loads a plugin from its folder and plugins.qgis.org takes a ZIP of
+that folder and refuses binaries, which leaves a plugin no `src/` layout,
+wheel or command catalog and no command to route, as the hub has none. One
+document at one address lets a client find each service, its API majors
+and capabilities whether the address is a tool's own server or Latarnik,
+so a service moved behind Latarnik needs no change of the client; written
+once, it serves the Goniec and Latarnik plans alike. A paste target such
+as HEC-RAS's flow table or HEC-HMS's time-series table takes values only,
+so the lines cannot travel in the clipboard and stay beside the button and
+in every saved file. The regulamin asked programs not to download in bulk
+and named no API, which programs such as Goniec now use.
+
+**Rejected.** WFS first (QGIS reads OGC API – Features with paging and
+CRS84; a WFS endpoint can serve the same collections later). MIT for
+Goniec (plugins.qgis.org's requirement). The name „Pegaz” (the author chose
+Goniec). A plugin as a `tool` with an empty package (it would owe a wheel,
+a CLI and a catalog it cannot have). HEC-DSS files written by the plugin
+(HEC's native library is a binary plugins.qgis.org refuses; the server
+writes them). The lines in the clipboard (a paste target would take them
+for values). A discovery document of each plan's own (two schemas for one
+request would drift).
+
+**Consequence.** ECO-003, ECO-011, ECO-052 and ECO-060 are amended.
+`validate` takes a plugin without routes and refuses `distribution.qgis`
+outside a plugin; Nogat's AGENTS.md lists the plugin's folder among the
+tools' interfaces; the lists of the ecosystem's Python distributions in
+`standards/ci/` leave a plugin out. Goniec enters the registry with status
+`research` and a planned runtime dependency on Obserwator over REST, which
+provides the planned `obserwator-ogcapi` and `obserwator-hec`;
+`nogat-server/1` is named in the dependency's note, as `nogat-handoff/1`
+is. Goniec's mark and accent pair join `design/`. The regulamin's change
+stays within regulamin 1.1 and kit `1.3.0`, which no member has released
+yet (ECO-089). Obserwator serves the API, its caching and `series hec` in
+`v3.6.0` (step O1), Goniec 0.1 follows (G1), and its status becomes
+`active` then (N2).

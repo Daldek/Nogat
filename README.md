@@ -2,7 +2,7 @@
 
 Hub of an ecosystem of tools for hydrology, meteorology and geodata in
 Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
-Retman and Archiwista.
+Retman, Archiwista and Goniec.
 
 Nogat holds:
 

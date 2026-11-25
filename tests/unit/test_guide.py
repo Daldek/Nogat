@@ -232,3 +232,29 @@ def test_route_problems_reports(
     registry = _registry()
     change(registry)
     assert any(problem in found for found in guide.route_problems(registry))
+
+
+def _plugin() -> dict[str, Any]:
+    plugin = _project(
+        "Gamma",
+        profiles=["plugin"],
+        distribution={"pypi": None, "import_name": None, "qgis": "gamma"},
+        interfaces={"cli": None, "mcp": None, "rest": None, "python": None},
+    )
+    del plugin["routes"]
+    return plugin
+
+
+def test_route_problems_take_a_plugin_without_routes() -> None:
+    registry = _registry()
+    registry["projects"].append(_plugin())
+    assert guide.route_problems(registry) == []
+
+
+def test_render_lists_a_plugin_by_its_folder_and_routes_none_of_it() -> None:
+    registry = _registry()
+    registry["projects"].append(_plugin())
+    text = guide.render(registry)
+    tools = {row[0]: row for row in _table(text, "Tools")}
+    assert tools["Gamma"][2] == "QGIS plugin `gamma`"
+    assert all(row[1] != "[Gamma][gamma]" for row in _table(text, "Routing table"))
