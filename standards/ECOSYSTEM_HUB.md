@@ -1,6 +1,6 @@
 # Ecosystem hub (Nogat)
 
-Part of standard 1.2 · IDs `HUB-…`
+Part of standard 1.3 · IDs `HUB-…`
 
 Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
 

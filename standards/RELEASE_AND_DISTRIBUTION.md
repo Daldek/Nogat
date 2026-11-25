@@ -1,6 +1,6 @@
 # Release and distribution
 
-Part of standard 1.2 · IDs `REL-…`
+Part of standard 1.3 · IDs `REL-…`
 
 ---
 

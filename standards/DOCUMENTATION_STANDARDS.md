@@ -1,6 +1,6 @@
 # Documentation standards
 
-Part of standard 1.2 · IDs `DOC-…`
+Part of standard 1.3 · IDs `DOC-…`
 
 Documentation has three audiences, and each file serves one of them:
 

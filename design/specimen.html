@@ -14,6 +14,58 @@
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="kit/nogat-app-menu.css">
 <script type="module" src="kit/nogat-app-menu.js"></script>
+<link rel="stylesheet" href="kit/nogat-chart.css">
+<script type="module">
+  // Two charts of made-up data: daily discharge under the day's rain, and a rating curve.
+  import { chartFormat, drawChart } from "./kit/nogat-chart.js";
+  const first = Math.round(Date.UTC(2023, 10, 1) / 86400000);
+  const rain = [];
+  const flow = [];
+  let quick = 0;
+  for (let at = 0; at < 3 * 365; at += 1) {
+    const storm = Math.max(0, Math.sin(at * 0.37) * Math.sin(at * 0.11)) ** 6;
+    const fallen = Math.round(storm * 400) / 10;
+    quick = 0.82 * quick + 0.9 * fallen;
+    rain.push([first + at, fallen]);
+    flow.push([first + at, 6 + 3 * Math.sin((2 * Math.PI * (at - 60)) / 365) + quick]);
+  }
+  const peak = flow.reduce((best, point) => (point[1] > best[1] ? point : best));
+  const mean = flow.reduce((sum, point) => sum + point[1], 0) / flow.length;
+  drawChart(document.getElementById("chart-daily"), {
+    title: "Przepływ i opad dobowy",
+    x: { scale: "date" },
+    y: { label: "Q [m³/s]", unit: "m³/s", digits: 1 },
+    y2: { label: "P [mm]", unit: "mm", digits: 1 },
+    series: [
+      { id: "p", kind: "bars", axis: "y2", cls: "bar-p", label: "Opad", data: rain },
+      { id: "q", cls: "s1", label: "Przepływ", data: flow },
+    ],
+    marks: [
+      { kind: "hline", y: mean, label: "SSQ" },
+      { kind: "peak", x: peak[0], y: peak[1], label: `${chartFormat().number(peak[1], 1)} m³/s` },
+    ],
+    readout: { series: "q" },
+    legend: true,
+    fit: { ratio: 0.42, minHeight: 240 },
+  });
+  const curve = (level) => 0.004 * level ** 1.7;
+  const levels = Array.from({ length: 36 }, (_, at) => 15 + at * 9);
+  const measured = levels.map((level, at) => [curve(level) * (1 + 0.06 * Math.sin(at * 1.7)), level]);
+  const fitted = Array.from({ length: 81 }, (_, at) => [curve(at * 4.5), at * 4.5]);
+  drawChart(document.getElementById("chart-rating"), {
+    title: "Krzywa natężenia przepływu",
+    x: { label: "Q [m³/s]", short: "Q" },
+    y: { label: "H [cm]", short: "H", unit: "cm", digits: 0 },
+    series: [
+      { id: "measured", kind: "points", cls: "s2", label: "Pomiary", data: measured },
+      { id: "fit", cls: "s1", label: "Krzywa", data: fitted },
+    ],
+    readout: { series: "fit" },
+    zoom: "xy",
+    legend: true,
+    fit: { ratio: 0.8, minHeight: 240 },
+  });
+</script>
 <link rel="stylesheet" href="kit/nogat-sources.css">
 <script type="module" src="kit/nogat-sources.js"></script>
 <link rel="stylesheet" href="kit/nogat-basemaps.css">
@@ -95,6 +147,8 @@
   .fmt { font-family: var(--font-mono); font-size: var(--text-xs); padding: 1px var(--space-1); border: 1px solid var(--line-2); border-radius: var(--radius-xs); color: var(--text-2); }
   kbd { font-size: var(--text-xs); padding: 1px var(--space-1); background: var(--surface-2); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: var(--radius-xs); }
   pre { margin: 0; padding: var(--space-3) var(--space-4); background: var(--code-bg); color: var(--code-text); border-radius: var(--radius-md); font-size: var(--text-sm); overflow-x: auto; }
+  .charts { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+  .charts > div { padding: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
 
   /* App headers */
   .apps { display: grid; gap: var(--space-2); }
@@ -123,6 +177,9 @@
   .mark .sizes { display: flex; gap: var(--space-3); align-items: flex-end; }
   .mark span { font-size: var(--text-sm); color: var(--text-2); }
 
+  @media (max-width: 860px) {
+    .charts { grid-template-columns: minmax(0, 1fr); }
+  }
   @media (max-width: 640px) {
     input, select { font-size: 16px; }
     .app nav { display: none; }
@@ -201,6 +258,12 @@
       <nav class="rail-demo" aria-label="Widoki"><span class="rail-item">Mapa</span><a class="rail-terms" href="kit/nogat-terms.html" target="_blank" rel="noopener">Regulamin</a></nav>
       <span class="note"><code>.rail-terms</code> at the foot of the rail, the last small item of the bar on a phone; with the menu's „Regulamin” and the welcome window's „Regulamin serwisu” (<code>fillSources</code>) the only links, no footer (DEV-15.7, DEV-15.8, ECO-070)</span>
     </div>
+    <h3>Charts</h3>
+    <div class="charts">
+      <div id="chart-daily"></div>
+      <div id="chart-rating"></div>
+    </div>
+    <p class="note">kit/nogat-chart.js: a drag over the plot selects a range of x (a rectangle on the rating curve, <code>zoom: "xy"</code>), Ctrl with the wheel zooms around the cursor and the wheel alone scrolls the page, Shift with a drag or the middle button pans, a double click, 0 and „Cały zakres” show the whole; „+” under a chart not yet zoomed; two fingers pinch and pan on a phone (DEV-15.16)</p>
     <h3>Sources strip</h3>
     <nogat-sources attribution='["Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy", "Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone", "Źródło danych: Český hydrometeorologický ústav (ČHMÚ), https://opendata.chmi.cz, licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)", "Źródło: Główny Urząd Geodezji i Kartografii – GUGiK, PRG (wytworzono 2026, pozyskano 2026-11-13); dane przetworzone", "Źródło: Český úřad zeměměřický a katastrální (ČÚZK), RÚIAN (pozyskano 2026-11-13), licencja CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); dane przetworzone"]' terms-notice='["Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations", "Regulamin serwisu hydrologicznego IMGW-PIB: https://hydro.imgw.pl/#/regulamin"]'></nogat-sources>
     <p class="note">kit/nogat-sources.js: one strip per view with S, P, PS, PP and the short forms CK, GK, SK and ZK; „Źródła i warunki” opens every line and the terms (DEV-20.5)</p>
