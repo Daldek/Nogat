@@ -2,7 +2,7 @@
 
 Approved: 2026-11-21, the author (in session: „filtr ma działać na obu serwerach. zatwierdzam plan A.”)
 
-Status: steps 1 to 5 done on 2026-11-21 and merged into the `develop` of Nogat (`fa425fd`) and Obserwator (`9b920f8`, full gate passed at `55dd035`), released in Obserwator `v3.1.0` and Nogat `v0.2.0` (kit `1.1.0`, ECO-081); step 7 done with the round's release set `v0.2.0`. Step 6 done on 2026-11-23 and merged into Obserwator's `develop` (`3.3.0.dev0`); it is released with `v3.3.0`, not yet tagged. The design's proposals marked „[proposed]” were approved with it.
+Status: steps 1 to 5 done on 2026-11-21 and merged into the `develop` of Nogat (`fa425fd`) and Obserwator (`9b920f8`, full gate passed at `55dd035`), released in Obserwator `v3.1.0` and Nogat `v0.2.0` (kit `1.1.0`, ECO-081); step 7 done with the round's release set `v0.2.0`. Step 6 done on 2026-11-23 and merged into Obserwator's `develop` (`3.3.0.dev0`), released in Obserwator `v3.3.0` with the release set `v0.4.0` (2026-11-25). The design's proposals marked „[proposed]” were approved with it.
 
 Requirements: DEV-17.4, DEV-18.1 to DEV-18.4, DEV-12.4 to DEV-12.9, DEV §13, DEV-15.4, DEV-15.7, DEV-15.8, DEV §20, HUB-5.2. Related plans: `2026-11-20-hydromet-providers.md` (branch `plan/hydromet-providers`, P1 to P13), `2026-11-17-install-contract.md` (branch `plan/install-contract`, rules 1 to 13).
 

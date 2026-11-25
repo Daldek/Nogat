@@ -6,8 +6,33 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-25
+
 ### Added
 
+- Release set `v0.4.0` (`release-sets/v0.4.0/`, REL-6.6, HUB-7.2), the
+  release set of the round of 2026-11-25: candidate-16, verified by the
+  workflow `verify-candidate` (run 45652499176, Python 3.12 on Linux, macOS
+  and Windows; the experimental Python 3.15 job on macOS failed one
+  Obserwator e2e test, which is not blocking, REL-6.5), with each member's
+  commit replaced by its annotated release tag, Kartograf `v0.9.0`,
+  Obserwator `v3.3.0`, Hydrolog `v0.10.0`, Hydrograf `v0.7.0` (an app on its
+  own lock, not installed by the set) and Archiwista `v0.4.2`. It carries
+  Obserwator 3.3.0 with the providers fed by files, Gdańskie Wody and
+  PIG-PIB's groundwater monitoring; Hydrolog 0.10.0 with the interval
+  estimates and five hydrological signatures checked against CAMELS-PL;
+  Hydrograf 0.7.0 with its API at `/api/v1` and the kit's base maps and
+  charts; and Archiwista 0.4.2, which reads Obserwator 3.3.0. Kartograf
+  0.9.0 is unchanged. The first run of candidate-16, 45626852114 at
+  Obserwator `0f8fd31`, failed on Windows (no `tzdata` for PIG-PIB's
+  `Europe/Warsaw` and three tests of paths and line endings) and on Linux
+  (a race of the welcome window), each fixed in Obserwator's release
+  branch. As before, the set is installed as an environment, `uv sync
+  --locked --no-dev --python 3.12` in `release-sets/v0.4.0/`, not with `uv
+  tool install` (a deviation from HUB-7.1, HUB-7.2 and REL-6.1).
+- Standard 1.3 is published: it reaches `main` with this release, and the
+  merge commit is tagged `std-1.3` (HUB-6.1); its changes (ECO-089 to
+  ECO-095, kit `1.3.0`) are listed in `standards/README.md`.
 - The kit's base maps (ECO-089, step 1 of
   `docs/plans/2026-11-24-shared-base-maps.md`): the catalogue
   `design/kit/nogat-basemaps.json` with Hydrograf's three base maps
@@ -177,8 +202,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   GUI platform plan's status points to ECO-095.
 - `ecosystem.yaml` with Hydrograf's `/api/v1` (step N2 of
   `docs/plans/2026-11-24-latarnik.md` after Hydrograf's HG1, its ADR-091 on
-  its `develop` `cd9288a`, unreleased until 0.7.0): its `interfaces.rest`
-  `/api/v1, unreleased until 0.7.0`; its routes `GET
+  its `develop` `cd9288a`, released in Hydrograf v0.7.0): its
+  `interfaces.rest` `/api/v1`; its routes `GET
   /api/v1/watershed/delineate`, the hydrograph and the network as `POST
   /api/v1/jobs` with the commands `hydrograph generate` and `network
   delineate`, `POST /api/v1/network/preview`, `POST
@@ -191,14 +216,15 @@ the standard are listed in [standards/README.md](standards/README.md).
   (/api/v1), planned` (H1), and the GUI services of Hydrolog and Obserwator
   no longer name the entry point group `nogat.gui` (G8, ECO-095). Map and
   `AGENTS.md` regenerated.
+- README installs the set `v0.4.0` and names standard 1.3.
 
 ### Fixed
 
 - The kit's `maplibreBasemap` and `removeMaplibreBasemap` empty the words of
   MapLibre's attribution control once no source is credited (after a failed
   base map or „bez podkładu”): MapLibre 6.14.0 only hides the empty control
-  and kept the last base map's credit in it. Within kit `1.3.0`, not yet
-  released.
+  and kept the last base map's credit in it. Within kit `1.3.0`, before its
+  release.
 
 ## [0.3.0] - 2026-11-25
 
@@ -1319,7 +1345,8 @@ the standard are listed in [standards/README.md](standards/README.md).
   included) and no longer rejects people or prose that only mention a tool;
   only git's own `Revert "…"` subjects are exempt (DEV-4.1, DEV-4.3).
 
-[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Daldek/Nogat/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Daldek/Nogat/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Daldek/Nogat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Daldek/Nogat/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Daldek/Nogat/compare/v0.1.0...v0.1.1
