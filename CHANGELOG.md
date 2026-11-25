@@ -47,11 +47,29 @@ the standard are listed in [standards/README.md](standards/README.md).
   `design/README.md`'s „Chart” and „Charts”; browser tests in Chromium under
   the GUIs' CSP at 1440 and 390 px in both themes, fingers by DevTools'
   touch events.
+- The coverage of interval estimators (CMP-6.11, ECO-091, step N1 of
+  `docs/plans/2026-11-24-interval-estimation.md`): the reference module's
+  `assert_coverage` simulates an interval, seeded, at one setting with at
+  least 1,000 samples and asserts its coverage per level and element within
+  three Monte Carlo standard errors of the level, of a known or reported
+  coverage (`expected`) or above a bound (`at_least`), a bound not computed
+  holding nothing; `assert_interval_properties` asserts lower ≤ upper and the
+  intervals of the levels nested on one sample; the record `Coverage`, which
+  round-trips through JSON, and `formulas_markdown(coverage=…)`, which lists
+  it under its formula in `docs/FORMULAS.md`. Tested against the toy
+  `toy_mean_interval` and three wrong copies of it (CMP-8.2). The copies of
+  `nogat_formulas.py` in Kartograf, Obserwator, Hydrolog, Hydrograf and
+  Hydraulik are behind until their next releases (CMP-8.1).
 
 ### Changed
 
 - Standard 1.3 opens on `develop` (HUB-6.1) with the kit's base maps and
-  charts (DEV-15.15, DEV-15.16, ECO-089, ECO-090).
+  charts (DEV-15.15, DEV-15.16, ECO-089, ECO-090) and interval estimators
+  (CMP-2.3, CMP-6.11, ECO-091).
+- CMP-2.3: a spec lists the side and confidence level of an interval and its
+  method among its conventions (ECO-091). The interval-estimation plan
+  asserts an exact coverage within three Monte Carlo standard errors, not
+  two, with the seed fixed once (amended 2026-11-25).
 - The GUI kit is `1.3.0` (its base maps and its charts; REL-1.4, by the
   author's answers to question 7 of the base-maps plan and question 2 of the
   charts plan, since the members of Nogat `v0.3.0`'s round carry `1.2.0`),

@@ -8,7 +8,7 @@ import random
 import tomllib
 import warnings
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
@@ -24,9 +24,11 @@ from nogat_formulas import (
     CARD_FORMAT,
     TRAPS,
     UNITS,
+    Bounds,
     Case,
     Constant,
     Constraint,
+    Coverage,
     Delegated,
     FormulaCalculationError,
     FormulaSpec,
@@ -47,6 +49,8 @@ from nogat_formulas import (
     Values,
     Variable,
     assert_case,
+    assert_coverage,
+    assert_interval_properties,
     assert_limits,
     assert_within,
     card,
@@ -1592,6 +1596,111 @@ def test_formulas_markdown_shows_every_part_of_a_formula() -> None:
     assert "| `formula_toys` | 88% |" in text
     assert formulas_markdown([toys.KIRPICH]) == formulas_markdown([toys.KIRPICH])
     assert "not measured" in formulas_markdown([toys.CUMULATIVE])
+
+
+def _mean_bounds(sample: np.ndarray, levels: tuple[float, ...]) -> list[Bounds]:
+    mean = float(np.mean(sample))
+    return [(mean - c, mean + c) for c in levels]
+
+
+def _draw(generator: np.random.Generator, size: int) -> np.ndarray:
+    return generator.normal(0.0, 1.0, size)
+
+
+COVERAGE_ARGUMENTS: dict[str, Any] = {
+    "setting": "standard normal",
+    "size": 30,
+    "confidence_level": (0.95, 0.68),
+    "seed": 1,
+    "reason": "a test of the arguments",
+}
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        ({"samples": 999}, "samples is an integer of at least 1000"),
+        ({"size": True}, "size is an integer"),
+        ({"seed": -1}, "seed is an integer of at least 0"),
+        ({"reason": " "}, "needs its reason"),
+        ({"setting": ""}, "needs its setting"),
+        ({"confidence_level": 1.0}, r"in \(0, 1\), not 1\.0"),
+        ({"confidence_level": (0.95, 0.95)}, "not distinct"),
+        ({"confidence_level": ()}, "not distinct"),
+        ({"expected": {0.9: 0.9}}, "not a level asked"),
+        ({"at_least": {0.95: 1.5}}, r"not a share in \[0, 1\]"),
+        ({"expected": {0.95: [0.9, 0.9]}}, r"has the shape \(2,\), not \(\)"),
+        (
+            {"expected": {0.95: 0.95}, "at_least": {0.95: 0.9}},
+            "both a coverage and a bound",
+        ),
+    ],
+)
+def test_assert_coverage_refuses_what_is_no_simulation(
+    change: dict[str, Any], message: str
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        assert_coverage(
+            toys.MEAN_INTERVAL,
+            _mean_bounds,
+            _draw,
+            0.0,
+            **{**COVERAGE_ARGUMENTS, **change},
+        )
+
+
+def test_assert_coverage_refuses_a_true_value_that_is_not_finite() -> None:
+    with pytest.raises(ValueError, match="the true value is not finite"):
+        assert_coverage(
+            toys.MEAN_INTERVAL, _mean_bounds, _draw, math.nan, **COVERAGE_ARGUMENTS
+        )
+
+
+def test_assert_coverage_names_a_sample_or_bounds_of_the_wrong_shape() -> None:
+    with pytest.raises(AssertionError, match=r"a sample of shape \(29,\), not 30"):
+        assert_coverage(
+            toys.MEAN_INTERVAL,
+            _mean_bounds,
+            lambda generator, size: _draw(generator, size - 1),
+            0.0,
+            **COVERAGE_ARGUMENTS,
+        )
+    with pytest.raises(AssertionError, match=r"bounds of shape \(\), not \(2,\)"):
+        assert_coverage(
+            toys.MEAN_INTERVAL, _mean_bounds, _draw, [0.0, 0.0], **COVERAGE_ARGUMENTS
+        )
+    with pytest.raises(AssertionError, match="1 pairs of bounds for the 2 levels"):
+        assert_interval_properties(
+            lambda sample, levels: _mean_bounds(sample, levels[:1]), [0.0], (0.9, 0.5)
+        )
+
+
+def test_a_coverage_record_round_trips_and_is_reported_under_its_formula() -> None:
+    records = assert_coverage(
+        toys.MEAN_INTERVAL,
+        _mean_bounds,
+        _draw,
+        0.0,
+        **COVERAGE_ARGUMENTS,
+        at_least={0.95: 0.9, 0.68: 0.9},
+    )
+    kept = json.loads(json.dumps([asdict(record) for record in records]))
+    assert [Coverage(**record) for record in kept] == records
+    text = formulas_markdown([toys.KIRPICH, toys.MEAN_INTERVAL], coverage=records)
+    kirpich, interval = text.split('<a id="toy_mean_interval"></a>')
+    assert "CMP-6.11" not in kirpich
+    assert "**Coverage of its intervals (CMP-6.11)**" in interval
+    assert "- standard normal, n = 30, c = 0.95: coverage 1.000, asserted against " in (
+        interval
+    )
+    assert "at least 0.900 within the Monte Carlo error; 1000 samples, seed 1, " in (
+        interval
+    )
+    assert "; coverage (CMP-6.11)." in interval
+    with pytest.raises(ValueError, match=r"coverage of \['toy_mean_interval'\]"):
+        formulas_markdown([toys.KIRPICH], coverage=records)
+    with pytest.raises(SpecError, match="one entry per element"):
+        replace(records[0], undefined=())
 
 
 def test_docstring_problems_find_digits_and_a_missing_name() -> None:

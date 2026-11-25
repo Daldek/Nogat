@@ -100,6 +100,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
 | [ECO-089](#eco-089-one-set-of-base-maps-in-the-kit-shared-by-every-gui) | One set of base maps in the kit, shared by every GUI | accepted | 2026-11-24 |
 | [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
+| [ECO-091](#eco-091-intervals-beside-point-estimates-computed-by-hydrolog-shown-by-obserwator) | Intervals beside point estimates: computed by Hydrolog, shown by Obserwator | accepted | 2026-11-25 |
 
 ---
 
@@ -2561,3 +2562,74 @@ deviation in its `CLAUDE.md` (DEV-1.2), as ECO-055 and ECO-058 did, and its
 chart code takes fixes only: a new chart feature goes into the kit first
 (DEV-17.5). The GUI platform plan's `chart-theme.js` gives way to the
 module.
+
+## ECO-091 Intervals beside point estimates: computed by Hydrolog, shown by Obserwator
+
+**Decision.** The flood, precipitation and low-flow quantiles and the median
+annual flow-duration curve get interval estimates, computed by Hydrolog and
+shown by Obserwator (ECO-059): two-sided and central at each
+`confidence_level` asked, one number in (0, 1) or a list of distinct ones,
+0.95 by default; Obserwator stores 0.95 and 0.68, whose upper bound is KZGW
+2017's one-sided bound at β = 84 %. A result carries the list `intervals`,
+one entry per level in the order asked, named as `stats monthly`'s fields:
+`confidence_level`, `ci_method` (`parametric_bootstrap`, `delta` or
+`order_statistics`), `ci_lower` and `ci_upper` aligned with the quantiles or
+the curve's percentages, an element `null` where undefined, and `ci_samples`,
+the bootstrap samples kept of 999. An interval not computed has its method,
+bounds and samples `null` and the notice `interval_not_computed` (level
+`warning`) with `details.reason` `fit_method`, `too_few_values`,
+`bootstrap_failures`, `nonregular_fit` or `too_few_complete_years` and
+`details.confidence_levels`; a bound of a discharge or a precipitation below
+0 is `null` with the reason `below_physical_range`. These are optional
+fields within each document's `/1` (ECO-085). The methods: an L-moments fit
+by the percentile interval of the 999 parametric bootstrap refits that
+already give `ad_critical_values`; a maximum-likelihood fit by KZGW's delta
+method, the bound of Pearson III and Weibull held at its estimate and the
+expected information of the two other parameters in closed form, the
+log-normal on ln Q, the GEV by its observed information and only where
+ξ > −0.5; moments and least squares none; the median annual flow-duration
+curve by order statistics of the annual curves (Vogel and Fennessey 1994).
+CMP-2.3 lists an interval's side, level and method among a spec's
+conventions; CMP-6.11 has its coverage simulated, reported in
+`docs/FORMULAS.md` and asserted within three Monte Carlo standard errors,
+3√(c(1 − c)/m), per element, its seed fixed once in the test and recorded;
+the reference module gains `assert_coverage`, `assert_interval_properties`
+and the coverage in `formulas_markdown`. Plan:
+`docs/plans/2026-11-24-interval-estimation.md` (step N1).
+
+**Why.** The author's feedback #13 to Obserwator („Rozważyć wprowadzenie
+estymacji przedziałowej, obok punktowej.”) and his answers of 2026-11-24 to
+the plan's six questions („Przedziały ufności: 1. liczymy oba; 2, 3, 4, 5, 6
+– ok.”). A design value at T of 100 to 1000 years from 30 to 60 maxima is an
+extrapolation, and the regulation (Dz.U. 2026 poz. 692) and KZGW ask for its
+upper limit; both levels of a fit come from one computation, so storing both
+adds no run. The plan's first wording asserted coverage within two standard
+errors, 2√(c(1 − c)/m); amended on 2026-11-25 (step N1): a right exact
+interval fails that in about 4.6 % of assertions whatever m, and Hydrolog
+asserts one per return period, level, sample size and distribution, so only
+a seed chosen to pass would pass; three standard errors fail one assertion
+in about 370.
+
+**Rejected.** Storing 0.95 only and computing 0.68 on request (Fable's
+recommendation; the author's answer 1). A bootstrap for every fit method
+(minutes per request, Hydrolog's ADR-0048). The profile likelihood (one
+constrained search per return period). A nonparametric bootstrap of the
+annual maxima (too narrow for 30 to 60 values, Kyselý 2008). KZGW's tables
+A.3 and A.4 in code. The observed information of all three parameters of
+Pearson III and Weibull (not regular below a shape of 2, Smith 1985).
+`stats monthly`'s flat fields instead of a list (one fit gives every level
+from one computation). Intervals of SSQ, SWQ and SNQ (characteristic values
+of the record by IMGW-PIB's definitions; answer 4) and of the rating curve
+(a separate plan; answer 6). Coverage within two standard errors (above).
+
+**Consequence.** CMP-2.3 and CMP-6.11 read as above, in standard 1.3. The
+copies of `nogat_formulas.py` in Kartograf, Obserwator, Hydrolog, Hydrograf
+and Hydraulik are behind until each project's next release copies it
+(CMP-8.1, `drift`). Hydrolog `0.10.0` declares the three interval specs with
+their coverage tests and gives `intervals` in `stats flood-frequency`,
+`stats low-flow` and `stats duration-curve` (step H1); Obserwator, in the
+release that first runs Hydrolog `0.10.0` (`v3.4.0` or `v3.5.0`), stores
+`[0.95, 0.68]` and shows both levels, selectable (step O1); one
+`analyses build` follows both (step D1). Archiwista and Hydrograf read none
+of these results, so ECO-085's condition holds; `stats monthly` keeps its
+fields.
