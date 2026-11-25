@@ -16,6 +16,8 @@
 <script type="module" src="kit/nogat-app-menu.js"></script>
 <link rel="stylesheet" href="kit/nogat-sources.css">
 <script type="module" src="kit/nogat-sources.js"></script>
+<link rel="stylesheet" href="kit/nogat-basemaps.css">
+<script type="module" src="kit/nogat-basemaps.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -204,6 +206,11 @@
     <p class="note">kit/nogat-sources.js: one strip per view with S, P, PS, PP and the short forms CK, GK, SK and ZK; „Źródła i warunki” opens every line and the terms (DEV-20.5)</p>
     <nogat-sources attribution='["Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy", "Dane Instytutu Meteorologii i Gospodarki Wodnej – Państwowego Instytutu Badawczego zostały przetworzone", "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl", "Dane Wodociągów Przykładowych zostały przetworzone"]' terms-notice='["Regulamin danych IMGW-PIB: https://danepubliczne.imgw.pl/regulations"]' screen-lines='[{"text": "Źródło danych: Wodociągi Przykładowe Sp. z o.o., https://pomiary.example.pl", "short": "Źródło: Wodociągi Przykładowe", "links": [["Wodociągi Przykładowe", "https://pomiary.example.pl"]]}]' terms="kit/nogat-terms.html"></nogat-sources>
     <p class="note">with <code>screen-lines</code>: the line of an operator's own network, which the GUI declares, after the kit's lines in its short form, the full line and the processed one in the dialog (DEV-20.4, DEV-20.5, ECO-087)</p>
+    <h3>Base maps</h3>
+    <div class="row">
+      <div class="panel"><h4>Podkłady kartograficzne</h4><nogat-basemaps id="basemaps"></nogat-basemaps></div>
+      <span class="note">kit/nogat-basemaps.js: the catalogue's entries in its order, then „bez podkładu”, the choice kept in the browser under <code>nogat-basemap</code>, „Podkład nie odpowiada” beside an entry whose provider fails (the orthophoto here); the GUI draws the chosen one with <code>maplibreBasemap</code> or <code>leafletBasemap</code>, its credit in the map's attribution (DEV-15.15, ECO-089)</span>
+    </div>
     <h3>Admin panel</h3>
     <p class="note">kit/nogat-admin.js: the admin page of a GUI with „Zgłoszenia”, „Statystyki” and „Stan” on a fake API, <a href="specimen-admin.html">specimen-admin.html</a>, key <code>nogat</code> (DEV-15.13)</p>
     <h3>Code</h3>
@@ -328,6 +335,15 @@ tiles: 42  missing: 0  size: 1.8 GB</pre>
   renderMarks("marks-bg");
   renderMarks("marks-s2");
   setTheme(root.dataset.theme || "auto");
+  // The catalogue as a GUI's server hands it; the orthophoto marked as a failing provider is.
+  Promise.all([
+    fetch("kit/nogat-basemaps.json").then(function (response) { return response.json(); }),
+    customElements.whenDefined("nogat-basemaps")
+  ]).then(function (loaded) {
+    var switcher = document.getElementById("basemaps");
+    switcher.entries = loaded[0].entries;
+    switcher.fail("gugik-ortho");
+  });
 </script>
 </body>
 </html>

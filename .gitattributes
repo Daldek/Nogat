@@ -5,3 +5,8 @@
 standards/legacy/** -text
 standards/templates/** -text
 standards/configs/** -text
+
+# Libraries and recorded tiles of the base-map browser tests, kept byte for byte
+# as published (DEV-15.1).
+tests/browser/basemaps/vendor/** -text
+tests/browser/basemaps/tiles/** -text

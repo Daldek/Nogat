@@ -58,7 +58,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | Document | Covers |
 |---|---|
 | [DECISIONS.md](DECISIONS.md) | Decisions behind the standard, with reasons and rejected options (ECO-…) |
-| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
+| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts, base maps), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
 | [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, mutation testing, gross defects (CMP-…) |
@@ -132,6 +132,20 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - The GUI kit becomes version 1.2.0: `screen-lines` of `<nogat-sources>`
     and the blocks `camels-pl` and `e-obs` of the regulamin (ECO-086,
     ECO-087).
+  - A GUI with a map draws its base maps only from the kit's catalogue
+    `nogat-basemaps.json`, through `nogat-basemaps.js`, and offers them in
+    `<nogat-basemaps>`: the catalogue's entries in its order, the
+    deployment's own base maps after them, „bez podkładu” last, the choice
+    kept in the browser and never a GUGiK entry as the default; each base
+    map carries its credit in the map's own attribution; the shared keys
+    `basemaps`, `basemap_mirrors` and `basemap_extra` set which entries a
+    deployment allows, its copies of them and its own base maps; the CSP
+    names each origin and no scheme source, and an admin page's map adds
+    only its one base map's origin (DEV-15.15, DEV-15.13, DEV-18.1,
+    DEV-20.9, ECO-089).
+  - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
+    `.js` and `.css`, and regulamin 1.1, whose § 8 ust. 7 names the base
+    map among the settings the browser keeps (ECO-089).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is
