@@ -2,6 +2,9 @@
 # Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is
 # generated from this file (`set readme`). `runs` lists the passing runs
 # of verify-candidate at these commits (REL-6.5); a bump drops them.
+runs = [
+    "https://github.com/Daldek/Nogat/actions/runs/45515449114",
+]
 
 [Kartograf]
 commit = "05052b3a924bfabd5d0fbb21bf30c9e78a8d640a"

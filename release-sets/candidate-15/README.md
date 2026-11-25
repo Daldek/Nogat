@@ -17,4 +17,6 @@ consumer and `set bump <P>` moves a member.
 
 ## Verification
 
-Not verified at these commits: no run of the workflow verify-candidate (REL-6.5).
+Passing runs of the workflow verify-candidate (REL-6.5):
+
+- <https://github.com/Daldek/Nogat/actions/runs/45515449114>
