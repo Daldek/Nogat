@@ -6,6 +6,40 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Added
+
+- The kit's base maps (ECO-089, step 1 of
+  `docs/plans/2026-11-24-shared-base-maps.md`): the catalogue
+  `design/kit/nogat-basemaps.json` with Hydrograf's three base maps
+  (`openfreemap` in the kit's grey style, the default; `gugik-osm` and
+  `gugik-ortho`, bounded by Poland's box and never the default);
+  `nogat-basemaps.js` with the switcher `<nogat-basemaps>`, the choice kept
+  in the browser as `nogat-basemap`, and the adapters `maplibreBasemap`,
+  `removeMaplibreBasemap`, `repaintMaplibreBasemap` for MapLibre GL JS and
+  `leafletBasemap` for Leaflet, which check that a TileJSON's tiles stay on
+  the entry's origin, draw a deployment's own base maps handed in the
+  catalogue's shape and report a failing provider; `nogat-basemaps.css`
+  with the credit in the map's attribution at 12 px, folded behind „i” at
+  the first drag on a phone, and the grey style's colours in both themes.
+  The rule DEV-15.15, the switcher in the specimen and `design/README.md`'s
+  „Basemaps”; browser tests on MapLibre 6.14.0 and on Leaflet 1.9.4 with
+  maplibre-gl-leaflet 0.0.22 over MapLibre 4.7.1, vendored as fixtures with
+  their licences, every provider answered from tiles recorded by
+  `tests/browser/basemaps/record.py`.
+
+### Changed
+
+- The GUI kit is `1.3.0` (its base maps; REL-1.4, by the author's answer to
+  question 7 of the base-maps plan, since the members of Nogat `v0.3.0`'s
+  round carry `1.2.0`), with regulamin 1.1: § 8 ust. 7 of the template and
+  of the operator's draft names the base map among the settings the
+  browser keeps, and `nogat-terms.html` is regenerated. DEV-15.13 lets an
+  admin page's map add its one base map's origin to the admin CSP, DEV-18.1
+  lists the shared keys `basemaps`, `basemap_mirrors` and `basemap_extra`,
+  and DEV-20.9 credits a GUGiK base map with its catalogue entry's credit
+  (ECO-089). The GUI platform plan's `basemaps.json` points to the
+  base-maps plan.
+
 ## [0.3.0] - 2026-11-25
 
 ### Added

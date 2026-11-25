@@ -1,6 +1,6 @@
 # Regulamin serwisu {{service_name}}
 
-Wersja 1.0, obowiązuje od {{terms_effective}}
+Wersja 1.1, obowiązuje od {{terms_effective}}
 
 ## 1. Postanowienia ogólne
 
@@ -150,7 +150,7 @@ Licencja ODbL: <https://www.openstreetmap.org/copyright>
 4. Ruch do serwisu przechodzi przez {{processor}}, który przetwarza go, w tym Twój adres IP, w imieniu operatora jako podmiot przetwarzający na podstawie umowy powierzenia zawartej w jego warunkach świadczenia usług, i może prowadzić własne dzienniki bezpieczeństwa zgodnie ze swoją polityką prywatności. {{processor_transfer}}
 5. Podkład mapowy i warstwy map innych dostawców (§ 5) Twoja przeglądarka pobiera bezpośrednio z ich serwerów, które otrzymują przy tym Twój adres IP.
 6. Formularz „Zgłoś uwagę” przesyła tylko treść zgłoszenia i kontekst dodany przez serwis: widok, stację, parametry widoku i wersję aplikacji; nie ma pól kontaktowych i nie zapisuje adresu IP. Nie wpisuj w nim danych osobowych; jeśli chcesz odpowiedzi, napisz e-mail. Zgłoszenia i e-maile operator przetwarza, aby je załatwić (art. 6 ust. 1 lit. f RODO), i usuwa po załatwieniu sprawy. E-maile do operatora są przechowywane w jego skrzynce w usłudze {{mail_provider}}. {{mail_transfer}}
-7. Ustawienia (motyw, układ widoków, układ współrzędnych) i wprowadzone dane serwis zapamiętuje w pamięci Twojej przeglądarki (localStorage), bo o to prosisz, korzystając z tych funkcji; usuniesz je w ustawieniach przeglądarki. Wartości i pliki, które przekazujesz do obliczeń, serwer wykorzystuje tylko do ich wykonania. Serwis nie ustawia własnych plików cookie i nie korzysta z zewnętrznych narzędzi analitycznych ani reklamowych. {{processor_cookie}}
+7. Ustawienia (motyw, układ widoków, układ współrzędnych, podkład mapy) i wprowadzone dane serwis zapamiętuje w pamięci Twojej przeglądarki (localStorage), bo o to prosisz, korzystając z tych funkcji; usuniesz je w ustawieniach przeglądarki. Wartości i pliki, które przekazujesz do obliczeń, serwer wykorzystuje tylko do ich wykonania. Serwis nie ustawia własnych plików cookie i nie korzysta z zewnętrznych narzędzi analitycznych ani reklamowych. {{processor_cookie}}
 8. Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia i ograniczenia przetwarzania oraz prawo sprzeciwu (art. 15–18 i 21 RODO); w praktyce dotyczą one e-maili i zgłoszeń, bo adresu IP, skrótu ani dzienników operator nie potrafi przypisać do osoby (art. 11 RODO). Żądanie wyślij na adres operatora; odpowiada w ciągu miesiąca (art. 12 ust. 3 RODO). Przysługuje Ci prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (<https://uodo.gov.pl>).
 
 ## 9. Licencja oprogramowania
@@ -173,6 +173,7 @@ Uwagi, pytania i błędy zgłaszaj na adres [{{operator_email}}](mailto:{{operat
 
 ## Historia zmian
 
+- **1.1**: podkład mapy wśród ustawień, które serwis zapamiętuje w pamięci przeglądarki (§ 8 ust. 7).
 - **1.0**: pierwsza wersja.
 
 Poprzednie wersje regulaminu są w historii jego wzoru w repozytorium Nogat: <https://github.com/Daldek/Nogat/commits/develop/design/kit/nogat-terms.md>

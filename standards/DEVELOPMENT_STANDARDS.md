@@ -693,10 +693,14 @@ the key in `sessionStorage` under `<project>/admin-key/1`, which „Wyloguj”
 forgets. It is the operator's, not a public view: no regulamin link, app
 menu or stats count (DEV-15.4, DEV-15.7 and DEV-15.11 do not apply to it);
 `<meta name="robots" content="noindex">`;
-every admin answer `Cache-Control: no-store`; CSP `'self'`; its requests stay
-under the rate limit (DEV-15.9).
+every admin answer `Cache-Control: no-store`; CSP `'self'`, whose `img-src`
+and `connect-src` add only the origin of the one base map an admin page's
+map draws without the switcher, the first allowed raster entry of
+DEV-15.15 (none without one); its requests stay under the rate limit
+(DEV-15.9).
 *Why:* the operator handles every GUI in one place and one way, and a
-deployment protects three paths (ECO-067).
+deployment protects three paths (ECO-067); an admin map, such as a box
+drawn over the base map, asks one provider only (ECO-089).
 
 **DEV-15.14** An info text, behind „(i)”, in a help popover or in a
 section's „Objaśnienie metod”, explains to the GUI's user what a value or
@@ -719,6 +723,29 @@ GUI's guide (instrukcja), which the info text links; an example is in
 [design/](../design/README.md#info-texts).
 *Why:* every GUI explains its values one way, short enough to read beside
 them (ECO-069).
+
+**DEV-15.15** A GUI with a map draws its base map only from the entries of
+the kit's catalogue `nogat-basemaps.json` (DEV-15.6) that the setting
+`basemaps` (DEV-18.1) allows, every entry by default, each from its provider
+or from the deployment's copy of it in `basemap_mirrors`, and from the
+deployment's own base maps in its setting `basemap_extra`, through the kit's
+`nogat-basemaps.js`, and offers them in the kit's `<nogat-basemaps>`, the
+catalogue's in its order, then the deployment's, with „bez podkładu” last,
+remembering the choice in the browser and opening by default on the first
+allowed entry the catalogue marks as a default; it has no other base map,
+list or switcher, and takes no base map from a visitor. Each base map
+carries its credit in the map's own attribution, shown when the map opens:
+the catalogue's, or the one the deployment gives its own (DEV-20.9). Its CSP
+names in `img-src` and `connect-src` no remote origin but those of the
+allowed entries or their copies, of the deployment's own base maps and of
+its own map layers, and no scheme source, and its regulamin keeps the blocks
+the allowed entries name (DEV-15.7). A new base map for the GUIs to share
+enters the catalogue first.
+*Why:* the author's direction of 2026-11-24: one set, one switcher and one
+credit wherever a map is shown; the catalogue is the shared default set,
+which a deployment's own base maps extend without changing it, and a CSP
+that names each origin keeps an injected script from sending data to any
+server (ECO-089).
 
 ---
 
@@ -799,7 +826,14 @@ on that processor's transfers outside the EEA, empty without them,
 `processor_cookie`, the sentence on its cookie against bots, empty without
 one, `mail_provider`, the service holding the operator's mailbox, and
 `mail_transfer`, the sentence on its processing outside the EEA, empty
-without it);
+without it; and the base maps of a GUI with a map, DEV-15.15: `basemaps`,
+the ids of the kit's entries it allows, every entry by default and `[]`
+none, joined by `,` in an environment variable, `basemap_mirrors`, a table
+of an allowed entry's id and the address of the deployment's copy of it,
+and `basemap_extra`, the deployment's own base maps, a list of tables with
+`id`, `name`, `kind` (`xyz`, `wms` or `vector`), `url`, `attribution` and
+`grayscale`; an unknown id or a bad table stops the server at start with an
+error document naming the key and the value);
 section `[<tool>]` holds the tool's own keys. A value
 comes from the first of: command-line option, environment variable
 (`<TOOL>_<KEY>` before `NOGAT_<KEY>`), `nogat.toml` (`[<tool>]` before
@@ -1231,11 +1265,12 @@ stays visible on every surface (ECO-060).
 
 **DEV-20.9** A product with GUGiK data (NMT, BDOT10k, PRG and the other data
 of geoportal.gov.pl) or results derived from them carries G; a basemap a GUI
-loads live from GUGiK's services is credited in the map's own attribution
-instead, the orthophoto as „Ortofotomapa © GUGiK”.
+loads live from GUGiK's services is credited instead in the map's own
+attribution with the credit of its entry in the kit's catalogue
+(DEV-15.15), the orthophoto as „Ortofotomapa © GUGiK”.
 *Why:* pkt 1 and 2 of GUGiK's conditions of reuse: its full name, the time
 the data were created and acquired, and a note that they were processed
-(ECO-068).
+(ECO-068); one credit per base map in every GUI (ECO-089).
 
 **DEV-20.10** A product with ISRIC SoilGrids data or results derived from
 them carries SG.
