@@ -13,9 +13,48 @@
   },
   "$defs": {
     "command_name": {
-      "description": "`<group> <verb>` as typed in the CLI",
+      "description": "`<group> <verb>` as typed in the CLI; `server` and `jobs` are reserved and never a group (AGI-6.1)",
       "type": "string",
-      "pattern": "^[a-z][a-z0-9-]* [a-z][a-z0-9-]*$"
+      "pattern": "^(?!(server|jobs) )[a-z][a-z0-9-]* [a-z][a-z0-9-]*$"
+    },
+    "effects": {
+      "type": "object",
+      "required": ["read_only", "writes", "idempotent", "network", "destructive"],
+      "properties": {
+        "read_only": {"type": "boolean"},
+        "writes": {"enum": ["none", "add", "replace", "delete"]},
+        "idempotent": {"type": "boolean"},
+        "network": {"type": "boolean"},
+        "destructive": {"type": "boolean"}
+      },
+      "if": {"properties": {"read_only": {"const": true}}},
+      "then": {"properties": {"writes": {"const": "none"}, "destructive": {"const": false}}}
+    },
+    "check": {
+      "description": "name of the command that plans this one without effects, or null",
+      "oneOf": [{"$ref": "#/$defs/command_name"}, {"type": "null"}]
+    },
+    "rest": {
+      "description": "The command's route on the tool's server (AGI-6.1, AGI-6.8), or null where the server does not serve it. `key`: true when a run needs the tool's key `X-API-Key`, because it changes something on the server or the tool keeps it for its operator; absent, true for a command whose effects are not read-only and false otherwise. Other fields, such as Obserwator's `server_options` and `local_options`, are allowed",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["method", "path"],
+          "properties": {
+            "method": {
+              "description": "`GET` for a read-only command; `POST` for a writing one and for a read-only one whose inputs a URL cannot carry",
+              "enum": ["GET", "POST"]
+            },
+            "path": {
+              "description": "The route on the tool's own server, `/api/v1/<group>/<verb>`",
+              "type": "string",
+              "pattern": "^/api/v[1-9][0-9]*/(?!(server|jobs)/)[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$"
+            },
+            "key": {"type": "boolean"}
+          }
+        },
+        {"type": "null"}
+      ]
     },
     "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
     "command": {
@@ -44,22 +83,12 @@
             "cardinality": {"enum": ["single", "bounded", "unbounded"]}
           }
         },
-        "effects": {
-          "type": "object",
-          "required": ["read_only", "writes", "idempotent", "network", "destructive"],
-          "properties": {
-            "read_only": {"type": "boolean"},
-            "writes": {"enum": ["none", "add", "replace", "delete"]},
-            "idempotent": {"type": "boolean"},
-            "network": {"type": "boolean"},
-            "destructive": {"type": "boolean"}
-          },
-          "if": {"properties": {"read_only": {"const": true}}},
-          "then": {"properties": {"writes": {"const": "none"}, "destructive": {"const": false}}}
-        },
-        "check": {
-          "description": "name of the command that plans this one without effects, or null",
-          "oneOf": [{"$ref": "#/$defs/command_name"}, {"type": "null"}]
+        "effects": {"$ref": "#/$defs/effects"},
+        "check": {"$ref": "#/$defs/check"},
+        "rest": {"$ref": "#/$defs/rest"},
+        "long": {
+          "description": "True when a run can outlast a request: the server serves it as a job, `nogat-job/1` (AGI-6.10); absent means false",
+          "type": "boolean"
         },
         "families": {
           "description": "MCP tool families selectable with --tools (AGI-5.8); `core` marks the core family (AGI-5.12)",

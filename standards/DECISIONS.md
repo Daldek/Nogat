@@ -12,7 +12,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 |---|---|---|---|
 | [ECO-001](#eco-001-nogat-is-the-ecosystem-hub) | Nogat is the ecosystem hub | amended by ECO-036 | 2026-10-19 |
 | [ECO-002](#eco-002-machine-readable-registry-ecosystemyaml) | Machine-readable registry `ecosystem.yaml` | amended by ECO-034 | 2026-10-19 |
-| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | amended by ECO-094 | 2026-10-19 |
+| [ECO-003](#eco-003-scope-eight-projects-basichydraulic-excluded) | Scope: eight projects, BasicHydraulic excluded | amended by ECO-094, ECO-095 | 2026-10-19 |
 | [ECO-004](#eco-004-standard-v20-is-rewritten-from-practice) | Standard v2.0 is rewritten from practice | amended by ECO-056 | 2026-10-19 |
 | [ECO-005](#eco-005-english-everywhere-polish-only-in-the-end-user-interface) | English everywhere, Polish only in the end-user interface | accepted | 2026-10-19 |
 | [ECO-006](#eco-006-single-author-identity-no-ai-attribution) | Single author identity, no AI attribution | amended by ECO-038 | 2026-10-19 |
@@ -67,8 +67,8 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-055](#eco-055-one-visual-identity-for-every-gui) | One visual identity for every GUI | amended by ECO-079 | 2026-11-01 |
 | [ECO-056](#eco-056-numbers-count-from-main) | Numbers count from main | accepted | 2026-11-03 |
 | [ECO-057](#eco-057-imgwtools-becomes-obserwator) | IMGWTools becomes Obserwator | accepted | 2026-11-03 |
-| [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | accepted | 2026-11-12 |
-| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084 | 2026-11-13 |
+| [ECO-058](#eco-058-guis-link-to-each-other-and-hand-off-one-way) | GUIs link to each other and hand off one way | amended by ECO-095 | 2026-11-12 |
+| [ECO-059](#eco-059-station-data-raw-in-archiwista-harmonized-in-obserwator-computed-by-hydrolog) | Station data: raw in Archiwista, harmonized in Obserwator, computed by Hydrolog | amended by ECO-084, ECO-095 | 2026-11-13 |
 | [ECO-060](#eco-060-every-product-carries-the-providers-attribution) | Every product carries the providers' attribution | amended by ECO-064, ECO-065, ECO-068, ECO-082, ECO-084, ECO-086, ECO-087, ECO-092, ECO-094 | 2026-11-13 |
 | [ECO-061](#eco-061-every-gui-serves-one-regulamin-from-nogats-template) | Every GUI serves one regulamin from Nogat's template | amended by ECO-062, ECO-070, ECO-079 | 2026-11-13 |
 | [ECO-062](#eco-062-public-guis-no-sign-in-no-stored-ip-addresses-regulamin-10) | Public GUIs: no sign-in, no stored IP addresses, regulamin 1.0 | amended by ECO-063, ECO-066, ECO-070, ECO-079 | 2026-11-13 |
@@ -104,6 +104,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
 | [ECO-093](#eco-093-one-command-builder-in-the-kit-generated-from-the-commands-1-entry) | One command builder in the kit, generated from the commands-1 entry | accepted | 2026-11-25 |
 | [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
+| [ECO-095](#eco-095-latarnik-the-access-point-and-gui-hub-every-tools-server-by-one-set-of-rules) | Latarnik, the access point and GUI hub; every tool's server by one set of rules | accepted | 2026-11-25 |
 
 ---
 
@@ -144,6 +145,9 @@ pins are data. YAML is readable by people and agents alike.
 
 **Amended by ECO-094 (2026-11-25):** Goniec, a QGIS plugin, is the ninth
 project.
+
+**Amended by ECO-095 (2026-11-25):** Latarnik, the access point of a
+deployment and its GUI hub, is the tenth project.
 
 **Decision.** The standard covers Kartograf, Hydrolog, IMGWTools, Hydrograf,
 Hydraulik, Retman, Archiwista and Nogat. BasicHydraulic is out of scope at
@@ -1152,6 +1156,12 @@ Archiwista, Retman, Hydraulik and Hydrolog, then the frozen Kartograf
 
 ## ECO-058 GUIs link to each other and hand off one way
 
+**Amended by ECO-095 (2026-11-25):** stage 2 is Latarnik, an optional
+project of its own in front of the tools' servers, which it reaches over
+HTTP; nothing runs in its process, so hosting the GUIs as modules and the
+entry point group `nogat.gui` retire, and its levels 1 and 2 have no
+sign-in and no frames.
+
 **Decision.** The GUI platform comes in two stages. Stage 1: every GUI of the
 ecosystem shows the kit's app menu, which leads to the other GUIs the
 deployment configures in `[nogat.gui]` of `nogat.toml`, and hands data off by
@@ -1185,6 +1195,11 @@ deployment's user systemd timers write the raw root beside the downloads
 Archiwista orders; operational data are archived as captures; the backup
 copy of the raw and data roots is the deployment's `rsync` timer, documented
 by Obserwator, not an Archiwista job.
+
+**Amended by ECO-095 (2026-11-25):** Obserwator calls Hydrolog's program or
+server and does not import it: the analyses a person asks for run as jobs of
+`hydrolog server` where the deployment sets its URL, the program otherwise,
+and `analyses build` always runs the program.
 
 **Decision.** For the hydro-meteorological station data of IMGW-PIB and
 ČHMÚ each project has one role. Archiwista orders every download and keeps
@@ -2866,3 +2881,76 @@ stays within regulamin 1.1 and kit `1.3.0`, which no member has released
 yet (ECO-089). Obserwator serves the API, its caching and `series hec` in
 `v3.6.0` (step O1), Goniec 0.1 follows (G1), and its status becomes
 `active` then (N2).
+
+## ECO-095 Latarnik, the access point and GUI hub; every tool's server by one set of rules
+
+**Decision.** Latarnik is a project of the ecosystem, profile `app`,
+repository `Latarnik`, optional in every deployment: its main access point
+and GUI hub. Every tool keeps its CLI, MCP, library, server and GUI and
+works alone, `<tool> gui serve` one command on 127.0.0.1; Latarnik imports no
+tool, reaches each tool's server over HTTP and computes nothing: it routes,
+checks, limits, caches, logs and chains calls, and a step that needs logic is
+a tool's command. It listens on 127.0.0.1 behind the host's one edge, which
+keeps TLS; each GUI keeps its own host, which Latarnik passes whole to the
+tool's server; its own host serves the hub at `/`, `nogat-server/1` of every
+service at `GET /api/v1/server`, each tool's `/api/v1/…` at `/<tool>/v1/…`
+(an admin path there answers `404 not_found`) and, at its level 2, its jobs
+and flows at `/api/v1/jobs` and `/api/v1/flows`, a flow being a fixed list of
+catalog commands whose options are literals, inputs or JSON Pointers into an
+earlier answer. A deployment runs the services of one release set, and a
+service of another version stays routed and is named `other_version`. Every
+GUI becomes files over its tool's `/api/v1`, and every number comes from a
+tool's server: Hydrolog gets `hydrolog server`, Obserwator's GUI moves from
+its private API to `/api/v1`, and Hydrograf's API moves from `/api` to
+`/api/v1`, its catalog, envelopes and jobs, `/api` then removed. A server
+follows AGI §6: a read-only command whose inputs a URL cannot carry is a
+`POST`, `server` and `jobs` are reserved groups, OpenAPI is at
+`/api/v1/openapi.json`, each command's route and key are the catalog's
+optional `rest` (`{method, path, key}`; a command list MAY carry `effects`,
+`check` and `rest`, and commands-1 `long`), the catalog decides access and
+caching (AGI-6.8), the client's address comes only from a trusted proxy's
+`X-Forwarded-For` and links are relative but OGC API's (AGI-6.9), and a long
+run is a job, `nogat-job/1` (`schemas/exchange/job-1.schema.json`,
+AGI-6.10), whose reasons `job_running`, `run_as_job` and `other_version` of
+`conflict` and `job_expired` of `not_found` the registry's meanings name.
+Stage 2 of the GUI platform (ECO-058) is replaced: no GUI hosted as a module,
+the entry point group `nogat.gui` retired. Plan:
+`docs/plans/2026-11-24-latarnik.md` (step N1).
+
+**Why.** The author's decisions of 2026-11-24: the access point and the GUI
+hub are one project of their own, Latarnik; Hydrolog gets its server;
+Kartograf's GUI is static over a read-only `kartograf server` that Latarnik
+routes; his answers to the plan's six questions followed Fable's
+recommendations. Two GUIs computed in their own GUI servers behind private
+APIs (Obserwator, Hydrolog), while Hydrograf's and Archiwista's were files
+over their APIs; a 137 km² hydrograph took about 150 s behind Hydrograf's
+nginx, which waits 120 s, so the GUI got a `504`; every public GUI repeated
+its limit, cache and logs; a tunnel rule forwards the full path and strips
+no prefix. Routing over HTTP keeps each tool alone and in its own
+environment, and Hydrograf in Docker has no package to host.
+
+**Rejected.** Stage 2's one process hosting Hydrolog's and Obserwator's GUI
+modules through `nogat.gui` (Latarnik would share the tools' environment).
+Caddy or nginx with a generated configuration (the catalog's access rules,
+the problem documents of a `429` and the logs of DEV-12.4 would need plugins
+or a second program). Stage 2's catalog bridge `/api/<tool>/<group>/<verb>`
+(each tool's own `/api/v1` already is one). Flows with conditions,
+arithmetic or geometry (logic is a tool's command). The PMAXTP depth at a
+catchment's centroid (one point would get two design depths; Hydrograf's
+catchment mean is a command of its catalog). Obserwator's `analyses build`
+through `hydrolog server` (thousands of calls over hours would hold the
+workers persons share). TLS, sign-in or frames in levels 1 and 2.
+
+**Consequence.** ECO-003, ECO-058 and ECO-059 are amended; AGI-6.1, AGI-6.2,
+AGI-6.5, AGI-2.2 and AGI-2.4 change and AGI-6.7 to AGI-6.10 are new, within
+version 1 of commands-1 and command-list-1 (AGI-4.1). Latarnik enters the
+registry with status `research`, profile `app`, `interfaces.rest`
+`/api/v1`, the route `GET /api/v1/server` and planned runtime dependencies
+over REST on Obserwator, Hydrolog, Hydrograf, Kartograf and Archiwista;
+`nogat-server/1` is named in their notes, as `nogat-handoff/1` is. Its mark
+and accent pair join `design/`, and the lists of the ecosystem's Python
+distributions in `standards/ci/` name it. Each tool changes in its own
+session, producers first: Hydrolog's server (H1), Obserwator on it (O1),
+Hydrograf's `/api/v1` (HG1), Kartograf's server (K4), then Latarnik's levels
+(L1, L2); the registry follows each step (N2), Latarnik becoming `active` at
+the end. Its repository is the author's to create.

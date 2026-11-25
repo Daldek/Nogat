@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Daldek/Nogat/schemas/exchange/server-1.schema.json",
   "title": "nogat-server/1",
-  "description": "What a server serves, at `GET /api/v1/server` of a tool's own server and of Latarnik alike, so that a client needs one address and one request (S4 of docs/plans/2026-11-24-qgis-plugin.md and of docs/plans/2026-11-24-latarnik.md, ECO-094): one entry in `services` on a tool's own server, one per routed service and one for Latarnik itself on Latarnik. A client uses the services whose `tool` it knows and an `api` major it speaks, skips the rest and refuses a known service with no such major, naming both versions; a capability absent from `capabilities` is not served. Projects copy this file like schemas/agent/ (ECO-050). Unknown fields are allowed: adding optional fields keeps the version (AGI-4.1).",
+  "description": "What a server serves, at `GET /api/v1/server` of a tool's own server and of Latarnik alike, so that a client needs one address and one request (AGI-6.7; S4 of docs/plans/2026-11-24-qgis-plugin.md and of docs/plans/2026-11-24-latarnik.md, ECO-094, ECO-095): one entry in `services` on a tool's own server, one per routed service and one for Latarnik itself on Latarnik, which builds each routed entry from the tool's own with `api` mapped to `/<tool>/v<major>` and refreshes it every minute. A client uses the services whose `tool` it knows and an `api` major it speaks, skips the rest and refuses a known service with no such major, naming both versions; a capability absent from `capabilities` is not served. Projects copy this file like schemas/agent/ (ECO-050). Unknown fields are allowed: adding optional fields keeps the version (AGI-4.1).",
   "type": "object",
   "required": ["schema", "services"],
   "properties": {
@@ -127,7 +127,7 @@
     {
       "schema": "nogat-server/1",
       "release_set": "v0.3.0",
-      "flows": ["series-to-hydrolog"],
+      "flows": ["point-design-hydrograph"],
       "services": [
         {
           "tool": "latarnik",
@@ -142,8 +142,8 @@
           "version": "3.6.0",
           "api": {"1": "/obserwator/v1"},
           "capabilities": ["stations", "current", "series"],
-          "ogcapi": "/obserwator/ogcapi/",
-          "gui": "/obserwator/",
+          "ogcapi": "https://obserwator.example.org/ogcapi/",
+          "gui": "https://obserwator.example.org/",
           "state": "ok"
         },
         {
@@ -152,6 +152,14 @@
           "api": {"1": "/kartograf/v1"},
           "capabilities": ["catalog", "plan", "script"],
           "state": "ok"
+        },
+        {
+          "tool": "hydrograf",
+          "version": "0.7.0",
+          "api": {"1": "/hydrograf/v1"},
+          "capabilities": ["watershed", "hydrograph"],
+          "gui": "https://hydrograf.example.org/",
+          "state": "other_version"
         },
         {
           "tool": "hydrolog",

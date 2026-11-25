@@ -326,6 +326,64 @@ def test_catalog_with_wrong_fields_of_a_form_invalid(document: dict[str, Any]) -
     assert _errors("commands", document) != []
 
 
+# A command's route on its tool's server and its run as a job (AGI-6.1,
+# AGI-6.8, AGI-6.10, ECO-095).
+ROUTE = {"method": "POST", "path": "/api/v1/dem/download", "key": True}
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(rest=ROUTE, long=True),
+        _command(rest=None),
+        # Obserwator's form before `key`: its options' roles, no key; the
+        # key then follows `effects.read_only`.
+        _command(
+            rest={
+                "method": "GET",
+                "path": "/api/v1/series/read",
+                "server_options": ["root"],
+                "local_options": ["output"],
+            }
+        ),
+    ],
+    ids=["route-and-long", "not-served", "without-key"],
+)
+def test_catalog_with_a_route_valid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _command(rest={**ROUTE, "method": "PUT"}),
+        _command(rest={**ROUTE, "path": "/api/dem/download"}),
+        _command(rest={**ROUTE, "path": "/api/v1/download"}),
+        _command(rest={**ROUTE, "path": "/api/v1/jobs/start"}),
+        _command(rest={**ROUTE, "path": "/api/v1/server/info"}),
+        _command(rest={**ROUTE, "key": "yes"}),
+        _command(rest={"method": "GET"}),
+        _command(long="yes"),
+        _command(name="jobs list"),
+        _command(name="server info"),
+    ],
+    ids=[
+        "method-not-get-or-post",
+        "path-unversioned",
+        "path-without-verb",
+        "path-in-reserved-jobs",
+        "path-in-reserved-server",
+        "key-not-boolean",
+        "route-without-path",
+        "long-not-boolean",
+        "group-jobs-reserved",
+        "group-server-reserved",
+    ],
+)
+def test_catalog_with_a_wrong_route_invalid(document: dict[str, Any]) -> None:
+    assert _errors("commands", document) != []
+
+
 ENTRY: dict[str, Any] = {
     "name": "dem download",
     "operation_id": "kartograf_dem_download",
@@ -363,6 +421,32 @@ def test_command_list_valid() -> None:
     ],
 )
 def test_command_list_invalid(document: dict[str, Any]) -> None:
+    assert _errors("command-list", document) != []
+
+
+def test_command_list_as_a_server_serves_it_valid() -> None:
+    document = _entry(effects=COMMAND["effects"], check="dem check", rest=ROUTE)
+    assert _errors("command-list", document) == []
+
+
+@pytest.mark.parametrize(
+    "document",
+    [
+        _entry(effects={"read_only": False}),
+        _entry(effects={**COMMAND["effects"], "read_only": True}),
+        _entry(check="check"),
+        _entry(rest={**ROUTE, "method": "DELETE"}),
+    ],
+    ids=[
+        "effects-incomplete",
+        "read-only-but-writes",
+        "check-not-a-command",
+        "rest-method",
+    ],
+)
+def test_command_list_with_wrong_served_fields_invalid(
+    document: dict[str, Any],
+) -> None:
     assert _errors("command-list", document) != []
 
 

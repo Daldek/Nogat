@@ -3,8 +3,9 @@
 Standard 1.3 · in preparation on `develop`; the published version is 1.2, tagged `std-1.2` (HUB-6.1)
 
 Shared rules for Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik,
-Retman, Archiwista, Goniec and Nogat. AI agents are their primary operators, so the
-tools must be easy to discover, judge and call correctly, and safe to develop.
+Retman, Archiwista, Goniec, Latarnik and Nogat. AI agents are their primary
+operators, so the tools must be easy to discover, judge and call correctly,
+and safe to develop.
 
 ## Zen of Nogat
 
@@ -47,7 +48,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 - Placeholders, defined here once:
   - `<project>`: the project name in lower case as in `nogat-<project>`:
     kartograf, obserwator, hydrolog, hydrograf, hydraulik, retman, archiwista,
-    goniec;
+    goniec, latarnik;
   - `<Project>`: the project name as in the registry (Kartograf, Obserwator, …);
   - `<tool>`: the CLI name, `interfaces.cli` in `ecosystem.yaml`: kartograf,
     obserwator, hydrolog, retman, archiwista, hydraulik; `<TOOL>` is its upper
@@ -158,6 +159,26 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     values only, the lines beside its button, and a desktop GIS layer
     carries them in its metadata (DEV §1, DEV-5.1, DEV-20.5, HUB-1.1,
     HUB-2.1, HUB-2.9, ECO-094).
+  - Latarnik, an optional `app`, is the access point of a deployment and its
+    GUI hub: in front of the tools' servers on 127.0.0.1, it reaches them
+    over HTTP, routes each tool's `/api/v1/…` at `/<tool>/v1/…`, limits,
+    caches, logs and chains their calls and computes nothing; stage 2 of the
+    GUI platform and the entry point group `nogat.gui` retire, and
+    Obserwator calls Hydrolog's program or server. A server's REST API:
+    `POST` also for a read-only command whose inputs a URL cannot carry,
+    `server` and `jobs` reserved groups, OpenAPI at `/api/v1/openapi.json`
+    with a relative `servers` URL, `nogat-server/1` at `GET /api/v1/server`
+    and the command list at `/api/v1/commands/list`, access and caching by
+    the catalog (the tool's key `X-API-Key` on a run whose `rest.key` is
+    true), the client's address only from a trusted proxy's
+    `X-Forwarded-For`, relative links but OGC API's, and a long run as a job,
+    `nogat-job/1` (`schemas/exchange/job-1.schema.json`); commands-1 gains
+    the optional `rest` (`{method, path, key}`) and `long`, a command list
+    `effects`, `check` and `rest`; a catalog group is never `server` or
+    `jobs`; the registry's `conflict` names the reasons `job_running`,
+    `run_as_job` and `other_version`, and `not_found` `job_expired`
+    (AGI-2.2, AGI-2.4, AGI-6.1, AGI-6.2, AGI-6.5, AGI-6.7 to AGI-6.10, ERR-1,
+    HUB-1.1, DEV §1, ECO-095).
   - The GUI kit becomes version 1.3.0: the base maps `nogat-basemaps.json`,
     `.js` and `.css`, the chart module `nogat-chart.js` and `nogat-chart.css`,
     the command builder `nogat-command-form.js` and `.css`, the lines W, WP

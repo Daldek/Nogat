@@ -13,8 +13,10 @@ Requirements for Nogat as the hub of the ecosystem (ECO-001, ECO-002).
    documents (`schemas/agent/`, AGI-4.1) and of the documents exchanged
    between GUIs or between a server and its clients (`schemas/exchange/`:
    the hand-off `nogat-handoff/1`, the description of a server
-   `nogat-server/1`), and the visual identity and GUI kit that GUIs copy
-   (`design/`, DEV-15.3 to DEV-15.6); Nogat itself runs no GUI (ECO-058);
+   `nogat-server/1`, a server's job `nogat-job/1`), and the visual identity
+   and GUI kit that GUIs copy (`design/`, DEV-15.3 to DEV-15.6); Nogat
+   itself runs no GUI (ECO-058), and Latarnik, optional, is a deployment's
+   access point to the GUIs and servers (ECO-095);
 2. the project registry (`ecosystem.yaml`);
 3. tooling that reads the registry (drift report, workspace sync, MCP
    configuration, routing table for agents, checks of this standard);

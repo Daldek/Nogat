@@ -552,3 +552,48 @@ projects:
         via: [rest]
         exchange: [obserwator-ogcapi, obserwator-result/1, obserwator-series-csv, obserwator-hec]
         note: Planned for Goniec 0.1 with Obserwator v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin); no package dependency. Reads nogat-server/1 at GET /api/v1/server of the address a person chooses, adds the collections of /ogcapi/ as QGIS's own OAPIF layers, reads stations, current data and series through /api/v1 and copies or saves the server's CSV, HEC tables and DSS files as served; computes nothing.
+
+  - name: Latarnik
+    summary: Optional access point and GUI hub of a deployment; routes, limits and caches the tools' servers.
+    profiles: [app]
+    status: research
+    repo: https://github.com/Daldek/Latarnik
+    visibility: public
+    distribution: {pypi: null, import_name: null}
+    interfaces: {cli: null, mcp: null, rest: /api/v1, python: null}
+    routes:
+      - task: List the services of a deployment with each one's API base, version, GUI and regulamin
+        command: GET /api/v1/server
+    data_sources: []
+    provides: []
+    depends_on:
+      - project: Obserwator
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [obserwator-command-list/1, obserwator-result/1]
+        note: Planned for Latarnik 0.1 (ECO-095, plan 2026-11-24-latarnik steps L1 and L2); no package dependency. Reads nogat-server/1 at GET /api/v1/server and the rest of each command at /api/v1/commands/list every minute, passes /obserwator/v1/… to obserwator server's /api/v1/… and its GUI's host whole; the flow point-design-hydrograph takes the gauges of a catchment from the store-only stations command with area (O1).
+      - project: Hydrolog
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [hydrolog-command-list/1, hydrolog-result/1, watershed-parameters]
+        note: Planned with hydrolog server (ECO-095, plan 2026-11-24-latarnik step H1); no package dependency. Passes /hydrolog/v1/… to its /api/v1/… and its GUI's host whole, reads nogat-server/1 and the command list as for Obserwator; point-design-hydrograph passes the watershed of Hydrograf's hand-off to hydrograph generate.
+      - project: Hydrograf
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [hydrograf-rest]
+        note: Planned with Hydrograf's /api/v1 (ECO-095, plan 2026-11-24-latarnik step HG1), its catalog's command list and envelope replacing hydrograf-rest then; no package dependency. Passes /hydrograf/v1/… and its GUI's host whole once its nginx forwards X-Forwarded-For; point-design-hydrograph takes the delineation and the catchment's design depth from it.
+      - project: Kartograf
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [kartograf-command-list/1, kartograf-result/1]
+        note: Planned with kartograf server (ECO-093, ECO-095, Kartograf's plan 2026-11-24-kartograf-gui step K4); no package dependency. Passes /kartograf/v1/… to its read-only /api/v1/…, plans and scripts only, and hosts its GUI's page; reads nogat-server/1 as for Obserwator.
+      - project: Archiwista
+        kind: runtime
+        status: planned
+        via: [rest]
+        exchange: [archiwista-rest]
+        note: Planned for Latarnik 0.1 (ECO-095); no package dependency. Passes Archiwista's own host whole, its sign-in, cookie and CSRF header included, once its trusted_proxies names Latarnik; never on Latarnik's shared host.

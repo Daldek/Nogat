@@ -4,7 +4,7 @@
 
 ## Purpose and scope
 
-Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman, Archiwista and Goniec. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
+Nogat is the hub of an ecosystem of tools for hydrology, meteorology and geodata in Poland and Czechia: Kartograf, Obserwator, Hydrolog, Hydrograf, Hydraulik, Retman, Archiwista, Goniec and Latarnik. It holds the shared standard, the project registry and the map of what feeds what. It downloads and computes nothing itself.
 
 Use it to find the tool for a task and the command to start with, then read that tool's guide, linked in the table; and to plan a change that spans projects: a plan in `docs/plans/` comes first, producers before consumers.
 
@@ -55,6 +55,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Browse a Kartograf store on a map in the browser | [Archiwista][archiwista] | `archiwista serve` |
 | Search the file catalog of a Kartograf store from a script | [Archiwista][archiwista] | `archiwista search` |
 | Export the input data of a project's set (one year, one purpose) as flat category folders or a ZIP | [Archiwista][archiwista] | `archiwista project-export` |
+| List the services of a deployment with each one's API base, version, GUI and regulamin | [Latarnik][latarnik] (research) | `GET /api/v1/server` |
 
 [kartograf]: https://raw.githubusercontent.com/Daldek/Kartograf/main/AGENTS.md
 [obserwator]: https://raw.githubusercontent.com/Daldek/Obserwator/main/AGENTS.md
@@ -63,6 +64,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 [hydraulik]: https://raw.githubusercontent.com/Daldek/Hydraulik/main/AGENTS.md
 [retman]: https://raw.githubusercontent.com/Daldek/Retman/main/AGENTS.md
 [archiwista]: https://raw.githubusercontent.com/Daldek/Archiwista/main/README.md
+[latarnik]: https://raw.githubusercontent.com/Daldek/Latarnik/main/README.md
 
 ## Tools
 
@@ -76,6 +78,7 @@ One row per task. A tool that is not `active` is marked in its row; an app has n
 | Retman | active | CLI `retman`, Python `retman` | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | Archiwista | active | CLI `archiwista`, REST `/api/v1` | Web browser and manager of Kartograf and Obserwator stores. |
 | Goniec | research | QGIS plugin `goniec` | QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series. |
+| Latarnik | research | REST `/api/v1` | Optional access point and GUI hub of a deployment; routes, limits and caches the tools' servers. |
 
 ## Calling a tool
 

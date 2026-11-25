@@ -23,6 +23,7 @@ flowchart LR
   Retman["Retman<br/>active"]
   Archiwista["Archiwista<br/>active"]
   Goniec["Goniec<br/>research"]
+  Latarnik["Latarnik<br/>research"]
   subgraph external[External data sources]
     src_gugik(["gugik"])
     src_cuzk(["cuzk"])
@@ -68,6 +69,11 @@ flowchart LR
   Obserwator -- library/store --> Archiwista
   Hydrolog -. file, no package .-> Archiwista
   Obserwator -. planned: rest .-> Goniec
+  Obserwator -. planned: rest .-> Latarnik
+  Hydrolog -. planned: rest .-> Latarnik
+  Hydrograf -. planned: rest .-> Latarnik
+  Kartograf -. planned: rest .-> Latarnik
+  Archiwista -. planned: rest .-> Latarnik
 ```
 
 ## Projects
@@ -83,6 +89,7 @@ flowchart LR
 | [Retman](https://github.com/Daldek/Retman) | tool | active | Polish natural-language command layer over Kartograf, Obserwator and Hydrolog. |
 | [Archiwista](https://github.com/Daldek/Archiwista) | app | active | Web browser and manager of Kartograf and Obserwator stores. |
 | [Goniec](https://github.com/Daldek/Goniec) | plugin | research | QGIS plugin over the tools' servers; 0.1 shows Obserwator's stations, current data and series. |
+| [Latarnik](https://github.com/Daldek/Latarnik) | app | research | Optional access point and GUI hub of a deployment; routes, limits and caches the tools' servers. |
 
 ## Dependencies and exchanged data
 
@@ -109,6 +116,11 @@ flowchart LR
 | Archiwista | Obserwator | optional | active | library, store | `obserwator-store/1`, `obserwator-meta/1`, `obserwator-series/1`, `obserwator-observation/1`, `chmu-json/1`, `obserwator-data/1` |
 | Archiwista | Hydrolog | data | active | file | `hydrolog-series/1` |
 | Goniec | Obserwator | runtime | planned | rest | `obserwator-ogcapi`, `obserwator-result/1`, `obserwator-series-csv`, `obserwator-hec` |
+| Latarnik | Obserwator | runtime | planned | rest | `obserwator-command-list/1`, `obserwator-result/1` |
+| Latarnik | Hydrolog | runtime | planned | rest | `hydrolog-command-list/1`, `hydrolog-result/1`, `watershed-parameters` |
+| Latarnik | Hydrograf | runtime | planned | rest | `hydrograf-rest` |
+| Latarnik | Kartograf | runtime | planned | rest | `kartograf-command-list/1`, `kartograf-result/1` |
+| Latarnik | Archiwista | runtime | planned | rest | `archiwista-rest` |
 
 ### Details
 
@@ -130,6 +142,11 @@ flowchart LR
 - **Archiwista → Obserwator**: Extra archiwista[obserwator] (IMGW-1..14); ČHMÚ (IMGW-15..19). Downloads into a raw root through Obserwator's library; the adapter reads series, station catalogs and analyses from Obserwator's data root (obserwator-data.json).
 - **Archiwista → Hydrolog**: No package dependency; the station card's „Kopiuj do Hydrologa” and „Plik przekazania” (and `archiwista stations handoff`) write nogat-handoff/1 around hydrolog-series/1 (Archiwista A-ADR-052), which Hydrolog's „Wczytaj z Archiwisty” opens.
 - **Goniec → Obserwator**: Planned for Goniec 0.1 with Obserwator v3.6.0 (ECO-094, plan 2026-11-24-qgis-plugin); no package dependency. Reads nogat-server/1 at GET /api/v1/server of the address a person chooses, adds the collections of /ogcapi/ as QGIS's own OAPIF layers, reads stations, current data and series through /api/v1 and copies or saves the server's CSV, HEC tables and DSS files as served; computes nothing.
+- **Latarnik → Obserwator**: Planned for Latarnik 0.1 (ECO-095, plan 2026-11-24-latarnik steps L1 and L2); no package dependency. Reads nogat-server/1 at GET /api/v1/server and the rest of each command at /api/v1/commands/list every minute, passes /obserwator/v1/… to obserwator server's /api/v1/… and its GUI's host whole; the flow point-design-hydrograph takes the gauges of a catchment from the store-only stations command with area (O1).
+- **Latarnik → Hydrolog**: Planned with hydrolog server (ECO-095, plan 2026-11-24-latarnik step H1); no package dependency. Passes /hydrolog/v1/… to its /api/v1/… and its GUI's host whole, reads nogat-server/1 and the command list as for Obserwator; point-design-hydrograph passes the watershed of Hydrograf's hand-off to hydrograph generate.
+- **Latarnik → Hydrograf**: Planned with Hydrograf's /api/v1 (ECO-095, plan 2026-11-24-latarnik step HG1), its catalog's command list and envelope replacing hydrograf-rest then; no package dependency. Passes /hydrograf/v1/… and its GUI's host whole once its nginx forwards X-Forwarded-For; point-design-hydrograph takes the delineation and the catchment's design depth from it.
+- **Latarnik → Kartograf**: Planned with kartograf server (ECO-093, ECO-095, Kartograf's plan 2026-11-24-kartograf-gui step K4); no package dependency. Passes /kartograf/v1/… to its read-only /api/v1/…, plans and scripts only, and hosts its GUI's page; reads nogat-server/1 as for Obserwator.
+- **Latarnik → Archiwista**: Planned for Latarnik 0.1 (ECO-095); no package dependency. Passes Archiwista's own host whole, its sign-in, cookie and CSRF header included, once its trusted_proxies names Latarnik; never on Latarnik's shared host.
 
 ## What each project provides
 
@@ -143,9 +160,9 @@ flowchart LR
 | `kartograf-download/1` | document | Hydraulik, Retman | Download report: files[] {path, size_bytes, sha256, status}, failed[], skipped[], notices, mode plain or store; also for land cover, soil, HSG and collections. |
 | `kartograf-plan/1` | document | Hydraulik, Archiwista | Plan without effects (--check) per file; current, newer, missing or unverifiable in the store, write, replace or conflict in plain mode. |
 | `kartograf-availability/1` | document | — | Years, systems, resolutions and completeness of DEM coverage for an area. |
-| `kartograf-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery. |
+| `kartograf-command-list/1` | catalog | Retman, Latarnik (planned) | Summary of every command (name, operation_id, effects, check twin) from list_commands and kartograf commands list; the first step of discovery. |
 | `kartograf-commands/1` | catalog | Hydraulik, Retman | One command with options, rules, errors and examples (command_schema, kartograf commands schema) behind CLI and MCP, with validate_command, run_command, check_command, format_command. |
-| `kartograf-result/1` | document | Hydraulik, Retman | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
+| `kartograf-result/1` | document | Hydraulik, Retman, Latarnik (planned) | Result envelope of every command (status ok, partial or failed, domain result, items, notices); exit codes 0, 10 and 11. |
 | `kartograf-error/1` | document | Hydraulik, Retman | Error document with code, hint and exit code, the last line of stderr. |
 | `kartograf-testing` | library | — | kartograf.testing builds stores and sidecars with the real writers, offline, for the contract tests of consumers (DEV-10.6). |
 | `kartograf-camels-pl` | dataset | Obserwator (planned) | Since v0.9.0 (ECO-086), the catchment boundaries and the gauges of CAMELS-PL, a product of the group hydro (`hydro download --product camels`); the two GeoPackages of a release as published (EPSG:2180), read from its ZIP, a store version only when their bytes change, the sidecar naming every release with these bytes, the lines L, S and P and the terms line RD (DEV-20.12, ECO-088). |
@@ -162,8 +179,8 @@ flowchart LR
 | `obserwator-observation/1` | document | Archiwista | History of published HTTP signals per archive file. |
 | `chmu-json/1` | document | Archiwista | Canonical JSON form of ČHMÚ files used for content-based pins. |
 | `pig-json/1` | document | — | Planned for v3.3.0 (ECO-092), the canonical JSON form of PIG-PIB's ArcGIS answers (rows sorted by their key, without OBJECTID and paging) used for content-based pins, as chmu-json/1. |
-| `obserwator-result/1` | document | Hydraulik, Retman, Goniec (planned) | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
-| `obserwator-command-list/1` | catalog | Retman | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
+| `obserwator-result/1` | document | Hydraulik, Retman, Goniec (planned), Latarnik (planned) | Result envelope of every command (status, result, errors, notices, exit code); a writing command lists files[] {path, size_bytes, sha256, status}. |
+| `obserwator-command-list/1` | catalog | Retman, Latarnik (planned) | Summary of every command (name, operation_id, group, effects, check twin, REST route) from list_commands and obserwator commands list. |
 | `obserwator-commands/1` | catalog | Retman | One command with options, x-obserwator metadata and errors (command_schema, obserwator commands schema) behind CLI, REST and MCP, with validate_command, run_command, check_command, format_command. |
 | `obserwator-archives` | dataset | Retman | IMGW-PIB and ČHMÚ archive files as published (ZIP, CSV, JSON), as plain files under their server path (datasets download --output-dir) or as store versions; planned for v3.3.0 (ECO-092), PIG-PIB's pages of its Monitoring Wód Podziemnych as published. |
 | `obserwator-series-csv` | dataset | Hydrolog, Retman, Goniec (planned) | CSV export of series with units and IMGW-PIB attribution (series export --output FILE). |
@@ -179,13 +196,13 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `watershed-parameters` | document | Hydrograf | WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input. |
+| `watershed-parameters` | document | Hydrograf, Latarnik (planned) | WatershedParameters JSON (area, perimeter, length, elevations, CN, slopes) as calculation input. |
 | `hydrolog-hsg` | dataset | — | HSG raster (uint8 GeoTIFF, groups A–D) and HSG statistics from clay, sand and silt rasters. |
 | `hydrolog-hydrograph-csv` | dataset | Hydraulik | Hydrograph table, a CSV with time_min and discharge_m3s at a regular step; every route command reads it and writes it with --output, route network writes one &lt;id&gt;.csv per node with --output-dir; the hand-off to hydraulic models. |
 | `hydrolog-network/1` | document | Hydrograf | River-network document of route network (nodes subcatchment, reach, reservoir, junction and outlet, with the options of their method), with its JSON Schema shipped in the package. |
-| `hydrolog-result/1` | document | Obserwator, Hydraulik, Retman | Result envelope (command, inputs, result, files with SHA-256, notices). |
+| `hydrolog-result/1` | document | Obserwator, Hydraulik, Retman, Latarnik (planned) | Result envelope (command, inputs, result, files with SHA-256, notices). |
 | `hydrolog-error/1` | document | — | Error envelope with registry code, details and hint. |
-| `hydrolog-command-list/1` | catalog | Retman | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
+| `hydrolog-command-list/1` | catalog | Retman, Latarnik (planned) | Summary of every command from list_commands and hydrolog commands list (paged); the first step of discovery. |
 | `hydrolog-commands/1` | catalog | Retman | One command with options, effects, errors and examples (command_schema, hydrolog commands schema) behind CLI, MCP and hydrolog.operations, with validate_command, check_command, run_command. |
 | `hydrolog-python-api` | library | Hydrograf, Hydraulik | Calculation classes (ConcentrationTime, HydrographGenerator, NashIUH, the four hietograms) and routing (Hydrograph, the reach classes, RoutingNetwork). |
 | `hydrolog-gui` | service | — | Browser GUI over the catalog (extra gui); alone by hydrolog gui serve, 127.0.0.1:8070 by default, or as the module hydrolog.gui:gui_module of the entry point group nogat.gui for Nogat's GUI host. |
@@ -196,7 +213,7 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `hydrograf-rest` | service | Retman (planned) | REST API with watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t) and CSV exports; MVT tiles. |
+| `hydrograf-rest` | service | Retman (planned), Latarnik (planned) | REST API with watershed boundary GeoJSON, morphometry JSON, hydrograph Q(t) and CSV exports; MVT tiles. |
 
 ### Hydraulik
 
@@ -208,7 +225,7 @@ flowchart LR
 
 | Id | Kind | Consumers | Description |
 |---|---|---|---|
-| `archiwista-rest` | service | — | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
+| `archiwista-rest` | service | Latarnik (planned) | REST API /api/v1 (catalog, map footprints, projects, previews, jobs with SSE). |
 | `archiwista-sources` | contract | — | Source adapter protocol registered through the archiwista.sources entry point. |
 | `archiwista-project/1` | manifest | — | archiwista-project.json in a project directory; the area, the stores and groups of pins (producer, store version, SHA-256, content_sha256) with their origin, a producer's call or a local selection (ECO-054). |
 | `archiwista-raw-root` | dataset | Obserwator (planned) | Planned (ECO-059) raw root of IMGW-PIB and ČHMÚ data, and PIG-PIB's from Obserwator v3.3.0 (ECO-092), an obserwator-store/1 with its marker (archives with sidecars, station metadata, PMAXTP cells), filled by Archiwista's jobs through Obserwator's library and by Obserwator's commands run by the deployment's timers (ECO-084); both roots are backed up by the deployment's rsync timer. |
