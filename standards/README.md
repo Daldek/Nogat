@@ -58,7 +58,7 @@ tools must be easy to discover, judge and call correctly, and safe to develop.
 | Document | Covers |
 |---|---|
 | [DECISIONS.md](DECISIONS.md) | Decisions behind the standard, with reasons and rejected options (ECO-…) |
-| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
+| [DEVELOPMENT_STANDARDS.md](DEVELOPMENT_STANDARDS.md) | Profiles, language, git, commits, layout, uv, quality gate, naming, docstrings, tests, errors, logging, security, files and encoding, frontend (visual identity, GUI kit, regulamin, admin panel, info texts, charts), licence and contributions, agent workflow, user environment, data output, provider attribution (DEV-…) |
 | [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) | File set and size budgets, README for agents and people, CLAUDE.md, AGENTS.md, llms.txt, PROGRESS, CHANGELOG, ADR, PRD, ARCHITECTURE, USAGE, templates, ecosystem user documentation (DOC-…) |
 | [AGENT_INTERFACE.md](AGENT_INTERFACE.md) | Command catalog, CLI, result and error documents, MCP, REST, Python library, generated guides, languages, discoverability (AGI-…) |
 | [COMPUTATIONS.md](COMPUTATIONS.md) | Formulas: tiers, ranges, preconditions, specs, errors and notices at the limits, input types and units, reference cases, oracles, generated range, type and property tests, mutation testing, gross defects (CMP-…) |
@@ -132,6 +132,21 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
   - The GUI kit becomes version 1.2.0: `screen-lines` of `<nogat-sources>`
     and the blocks `camels-pl` and `e-obs` of the regulamin (ECO-086,
     ECO-087).
+  - A GUI draws its charts over axes with the kit's chart module
+    `nogat-chart.js` and `nogat-chart.css`, never with a chart library or a
+    drawing of its own, a circular chart or warming stripes excepted; a
+    chart whose x is a time or a value, not one of a year's months or days,
+    of named bars or of probabilities, zooms and pans alike in every GUI: a
+    drag selects the range (of x and y on a chart of points), Ctrl with the
+    wheel zooms around the cursor while the wheel alone scrolls the page,
+    Shift with a drag or the middle button pans, a double click, the key 0
+    and „Cały zakres” show the whole, two fingers pinch and pan; „+” under
+    a chart not yet zoomed, „−”, „+”, „Cały zakres” and the range under a
+    zoomed one, whose y axis fits the values shown; a PNG is the chart as
+    shown with the providers' lines, a CSV the whole series (DEV-15.16,
+    ECO-090).
+  - The GUI kit becomes version 1.3.0: the chart module `nogat-chart.js`
+    and `nogat-chart.css` (ECO-090).
 - 1.1 (published with Nogat `v0.2.0`, tag `std-1.1`):
   - A file a tool names for a user (a GUI's download, a REST attachment, a
     file a command writes into `output_dir` under a name it picks) is

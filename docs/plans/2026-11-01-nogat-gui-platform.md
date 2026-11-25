@@ -309,7 +309,7 @@ research and waits for the author's approval.
    | `theme.js` | pre-paint init and the three-way switch, one storage key |
    | `info.js`, `form.js` | `<nogat-info>` tooltip with MathML, the texts the app's; number with unit and bounds, choice with meanings, series table with paste and CSV |
    | `command-form.js`, `schematic.js` | `<nogat-command-form>` (item 8); `<nogat-schematic>` drawing `hydrolog-network-schematic/1` in the tokens (ADR-0013 lets a consumer draw it) |
-   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes; shared basemaps, attribution and the origins a CSP must allow |
+   | `chart-theme.js`, `basemaps.json` | tokens as Chart.js defaults and SVG classes — for charts replaced by `2026-11-24-unified-charts.md`: the kit's `nogat-chart.js` and `.css` (DEV-15.16, ECO-090); shared basemaps, attribution and the origins a CSP must allow |
    | `embed.js` | both sides of the handshake (item 5); `nogat-handoff.js` of stage 1 gains `nogat:handoff` |
    | `nogat-app-menu.*`, `nogat-handoff.js`, `nogat-kit.json` | from stage 1 |
 

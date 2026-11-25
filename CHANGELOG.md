@@ -8,6 +8,27 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ### Added
 
+- The kit's charts (ECO-090, step 1 of
+  `docs/plans/2026-11-24-unified-charts.md`): `design/kit/nogat-chart.js`,
+  Obserwator's SVG engine with Hydrolog's short time axis in minutes and its
+  PNG footer as one plain ES module, and `nogat-chart.css`, scoped by
+  `.nogat-chart` with the tokens' light fallbacks. `drawChart` zooms a
+  chart of a time or a value alike in every GUI: a drag selects the range
+  (a rectangle of x and y with `zoom: "xy"`), Ctrl with the wheel or a
+  trackpad's pinch zooms around the cursor while the wheel alone scrolls the
+  page, Shift or the middle button pans, a double click, `0` and „Cały
+  zakres” show the whole, two fingers pinch and pan on a phone, where a
+  zoomable chart is drawn at the page's width; a lone „+” before a zoom,
+  then the bar „−”, „+”, „Cały zakres” and the range shown, the y axis
+  fitted to it; every zoom in stops at four points of the readout's series.
+  For Archiwista and Hydrograf a second unit on a right-hand axis, gap
+  spans, hollow and diamond points, an x axis without labels, `onReadout`,
+  `onRange` with `plotWidth()` and `zoom.set`; for every GUI `CHART_TEXTS`
+  and `spec.texts`, `spec.locale` and `spec.dateFormat`, and `toPng` with
+  the providers' lines. The rule DEV-15.16, two charts in the specimen and
+  `design/README.md`'s „Chart” and „Charts”; browser tests in Chromium under
+  the GUIs' CSP at 1440 and 390 px in both themes, fingers by DevTools'
+  touch events.
 - PIG-PIB's groundwater monitoring in Obserwator `v3.3.0`, a plan
   (`docs/plans/2026-11-24-pig-groundwater.md`), reviewed and approved by
   Fable for the author on
@@ -165,6 +186,10 @@ the standard are listed in [standards/README.md](standards/README.md).
   origin named in the CSP; and no REL-1.1 deviation in Obserwator `v3.5.0`,
   which keeps its two base-map settings deprecated and translates them at
   start.
+- The GUI kit is `1.3.0` (its charts; REL-1.4, by the author's answer to
+  question 2 of the charts plan, since the members of Nogat `v0.3.0`'s
+  round carry `1.2.0`). The GUI platform plan's `chart-theme.js` points to
+  the charts plan.
 
 ## [0.2.0] - 2026-11-22
 

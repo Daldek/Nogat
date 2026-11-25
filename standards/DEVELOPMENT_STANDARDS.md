@@ -720,6 +720,23 @@ GUI's guide (instrukcja), which the info text links; an example is in
 *Why:* every GUI explains its values one way, short enough to read beside
 them (ECO-069).
 
+**DEV-15.16** A GUI draws its charts over axes with the kit's chart module
+(`nogat-chart.js` and `nogat-chart.css`, DEV-15.6), never with a chart
+library or a drawing of its own; a figure the module does not draw (a
+circular chart, warming stripes) MAY be the GUI's own. A chart whose x is a
+time or a value shows a range of it, not a chart of a year's months or days,
+of named bars or of probabilities: a drag over the plot selects the range of
+x, of x and y on a chart of points; Ctrl with the wheel zooms around the
+cursor and the wheel alone scrolls the page; Shift with a drag, or a drag
+with the middle button, pans; a double click, the key 0 and „Cały zakres”
+show the whole. On a touch screen two fingers pinch and pan, one finger
+scrolls the page and reads the values. A chart not yet zoomed shows „+”
+under it; a zoomed chart shows under it „−”, „+”, „Cały zakres” and the
+range shown, and its y axis fits the values shown. A PNG of a chart is the
+chart as shown with the lines of DEV-20.5; a CSV holds the whole series.
+*Why:* one person moves between the GUIs, and four implementations had three
+sets of gestures (ECO-090).
+
 ---
 
 ## 16. Licence and contributions

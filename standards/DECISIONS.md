@@ -98,6 +98,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-086](#eco-086-camels-pl-as-a-source-geometry-by-kartograf-the-rest-by-obserwator) | CAMELS-PL as a source: geometry by Kartograf, the rest by Obserwator | accepted | 2026-11-23 |
 | [ECO-087](#eco-087-provider-lines-in-one-table-a-gui-declares-a-line-the-kit-does-not-know) | Provider lines in one table; a GUI declares a line the kit does not know | accepted | 2026-11-23 |
 | [ECO-088](#eco-088-camels-pls-data-from-imgw-pib-carry-rd-its-licence-is-its-zenodo-records) | CAMELS-PL's data from IMGW-PIB carry RD; its licence is its Zenodo record's | accepted | 2026-11-24 |
+| [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
 
 ---
 
@@ -2427,3 +2428,69 @@ and the regulamin 1.0: a GUI with CAMELS-PL's IMGW-PIB data keeps the block
 and to the `ATTRIBUTION.txt` of a plain write on its branch
 `fix/camels-terms-line` (a follow-up of step 2); Obserwator (step 3) and
 Archiwista (step 4) carry RD on these data from the start.
+
+## ECO-090 One chart module in the kit: zoom, pan and reset alike in every GUI
+
+**Decision.** Every GUI draws its charts over axes with the kit's chart
+module, `nogat-chart.js` and `nogat-chart.css`, built from Obserwator's SVG
+engine (its `src/charts/` at `b5a1c1a`) with Hydrolog's short time axis in
+minutes and its PNG footer of the providers' lines: one plain ES module
+that imports nothing, its words in Polish in `CHART_TEXTS` and a GUI's
+other language through `spec.texts`, its numbers and dates in the language
+of `spec.locale` (`pl-PL` by default) and in a GUI's own date format
+through `spec.dateFormat` (Archiwista's `RRRR.MM.DD`), every token with its
+light fallback and every class under `.nogat-chart`. It gains what
+Archiwista and Hydrograf need: a second unit on a right-hand axis, spans
+over gaps, hollow and diamond points, an x axis without labels,
+`onReadout`, `onRange` and `plotWidth()`. A chart whose x is a date, a time
+or a value zooms, never a probability axis, a band y or a chart its GUI
+sets `zoom: false` (a year's months or days): a drag over the plot selects
+x, at least 6 units of the viewBox, else it is a click, and a rectangle on
+a chart of points (`zoom: "xy"`: the rating curve, PMAXTP), whose y is then
+the person's; Ctrl with the wheel zooms around the cursor, 1.25 a notch and
+a trackpad's pinch in proportion, while the wheel alone scrolls the page;
+Shift with a drag, or a drag with the middle button, pans within the whole;
+a double click, `0` and „Cały zakres” show the whole; on a touch screen
+(`touch-action: pan-y`) one finger scrolls the page or reads the values and
+two pinch and pan; `+`, `−` and the arrows past the range's edge do it by
+keys. Every zoom in stops at four points of the readout's series, else at
+a thousandth of the whole, and a burst of events draws once an animation
+frame. Under a zoomable chart a lone „+” before a zoom, then „−”, „+”,
+„Cały zakres” and the range shown, one line at 390 px with buttons of at
+least 24 px; the y axis fits the values shown, and up to 860 px a zoomable
+chart is drawn at its container's width. A range outlives a redraw of the
+same data, and `toPng` writes the chart as shown with the providers' lines
+under it. The rule is DEV-15.16. Plan:
+`docs/plans/2026-11-24-unified-charts.md`.
+
+**Why.** Obserwator's feedback #9 of 2026-11-23 („Fajnie byłoby dodać zoom
+i przesuwanie do wykresów w tych wszystkich apkach. No i reset widoku po
+zoomie.”) and the author's direction of 2026-11-24 („musimy ujednolicać
+pomiędzy projektami zachowanie i technologię”), with his answers to the
+plan's seven questions the same day. Four implementations had three sets of
+gestures and three words for the reset; two copies of one engine drifted
+apart (Hydrolog's), Archiwista's plain wheel took the page's scroll and
+Hydrograf drew with a library of its own. The lone „+” lets a person who
+can neither drag nor pinch zoom (WCAG 2.2 SC 2.5.1, 2.5.7); a probability
+axis holds tens of annual values on fixed ticks, each read by the readout.
+
+**Rejected.** Four implementations kept to one written gesture
+specification (they drifted already: Hydrolog's copy). Chart.js with its
+zoom plugin everywhere, Hydrograf's option B (a canvas without the keys and
+the readout the SVG engine has, and a second migration of three GUIs). The
+wheel alone zooming (Archiwista's: it takes the page's scroll). No bar
+before a zoom (the first zoom would need a path or two fingers). Zooming
+the Gumbel plots. One date format for every GUI (a rule of its own, over
+tables as well as charts).
+
+**Consequence.** The kit becomes `1.3.0` (REL-1.4): by the author's answer
+to the plan's question 2 a kit change takes the version `develop` carries
+while no member is released with a copy of it, else the next minor, and the
+members of Nogat `v0.3.0`'s round carry copies of `1.2.0`. Obserwator
+(`v3.5.0`), Hydrolog, Archiwista and Hydrograf (off Chart.js, option A)
+move to the module in steps 2 to 5 of the plan, each in its next minor;
+until its step a GUI that draws its charts otherwise records the gap as a
+deviation in its `CLAUDE.md` (DEV-1.2), as ECO-055 and ECO-058 did, and its
+chart code takes fixes only: a new chart feature goes into the kit first
+(DEV-17.5). The GUI platform plan's `chart-theme.js` gives way to the
+module.
