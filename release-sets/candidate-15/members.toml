@@ -1,0 +1,22 @@
+# Release set candidate-15 (REL-6.4): the commit of each member.
+# Moved by `uv run scripts/ecosystem.py set bump <Project>`; README.md is
+# generated from this file (`set readme`). `runs` lists the passing runs
+# of verify-candidate at these commits (REL-6.5); a bump drops them.
+runs = [
+    "https://github.com/Daldek/Nogat/actions/runs/45515449114",
+]
+
+[Kartograf]
+commit = "05052b3a924bfabd5d0fbb21bf30c9e78a8d640a"
+
+[Obserwator]
+commit = "1ffe40d03eb57f8b155542782d3c11a9b27163cb"
+
+[Hydrolog]
+commit = "1b25a9184c2bfea07eebc4e8088d0b8aaf54a351"
+
+[Hydrograf]
+commit = "ce4fefbddeb0ee91b3eb224825d0edf9661f67ab"
+
+[Archiwista]
+commit = "0b1949bc6a612305ae17aedb20d9316fb37d706f"

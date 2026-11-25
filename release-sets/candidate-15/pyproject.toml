@@ -1,0 +1,81 @@
+# Release set candidate-15 (REL-6.4): what `nogat` would install, verified by
+# the workflow verify-candidate (REL-6.5). Each installable member at its
+# commit of members.toml (`set bump` moves the `rev` below), with the extras its
+# gate installs (`--all-extras`); the `dev` group is the union of the members'
+# `dev` groups, verbatim. Hydrograf, an app without a package, is not installed
+# (REL-6.1, ECO-074): verify-candidate runs it on its own lock, which pins the
+# set's commits of its producers.
+[project]
+name = "nogat"
+version = "0.1.0.dev0"
+requires-python = ">=3.12"
+dependencies = [
+    "kartograf[mcp]",
+    "obserwator[full]",
+    "hydrolog[all]",
+    "archiwista[obserwator]",
+]
+
+[dependency-groups]
+dev = [
+    # Kartograf
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "jsonschema>=4.18",
+    # Obserwator
+    "jsonschema>=4.18",
+    "mypy>=1.19",
+    "pandas-stubs>=2.0",
+    "playwright>=1.64,<2",
+    "pytest>=8",
+    "pytest-asyncio>=0.21",
+    "pytest-cov>=6",
+    "respx>=0.20",
+    "ruff>=0.15",
+    # Hydrolog
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "jsonschema>=4.18",
+    "httpx2>=2.16,<3",
+    "playwright>=1.64,<2",
+    "hypothesis>=6.170.15",
+    "mutmut>=3.8.1",
+    # Archiwista
+    "pytest>=8,<10",
+    "pytest-cov>=5,<8",
+    "ruff>=0.8,<1",
+    "mypy>=1.13,<2",
+    "httpx>=0.27,<1",
+    "playwright>=1.50,<2",
+    "jsonschema>=4.18,<5",
+    "trustme>=1.2,<2",
+]
+
+[tool.uv]
+# No `nogat` package yet (HUB §7): the set is installed, not built.
+package = false
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin'",
+    "sys_platform == 'win32'",
+]
+# Hydrolog and Archiwista pin Obserwator's commit in two forms (`rev` on
+# `Obserwator.git`, `git+…/Obserwator@<commit>`) and Archiwista pins Kartograf's
+# commit (`git+…/Kartograf@<commit>`), which uv would otherwise lock as
+# Kartograf's source; the overrides name each shared producer once, with the
+# extras of `dependencies` (as in release set v0.1.0), so that its `rev` below
+# decides the commit installed.
+override-dependencies = [
+    "kartograf[mcp] @ git+https://github.com/Daldek/Kartograf@05052b3a924bfabd5d0fbb21bf30c9e78a8d640a",
+    "obserwator[full] @ git+https://github.com/Daldek/Obserwator@1ffe40d03eb57f8b155542782d3c11a9b27163cb",
+]
+
+[tool.uv.sources]
+kartograf = { git = "https://github.com/Daldek/Kartograf", rev = "05052b3a924bfabd5d0fbb21bf30c9e78a8d640a" }
+obserwator = { git = "https://github.com/Daldek/Obserwator", rev = "1ffe40d03eb57f8b155542782d3c11a9b27163cb" }
+hydrolog = { git = "https://github.com/Daldek/Hydrolog", rev = "1b25a9184c2bfea07eebc4e8088d0b8aaf54a351" }
+archiwista = { git = "https://github.com/Daldek/Archiwista", rev = "0b1949bc6a612305ae17aedb20d9316fb37d706f" }
