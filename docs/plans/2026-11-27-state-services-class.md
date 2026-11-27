@@ -1,6 +1,6 @@
 # Plan: the source classes as state services and other sources
 
-Status: drafted 2026-11-27 on the author's report and choice; awaiting approval (DEV-17.4).
+Approved: 2026-11-27, the author (in session: „Akceptuję plan.”); open question 1 as recommended (patch `v3.3.1`). The full gate runs once, before the release commit; targeted tests while working (the author's question, answered by DEV-7.6).
 
 Requirements: HUB-5.2, DEV-17.4, DEV-17.5, DEV-20.8, DEV-20.13, REL-2.4, ECO-085, ECO-092. Amends P11 to P13 of `2026-11-20-hydromet-providers.md` and W2 and open question 5 of `2026-11-24-pig-groundwater.md`.
 
