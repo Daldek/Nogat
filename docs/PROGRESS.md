@@ -285,7 +285,7 @@ Hydroni 8081. Public hosts: `hydrograf-test`, `hydrolog-test`,
   request is merged. Private vulnerability reporting (DEV-13.7) is the
   author's GitHub setting; GitHub's API reported it off on 2026-11-09.
 - No record of approval, so no `Approved:` line (DEV-17.4):
-  `2026-10-20-unified-gui.md` (an idea).
+  `2026-10-20-unified-gui.md` (an idea); `2026-11-27-obserwator-on-mikrus.md`, Obserwator's public GUI on a Mikrus VPS with its data built at home, dropped by the author on 2026-11-27 because Mikrus would be a processor of the visitors' data, kept for a later decision with its measurements and the steps before resuming.
 - Watch: Hydrograf keeps `affine<3` until pyflwdir 0.5.13 (ADR-062); until
   then Hydrograf and Archiwista run in separate environments.
 - The author's decisions: Windows as a blocking CI job in Hydrolog; Hydroni
