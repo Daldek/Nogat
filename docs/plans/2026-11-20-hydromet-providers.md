@@ -6,6 +6,8 @@ Requirements: DEV-17.4, HUB-5.2, DEV-18.4, DEV §19, DEV §20, AGI-3.4, ECO-002.
 
 Releases (the author, 2026-11-20, changed 2026-11-22): step 0 was folded into `v3.1.0`; steps 2 to 4, the captures (step 2a) and ČHMÚ's groundwater (step 5a) are Obserwator `v3.2.0`, together with the operational series of `2026-11-16-operational-series.md`; Gdańskie Wody (step 5, with the GUI of the source classes, P11–P13) and the provider fed by files (`2026-11-21-obserwator-instance.md` step 6, I13; „też przenosimy do v3.3.0”) are Obserwator `v3.3.0`; CAMELS-PL is `v3.4.0`; the rest `v3.5.0` at the earliest; the consumers' steps 6 and 7 follow in their own next minors.
 
+Amended 2026-11-27 by ECO-096 (`2026-11-27-state-services-class.md`): P11 to P13's classes are `state` (a state service set up by statute: IMGW-PIB, ČHMÚ, PIG-PIB) and `other`, not `nmhs` defined by WMO membership; the GUI says „Służby państwowe” and „Inne źródła”, the solid outline is `state`'s.
+
 ## The author's answers (2026-11-20)
 
 - Aim: „zacząć pracę nad dodawaniem kolejnych źródeł danych hydrometeorologicznych. Będą to inne podmioty niż służby hydrometeo, np. urzędy, uniwersytety lub inne podmioty. Trzeba więc zaplanować jak dalej dodawać nowych dostawców.” The first candidate is `https://pomiary.gdanskiewody.pl/rest/`.

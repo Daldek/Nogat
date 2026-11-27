@@ -40,7 +40,8 @@ Requirements: HUB-5.2, DEV-17.4, DEV-17.5, DEV-20.8, DEV-20.13, REL-2.4, ECO-085
 | S3 | **Words.**<br>• The switch: „Wszystkie \| Służby państwowe \| Inne źródła” (EN „All \| State services \| Other sources”).<br>• The heading: „Służby państwowe” („State services”).<br>• The legend: „Służba państwowa” („State service”).<br>• „Inne źródła” and „Inne źródło” stay.<br>• The guide gives the classes with their members and takes PIG-PIB out of the example of other sources. | — |
 | S4 | **The outline follows the class.** Solid for `state`, dashed for `other`. PIG-PIB's points lose the dashed outline. | — |
 | S5 | **What stays.**<br>• P8's notice for PIG-PIB: the data come from a state service, but not a hydro-meteorological one.<br>• Lines W, WP, WK and RW.<br>• The tiers: MWP readings `verified`, `mwp_auto` `operational` with „niezweryfikowane” (DEV-20.8).<br>• The hand-off: `pobierz.js:157` tests `state`. A PIG-PIB point has neither Q nor H nor a flood frequency, so it still offers none. | — |
-| S6 | **The record.** A new decision, ECO-0NN (the next free number when N1 lands; ECO-095 is the last on `develop` on 2026-11-27). It amends ECO-092 (its rejection of `nmhs` and the class `other` given to PIG-PIB) and the P11 to P13 rows of the providers plan. Why: the author's report and choice of 2026-11-27. Rejected: the options of S1. DEV §20 names no class, so no rule's text changes. | — |
+| S6 | **The record.** A new decision, ECO-096 (the next free number). It amends ECO-092 (its rejection of `nmhs` and the class `other` given to PIG-PIB) and the P11 to P13 rows of the providers plan. Why: the author's report and choice of 2026-11-27. Rejected: the options of S1. DEV §20 names no class, so no rule's text changes. | — |
+| S7 | **The night builds only the months PIG-PIB's new rows touch** (added 2026-11-27 with the author's approval, „Fix w v3.3.1 + backfill teraz”). `deploy/obserwator-jobs.sh` of `v3.3.0` builds `pl.pig.groundwater_subdaily` without bounds (`:139-140`). The imported backfill capture's period is 2000-01-02 to 2026-07-20, so every night would walk 323 months at about 75 s and 5.2 GB each, about 6.5 h. W11 of the PIG-PIB plan asked for the months the night's rows touch. The fix builds with `--start`/`--end` over the period of the night's new capture, and nothing when it wrote none. The deployment's first backfill runs a local copy without that step until `v3.3.1` is deployed. | The unbounded build: its cost grows with every stray old row. |
 
 ## Steps
 
@@ -49,10 +50,10 @@ Producers first (HUB-5.2). Only Obserwator reads the class.
 | Step | Project, branch | What | Acceptance |
 |---|---|---|---|
 | N1 | Nogat, `feat/state-services-class` | S6's decision in `standards/DECISIONS.md` (index row; ECO-092's row lists it as amending); the amendment lines under P11–P13 of `2026-11-20-hydromet-providers.md` and W2 and question 5 of `2026-11-24-pig-groundwater.md`; CHANGELOG, PROGRESS | `scripts/gate.sh` green |
-| O1 | Obserwator, `fix/state-services-class` from the tag `v3.3.0` (patch release, REL-2.4) | S2 to S5:<br>• `Literal["state", "other"]` in `base.py`, `datasets.py`, `files.py`, `gdanskiewody.py`;<br>• `pig.py` set to `state`;<br>• `words.js` `SOURCE_CLASSES`, `list.js`, `map.js`, `symbols.js`, `pobierz.js`;<br>• the messages and the guide;<br>• the tests that name `nmhs`;<br>• errata to ADR-035 W2 and to ADR-034 D12 (the GUI of the source classes);<br>• CHANGELOG `3.3.1`. | Full gate. The GUI on the deployed data: PIG-PIB under „Służby państwowe” with a solid outline, Gdańskie Wody and a provider file under „Inne źródła”, the switch shown only where both classes are held (as now) |
+| O1 | Obserwator, `fix/state-services-class` from the tag `v3.3.0` (patch release, REL-2.4) | S2 to S5 and S7:<br>• `Literal["state", "other"]` in `base.py`, `datasets.py`, `files.py`, `gdanskiewody.py`;<br>• `pig.py` set to `state`;<br>• `words.js` `SOURCE_CLASSES`, `list.js`, `map.js`, `symbols.js`, `pobierz.js`;<br>• the messages and the guide;<br>• the tests that name `nmhs`;<br>• `deploy/obserwator-jobs.sh`'s PIG-PIB build bounded to the night's capture (S7);<br>• errata to ADR-035 W2, W11 and to ADR-034 D12 (the GUI of the source classes);<br>• CHANGELOG `3.3.1`. | Full gate. The GUI on the deployed data: PIG-PIB under „Służby państwowe” with a solid outline, Gdańskie Wody and a provider file under „Inne źródła”, the switch shown only where both classes are held (as now). The jobs script's test of a night: the PIG-PIB build bounded |
 | O2 | Obserwator, merged back into `develop` | The same change on `develop`, so CAMELS-PL's `v3.4.0` carries it | `develop`'s gate |
 | R1 | Nogat, release set | candidate-17: Obserwator `v3.3.1`; Archiwista needs no new pin (`>=3.2.0,<4`) | `set verify` |
-| D1 | Deployment | `app-331` beside `app-330`, the unit switched; rollback by the unit's copy | The checks of O1 on 127.0.0.1:8060 and the public host |
+| D1 | Deployment | `app-331` beside `app-330`, the unit switched, the jobs scripts copied from the tag, then the night and telemetry timers enabled; rollback by the unit's copy | The checks of O1 on 127.0.0.1:8060 and the public host; the first timed night ends with its PIG-PIB build bounded |
 
 ## Open questions
 
@@ -61,4 +62,4 @@ Producers first (HUB-5.2). Only Obserwator reads the class.
 
 ## Results
 
-None yet.
+- N1 (2026-11-27, Nogat `feat/state-services-class`): ECO-096 in `standards/DECISIONS.md`, ECO-092 amended; the amendment lines in `2026-11-20-hydromet-providers.md` and `2026-11-24-pig-groundwater.md`; standard 1.4's changelog on `develop`; CHANGELOG.

@@ -88,6 +88,11 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
 
 ## Changelog
 
+- 1.4 (on `develop`, unpublished):
+  - The source classes of a provider are `state`, a state service set up
+    by statute (IMGW-PIB, ČHMÚ, PIG-PIB), and `other`, every other operator;
+    `nmhs`, defined by WMO membership, is gone, and PIG-PIB moves to `state`
+    (ECO-092, ECO-096).
 - 1.3 (published with Nogat `v0.4.0` on 2026-11-25, tag `std-1.3`):
   - A GUI with a map draws its base maps only from the kit's catalogue
     `nogat-basemaps.json`, through `nogat-basemaps.js`, and offers them in

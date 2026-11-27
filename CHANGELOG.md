@@ -6,6 +6,15 @@ the standard are listed in [standards/README.md](standards/README.md).
 
 ## [Unreleased]
 
+### Changed
+
+- The source classes are state services and other sources (ECO-096, plan
+  `docs/plans/2026-11-27-state-services-class.md`, approved 2026-11-27):
+  `state` (IMGW-PIB, ČHMÚ, PIG-PIB) and `other` replace `nmhs` and `other`,
+  PIG-PIB moving to „Służby państwowe” after the author's report on the
+  deployed Obserwator `v3.3.0`; ECO-092, P11 to P13 of the providers plan
+  and W2 of the PIG-PIB plan are amended.
+
 ## [0.4.0] - 2026-11-25
 
 ### Added
