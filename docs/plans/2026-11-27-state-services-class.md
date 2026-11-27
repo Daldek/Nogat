@@ -1,0 +1,69 @@
+# Plan: the source classes as state services and other sources
+
+Approved: 2026-11-27, the author (in session: „Akceptuję plan.”); open question 1 as recommended (patch `v3.3.1`). The full gate runs once, before the release commit; targeted tests while working (the author's question, answered by DEV-7.6).
+
+Requirements: HUB-5.2, DEV-17.4, DEV-17.5, DEV-20.8, DEV-20.13, REL-2.4, ECO-085, ECO-092. Amends P11 to P13 of `2026-11-20-hydromet-providers.md` and W2 and open question 5 of `2026-11-24-pig-groundwater.md`.
+
+## The author's report and choice (2026-11-27)
+
+- Report, after Obserwator `v3.3.0` was deployed: „Błąd w GUI Obserwatora - dane o wodach podziemnych z PIG (PAŃSTWOWY INSTYTUT GEOLOGICZNY) trafił do kategorii „Inne źródła”, a jest to służba hydrogeologiczna.”
+- Choice among four options put to him the same day: „Służby państwowe vs inne”. The other options were rejected:
+  - a third class beside the hydro-meteorological services and the other sources;
+  - PIG-PIB in `nmhs`;
+  - leaving W2 as it is.
+
+## What exists (Obserwator `v3.3.0`, tag `34978a4`)
+
+- **The two classes.** `ProviderAdapter.source_class` is `nmhs` or `other` (`src/obserwator/providers/base.py:248-260`, `:293`). `nmhs` is the default (IMGW-PIB, ČHMÚ). `other` is set by:
+  - PIG-PIB (`providers/pl/pig.py:373`);
+  - Gdańskie Wody (`providers/pl/gdanskiewody.py:325`);
+  - every provider fed by files (`providers/files.py:161`, `_provider_files.py`: `SOURCE_CLASSES = ("other",)`).
+- **P11 defines `nmhs` by WMO membership.** It is „a national meteorological and hydrological service of a WMO member”, following the author's answer of 2026-11-20 („…od służb hydrometeorologicznych, co do których mamy pewność, że spełniają wymagania WMO, od pozostałych źródeł…”). W2 of the PIG-PIB plan therefore gave PIG-PIB `other`, and ECO-092 recorded `nmhs` as rejected.
+- **The GUI.**
+  - The class switch „Wszystkie | Służby | Inne źródła” (`gui/web/src/list.js:43`; `messages/gui/stations.py:18-19`).
+  - The headings „Służby hydrologiczno-meteorologiczne” and „Inne źródła” (`messages/gui/words.py:19-23`; `gui/web/src/words.js:80`, `:97`).
+  - The legend's „Służba hydrologiczno-meteorologiczna” and „Inne źródło” (`stations.py:116-120`).
+  - The outline: solid for `nmhs`, dashed for any other class (`gui/web/src/symbols.js:24`, `:172`, `:208`; `map.js:303`, `:884`).
+  - The class reaches the page as `source_class` of `api/session` (`gui/_app.py:675`).
+  - The guide names PIG-PIB as an example of „inne źródła” (`gui/web/instrukcja/index.html:194`).
+- **The hand-off to Hydrolog** is offered only for an `nmhs` station (`gui/web/src/sections/pobierz.js:157`) and only with daily Q or H, or the flood frequency of Q.
+- **P8's notice for PIG-PIB** (`messages/datasets.py:193-196`): „Dane pochodzą z monitoringu wód podziemnych państwowej służby geologicznej (PIG-PIB), nie od państwowej służby hydrologiczno-meteorologicznej”. It is true and stays.
+- **No other consumer reads the class.** Archiwista, Retman, Hydrograf and Kartograf do not (`git grep nmhs|source_class` on their checked-out branches, 2026-11-27). Goniec reads Obserwator's REST server, whose `obserwator-provider/1` does not carry the class (`datasets.py:334-335`). Goniec is not checked out here (to check in S1).
+- **The legal fact.** PIG-PIB ran the państwowa służba hydrogeologiczna (PSH) from 2002 to 2023. From 2024-01-01 PSH and the państwowa służba geologiczna (PSG) are one service, and PSG carries on PSH's tasks under Prawo wodne (art. 369 ust. 2, art. 380-381, art. 387). Groundwater monitoring and the MWP database are among those tasks. Source: https://www.pgi.gov.pl/psh/o-psh-info.html, read 2026-11-27. W's wording „Monitoring Wód Podziemnych państwowej służby geologicznej” is therefore current and stays.
+
+## Design
+
+| ID | Decision | Rejected |
+|---|---|---|
+| S1 | **Two classes, redefined by who runs the network.**<br>• `state`: a state service set up by statute and run by a state body or state research institute. It holds IMGW-PIB (PSHM), ČHMÚ and PIG-PIB (PSG, the hydrogeological tasks of Prawo wodne).<br>• `other`: every other operator: municipal companies, offices, universities, an operator's own network. It holds Gdańskie Wody and every provider fed by files.<br>A provider declares its class in its adapter, as now (P11: per provider, never per station or dataset). | A third class: four buttons in the switch and a third outline, which P13 found unreadable at 16 px. PIG-PIB in `nmhs`: the heading „Służby hydrologiczno-meteorologiczne” and the WMO meaning would be untrue for it. |
+| S2 | **The identifier `nmhs` becomes `state`**, a clean cutover in one release with no alias. The class's only reader is Obserwator's own page, through the private `api/session`. `obserwator-provider/1` and every `/N` document stay unchanged, so ECO-085 sees no new value in a released document. A provider file keeps `source_class = "other"`, its only value. | Keeping `nmhs` with PIG-PIB in it: the name would contradict its members. |
+| S3 | **Words.**<br>• The switch: „Wszystkie \| Służby państwowe \| Inne źródła” (EN „All \| State services \| Other sources”).<br>• The heading: „Służby państwowe” („State services”).<br>• The legend: „Służba państwowa” („State service”).<br>• „Inne źródła” and „Inne źródło” stay.<br>• The guide gives the classes with their members and takes PIG-PIB out of the example of other sources. | — |
+| S4 | **The outline follows the class.** Solid for `state`, dashed for `other`. PIG-PIB's points lose the dashed outline. | — |
+| S5 | **What stays.**<br>• P8's notice for PIG-PIB: the data come from a state service, but not a hydro-meteorological one.<br>• Lines W, WP, WK and RW.<br>• The tiers: MWP readings `verified`, `mwp_auto` `operational` with „niezweryfikowane” (DEV-20.8).<br>• The hand-off: `pobierz.js:157` tests `state`. A PIG-PIB point has neither Q nor H nor a flood frequency, so it still offers none. | — |
+| S6 | **The record.** A new decision, ECO-096 (the next free number). It amends ECO-092 (its rejection of `nmhs` and the class `other` given to PIG-PIB) and the P11 to P13 rows of the providers plan. Why: the author's report and choice of 2026-11-27. Rejected: the options of S1. DEV §20 names no class, so no rule's text changes. | — |
+| S7 | **The night builds only the months PIG-PIB's new rows touch** (added 2026-11-27 with the author's approval, „Fix w v3.3.1 + backfill teraz”). `deploy/obserwator-jobs.sh` of `v3.3.0` builds `pl.pig.groundwater_subdaily` without bounds (`:139-140`). The imported backfill capture's period is 2000-01-02 to 2026-07-20, so every night would walk 323 months at about 75 s and 5.2 GB each, about 6.5 h. W11 of the PIG-PIB plan asked for the months the night's rows touch. The fix builds with `--start`/`--end` over the period of the night's new capture, and nothing when it wrote none. The deployment's first backfill runs a local copy without that step until `v3.3.1` is deployed. | The unbounded build: its cost grows with every stray old row. |
+
+## Steps
+
+Producers first (HUB-5.2). Only Obserwator reads the class.
+
+| Step | Project, branch | What | Acceptance |
+|---|---|---|---|
+| N1 | Nogat, `feat/state-services-class` | S6's decision in `standards/DECISIONS.md` (index row; ECO-092's row lists it as amending); the amendment lines under P11–P13 of `2026-11-20-hydromet-providers.md` and W2 and question 5 of `2026-11-24-pig-groundwater.md`; CHANGELOG, PROGRESS | `scripts/gate.sh` green |
+| O1 | Obserwator, `fix/state-services-class` from the tag `v3.3.0` (patch release, REL-2.4) | S2 to S5 and S7:<br>• `Literal["state", "other"]` in `base.py`, `datasets.py`, `files.py`, `gdanskiewody.py`;<br>• `pig.py` set to `state`;<br>• `words.js` `SOURCE_CLASSES`, `list.js`, `map.js`, `symbols.js`, `pobierz.js`;<br>• the messages and the guide;<br>• the tests that name `nmhs`;<br>• `deploy/obserwator-jobs.sh`'s PIG-PIB build bounded to the night's capture (S7);<br>• errata to ADR-035 W2, W11 and to ADR-034 D12 (the GUI of the source classes);<br>• CHANGELOG `3.3.1`. | Full gate. The GUI on the deployed data: PIG-PIB under „Służby państwowe” with a solid outline, Gdańskie Wody and a provider file under „Inne źródła”, the switch shown only where both classes are held (as now). The jobs script's test of a night: the PIG-PIB build bounded |
+| O2 | Obserwator, merged back into `develop` | The same change on `develop`, so CAMELS-PL's `v3.4.0` carries it | `develop`'s gate |
+| R1 | Nogat, release set | candidate-17: Obserwator `v3.3.1`; Archiwista needs no new pin (`>=3.2.0,<4`) | `set verify` |
+| D1 | Deployment | `app-331` beside `app-330`, the unit switched, the jobs scripts copied from the tag, then the night and telemetry timers enabled; rollback by the unit's copy | The checks of O1 on 127.0.0.1:8060 and the public host; the first timed night ends with its PIG-PIB build bounded |
+
+## Open questions
+
+1. **Release vehicle.** Recommended: patch `v3.3.1` from the tag, so production gets it now. The alternative is to wait for `v3.4.0` (CAMELS-PL).
+2. **Do the regulamin's § 5 or the info texts describe the classes?** Checked: § 5 holds only the providers' blocks (DEV-20.7), so no version of the regulamin changes. The info texts (DEV-15.14) of „Stacje” are Obserwator's own and change in O1.
+
+## Results
+
+- N1 (2026-11-27, Nogat `feat/state-services-class`): ECO-096 in `standards/DECISIONS.md`, ECO-092 amended; the amendment lines in `2026-11-20-hydromet-providers.md` and `2026-11-24-pig-groundwater.md`; standard 1.4's changelog on `develop`; CHANGELOG.
+- O1 (2026-11-27, Obserwator `fix/state-services-class` from `v3.3.0`, commit `819af05`): S2 to S5 and S7 in 41 files, errata to ADR-013 D8, ADR-029 D2, ADR-034 (D10, D12) and ADR-035 (W2, W11, W12, D13). `panel.js` shows a provider's own notice for either class, so PIG-PIB keeps P8's notice; the „Inne źródło” chip stays for `other`. With IMGW-PIB, ČHMÚ and PIG-PIB all `state`, a deployment without another provider shows no class switch (the switch needs both classes, as before). The night builds PIG-PIB's hourly series with `--start` only, from the first day of the rows of the captures its harvest stored, so empty months are skipped; a new test of `tests/unit/test_deploy_jobs.py` fails on `v3.3.0`'s script. Full gate: 4,582 passed, 47 skipped, 1,076 s, with `XDG_CONFIG_HOME` empty, since two tests read the host's `~/.config/nogat/nogat.toml` (its `[obserwator.capture]`), an isolation defect of Obserwator's tests.
+- Released 2026-11-27: `main` `78a0653`, tag `v3.3.1`; O2 by merging `main` into `develop` (`6ce1d03`, no conflict: `develop` had nothing after `v3.3.0`); pushed.
+- D1 (2026-11-27): `app-331` on :8060; `api/session` gives IMGW-PIB, ČHMÚ and PIG-PIB `state`, `api/texts` „Służby państwowe”; the jobs scripts and units of the tag installed; the night and telemetry timers wait for the first backfill (PROGRESS, Deployment).
+- R1 deferred by the author on 2026-11-27 („później”): the set pins every consumer at exact commits, so candidate-17 also needs Obserwator `v3.3.1` re-pinned in Hydrolog, Hydrograf and Archiwista (the step's „Archiwista needs no new pin” was wrong under REL-6.4), a round of pin-only patches.

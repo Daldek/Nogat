@@ -101,10 +101,11 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-089](#eco-089-one-set-of-base-maps-in-the-kit-shared-by-every-gui) | One set of base maps in the kit, shared by every GUI | accepted | 2026-11-24 |
 | [ECO-090](#eco-090-one-chart-module-in-the-kit-zoom-pan-and-reset-alike-in-every-gui) | One chart module in the kit: zoom, pan and reset alike in every GUI | accepted | 2026-11-24 |
 | [ECO-091](#eco-091-intervals-beside-point-estimates-computed-by-hydrolog-shown-by-obserwator) | Intervals beside point estimates: computed by Hydrolog, shown by Obserwator | accepted | 2026-11-25 |
-| [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | accepted | 2026-11-24 |
+| [ECO-092](#eco-092-pig-pibs-groundwater-monitoring-as-a-source-cc-by-40-its-terms-linked) | PIG-PIB's groundwater monitoring as a source: CC BY 4.0, its terms linked | amended by ECO-096 | 2026-11-24 |
 | [ECO-093](#eco-093-one-command-builder-in-the-kit-generated-from-the-commands-1-entry) | One command builder in the kit, generated from the commands-1 entry | accepted | 2026-11-25 |
 | [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
 | [ECO-095](#eco-095-latarnik-the-access-point-and-gui-hub-every-tools-server-by-one-set-of-rules) | Latarnik, the access point and GUI hub; every tool's server by one set of rules | accepted | 2026-11-25 |
+| [ECO-096](#eco-096-the-source-classes-are-state-services-and-other-sources) | The source classes are state services and other sources | accepted | 2026-11-27 |
 
 ---
 
@@ -2742,6 +2743,11 @@ takes the provider in steps O1 to O6 of the plan, for `v3.3.0`; data
 received later by request carry the request form's sentence as a line of
 their own, added to the table when they enter.
 
+**Amended by ECO-096 (2026-11-27):** PIG-PIB is of the source class
+`state`, not `other`; its rejection of `nmhs` stands, since the class is no
+longer defined by WMO membership. P8's notice, the lines W, WP, WK and RW
+and the tiers are unchanged.
+
 ## ECO-093 One command builder in the kit, generated from the commands-1 entry
 
 **Decision.** The kit gains the command builder, `nogat-command-form.js`
@@ -2954,3 +2960,42 @@ session, producers first: Hydrolog's server (H1), Obserwator on it (O1),
 Hydrograf's `/api/v1` (HG1), Kartograf's server (K4), then Latarnik's levels
 (L1, L2); the registry follows each step (N2), Latarnik becoming `active` at
 the end. Its repository is the author's to create.
+
+## ECO-096 The source classes are state services and other sources
+
+**Decision.** The two source classes of a provider (P11 of
+`docs/plans/2026-11-20-hydromet-providers.md`) are `state`, a state
+service set up by statute and run by a state body or state research
+institute (IMGW-PIB, ČHMÚ and PIG-PIB, the państwowa służba geologiczna
+with its hydrogeological tasks of Prawo wodne), and `other`, every other
+operator (municipal companies, offices, universities, an operator's own
+network; Gdańskie Wody and every provider fed by files). `nmhs` becomes
+`state` in one release without an alias; the class stays a property of the
+provider's adapter, outside every released document. A GUI names them
+„Służby państwowe” and „Inne źródła”, with a solid outline for `state` and a
+dashed one for `other` (P13). PIG-PIB's notice that its data come from no
+hydro-meteorological service, its lines and its tiers stay. Plan:
+`docs/plans/2026-11-27-state-services-class.md` (step N1).
+
+**Why.** The author's report of 2026-11-27, after Obserwator `v3.3.0` was
+deployed: PIG-PIB's groundwater data sat under „Inne źródła” beside
+municipal companies, although they come from a state service. PIG-PIB ran
+the państwowa służba hydrogeologiczna from 2002 to 2023, and since
+2024-01-01 the państwowa służba geologiczna carries on its tasks under
+Prawo wodne (art. 369 ust. 2, art. 380, art. 381, art. 387), groundwater
+monitoring and the MWP database among them
+(https://www.pgi.gov.pl/psh/o-psh-info.html, read 2026-11-27). His choice
+among four options was „Służby państwowe vs inne”.
+
+**Rejected.** A third class beside the hydro-meteorological services and
+the other sources (four buttons in the class switch, a third outline that
+P13 found unreadable at 16 px). PIG-PIB in `nmhs` (the heading „Służby
+hydrologiczno-meteorologiczne” would be untrue for it). Keeping W2 of
+`docs/plans/2026-11-24-pig-groundwater.md`. Keeping the identifier `nmhs`
+for the new class (its name would contradict its members).
+
+**Consequence.** ECO-092 is amended, and so are P11 to P13 of the providers
+plan and W2 and open question 5 of the PIG-PIB plan. No rule's text
+changes: DEV §20 names no class. Obserwator changes in `v3.3.1`, a patch
+from its tag `v3.3.0`, merged back into `develop`; no other member reads
+the class.
