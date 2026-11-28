@@ -749,6 +749,28 @@ def test_typing_keeps_its_place_when_the_form_is_drawn_again(
     assert tab.options()["tags"] == ["ab", "c"]
 
 
+def test_the_more_options_stay_open_when_drawn_again_before_they_tell_it(
+    tabs: Callable[..., Tab],
+) -> None:
+    # `toggle` comes a task after the click; a keystroke may come first.
+    tab = tabs("catalog=toy")
+    focused = tab.run(
+        """t => {
+          t.form.querySelector('details.nogat-command-form-more summary').click();
+          const tags = t.form.querySelector('[data-option=tags] input');
+          tags.focus();
+          tags.value = 'a';
+          tags.dispatchEvent(new Event('input', {bubbles: true}));
+          return [document.activeElement.id, document.activeElement.value];
+        }"""
+    )
+    expect(tab.field("tag_colour")).to_have_count(1)
+    assert focused == [tab.control("tags").get_attribute("id"), "a"]
+    expect(tab.page.locator("details.nogat-command-form-more")).to_have_attribute(
+        "open", ""
+    )
+
+
 def test_another_language_passes_its_own_words(tabs: Callable[..., Tab]) -> None:
     tab = tabs("catalog=toy")
     tab.run(

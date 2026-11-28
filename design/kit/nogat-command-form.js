@@ -886,6 +886,7 @@ export class NogatCommandForm extends HTMLElement {
     this._pasteText = "";
     this._pasteMessage = null;
     this._moreOpen = null;
+    this._moreBox = null;
     this._structure = "";
     this._parts = new Map();
     this._id = `nogat-command-form-${++counter}`;
@@ -908,6 +909,7 @@ export class NogatCommandForm extends HTMLElement {
     this._lineErrors = {};
     this._line = { state: "none", text: "" };
     this._moreOpen = null;
+    this._moreBox = null;
     this._rebuild();
   }
 
@@ -1127,6 +1129,9 @@ export class NogatCommandForm extends HTMLElement {
   /** Draw the form. */
   render() {
     const focus = this._focused();
+    // „Opcje dodatkowe” as the person left it, read now: its `toggle` comes a task later.
+    if (this._moreBox) this._moreOpen = this._moreBox.open;
+    this._moreBox = null;
     this.replaceChildren();
     this._parts = new Map();
     if (!this._model) return;
@@ -1179,9 +1184,7 @@ export class NogatCommandForm extends HTMLElement {
     details.append(summary, ...items);
     const alone = this._model.sections.length === 1;
     details.open = this._moreOpen ?? alone;
-    details.addEventListener("toggle", () => {
-      this._moreOpen = details.open;
-    });
+    this._moreBox = details;
     return details;
   }
 

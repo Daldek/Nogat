@@ -15,6 +15,15 @@ the standard are listed in [standards/README.md](standards/README.md).
   deployed Obserwator `v3.3.0`; ECO-092, P11 to P13 of the providers plan
   and W2 of the PIG-PIB plan are amended.
 
+### Fixed
+
+- The kit's `<nogat-command-form>` keeps „Opcje dodatkowe” open and the
+  focus in the field typed into when a keystroke draws the form again before
+  the `toggle` event of the opening click: the element learnt the section's
+  state from that event, a task later, so the form came back with the section
+  closed and the focus on the page (a failure of the gate's full browser
+  run). It reads the state when it draws.
+
 ## [0.4.0] - 2026-11-25
 
 ### Added
