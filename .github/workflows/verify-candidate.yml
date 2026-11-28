@@ -4,7 +4,8 @@
 # the candidate's environment, its uv.lock with every member installed as a
 # wheel; an app runs on its own lock, on Linux only. Linux, macOS and Windows on
 # Python 3.12 (required) and the newest stable Python (reported, not blocking),
-# as in standards/ci/ci.yml.
+# as in standards/ci/ci.yml. Windows is run and reported, not blocking; Linux
+# is the priority platform (ECO-097).
 # GitHub offers workflow_dispatch only for a workflow on the default branch:
 # the file is on `main`, and a run is dispatched against the branch holding
 # the candidate. The URL of a passing run goes into the candidate's
@@ -26,7 +27,7 @@ jobs:
   verify:
     name: verify (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: ${{ matrix.experimental || matrix.os == 'windows-latest' }}
     # Archiwista's suite alone takes about 40 minutes on a hosted runner.
     timeout-minutes: 180
     strategy:

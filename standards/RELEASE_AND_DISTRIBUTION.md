@@ -182,12 +182,13 @@ registry lists each in the producer's `exchange` as `<tool>-testing`;
 DEV-10.6). The members are installed as wheels (REL-2.5). An app among the
 members runs its suite on its own lock, which pins its producers at the
 set's commits (`set check`), and a member whose profiles hold no `tool` runs
-on Linux only (DEV-7.7). The URL of a passing run, recorded as `runs` in the
-candidate's `members.toml` and shown in its README, is the verification
-record; moving a member drops it. The author MAY also run on their own
-machines what CI cannot, such as network shares. A failure is fixed in the
-member and produces a new candidate.
-*Why:* ECO-037, ECO-053, ECO-077.
+on Linux only (DEV-7.7). A failure on Windows is reported in the run and does
+not fail it, so it blocks no set (ECO-097). The URL of a passing run, recorded
+as `runs` in the candidate's `members.toml` and shown in its README, is the
+verification record; moving a member drops it. The author MAY also run on
+their own machines what CI cannot, such as network shares. A failure is fixed
+in the member and produces a new candidate.
+*Why:* ECO-037, ECO-053, ECO-077, ECO-097.
 
 **REL-6.6** After verification each member is released by REL-2.1; its
 release pull request changes only what REL-2.1 lists, and any other change
@@ -201,9 +202,11 @@ a patch release of the member and of `nogat`, verified by the same workflow.
 ## 7. Support
 
 **REL-7.1** Supported: the latest release set (the latest `nogat` release)
-and the latest release of each member, on Linux x86_64, macOS arm64 and
-Windows x86_64 (the CI runners), Python 3.12 or newer as verified.
+and the latest release of each member, on Linux x86_64 and macOS arm64, and
+as best effort on Windows x86_64, verified and reported but blocking no
+release (the CI runners, DEV-7.7), Python 3.12 or newer as verified.
 `requires-python` is `>=3.12`; a set is verified on 3.12 and on the newest
 stable Python that CI runs, and the supported Pythons are those the latest set
 verified. Nothing else is promised; fixes go forward.
-*Why:* ECO-035; one maintainer can support one line.
+*Why:* ECO-035, ECO-097; Linux is the priority platform, and one maintainer
+can support one line.

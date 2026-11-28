@@ -14,6 +14,14 @@ the standard are listed in [standards/README.md](standards/README.md).
   PIG-PIB moving to „Służby państwowe” after the author's report on the
   deployed Obserwator `v3.3.0`; ECO-092, P11 to P13 of the providers plan
   and W2 of the PIG-PIB plan are amended.
+- Windows is not blocking in any repository (ECO-097, the author's decision
+  of 2026-11-28): the Windows jobs of `standards/ci/ci.yml` and of
+  `verify-candidate` run and are reported, but a failure fails neither the
+  workflow nor a merge, a release or a release set; the rulesets require the
+  Linux and macOS `gate` jobs only (DEV-3.6). Linux is the priority platform,
+  macOS stays blocking and Windows support is best effort (DEV-7.7, REL-6.5,
+  REL-7.1); ECO-035 is amended. The members adopt it by copying
+  `standards/ci/ci.yml` again.
 
 ## [0.4.0] - 2026-11-25
 

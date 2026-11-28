@@ -44,7 +44,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-032](#eco-032-small-explicit-support-policy) | Small, explicit support policy | superseded by ECO-035 | 2026-10-20 |
 | [ECO-033](#eco-033-zen-of-nogat-and-one-way-to-write-a-rule) | Zen of Nogat and one way to write a rule | amended by ECO-046 | 2026-10-20 |
 | [ECO-034](#eco-034-the-registry-holds-structure-only) | The registry holds structure only | accepted | 2026-10-20 |
-| [ECO-035](#eco-035-minimal-support-and-three-channels) | Minimal support and three channels | accepted | 2026-10-20 |
+| [ECO-035](#eco-035-minimal-support-and-three-channels) | Minimal support and three channels | amended by ECO-097 | 2026-10-20 |
 | [ECO-036](#eco-036-three-profiles-tool-app-hub) | Three profiles: tool, app, hub | accepted | 2026-10-20 |
 | [ECO-037](#eco-037-one-release-path) | One release path | accepted | 2026-10-20 |
 | [ECO-038](#eco-038-commits-are-checked-once-on-entry-to-develop) | Commits are checked once, on entry to develop | amended by ECO-049 | 2026-10-20 |
@@ -106,6 +106,7 @@ Status values: `accepted`, `amended` (still valid, changed by a later entry),
 | [ECO-094](#eco-094-goniec-a-qgis-plugin-over-the-tools-servers-gpl-20-or-later-the-profile-plugin) | Goniec, a QGIS plugin over the tools' servers: GPL-2.0-or-later, the profile `plugin` | accepted | 2026-11-25 |
 | [ECO-095](#eco-095-latarnik-the-access-point-and-gui-hub-every-tools-server-by-one-set-of-rules) | Latarnik, the access point and GUI hub; every tool's server by one set of rules | accepted | 2026-11-25 |
 | [ECO-096](#eco-096-the-source-classes-are-state-services-and-other-sources) | The source classes are state services and other sources | accepted | 2026-11-27 |
+| [ECO-097](#eco-097-windows-ci-jobs-are-reported-not-blocking-linux-is-the-priority-platform) | Windows CI jobs are reported, not blocking; Linux is the priority platform | accepted | 2026-11-28 |
 
 ---
 
@@ -692,6 +693,10 @@ with the repositories (Zen 2).
 **Rejected.** Hand-kept versions and pins (simpler script, stale data).
 
 ## ECO-035 Minimal support and three channels
+
+**Amended by ECO-097 (2026-11-28):** Linux and macOS are supported; Windows
+is supported as best effort, verified and reported on its CI runner, and its
+failure blocks no merge, release or release set.
 
 **Decision.** Supported is the latest release set and the latest release of
 each member, on the three CI runners, on the Python versions the set
@@ -2999,3 +3004,39 @@ plan and W2 and open question 5 of the PIG-PIB plan. No rule's text
 changes: DEV §20 names no class. Obserwator changes in `v3.3.1`, a patch
 from its tag `v3.3.0`, merged back into `develop`; no other member reads
 the class.
+
+## ECO-097 Windows CI jobs are reported, not blocking; Linux is the priority platform
+
+**Decision.** Windows is not blocking in any repository of the ecosystem, and
+Linux is the priority platform. The Windows jobs of every repository's CI
+(the template `standards/ci/ci.yml`, which the members copy) and of Nogat's
+`verify-candidate` keep running and are reported, but a Windows failure fails
+neither the workflow nor a merge, a release or a release set: the jobs carry
+a job-level `continue-on-error` that is true for the experimental and the
+`windows-latest` entries of the unchanged matrix, and a ruleset's required
+checks are the Linux and macOS `gate` jobs (DEV-3.6). macOS stays blocking on
+Python 3.12, and the jobs on the newest stable Python stay reported and not
+blocking, as before. Windows support is best effort: the published set's
+`uv.lock` stays universal for Linux, macOS and Windows (REL-6.1), and a
+Windows failure is fixed in the member when it is worth fixing, not as a
+condition of a merge or a release.
+
+**Why.** The author's decision of 2026-11-28: „Windowsa traktujemy jako
+nieblokujacego we wszystkich repo, priorytetem jest Linux.” It answers the
+open question „Windows as a blocking CI job in Hydrolog” for every
+repository at once. The deployed instances and the apps run on Linux
+(ECO-077), and one maintainer cannot hold merges, releases and sets back on
+a platform the ecosystem does not deploy on.
+
+**Rejected.** Removing the Windows jobs from the matrix (a Windows
+regression would go unseen until a user reports it). Windows blocking in some
+repositories only, the open question's narrow form (two rules for one
+template). A separate Windows workflow (its matrix and required checks would
+drift from the template's).
+
+**Consequence.** ECO-035 is amended; DEV-3.6, DEV-7.7, REL-6.5 and REL-7.1
+change. `standards/ci/ci.yml`, its README and
+`.github/workflows/verify-candidate.yml` carry the `continue-on-error` above.
+Each member adopts it in its own session by copying `standards/ci/ci.yml`
+again and removing its Windows `gate` job from the required checks of its
+rulesets.

@@ -68,8 +68,10 @@ and a committed `uv.lock`.
 
 `ci.yml` runs the gate on Linux, macOS and Windows with Python 3.12 (required)
 and the newest stable Python (reported; a failure does not fail the workflow,
-because wheels of geospatial dependencies often arrive later). Raise the
-newest version when a new Python is released.
+because wheels of geospatial dependencies often arrive later). Windows jobs
+are run and reported, but a Windows failure does not fail the workflow nor
+block a merge or a release; Linux is the priority platform (ECO-097). Raise
+the newest version when a new Python is released.
 
 The `audit` job exports the locked dependencies with hashes, leaves out the
 ecosystem's own distributions (`kartograf`, `obserwator`, `hydrolog`, `retman`,
@@ -89,9 +91,9 @@ security updates" (DEV-13.6).
   `main` and `develop`, enforcement Active, no bypass actors (DEV-3.6):
   - require a pull request before merging, approvals 0, allowed merge
     methods: merge commit only;
-  - require status checks: the three `gate (…, Python 3.12)` jobs (they appear
-    in the list after the first CI run), and `db` in an `app` project; not
-    `dependency audit`;
+  - require status checks: the Linux and macOS `gate (…, Python 3.12)` jobs
+    (they appear in the list after the first CI run), and `db` in an `app`
+    project; not the Windows jobs (ECO-097) nor `dependency audit`;
   - block force pushes, restrict deletions.
 - Tag ruleset: target tags `v*`, restrict updates and deletions.
 - Code security: enable Dependabot security updates (DEV-13.6) and private
