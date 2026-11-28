@@ -1,8 +1,9 @@
 # CI (DEV-7.7), template from Nogat standards/ci/ci.yml.
 # Copy to .github/workflows/ci.yml. Runs scripts/gate.sh on Linux, macOS and
 # Windows, on Python 3.12 (required) and the newest stable Python (reported,
-# not blocking: wheels of geospatial dependencies often lag), and audits the
-# locked PyPI dependencies (DEV-13.6; informative, not a required check).
+# not blocking: wheels of geospatial dependencies often lag). Windows is run
+# and reported, not blocking; Linux is the priority platform (ECO-097). Audits
+# the locked PyPI dependencies (DEV-13.6; informative, not a required check).
 # Commit messages are checked once, on pull requests into develop and from
 # hotfix/* into main (DEV-4.5).
 # Actions are pinned by commit SHA; Dependabot updates them
@@ -30,7 +31,7 @@ jobs:
     if: github.event_name != 'schedule'
     name: gate (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: ${{ matrix.experimental || matrix.os == 'windows-latest' }}
     timeout-minutes: 30
     strategy:
       fail-fast: false

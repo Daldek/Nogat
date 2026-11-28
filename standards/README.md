@@ -93,6 +93,12 @@ and the author replaces them (ADOPTION_PLAN 0.1, DOC-11.1).
     by statute (IMGW-PIB, ČHMÚ, PIG-PIB), and `other`, every other operator;
     `nmhs`, defined by WMO membership, is gone, and PIG-PIB moves to `state`
     (ECO-092, ECO-096).
+  - Windows is not blocking in any repository: its CI jobs, in the template
+    `ci.yml` and in `verify-candidate`, run and are reported, but a failure
+    fails neither the workflow nor a merge, a release or a release set, and
+    the rulesets require the Linux and macOS `gate` jobs only; Linux is the
+    priority platform, macOS stays blocking, and Windows support is best
+    effort (DEV-3.6, DEV-7.7, REL-6.5, REL-7.1, ECO-035, ECO-097).
 - 1.3 (published with Nogat `v0.4.0` on 2026-11-25, tag `std-1.3`):
   - A GUI with a map draws its base maps only from the kit's catalogue
     `nogat-basemaps.json`, through `nogat-basemaps.js`, and offers them in

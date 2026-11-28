@@ -107,15 +107,16 @@ dedicated branch of the target repository and follows the target's
 rewrites and branch renames.
 
 **DEV-3.6** `main` and `develop` are protected on GitHub by a ruleset: pull
-request required, 0 approvals, required checks = the three non-experimental
-`gate` jobs (and `db` where the project has that job, DEV-7.7), force push and
-deletion blocked, no bypass actors. Every pull request (topic → `develop`,
-`develop` → `main`, hotfix → `main`, `main` → `develop`) is merged with a
-merge commit, the only merge method the ruleset allows. A tag ruleset blocks
-update and deletion of `v*` tags. For a history rewrite the author disables
-the ruleset, rewrites, re-enables it and notes it in PROGRESS.
-*Why:* ECO-030, ECO-037; nothing reaches `main` or `develop` without a pull
-request and a green gate. Merges and tags still rest on DEV-3.3.
+request required, 0 approvals, required checks = the non-experimental Linux
+and macOS `gate` jobs, not Windows (and `db` where the project has that job,
+DEV-7.7), force push and deletion blocked, no bypass actors. Every pull
+request (topic → `develop`, `develop` → `main`, hotfix → `main`, `main` →
+`develop`) is merged with a merge commit, the only merge method the ruleset
+allows. A tag ruleset blocks update and deletion of `v*` tags. For a history
+rewrite the author disables the ruleset, rewrites, re-enables it and notes it
+in PROGRESS.
+*Why:* ECO-030, ECO-037, ECO-097; nothing reaches `main` or `develop` without
+a pull request and a green gate. Merges and tags still rest on DEV-3.3.
 
 ---
 
@@ -266,12 +267,14 @@ which needs no approval.
 be checked before the commit exists.
 
 **DEV-7.7** CI (GitHub Actions) MUST run the gate on push and pull request to
-`main` and `develop`: on Linux, macOS and Windows for `tool` projects; an
-`app` project MAY run the platform matrix without `db` tests plus a Linux `db`
-job; the `hub` runs on Linux until the `nogat` package exists. Templates:
-`standards/ci/ci.yml` (gate on the three systems) and `standards/ci/live.yml`
-(weekly `live` tests).
-*Why:* file-system and path bugs appear only on the platform that has them.
+`main` and `develop`: on Linux, macOS and Windows for `tool` projects, Linux
+and macOS blocking, Windows run and reported but not blocking (its failure
+fails neither the workflow nor a merge); an `app` project MAY run the platform
+matrix without `db` tests plus a Linux `db` job; the `hub` runs on Linux until
+the `nogat` package exists. Templates: `standards/ci/ci.yml` (gate on the
+three systems) and `standards/ci/live.yml` (weekly `live` tests).
+*Why:* file-system and path bugs appear only on the platform that has them;
+Linux is the priority platform (ECO-097).
 
 ---
 
